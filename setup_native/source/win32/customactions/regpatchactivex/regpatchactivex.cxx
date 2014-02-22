@@ -32,7 +32,7 @@
 #include <malloc.h>
 #include <stdio.h>
 
-//----------------------------------------------------------
+
 BOOL UnicodeEquals( wchar_t* pStr1, wchar_t* pStr2 )
 {
     if ( pStr1 == NULL && pStr2 == NULL )
@@ -46,7 +46,7 @@ BOOL UnicodeEquals( wchar_t* pStr1, wchar_t* pStr2 )
     return ( *pStr1 == 0 && *pStr2 == 0 );
 }
 
-//----------------------------------------------------------
+
 BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
 {
     DWORD sz = 0;
@@ -65,7 +65,7 @@ BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
     return FALSE;
 }
 
-//----------------------------------------------------------
+
 BOOL MakeInstallForAllUsers( MSIHANDLE hMSI )
 {
     BOOL bResult = FALSE;
@@ -79,7 +79,7 @@ BOOL MakeInstallForAllUsers( MSIHANDLE hMSI )
     return bResult;
 }
 
-//----------------------------------------------------------
+
 extern "C" UINT __stdcall PatchActiveXControl( MSIHANDLE hMSI )
 {
     // MessageBox(NULL, L"PatchActiveXControl", L"Information", MB_OK | MB_ICONINFORMATION);

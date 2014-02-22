@@ -72,7 +72,7 @@ AccessibleBrowseBox::AccessibleBrowseBox(
 
     m_xFocusWindow = VCLUnoHelper::GetInterface(mpBrowseBox->GetWindowInstance());
 }
-// -----------------------------------------------------------------------------
+
 void AccessibleBrowseBox::setCreator( const Reference< XAccessible >& _rxCreator )
 {
 #if OSL_DEBUG_LEVEL > 0
@@ -82,11 +82,11 @@ void AccessibleBrowseBox::setCreator( const Reference< XAccessible >& _rxCreator
     m_pImpl->m_aCreator = _rxCreator;
 }
 
-// -----------------------------------------------------------------------------
+
 AccessibleBrowseBox::~AccessibleBrowseBox()
 {
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL AccessibleBrowseBox::disposing()
 {
@@ -111,7 +111,7 @@ void SAL_CALL AccessibleBrowseBox::disposing()
 
     AccessibleBrowseBoxBase::disposing();
 }
-// -----------------------------------------------------------------------------
+
 
 // XAccessibleContext ---------------------------------------------------------
 
@@ -123,7 +123,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBox::getAccessibleChildCount()
     ensureIsAlive();
     return BBINDEX_FIRSTCONTROL + mpBrowseBox->GetAccessibleControlCount();
 }
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > SAL_CALL
 AccessibleBrowseBox::getAccessibleChild( sal_Int32 nChildIndex )
@@ -184,7 +184,7 @@ AccessibleBrowseBox::getAccessibleAtPoint( const awt::Point& rPoint )
     }
     return xChild;
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL AccessibleBrowseBox::grabFocus()
     throw ( uno::RuntimeException )
@@ -194,7 +194,7 @@ void SAL_CALL AccessibleBrowseBox::grabFocus()
     ensureIsAlive();
     mpBrowseBox->GrabFocus();
 }
-// -----------------------------------------------------------------------------
+
 
 Any SAL_CALL AccessibleBrowseBox::getAccessibleKeyBinding()
     throw ( uno::RuntimeException )
@@ -202,7 +202,7 @@ Any SAL_CALL AccessibleBrowseBox::getAccessibleKeyBinding()
     ensureIsAlive();
     return Any();
 }
-// -----------------------------------------------------------------------------
+
 
 // XServiceInfo ---------------------------------------------------------------
 
@@ -211,7 +211,7 @@ OUString SAL_CALL AccessibleBrowseBox::getImplementationName()
 {
     return OUString( "com.sun.star.comp.svtools.AccessibleBrowseBox" );
 }
-// -----------------------------------------------------------------------------
+
 
 // internal virtual methods ---------------------------------------------------
 
@@ -221,13 +221,13 @@ Rectangle AccessibleBrowseBox::implGetBoundingBox()
     OSL_ENSURE( pParent, "implGetBoundingBox - missing parent window" );
     return mpBrowseBox->GetWindowExtentsRelative( pParent );
 }
-// -----------------------------------------------------------------------------
+
 
 Rectangle AccessibleBrowseBox::implGetBoundingBoxOnScreen()
 {
     return mpBrowseBox->GetWindowExtentsRelative( NULL );
 }
-// -----------------------------------------------------------------------------
+
 
 // internal helper methods ----------------------------------------------------
 
@@ -241,7 +241,7 @@ Reference< XAccessible > AccessibleBrowseBox::implGetTable()
     }
     return m_pImpl->mxTable;
 }
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible >
 AccessibleBrowseBox::implGetHeaderBar( AccessibleBrowseBoxObjType eObjType )
@@ -272,7 +272,7 @@ AccessibleBrowseBox::implGetHeaderBar( AccessibleBrowseBoxObjType eObjType )
     }
     return xRet;
 }
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible >
 AccessibleBrowseBox::implGetFixedChild( sal_Int32 nChildIndex )
@@ -292,14 +292,14 @@ AccessibleBrowseBox::implGetFixedChild( sal_Int32 nChildIndex )
     }
     return xRet;
 }
-// -----------------------------------------------------------------------------
+
 AccessibleBrowseBoxTable* AccessibleBrowseBox::createAccessibleTable()
 {
     Reference< XAccessible > xCreator = (Reference< XAccessible >)m_pImpl->m_aCreator;
     OSL_ENSURE( xCreator.is(), "accessibility/extended/AccessibleBrowseBox::createAccessibleTable: my creator died - how this?" );
     return new AccessibleBrowseBoxTable( xCreator, *mpBrowseBox );
 }
-// -----------------------------------------------------------------------------
+
 void AccessibleBrowseBox::commitTableEvent(sal_Int16 _nEventId,const Any& _rNewValue,const Any& _rOldValue)
 {
     if ( m_pImpl->mxTable.is() )
@@ -307,7 +307,7 @@ void AccessibleBrowseBox::commitTableEvent(sal_Int16 _nEventId,const Any& _rNewV
         m_pImpl->m_pTable->commitEvent(_nEventId,_rNewValue,_rOldValue);
     }
 }
-// -----------------------------------------------------------------------------
+
 void AccessibleBrowseBox::commitHeaderBarEvent( sal_Int16 _nEventId,
                                                 const Any& _rNewValue,
                                                 const Any& _rOldValue,sal_Bool _bColumnHeaderBar)
@@ -328,12 +328,12 @@ AccessibleBrowseBoxAccess::AccessibleBrowseBoxAccess( const Reference< XAccessib
 {
 }
 
-// -----------------------------------------------------------------------------
+
 AccessibleBrowseBoxAccess::~AccessibleBrowseBoxAccess()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 void AccessibleBrowseBoxAccess::dispose()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -342,7 +342,7 @@ void AccessibleBrowseBoxAccess::dispose()
     ::comphelper::disposeComponent( m_xContext );
 }
 
-// -----------------------------------------------------------------------------
+
 Reference< XAccessibleContext > SAL_CALL AccessibleBrowseBoxAccess::getAccessibleContext() throw ( RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -361,7 +361,7 @@ Reference< XAccessibleContext > SAL_CALL AccessibleBrowseBoxAccess::getAccessibl
     return m_xContext;
 }
 
-// -----------------------------------------------------------------------------
+
 bool AccessibleBrowseBoxAccess::isContextAlive() const
 {
     return  ( NULL != m_pContext ) && m_pContext->isAlive();

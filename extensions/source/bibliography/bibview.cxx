@@ -47,7 +47,7 @@ namespace bib
 {
 //.........................................................................
 
-    // -----------------------------------------------------------------------
+
     BibView::BibView( Window* _pParent, BibDataManager* _pManager, WinBits _nStyle )
         :BibWindow( _pParent, _nStyle )
         ,m_pDatMan( _pManager )
@@ -58,7 +58,7 @@ namespace bib
             connectForm( m_xDatMan );
     }
 
-    // -----------------------------------------------------------------------
+
     BibView::~BibView()
     {
         BibGeneralPage* pGeneralPage = m_pGeneralPage;

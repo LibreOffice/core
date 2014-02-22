@@ -181,13 +181,13 @@ namespace dlgprov
             listernersForTypes[ OUString("VBAInterop") ] = new DialogVBAScriptListenerImpl( rxContext, rxControl, rxModel, sDialogLibName );
     }
 
-    // -----------------------------------------------------------------------------
+
 
     DialogEventsAttacherImpl::~DialogEventsAttacherImpl()
     {
     }
 
-    // -----------------------------------------------------------------------------
+
     Reference< script::XScriptListener >
     DialogEventsAttacherImpl::getScriptListenerForKey( const OUString& sKey ) throw ( RuntimeException )
     {
@@ -210,7 +210,7 @@ namespace dlgprov
         return xEventsSupplier;
     }
 
-    // -----------------------------------------------------------------------------
+
     void SAL_CALL DialogEventsAttacherImpl::attachEventsToControl( const Reference< XControl>& xControl, const Reference< XScriptEventsSupplier >& xEventsSupplier, const Any& Helper )
     {
         if ( xEventsSupplier.is() )
@@ -322,9 +322,9 @@ namespace dlgprov
         }
     }
 
-    // -----------------------------------------------------------------------------
+
     // XScriptEventsAttacher
-    // -----------------------------------------------------------------------------
+
 
     void SAL_CALL DialogEventsAttacherImpl::attachEvents( const Sequence< Reference< XInterface > >& Objects,
         const com::sun::star::uno::Reference<com::sun::star::script::XScriptListener>&,
@@ -383,13 +383,13 @@ namespace dlgprov
     {
     }
 
-    // -----------------------------------------------------------------------------
+
 
     DialogAllListenerImpl::~DialogAllListenerImpl()
     {
     }
 
-    // -----------------------------------------------------------------------------
+
 
     void DialogAllListenerImpl::firing_impl( const AllEventObject& Event, Any* pRet )
     {
@@ -411,17 +411,17 @@ namespace dlgprov
         }
     }
 
-    // -----------------------------------------------------------------------------
+
     // XEventListener
-    // -----------------------------------------------------------------------------
+
 
     void DialogAllListenerImpl::disposing(const EventObject& ) throw ( RuntimeException )
     {
     }
 
-    // -----------------------------------------------------------------------------
+
     // XAllListener
-    // -----------------------------------------------------------------------------
+
 
     void DialogAllListenerImpl::firing( const AllEventObject& Event ) throw ( RuntimeException )
     {
@@ -430,7 +430,7 @@ namespace dlgprov
         firing_impl( Event, NULL );
     }
 
-    // -----------------------------------------------------------------------------
+
 
     Any DialogAllListenerImpl::approveFiring( const AllEventObject& Event )
         throw ( reflection::InvocationTargetException, RuntimeException )
@@ -461,13 +461,13 @@ namespace dlgprov
     {
     }
 
-    // -----------------------------------------------------------------------------
+
 
     DialogScriptListenerImpl::~DialogScriptListenerImpl()
     {
     }
 
-    // -----------------------------------------------------------------------------
+
     void DialogSFScriptListenerImpl::firing_impl( const ScriptEvent& aScriptEvent, Any* pRet )
     {
         try
@@ -651,17 +651,17 @@ namespace dlgprov
         }
     }
 
-    // -----------------------------------------------------------------------------
+
     // XEventListener
-    // -----------------------------------------------------------------------------
+
 
     void DialogScriptListenerImpl::disposing(const EventObject& ) throw ( RuntimeException )
     {
     }
 
-    // -----------------------------------------------------------------------------
+
     // XScriptListener
-    // -----------------------------------------------------------------------------
+
 
     void DialogScriptListenerImpl::firing( const ScriptEvent& aScriptEvent ) throw ( RuntimeException )
     {
@@ -670,7 +670,7 @@ namespace dlgprov
         firing_impl( aScriptEvent, NULL );
     }
 
-    // -----------------------------------------------------------------------------
+
 
     Any DialogScriptListenerImpl::approveFiring( const ScriptEvent& aScriptEvent )
         throw ( reflection::InvocationTargetException, RuntimeException )
@@ -682,7 +682,7 @@ namespace dlgprov
         return aReturn;
     }
 
-    // -----------------------------------------------------------------------------
+
 
 //.........................................................................
 }   // namespace dlgprov

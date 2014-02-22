@@ -32,38 +32,38 @@ namespace comphelper
     //=====================================================================
     //= OCommonAccessibleSelection
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OCommonAccessibleSelection::OCommonAccessibleSelection( )
     {
     }
 
     OCommonAccessibleSelection::~OCommonAccessibleSelection() {}
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OCommonAccessibleSelection::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         implSelect( nChildIndex, sal_True );
     }
 
-    //--------------------------------------------------------------------
+
     bool SAL_CALL OCommonAccessibleSelection::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         return( implIsSelected( nChildIndex ) );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OCommonAccessibleSelection::clearAccessibleSelection(  ) throw (RuntimeException)
     {
         implSelect( ACCESSIBLE_SELECTION_CHILD_ALL, sal_False );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OCommonAccessibleSelection::selectAllAccessibleChildren(  ) throw (RuntimeException)
     {
         implSelect( ACCESSIBLE_SELECTION_CHILD_ALL, sal_True );
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int32 SAL_CALL OCommonAccessibleSelection::getSelectedAccessibleChildCount(  ) throw (RuntimeException)
     {
         sal_Int32                       nRet = 0;
@@ -81,7 +81,7 @@ namespace comphelper
         return( nRet );
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XAccessible > SAL_CALL OCommonAccessibleSelection::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         Reference< XAccessible >        xRet;
@@ -99,7 +99,7 @@ namespace comphelper
         return( xRet );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OCommonAccessibleSelection::deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         implSelect( nSelectedChildIndex, sal_False );
@@ -108,65 +108,65 @@ namespace comphelper
     //=====================================================================
     //= OAccessibleSelectionHelper
     //=====================================================================
-    //--------------------------------------------------------------------
+
     OAccessibleSelectionHelper::OAccessibleSelectionHelper( IMutex* _pExternalLock ) : OAccessibleComponentHelper(_pExternalLock)
     {
     }
 
-    //--------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XINTERFACE2( OAccessibleSelectionHelper, OAccessibleComponentHelper, OAccessibleSelectionHelper_Base )
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleSelectionHelper, OAccessibleComponentHelper, OAccessibleSelectionHelper_Base )
     // (order matters: the first is the class name, the second is the class doing the ref counting)
 
-    //--------------------------------------------------------------------
+
     Reference< XAccessibleContext > OAccessibleSelectionHelper::implGetAccessibleContext() throw ( RuntimeException )
     {
         return( this );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OAccessibleSelectionHelper::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         OExternalLockGuard aGuard( this );
         OCommonAccessibleSelection::selectAccessibleChild( nChildIndex );
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool SAL_CALL OAccessibleSelectionHelper::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         OExternalLockGuard aGuard( this );
         return( OCommonAccessibleSelection::isAccessibleChildSelected( nChildIndex ) );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OAccessibleSelectionHelper::clearAccessibleSelection(  ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
         OCommonAccessibleSelection::clearAccessibleSelection();
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OAccessibleSelectionHelper::selectAllAccessibleChildren(  ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
         OCommonAccessibleSelection::selectAllAccessibleChildren();
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int32 SAL_CALL OAccessibleSelectionHelper::getSelectedAccessibleChildCount(  ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
         return( OCommonAccessibleSelection::getSelectedAccessibleChildCount() );
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XAccessible > SAL_CALL OAccessibleSelectionHelper::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         OExternalLockGuard aGuard( this );
         return( OCommonAccessibleSelection::getSelectedAccessibleChild( nSelectedChildIndex ) );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OAccessibleSelectionHelper::deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         OExternalLockGuard aGuard( this );

@@ -121,7 +121,7 @@ void ScEditWindow::Resize()
     Control::Resize();
 }
 
-// -----------------------------------------------------------------------
+
 
 ScEditWindow::~ScEditWindow()
 {
@@ -141,7 +141,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScEditWindow(Window *pParen
     return new ScEditWindow (pParent, WB_BORDER|WB_TABSTOP, Left);
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::SetNumType(SvxNumType eNumType)
 {
@@ -149,7 +149,7 @@ void ScEditWindow::SetNumType(SvxNumType eNumType)
     pEdEngine->UpdateFields();
 }
 
-// -----------------------------------------------------------------------
+
 
 EditTextObject* ScEditWindow::CreateTextObject()
 {
@@ -164,7 +164,7 @@ EditTextObject* ScEditWindow::CreateTextObject()
     return pEdEngine->CreateTextObject();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::SetFont( const ScPatternAttr& rPattern )
 {
@@ -180,21 +180,21 @@ void ScEditWindow::SetFont( const ScPatternAttr& rPattern )
     pEdEngine->SetDefaults( pSet );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::SetText( const EditTextObject& rTextObject )
 {
     pEdEngine->SetText( rTextObject );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::InsertField( const SvxFieldItem& rFld )
 {
     pEdView->InsertField( rFld );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::SetCharAttriutes()
 {
@@ -233,7 +233,7 @@ void ScEditWindow::SetCharAttriutes()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::Paint( const Rectangle& rRect )
 {
@@ -252,14 +252,14 @@ void ScEditWindow::Paint( const Rectangle& rRect )
         pEdView->ShowCursor(true,true);
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::MouseMove( const MouseEvent& rMEvt )
 {
     pEdView->MouseMove( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -269,14 +269,14 @@ void ScEditWindow::MouseButtonDown( const MouseEvent& rMEvt )
     pEdView->MouseButtonDown( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     pEdView->MouseButtonUp( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::KeyInput( const KeyEvent& rKEvt )
 {
@@ -299,14 +299,14 @@ void ScEditWindow::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::Command( const CommandEvent& rCEvt )
 {
     pEdView->Command( rCEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScEditWindow::GetFocus()
 {
@@ -333,7 +333,7 @@ void ScEditWindow::LoseFocus()
         pAcc = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > ScEditWindow::CreateAccessible()
 {

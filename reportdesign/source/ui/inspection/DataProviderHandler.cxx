@@ -226,7 +226,7 @@ void SAL_CALL DataProviderHandler::setPropertyValue(const OUString & PropertyNam
             break;
     }
 }
-// -----------------------------------------------------------------------------
+
 void DataProviderHandler::impl_updateChartTitle_throw(const uno::Any& _aValue)
 {
     uno::Reference<chart2::XTitled> xTitled(m_xChartModel,uno::UNO_QUERY);
@@ -516,7 +516,7 @@ bool DataProviderHandler::impl_dialogLinkedFields_nothrow( ::osl::ClearableMutex
     _rClearBeforeDialog.clear();
     return ( xDialog->execute() != 0 );
 }
-// -----------------------------------------------------------------------------
+
 bool DataProviderHandler::impl_dialogChartType_nothrow( ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
 {
     uno::Sequence<uno::Any> aSeq(2);

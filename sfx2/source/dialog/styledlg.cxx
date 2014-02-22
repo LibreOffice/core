@@ -68,7 +68,7 @@ SfxStyleDialog::SfxStyleDialog
     GetCancelButton().SetClickHdl( LINK(this, SfxStyleDialog, CancelHdl) );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxStyleDialog::~SfxStyleDialog()
 
@@ -84,7 +84,7 @@ SfxStyleDialog::~SfxStyleDialog()
     delete GetInputSetImpl();
 }
 
-// -----------------------------------------------------------------------
+
 
 const SfxItemSet* SfxStyleDialog::GetRefreshedSet()
 
@@ -98,7 +98,7 @@ const SfxItemSet* SfxStyleDialog::GetRefreshedSet()
     return GetInputSetImpl();
 }
 
-// -----------------------------------------------------------------------
+
 
 short SfxStyleDialog::Ok()
 
@@ -112,7 +112,7 @@ short SfxStyleDialog::Ok()
     return RET_OK;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SfxStyleDialog, CancelHdl, Button *, pButton )
 

@@ -29,12 +29,12 @@
 #include "inputhdl.hxx"
 #include "globstr.hrc"
 
-// -----------------------------------------------------------------------
+
 
 TYPEINIT1(ScUndoModifyStyle, ScSimpleUndo);
 TYPEINIT1(ScUndoApplyPageStyle, ScSimpleUndo);
 
-// -----------------------------------------------------------------------
+
 //
 //      modify style (cell or page style)
 //
@@ -86,7 +86,7 @@ void ScStyleSaveData::InitFromStyle( const SfxStyleSheetBase* pSource )
         *this = ScStyleSaveData();      // empty
 }
 
-// -----------------------------------------------------------------------
+
 
 ScUndoModifyStyle::ScUndoModifyStyle( ScDocShell* pDocSh, SfxStyleFamily eFam,
                     const ScStyleSaveData& rOld, const ScStyleSaveData& rNew ) :
@@ -230,7 +230,7 @@ bool ScUndoModifyStyle::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;       // no repeat possible
 }
 
-// -----------------------------------------------------------------------
+
 //
 //      apply page style
 //

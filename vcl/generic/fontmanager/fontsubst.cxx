@@ -114,7 +114,7 @@ void SalGenericInstance::RegisterFontSubstitutors( ImplDevFontList* pList )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static FontSelectPattern GetFcSubstitute(const FontSelectPattern &rFontSelData, OUString& rMissingCodes )
 {
@@ -152,7 +152,7 @@ namespace
     };
 }
 
-//--------------------------------------------------------------------------
+
 
 bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelData ) const
 {
@@ -219,7 +219,7 @@ bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelDa
     return bHaveSubstitute;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool FcGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFontSelData,
     OUString& rMissingCodes ) const

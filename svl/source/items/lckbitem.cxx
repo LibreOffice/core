@@ -22,17 +22,17 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-// -----------------------------------------------------------------------
+
 
 TYPEINIT1_AUTOFACTORY(SfxLockBytesItem, SfxPoolItem);
 
-// -----------------------------------------------------------------------
+
 
 SfxLockBytesItem::SfxLockBytesItem()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxLockBytesItem::SfxLockBytesItem( sal_uInt16 nW, SvStream &rStream )
 :   SfxPoolItem( nW )
@@ -44,7 +44,7 @@ SfxLockBytesItem::SfxLockBytesItem( sal_uInt16 nW, SvStream &rStream )
     rStream.ReadStream( aLockBytesStream );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxLockBytesItem::SfxLockBytesItem( const SfxLockBytesItem& rItem )
 :   SfxPoolItem( rItem ),
@@ -52,27 +52,27 @@ SfxLockBytesItem::SfxLockBytesItem( const SfxLockBytesItem& rItem )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxLockBytesItem::~SfxLockBytesItem()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxLockBytesItem::operator==( const SfxPoolItem& rItem ) const
 {
     return ((SfxLockBytesItem&)rItem)._xVal == _xVal;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SfxLockBytesItem::Clone(SfxItemPool *) const
 {
     return new SfxLockBytesItem( *this );
 }
 
-// -----------------------------------------------------------------------
+
 
 #define MAX_BUF 32000
 
@@ -97,7 +97,7 @@ SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, sal_uInt16 ) const
     return new SfxLockBytesItem( Which(), aNewStream );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SfxLockBytesItem::Store(SvStream &rStream, sal_uInt16 ) const
 {

@@ -34,7 +34,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 
 
-//------------------------------------------------------------------------------
+
 // static ServiceInfo
 
 OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
@@ -49,7 +49,7 @@ OUString SAL_CALL ODriver::getImplementationName(  ) throw(RuntimeException)
 
 // service names from file::OFileDriver
 
-//------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
     connectivity::calc::ODriver_CreateInstance(const ::com::sun::star::uno::Reference<
@@ -92,6 +92,6 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
     }
     return Sequence< DriverPropertyInfo >();
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

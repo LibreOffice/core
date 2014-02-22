@@ -1074,7 +1074,7 @@ void ChartTypeTabPage::showAllControls( ChartTypeDialogController& rTypeControll
 
     long nYPos = m_nYTopPos;
 
-    //------
+
     bool bShow = rTypeController.shouldShow_XAxisTypeControl();
     long nXPos = m_pAxisTypeResourceGroup->getPosition().X();
     m_pAxisTypeResourceGroup->showControls( bShow );
@@ -1083,7 +1083,7 @@ void ChartTypeTabPage::showAllControls( ChartTypeDialogController& rTypeControll
         m_pAxisTypeResourceGroup->setPosition( Point( nXPos, nYPos ) );
         nYPos += m_pAxisTypeResourceGroup->getHeight() + lcl_getDistance();
     }
-    //------
+
     bShow = rTypeController.shouldShow_3DLookControl();
     m_pDim3DLookResourceGroup->showControls( bShow );
     if(bShow)
@@ -1091,7 +1091,7 @@ void ChartTypeTabPage::showAllControls( ChartTypeDialogController& rTypeControll
         m_pDim3DLookResourceGroup->setPosition( Point( nXPos, nYPos ) );
         nYPos += m_pDim3DLookResourceGroup->getHeight() + lcl_getDistance();
     }
-    //------
+
     bShow = rTypeController.shouldShow_StackingControl();
     m_pStackingResourceGroup->showControls( bShow, rTypeController.shouldShow_DeepStackingControl() );
     if(bShow)
@@ -1102,7 +1102,7 @@ void ChartTypeTabPage::showAllControls( ChartTypeDialogController& rTypeControll
         m_pStackingResourceGroup->setPosition( Point( nStackingXPos, nYPos ) );
         nYPos += m_pStackingResourceGroup->getHeight() + lcl_getDistance();
     }
-    //------
+
     bShow = rTypeController.shouldShow_SplineControl();
     m_pSplineResourceGroup->showControls( bShow );
     if(bShow)
@@ -1110,7 +1110,7 @@ void ChartTypeTabPage::showAllControls( ChartTypeDialogController& rTypeControll
         m_pSplineResourceGroup->setPosition( Point( nXPos, nYPos ) );
         nYPos += m_pSplineResourceGroup->getHeight() + lcl_getDistance();
     }
-    //------
+
     bShow = rTypeController.shouldShow_GeometryControl();
     m_pGeometryResourceGroup->showControls( bShow );
     if(bShow)
@@ -1118,7 +1118,7 @@ void ChartTypeTabPage::showAllControls( ChartTypeDialogController& rTypeControll
         m_pGeometryResourceGroup->setPosition( Point( nXPos+17, nYPos ) );
         nYPos += m_pGeometryResourceGroup->getHeight() + lcl_getDistance();
     }
-    //------
+
     bShow = rTypeController.shouldShow_SortByXValuesResourceGroup();
     m_pSortByXValuesResourceGroup->showControls( bShow );
     if(bShow)
@@ -1126,7 +1126,7 @@ void ChartTypeTabPage::showAllControls( ChartTypeDialogController& rTypeControll
         m_pSortByXValuesResourceGroup->setPosition( Point( nXPos, nYPos ) );
         nYPos += m_pSortByXValuesResourceGroup->getHeight() + lcl_getDistance();
     }
-    //------
+
     Size aPageSize( this->GetSizePixel() );
     Size aRemainingSize = Size( aPageSize.Width()-nXPos, aPageSize.Height()-nYPos );
     rTypeController.showExtraControls( this, Point( nXPos, nYPos ), aRemainingSize );

@@ -54,20 +54,20 @@ using com::sun::star::beans::XPropertySet;
 using com::sun::star::presentation::XPresentationPage;
 using com::sun::star::task::XStatusIndicator;
 
-// -----------------------------------------------------------------------------
+
 
 PlaceWareExporter::PlaceWareExporter(const Reference< XComponentContext > & rxContext)
 :   mxContext( rxContext )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 PlaceWareExporter::~PlaceWareExporter()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 class PageEntry
 {
 private:
@@ -399,7 +399,7 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 PageEntry* PlaceWareExporter::exportPage( Reference< XDrawPage >&xDrawPage )
 {

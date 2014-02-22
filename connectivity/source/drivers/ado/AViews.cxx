@@ -44,18 +44,18 @@ sdbcx::ObjectType OViews::createObject(const OUString& _rName)
     pView->setNew(sal_False);
     return pView;
 }
-// -------------------------------------------------------------------------
+
 void OViews::impl_refresh(  ) throw(RuntimeException)
 {
     m_aCollection.Refresh();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OViews::createDescriptor()
 {
     return new OAdoView(isCaseSensitive());
 }
 
-// -------------------------------------------------------------------------
+
 // XAppend
 sdbcx::ObjectType OViews::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
@@ -81,14 +81,14 @@ sdbcx::ObjectType OViews::appendObject( const OUString& _rForName, const Referen
 
     return createObject( _rForName );
 }
-// -------------------------------------------------------------------------
+
 // XDrop
 void OViews::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
 {
     if(!m_aCollection.Delete(_sElementName))
         ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
 }
-// -------------------------------------------------------------------------
+
 
 
 

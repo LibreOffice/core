@@ -58,7 +58,7 @@ static ::osl::Mutex m_ThreadMutex;
 using namespace ::comphelper;
 using namespace connectivity::mozab;
 using namespace connectivity;
-//------------------------------------------------------------------------------
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -66,7 +66,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
-//------------------------------------------------------------------------------
+
 OCommonStatement::OCommonStatement(OConnection* _pConnection )
     :OCommonStatement_IBASE(m_aMutex)
     ,OPropertySetHelper(OCommonStatement_IBASE::rBHelper)
@@ -83,12 +83,12 @@ OCommonStatement::OCommonStatement(OConnection* _pConnection )
     m_pConnection->acquire();
     OSL_TRACE("In/Out: OCommonStatement::OCommonStatement" );
 }
-// -----------------------------------------------------------------------------
+
 OCommonStatement::~OCommonStatement()
 {
 }
 
-//------------------------------------------------------------------------------
+
 void OCommonStatement::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -105,7 +105,7 @@ void OCommonStatement::disposing()
     dispose_ChildImpl();
     OCommonStatement_IBASE::disposing();
 }
-//-----------------------------------------------------------------------------
+
 Any SAL_CALL OCommonStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = OCommonStatement_IBASE::queryInterface(rType);
@@ -113,7 +113,7 @@ Any SAL_CALL OCommonStatement::queryInterface( const Type & rType ) throw(Runtim
         aRet = OPropertySetHelper::queryInterface(rType);
     return aRet;
 }
-// -------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OCommonStatement::getTypes(  ) throw(RuntimeException)
 {
     ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
@@ -122,7 +122,7 @@ Sequence< Type > SAL_CALL OCommonStatement::getTypes(  ) throw(RuntimeException)
 
     return ::comphelper::concatSequences(aTypes.getTypes(),OCommonStatement_IBASE::getTypes());
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OCommonStatement::close(  ) throw(SQLException, RuntimeException)
 {
     {
@@ -133,7 +133,7 @@ void SAL_CALL OCommonStatement::close(  ) throw(SQLException, RuntimeException)
 }
 
 
-// -------------------------------------------------------------------------
+
 void OCommonStatement::createTable( ) throw ( SQLException, RuntimeException )
 {
     if(m_pParseTree)
@@ -178,7 +178,7 @@ void OCommonStatement::createTable( ) throw ( SQLException, RuntimeException )
     else
         getOwnConnection()->throwSQLException( STR_QUERY_TOO_COMPLEX, *this );
 }
-// -------------------------------------------------------------------------
+
 OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql , sal_Bool bAdjusted)
     throw ( SQLException, RuntimeException )
 {
@@ -250,7 +250,7 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql 
     return eSelect;
 
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > OCommonStatement::impl_executeCurrentQuery()
 {
     clearCachedResultSet();
@@ -265,7 +265,7 @@ Reference< XResultSet > OCommonStatement::impl_executeCurrentQuery()
 
 }
 
-// -------------------------------------------------------------------------
+
 void OCommonStatement::initializeResultSet( OResultSet* _pResult )
 {
     ENSURE_OR_THROW( _pResult, "invalid result set" );
@@ -277,7 +277,7 @@ void OCommonStatement::initializeResultSet( OResultSet* _pResult )
     _pResult->setTable(m_pTable);
 }
 
-// -------------------------------------------------------------------------
+
 void OCommonStatement::clearCachedResultSet()
 {
     Reference< XResultSet > xResultSet( m_xResultSet.get(), UNO_QUERY );
@@ -297,14 +297,14 @@ void OCommonStatement::clearCachedResultSet()
     m_xResultSet.clear();
 }
 
-// -------------------------------------------------------------------------
+
 void OCommonStatement::cacheResultSet( const ::rtl::Reference< OResultSet >& _pResult )
 {
     ENSURE_OR_THROW( _pResult.is(), "invalid result set" );
     m_xResultSet = Reference< XResultSet >( _pResult.get() );
 }
 
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OCommonStatement::execute( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -316,7 +316,7 @@ sal_Bool SAL_CALL OCommonStatement::execute( const OUString& sql ) throw(SQLExce
     // returns true when a resultset is available
     return xRS.is();
 }
-// -------------------------------------------------------------------------
+
 
 Reference< XResultSet > SAL_CALL OCommonStatement::executeQuery( const OUString& sql ) throw(SQLException, RuntimeException)
 {
@@ -332,7 +332,7 @@ Reference< XResultSet > SAL_CALL OCommonStatement::executeQuery( const OUString&
 
     return impl_executeCurrentQuery();
 }
-// -------------------------------------------------------------------------
+
 
 Reference< XConnection > SAL_CALL OCommonStatement::getConnection(  ) throw(SQLException, RuntimeException)
 {
@@ -342,7 +342,7 @@ Reference< XConnection > SAL_CALL OCommonStatement::getConnection(  ) throw(SQLE
     // just return our connection here
     return (Reference< XConnection >)m_pConnection;
 }
-// -----------------------------------------------------------------------------
+
 Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = ::cppu::queryInterface(rType,static_cast< XServiceInfo*> (this));
@@ -350,14 +350,14 @@ Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeExcep
         aRet = OCommonStatement::queryInterface(rType);
     return aRet;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OCommonStatement::executeUpdate( const OUString& /*sql*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XStatement::executeUpdate", *this );
     return 0;
 
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OCommonStatement::getWarnings(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -365,9 +365,9 @@ Any SAL_CALL OCommonStatement::getWarnings(  ) throw(SQLException, RuntimeExcept
 
     return makeAny(m_aLastWarning);
 }
-// -------------------------------------------------------------------------
 
-// -------------------------------------------------------------------------
+
+
 void SAL_CALL OCommonStatement::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -376,7 +376,7 @@ void SAL_CALL OCommonStatement::clearWarnings(  ) throw(SQLException, RuntimeExc
 
     m_aLastWarning = SQLWarning();
 }
-// -------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* OCommonStatement::createArrayHelper( ) const
 {
     // this properties are define by the service resultset
@@ -397,12 +397,12 @@ void SAL_CALL OCommonStatement::clearWarnings(  ) throw(SQLException, RuntimeExc
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-// -------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper & OCommonStatement::getInfoHelper()
 {
     return *const_cast<OCommonStatement*>(this)->getArrayHelper();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool OCommonStatement::convertFastPropertyValue(
                             Any & /*rConvertedValue*/,
                             Any & /*rOldValue*/,
@@ -414,7 +414,7 @@ sal_Bool OCommonStatement::convertFastPropertyValue(
     // here we have to try to convert
     return bConverted;
 }
-// -------------------------------------------------------------------------
+
 void OCommonStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& /*rValue*/) throw (Exception)
 {
     // set the value to whatever is necessary
@@ -432,7 +432,7 @@ void OCommonStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
             ;
     }
 }
-// -------------------------------------------------------------------------
+
 void OCommonStatement::getFastPropertyValue(Any& /*rValue*/,sal_Int32 nHandle) const
 {
     switch(nHandle)
@@ -449,34 +449,34 @@ void OCommonStatement::getFastPropertyValue(Any& /*rValue*/,sal_Int32 nHandle) c
             ;
     }
 }
-// -------------------------------------------------------------------------
+
 IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbcx.OStatement","com.sun.star.sdbc.Statement");
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OCommonStatement::acquire() throw()
 {
     OCommonStatement_IBASE::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OCommonStatement::release() throw()
 {
     relase_ChildImpl();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OStatement::acquire() throw()
 {
     OCommonStatement::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OStatement::release() throw()
 {
     OCommonStatement::release();
 }
-// -----------------------------------------------------------------------------
+
 Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OCommonStatement::getPropertySetInfo(  ) throw(RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
-// -----------------------------------------------------------------------------
+
 void OCommonStatement::createColumnMapping()
 {
     size_t i;
@@ -499,7 +499,7 @@ void OCommonStatement::createColumnMapping()
         OSL_TRACE("AFTER  Mapped: %d -> %d", i, m_aColMapping[i] );
 #endif
 }
-// -----------------------------------------------------------------------------
+
 
 void OCommonStatement::analyseSQL()
 {
@@ -525,7 +525,7 @@ void OCommonStatement::analyseSQL()
         }
     }
 }
-//------------------------------------------------------------------
+
 void OCommonStatement::setOrderbyColumn(    OSQLParseNode* pColumnRef,
                                         OSQLParseNode* pAscendingDescending)
 {
@@ -550,6 +550,6 @@ void OCommonStatement::setOrderbyColumn(    OSQLParseNode* pColumnRef,
     // Ascending or Descending?
     m_aOrderbyAscending.push_back((SQL_ISTOKEN(pAscendingDescending,DESC)) ? SQL_DESC : SQL_ASC);
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

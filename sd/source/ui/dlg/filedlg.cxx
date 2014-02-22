@@ -43,9 +43,9 @@
 #include <vcl/graphicfilter.hxx>
 
 
-// --------------------------------------------------------------------
+
 // -----------      SdFileDialog_Imp        ---------------------------
-// --------------------------------------------------------------------
+
 class SdFileDialog_Imp : public sfx2::FileDialogHelper
 {
 private:
@@ -76,7 +76,7 @@ public:
     virtual void SAL_CALL       ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
 };
 
-// ------------------------------------------------------------------------
+
 void SAL_CALL SdFileDialog_Imp::ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
 {
     SolarMutexGuard aGuard;
@@ -99,7 +99,7 @@ void SAL_CALL SdFileDialog_Imp::ControlStateChanged( const css::ui::dialogs::Fil
     }
 }
 
-// ------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl)
 {
     maUpdateTimer.Stop();
@@ -167,7 +167,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl)
     return 0;
 }
 
-// ------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(SdFileDialog_Imp, IsMusicStoppedHdl)
 {
     SolarMutexGuard aGuard;
@@ -224,7 +224,7 @@ void SdFileDialog_Imp::CheckSelectionState()
     }
 }
 
-//-----------------------------------------------------------------------------
+
 SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
                                     sal_Bool        bUsableSelection    ) :
     FileDialogHelper( nDialogType, 0 ),
@@ -273,14 +273,14 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
 }
 
 
-// ------------------------------------------------------------------------
+
 SdFileDialog_Imp::~SdFileDialog_Imp()
 {
     if( mnPlaySoundEvent )
         Application::RemoveUserEvent( mnPlaySoundEvent );
 }
 
-// ------------------------------------------------------------------------
+
 ErrCode SdFileDialog_Imp::Execute()
 {
     // make sure selection checkbox is disabled if
@@ -289,9 +289,9 @@ ErrCode SdFileDialog_Imp::Execute()
     return FileDialogHelper::Execute();
 }
 
-// --------------------------------------------------------------------
+
 // -----------      SdOpenSoundFileDialog       -----------------------
-// --------------------------------------------------------------------
+
 
 // these are simple forwarders
 SdOpenSoundFileDialog::SdOpenSoundFileDialog() :
@@ -323,24 +323,24 @@ SdOpenSoundFileDialog::SdOpenSoundFileDialog() :
 #endif
 }
 
-// ------------------------------------------------------------------------
+
 SdOpenSoundFileDialog::~SdOpenSoundFileDialog()
 {
 }
 
-// ------------------------------------------------------------------------
+
 ErrCode SdOpenSoundFileDialog::Execute()
 {
     return mpImpl->Execute();
 }
 
-// ------------------------------------------------------------------------
+
 OUString SdOpenSoundFileDialog::GetPath() const
 {
     return mpImpl->GetPath();
 }
 
-// ------------------------------------------------------------------------
+
 void SdOpenSoundFileDialog::SetPath( const OUString& rPath )
 {
     mpImpl->SetDisplayDirectory( rPath );

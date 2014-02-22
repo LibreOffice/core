@@ -31,7 +31,7 @@ namespace abp
     //=====================================================================
     //= FieldMappingPage
     //=====================================================================
-    //---------------------------------------------------------------------
+
     FieldMappingPage::FieldMappingPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage( _pParent, ModuleRes( RID_PAGE_FIELDMAPPING ) )
         ,m_aExplanation     ( this, ModuleRes( FT_FIELDASSIGMENTEXPL ) )
@@ -56,27 +56,27 @@ namespace abp
         }
     }
 
-    //---------------------------------------------------------------------
+
     void FieldMappingPage::ActivatePage()
     {
         AddressBookSourcePage::ActivatePage();
         m_aInvokeDialog.GrabFocus();
     }
 
-    //---------------------------------------------------------------------
+
     void FieldMappingPage::DeactivatePage()
     {
         AddressBookSourcePage::DeactivatePage();
     }
 
-    //---------------------------------------------------------------------
+
     void FieldMappingPage::initializePage()
     {
         AddressBookSourcePage::initializePage();
         implUpdateHint();
     }
 
-    //---------------------------------------------------------------------
+
     void FieldMappingPage::implUpdateHint()
     {
         const AddressSettings& rSettings = getSettings();
@@ -86,7 +86,7 @@ namespace abp
         m_aHint.SetText( sHint );
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK( FieldMappingPage, OnInvokeDialog, void*, /*NOTINTERESTEDIN*/ )
     {
         AddressSettings& rSettings = getSettings();

@@ -96,7 +96,7 @@ static inline double unsigned_int64_to_double( sal_uInt64 n ) SAL_THROW(())
 #endif
 
 
-//--------------------------------------------------------------------------------------------------
+
 static inline double round( double aVal )
 {
     sal_Bool bPos   = (aVal >= 0.0);    //
@@ -107,7 +107,7 @@ static inline double round( double aVal )
     return (bPos ? aVal : -aVal);
 }
 
-//--------------------------------------------------------------------------------------------------
+
 static sal_Bool getNumericValue( double & rfVal, const OUString & rStr )
 {
     double fRet = rStr.toDouble();
@@ -302,7 +302,7 @@ Sequence< OUString > TypeConverter_Impl::getSupportedServiceNames(void) throw( R
     return stoc_services::tcv_getSupportedServiceNames();
 }
 
-//--------------------------------------------------------------------------------------------------
+
 sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt64 max )
     throw( CannotConvertException )
 {
@@ -417,7 +417,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
         Reference<XInterface>(), aDestinationClass, FailReason::OUT_OF_RANGE, 0 );
 }
 
-//--------------------------------------------------------------------------------------------------
+
 double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max ) const
     throw( CannotConvertException )
 {
@@ -498,7 +498,7 @@ double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max ) c
         Reference< XInterface >(), aDestinationClass, FailReason::OUT_OF_RANGE, 0 );
 }
 
-//--------------------------------------------------------------------------------------------------
+
 Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestType )
     throw( IllegalArgumentException, CannotConvertException, RuntimeException)
 {
@@ -692,7 +692,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         Reference< XInterface >(), aDestinationClass, FailReason::INVALID, 0 );
 }
 
-//--------------------------------------------------------------------------------------------------
+
 Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestinationClass )
     throw( IllegalArgumentException, CannotConvertException, RuntimeException )
 {

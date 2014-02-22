@@ -82,7 +82,7 @@ namespace slideshow
         private:
 
             // View layer methods
-            //------------------------------------------------------------------
+
 
             virtual void addViewLayer( const ViewLayerSharedPtr&    rNewLayer,
                                        bool                         bRedrawLayer );
@@ -91,7 +91,7 @@ namespace slideshow
 
 
             // ExternalShapeBase methods
-            //------------------------------------------------------------------
+
 
             virtual bool implRender( const ::basegfx::B2DRange& rCurrBounds ) const;
             virtual void implViewChanged( const UnoViewSharedPtr& rView );
@@ -127,7 +127,7 @@ namespace slideshow
         {
         }
 
-        // ---------------------------------------------------------------------
+
 
         void AppletShape::implViewChanged( const UnoViewSharedPtr& rView )
         {
@@ -143,7 +143,7 @@ namespace slideshow
             }
         }
 
-        // ---------------------------------------------------------------------
+
 
         void AppletShape::implViewsChanged()
         {
@@ -156,7 +156,7 @@ namespace slideshow
                                  ::boost::cref( AppletShape::getBounds())) );
         }
 
-        // ---------------------------------------------------------------------
+
 
         void AppletShape::addViewLayer( const ViewLayerSharedPtr& rNewLayer,
                                         bool                      bRedrawLayer )
@@ -185,7 +185,7 @@ namespace slideshow
             }
         }
 
-        // ---------------------------------------------------------------------
+
 
         bool AppletShape::removeViewLayer( const ViewLayerSharedPtr& rLayer )
         {
@@ -219,7 +219,7 @@ namespace slideshow
             return true;
         }
 
-        // ---------------------------------------------------------------------
+
 
         bool AppletShape::clearAllViewLayers()
         {
@@ -227,7 +227,7 @@ namespace slideshow
             return true;
         }
 
-        // ---------------------------------------------------------------------
+
 
         bool AppletShape::implRender( const ::basegfx::B2DRange& rCurrBounds ) const
         {
@@ -248,7 +248,7 @@ namespace slideshow
             return true;
         }
 
-        // ---------------------------------------------------------------------
+
 
         bool AppletShape::implStartIntrinsicAnimation()
         {
@@ -262,7 +262,7 @@ namespace slideshow
             return true;
         }
 
-        // ---------------------------------------------------------------------
+
 
         bool AppletShape::implEndIntrinsicAnimation()
         {
@@ -275,7 +275,7 @@ namespace slideshow
             return true;
         }
 
-        // ---------------------------------------------------------------------
+
 
         bool AppletShape::implPauseIntrinsicAnimation()
         {
@@ -284,14 +284,14 @@ namespace slideshow
             return true;
         }
 
-        // ---------------------------------------------------------------------
+
 
         bool AppletShape::implIsIntrinsicAnimationPlaying() const
         {
             return mbIsPlaying;
         }
 
-        // ---------------------------------------------------------------------
+
 
         void AppletShape::implSetIntrinsicAnimationTime(double)
         {

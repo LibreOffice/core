@@ -59,7 +59,7 @@ ORoadmapEntry::ORoadmapEntry() : ORoadmapEntry_Base( )
     // which has been built from the registered property of _one_ instance.
 }
 
-//--------------------------------------------------------------------------
+
 IMPLEMENT_FORWARD_XINTERFACE2( ORoadmapEntry, ORoadmapEntry_Base, ::comphelper::OPropertyContainer );
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( ORoadmapEntry, ORoadmapEntry_Base, ::comphelper::OPropertyContainer );
     // order matters:
@@ -68,7 +68,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( ORoadmapEntry, ORoadmapEntry_Base, ::comphelpe
     //  the third up to n-th (when using IMPLEMENT_FORWARD_*3 and so on) are other base classes
     //  whose XInterface and XTypeProvider implementations should be merged
 
-//--------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star:: beans::XPropertySetInfo > SAL_CALL
     ORoadmapEntry::getPropertySetInfo()
     throw(::com::sun::star::uno::RuntimeException)
@@ -95,13 +95,13 @@ sal_Bool SAL_CALL ORoadmapEntry::supportsService( const OUString& ServiceName ) 
     pArray[0] = "com.sun.star.awt.RoadmapItem";
     return aRet;
 }
-//--------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper& ORoadmapEntry::getInfoHelper()
 {
     return *getArrayHelper();
 }
 
-//--------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* ORoadmapEntry::createArrayHelper() const
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps;

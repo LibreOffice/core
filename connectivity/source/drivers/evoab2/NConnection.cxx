@@ -33,7 +33,7 @@
 using namespace connectivity::evoab;
 using namespace dbtools;
 
-//------------------------------------------------------------------------------
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -64,14 +64,14 @@ OUString implGetExceptionMsg( Exception& e )
          return aMsg;
 }
 
-// --------------------------------------------------------------------------------
+
 OEvoabConnection::OEvoabConnection( OEvoabDriver& _rDriver )
     :OSubComponent<OEvoabConnection, OConnection_BASE>( (::cppu::OWeakObject*)(&_rDriver), this )
     ,m_rDriver(_rDriver)
     ,m_xCatalog(NULL)
 {
 }
-//-----------------------------------------------------------------------------
+
 OEvoabConnection::~OEvoabConnection()
 {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -82,17 +82,17 @@ OEvoabConnection::~OEvoabConnection()
     }
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL OEvoabConnection::release() throw()
 {
     relase_ChildImpl();
 }
 
 // XServiceInfo
-// --------------------------------------------------------------------------------
+
 IMPLEMENT_SERVICE_INFO(OEvoabConnection, "com.sun.star.sdbc.drivers.evoab.Connection", "com.sun.star.sdbc.Connection")
 
-//-----------------------------------------------------------------------------
+
 void OEvoabConnection::construct(const OUString& url, const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     osl_atomic_increment( &m_refCount );
@@ -123,13 +123,13 @@ void OEvoabConnection::construct(const OUString& url, const Sequence< PropertyVa
     osl_atomic_decrement( &m_refCount );
 }
 
-// --------------------------------------------------------------------------------
+
 OUString SAL_CALL OEvoabConnection::nativeSQL( const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     // when you need to transform SQL92 to you driver specific you can do it here
     return _sSql;
 }
-// --------------------------------------------------------------------------------
+
 Reference< XDatabaseMetaData > SAL_CALL OEvoabConnection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -144,7 +144,7 @@ Reference< XDatabaseMetaData > SAL_CALL OEvoabConnection::getMetaData(  ) throw(
 
     return xMetaData;
 }
-//------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< XTablesSupplier > OEvoabConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -157,7 +157,7 @@ Reference< XDatabaseMetaData > SAL_CALL OEvoabConnection::getMetaData(  ) throw(
      }
      return xTab;
 }
-// --------------------------------------------------------------------------------
+
 Reference< XStatement > SAL_CALL OEvoabConnection::createStatement(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -169,7 +169,7 @@ Reference< XStatement > SAL_CALL OEvoabConnection::createStatement(  ) throw(SQL
     m_aStatements.push_back(WeakReferenceHelper(*pStmt));
     return xStmt;
 }
-// --------------------------------------------------------------------------------
+
 Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareStatement( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -194,7 +194,7 @@ sal_Bool SAL_CALL OEvoabConnection::isClosed(  ) throw(SQLException, RuntimeExce
     return OConnection_BASE::rBHelper.bDisposed;
 }
 
-// --------------------------------------------------------------------------------
+
 // XCloseable
 void SAL_CALL OEvoabConnection::close(  ) throw(SQLException, RuntimeException)
 {
@@ -205,7 +205,7 @@ void SAL_CALL OEvoabConnection::close(  ) throw(SQLException, RuntimeException)
     dispose();
 }
 
-// --------------------------------------------------------------------------------
+
 // XWarningsSupplier
 Any SAL_CALL OEvoabConnection::getWarnings(  ) throw(SQLException, RuntimeException)
 {
@@ -215,7 +215,7 @@ void SAL_CALL OEvoabConnection::clearWarnings(  ) throw(SQLException, RuntimeExc
 {
     m_aWarnings.clearWarnings();
 }
-//------------------------------------------------------------------------------
+
 
 void OEvoabConnection::disposing()
 {

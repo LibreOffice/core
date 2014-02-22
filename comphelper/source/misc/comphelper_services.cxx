@@ -22,7 +22,7 @@
 
 #include <rtl/instance.hxx>
 
-//--------------------------------------------------------------------
+
 extern void createRegistryInfo_OPropertyBag();
 extern void createRegistryInfo_SequenceOutputStream();
 extern void createRegistryInfo_SequenceInputStream();

@@ -36,7 +36,7 @@ namespace abp
     //=====================================================================
     //= TypeSelectionPage
     //=====================================================================
-    //---------------------------------------------------------------------
+
     TypeSelectionPage::TypeSelectionPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_SELECTABTYPE))
         ,m_aHint                (this,  ModuleRes(FT_TYPE_HINTS))
@@ -168,7 +168,7 @@ namespace abp
         }
     }
 
-    //---------------------------------------------------------------------
+
     TypeSelectionPage::~TypeSelectionPage()
     {
         for ( ::std::vector< ButtonItem >::iterator loop = m_aAllTypes.begin();
@@ -178,7 +178,7 @@ namespace abp
         }
     }
 
-    //---------------------------------------------------------------------
+
     void TypeSelectionPage::ActivatePage()
     {
         AddressBookSourcePage::ActivatePage();
@@ -197,14 +197,14 @@ namespace abp
         getDialog()->enableButtons(WZB_PREVIOUS, sal_False);
     }
 
-    //---------------------------------------------------------------------
+
     void TypeSelectionPage::DeactivatePage()
     {
         AddressBookSourcePage::DeactivatePage();
         getDialog()->enableButtons(WZB_PREVIOUS, sal_True);
     }
 
-    //---------------------------------------------------------------------
+
     void TypeSelectionPage::selectType( AddressSourceType _eType )
     {
         for ( ::std::vector< ButtonItem >::const_iterator loop = m_aAllTypes.begin();
@@ -215,7 +215,7 @@ namespace abp
         }
     }
 
-    //---------------------------------------------------------------------
+
     AddressSourceType TypeSelectionPage::getSelectedType() const
     {
         for ( ::std::vector< ButtonItem >::const_iterator loop = m_aAllTypes.begin();
@@ -229,7 +229,7 @@ namespace abp
         return AST_INVALID;
     }
 
-    //---------------------------------------------------------------------
+
     void TypeSelectionPage::initializePage()
     {
         AddressBookSourcePage::initializePage();
@@ -238,7 +238,7 @@ namespace abp
         selectType(rSettings.eType);
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool TypeSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!AddressBookSourcePage::commitPage(_eReason))
@@ -257,14 +257,14 @@ namespace abp
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+
     bool TypeSelectionPage::canAdvance() const
     {
         return  AddressBookSourcePage::canAdvance()
             &&  (AST_INVALID != getSelectedType());
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK( TypeSelectionPage, OnTypeSelected, void*, /*NOTINTERESTEDIN*/ )
     {
         getDialog()->typeSelectionChanged( getSelectedType() );

@@ -26,7 +26,7 @@
 
 static const sal_Char pStrFix[] = "FIX";
 
-//------------------------------------------------------------------------
+
 //  Der Options-String darf kein Semikolon mehr enthalten (wegen Pickliste)
 //  darum ab Version 336 Komma stattdessen
 
@@ -76,7 +76,7 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 OUString ScImportOptions::BuildString() const
 {
@@ -98,7 +98,7 @@ OUString ScImportOptions::BuildString() const
     return aResult;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScImportOptions::SetTextEncoding( rtl_TextEncoding nEnc )
 {

@@ -55,14 +55,14 @@ using com::sun::star::container::XNameContainer;
 
 TYPEINIT1(FmFormPage, SdrPage);
 
-//------------------------------------------------------------------
+
 FmFormPage::FmFormPage(FmFormModel& rModel, bool bMasterPage)
            :SdrPage(rModel, bMasterPage)
            ,m_pImpl( new FmFormPageImpl( *this ) )
 {
 }
 
-//------------------------------------------------------------------
+
 FmFormPage::FmFormPage(const FmFormPage& rPage)
            :SdrPage(rPage)
            ,m_pImpl(new FmFormPageImpl( *this ) )
@@ -71,13 +71,13 @@ FmFormPage::FmFormPage(const FmFormPage& rPage)
     m_sPageName = rPage.m_sPageName;
 }
 
-//------------------------------------------------------------------
+
 FmFormPage::~FmFormPage()
 {
     delete m_pImpl;
 }
 
-//------------------------------------------------------------------
+
 void FmFormPage::SetModel(SdrModel* pNewModel)
 {
     /* #35055# */
@@ -111,14 +111,14 @@ void FmFormPage::SetModel(SdrModel* pNewModel)
     }
 }
 
-//------------------------------------------------------------------
+
 SdrPage* FmFormPage::Clone() const
 {
     return new FmFormPage(*this);
     // hier fehlt noch ein kopieren der Objekte
 }
 
-//------------------------------------------------------------------
+
 void FmFormPage::InsertObject(SdrObject* pObj, sal_uLong nPos,
                               const SdrInsertReason* pReason)
 {
@@ -127,7 +127,7 @@ void FmFormPage::InsertObject(SdrObject* pObj, sal_uLong nPos,
         ((FmFormModel*)GetModel())->GetUndoEnv().Inserted(pObj);
 }
 
-//------------------------------------------------------------------
+
 const Reference< css::form::XForms > & FmFormPage::GetForms( bool _bForceCreate ) const
 {
     const SdrPage& rMasterPage( *this );
@@ -139,7 +139,7 @@ const Reference< css::form::XForms > & FmFormPage::GetForms( bool _bForceCreate 
     return pFormPage->m_pImpl->getForms( _bForceCreate );
 }
 
-//------------------------------------------------------------------
+
 sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
                               const HelpEvent& rEvt )
 {
@@ -205,7 +205,7 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
     return sal_True;
 }
 
-//------------------------------------------------------------------
+
 SdrObject* FmFormPage::RemoveObject(sal_uLong nObjNum)
 {
     SdrObject* pObj = SdrPage::RemoveObject(nObjNum);

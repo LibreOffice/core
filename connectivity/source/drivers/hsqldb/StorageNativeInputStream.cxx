@@ -67,7 +67,7 @@ SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInp
 #endif
     StorageContainer::registerStream(env,name,key,mode);
 }
-// -----------------------------------------------------------------------------
+
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream
@@ -86,7 +86,7 @@ SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInp
     return read_from_storage_stream( env, obj_this, name, key );
 #endif
 }
-// -----------------------------------------------------------------------------
+
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream
@@ -105,7 +105,7 @@ SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInp
     return read_from_storage_stream_into_buffer(env,obj_this,name,key,buffer,off,len);
 #endif
 }
-// -----------------------------------------------------------------------------
+
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream
@@ -125,7 +125,7 @@ SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInp
 #endif
     StorageContainer::revokeStream(env,name,key);
 }
-// -----------------------------------------------------------------------------
+
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream
@@ -191,7 +191,7 @@ SAL_JNI_EXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeIn
     }
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream
@@ -233,7 +233,7 @@ SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInp
     }
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream
@@ -291,6 +291,6 @@ SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInp
 #endif
     return nBytesRead;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

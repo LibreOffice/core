@@ -102,7 +102,7 @@ sal_Int32                    SvtViewOptions::m_nRefCount_Windows         =   0  
 class IMPL_TViewData
 {
     public:
-        //---------------------------------------------------------------------------------------------------------
+
         // create "default" item
         IMPL_TViewData()
         {
@@ -114,7 +114,7 @@ class IMPL_TViewData
             m_bDefault     = true            ;
         }
 
-        //---------------------------------------------------------------------------------------------------------
+
         // write access - with reseting of default state
         void setWindowState( const OUString& sValue )
         {
@@ -125,7 +125,7 @@ class IMPL_TViewData
             m_sWindowState = sValue;
         }
 
-        //---------------------------------------------------------------------------------------------------------
+
         void setUserData( const css::uno::Sequence< css::beans::NamedValue >& lValue )
         {
             m_bDefault  = (
@@ -135,7 +135,7 @@ class IMPL_TViewData
             m_lUserData = lValue;
         }
 
-        //---------------------------------------------------------------------------------------------------------
+
         void setPageID( sal_Int32 nValue )
         {
             m_bDefault = (
@@ -145,7 +145,7 @@ class IMPL_TViewData
             m_nPageID  = nValue;
         }
 
-        //---------------------------------------------------------------------------------------------------------
+
         void setVisible( bool bValue )
         {
             m_bDefault = (
@@ -155,14 +155,14 @@ class IMPL_TViewData
             m_bVisible = bValue;
         }
 
-        //---------------------------------------------------------------------------------------------------------
+
         // read access
         OUString                              getWindowState() { return m_sWindowState; }
         css::uno::Sequence< css::beans::NamedValue > getUserData   () { return m_lUserData   ; }
         sal_Int32                                    getPageID     () { return m_nPageID     ; }
         bool                                     getVisible    () { return m_bVisible    ; }
 
-        //---------------------------------------------------------------------------------------------------------
+
         // special operation for easy access on user data
         void setUserItem( const OUString& sName  ,
                           const css::uno::Any&   aValue )
@@ -195,7 +195,7 @@ class IMPL_TViewData
             }
         }
 
-        //---------------------------------------------------------------------------------------------------------
+
         css::uno::Any getUserItem( const OUString& sName )
         {
             // default value - if item not exist!
@@ -213,7 +213,7 @@ class IMPL_TViewData
             return aValue;
         }
 
-        //---------------------------------------------------------------------------------------------------------
+
         // check for default items
         bool isDefault() { return m_bDefault; }
 
@@ -252,7 +252,7 @@ typedef ::boost::unordered_map< OUString                    ,
 *//*-*************************************************************************************************************/
 class SvtViewOptionsBase_Impl
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     public:
         enum State { STATE_NONE, STATE_FALSE, STATE_TRUE };
 
@@ -278,12 +278,12 @@ class SvtViewOptionsBase_Impl
                                                                                   const OUString&                                sItem    ,
                                                                                   const css::uno::Any&                                  aValue   );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
         css::uno::Reference< css::uno::XInterface > impl_getSetNode( const OUString& sNode           ,
                                                                            bool         bCreateIfMissing);
 
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
         OUString                                    m_sListName;
         css::uno::Reference< css::container::XNameAccess > m_xRoot;

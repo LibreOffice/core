@@ -80,7 +80,7 @@ private:
     ScExtTabSettingsMap maMap;
 };
 
-// ----------------------------------------------------------------------------
+
 
 ScExtTabSettingsCont::ScExtTabSettingsCont()
 {
@@ -143,7 +143,7 @@ ScExtDocOptionsImpl::ScExtDocOptionsImpl() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScExtDocOptions::ScExtDocOptions() :
     mxImpl( new ScExtDocOptionsImpl )

@@ -40,7 +40,7 @@ using namespace connectivity::file;
 
 typedef connectivity::file::OConnection OConnection_BASE;
 
-//------------------------------------------------------------------------------
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -50,7 +50,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::sheet;
 
-// --------------------------------------------------------------------------------
+
 
 OCalcConnection::OCalcConnection(ODriver* _pDriver) : OConnection(_pDriver),m_nDocCount(0)
 {
@@ -103,7 +103,7 @@ void OCalcConnection::construct(const OUString& url,const Sequence< PropertyValu
     ODocHolder aDocHodler(this); // just to test that the doc can be loaded
     acquireDoc();
 }
-// -----------------------------------------------------------------------------
+
 Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcConnection::acquireDoc" );
@@ -170,14 +170,14 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
     osl_atomic_increment(&m_nDocCount);
     return m_xDoc;
 }
-// -----------------------------------------------------------------------------
+
 void OCalcConnection::releaseDoc()
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcConnection::releaseDoc" );
     if ( osl_atomic_decrement(&m_nDocCount) == 0 )
         ::comphelper::disposeComponent( m_xDoc );
 }
-// -----------------------------------------------------------------------------
+
 void OCalcConnection::disposing()
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcConnection::disposing" );
@@ -190,11 +190,11 @@ void OCalcConnection::disposing()
 }
 
 // XServiceInfo
-// --------------------------------------------------------------------------------
+
 
 IMPLEMENT_SERVICE_INFO(OCalcConnection, "com.sun.star.sdbc.drivers.calc.Connection", "com.sun.star.sdbc.Connection")
 
-// --------------------------------------------------------------------------------
+
 
 Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
@@ -213,7 +213,7 @@ Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  ) throw(S
     return xMetaData;
 }
 
-//------------------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Reference< XTablesSupplier > OCalcConnection::createCatalog()
 {
@@ -229,7 +229,7 @@ Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  ) throw(S
     return xTab;
 }
 
-// --------------------------------------------------------------------------------
+
 
 Reference< XStatement > SAL_CALL OCalcConnection::createStatement(  ) throw(SQLException, RuntimeException)
 {
@@ -243,7 +243,7 @@ Reference< XStatement > SAL_CALL OCalcConnection::createStatement(  ) throw(SQLE
     return xReturn;
 }
 
-// --------------------------------------------------------------------------------
+
 
 Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareStatement( const OUString& sql )
     throw(SQLException, RuntimeException)
@@ -260,7 +260,7 @@ Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareStatement( cons
     return pStmt;
 }
 
-// --------------------------------------------------------------------------------
+
 
 Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareCall( const OUString& /*sql*/ )
     throw(SQLException, RuntimeException)
@@ -272,6 +272,6 @@ Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareCall( const OUS
     ::dbtools::throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
     return NULL;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

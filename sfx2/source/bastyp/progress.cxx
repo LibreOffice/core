@@ -77,7 +77,7 @@ struct SfxProgress_Impl
 //========================================================================
 extern sal_uInt32 Get10ThSec();
 
-// -----------------------------------------------------------------------
+
 
 void SfxProgress_Impl::Enable_Impl( sal_Bool bEnable )
 {
@@ -100,7 +100,7 @@ void SfxProgress_Impl::Enable_Impl( sal_Bool bEnable )
         SFX_APP()->GetAppDispatcher_Impl()->Lock( !bEnable );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxProgress_Impl::SfxProgress_Impl( const OUString &/*rTitle*/ )
     : nMax(0)
@@ -117,7 +117,7 @@ SfxProgress_Impl::SfxProgress_Impl( const OUString &/*rTitle*/ )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxProgress::SfxProgress
 (
@@ -172,7 +172,7 @@ SfxProgress::SfxProgress
     Resume();
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxProgress::~SfxProgress()
 
@@ -189,7 +189,7 @@ SfxProgress::~SfxProgress()
     delete pImp;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxProgress::Stop()
 
@@ -220,7 +220,7 @@ void SfxProgress::Stop()
         pImp->Enable_Impl(sal_True);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxProgress::SetText( const OUString&  /*      new Text */)
 
@@ -238,7 +238,7 @@ void SfxProgress::SetText( const OUString&  /*      new Text */)
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 // Required in App data
 static sal_uIntPtr nLastTime = 0;
@@ -255,7 +255,7 @@ long TimeOut_Impl( void*, void* pArgV )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SfxProgress::SetStateText
 (
@@ -269,7 +269,7 @@ sal_Bool SfxProgress::SetStateText
     return SetState( nNewVal, nNewRange );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SfxProgress::SetState
 (
@@ -354,7 +354,7 @@ sal_Bool SfxProgress::SetState
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxProgress::Resume()
 
@@ -400,7 +400,7 @@ void SfxProgress::Resume()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxProgress::Suspend()
 
@@ -442,7 +442,7 @@ void SfxProgress::Suspend()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxProgress::UnLock()
 {
@@ -455,7 +455,7 @@ void SfxProgress::UnLock()
     pImp->Enable_Impl(sal_True);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxProgress::Reschedule()
 
@@ -478,7 +478,7 @@ void SfxProgress::Reschedule()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxProgress* SfxProgress::GetActiveProgress
 (
@@ -527,14 +527,14 @@ SfxProgress* SfxProgress::GetActiveProgress
     return pProgress;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxProgress::EnterLock()
 {
     SFX_APP()->Get_Impl()->nRescheduleLocks++;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxProgress::LeaveLock()
 {

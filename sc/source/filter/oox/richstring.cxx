@@ -157,7 +157,7 @@ void RichStringPortion::writeFontProperties( const Reference<XText>& rxText, con
         pFont->writeToPropertySet(aPropSet, FONT_PROPTYPE_TEXT);
 }
 
-// ----------------------------------------------------------------------------
+
 
 void FontPortionModel::read( SequenceInputStream& rStrm )
 {
@@ -165,7 +165,7 @@ void FontPortionModel::read( SequenceInputStream& rStrm )
     mnFontId = rStrm.readuInt16();
 }
 
-// ----------------------------------------------------------------------------
+
 
 void FontPortionModelList::appendPortion( const FontPortionModel& rPortion )
 {
@@ -213,7 +213,7 @@ void PhoneticDataModel::setBiffData( sal_Int32 nType, sal_Int32 nAlignment )
     mnAlignment = STATIC_ARRAY_SELECT( spnAlignments, nAlignment, XML_left );
 }
 
-// ----------------------------------------------------------------------------
+
 
 PhoneticSettings::PhoneticSettings( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -270,7 +270,7 @@ void RichStringPhonetic::setBaseRange( sal_Int32 nBasePos, sal_Int32 nBaseEnd )
     mnBaseEnd = nBaseEnd;
 }
 
-// ----------------------------------------------------------------------------
+
 
 void PhoneticPortionModel::read( SequenceInputStream& rStrm )
 {
@@ -279,7 +279,7 @@ void PhoneticPortionModel::read( SequenceInputStream& rStrm )
     mnBaseLen = rStrm.readuInt16();
 }
 
-// ----------------------------------------------------------------------------
+
 
 void PhoneticPortionModelList::appendPortion( const PhoneticPortionModel& rPortion )
 {

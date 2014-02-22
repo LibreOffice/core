@@ -20,7 +20,7 @@
 #include "svx/relfld.hxx"
 #include "vcl/builder.hxx"
 
-// -----------------------------------------------------------------------
+
 
 SvxRelativeField::SvxRelativeField( Window* pParent, WinBits nBits)
     : MetricField( pParent, nBits)
@@ -42,7 +42,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxRelativeField(Window *pP
 {
     return new SvxRelativeField(pParent, WB_BORDER | WB_SPIN | WB_REPEAT | WB_LEFT | WB_GROUP);
 }
-// -----------------------------------------------------------------------
+
 
 void SvxRelativeField::Modify()
 {
@@ -81,7 +81,7 @@ void SvxRelativeField::Modify()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxRelativeField::EnableRelativeMode( sal_uInt16 nMin,
                                            sal_uInt16 nMax, sal_uInt16 nStep )
@@ -93,7 +93,7 @@ void SvxRelativeField::EnableRelativeMode( sal_uInt16 nMin,
     SetUnit( FUNIT_CM );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxRelativeField::SetRelative( sal_Bool bNewRelative )
 {

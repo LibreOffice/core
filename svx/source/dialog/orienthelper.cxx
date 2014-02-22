@@ -52,7 +52,7 @@ struct OrientationHelper_Impl
     DECL_LINK( ClickHdl, void* );
 };
 
-// ----------------------------------------------------------------------------
+
 
 OrientationHelper_Impl::OrientationHelper_Impl( DialControl& rCtrlDial, CheckBox& rCbStacked ) :
     mrCtrlDial( rCtrlDial ),

@@ -147,7 +147,7 @@ namespace rtl_str
     CPPUNIT_TEST_SUITE_END();
     }; // class compareIgnoreAsciiCase
 
-// -----------------------------------------------------------------------------
+
 
     class shortenedCompareIgnoreAsciiCase_WithLength : public CppUnit::TestFixture
     {
@@ -232,7 +232,7 @@ namespace rtl_str
 }; // class compare
 
 
-// -----------------------------------------------------------------------------
+
 
     class hashCode : public CppUnit::TestFixture
     {
@@ -286,7 +286,7 @@ namespace rtl_str
     }; // class compare
 
 
-// -----------------------------------------------------------------------------
+
 
     class indexOfChar : public CppUnit::TestFixture
     {
@@ -333,7 +333,7 @@ namespace rtl_str
         CPPUNIT_TEST_SUITE_END();
     }; // class compare
 
-// -----------------------------------------------------------------------------
+
     class lastIndexOfChar : public CppUnit::TestFixture
     {
     public:
@@ -380,7 +380,7 @@ namespace rtl_str
     }; // class lastIndexOfChar
 
 
-// -----------------------------------------------------------------------------
+
 
     class indexOfStr : public CppUnit::TestFixture
     {
@@ -432,7 +432,7 @@ namespace rtl_str
         CPPUNIT_TEST(indexOfStr_002);
         CPPUNIT_TEST_SUITE_END();
     }; // class compare
-// -----------------------------------------------------------------------------
+
 
 
     class lastIndexOfStr : public CppUnit::TestFixture
@@ -497,7 +497,7 @@ namespace rtl_str
         CPPUNIT_TEST_SUITE_END();
     }; // class lastIndexOfStr
 
-// -----------------------------------------------------------------------------
+
 
     class replaceChar : public CppUnit::TestFixture
     {
@@ -533,7 +533,7 @@ namespace rtl_str
         CPPUNIT_TEST_SUITE_END();
     }; // class replaceChar
 
-// -----------------------------------------------------------------------------
+
 
     class replaceChar_WithLength : public CppUnit::TestFixture
     {
@@ -575,7 +575,7 @@ namespace rtl_str
     }; // class replaceChar
 
 
-// -----------------------------------------------------------------------------
+
 
     class toAsciiLowerCase : public CppUnit::TestFixture
     {
@@ -647,7 +647,7 @@ namespace rtl_str
         CPPUNIT_TEST_SUITE_END();
     }; // class replaceChar
 
-// -----------------------------------------------------------------------------
+
 
     class toAsciiUpperCase : public CppUnit::TestFixture
     {
@@ -720,7 +720,7 @@ namespace rtl_str
     }; // class replaceChar
 
 
-    // -----------------------------------------------------------------------------
+
 
     class trim_WithLength : public CppUnit::TestFixture
     {
@@ -822,7 +822,7 @@ namespace rtl_str
         CPPUNIT_TEST_SUITE_END();
     };
 
-    // -----------------------------------------------------------------------------
+
 
     class valueOfChar : public CppUnit::TestFixture
     {
@@ -854,7 +854,7 @@ namespace rtl_str
         CPPUNIT_TEST_SUITE_END();
     };
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::compare);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::compareIgnoreAsciiCase);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::shortenedCompareIgnoreAsciiCase_WithLength);
@@ -878,7 +878,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::valueOfChar);
 
 } // namespace rtl_str
 
-// -----------------------------------------------------------------------------
+
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

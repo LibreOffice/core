@@ -50,21 +50,21 @@ NSString * getTableNotification( const AccessibleEventObject& aEvent )
     return notification;
 }
 
-//------------------------------------------------------------------------------
+
 
 AquaA11yEventListener::AquaA11yEventListener(id wrapperObject, sal_Int16 role) : m_wrapperObject(wrapperObject), m_role(role)
 {
     [ m_wrapperObject retain ];
 }
 
-//------------------------------------------------------------------------------
+
 
 AquaA11yEventListener::~AquaA11yEventListener()
 {
     [ m_wrapperObject release ];
 }
 
-//------------------------------------------------------------------------------
+
 
 void SAL_CALL
 AquaA11yEventListener::disposing( const EventObject& ) throw( RuntimeException )
@@ -72,7 +72,7 @@ AquaA11yEventListener::disposing( const EventObject& ) throw( RuntimeException )
     [ AquaA11yFactory removeFromWrapperRepositoryFor: [ (AquaA11yWrapper *) m_wrapperObject accessibleContext ] ];
 }
 
-//------------------------------------------------------------------------------
+
 
 void SAL_CALL
 AquaA11yEventListener::notifyEvent( const AccessibleEventObject& aEvent ) throw( RuntimeException )

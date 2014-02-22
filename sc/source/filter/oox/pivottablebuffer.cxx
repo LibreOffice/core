@@ -70,7 +70,7 @@ const sal_Int32 OOX_PT_DATALAYOUTFIELD              = -2;           /// Placehol
 const sal_Int32 OOX_PT_PREVIOUS_ITEM                = 0x001000FC;   /// Calculation of data item result is based on previous item.
 const sal_Int32 OOX_PT_NEXT_ITEM                    = 0x001000FD;   /// Calculation of data item result is based on next item.
 
-// ----------------------------------------------------------------------------
+
 
 const sal_uInt32 BIFF12_PTFIELD_DATAFIELD           = 0x00000008;
 const sal_uInt32 BIFF12_PTFIELD_DEFAULT             = 0x00000100;
@@ -176,7 +176,7 @@ void PTFieldItemModel::setBiffType( sal_uInt16 nType )
     mnType = STATIC_ARRAY_SELECT( spnTypes, nType, XML_data );
 }
 
-// ----------------------------------------------------------------------------
+
 
 PTFieldModel::PTFieldModel() :
     mnAxis( XML_TOKEN_INVALID ),
@@ -224,7 +224,7 @@ void PTFieldModel::setBiffAxis( sal_uInt8 nAxis )
     mnAxis = STATIC_ARRAY_SELECT( spnAxisIds, nAxis, XML_TOKEN_INVALID );
 }
 
-// ----------------------------------------------------------------------------
+
 
 PTPageFieldModel::PTPageFieldModel() :
     mnField( -1 ),
@@ -232,7 +232,7 @@ PTPageFieldModel::PTPageFieldModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 PTDataFieldModel::PTDataFieldModel() :
     mnField( -1 ),
@@ -256,7 +256,7 @@ void PTDataFieldModel::setBiffShowDataAs( sal_Int32 nShowDataAs )
     mnShowDataAs = STATIC_ARRAY_SELECT( spnShowDataAs, nShowDataAs, XML_TOKEN_INVALID );
 }
 
-// ----------------------------------------------------------------------------
+
 
 PivotTableField::PivotTableField( PivotTable& rPivotTable, sal_Int32 nFieldIndex ) :
     WorkbookHelper( rPivotTable ),
@@ -762,7 +762,7 @@ PTFilterModel::PTFilterModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 PivotTableFilter::PivotTableFilter( const PivotTable& rPivotTable ) :
     WorkbookHelper( rPivotTable ),
@@ -902,7 +902,7 @@ PTDefinitionModel::PTDefinitionModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 PTLocationModel::PTLocationModel() :
     mnFirstHeaderRow( 0 ),
@@ -913,7 +913,7 @@ PTLocationModel::PTLocationModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 PivotTable::PivotTable( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),

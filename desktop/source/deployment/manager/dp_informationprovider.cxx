@@ -74,7 +74,7 @@ class PackageInformationProvider :
         throw ( uno::RuntimeException );
     virtual uno::Sequence< uno::Sequence< OUString > > SAL_CALL getExtensionList()
         throw ( uno::RuntimeException );
-//---------
+
 private:
 
     uno::Reference< uno::XComponentContext> mxContext;
@@ -85,7 +85,7 @@ private:
     uno::Reference< deployment::XUpdateInformationProvider > mxUpdateInformation;
 };
 
-//------------------------------------------------------------------------------
+
 
 PackageInformationProvider::PackageInformationProvider( uno::Reference< uno::XComponentContext > const& xContext) :
     mxContext( xContext ),
@@ -93,13 +93,13 @@ PackageInformationProvider::PackageInformationProvider( uno::Reference< uno::XCo
 {
 }
 
-//------------------------------------------------------------------------------
+
 
 PackageInformationProvider::~PackageInformationProvider()
 {
 }
 
-//------------------------------------------------------------------------------
+
 OUString PackageInformationProvider::getPackageLocation(
     const OUString & repository,
     const OUString& _rExtensionId )
@@ -134,7 +134,7 @@ OUString PackageInformationProvider::getPackageLocation(
     return aLocationURL;
 }
 
-//------------------------------------------------------------------------------
+
 
 OUString SAL_CALL
 PackageInformationProvider::getPackageLocation( const OUString& _sExtensionId )
@@ -158,7 +158,7 @@ PackageInformationProvider::getPackageLocation( const OUString& _sExtensionId )
     return aLocationURL;
 }
 
-//------------------------------------------------------------------------------
+
 
 uno::Sequence< uno::Sequence< OUString > > SAL_CALL
 PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
@@ -271,7 +271,7 @@ PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
     return aList;
 }
 
-//------------------------------------------------------------------------------
+
 uno::Sequence< uno::Sequence< OUString > > SAL_CALL PackageInformationProvider::getExtensionList()
     throw ( uno::RuntimeException )
 {
@@ -318,7 +318,7 @@ uno::Sequence< uno::Sequence< OUString > > SAL_CALL PackageInformationProvider::
 }
 
 
-//------------------------------------------------------------------------------
+
 
 namespace sdecl = comphelper::service_decl;
 sdecl::class_<PackageInformationProvider> servicePIP;

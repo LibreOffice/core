@@ -411,7 +411,7 @@ void XclExpPageSettings::SaveXml( XclExpXmlStream& rStrm )
         XclExpImgData( *pGraphic, EXC_ID8_IMGDATA ).SaveXml( rStrm );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpChartPageSettings::XclExpChartPageSettings( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )

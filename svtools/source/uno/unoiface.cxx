@@ -804,7 +804,7 @@ void VCLXFileControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 //  ----------------------------------------------------
 //  class SVTXFormattedField
 //  ----------------------------------------------------
-// --------------------------------------------------------------------------------------
+
 SVTXFormattedField::SVTXFormattedField()
     :m_pCurrentSupplier(NULL)
     ,bIsStandardSupplier(sal_True)
@@ -812,7 +812,7 @@ SVTXFormattedField::SVTXFormattedField()
 {
 }
 
-// --------------------------------------------------------------------------------------
+
 SVTXFormattedField::~SVTXFormattedField()
 {
     if (m_pCurrentSupplier)
@@ -822,7 +822,7 @@ SVTXFormattedField::~SVTXFormattedField()
     }
 }
 
-// --------------------------------------------------------------------------------------
+
 void SVTXFormattedField::SetWindow( Window* _pWindow )
 {
     VCLXSpinField::SetWindow(_pWindow);
@@ -830,7 +830,7 @@ void SVTXFormattedField::SetWindow( Window* _pWindow )
         GetFormattedField()->SetAutoColor(sal_True);
 }
 
-// --------------------------------------------------------------------------------------
+
 void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -955,7 +955,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com:
         VCLXSpinField::setProperty( PropertyName, Value );
 }
 
-// --------------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Any SVTXFormattedField::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1023,7 +1023,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com:
     return aReturn;
 }
 
-// --------------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Any SVTXFormattedField::convertEffectiveValue(const ::com::sun::star::uno::Any& rValue)
 {
     ::com::sun::star::uno::Any aReturn;
@@ -1083,7 +1083,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com:
     return aReturn;
 }
 
-// --------------------------------------------------------------------------------------
+
 void SVTXFormattedField::SetMinValue(const ::com::sun::star::uno::Any& rValue)
 {
     FormattedField* pField = GetFormattedField();
@@ -1112,7 +1112,7 @@ void SVTXFormattedField::SetMinValue(const ::com::sun::star::uno::Any& rValue)
     }
 }
 
-// --------------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Any SVTXFormattedField::GetMinValue()
 {
     FormattedField* pField = GetFormattedField();
@@ -1124,7 +1124,7 @@ void SVTXFormattedField::SetMinValue(const ::com::sun::star::uno::Any& rValue)
     return aReturn;
 }
 
-// --------------------------------------------------------------------------------------
+
 void SVTXFormattedField::SetMaxValue(const ::com::sun::star::uno::Any& rValue)
 {
     FormattedField* pField = GetFormattedField();
@@ -1152,7 +1152,7 @@ void SVTXFormattedField::SetMaxValue(const ::com::sun::star::uno::Any& rValue)
     }
 }
 
-// --------------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Any SVTXFormattedField::GetMaxValue()
 {
     FormattedField* pField = GetFormattedField();
@@ -1164,7 +1164,7 @@ void SVTXFormattedField::SetMaxValue(const ::com::sun::star::uno::Any& rValue)
     return aReturn;
 }
 
-// --------------------------------------------------------------------------------------
+
 void SVTXFormattedField::SetDefaultValue(const ::com::sun::star::uno::Any& rValue)
 {
     FormattedField* pField = GetFormattedField();
@@ -1197,7 +1197,7 @@ void SVTXFormattedField::SetDefaultValue(const ::com::sun::star::uno::Any& rValu
     }
 }
 
-// --------------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Any SVTXFormattedField::GetDefaultValue()
 {
     FormattedField* pField = GetFormattedField();
@@ -1212,7 +1212,7 @@ void SVTXFormattedField::SetDefaultValue(const ::com::sun::star::uno::Any& rValu
     return aReturn;
 }
 
-// --------------------------------------------------------------------------------------
+
 sal_Bool SVTXFormattedField::GetTreatAsNumber()
 {
     FormattedField* pField = GetFormattedField();
@@ -1222,7 +1222,7 @@ sal_Bool SVTXFormattedField::GetTreatAsNumber()
     return sal_True;
 }
 
-// --------------------------------------------------------------------------------------
+
 void SVTXFormattedField::SetTreatAsNumber(sal_Bool bSet)
 {
     FormattedField* pField = GetFormattedField();
@@ -1230,7 +1230,7 @@ void SVTXFormattedField::SetTreatAsNumber(sal_Bool bSet)
         pField->TreatAsNumber(bSet);
 }
 
-// --------------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Any SVTXFormattedField::GetValue()
 {
     FormattedField* pField = GetFormattedField();
@@ -1252,7 +1252,7 @@ void SVTXFormattedField::SetTreatAsNumber(sal_Bool bSet)
     return aReturn;
 }
 
-// --------------------------------------------------------------------------------------
+
 void SVTXFormattedField::SetValue(const ::com::sun::star::uno::Any& rValue)
 {
     FormattedField* pField = GetFormattedField();
@@ -1286,13 +1286,13 @@ void SVTXFormattedField::SetValue(const ::com::sun::star::uno::Any& rValue)
 //  NotifyTextListeners();
 }
 
-// --------------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  SVTXFormattedField::getFormatsSupplier(void) const
 {
     return ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > ((::com::sun::star::util::XNumberFormatsSupplier*)m_pCurrentSupplier);
 }
 
-// --------------------------------------------------------------------------------------
+
 void SVTXFormattedField::setFormatsSupplier(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xSupplier)
 {
     FormattedField* pField = GetFormattedField();
@@ -1334,14 +1334,14 @@ void SVTXFormattedField::setFormatsSupplier(const ::com::sun::star::uno::Referen
     }
 }
 
-// --------------------------------------------------------------------------------------
+
 sal_Int32 SVTXFormattedField::getFormatKey(void) const
 {
     FormattedField* pField = GetFormattedField();
     return pField ? pField->GetFormatKey() : 0;
 }
 
-// --------------------------------------------------------------------------------------
+
 void SVTXFormattedField::setFormatKey(sal_Int32 nKey)
 {
     FormattedField* pField = GetFormattedField();
@@ -1360,7 +1360,7 @@ void SVTXFormattedField::setFormatKey(sal_Int32 nKey)
     }
 }
 
-// --------------------------------------------------------------------------------------
+
 void SVTXFormattedField::NotifyTextListeners()
 {
     if ( GetTextListeners().getLength() )
@@ -1402,12 +1402,12 @@ void SVTXFormattedField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 
 using namespace svt;
 
-// --------------------------------------------------------------------------------------
+
 SVTXRoadmap::SVTXRoadmap() : maItemListeners( *this )
 {
 }
 
-// --------------------------------------------------------------------------------------
+
 SVTXRoadmap::~SVTXRoadmap()
 {
 }
@@ -1552,7 +1552,7 @@ void SVTXRoadmap::elementReplaced( const ::com::sun::star::container::ContainerE
 
 
 
-// --------------------------------------------------------------------------------------
+
 void SVTXRoadmap::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1607,7 +1607,7 @@ void SVTXRoadmap::setProperty( const OUString& PropertyName, const ::com::sun::s
 }
 
 
-// --------------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Any SVTXRoadmap::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;

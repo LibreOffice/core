@@ -223,19 +223,19 @@ namespace basic
     //====================================================================
     //= ImplRepository
     //====================================================================
-    //--------------------------------------------------------------------
+
     ImplRepository::ImplRepository()
     {
     }
 
-    //--------------------------------------------------------------------
+
     ImplRepository& ImplRepository::Instance()
     {
         return *rtl_Instance< ImplRepository, CreateImplRepository, ::osl::MutexGuard, ::osl::GetGlobalMutex >::
             create( CreateImplRepository(), ::osl::GetGlobalMutex() );
     }
 
-    //--------------------------------------------------------------------
+
     BasicManager* ImplRepository::getDocumentBasicManager( const Reference< XModel >& _rxDocumentModel )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -255,7 +255,7 @@ namespace basic
         return pBasicManager;
     }
 
-    //--------------------------------------------------------------------
+
     BasicManager* ImplRepository::getApplicationBasicManager( bool _bCreate )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -267,7 +267,7 @@ namespace basic
         return pAppManager;
     }
 
-    //--------------------------------------------------------------------
+
     void ImplRepository::setApplicationBasicManager( BasicManager* _pBasicManager )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -278,7 +278,7 @@ namespace basic
         GetSbData()->pAppBasMgr = _pBasicManager;
     }
 
-    //--------------------------------------------------------------------
+
     BasicManager* ImplRepository::impl_createApplicationBasicManager()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -337,14 +337,14 @@ namespace basic
         return pBasicManager;
     }
 
-    //--------------------------------------------------------------------
+
     void ImplRepository::registerCreationListener( BasicManagerCreationListener& _rListener )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         m_aCreationListeners.push_back( &_rListener );
     }
 
-    //--------------------------------------------------------------------
+
     void ImplRepository::revokeCreationListener( BasicManagerCreationListener& _rListener )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -356,7 +356,7 @@ namespace basic
         }
     }
 
-    //--------------------------------------------------------------------
+
     void ImplRepository::impl_notifyCreationListeners( const Reference< XModel >& _rxDocumentModel, BasicManager& _rManager )
     {
         for (   CreationListeners::const_iterator loop = m_aCreationListeners.begin();
@@ -368,7 +368,7 @@ namespace basic
         }
     }
 
-    //--------------------------------------------------------------------
+
     StarBASIC* ImplRepository::impl_getDefaultAppBasicLibrary()
     {
         BasicManager* pAppManager = getApplicationBasicManager( true );
@@ -378,7 +378,7 @@ namespace basic
         return pAppBasic;
     }
 
-    //--------------------------------------------------------------------
+
     BasicManagerPointer& ImplRepository::impl_getLocationForModel( const Reference< XModel >& _rxDocumentModel )
     {
         DBG_ASSERT( _rxDocumentModel.is(), "ImplRepository::impl_getLocationForModel: invalid model!" );
@@ -387,7 +387,7 @@ namespace basic
         return location;
     }
 
-    //--------------------------------------------------------------------
+
     void ImplRepository::impl_initDocLibraryContainers_nothrow( const Reference< XPersistentLibraryContainer >& _rxBasicLibraries, const Reference< XPersistentLibraryContainer >& _rxDialogLibraries )
     {
         OSL_PRECOND( _rxBasicLibraries.is() && _rxDialogLibraries.is(),
@@ -413,7 +413,7 @@ namespace basic
         }
     }
 
-    //--------------------------------------------------------------------
+
     void ImplRepository::impl_createManagerForModel( BasicManagerPointer& _out_rpBasicManager, const Reference< XModel >& _rxDocumentModel )
     {
         StarBASIC* pAppBasic = impl_getDefaultAppBasicLibrary();
@@ -502,7 +502,7 @@ namespace basic
 
     }
 
-    //--------------------------------------------------------------------
+
     bool ImplRepository::impl_getDocumentStorage_nothrow( const Reference< XModel >& _rxDocument, Reference< XStorage >& _out_rStorage )
     {
         _out_rStorage.clear();
@@ -519,7 +519,7 @@ namespace basic
         return true;
     }
 
-    //--------------------------------------------------------------------
+
     bool ImplRepository::impl_getDocumentLibraryContainers_nothrow( const Reference< XModel >& _rxDocument,
         Reference< XPersistentLibraryContainer >& _out_rxBasicLibraries, Reference< XPersistentLibraryContainer >& _out_rxDialogLibraries )
     {
@@ -538,7 +538,7 @@ namespace basic
         return _out_rxBasicLibraries.is() && _out_rxDialogLibraries.is();
     }
 
-    //--------------------------------------------------------------------
+
     void ImplRepository::impl_removeFromRepository( BasicManagerStore::iterator _pos )
     {
         OSL_PRECOND( _pos != m_aStore.end(), "ImplRepository::impl_removeFromRepository: invalid position!" );
@@ -553,7 +553,7 @@ namespace basic
         BasicManagerCleaner::deleteBasicManager( pManager );
     }
 
-    //--------------------------------------------------------------------
+
     void ImplRepository::_disposing( const ::com::sun::star::lang::EventObject& _rSource )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -581,7 +581,7 @@ namespace basic
         OSL_ENSURE( bFound, "ImplRepository::_disposing: where does this come from?" );
     }
 
-    //--------------------------------------------------------------------
+
     void ImplRepository::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
     {
         const SfxSimpleHint* pSimpleHint = dynamic_cast< const SfxSimpleHint* >( &_rHint );
@@ -612,31 +612,31 @@ namespace basic
     //====================================================================
     //= BasicManagerRepository
     //====================================================================
-    //--------------------------------------------------------------------
+
     BasicManager* BasicManagerRepository::getDocumentBasicManager( const Reference< XModel >& _rxDocumentModel )
     {
         return ImplRepository::Instance().getDocumentBasicManager( _rxDocumentModel );
     }
 
-    //--------------------------------------------------------------------
+
     BasicManager* BasicManagerRepository::getApplicationBasicManager( bool _bCreate )
     {
         return ImplRepository::Instance().getApplicationBasicManager( _bCreate );
     }
 
-    //--------------------------------------------------------------------
+
     void BasicManagerRepository::resetApplicationBasicManager()
     {
         return ImplRepository::Instance().setApplicationBasicManager( NULL );
     }
 
-    //--------------------------------------------------------------------
+
     void BasicManagerRepository::registerCreationListener( BasicManagerCreationListener& _rListener )
     {
         ImplRepository::Instance().registerCreationListener( _rListener );
     }
 
-    //--------------------------------------------------------------------
+
     void BasicManagerRepository::revokeCreationListener( BasicManagerCreationListener& _rListener )
     {
         ImplRepository::Instance().revokeCreationListener( _rListener );

@@ -30,22 +30,22 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::accessibility;
 
 
-// -----------------------------------------------------------------------------
+
 // VCLXAccessibleFixedText
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleFixedText::VCLXAccessibleFixedText( VCLXWindow* pVCLWindow )
     :VCLXAccessibleTextComponent( pVCLWindow )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleFixedText::~VCLXAccessibleFixedText()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleFixedText::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
@@ -55,7 +55,7 @@ void VCLXAccessibleFixedText::FillAccessibleStateSet( utl::AccessibleStateSetHel
         rStateSet.AddState( AccessibleStateType::MULTI_LINE );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleFixedText::implGetLineBoundary( i18n::Boundary& rBoundary, sal_Int32 nIndex )
 {
@@ -63,16 +63,16 @@ void VCLXAccessibleFixedText::implGetLineBoundary( i18n::Boundary& rBoundary, sa
     OCommonAccessibleText::implGetLineBoundary( rBoundary, nIndex );
 }
 
-// -----------------------------------------------------------------------------
+
 // XServiceInfo
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleFixedText::getImplementationName() throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleFixedText" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > VCLXAccessibleFixedText::getSupportedServiceNames() throw (RuntimeException)
 {
@@ -81,6 +81,6 @@ Sequence< OUString > VCLXAccessibleFixedText::getSupportedServiceNames() throw (
     return aNames;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

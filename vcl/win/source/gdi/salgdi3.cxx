@@ -59,9 +59,9 @@ using namespace vcl;
 
 static const int MAXFONTHEIGHT = 2048;
 
-// -----------
+
 // - Inlines -
-// -----------
+
 
 inline FIXED FixedFromDouble( double d )
 {
@@ -69,7 +69,7 @@ inline FIXED FixedFromDouble( double d )
     return *(FIXED*) &l;
 }
 
-// -----------------------------------------------------------------------
+
 
 inline int IntTimes256FromFixed(FIXED f)
 {
@@ -86,7 +86,7 @@ static bool bImplSalCourierNew = false;
 
 // =======================================================================
 
-// -----------------------------------------------------------------------
+
 
 // TODO: also support temporary TTC font files
 typedef std::map< OUString, ImplDevFontAttributes > FontAttrMap;
@@ -649,7 +649,7 @@ static rtl_TextEncoding ImplCharSetToSal( BYTE nCharSet )
     return eTextEncoding;
 }
 
-// -----------------------------------------------------------------------
+
 
 static FontFamily ImplFamilyToSal( BYTE nFamily )
 {
@@ -677,7 +677,7 @@ static FontFamily ImplFamilyToSal( BYTE nFamily )
     return FAMILY_DONTKNOW;
 }
 
-// -----------------------------------------------------------------------
+
 
 static BYTE ImplFamilyToWin( FontFamily eFamily )
 {
@@ -708,7 +708,7 @@ static BYTE ImplFamilyToWin( FontFamily eFamily )
     return FF_DONTCARE;
 }
 
-// -----------------------------------------------------------------------
+
 
 static FontWeight ImplWeightToSal( int nWeight )
 {
@@ -732,7 +732,7 @@ static FontWeight ImplWeightToSal( int nWeight )
         return WEIGHT_BLACK;
 }
 
-// -----------------------------------------------------------------------
+
 
 static int ImplWeightToWin( FontWeight eWeight )
 {
@@ -773,7 +773,7 @@ static int ImplWeightToWin( FontWeight eWeight )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 inline FontPitch ImplLogPitchToSal( BYTE nPitch )
 {
@@ -783,7 +783,7 @@ inline FontPitch ImplLogPitchToSal( BYTE nPitch )
         return PITCH_VARIABLE;
 }
 
-// -----------------------------------------------------------------------
+
 
 inline FontPitch ImplMetricPitchToSal( BYTE nPitch )
 {
@@ -794,7 +794,7 @@ inline FontPitch ImplMetricPitchToSal( BYTE nPitch )
         return PITCH_VARIABLE;
 }
 
-// -----------------------------------------------------------------------
+
 
 inline BYTE ImplPitchToWin( FontPitch ePitch )
 {
@@ -806,7 +806,7 @@ inline BYTE ImplPitchToWin( FontPitch ePitch )
         return DEFAULT_PITCH;
 }
 
-// -----------------------------------------------------------------------
+
 
 static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXA& rEnumFont,
     const NEWTEXTMETRICA& rMetric, DWORD nFontType )
@@ -881,7 +881,7 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXA& rE
     return aDFA;
 }
 
-// -----------------------------------------------------------------------
+
 
 static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rEnumFont,
     const NEWTEXTMETRICW& rMetric, DWORD nFontType )
@@ -956,7 +956,7 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rE
     return aDFA;
 }
 
-// -----------------------------------------------------------------------
+
 
 static ImplWinFontData* ImplLogMetricToDevFontDataA( const ENUMLOGFONTEXA* pLogFont,
                                          const NEWTEXTMETRICA* pMetric,
@@ -975,7 +975,7 @@ static ImplWinFontData* ImplLogMetricToDevFontDataA( const ENUMLOGFONTEXA* pLogF
     return pData;
 }
 
-// -----------------------------------------------------------------------
+
 
 static ImplWinFontData* ImplLogMetricToDevFontDataW( const ENUMLOGFONTEXW* pLogFont,
                                          const NEWTEXTMETRICW* pMetric,
@@ -994,7 +994,7 @@ static ImplWinFontData* ImplLogMetricToDevFontDataW( const ENUMLOGFONTEXW* pLogF
     return pData;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
 {
@@ -1180,7 +1180,7 @@ ImplWinFontData::ImplWinFontData( const ImplDevFontAttributes& rDFS,
 #endif
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplWinFontData::~ImplWinFontData()
 {
@@ -1198,19 +1198,19 @@ ImplWinFontData::~ImplWinFontData()
     delete mpEncodingVector;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_IntPtr ImplWinFontData::GetFontId() const
 {
     return mnId;
 }
 
-// -----------------------------------------------------------------------
+
 
 static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
 static inline DWORD CalcTag( const char p[4]) { return (p[0]+(p[1]<<8)+(p[2]<<16)+(p[3]<<24)); }
 
-// -----------------------------------------------------------------------
+
 
 void ImplWinFontData::UpdateFromHDC( HDC hDC ) const
 {
@@ -1267,7 +1267,7 @@ const gr_face* ImplWinFontData::GraphiteFace() const
     return (mpGraphiteData)? mpGraphiteData->getFace() : NULL;
 }
 #endif
-// -----------------------------------------------------------------------
+
 
 bool ImplWinFontData::HasGSUBstitutions( HDC hDC ) const
 {
@@ -1276,14 +1276,14 @@ bool ImplWinFontData::HasGSUBstitutions( HDC hDC ) const
     return !maGsubTable.empty();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplWinFontData::IsGSUBstituted( sal_UCS4 cChar ) const
 {
     return( maGsubTable.find( cChar ) != maGsubTable.end() );
 }
 
-// -----------------------------------------------------------------------
+
 
 const ImplFontCharMap* ImplWinFontData::GetImplFontCharMap() const
 {
@@ -1298,7 +1298,7 @@ bool ImplWinFontData::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabi
     return !rFontCapabilities.maUnicodeRange.empty() || !rFontCapabilities.maCodePageRange.empty();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplWinFontData::ReadGsubTable( HDC hDC ) const
 {
@@ -1345,7 +1345,7 @@ void ImplWinFontData::ReadGsubTable( HDC hDC ) const
     CloseTTFont( pTTFont );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplWinFontData::ReadCmapTable( HDC hDC ) const
 {
@@ -1433,7 +1433,7 @@ void WinSalGraphics::SetTextColor( SalColor nSalColor )
     ::SetTextColor( getHDC(), aCol );
 }
 
-// -----------------------------------------------------------------------
+
 
 int CALLBACK SalEnumQueryFontProcExW( const ENUMLOGFONTEXW*,
                                       const NEWTEXTMETRICEXW*,
@@ -1443,7 +1443,7 @@ int CALLBACK SalEnumQueryFontProcExW( const ENUMLOGFONTEXW*,
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplGetLogFontFromFontSelect( HDC hDC,
                                    const FontSelectPattern* pFont,
@@ -1516,7 +1516,7 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 HFONT WinSalGraphics::ImplDoSetFont( FontSelectPattern* i_pFont, float& o_rFontScale, HFONT& o_rOldFont )
 {
@@ -1665,7 +1665,7 @@ sal_uInt16 WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel
         return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLevel )
 {
@@ -1743,7 +1743,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
     pMetric->mnMinKashida = GetMinKashidaWidth();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uLong WinSalGraphics::GetKernPairs()
 {
@@ -1774,7 +1774,7 @@ sal_uLong WinSalGraphics::GetKernPairs()
     return mnFontKernPairCount;
 }
 
-// -----------------------------------------------------------------------
+
 
 const ImplFontCharMap* WinSalGraphics::GetImplFontCharMap() const
 {
@@ -1790,7 +1790,7 @@ bool WinSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabil
     return mpWinFontData[0]->GetImplFontCapabilities(rFontCapabilities);
 }
 
-// -----------------------------------------------------------------------
+
 
 int CALLBACK SalEnumFontsProcExA( const ENUMLOGFONTEXA* pLogFont,
                                   const NEWTEXTMETRICEXA* pMetric,
@@ -1846,7 +1846,7 @@ int CALLBACK SalEnumFontsProcExA( const ENUMLOGFONTEXA* pLogFont,
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 int CALLBACK SalEnumFontsProcExW( const ENUMLOGFONTEXW* pLogFont,
                                   const NEWTEXTMETRICEXW* pMetric,
@@ -1896,7 +1896,7 @@ int CALLBACK SalEnumFontsProcExW( const ENUMLOGFONTEXW* pLogFont,
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 struct TempFontItem
 {
@@ -1975,7 +1975,7 @@ bool ImplAddTempFont( SalData& rSalData, const OUString& rFontFileURL )
     return (nRet > 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplReleaseTempFonts( SalData& rSalData )
 {
@@ -2006,7 +2006,7 @@ void ImplReleaseTempFonts( SalData& rSalData )
 #endif // FR_PRIVATE
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplGetFontAttrFromFile( const OUString& rFontFileURL,
     ImplDevFontAttributes& rDFA )
@@ -2103,7 +2103,7 @@ static bool ImplGetFontAttrFromFile( const OUString& rFontFileURL,
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     const OUString& rFontFileURL, const OUString& rFontName )
@@ -2161,7 +2161,7 @@ bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
 {
@@ -2263,7 +2263,7 @@ void WinSalGraphics::ClearDevFontCache()
     //anything to do here ?
 }
 
-// -----------------------------------------------------------------------
+
 
 bool WinSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
 {
@@ -2295,7 +2295,7 @@ bool WinSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool WinSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
     ::basegfx::B2DPolyPolygon& rB2DPolyPoly )
@@ -2479,7 +2479,7 @@ bool WinSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 class ScopedFont
 {

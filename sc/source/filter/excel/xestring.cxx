@@ -438,7 +438,7 @@ void XclExpString::WriteXml( XclExpXmlStream& rStrm ) const
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool XclExpString::IsWriteFlags() const
 {

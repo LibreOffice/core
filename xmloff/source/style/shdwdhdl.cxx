@@ -21,7 +21,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustrbuf.hxx>
 
-// --
+
 #include <xmloff/xmltoken.hxx>
 
 using namespace ::com::sun::star::uno;

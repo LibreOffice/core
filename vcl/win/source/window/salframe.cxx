@@ -197,7 +197,7 @@ static void ImplSaveFrameState( WinSalFrame* pFrame )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 // if pParentRect is set, the workarea of the monitor that contains pParentRect is returned
 void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect )
@@ -703,7 +703,7 @@ static UINT ImplSalGetWheelScrollLines()
     return nScrLines;
 }
 
-// -----------------------------------------------------------------------
+
 
 static UINT ImplSalGetWheelScrollChars()
 {
@@ -729,7 +729,7 @@ static UINT ImplSalGetWheelScrollChars()
     return nScrChars;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplSalAddBorder( const WinSalFrame* pFrame, int& width, int& height )
 {
@@ -745,7 +745,7 @@ static void ImplSalAddBorder( const WinSalFrame* pFrame, int& width, int& height
     height = aWinRect.bottom - aWinRect.top + 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplSalCalcFullScreenSize( const WinSalFrame* pFrame,
                                        int& rX, int& rY, int& rDX, int& rDY )
@@ -824,7 +824,7 @@ static void ImplSalCalcFullScreenSize( const WinSalFrame* pFrame,
     rDY = nScreenDY+(nFrameY*2)+nCaptionY;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplSalFrameFullScreenPos( WinSalFrame* pFrame, sal_Bool bAlways = FALSE )
 {
@@ -842,7 +842,7 @@ static void ImplSalFrameFullScreenPos( WinSalFrame* pFrame, sal_Bool bAlways = F
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 WinSalFrame::WinSalFrame()
 {
@@ -912,7 +912,7 @@ WinSalFrame::WinSalFrame()
     pSalData->mpFirstFrame = this;
 }
 
-// -----------------------------------------------------------------------
+
 void WinSalFrame::updateScreenNumber()
 {
     if( mnDisplay == -1 ) // spans all monitors
@@ -935,7 +935,7 @@ void WinSalFrame::updateScreenNumber()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 WinSalFrame::~WinSalFrame()
 {
@@ -992,7 +992,7 @@ WinSalFrame::~WinSalFrame()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SalGraphics* WinSalFrame::GetGraphics()
 {
@@ -1071,7 +1071,7 @@ SalGraphics* WinSalFrame::GetGraphics()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
 {
@@ -1095,14 +1095,14 @@ void WinSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
     mbGraphics = FALSE;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool WinSalFrame::PostEvent( void* pData )
 {
     return (sal_Bool)ImplPostMessage( mhWnd, SAL_MSG_USEREVENT, 0, (LPARAM)pData );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::SetTitle( const OUString& rTitle )
 {
@@ -1111,7 +1111,7 @@ void WinSalFrame::SetTitle( const OUString& rTitle )
     SetWindowTextW( mhWnd, reinterpret_cast<LPCWSTR>(rTitle.getStr()) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::SetIcon( sal_uInt16 nIcon )
 {
@@ -1133,7 +1133,7 @@ void WinSalFrame::SetIcon( sal_uInt16 nIcon )
     ImplSendMessage( mhWnd, WM_SETICON, ICON_SMALL, (LPARAM)hSmIcon );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::SetMenu( SalMenu* pSalMenu )
 {
@@ -1147,7 +1147,7 @@ void WinSalFrame::DrawMenuBar()
     ::DrawMenuBar( mhWnd );
 }
 
-// -----------------------------------------------------------------------
+
 HWND ImplGetParentHwnd( HWND hWnd )
 {
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
@@ -1161,14 +1161,14 @@ HWND ImplGetParentHwnd( HWND hWnd )
 
 }
 
-// -----------------------------------------------------------------------
+
 
 SalFrame* WinSalFrame::GetParent() const
 {
     return GetWindowPtr( ImplGetParentHwnd( mhWnd ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplSalShow( HWND hWnd, sal_Bool bVisible, sal_Bool bNoActivate )
 {
@@ -1246,14 +1246,14 @@ static void ImplSalShow( HWND hWnd, sal_Bool bVisible, sal_Bool bNoActivate )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 
 void WinSalFrame::SetExtendedFrameStyle( SalExtStyle )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
 {
@@ -1266,14 +1266,14 @@ void WinSalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
         ImplSalShow( mhWnd, bVisible, bNoActivate );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::Enable( sal_Bool bEnable )
 {
     EnableWindow( mhWnd, bEnable );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::SetMinClientSize( long nWidth, long nHeight )
 {
@@ -1287,7 +1287,7 @@ void WinSalFrame::SetMaxClientSize( long nWidth, long nHeight )
     mnMaxHeight = nHeight;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
                                                    sal_uInt16 nFlags )
@@ -1500,7 +1500,7 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
         CallCallback( nEvent, NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, sal_Bool bAsChild )
 {
@@ -1651,7 +1651,7 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, sal_Bool
                      SAL_MSG_DESTROYHWND, (WPARAM) 0, (LPARAM)hWndOld);
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::SetParent( SalFrame* pNewParent )
 {
@@ -1674,7 +1674,7 @@ bool WinSalFrame::SetPluginParent( SystemParentData* pNewParent )
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::GetWorkArea( Rectangle &rRect )
 {
@@ -1686,7 +1686,7 @@ void WinSalFrame::GetWorkArea( Rectangle &rRect )
     rRect.Bottom()   = aRect.bottom-1;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::GetClientSize( long& rWidth, long& rHeight )
 {
@@ -1694,7 +1694,7 @@ void WinSalFrame::GetClientSize( long& rWidth, long& rHeight )
     rHeight = maGeometry.nHeight;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::SetWindowState( const SalFrameState* pState )
 {
@@ -1855,7 +1855,7 @@ void WinSalFrame::SetWindowState( const SalFrameState* pState )
         mbDefPos = FALSE; // window was positioned
 }
 
-// -----------------------------------------------------------------------
+
 
 bool WinSalFrame::GetWindowState( SalFrameState* pState )
 {
@@ -1873,7 +1873,7 @@ bool WinSalFrame::GetWindowState( SalFrameState* pState )
     return FALSE;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::SetScreenNumber( unsigned int nNewScreen )
 {
@@ -1944,7 +1944,7 @@ void WinSalFrame::SetApplicationID( const OUString &rApplicationID )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
 {
@@ -2009,7 +2009,7 @@ void WinSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::StartPresentation( sal_Bool bStart )
 {
@@ -2064,7 +2064,7 @@ void WinSalFrame::StartPresentation( sal_Bool bStart )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::SetAlwaysOnTop( sal_Bool bOnTop )
 {
@@ -2076,7 +2076,7 @@ void WinSalFrame::SetAlwaysOnTop( sal_Bool bOnTop )
     SetWindowPos( mhWnd, hWnd, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE );
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplSalToTop( HWND hWnd, sal_uInt16 nFlags )
 {
@@ -2131,7 +2131,7 @@ static void ImplSalToTop( HWND hWnd, sal_uInt16 nFlags )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::ToTop( sal_uInt16 nFlags )
 {
@@ -2145,7 +2145,7 @@ void WinSalFrame::ToTop( sal_uInt16 nFlags )
         ImplSalToTop( mhWnd, nFlags );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
 {
@@ -2280,7 +2280,7 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::CaptureMouse( sal_Bool bCapture )
 {
@@ -2294,7 +2294,7 @@ void WinSalFrame::CaptureMouse( sal_Bool bCapture )
     ImplSendMessage( mhWnd, nMsg, 0, 0 );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::SetPointerPos( long nX, long nY )
 {
@@ -2305,21 +2305,21 @@ void WinSalFrame::SetPointerPos( long nX, long nY )
     SetCursorPos( aPt.x, aPt.y );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::Flush()
 {
     GdiFlush();
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::Sync()
 {
     GdiFlush();
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplSalFrameSetInputContext( HWND hWnd, const SalInputContext* pContext )
 {
@@ -2381,7 +2381,7 @@ static void ImplSalFrameSetInputContext( HWND hWnd, const SalInputContext* pCont
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::SetInputContext( SalInputContext* pContext )
 {
@@ -2389,7 +2389,7 @@ void WinSalFrame::SetInputContext( SalInputContext* pContext )
     ImplSendMessage( mhWnd, SAL_MSG_SETINPUTCONTEXT, 0, (LPARAM)(void*)pContext );
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplSalFrameEndExtTextInput( HWND hWnd, sal_uInt16 nFlags )
 {
@@ -2407,7 +2407,7 @@ static void ImplSalFrameEndExtTextInput( HWND hWnd, sal_uInt16 nFlags )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::EndExtTextInput( sal_uInt16 nFlags )
 {
@@ -2415,7 +2415,7 @@ void WinSalFrame::EndExtTextInput( sal_uInt16 nFlags )
     ImplSendMessage( mhWnd, SAL_MSG_ENDEXTTEXTINPUT, (WPARAM)nFlags, 0 );
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
                                 UINT& rCount, UINT nMaxSize,
@@ -2487,7 +2487,7 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
         rCount = 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 {
@@ -2689,14 +2689,14 @@ OUString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
     return OUString( aKeyBuf, sal::static_int_cast< sal_uInt16 >(nKeyBufLen) );
 }
 
-// -----------------------------------------------------------------------
+
 
 inline Color ImplWinColorToSal( COLORREF nColor )
 {
     return Color( GetRValue( nColor ), GetGValue( nColor ), GetBValue( nColor ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplSalUpdateStyleFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
 {
@@ -2716,7 +2716,7 @@ static void ImplSalUpdateStyleFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rF
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static long ImplA2I( const BYTE* pStr )
 {
@@ -2741,7 +2741,7 @@ static long ImplA2I( const BYTE* pStr )
     return n;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::UpdateSettings( AllSettings& rSettings )
 {
@@ -2973,14 +2973,14 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     WinSalGraphics::updateSettingsNative( rSettings );
 }
 
-// -----------------------------------------------------------------------
+
 
 const SystemEnvData* WinSalFrame::GetSystemData() const
 {
     return &maSysData;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::Beep()
 {
@@ -2988,7 +2988,7 @@ void WinSalFrame::Beep()
     MessageBeep( 0 );
 }
 
-// -----------------------------------------------------------------------
+
 
 SalFrame::SalPointerState WinSalFrame::GetPointerState()
 {
@@ -3015,7 +3015,7 @@ SalFrame::SalPointerState WinSalFrame::GetPointerState()
     return aState;
 }
 
-// -----------------------------------------------------------------------
+
 
 SalFrame::SalIndicatorState WinSalFrame::GetIndicatorState()
 {
@@ -3050,14 +3050,14 @@ void WinSalFrame::SimulateKeyPress( sal_uInt16 nKeyCode )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::ResetClipRegion()
 {
     SetWindowRgn( mhWnd, 0, TRUE );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::BeginSetClipRegion( sal_uLong nRects )
 {
@@ -3074,7 +3074,7 @@ void WinSalFrame::BeginSetClipRegion( sal_uLong nRects )
     mbFirstClipRect       = TRUE;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 {
@@ -3117,7 +3117,7 @@ void WinSalFrame::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
         mpNextClipRect++;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalFrame::EndSetClipRegion()
 {
@@ -3157,7 +3157,7 @@ void WinSalFrame::EndSetClipRegion()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
                                 WPARAM wParam, LPARAM lParam )
@@ -3324,7 +3324,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 static long ImplHandleMouseActivateMsg( HWND hWnd )
 {
@@ -3344,7 +3344,7 @@ static long ImplHandleMouseActivateMsg( HWND hWnd )
     return pFrame->CallCallback( SALEVENT_MOUSEACTIVATE, &aMouseActivateEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 static long ImplHandleWheelMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -3416,7 +3416,7 @@ static long ImplHandleWheelMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 static sal_uInt16 ImplSalGetKeyCode( WPARAM wParam )
 {
@@ -3438,7 +3438,7 @@ static sal_uInt16 ImplSalGetKeyCode( WPARAM wParam )
     return nKeyCode;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplUpdateInputLang( WinSalFrame* pFrame )
 {
@@ -3465,7 +3465,7 @@ static sal_Unicode ImplGetCharCode( WinSalFrame* pFrame, WPARAM nCharCode )
     return (sal_Unicode)nCharCode;
 }
 
-// -----------------------------------------------------------------------
+
 
 LanguageType WinSalFrame::GetInputLanguage()
 {
@@ -3478,7 +3478,7 @@ LanguageType WinSalFrame::GetInputLanguage()
         return (LanguageType) mnInputLang;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool WinSalFrame::MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode )
 {
@@ -3516,7 +3516,7 @@ bool WinSalFrame::MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangT
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                               WPARAM wParam, LPARAM lParam, LRESULT& rResult )
@@ -3800,7 +3800,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 long ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg,
                              WPARAM wParam, LPARAM lParam )
@@ -3853,7 +3853,7 @@ long ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg,
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 long ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
 {
@@ -3891,7 +3891,7 @@ long ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplHandlePaintMsg( HWND hWnd )
 {
@@ -3960,7 +3960,7 @@ static bool ImplHandlePaintMsg( HWND hWnd )
     return bMutex ? true : false;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandlePaintMsg2( HWND hWnd, RECT* pRect )
 {
@@ -3980,7 +3980,7 @@ static void ImplHandlePaintMsg2( HWND hWnd, RECT* pRect )
         ImplPostMessage( hWnd, SAL_MSG_POSTPAINT, (WPARAM)pRect, 0 );
 }
 
-// -----------------------------------------------------------------------
+
 
 static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame, RECT* pParentRect )
 {
@@ -4066,7 +4066,7 @@ static void UpdateFrameGeometry( HWND hWnd, WinSalFrame* pFrame )
     pFrame->updateScreenNumber();
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplCallMoveHdl( HWND hWnd )
 {
@@ -4080,7 +4080,7 @@ static void ImplCallMoveHdl( HWND hWnd )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplCallClosePopupsHdl( HWND hWnd )
 {
@@ -4091,7 +4091,7 @@ static void ImplCallClosePopupsHdl( HWND hWnd )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleMoveMsg( HWND hWnd )
 {
@@ -4130,7 +4130,7 @@ static void ImplHandleMoveMsg( HWND hWnd )
         ImplPostMessage( hWnd, SAL_MSG_POSTMOVE, 0, 0 );
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplCallSizeHdl( HWND hWnd )
 {
@@ -4153,7 +4153,7 @@ static void ImplCallSizeHdl( HWND hWnd )
         ImplPostMessage( hWnd, SAL_MSG_POSTCALLSIZE, 0, 0 );
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleSizeMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
 {
@@ -4174,7 +4174,7 @@ static void ImplHandleSizeMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleFocusMsg( HWND hWnd )
 {
@@ -4212,7 +4212,7 @@ static void ImplHandleFocusMsg( HWND hWnd )
         ImplPostMessage( hWnd, SAL_MSG_POSTFOCUS, 0, 0 );
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleCloseMsg( HWND hWnd )
 {
@@ -4230,7 +4230,7 @@ static void ImplHandleCloseMsg( HWND hWnd )
         ImplPostMessage( hWnd, WM_CLOSE, 0, 0 );
 }
 
-// -----------------------------------------------------------------------
+
 
 static long ImplHandleShutDownMsg( HWND hWnd )
 {
@@ -4245,7 +4245,7 @@ static long ImplHandleShutDownMsg( HWND hWnd )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleSettingsChangeMsg( HWND hWnd, UINT nMsg,
                                          WPARAM wParam, LPARAM lParam )
@@ -4297,7 +4297,7 @@ static void ImplHandleSettingsChangeMsg( HWND hWnd, UINT nMsg,
     ImplSalYieldMutexRelease();
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleUserEvent( HWND hWnd, LPARAM lParam )
 {
@@ -4310,7 +4310,7 @@ static void ImplHandleUserEvent( HWND hWnd, LPARAM lParam )
     ImplSalYieldMutexRelease();
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleForcePalette( HWND hWnd )
 {
@@ -4344,7 +4344,7 @@ static void ImplHandleForcePalette( HWND hWnd )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static LRESULT ImplHandlePalette( sal_Bool bFrame, HWND hWnd, UINT nMsg,
                                   WPARAM wParam, LPARAM lParam, int& rDef )
@@ -4494,7 +4494,7 @@ static LRESULT ImplHandlePalette( sal_Bool bFrame, HWND hWnd, UINT nMsg,
         return nCols;
 }
 
-// -----------------------------------------------------------------------
+
 
 static int ImplHandleMinMax( HWND hWnd, LPARAM lParam )
 {
@@ -4571,7 +4571,7 @@ static int ImplHandleMinMax( HWND hWnd, LPARAM lParam )
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 // retrieves the SalMenuItem pointer from a hMenu
 // the pointer is stored in every item, so if no position
@@ -5092,7 +5092,7 @@ static int ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
     return FALSE;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleInputLangChange( HWND hWnd, WPARAM, LPARAM lParam )
 {
@@ -5125,7 +5125,7 @@ static void ImplHandleInputLangChange( HWND hWnd, WPARAM, LPARAM lParam )
     ImplSalYieldMutexRelease();
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplUpdateIMECursorPos( WinSalFrame* pFrame, HIMC hIMC )
 {
@@ -5156,7 +5156,7 @@ static void ImplUpdateIMECursorPos( WinSalFrame* pFrame, HIMC hIMC )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static sal_Bool ImplHandleIMEStartComposition( HWND hWnd )
 {
@@ -5186,7 +5186,7 @@ static sal_Bool ImplHandleIMEStartComposition( HWND hWnd )
     return bDef;
 }
 
-// -----------------------------------------------------------------------
+
 
 static sal_Bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
                                                HIMC hIMC, LPARAM lParam )
@@ -5317,7 +5317,7 @@ static sal_Bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
     return !bDef;
 }
 
-// -----------------------------------------------------------------------
+
 
 static sal_Bool ImplHandleIMEComposition( HWND hWnd, LPARAM lParam )
 {
@@ -5364,7 +5364,7 @@ static sal_Bool ImplHandleIMEComposition( HWND hWnd, LPARAM lParam )
     return bDef;
 }
 
-// -----------------------------------------------------------------------
+
 
 static sal_Bool ImplHandleIMEEndComposition( HWND hWnd )
 {
@@ -5384,7 +5384,7 @@ static sal_Bool ImplHandleIMEEndComposition( HWND hWnd )
     return bDef;
 }
 
-// -----------------------------------------------------------------------
+
 
 static boolean ImplHandleAppCommand( HWND hWnd, LPARAM lParam )
 {
@@ -5485,7 +5485,7 @@ static void ImplHandleIMENotify( HWND hWnd, WPARAM wParam )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool
 ImplHandleGetObject(HWND hWnd, LPARAM lParam, WPARAM wParam, LRESULT & nRet)
@@ -5525,7 +5525,7 @@ ImplHandleGetObject(HWND hWnd, LPARAM lParam, WPARAM wParam, LRESULT & nRet)
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 static LRESULT ImplHandleIMEReconvertString( HWND hWnd, LPARAM lParam )
 {
@@ -5580,7 +5580,7 @@ static LRESULT ImplHandleIMEReconvertString( HWND hWnd, LPARAM lParam )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 static LRESULT ImplHandleIMEConfirmReconvertString( HWND hWnd, LPARAM lParam )
 {
@@ -5648,7 +5648,7 @@ static LRESULT ImplHandleIMEQueryCharPosition( HWND hWnd, LPARAM lParam ) {
     return TRUE;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SalTestMouseLeave()
 {
@@ -5663,7 +5663,7 @@ void SalTestMouseLeave()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static int ImplSalWheelMousePos( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam ,
                                  LRESULT& rResult )
@@ -5693,7 +5693,7 @@ static int ImplSalWheelMousePos( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
     return TRUE;
 }
 
-// -----------------------------------------------------------------------
+
 
 LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
 {
@@ -6171,7 +6171,7 @@ LRESULT CALLBACK SalFrameWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT& rlResult )
 {
@@ -6194,7 +6194,7 @@ sal_Bool ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam
     return bResult;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool ImplWriteLastError( DWORD lastError, const char *szApiCall )
 {
@@ -6256,7 +6256,7 @@ sal_Bool ImplWriteLastError( DWORD lastError, const char *szApiCall )
         return TRUE;
 }
 
-// -----------------------------------------------------------------------
+
 
 #ifdef _WIN32
 bool HasAtHook()

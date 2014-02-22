@@ -22,7 +22,7 @@
 // ---- needed as long as we have no contexts for components ---
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-//---------------------------------------------------
+
 #include <osl/thread.h>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -40,13 +40,13 @@ namespace reportdesign
     //==================================================================
     SimpleResMgr* ResourceManager::m_pImpl = NULL;
 
-    //------------------------------------------------------------------
+
     ResourceManager::EnsureDelete::~EnsureDelete()
     {
         delete ResourceManager::m_pImpl;
     }
 
-    //------------------------------------------------------------------
+
     void ResourceManager::ensureImplExists(const uno::Reference< lang::XMultiComponentFactory >& /* _rM */)
     {
         if (!m_pImpl)
@@ -58,7 +58,7 @@ namespace reportdesign
         }
     }
 
-    //------------------------------------------------------------------
+
     OUString ResourceManager::loadString(sal_uInt16 _nResId,const uno::Reference< lang::XMultiComponentFactory >& _rM)
     {
         OUString sReturn;

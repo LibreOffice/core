@@ -1839,7 +1839,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
               ( bReplaceSglQuote && '\'' == cChar ) ) &&
             (!nPos || ' ' == (*pTxt)[nPos-1]))
         {
-            // --------------------------------------
+
             // beachte: Sonderfall Symbolfonts !!!
             if( !aFInfo.GetFrm() )
                 aFInfo.SetFrm( GetFrm( *m_pCurTxtNd ) );

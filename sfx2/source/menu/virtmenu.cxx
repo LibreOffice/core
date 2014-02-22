@@ -166,7 +166,7 @@ void SfxVirtualMenu::Construct_Impl()
         pResMgr = pParent->pResMgr;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxVirtualMenu::SfxVirtualMenu( sal_uInt16 nOwnId,
                 SfxVirtualMenu* pOwnParent, Menu& rMenu, sal_Bool bWithHelp,
@@ -198,7 +198,7 @@ SfxVirtualMenu::SfxVirtualMenu( sal_uInt16 nOwnId,
     bHelpInitialized = sal_False;
 }
 
-//--------------------------------------------------------------------
+
 
 // creates a virtual menu from a StarView MenuBar or PopupMenu
 
@@ -232,7 +232,7 @@ SfxVirtualMenu::SfxVirtualMenu( Menu *pStarViewMenu, sal_Bool bWithHelp,
     bHelpInitialized = sal_False;
 }
 
-//--------------------------------------------------------------------
+
 
 /*  The destructor of the class SfxVirtualMenu releases bounded items and
     the associated StarView-PopupMenu is released from its parent.
@@ -283,7 +283,7 @@ SfxVirtualMenu::~SfxVirtualMenu()
     DBG_OUTF( ("SfxVirtualMenu %lx destroyed", this) );
     DBG_ASSERT( !nLocks, "destroying active menu" );
 }
-//--------------------------------------------------------------------
+
 // internal: creates the virtual menu from the pSVMenu
 
 void SfxVirtualMenu::CreateFromSVMenu()
@@ -489,7 +489,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
     pBindings->LEAVEREGISTRATIONS(); --nLocks;
 }
 
-//--------------------------------------------------------------------
+
 
 // called on activation of the SV-Menu
 
@@ -566,7 +566,7 @@ IMPL_LINK_NOARG(SfxVirtualMenu, SettingsChanged)
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxVirtualMenu::UpdateImages( Menu* pMenu )
 {
@@ -607,7 +607,7 @@ void SfxVirtualMenu::UpdateImages( Menu* pMenu )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxVirtualMenu::RemoveMenuImages( Menu* pMenu )
 {
@@ -626,7 +626,7 @@ void SfxVirtualMenu::RemoveMenuImages( Menu* pMenu )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 bool SfxVirtualMenu::Bind_Impl( Menu *pMenu )
 {
@@ -744,7 +744,7 @@ void SfxVirtualMenu::UnbindControllers()
 }
 
 
-//--------------------------------------------------------------------
+
 void SfxVirtualMenu::InsertAddOnsMenuItem( Menu* pMenu )
 {
     // Create special popup menu that is filled with the 3rd party components popup menu items
@@ -781,7 +781,7 @@ void SfxVirtualMenu::InsertAddOnsMenuItem( Menu* pMenu )
         delete pAddonMenu;
 }
 
-//--------------------------------------------------------------------
+
 
 // called on activation of the SV-Menu
 
@@ -917,7 +917,7 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 IMPL_LINK( SfxVirtualMenu, Deactivate, Menu *, pMenu )
 {
@@ -932,7 +932,7 @@ IMPL_LINK( SfxVirtualMenu, Deactivate, Menu *, pMenu )
     }
     return sal_True;
 }
-//--------------------------------------------------------------------
+
 
 // called on activation of the SV-Menu
 
@@ -980,7 +980,7 @@ IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
     return sal_True;
 }
 
-//--------------------------------------------------------------------
+
 
 // returns the associated StarView-menu
 
@@ -991,7 +991,7 @@ Menu* SfxVirtualMenu::GetSVMenu() const
     return pSVMenu;
 }
 
-//--------------------------------------------------------------------
+
 
 // set the checkmark of the specified item
 
@@ -1003,7 +1003,7 @@ void SfxVirtualMenu::CheckItem( sal_uInt16 nItemId, sal_Bool bCheck )
     if (pSVMenu->GetItemPos( nItemId ) != MENU_ITEM_NOTFOUND )
         pSVMenu->CheckItem( nItemId, bCheck );
 }
-//--------------------------------------------------------------------
+
 
 // set the enabled-state of the specified item
 
@@ -1016,7 +1016,7 @@ void SfxVirtualMenu::EnableItem( sal_uInt16 nItemId, sal_Bool bEnable )
     if (pSVMenu->GetItemPos( nItemId ) != MENU_ITEM_NOTFOUND )
         pSVMenu->EnableItem( nItemId, bEnable );
 }
-//--------------------------------------------------------------------
+
 
 // set the text of the specified item
 
@@ -1029,7 +1029,7 @@ void SfxVirtualMenu::SetItemText( sal_uInt16 nItemId, const OUString& rText )
         pSVMenu->SetItemText( nItemId, rText );
 }
 
-//--------------------------------------------------------------------
+
 
 
 void SfxVirtualMenu::SetPopupMenu( sal_uInt16 nItemId, PopupMenu *pMenu )
@@ -1046,7 +1046,7 @@ void SfxVirtualMenu::SetPopupMenu( sal_uInt16 nItemId, PopupMenu *pMenu )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 // Forces the initialization, which is otherwise only happens in Activate
 

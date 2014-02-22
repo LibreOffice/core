@@ -33,7 +33,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
-// -------------------------------------------------------------------------
+
 OAdoUser::OAdoUser(OCatalog* _pParent,sal_Bool _bCase, ADOUser* _pUser)
     : OUser_TYPEDEF(_bCase)
     ,m_pCatalog(_pParent)
@@ -45,7 +45,7 @@ OAdoUser::OAdoUser(OCatalog* _pParent,sal_Bool _bCase, ADOUser* _pUser)
     else
         m_aUser.Create();
 }
-// -------------------------------------------------------------------------
+
 OAdoUser::OAdoUser(OCatalog* _pParent,sal_Bool _bCase,   const OUString& _Name)
     : OUser_TYPEDEF(_Name,_bCase)
     , m_pCatalog(_pParent)
@@ -54,7 +54,7 @@ OAdoUser::OAdoUser(OCatalog* _pParent,sal_Bool _bCase,   const OUString& _Name)
     m_aUser.Create();
     m_aUser.put_Name(_Name);
 }
-// -------------------------------------------------------------------------
+
 void OAdoUser::refreshGroups()
 {
     TStringVector aVector;
@@ -65,7 +65,7 @@ void OAdoUser::refreshGroups()
     else
         m_pGroups = new OGroups(m_pCatalog,m_aMutex,aVector,aGroups,isCaseSensitive());
 }
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OAdoUser::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId * pId = 0;
@@ -82,7 +82,7 @@ Sequence< sal_Int8 > OAdoUser::getUnoTunnelImplementationId()
 }
 
 // com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
 sal_Int64 OAdoUser::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
@@ -90,7 +90,7 @@ sal_Int64 OAdoUser::getSomething( const Sequence< sal_Int8 > & rId ) throw (Runt
                 : OUser_TYPEDEF::getSomething(rId);
 }
 
-// -------------------------------------------------------------------------
+
 void OAdoUser::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)throw (Exception)
 {
     if(m_aUser.IsValid())
@@ -108,7 +108,7 @@ void OAdoUser::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rVa
         }
     }
 }
-// -------------------------------------------------------------------------
+
 void OAdoUser::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
 {
     if(m_aUser.IsValid())
@@ -121,47 +121,47 @@ void OAdoUser::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
         }
     }
 }
-// -------------------------------------------------------------------------
+
 OUserExtend::OUserExtend(OCatalog* _pParent,sal_Bool _bCase,    ADOUser* _pUser)
     : OAdoUser(_pParent,_bCase,_pUser)
 {
 }
-// -------------------------------------------------------------------------
+
 OUserExtend::OUserExtend(OCatalog* _pParent,sal_Bool _bCase, const OUString& _Name)
     : OAdoUser(_pParent,_bCase,_Name)
 {
 }
 
-// -------------------------------------------------------------------------
+
 void OUserExtend::construct()
 {
     OUser_TYPEDEF::construct();
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD),    PROPERTY_ID_PASSWORD,0,&m_Password,::getCppuType(static_cast< OUString*>(0)));
 }
-// -----------------------------------------------------------------------------
+
 cppu::IPropertyArrayHelper* OUserExtend::createArrayHelper() const
 {
     Sequence< com::sun::star::beans::Property > aProps;
     describeProperties(aProps);
     return new cppu::OPropertyArrayHelper(aProps);
 }
-// -------------------------------------------------------------------------
+
 cppu::IPropertyArrayHelper & OUserExtend::getInfoHelper()
 {
     return *OUserExtend_PROP::getArrayHelper();
 }
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+
+
 void SAL_CALL OAdoUser::acquire() throw()
 {
     OUser_TYPEDEF::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OAdoUser::release() throw()
 {
     OUser_TYPEDEF::release();
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OAdoUser::getPrivileges( const OUString& objName, sal_Int32 objType ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -169,7 +169,7 @@ sal_Int32 SAL_CALL OAdoUser::getPrivileges( const OUString& objName, sal_Int32 o
 
     return ADOS::mapAdoRights2Sdbc(m_aUser.GetPermissions(objName, ADOS::mapObjectType2Ado(objType)));
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OAdoUser::getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -182,7 +182,7 @@ sal_Int32 SAL_CALL OAdoUser::getGrantablePrivileges( const OUString& objName, sa
     ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
     return nRights;
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OAdoUser::grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -190,7 +190,7 @@ void SAL_CALL OAdoUser::grantPrivileges( const OUString& objName, sal_Int32 objT
     m_aUser.SetPermissions(objName,ADOS::mapObjectType2Ado(objType),adAccessGrant,RightsEnum(ADOS::mapRights2Ado(objPrivileges)));
     ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OAdoUser::revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -198,7 +198,7 @@ void SAL_CALL OAdoUser::revokePrivileges( const OUString& objName, sal_Int32 obj
     m_aUser.SetPermissions(objName,ADOS::mapObjectType2Ado(objType),adAccessRevoke,RightsEnum(ADOS::mapRights2Ado(objPrivileges)));
     ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
 }
-// -----------------------------------------------------------------------------
+
 // XUser
 void SAL_CALL OAdoUser::changePassword( const OUString& objPassword, const OUString& newPassword ) throw(SQLException, RuntimeException)
 {
@@ -207,7 +207,7 @@ void SAL_CALL OAdoUser::changePassword( const OUString& objPassword, const OUStr
     m_aUser.ChangePassword(objPassword,newPassword);
     ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
 }
-// -----------------------------------------------------------------------------
+
 
 
 

@@ -28,7 +28,7 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
+
 const SfxItemPropertyMapEntry* ScDocOptionsHelper::GetPropertyMap()
 {
     static const SfxItemPropertyMapEntry aMap[] =
@@ -179,7 +179,7 @@ uno::Any ScDocOptionsHelper::getPropertyValue(
     return aRet;
 }
 
-//------------------------------------------------------------------------
+
 
 ScDocOptionsObj::ScDocOptionsObj( const ScDocOptions& rOpt ) :
     ScModelObj( NULL ),

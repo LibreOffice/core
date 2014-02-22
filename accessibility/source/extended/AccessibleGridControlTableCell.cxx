@@ -51,7 +51,7 @@ namespace accessibility
     // =============================================================================
     // = AccessibleGridControlCell
     // =============================================================================
-    // -----------------------------------------------------------------------------
+
     AccessibleGridControlCell::AccessibleGridControlCell(
             const Reference< XAccessible >& _rxParent, IAccessibleTable& _rTable,
             sal_Int32 _nRowPos, sal_uInt16 _nColPos, AccessibleTableControlObjType _eType )
@@ -71,19 +71,19 @@ namespace accessibility
         implSetName( aAccName );
     }
 
-    // -----------------------------------------------------------------------------
+
     AccessibleGridControlCell::~AccessibleGridControlCell()
     {
     }
 
-    // -----------------------------------------------------------------------------
+
     void SAL_CALL AccessibleGridControlCell::grabFocus() throw ( RuntimeException )
     {
         SolarMutexGuard aSolarGuard;
 
         m_aTable.GoToCell( m_nColPos, m_nRowPos );
     }
-    //// -----------------------------------------------------------------------------
+    //
     // implementation of a table cell
     OUString AccessibleGridControlTableCell::implGetText()
     {
@@ -352,7 +352,7 @@ namespace accessibility
         Rectangle aCell( Point( nX, nY ), aCellRect.GetSize());
         return aCell;
     }
-    // -----------------------------------------------------------------------------
+
     Rectangle AccessibleGridControlTableCell::implGetBoundingBoxOnScreen()
     {
         Rectangle aGridRect = m_aTable.GetWindowExtentsRelative( NULL );

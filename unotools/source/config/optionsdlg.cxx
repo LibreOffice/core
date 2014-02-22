@@ -80,7 +80,7 @@ namespace
     return theOptionsDlgOptions_ImplMutex::get();
 }
 
-// -----------------------------------------------------------------------
+
 
 SvtOptionsDlgOptions_Impl::SvtOptionsDlgOptions_Impl()
     : ConfigItem( OUString( CFG_FILENAME ) ),
@@ -100,14 +100,14 @@ SvtOptionsDlgOptions_Impl::SvtOptionsDlgOptions_Impl()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtOptionsDlgOptions_Impl::Commit()
 {
     // nothing to commit
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtOptionsDlgOptions_Impl::Notify( const Sequence< OUString >& )
 {
@@ -168,7 +168,7 @@ void SvtOptionsDlgOptions_Impl::ReadNode( const OUString& _rNode, NodeType _eTyp
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString getGroupPath( const OUString& _rGroup )
 {
@@ -183,7 +183,7 @@ OUString getOptionPath( const OUString& _rOption )
     return OUString( OPTIONS_NODE + OUString('/') + _rOption + OUString('/') );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvtOptionsDlgOptions_Impl::IsHidden( const OUString& _rPath ) const
 {
@@ -194,21 +194,21 @@ bool SvtOptionsDlgOptions_Impl::IsHidden( const OUString& _rPath ) const
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvtOptionsDlgOptions_Impl::IsGroupHidden( const OUString& _rGroup ) const
 {
     return IsHidden( getGroupPath( _rGroup ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvtOptionsDlgOptions_Impl::IsPageHidden( const OUString& _rPage, const OUString& _rGroup ) const
 {
     return IsHidden( getGroupPath( _rGroup  ) + getPagePath( _rPage ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvtOptionsDlgOptions_Impl::IsOptionHidden(
     const OUString& _rOption, const OUString& _rPage, const OUString& _rGroup ) const
@@ -216,7 +216,7 @@ bool SvtOptionsDlgOptions_Impl::IsOptionHidden(
     return IsHidden( getGroupPath( _rGroup  ) + getPagePath( _rPage ) + getOptionPath( _rOption ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvtOptionsDialogOptions::SvtOptionsDialogOptions()
 {
@@ -232,7 +232,7 @@ SvtOptionsDialogOptions::SvtOptionsDialogOptions()
     m_pImp = pOptions;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvtOptionsDialogOptions::~SvtOptionsDialogOptions()
 {

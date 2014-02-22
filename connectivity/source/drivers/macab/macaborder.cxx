@@ -27,14 +27,14 @@ using namespace ::connectivity::macab;
 MacabOrder::~MacabOrder()
 {
 }
-// -----------------------------------------------------------------------------
+
 MacabSimpleOrder::MacabSimpleOrder(MacabHeader *header, OUString &sColumnName, sal_Bool bAscending)
     : MacabOrder(),
       m_nFieldNumber(header->getColumnNumber(sColumnName)),
       m_bAscending(bAscending)
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 MacabSimpleOrder::compare(const MacabRecord *record1, const MacabRecord *record2) const
 {
     sal_Int32 result;
@@ -45,24 +45,24 @@ sal_Int32 MacabSimpleOrder::compare(const MacabRecord *record1, const MacabRecor
 
     return result;
 }
-// -----------------------------------------------------------------------------
+
 MacabComplexOrder::MacabComplexOrder()
     : MacabOrder(),
       m_aOrders()
 {
 }
-// -----------------------------------------------------------------------------
+
 MacabComplexOrder::~MacabComplexOrder()
 {
     for (sal_uInt32 i = 0; i < m_aOrders.size(); i++)
         delete m_aOrders[i];
 }
-// -----------------------------------------------------------------------------
+
 void MacabComplexOrder::addOrder(MacabOrder *pOrder)
 {
     m_aOrders.push_back(pOrder);
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 MacabComplexOrder::compare(const MacabRecord *record1, const MacabRecord *record2) const
 {
     for (sal_uInt32 i = 0; i < m_aOrders.size(); i++)

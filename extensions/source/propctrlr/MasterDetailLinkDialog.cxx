@@ -37,43 +37,43 @@ namespace pcr
     //====================================================================
     //= MasterDetailLinkDialog
     //====================================================================
-    //---------------------------------------------------------------------
+
     MasterDetailLinkDialog::MasterDetailLinkDialog(const Reference< XComponentContext >& _rxContext )
         :OGenericUnoDialog( _rxContext )
     {
     }
-//---------------------------------------------------------------------
+
     Sequence<sal_Int8> SAL_CALL MasterDetailLinkDialog::getImplementationId(  ) throw(RuntimeException)
     {
         static ::cppu::OImplementationId aId;
         return aId.getImplementationId();
     }
 
-    //---------------------------------------------------------------------
+
     Reference< XInterface > SAL_CALL MasterDetailLinkDialog::Create( const Reference< XComponentContext >& _rxContext )
     {
         return *( new MasterDetailLinkDialog( _rxContext ) );
     }
 
-    //---------------------------------------------------------------------
+
     OUString SAL_CALL MasterDetailLinkDialog::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_static();
     }
 
-    //---------------------------------------------------------------------
+
     OUString MasterDetailLinkDialog::getImplementationName_static() throw(RuntimeException)
     {
         return OUString("org.openoffice.comp.form.ui.MasterDetailLinkDialog");
     }
 
-    //---------------------------------------------------------------------
+
     ::comphelper::StringSequence SAL_CALL MasterDetailLinkDialog::getSupportedServiceNames() throw(RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
-    //---------------------------------------------------------------------
+
     ::comphelper::StringSequence MasterDetailLinkDialog::getSupportedServiceNames_static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
@@ -81,20 +81,20 @@ namespace pcr
         return aSupported;
     }
 
-    //---------------------------------------------------------------------
+
     Reference<XPropertySetInfo>  SAL_CALL MasterDetailLinkDialog::getPropertySetInfo() throw(RuntimeException)
     {
         Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
     }
 
-    //---------------------------------------------------------------------
+
     ::cppu::IPropertyArrayHelper& MasterDetailLinkDialog::getInfoHelper()
     {
         return *const_cast<MasterDetailLinkDialog*>(this)->getArrayHelper();
     }
 
-    //--------------------------------------------------------------------------
+
     ::cppu::IPropertyArrayHelper* MasterDetailLinkDialog::createArrayHelper( ) const
     {
         Sequence< Property > aProps;
@@ -102,13 +102,13 @@ namespace pcr
         return new ::cppu::OPropertyArrayHelper(aProps);
     }
 
-    //--------------------------------------------------------------------------
+
     Dialog* MasterDetailLinkDialog::createDialog(Window* _pParent)
     {
         return new FormLinkDialog(_pParent,m_xDetail,m_xMaster, m_aContext
             ,m_sExplanation,m_sDetailLabel,m_sMasterLabel);
     }
-    //---------------------------------------------------------------------
+
     void MasterDetailLinkDialog::implInitialize(const Any& _rValue)
     {
         PropertyValue aProperty;

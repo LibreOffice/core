@@ -227,7 +227,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowCellAttrTokenMap()
     return *pTableRowCellAttrTokenMap;
 }
 
-//----------------------------------------------------------------------------
+
 
 
 
@@ -2245,7 +2245,7 @@ ScXMLImport::~ScXMLImport() throw()
     delete pDetectiveOpArray;
 }
 
-// ---------------------------------------------------------------------
+
 
 SvXMLImportContext *ScXMLImport::CreateFontDeclsContext(const sal_uInt16 nPrefix, const OUString& rLocalName,
                                                         const uno::Reference<xml::sax::XAttributeList>& xAttrList)

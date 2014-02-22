@@ -30,17 +30,17 @@
 #include "grfcache.hxx"
 #include <svtools/grfmgr.hxx>
 
-// -----------
+
 // - defines -
-// -----------
+
 
 #define WATERMARK_LUM_OFFSET        50
 #define WATERMARK_CON_OFFSET        -70
 #define MAP( cVal0, cVal1, nFrac )  ((sal_uInt8)((((long)(cVal0)<<20L)+nFrac*((long)(cVal1)-(cVal0)))>>20L))
 
-// ------------------
+
 // - GraphicManager -
-// ------------------
+
 
 GraphicManager::GraphicManager( sal_uLong nCacheSize, sal_uLong nMaxObjCacheSize ) :
         mpCache( new GraphicCache( nCacheSize, nMaxObjCacheSize ) )

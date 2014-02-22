@@ -1275,7 +1275,7 @@ getRangeForName( const uno::Reference< uno::XComponentContext >& xContext, const
     return new ScVbaRange( xFixThisParent, xContext, xRanges );
 }
 
-// ----------------------------------------------------------------------------
+
 
 namespace {
 
@@ -1381,7 +1381,7 @@ util::TriState lclGetMergedState( const uno::Reference< table::XCellRange >& rxC
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 css::uno::Reference< excel::XRange >
 ScVbaRange::getRangeObjectForName(

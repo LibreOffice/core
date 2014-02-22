@@ -59,9 +59,9 @@
 namespace avmedia
 {
 
-// ----------------
+
 // - MediaControl -
-// ---------------
+
 
 MediaControl::MediaControl( Window* pParent, MediaControlStyle eControlStyle ) :
     Control( pParent ),
@@ -194,7 +194,7 @@ MediaControl::MediaControl( Window* pParent, MediaControlStyle eControlStyle ) :
     maTimer.Start();
 }
 
-// ------------------------------------------------------------------------------
+
 
 MediaControl::~MediaControl()
 {
@@ -202,14 +202,14 @@ MediaControl::~MediaControl()
     delete mpZoomListBox;
 }
 
-// ------------------------------------------------------------------------------
+
 
 const Size& MediaControl::getMinSizePixel() const
 {
     return maMinSize;
 }
 
-// ------------------------------------------------------------------------------
+
 
 void MediaControl::Resize()
 {
@@ -267,7 +267,7 @@ void MediaControl::Resize()
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 void MediaControl::setState( const MediaItem& rItem )
 {
@@ -282,7 +282,7 @@ void MediaControl::setState( const MediaItem& rItem )
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 void MediaControl::implUpdateToolboxes()
 {
@@ -361,7 +361,7 @@ void MediaControl::implUpdateToolboxes()
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 void MediaControl::implUpdateTimeSlider()
 {
@@ -388,7 +388,7 @@ void MediaControl::implUpdateTimeSlider()
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 void MediaControl::implUpdateVolumeSlider()
 {
@@ -405,7 +405,7 @@ void MediaControl::implUpdateVolumeSlider()
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 void MediaControl::implUpdateTimeField( double fCurTime )
 {
@@ -425,14 +425,14 @@ void MediaControl::implUpdateTimeField( double fCurTime )
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 Image MediaControl::implGetImage( sal_Int32 nImageId ) const
 {
     return maImageList.GetImage( static_cast< sal_uInt16 >( nImageId ) );
 }
 
-// ------------------------------------------------------------------------------
+
 
 IMPL_LINK( MediaControl, implTimeHdl, Slider*, p )
 {
@@ -443,7 +443,7 @@ IMPL_LINK( MediaControl, implTimeHdl, Slider*, p )
     return 0;
 }
 
-// ------------------------------------------------------------------------------
+
 
 IMPL_LINK( MediaControl, implTimeEndHdl, Slider*, p )
 {
@@ -458,7 +458,7 @@ IMPL_LINK( MediaControl, implTimeEndHdl, Slider*, p )
     return 0;
 }
 
-// ------------------------------------------------------------------------------
+
 
 IMPL_LINK( MediaControl, implVolumeHdl, Slider*, p )
 {
@@ -471,14 +471,14 @@ IMPL_LINK( MediaControl, implVolumeHdl, Slider*, p )
     return 0;
 }
 
-// ------------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(MediaControl, implVolumeEndHdl)
 {
     return 0;
 }
 
-// ------------------------------------------------------------------------------
+
 
 IMPL_LINK( MediaControl, implSelectHdl, ToolBox*, p )
 {
@@ -569,7 +569,7 @@ IMPL_LINK( MediaControl, implSelectHdl, ToolBox*, p )
     return 0;
 }
 
-// ------------------------------------------------------------------------------
+
 
 IMPL_LINK( MediaControl, implZoomSelectHdl, ListBox*, p )
 {
@@ -597,7 +597,7 @@ IMPL_LINK( MediaControl, implZoomSelectHdl, ListBox*, p )
     return 0;
 }
 
-// ------------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(MediaControl, implTimeoutHdl)
 {

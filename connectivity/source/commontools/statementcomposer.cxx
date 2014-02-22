@@ -82,10 +82,10 @@ namespace dbtools
         }
     };
 
-    //--------------------------------------------------------------------
+
     namespace
     {
-        //----------------------------------------------------------------
+
         void    lcl_resetComposer( StatementComposer_Data& _rData )
         {
             if ( _rData.bDisposeComposer && _rData.xComposer.is() )
@@ -103,7 +103,7 @@ namespace dbtools
             _rData.xComposer.clear();
         }
 
-        //----------------------------------------------------------------
+
         bool    lcl_ensureUpToDateComposer_nothrow( StatementComposer_Data& _rData )
         {
             if ( !_rData.bComposerDirty )
@@ -236,7 +236,7 @@ namespace dbtools
     //====================================================================
     //= StatementComposer
     //====================================================================
-    //--------------------------------------------------------------------
+
     StatementComposer::StatementComposer( const Reference< XConnection >& _rxConnection,
         const OUString&  _rCommand, const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing )
         :m_pData( new StatementComposer_Data( _rxConnection ) )
@@ -247,40 +247,40 @@ namespace dbtools
         m_pData->bEscapeProcessing = _bEscapeProcessing;
     }
 
-    //--------------------------------------------------------------------
+
     StatementComposer::~StatementComposer()
     {
         lcl_resetComposer( *m_pData );
     }
 
-    //--------------------------------------------------------------------
+
     void StatementComposer::setDisposeComposer( bool _bDoDispose )
     {
         m_pData->bDisposeComposer = _bDoDispose;
     }
 
-    //--------------------------------------------------------------------
+
     void StatementComposer::setFilter( const OUString& _rFilter )
     {
         m_pData->sFilter = _rFilter;
         m_pData->bComposerDirty = true;
     }
 
-    //--------------------------------------------------------------------
+
     void StatementComposer::setOrder( const OUString& _rOrder )
     {
         m_pData->sOrder = _rOrder;
         m_pData->bComposerDirty = true;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XSingleSelectQueryComposer > StatementComposer::getComposer()
     {
         lcl_ensureUpToDateComposer_nothrow( *m_pData );
         return m_pData->xComposer;
     }
 
-    //--------------------------------------------------------------------
+
     OUString StatementComposer::getQuery()
     {
         if ( lcl_ensureUpToDateComposer_nothrow( *m_pData ) )

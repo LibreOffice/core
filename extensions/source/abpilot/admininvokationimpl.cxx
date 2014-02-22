@@ -45,7 +45,7 @@ namespace abp
     //=====================================================================
     //= OAdminDialogInvokation
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OAdminDialogInvokation::OAdminDialogInvokation(const Reference< XComponentContext >& _rxContext
                     , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _xDataSource
                     , Window* _pMessageParent)
@@ -58,7 +58,7 @@ namespace abp
         DBG_ASSERT(m_pMessageParent, "OAdminDialogInvokation::OAdminDialogInvokation: invalid message parent!");
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OAdminDialogInvokation::invokeAdministration( sal_Bool _bFixedType )
     {
         if (!m_xContext.is())

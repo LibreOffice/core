@@ -108,14 +108,14 @@ namespace CPPU_CURRENT_NAMESPACE
 
         type_info * getRTTI(typelib_CompoundTypeDescription *) SAL_THROW(());
     };
-    //____________________________________________________________________
+
     RTTI::RTTI() SAL_THROW(())
 #ifndef ANDROID
         : m_hApp( dlopen( 0, RTLD_LAZY ) )
 #endif
     {
     }
-    //____________________________________________________________________
+
     RTTI::~RTTI() SAL_THROW(())
     {
 #ifndef ANDROID
@@ -123,7 +123,7 @@ namespace CPPU_CURRENT_NAMESPACE
 #endif
     }
 
-    //____________________________________________________________________
+
     type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW(())
     {
         type_info * rtti;
@@ -220,7 +220,7 @@ namespace CPPU_CURRENT_NAMESPACE
         return rtti;
     }
 
-    //------------------------------------------------------------------
+
     static void deleteException( void * pExc )
     {
         __cxa_exception const * header = ((__cxa_exception const *)pExc - 1);

@@ -23,12 +23,12 @@
 using namespace connectivity::flat;
 using namespace connectivity::file;
 using namespace com::sun::star::uno;
-// -------------------------------------------------------------------------
+
 OResultSet* OFlatStatement::createResultSet()
 {
     return new OFlatResultSet(this,m_aSQLIterator);
 }
-// -------------------------------------------------------------------------
+
 IMPLEMENT_SERVICE_INFO(OFlatStatement,"com.sun.star.sdbc.driver.flat.Statement","com.sun.star.sdbc.Statement");
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

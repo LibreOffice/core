@@ -168,21 +168,21 @@ sal_Bool SfxObjectShell::Save()
     return SaveChildren();
 }
 
-//--------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::SaveAs( SfxMedium& rMedium )
 {
     return SaveAsChildren( rMedium );
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::QuerySlotExecutable( sal_uInt16 /*nSlotId*/ )
 {
     return sal_True;
 }
 
-//-------------------------------------------------------------------------
+
 
 bool GetEncryptionData_Impl( const SfxItemSet* pSet, uno::Sequence< beans::NamedValue >& o_rEncryptionData )
 {
@@ -210,7 +210,7 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, uno::Sequence< beans::Named
     return bResult;
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SfxObjectShell::PutURLContentsToVersionStream_Impl(
                                             OUString aURL,
                                             const uno::Reference< embed::XStorage >& xDocStorage,
@@ -267,7 +267,7 @@ sal_Bool SfxObjectShell::PutURLContentsToVersionStream_Impl(
     return bResult;
 }
 
-//-------------------------------------------------------------------------
+
 OUString SfxObjectShell::CreateTempCopyOfStorage_Impl( const uno::Reference< embed::XStorage >& xStorage )
 {
     OUString aTempURL = ::utl::TempFile().GetURL();
@@ -300,7 +300,7 @@ OUString SfxObjectShell::CreateTempCopyOfStorage_Impl( const uno::Reference< emb
     return aTempURL;
 }
 
-//-------------------------------------------------------------------------
+
 SvGlobalName SfxObjectShell::GetClassName() const
 {
     return GetFactory().GetClassId();
@@ -335,7 +335,7 @@ sal_uInt32 GetChartVersion( sal_Int32 nVersion, bool bTemplate )
 
 }
 
-//-------------------------------------------------------------------------
+
 void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xStorage,
                                    sal_Int32 nVersion, sal_Bool bTemplate, bool bChart ) const
 {
@@ -420,7 +420,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
     }
 }
 
-//-------------------------------------------------------------------------
+
 void SfxObjectShell::PrepareSecondTryLoad_Impl()
 {
     // only for internal use
@@ -429,7 +429,7 @@ void SfxObjectShell::PrepareSecondTryLoad_Impl()
     ResetError();
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SfxObjectShell::GeneralInit_Impl( const uno::Reference< embed::XStorage >& xStorage,
                                             sal_Bool bTypeMustBeSetAlready )
 {
@@ -468,13 +468,13 @@ sal_Bool SfxObjectShell::GeneralInit_Impl( const uno::Reference< embed::XStorage
     return sal_True;
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SfxObjectShell::InitNew( const uno::Reference< embed::XStorage >& xStorage )
 {
     return GeneralInit_Impl( xStorage, sal_False );
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SfxObjectShell::Load( SfxMedium& rMedium )
 {
     return GeneralInit_Impl( rMedium.GetStorage(), sal_True );
@@ -545,7 +545,7 @@ sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
     return sal_False;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::ImportFromGeneratedStream_Impl(
                     const uno::Reference< io::XStream >& xStream,
@@ -618,7 +618,7 @@ sal_Bool SfxObjectShell::ImportFromGeneratedStream_Impl(
     return bResult;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 {
@@ -986,7 +986,7 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
     return nError;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::IsOwnStorageFormat_Impl(const SfxMedium &rMedium) const
 {
@@ -996,7 +996,7 @@ sal_Bool SfxObjectShell::IsOwnStorageFormat_Impl(const SfxMedium &rMedium) const
              rMedium.GetFilter()->GetVersion() >= SOFFICE_FILEFORMAT_60 );
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::IsPackageStorageFormat_Impl(const SfxMedium &rMedium) const
 {
@@ -1005,7 +1005,7 @@ sal_Bool SfxObjectShell::IsPackageStorageFormat_Impl(const SfxMedium &rMedium) c
              rMedium.GetFilter()->GetVersion() >= SOFFICE_FILEFORMAT_60 );
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::DoSave()
 // DoSave is only invoked for OLE. Save your own documents in the SFX through
@@ -1099,7 +1099,7 @@ void Lock_Impl( SfxObjectShell* pDoc, sal_Bool bLock )
 
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::SaveTo_Impl
 (
@@ -1763,7 +1763,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     return bOk;
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& rTargetMedium )
 {
     SAL_INFO( "sfx.doc", "SfxObjectShell::DisconnectStorage_Impl" );
@@ -1810,7 +1810,7 @@ sal_Bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMediu
     return bResult;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::ConnectTmpStorage_Impl(
     const uno::Reference< embed::XStorage >& xStorage,
@@ -1894,7 +1894,7 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl(
     return bResult;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, sal_Bool bCommit )
 {
@@ -1936,7 +1936,7 @@ sal_Bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, sal_Bool bCommit )
     return bOk;
 }
 
-//-------------------------------------------------------------------------
+
 // TODO/LATER: may be the call must be removed completelly
 sal_Bool SfxObjectShell::DoSaveAs( SfxMedium& rMedium )
 {
@@ -1956,7 +1956,7 @@ sal_Bool SfxObjectShell::DoSaveAs( SfxMedium& rMedium )
     return bRet;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
 {
@@ -2120,7 +2120,7 @@ void SfxObjectShell::AddToRecentlyUsedList()
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::ConvertFrom
 (
@@ -2414,7 +2414,7 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
     return sal_False;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::ConvertTo
 (
@@ -2471,7 +2471,7 @@ sal_Bool SfxObjectShell::ConvertTo
     return sal_False;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
 {
@@ -2559,7 +2559,7 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     return bSaved;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
 {
@@ -2600,7 +2600,7 @@ sal_Bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
     return bSaved;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::CommonSaveAs_Impl
 (
@@ -2746,7 +2746,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
         return sal_False;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::PreDoSaveAs_Impl
 (
@@ -2884,7 +2884,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     return bOk;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::LoadFrom( SfxMedium& /*rMedium*/ )
 {
@@ -2892,7 +2892,7 @@ sal_Bool SfxObjectShell::LoadFrom( SfxMedium& /*rMedium*/ )
     return sal_True;
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SfxObjectShell::IsInformationLost()
 {
     Sequence< PropertyValue > aProps = GetModel()->getArgs();
@@ -2918,7 +2918,7 @@ sal_Bool SfxObjectShell::IsInformationLost()
     return sal_False;
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SfxObjectShell::CanReload_Impl()
 
 /*  [Description]
@@ -2931,7 +2931,7 @@ sal_Bool SfxObjectShell::CanReload_Impl()
     return pMedium && HasName() && !IsInModalMode() && !pImp->bForbidReload;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_uInt16 SfxObjectShell::GetHiddenInformationState( sal_uInt16 nStates )
 {
@@ -3662,7 +3662,7 @@ sal_Bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference
     // No interaction handler, default is to continue to save
     return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< task::XInteractionHandler > SfxObjectShell::getInteractionHandler() const
 {
     uno::Reference< task::XInteractionHandler > xRet;

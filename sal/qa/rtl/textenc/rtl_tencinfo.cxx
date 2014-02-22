@@ -467,7 +467,7 @@ namespace
         CPPUNIT_TEST_SUITE_END( );
     };
 
-    // -----------------------------------------------------------------------------
+
 
     class testBestUnix : public CppUnit::TestFixture
     {

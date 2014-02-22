@@ -79,7 +79,7 @@ namespace svt
     //====================================================================
     //= FileViewContentEnumerator
     //====================================================================
-    //--------------------------------------------------------------------
+
     FileViewContentEnumerator::FileViewContentEnumerator(
             const Reference< XCommandEnvironment >& _rxCommandEnv,
             ContentData& _rContentToFill, ::osl::Mutex& _rContentMutex,
@@ -94,12 +94,12 @@ namespace svt
     {
     }
 
-    //--------------------------------------------------------------------
+
     FileViewContentEnumerator::~FileViewContentEnumerator()
     {
     }
 
-    //--------------------------------------------------------------------
+
     void FileViewContentEnumerator::cancel()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -110,7 +110,7 @@ namespace svt
         m_aFolder.sURL = "";
     }
 
-    //--------------------------------------------------------------------
+
     EnumerationResult FileViewContentEnumerator::enumerateFolderContentSync(
         const FolderDescriptor& _rFolder,
         const ::com::sun::star::uno::Sequence< OUString >& rBlackList )
@@ -124,7 +124,7 @@ namespace svt
         return enumerateFolderContent();
     }
 
-    //--------------------------------------------------------------------
+
     void FileViewContentEnumerator::enumerateFolderContent(
         const FolderDescriptor& _rFolder, IEnumerationResultHandler* _pResultHandler )
     {
@@ -142,7 +142,7 @@ namespace svt
             // atexit handlers
     }
 
-    //--------------------------------------------------------------------
+
     EnumerationResult FileViewContentEnumerator::enumerateFolderContent()
     {
         EnumerationResult eResult = ERROR;
@@ -349,7 +349,7 @@ namespace svt
         return eResult;
     }
 
-    //--------------------------------------------------------------------
+
 
     sal_Bool FileViewContentEnumerator::URLOnBlackList ( const OUString& sRealURL )
     {
@@ -364,7 +364,7 @@ namespace svt
         return false;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool FileViewContentEnumerator::implGetDocTitle( const OUString& _rTargetURL, OUString& _rRet ) const
     {
         sal_Bool bRet = sal_False;
@@ -398,7 +398,7 @@ namespace svt
         return bRet;
     }
 
-    //--------------------------------------------------------------------
+
     void FileViewContentEnumerator::execute()
     {
         enumerateFolderContent();

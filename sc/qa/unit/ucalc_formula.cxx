@@ -906,9 +906,9 @@ void Test::testFormulaRefUpdate()
     // Clear all and start over.
     clearRange(m_pDoc, ScRange(0,0,0,10,10,0));
 
-    // ------------------------------------------
+
     // Test range updates
-    // ------------------------------------------
+
 
     // Fill B2:C3 with values.
     m_pDoc->SetValue(ScAddress(1,1,0), 1);

@@ -79,7 +79,7 @@
 using namespace com::sun::star;
 using ::std::vector;
 
-// -----------------------------------------------------------------------
+
 
 #define SC_SERVICE_ROWSET           "com.sun.star.sdb.RowSet"
 
@@ -152,7 +152,7 @@ namespace
 
 #endif // !DISABLE_DBCONNECTIVITY
 
-// -----------------------------------------------------------------------
+
 // MoveFile/KillFile/IsDocument: similar to SfxContentHelper
 
 bool ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject& rDestObj )
@@ -239,7 +239,7 @@ bool ScDocShell::IsDocument( const INetURLObject& rURL )
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 #ifndef DISABLE_DBCONNECTIVITY
 

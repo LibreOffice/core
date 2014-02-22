@@ -83,7 +83,7 @@ using namespace com::sun::star;
 #define STR_EPSILONLEVEL  "EpsilonLevel"
 #define STR_LIMITBBDEPTH  "LimitBBDepth"
 
-// -----------------------------------------------------------------------
+
 //  Resources from tools are used for translated strings
 
 static ResMgr* pSolverResMgr = NULL;
@@ -96,7 +96,7 @@ static OUString lcl_GetResourceString( sal_uInt32 nId )
     return ResId(nId, *pSolverResMgr).toString();
 }
 
-// -----------------------------------------------------------------------
+
 
 namespace
 {
@@ -110,7 +110,7 @@ namespace
     };
 }
 
-// -----------------------------------------------------------------------
+
 
 // hash map for the coefficients of a dependent cell (objective or constraint)
 // The size of each vector is the number of columns (variable cells) plus one, first entry is initial value.
@@ -138,7 +138,7 @@ struct ScSolverCellEqual
 
 typedef boost::unordered_map< table::CellAddress, std::vector<double>, ScSolverCellHash, ScSolverCellEqual > ScSolverCellHashMap;
 
-// -----------------------------------------------------------------------
+
 
 static uno::Reference<table::XCell> lcl_GetCell( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
                                           const table::CellAddress& rPos )
@@ -160,7 +160,7 @@ static double lcl_GetValue( const uno::Reference<sheet::XSpreadsheetDocument>& x
     return lcl_GetCell( xDoc, rPos )->getValue();
 }
 
-// -------------------------------------------------------------------------
+
 
 SolverComponent::SolverComponent( const uno::Reference<uno::XComponentContext>& /* rSMgr */ ) :
     OPropertyContainer( GetBroadcastHelper() ),

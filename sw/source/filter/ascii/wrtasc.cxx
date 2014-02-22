@@ -31,7 +31,7 @@
 
 #include <statstr.hrc>
 
-//-----------------------------------------------------------------
+
 
 SwASCWriter::SwASCWriter( const OUString& rFltNm )
 {

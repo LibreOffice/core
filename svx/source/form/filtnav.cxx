@@ -111,13 +111,13 @@ OFilterItemExchange::OFilterItemExchange()
 {
 }
 
-//------------------------------------------------------------------------
+
 void OFilterItemExchange::AddSupportedFormats()
 {
     AddFormat(getFormatId());
 }
 
-//------------------------------------------------------------------------
+
 sal_uInt32 OFilterItemExchange::getFormatId()
 {
     static sal_uInt32 s_nFormat = (sal_uInt32)-1;
@@ -129,7 +129,7 @@ sal_uInt32 OFilterItemExchange::getFormatId()
     return s_nFormat;
 }
 
-//------------------------------------------------------------------------
+
 OLocalExchange* OFilterExchangeHelper::createExchange() const
 {
     return new OFilterItemExchange;
@@ -144,7 +144,7 @@ Image FmFilterData::GetImage() const
 
 //========================================================================
 TYPEINIT1(FmParentData, FmFilterData);
-//------------------------------------------------------------------------
+
 FmParentData::~FmParentData()
 {
     for (::std::vector<FmFilterData*>::const_iterator i = m_aChildren.begin();
@@ -154,7 +154,7 @@ FmParentData::~FmParentData()
 
 //========================================================================
 TYPEINIT1(FmFormItem, FmParentData);
-//------------------------------------------------------------------------
+
 Image FmFormItem::GetImage() const
 {
     static Image aImage;
@@ -169,7 +169,7 @@ Image FmFormItem::GetImage() const
 
 //========================================================================
 TYPEINIT1(FmFilterItems, FmParentData);
-//------------------------------------------------------------------------
+
 FmFilterItem* FmFilterItems::Find( const ::sal_Int32 _nFilterComponentIndex ) const
 {
     for (   ::std::vector< FmFilterData* >::const_iterator i = m_aChildren.begin();
@@ -185,7 +185,7 @@ FmFilterItem* FmFilterItems::Find( const ::sal_Int32 _nFilterComponentIndex ) co
     return NULL;
 }
 
-//------------------------------------------------------------------------
+
 Image FmFilterItems::GetImage() const
 {
     static Image aImage;
@@ -200,7 +200,7 @@ Image FmFilterItems::GetImage() const
 
 //========================================================================
 TYPEINIT1(FmFilterItem, FmFilterData);
-//------------------------------------------------------------------------
+
 FmFilterItem::FmFilterItem( FmFilterItems* pParent,
                             const OUString& aFieldName,
                             const OUString& aText,
@@ -211,7 +211,7 @@ FmFilterItem::FmFilterItem( FmFilterItems* pParent,
 {
 }
 
-//------------------------------------------------------------------------
+
 Image FmFilterItem::GetImage() const
 {
     static Image aImage;
@@ -322,7 +322,7 @@ public:
         const OUString& rText);
 };
 
-//------------------------------------------------------------------------
+
 FmFilterAdapter::FmFilterAdapter(FmFilterModel* pModel, const Reference< XIndexAccess >& xControllers)
     :m_pModel( pModel )
     ,m_xControllers( xControllers )
@@ -330,13 +330,13 @@ FmFilterAdapter::FmFilterAdapter(FmFilterModel* pModel, const Reference< XIndexA
     AddOrRemoveListener( m_xControllers, true );
 }
 
-//------------------------------------------------------------------------
+
 void FmFilterAdapter::dispose() throw( RuntimeException )
 {
     AddOrRemoveListener( m_xControllers, false );
 }
 
-//------------------------------------------------------------------------
+
 void FmFilterAdapter::AddOrRemoveListener( const Reference< XIndexAccess >& _rxControllers, const bool _bAdd )
 {
     for (sal_Int32 i = 0, nLen = _rxControllers->getCount(); i < nLen; ++i)
@@ -359,7 +359,7 @@ void FmFilterAdapter::AddOrRemoveListener( const Reference< XIndexAccess >& _rxC
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmFilterAdapter::setText(sal_Int32 nRowPos,
                               const FmFilterItem* pFilterItem,
                               const OUString& rText)
@@ -379,12 +379,12 @@ void FmFilterAdapter::setText(sal_Int32 nRowPos,
 
 
 // XEventListener
-//------------------------------------------------------------------------
+
 void SAL_CALL FmFilterAdapter::disposing(const EventObject& /*e*/) throw( RuntimeException )
 {
 }
 
-//------------------------------------------------------------------------
+
 namespace
 {
     OUString lcl_getLabelName_nothrow( const Reference< XControl >& _rxControl )
@@ -419,7 +419,7 @@ namespace
 }
 
 // XFilterControllerListener
-//------------------------------------------------------------------------
+
 void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& _Event ) throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -469,7 +469,7 @@ void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& _Event ) th
     m_pModel->EnsureEmptyFilterRows( *pFormItem );
 }
 
-//------------------------------------------------------------------------
+
 void SAL_CALL FmFilterAdapter::disjunctiveTermRemoved( const FilterEvent& _Event ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -504,7 +504,7 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermRemoved( const FilterEvent& _Event
     m_pModel->EnsureEmptyFilterRows( *pFormItem );
 }
 
-//------------------------------------------------------------------------
+
 void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& _Event ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -536,7 +536,7 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& _Event )
 // class FmFilterModel
 //========================================================================
 TYPEINIT1(FmFilterModel, FmParentData);
-//------------------------------------------------------------------------
+
 FmFilterModel::FmFilterModel()
               :FmParentData(NULL, OUString())
               ,OSQLParserClient(comphelper::getProcessComponentContext())
@@ -545,13 +545,13 @@ FmFilterModel::FmFilterModel()
 {
 }
 
-//------------------------------------------------------------------------
+
 FmFilterModel::~FmFilterModel()
 {
     Clear();
 }
 
-//------------------------------------------------------------------------
+
 void FmFilterModel::Clear()
 {
     // notify
@@ -577,7 +577,7 @@ void FmFilterModel::Clear()
     m_aChildren.clear();
 }
 
-//------------------------------------------------------------------------
+
 void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, const Reference< XFormController > & xCurrent)
 {
     if ( xCurrent == m_xController )
@@ -610,7 +610,7 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, const
         SetCurrentController(xCurrent);
 }
 
-//------------------------------------------------------------------------
+
 void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmParentData* pParent)
 {
     try
@@ -678,7 +678,7 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmPar
     }
 }
 
-//------------------------------------------------------------------------
+
 FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, const Reference< XFormController > & xController) const
 {
     for (::std::vector<FmFilterData*>::const_iterator i = rItems.begin();
@@ -700,7 +700,7 @@ FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, cons
     return NULL;
 }
 
-//------------------------------------------------------------------------
+
 FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, const Reference< XForm >& xForm) const
 {
     for (::std::vector<FmFilterData*>::const_iterator i = rItems.begin();
@@ -722,7 +722,7 @@ FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, cons
     return NULL;
 }
 
-//------------------------------------------------------------------------
+
 void FmFilterModel::SetCurrentController(const Reference< XFormController > & xCurrent)
 {
     if ( xCurrent == m_xController )
@@ -749,7 +749,7 @@ void FmFilterModel::SetCurrentController(const Reference< XFormController > & xC
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmFilterModel::AppendFilterItems( FmFormItem& _rFormItem )
 {
     // insert the condition behind the last filter items
@@ -777,7 +777,7 @@ void FmFilterModel::AppendFilterItems( FmFormItem& _rFormItem )
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmFilterModel::Insert(const ::std::vector<FmFilterData*>::iterator& rPos, FmFilterData* pData)
 {
     ::std::vector<FmFilterData*>& rItems = pData->GetParent()->GetChildren();
@@ -789,7 +789,7 @@ void FmFilterModel::Insert(const ::std::vector<FmFilterData*>::iterator& rPos, F
     Broadcast( aInsertedHint );
 }
 
-//------------------------------------------------------------------------
+
 void FmFilterModel::Remove(FmFilterData* pData)
 {
     FmParentData* pParent = pData->GetParent();
@@ -853,7 +853,7 @@ void FmFilterModel::Remove(FmFilterData* pData)
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmFilterModel::Remove( const ::std::vector<FmFilterData*>::iterator& rPos )
 {
     // remove from parent's child list
@@ -867,7 +867,7 @@ void FmFilterModel::Remove( const ::std::vector<FmFilterData*>::iterator& rPos )
     delete pData;
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, OUString& rText, OUString& rErrorMsg) const
 {
     FmFormItem* pFormItem = PTR_CAST( FmFormItem, pItem->GetParent()->GetParent() );
@@ -912,13 +912,13 @@ sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, OUString& rText, OUStr
     return sal_False;
 }
 
-//------------------------------------------------------------------------
+
 void FmFilterModel::Append(FmFilterItems* pItems, FmFilterItem* pFilterItem)
 {
     Insert(pItems->GetChildren().end(), pFilterItem);
 }
 
-//------------------------------------------------------------------------
+
 void FmFilterModel::SetTextForItem(FmFilterItem* pItem, const OUString& rText)
 {
     ::std::vector<FmFilterData*>& rItems = pItem->GetParent()->GetParent()->GetChildren();
@@ -938,7 +938,7 @@ void FmFilterModel::SetTextForItem(FmFilterItem* pItem, const OUString& rText)
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmFilterModel::SetCurrentItems(FmFilterItems* pCurrent)
 {
     if (m_pCurrentItems == pCurrent)
@@ -983,7 +983,7 @@ void FmFilterModel::SetCurrentItems(FmFilterItems* pCurrent)
     Broadcast( aHint );
 }
 
-//------------------------------------------------------------------------
+
 void FmFilterModel::EnsureEmptyFilterRows( FmParentData& _rItem )
 {
     // checks whether for each form there's one free level for input
@@ -1033,7 +1033,7 @@ public:
 };
 
 const int nxDBmp = 12;
-//------------------------------------------------------------------------
+
 void FmFilterItemsString::Paint(
     const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
 {
@@ -1067,7 +1067,7 @@ void FmFilterItemsString::Paint(
     rDev.DrawText( Point(rPos.X() + nxDBmp, rPos.Y()), GetText() );
 }
 
-//------------------------------------------------------------------------
+
 void FmFilterItemsString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* pViewData)
 {
     if( !pViewData )
@@ -1099,7 +1099,7 @@ public:
 
 const int nxD = 4;
 
-//------------------------------------------------------------------------
+
 void FmFilterString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* pViewData)
 {
     if( !pViewData )
@@ -1116,7 +1116,7 @@ void FmFilterString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
     pViewData->maSize = aSize;
 }
 
-//------------------------------------------------------------------------
+
 void FmFilterString::Paint(
     const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
 {
@@ -1166,14 +1166,14 @@ FmFilterNavigator::FmFilterNavigator( Window* pParent )
     m_aDropActionTimer.SetTimeoutHdl(LINK(this, FmFilterNavigator, OnDropActionTimer));
 }
 
-//------------------------------------------------------------------------
+
 FmFilterNavigator::~FmFilterNavigator()
 {
     EndListening( *m_pModel );
     delete m_pModel;
 }
 
-//------------------------------------------------------------------------
+
 void FmFilterNavigator::UpdateContent(const Reference< XIndexAccess > & xControllers, const Reference< XFormController > & xCurrent)
 {
     if (xCurrent == m_pModel->GetCurrentController())
@@ -1200,7 +1200,7 @@ void FmFilterNavigator::UpdateContent(const Reference< XIndexAccess > & xControl
     }
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmFilterNavigator::EditingEntry( SvTreeListEntry* pEntry, Selection& rSelection )
 {
     m_pEditingCurrently = pEntry;
@@ -1210,7 +1210,7 @@ sal_Bool FmFilterNavigator::EditingEntry( SvTreeListEntry* pEntry, Selection& rS
     return pEntry && ((FmFilterData*)pEntry->GetUserData())->ISA(FmFilterItem);
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmFilterNavigator::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
 {
     DBG_ASSERT(pEntry == m_pEditingCurrently, "FmFilterNavigator::EditedEntry: suspicious entry!");
@@ -1257,7 +1257,7 @@ sal_Bool FmFilterNavigator::EditedEntry( SvTreeListEntry* pEntry, const OUString
     return sal_True;
 }
 
-//------------------------------------------------------------------------
+
 IMPL_LINK( FmFilterNavigator, OnRemove, SvTreeListEntry*, pEntry )
 {
     // now remove the entry
@@ -1265,7 +1265,7 @@ IMPL_LINK( FmFilterNavigator, OnRemove, SvTreeListEntry*, pEntry )
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(FmFilterNavigator, OnDropActionTimer)
 {
     if (--m_aTimerCounter > 0)
@@ -1299,7 +1299,7 @@ IMPL_LINK_NOARG(FmFilterNavigator, OnDropActionTimer)
 }
 
 
-//------------------------------------------------------------------------
+
 sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     Point aDropPos = rEvt.maPosPixel;
@@ -1391,7 +1391,7 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
 
     return rEvt.mnAction;
 }
-// -----------------------------------------------------------------------------
+
 namespace
 {
     FmFilterItems* getTargetItems(SvTreeListEntry* _pTarget)
@@ -1405,7 +1405,7 @@ namespace
         return pTargetItems;
     }
 }
-//------------------------------------------------------------------------
+
 sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     // ware schlecht, wenn nach dem Droppen noch gescrollt wird ...
@@ -1434,7 +1434,7 @@ sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
     return sal_True;
 }
 
-//------------------------------------------------------------------------
+
 void FmFilterNavigator::InitEntry(SvTreeListEntry* pEntry,
                                   const OUString& rStr,
                                   const Image& rImg1,
@@ -1453,7 +1453,7 @@ void FmFilterNavigator::InitEntry(SvTreeListEntry* pEntry,
         pEntry->ReplaceItem( pString, 1 );
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmFilterNavigator::Select( SvTreeListEntry* pEntry, sal_Bool bSelect )
 {
     if (bSelect == IsSelected(pEntry))  // das passiert manchmal, ich glaube, die Basisklasse geht zu sehr auf Nummer sicher ;)
@@ -1488,7 +1488,7 @@ sal_Bool FmFilterNavigator::Select( SvTreeListEntry* pEntry, sal_Bool bSelect )
         return sal_False;
 }
 
-//------------------------------------------------------------------------
+
 void FmFilterNavigator::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if (rHint.ISA(FmFilterInsertedHint))
@@ -1521,7 +1521,7 @@ void FmFilterNavigator::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
 }
 
-//------------------------------------------------------------------------
+
 SvTreeListEntry* FmFilterNavigator::FindEntry(const FmFilterData* pItem) const
 {
     SvTreeListEntry* pEntry = NULL;
@@ -1537,7 +1537,7 @@ SvTreeListEntry* FmFilterNavigator::FindEntry(const FmFilterData* pItem) const
     return pEntry;
 }
 
-//------------------------------------------------------------------------
+
 void FmFilterNavigator::Insert(FmFilterData* pItem, sal_uLong nPos)
 {
     const FmParentData* pParent = pItem->GetParent() ? pItem->GetParent() : GetFilterModel();
@@ -1549,7 +1549,7 @@ void FmFilterNavigator::Insert(FmFilterData* pItem, sal_uLong nPos)
         Expand( pParentEntry );
 }
 
-//------------------------------------------------------------------------
+
 void FmFilterNavigator::Remove(FmFilterData* pItem)
 {
     // der Entry zu den Daten
@@ -1562,7 +1562,7 @@ void FmFilterNavigator::Remove(FmFilterData* pItem)
     if (pEntry)
         GetModel()->Remove( pEntry );
 }
-// -----------------------------------------------------------------------------
+
 FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem*>& _rItemList)
 {
     // be sure that the data is only used within only one form!
@@ -1596,7 +1596,7 @@ FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem
         pFirstItem = NULL;
     return pFirstItem;
 }
-// -----------------------------------------------------------------------------
+
 void FmFilterNavigator::insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems,sal_Bool _bCopy)
 {
     ::std::vector<FmFilterItem*>::const_iterator aEnd = _rFilterList.end();
@@ -1627,7 +1627,7 @@ void FmFilterNavigator::insertFilterItem(const ::std::vector<FmFilterItem*>& _rF
     m_pModel->EnsureEmptyFilterRows( *_pTargetItems->GetParent() );
 }
 
-//------------------------------------------------------------------------------
+
 void FmFilterNavigator::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
 {
     EndSelection();
@@ -1644,7 +1644,7 @@ void FmFilterNavigator::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPi
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmFilterNavigator::Command( const CommandEvent& rEvt )
 {
     sal_Bool bHandled = sal_False;
@@ -1746,7 +1746,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
     if (!bHandled)
         SvTreeListBox::Command( rEvt );
 }
-// -----------------------------------------------------------------------------
+
 SvTreeListEntry* FmFilterNavigator::getNextEntry(SvTreeListEntry* _pStartWith)
 {
     SvTreeListEntry* pEntry = _pStartWith ? _pStartWith : LastSelected();
@@ -1756,7 +1756,7 @@ SvTreeListEntry* FmFilterNavigator::getNextEntry(SvTreeListEntry* _pStartWith)
         pEntry = Next(pEntry);
     return pEntry;
 }
-// -----------------------------------------------------------------------------
+
 SvTreeListEntry* FmFilterNavigator::getPrevEntry(SvTreeListEntry* _pStartWith)
 {
     SvTreeListEntry* pEntry = _pStartWith ? _pStartWith : FirstSelected();
@@ -1771,7 +1771,7 @@ SvTreeListEntry* FmFilterNavigator::getPrevEntry(SvTreeListEntry* _pStartWith)
     }
     return pEntry;
 }
-//------------------------------------------------------------------------
+
 void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
 {
     const KeyCode&  rKeyCode = rKEvt.GetKeyCode();
@@ -1855,7 +1855,7 @@ void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
     SvTreeListBox::KeyInput(rKEvt);
 }
 
-//------------------------------------------------------------------------------
+
 void FmFilterNavigator::DeleteSelection()
 {
     // to avoid the deletion of an entry twice (e.g. deletion of a parent and afterward
@@ -1884,7 +1884,7 @@ void FmFilterNavigator::DeleteSelection()
         m_pModel->Remove((FmFilterData*)(*i)->GetUserData());
     }
 }
-// -----------------------------------------------------------------------------
+
 
 //========================================================================
 // class FmFilterNavigatorWin
@@ -1902,13 +1902,13 @@ FmFilterNavigatorWin::FmFilterNavigatorWin( SfxBindings* _pBindings, SfxChildWin
     SfxDockingWindow::SetFloatingSize( Size(200,200) );
 }
 
-//------------------------------------------------------------------------
+
 FmFilterNavigatorWin::~FmFilterNavigatorWin()
 {
     delete m_pNavigator;
 }
 
-//-----------------------------------------------------------------------
+
 void FmFilterNavigatorWin::UpdateContent(FmFormShell* pFormShell)
 {
     if (!pFormShell)
@@ -1932,7 +1932,7 @@ void FmFilterNavigatorWin::UpdateContent(FmFormShell* pFormShell)
     }
 }
 
-//-----------------------------------------------------------------------
+
 void FmFilterNavigatorWin::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     if( !pState  || SID_FM_FILTER_NAVIGATOR_CONTROL != nSID )
@@ -1947,7 +1947,7 @@ void FmFilterNavigatorWin::StateChanged( sal_uInt16 nSID, SfxItemState eState, c
         UpdateContent( NULL );
 }
 
-//-----------------------------------------------------------------------
+
 bool FmFilterNavigatorWin::Close()
 {
     if ( m_pNavigator && m_pNavigator->IsEditingActive() )
@@ -1961,14 +1961,14 @@ bool FmFilterNavigatorWin::Close()
     return SfxDockingWindow::Close();
 }
 
-//-----------------------------------------------------------------------
+
 void FmFilterNavigatorWin::FillInfo( SfxChildWinInfo& rInfo ) const
 {
     SfxDockingWindow::FillInfo( rInfo );
     rInfo.bVisible = sal_False;
 }
 
-//-----------------------------------------------------------------------
+
 Size FmFilterNavigatorWin::CalcDockingSize( SfxChildAlignment eAlign )
 {
     if ( ( eAlign == SFX_ALIGN_TOP ) || ( eAlign == SFX_ALIGN_BOTTOM ) )
@@ -1977,7 +1977,7 @@ Size FmFilterNavigatorWin::CalcDockingSize( SfxChildAlignment eAlign )
     return SfxDockingWindow::CalcDockingSize( eAlign );
 }
 
-//-----------------------------------------------------------------------
+
 SfxChildAlignment FmFilterNavigatorWin::CheckAlignment( SfxChildAlignment eActAlign, SfxChildAlignment eAlign )
 {
     switch (eAlign)
@@ -1993,7 +1993,7 @@ SfxChildAlignment FmFilterNavigatorWin::CheckAlignment( SfxChildAlignment eActAl
     return (eActAlign);
 }
 
-//------------------------------------------------------------------------
+
 void FmFilterNavigatorWin::Resize()
 {
     SfxDockingWindow::Resize();
@@ -2008,14 +2008,14 @@ void FmFilterNavigatorWin::Resize()
 
     m_pNavigator->SetPosSizePixel( aExplPos, aExplSize );
 }
-// -----------------------------------------------------------------------------
+
 void FmFilterNavigatorWin::GetFocus()
 {
     // oj #97405#
     if ( m_pNavigator )
         m_pNavigator->GrabFocus();
 }
-// -----------------------------------------------------------------------------
+
 
 
 //========================================================================
@@ -2023,7 +2023,7 @@ void FmFilterNavigatorWin::GetFocus()
 //========================================================================
 SFX_IMPL_DOCKINGWINDOW( FmFilterNavigatorWinMgr, SID_FM_FILTER_NAVIGATOR )
 
-//-----------------------------------------------------------------------
+
 FmFilterNavigatorWinMgr::FmFilterNavigatorWinMgr( Window *_pParent, sal_uInt16 _nId,
                                     SfxBindings *_pBindings, SfxChildWinInfo* _pInfo )
                  :SfxChildWindow( _pParent, _nId )

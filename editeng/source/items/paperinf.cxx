@@ -33,7 +33,7 @@ inline sal_Bool IsValidPrinter( const Printer* pPtr )
     return pPtr->GetName().isEmpty() ? sal_False : sal_True;
 }
 
-//------------------------------------------------------------------------
+
 
 Size SvxPaperInfo::GetPaperSize( Paper ePaper, MapUnit eUnit )
 {
@@ -84,7 +84,7 @@ Size SvxPaperInfo::GetPaperSize( const Printer* pPrinter )
     return aSize;
 }
 
-// -----------------------------------------------------------------------
+
 
 Paper SvxPaperInfo::GetSvxPaper( const Size &rSize, MapUnit eUnit, bool bSloppy )
 {
@@ -95,7 +95,7 @@ Paper SvxPaperInfo::GetSvxPaper( const Size &rSize, MapUnit eUnit, bool bSloppy 
     return aInfo.getPaper();
 }
 
-// -----------------------------------------------------------------------
+
 
 long SvxPaperInfo::GetSloppyPaperDimension( long nSize, MapUnit eUnit )
 {
@@ -104,7 +104,7 @@ long SvxPaperInfo::GetSloppyPaperDimension( long nSize, MapUnit eUnit )
     return eUnit == MAP_100TH_MM ? nSize : OutputDevice::LogicToLogic(nSize, MAP_100TH_MM, eUnit);
 }
 
-// -----------------------------------------------------------------------
+
 
 Size SvxPaperInfo::GetDefaultPaperSize( MapUnit eUnit )
 {

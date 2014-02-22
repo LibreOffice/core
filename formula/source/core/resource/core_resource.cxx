@@ -42,7 +42,7 @@ namespace formula
     sal_Int32       ResourceManager::s_nClients = 0;
     ResMgr*         ResourceManager::m_pImpl = NULL;
 
-    //------------------------------------------------------------------
+
     void ResourceManager::ensureImplExists()
     {
         if (m_pImpl)
@@ -51,14 +51,14 @@ namespace formula
         m_pImpl = ResMgr::CreateResMgr("for", Application::GetSettings().GetUILanguageTag());
     }
 
-    //-------------------------------------------------------------------------
+
     void ResourceManager::registerClient()
     {
         ::osl::MutexGuard aGuard(theResourceManagerMutex::get());
         ++s_nClients;
     }
 
-    //-------------------------------------------------------------------------
+
     void ResourceManager::revokeClient()
     {
         ::osl::MutexGuard aGuard(theResourceManagerMutex::get());

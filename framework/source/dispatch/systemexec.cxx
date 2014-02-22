@@ -36,7 +36,7 @@ namespace framework{
 #define PROTOCOL_VALUE      "systemexecute:"
 #define PROTOCOL_LENGTH     14
 
-//_________________________________________________________________________________________________________________
+
 // XInterface, XTypeProvider, XServiceInfo
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2(SystemExec                   ,
@@ -54,7 +54,7 @@ DEFINE_INIT_SERVICE(SystemExec,
                     }
                    )
 
-//_________________________________________________________________________________________________________________
+
 
 SystemExec::SystemExec( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
         //  Init baseclasses first
@@ -64,14 +64,14 @@ SystemExec::SystemExec( const css::uno::Reference< css::uno::XComponentContext >
 {
 }
 
-//_________________________________________________________________________________________________________________
+
 
 SystemExec::~SystemExec()
 {
     m_xContext = NULL;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 css::uno::Reference< css::frame::XDispatch > SAL_CALL SystemExec::queryDispatch( const css::util::URL&  aURL    ,
                                                                                  const OUString&,
@@ -83,7 +83,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL SystemExec::queryDispatch(
     return xDispatcher;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL SystemExec::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw( css::uno::RuntimeException )
 {
@@ -99,7 +99,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Syst
     return lDispatcher;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void SAL_CALL SystemExec::dispatch( const css::util::URL&                                  aURL       ,
                                     const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException )
@@ -107,7 +107,7 @@ void SAL_CALL SystemExec::dispatch( const css::util::URL&                       
     dispatchWithNotification(aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&                                             aURL      ,
                                                     const css::uno::Sequence< css::beans::PropertyValue >&,
@@ -147,7 +147,7 @@ void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&       
         }
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void SAL_CALL SystemExec::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >&,
                                              const css::util::URL& ) throw( css::uno::RuntimeException )
@@ -155,7 +155,7 @@ void SAL_CALL SystemExec::addStatusListener( const css::uno::Reference< css::fra
     // not suported yet
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void SAL_CALL SystemExec::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >&,
                                                 const css::util::URL& ) throw( css::uno::RuntimeException )
@@ -163,7 +163,7 @@ void SAL_CALL SystemExec::removeStatusListener( const css::uno::Reference< css::
     // not suported yet
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void SystemExec::impl_notifyResultListener(const css::uno::Reference< css::frame::XDispatchResultListener >& xListener,
                                            const sal_Int16                                                   nState   )

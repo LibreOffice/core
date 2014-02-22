@@ -24,7 +24,7 @@
 
 // MasterPasswordDialog---------------------------------------------------
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(MasterPasswordDialog, OKHdl_Impl)
 {
@@ -32,7 +32,7 @@ IMPL_LINK_NOARG(MasterPasswordDialog, OKHdl_Impl)
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 MasterPasswordDialog::MasterPasswordDialog
 (

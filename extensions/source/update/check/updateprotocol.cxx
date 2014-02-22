@@ -44,7 +44,7 @@ namespace uno = css::uno ;
 namespace task = css::task ;
 namespace xml = css::xml ;
 
-//------------------------------------------------------------------------------
+
 
 static bool
 getBootstrapData(
@@ -74,7 +74,7 @@ getBootstrapData(
     return true;
 }
 
-//------------------------------------------------------------------------------
+
 
 // Returns 'true' if successfully connected to the update server
 bool
@@ -243,7 +243,7 @@ checkForUpdates(
     return true;
 }
 
-//------------------------------------------------------------------------------
+
 bool storeExtensionUpdateInfos( const uno::Reference< uno::XComponentContext > & rxContext,
                                 const uno::Sequence< uno::Sequence< OUString > > &rUpdateInfos )
 {
@@ -261,7 +261,7 @@ bool storeExtensionUpdateInfos( const uno::Reference< uno::XComponentContext > &
     return bNotify;
 }
 
-//------------------------------------------------------------------------------
+
 // Returns 'true' if there are updates for any extension
 
 bool checkForExtensionUpdates( const uno::Reference< uno::XComponentContext > & rxContext )
@@ -288,7 +288,7 @@ bool checkForExtensionUpdates( const uno::Reference< uno::XComponentContext > & 
     return bNotify;
 }
 
-//------------------------------------------------------------------------------
+
 // Returns 'true' if there are any pending updates for any extension (offline check)
 
 bool checkForPendingUpdates( const uno::Reference< uno::XComponentContext > & rxContext )

@@ -230,7 +230,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
         m_pAutoCB->Show();
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxManageStyleSheetPage::~SfxManageStyleSheetPage()
 
@@ -248,7 +248,7 @@ SfxManageStyleSheetPage::~SfxManageStyleSheetPage()
 
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxManageStyleSheetPage::UpdateName_Impl( ListBox* pBox,
                                                const OUString& rNew )
@@ -276,7 +276,7 @@ void SfxManageStyleSheetPage::UpdateName_Impl( ListBox* pBox,
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxManageStyleSheetPage::SetDescriptionText_Impl()
 
@@ -314,7 +314,7 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
     m_pDescFt->SetText( pStyle->GetDescription( eUnit ) );
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, GetFocusHdl, Edit *, pEdit )
 
@@ -329,7 +329,7 @@ IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, GetFocusHdl, Edit *, pEdit )
 }
 IMPL_LINK_INLINE_END( SfxManageStyleSheetPage, GetFocusHdl, Edit *, pEdit )
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
 
@@ -350,7 +350,7 @@ IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
 }
 IMPL_LINK_INLINE_END( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
 
@@ -397,7 +397,7 @@ sal_Bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
     return bModified;
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
 
@@ -466,7 +466,7 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxTabPage* SfxManageStyleSheetPage::Create( Window* pParent,
                                              const SfxItemSet &rAttrSet )
@@ -484,7 +484,7 @@ SfxTabPage* SfxManageStyleSheetPage::Create( Window* pParent,
     return new SfxManageStyleSheetPage( pParent, rAttrSet );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
 
@@ -515,7 +515,7 @@ void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
     m_pAutoCB->SaveValue();
 }
 
-//-------------------------------------------------------------------------
+
 
 int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
 

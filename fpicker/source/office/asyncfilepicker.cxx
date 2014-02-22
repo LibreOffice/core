@@ -34,7 +34,7 @@ namespace svt
     //= AsyncPickerAction
     //====================================================================
     DBG_NAME( AsyncPickerAction )
-    //--------------------------------------------------------------------
+
     AsyncPickerAction::AsyncPickerAction( SvtFileDialog* _pDialog, SvtFileView* _pView, const Action _eAction )
         :m_refCount ( 0        )
         ,m_eAction  ( _eAction )
@@ -47,19 +47,19 @@ namespace svt
         DBG_ASSERT( m_pView, "AsyncPickerAction::AsyncPickerAction: invalid view!" );
     }
 
-    //--------------------------------------------------------------------
+
     AsyncPickerAction::~AsyncPickerAction()
     {
         DBG_DTOR( AsyncPickerAction, NULL );
     }
 
-    //--------------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL AsyncPickerAction::acquire()
     {
         return osl_atomic_increment( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL AsyncPickerAction::release()
     {
         if ( 0 == osl_atomic_decrement( &m_refCount ) )
@@ -70,7 +70,7 @@ namespace svt
         return m_refCount;
     }
 
-    //--------------------------------------------------------------------
+
     void AsyncPickerAction::cancel()
     {
         DBG_TESTSOLARMUTEX();
@@ -81,7 +81,7 @@ namespace svt
             m_pView->CancelRunningAsyncAction();
     }
 
-    //--------------------------------------------------------------------
+
     void AsyncPickerAction::execute(
         const OUString& _rURL,
         const OUString& _rFilter,
@@ -151,7 +151,7 @@ namespace svt
         }
     }
 
-    //--------------------------------------------------------------------
+
     IMPL_LINK( AsyncPickerAction, OnActionDone, void*, pEmptyArg )
     {
         DBG_TESTSOLARMUTEX();

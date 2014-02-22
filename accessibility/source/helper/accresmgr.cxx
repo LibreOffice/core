@@ -24,20 +24,20 @@
 #include <vcl/settings.hxx>
 
 using namespace accessibility;
-// -----------------------------------------------------------------------------
+
 // TkResMgr
-// -----------------------------------------------------------------------------
+
 
 SimpleResMgr* TkResMgr::m_pImpl = NULL;
 
-// -----------------------------------------------------------------------------
+
 
 TkResMgr::EnsureDelete::~EnsureDelete()
 {
     delete TkResMgr::m_pImpl;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TkResMgr::ensureImplExists()
 {
@@ -53,7 +53,7 @@ void TkResMgr::ensureImplExists()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString TkResMgr::loadString( sal_uInt16 nResId )
 {
@@ -66,6 +66,6 @@ OUString TkResMgr::loadString( sal_uInt16 nResId )
     return sReturn;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -130,7 +130,7 @@ TGAReader::~TGAReader()
     delete mpFileFooter;
 }
 
-// -------------------------------------------------------------------------------------------
+
 
 sal_Bool TGAReader::ReadTGA(Graphic & rGraphic)
 {
@@ -170,7 +170,7 @@ sal_Bool TGAReader::ReadTGA(Graphic & rGraphic)
     return mbStatus;
 }
 
-// -------------------------------------------------------------------------------------------
+
 
 sal_Bool TGAReader::ImplReadHeader()
 {
@@ -276,7 +276,7 @@ sal_Bool TGAReader::ImplReadHeader()
     return mbStatus;
 }
 
-// -------------------------------------------------------------------------------------------
+
 
 sal_Bool TGAReader::ImplReadBody()
 {
@@ -711,7 +711,7 @@ sal_Bool TGAReader::ImplReadBody()
     return mbStatus;
 }
 
-// -------------------------------------------------------------------------------------------
+
 
 sal_Bool TGAReader::ImplReadPalette()
 {

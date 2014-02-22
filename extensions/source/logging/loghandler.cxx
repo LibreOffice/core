@@ -49,7 +49,7 @@ namespace logging
     //====================================================================
     //= LogHandlerHelper
     //====================================================================
-    //--------------------------------------------------------------------
+
     LogHandlerHelper::LogHandlerHelper( const Reference< XComponentContext >& _rxContext, ::osl::Mutex& _rMutex, ::cppu::OBroadcastHelper& _rBHelper )
         :m_eEncoding( RTL_TEXTENCODING_UTF8 )
         ,m_nLevel( LogLevel::SEVERE )
@@ -61,7 +61,7 @@ namespace logging
     {
     }
 
-    //--------------------------------------------------------------------
+
     void LogHandlerHelper::initFromSettings( const ::comphelper::NamedValueCollection& _rSettings )
     {
         OUString sEncoding;
@@ -75,7 +75,7 @@ namespace logging
         _rSettings.get_ensureType( "Level", m_nLevel );
     }
 
-    //--------------------------------------------------------------------
+
     void LogHandlerHelper::enterMethod()
     {
         m_rMutex.acquire();
@@ -101,7 +101,7 @@ namespace logging
         }
     }
 
-    //--------------------------------------------------------------------
+
     bool LogHandlerHelper::getEncoding( OUString& _out_rEncoding ) const
     {
         const char* pMimeCharset = rtl_getMimeCharsetFromTextEncoding( m_eEncoding );
@@ -114,7 +114,7 @@ namespace logging
         return false;
     }
 
-    //--------------------------------------------------------------------
+
     bool LogHandlerHelper::setEncoding( const OUString& _rEncoding )
     {
         OString sAsciiEncoding( OUStringToOString( _rEncoding, RTL_TEXTENCODING_ASCII_US ) );
@@ -127,7 +127,7 @@ namespace logging
         return false;
     }
 
-    //--------------------------------------------------------------------
+
     bool LogHandlerHelper::formatForPublishing( const LogRecord& _rRecord, OString& _out_rEntry ) const
     {
         if ( _rRecord.Level < getLevel() )
@@ -148,7 +148,7 @@ namespace logging
         return false;
     }
 
-    //--------------------------------------------------------------------
+
     bool LogHandlerHelper::getEncodedHead( OString& _out_rHead ) const
     {
         try
@@ -165,7 +165,7 @@ namespace logging
         return false;
     }
 
-    //--------------------------------------------------------------------
+
     bool LogHandlerHelper::getEncodedTail( OString& _out_rTail ) const
     {
         try

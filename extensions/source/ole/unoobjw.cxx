@@ -301,7 +301,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID /*riid*/,
 // by either using type information or by help of a specialized ValueObject object.
 
 // A. Type Information
-// -----------------------------------------------------------------------------
+
 // With the help of type information the kind of parameter can be exactly determined
 // and an appropriate conversion can be choosen. A problem arises if a method expects
 // an Any. Then the type info does not tell what the type of the value, that is kept
@@ -311,7 +311,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID /*riid*/,
 // the JScript value objects within a JScript script on such an occasion.
 
 // B. JavaScript Value Object ( class JScriptValue )
-// -----------------------------------------------------------------------------
+
 // A JScriptValue (ValueObject) object is a COM object in that it implements IDispatch and the
 // IJScriptValue object interface. Such objects are provided by all UNO wrapper
 // objects used within a JScript script. To obtain an instance one has to call
@@ -1069,7 +1069,7 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
                 ret= S_OK;
             }
         }
-// ---------
+
         // function: _GetValueObject
         else if( dispidMember == DISPID_JSCRIPT_VALUE_FUNC)
         {

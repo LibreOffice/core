@@ -53,7 +53,7 @@ FileControl::FileControl( Window* pParent, WinBits nStyle, FileControlMode nFlag
     SetStyle( ImplInitStyle( GetStyle() ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 WinBits FileControl::ImplInitStyle( WinBits nStyle )
 {
@@ -82,13 +82,13 @@ WinBits FileControl::ImplInitStyle( WinBits nStyle )
     return nStyle;
 }
 
-// -----------------------------------------------------------------------
+
 
 FileControl::~FileControl()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void FileControl::SetText( const OUString& rStr )
 {
@@ -97,14 +97,14 @@ void FileControl::SetText( const OUString& rStr )
         Resize();
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString FileControl::GetText() const
 {
     return maEdit.GetText();
 }
 
-// -----------------------------------------------------------------------
+
 
 void FileControl::StateChanged( StateChangedType nType )
 {
@@ -144,7 +144,7 @@ void FileControl::StateChanged( StateChangedType nType )
     Window::StateChanged( nType );
 }
 
-// -----------------------------------------------------------------------
+
 
 void FileControl::Resize()
 {
@@ -180,7 +180,7 @@ void FileControl::Resize()
     mnInternalFlags &= ~FILECTRL_INRESIZE; //InResize = sal_False
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(FileControl, ButtonHdl)
 {
@@ -189,14 +189,14 @@ IMPL_LINK_NOARG(FileControl, ButtonHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void FileControl::GetFocus()
 {
     maEdit.GrabFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 void FileControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {

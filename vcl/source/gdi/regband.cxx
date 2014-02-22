@@ -42,7 +42,7 @@
 // converted to rectangles and the points in the list are deleted.
 //
 //
-// -----------------------------------------------------------------------
+
 
 ImplRegionBand::ImplRegionBand( long nTop, long nBottom )
 {
@@ -58,7 +58,7 @@ ImplRegionBand::ImplRegionBand( long nTop, long nBottom )
     mbTouched           = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplRegionBand::ImplRegionBand(
     const ImplRegionBand& rRegionBand,
@@ -120,7 +120,7 @@ ImplRegionBand::ImplRegionBand(
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplRegionBand::~ImplRegionBand()
 {
@@ -145,7 +145,7 @@ ImplRegionBand::~ImplRegionBand()
     }
 }
 
-// -----------------------------------------------------------------------
+
 //
 // generate separations from lines and process union with existing
 // separations
@@ -198,7 +198,7 @@ void ImplRegionBand::ProcessPoints()
     mpFirstBandPoint = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 //
 // generate separations from lines and process union with existing
 // separations
@@ -311,7 +311,7 @@ bool ImplRegionBand::InsertPoint( long nX, long nLineId,
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplRegionBand::MoveX( long nHorzMove )
 {
@@ -325,7 +325,7 @@ void ImplRegionBand::MoveX( long nHorzMove )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplRegionBand::ScaleX( double fHorzScale )
 {
@@ -338,7 +338,7 @@ void ImplRegionBand::ScaleX( double fHorzScale )
     }
 }
 
-// -----------------------------------------------------------------------
+
 //
 // combine overlaping sparations
 
@@ -383,7 +383,7 @@ bool ImplRegionBand::OptimizeBand()
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplRegionBand::Union( long nXLeft, long nXRight )
 {
@@ -457,7 +457,7 @@ void ImplRegionBand::Union( long nXLeft, long nXRight )
     OptimizeBand();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplRegionBand::Intersect( long nXLeft, long nXRight )
 {
@@ -504,7 +504,7 @@ void ImplRegionBand::Intersect( long nXLeft, long nXRight )
     OptimizeBand();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplRegionBand::Exclude( long nXLeft, long nXRight )
 {
@@ -584,7 +584,7 @@ void ImplRegionBand::Exclude( long nXLeft, long nXRight )
     OptimizeBand();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplRegionBand::XOr( long nXLeft, long nXRight )
 {
@@ -831,7 +831,7 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
     OptimizeBand();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplRegionBand::IsInside( long nX )
 {
@@ -847,7 +847,7 @@ bool ImplRegionBand::IsInside( long nX )
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplRegionBand::IsOver( long nLeft, long nRight )
 {
@@ -863,7 +863,7 @@ bool ImplRegionBand::IsOver( long nLeft, long nRight )
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplRegionBand::IsInside( long nLeft, long nRight )
 {
@@ -879,7 +879,7 @@ bool ImplRegionBand::IsInside( long nLeft, long nRight )
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 long ImplRegionBand::GetXLeftBoundary() const
 {
@@ -888,7 +888,7 @@ long ImplRegionBand::GetXLeftBoundary() const
     return mpFirstSep->mnXLeft;
 }
 
-// -----------------------------------------------------------------------
+
 
 long ImplRegionBand::GetXRightBoundary() const
 {
@@ -901,7 +901,7 @@ long ImplRegionBand::GetXRightBoundary() const
     return pSep->mnXRight;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplRegionBand::operator==( const ImplRegionBand& rRegionBand ) const
 {
@@ -934,7 +934,7 @@ bool ImplRegionBand::operator==( const ImplRegionBand& rRegionBand ) const
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplRegionBand* ImplRegionBand::SplitBand (const sal_Int32 nY)
 {

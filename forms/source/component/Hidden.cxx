@@ -40,36 +40,36 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OHiddenModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return *(new OHiddenModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------
-//------------------------------------------------------------------
+
+
 OHiddenModel::OHiddenModel(const Reference<XComponentContext>& _rxFactory)
     :OControlModel(_rxFactory, OUString())
 {
     m_nClassId = FormComponentType::HIDDENCONTROL;
 }
 
-//------------------------------------------------------------------
+
 OHiddenModel::OHiddenModel( const OHiddenModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OControlModel( _pOriginal, _rxFactory )
 {
     m_sHiddenValue = _pOriginal->m_sHiddenValue;
 }
 
-//------------------------------------------------------------------------------
+
 OHiddenModel::~OHiddenModel( )
 {
 }
 
-//------------------------------------------------------------------------------
+
 IMPLEMENT_DEFAULT_CLONING( OHiddenModel )
 
-//------------------------------------------------------------------------------
+
 void OHiddenModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
 {
     switch (_nHandle)
@@ -80,7 +80,7 @@ void OHiddenModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OHiddenModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw (com::sun::star::uno::Exception)
 {
     switch (_nHandle)
@@ -94,7 +94,7 @@ void OHiddenModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const An
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OHiddenModel::convertFastPropertyValue(
             Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
             throw (IllegalArgumentException)
@@ -112,7 +112,7 @@ sal_Bool OHiddenModel::convertFastPropertyValue(
     return bModified;
 }
 
-//------------------------------------------------------------------------------
+
 void OHiddenModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_BASE_PROPERTIES(4)
@@ -124,7 +124,7 @@ void OHiddenModel::describeFixedProperties( Sequence< Property >& _rProps ) cons
 }
 
 // XServiceInfo
-//------------------------------------------------------------------------------
+
 StringSequence SAL_CALL OHiddenModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
 {
     StringSequence aSupported( 2 );
@@ -133,13 +133,13 @@ StringSequence SAL_CALL OHiddenModel::getSupportedServiceNames() throw(::com::su
     return aSupported;
 }
 
-//------------------------------------------------------------------------------
+
 OUString SAL_CALL OHiddenModel::getServiceName() throw(RuntimeException)
 {
     return OUString(FRM_COMPONENT_HIDDEN);    // old (non-sun) name for compatibility !
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OHiddenModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
     throw(IOException, RuntimeException)
 {
@@ -152,7 +152,7 @@ void SAL_CALL OHiddenModel::write(const Reference<XObjectOutputStream>& _rxOutSt
     OControlModel::write(_rxOutStream);
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OHiddenModel::read(const Reference<XObjectInputStream>& _rxInStream) throw(IOException, RuntimeException)
 {
     // Version

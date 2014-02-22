@@ -60,7 +60,7 @@ using namespace com::sun::star;
 
 #define TB_SEP_SIZE             8
 
-// -----------------------------------------------------------------------
+
 
 ImplToolBoxPrivateData::ImplToolBoxPrivateData() :
         m_pLayoutData( NULL ),
@@ -97,7 +97,7 @@ ImplToolBoxPrivateData::~ImplToolBoxPrivateData()
     delete mpMenu;
 }
 
-// -----------------------------------------------------------------------
+
 void ImplToolItem::init(sal_uInt16 nItemId, ToolBoxItemBits nItemBits,
                         bool bEmptyBtn)
 {
@@ -125,7 +125,7 @@ ImplToolItem::ImplToolItem()
     init(0, 0, true);
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
                             ToolBoxItemBits nItemBits ) :
@@ -134,7 +134,7 @@ ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
     init(nItemId, nItemBits, false);
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const OUString& rText,
                             ToolBoxItemBits nItemBits ) :
@@ -143,7 +143,7 @@ ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const OUString& rText,
     init(nItemId, nItemBits, false);
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
                             const OUString& rText, ToolBoxItemBits nItemBits ) :
@@ -153,7 +153,7 @@ ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
     init(nItemId, nItemBits, false);
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplToolItem::ImplToolItem( const ImplToolItem& rItem ) :
         mpWindow                ( rItem.mpWindow ),
@@ -188,13 +188,13 @@ ImplToolItem::ImplToolItem( const ImplToolItem& rItem ) :
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplToolItem::~ImplToolItem()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplToolItem& ImplToolItem::operator=( const ImplToolItem& rItem )
 {
@@ -230,7 +230,7 @@ ImplToolItem& ImplToolItem::operator=( const ImplToolItem& rItem )
     return *this;
 }
 
-// -----------------------------------------------------------------------
+
 
 Size ImplToolItem::GetSize( bool bHorz, bool bCheckMaxWidth, long maxWidth, const Size& rDefaultSize )
 {
@@ -284,7 +284,7 @@ Size ImplToolItem::GetSize( bool bHorz, bool bCheckMaxWidth, long maxWidth, cons
     return aSize;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplToolItem::DetermineButtonDrawStyle( ButtonType eButtonType, bool& rbImage, bool& rbText ) const
 {
@@ -344,7 +344,7 @@ void ImplToolItem::DetermineButtonDrawStyle( ButtonType eButtonType, bool& rbIma
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle ImplToolItem::GetDropDownRect( bool bHorz ) const
 {
@@ -362,22 +362,22 @@ Rectangle ImplToolItem::GetDropDownRect( bool bHorz ) const
     return aRect;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplToolItem::IsClipped() const
 {
     return ( meType == TOOLBOXITEM_BUTTON && mbVisible && maRect.IsEmpty() );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplToolItem::IsItemHidden() const
 {
     return ( meType == TOOLBOXITEM_BUTTON && !mbVisible );
 }
 
-// -----------------------------------------------------------------------
-// -----------------------------------------------------------------------
+
+
 
 const OUString ToolBox::ImplConvertMenuString( const OUString& rStr )
 {
@@ -388,7 +388,7 @@ const OUString ToolBox::ImplConvertMenuString( const OUString& rStr )
     return aCvtStr;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::ImplInvalidate( bool bNewCalc, bool bFullPaint )
 {
@@ -425,7 +425,7 @@ void ToolBox::ImplInvalidate( bool bNewCalc, bool bFullPaint )
     ImplCallEventListeners( VCLEVENT_TOOLBOX_FORMATCHANGED );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::ImplUpdateItem( sal_uInt16 nIndex )
 {
@@ -451,7 +451,7 @@ void ToolBox::ImplUpdateItem( sal_uInt16 nIndex )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::Click()
 {
@@ -459,7 +459,7 @@ void ToolBox::Click()
     maClickHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::DoubleClick()
 {
@@ -467,7 +467,7 @@ void ToolBox::DoubleClick()
     maDoubleClickHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::Activate()
 {
@@ -476,7 +476,7 @@ void ToolBox::Activate()
     maActivateHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::Deactivate()
 {
@@ -485,7 +485,7 @@ void ToolBox::Deactivate()
     maDeactivateHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::Highlight()
 {
@@ -493,7 +493,7 @@ void ToolBox::Highlight()
     maHighlightHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::Select()
 {
@@ -513,19 +513,19 @@ void ToolBox::Select()
         pWrapper->GetFloatingWindow()->EndPopupMode();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::Customize( const ToolBoxCustomizeEvent& )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::UserDraw( const UserDrawEvent& )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::InsertItem( const ResId& rResId, sal_uInt16 nPos )
 {
@@ -618,7 +618,7 @@ void ToolBox::InsertItem( const ResId& rResId, sal_uInt16 nPos )
     ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage,
                           ToolBoxItemBits nBits, sal_uInt16 nPos )
@@ -639,7 +639,7 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage,
     ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >(nNewPos ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage,
                           const OUString& rText,
@@ -661,7 +661,7 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage,
     ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::InsertItem( sal_uInt16 nItemId, const OUString& rText,
                           ToolBoxItemBits nBits, sal_uInt16 nPos )
@@ -798,7 +798,7 @@ void ToolBox::InsertItem(const OUString& rCommand, const uno::Reference<frame::X
         pItem->maMinimalItemSize = rRequestedSize;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::InsertWindow( sal_uInt16 nItemId, Window* pWindow,
                             ToolBoxItemBits nBits, sal_uInt16 nPos )
@@ -826,7 +826,7 @@ void ToolBox::InsertWindow( sal_uInt16 nItemId, Window* pWindow,
     ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::InsertSpace( sal_uInt16 nPos )
 {
@@ -844,7 +844,7 @@ void ToolBox::InsertSpace( sal_uInt16 nPos )
     ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::InsertSeparator( sal_uInt16 nPos, sal_uInt16 nPixSize )
 {
@@ -864,7 +864,7 @@ void ToolBox::InsertSeparator( sal_uInt16 nPos, sal_uInt16 nPixSize )
     ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::InsertBreak( sal_uInt16 nPos )
 {
@@ -882,7 +882,7 @@ void ToolBox::InsertBreak( sal_uInt16 nPos )
     ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::RemoveItem( sal_uInt16 nPos )
 {
@@ -916,7 +916,7 @@ void ToolBox::RemoveItem( sal_uInt16 nPos )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::CopyItem( const ToolBox& rToolBox, sal_uInt16 nItemId,
                         sal_uInt16 nNewPos )
@@ -946,7 +946,7 @@ void ToolBox::CopyItem( const ToolBox& rToolBox, sal_uInt16 nItemId,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::Clear()
 {
@@ -963,7 +963,7 @@ void ToolBox::Clear()
     ImplCallEventListeners( VCLEVENT_TOOLBOX_ALLITEMSCHANGED );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::SetButtonType( ButtonType eNewType )
 {
@@ -977,7 +977,7 @@ void ToolBox::SetButtonType( ButtonType eNewType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::SetToolboxButtonSize( ToolBoxButtonSize eSize )
 {
@@ -994,7 +994,7 @@ ToolBoxButtonSize ToolBox::GetToolboxButtonSize() const
     return mpData->meButtonSize;
 }
 
-// -----------------------------------------------------------------------
+
 
 /*static*/ Size
 ToolBox::GetDefaultImageSize(bool bLarge)
@@ -1013,7 +1013,7 @@ Size ToolBox::GetDefaultImageSize() const
     return GetDefaultImageSize( GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::SetAlign( WindowAlign eNewAlign )
 {
@@ -1041,7 +1041,7 @@ void ToolBox::SetAlign( WindowAlign eNewAlign )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::SetLineCount( sal_uInt16 nNewLines )
 {
@@ -1058,28 +1058,28 @@ void ToolBox::SetLineCount( sal_uInt16 nNewLines )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::SetPageScroll( bool b )
 {
     mpData->mbPageScroll = b;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ToolBox::GetItemCount() const
 {
     return (sal_uInt16)mpData->m_aItems.size();
 }
 
-// -----------------------------------------------------------------------
+
 
 ToolBoxItemType ToolBox::GetItemType( sal_uInt16 nPos ) const
 {
     return (nPos < mpData->m_aItems.size()) ? mpData->m_aItems[nPos].meType : TOOLBOXITEM_DONTKNOW;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ToolBox::GetItemPos( sal_uInt16 nItemId ) const
 {
@@ -1091,7 +1091,7 @@ sal_uInt16 ToolBox::GetItemPos( sal_uInt16 nItemId ) const
     return TOOLBOX_ITEM_NOTFOUND;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ToolBox::GetItemPos( const Point& rPos ) const
 {
@@ -1115,14 +1115,14 @@ sal_uInt16 ToolBox::GetItemPos( const Point& rPos ) const
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ToolBox::GetItemId( sal_uInt16 nPos ) const
 {
     return (nPos < mpData->m_aItems.size()) ? mpData->m_aItems[nPos].mnId : 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ToolBox::GetItemId( const Point& rPos ) const
 {
@@ -1156,7 +1156,7 @@ sal_uInt16 ToolBox::GetItemId(const OUString &rCommand) const
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 Point ToolBox::ImplGetPopupPosition( const Rectangle& rRect, const Size& rSize ) const
 {
@@ -1218,7 +1218,7 @@ Point ToolBox::GetItemPopupPosition( sal_uInt16 nItemId, const Size& rSize ) con
     return ImplGetPopupPosition( GetItemRect( nItemId ), rSize );
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle ToolBox::GetItemRect( sal_uInt16 nItemId ) const
 {
@@ -1229,7 +1229,7 @@ Rectangle ToolBox::GetItemRect( sal_uInt16 nItemId ) const
     return GetItemPosRect( nPos );
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle ToolBox::GetItemPosRect( sal_uInt16 nPos ) const
 {
@@ -1254,7 +1254,7 @@ Size ToolBox::GetItemContentSize( sal_uInt16 nItemId ) const
         return Size();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ToolBox::ImplHasExternalMenubutton()
 {
@@ -1269,7 +1269,7 @@ bool ToolBox::ImplHasExternalMenubutton()
     }
     return bRet;
 }
-// -----------------------------------------------------------------------
+
 
 void ToolBox::SetItemBits( sal_uInt16 nItemId, ToolBoxItemBits nBits )
 {
@@ -1288,7 +1288,7 @@ void ToolBox::SetItemBits( sal_uInt16 nItemId, ToolBoxItemBits nBits )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 ToolBoxItemBits ToolBox::GetItemBits( sal_uInt16 nItemId ) const
 {
@@ -1313,7 +1313,7 @@ void ToolBox::SetItemExpand( sal_uInt16 nItemId, bool bExpand )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ToolBox::GetItemExpand( sal_uInt16 nItemId ) const
 {
@@ -1323,7 +1323,7 @@ bool ToolBox::GetItemExpand( sal_uInt16 nItemId ) const
     return pItem->mbExpand;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::SetItemData( sal_uInt16 nItemId, void* pNewData )
 {
@@ -1336,7 +1336,7 @@ void ToolBox::SetItemData( sal_uInt16 nItemId, void* pNewData )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void* ToolBox::GetItemData( sal_uInt16 nItemId ) const
 {
@@ -1348,7 +1348,7 @@ void* ToolBox::GetItemData( sal_uInt16 nItemId ) const
         return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
 {
@@ -1388,7 +1388,7 @@ void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::SetImageList( const ImageList& rImageList )
 {
@@ -1405,7 +1405,7 @@ void ToolBox::SetImageList( const ImageList& rImageList )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static Image ImplRotImage( const Image& rImage, long nAngle10 )
 {
@@ -1448,7 +1448,7 @@ void ToolBox::SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static Image ImplMirrorImage( const Image& rImage )
 {
@@ -1486,7 +1486,7 @@ void ToolBox::SetItemImageMirrorMode( sal_uInt16 nItemId, bool bMirror )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 Image ToolBox::GetItemImage( sal_uInt16 nItemId ) const
 {
@@ -1498,7 +1498,7 @@ Image ToolBox::GetItemImage( sal_uInt16 nItemId ) const
         return Image();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::SetItemText( sal_uInt16 nItemId, const OUString& rText )
 {
@@ -1530,7 +1530,7 @@ void ToolBox::SetItemText( sal_uInt16 nItemId, const OUString& rText )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 const OUString& ToolBox::GetItemText( sal_uInt16 nItemId ) const
 {
@@ -1542,7 +1542,7 @@ const OUString& ToolBox::GetItemText( sal_uInt16 nItemId ) const
     return pItem->maText;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::SetItemWindow( sal_uInt16 nItemId, Window* pNewWindow )
 {
@@ -1559,7 +1559,7 @@ void ToolBox::SetItemWindow( sal_uInt16 nItemId, Window* pNewWindow )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 Window* ToolBox::GetItemWindow( sal_uInt16 nItemId ) const
 {
@@ -1571,7 +1571,7 @@ Window* ToolBox::GetItemWindow( sal_uInt16 nItemId ) const
         return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::StartSelection()
 {
@@ -1587,7 +1587,7 @@ void ToolBox::StartSelection()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::EndSelection()
 {
@@ -1612,7 +1612,7 @@ void ToolBox::EndSelection()
     mnMouseModifier = 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::SetItemDown( sal_uInt16 nItemId, bool bDown, bool bRelease )
 {
@@ -1658,7 +1658,7 @@ void ToolBox::SetItemDown( sal_uInt16 nItemId, bool bDown, bool bRelease )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::SetItemState( sal_uInt16 nItemId, TriState eState )
 {
@@ -1721,7 +1721,7 @@ void ToolBox::SetItemState( sal_uInt16 nItemId, TriState eState )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 TriState ToolBox::GetItemState( sal_uInt16 nItemId ) const
 {
@@ -1733,7 +1733,7 @@ TriState ToolBox::GetItemState( sal_uInt16 nItemId ) const
         return STATE_NOCHECK;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::EnableItem( sal_uInt16 nItemId, bool bEnable )
 {
@@ -1765,7 +1765,7 @@ void ToolBox::EnableItem( sal_uInt16 nItemId, bool bEnable )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ToolBox::IsItemEnabled( sal_uInt16 nItemId ) const
 {
@@ -1777,7 +1777,7 @@ bool ToolBox::IsItemEnabled( sal_uInt16 nItemId ) const
         return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::ShowItem( sal_uInt16 nItemId, bool bVisible )
 {
@@ -1795,7 +1795,7 @@ void ToolBox::ShowItem( sal_uInt16 nItemId, bool bVisible )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ToolBox::IsItemVisible( sal_uInt16 nItemId ) const
 {
@@ -1807,7 +1807,7 @@ bool ToolBox::IsItemVisible( sal_uInt16 nItemId ) const
         return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ToolBox::IsItemReallyVisible( sal_uInt16 nItemId ) const
 {
@@ -1825,7 +1825,7 @@ bool ToolBox::IsItemReallyVisible( sal_uInt16 nItemId ) const
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::SetItemCommand(sal_uInt16 nItemId, const OUString& rCommand)
 {
@@ -1835,7 +1835,7 @@ void ToolBox::SetItemCommand(sal_uInt16 nItemId, const OUString& rCommand)
         pItem->maCommandStr = rCommand;
 }
 
-// -----------------------------------------------------------------------
+
 
 const OUString ToolBox::GetItemCommand( sal_uInt16 nItemId ) const
 {
@@ -1847,7 +1847,7 @@ const OUString ToolBox::GetItemCommand( sal_uInt16 nItemId ) const
     return OUString();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::SetQuickHelpText( sal_uInt16 nItemId, const OUString& rText )
 {
@@ -1857,7 +1857,7 @@ void ToolBox::SetQuickHelpText( sal_uInt16 nItemId, const OUString& rText )
         pItem->maQuickHelpText = rText;
 }
 
-// -----------------------------------------------------------------------
+
 
 const OUString& ToolBox::GetQuickHelpText( sal_uInt16 nItemId ) const
 {
@@ -1871,7 +1871,7 @@ const OUString& ToolBox::GetQuickHelpText( sal_uInt16 nItemId ) const
         return sEmpty;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::SetHelpText( sal_uInt16 nItemId, const OUString& rText )
 {
@@ -1881,14 +1881,14 @@ void ToolBox::SetHelpText( sal_uInt16 nItemId, const OUString& rText )
         pItem->maHelpText = rText;
 }
 
-// -----------------------------------------------------------------------
+
 
 const OUString& ToolBox::GetHelpText( sal_uInt16 nItemId ) const
 {
     return ImplGetHelpText( nItemId );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::SetHelpId( sal_uInt16 nItemId, const OString& rHelpId )
 {
@@ -1898,7 +1898,7 @@ void ToolBox::SetHelpId( sal_uInt16 nItemId, const OString& rHelpId )
         pItem->maHelpId = rHelpId;
 }
 
-// -----------------------------------------------------------------------
+
 
 OString ToolBox::GetHelpId( sal_uInt16 nItemId ) const
 {
@@ -1917,7 +1917,7 @@ OString ToolBox::GetHelpId( sal_uInt16 nItemId ) const
     return aRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::SetOutStyle( sal_uInt16 nNewStyle )
 {
@@ -1940,7 +1940,7 @@ void ToolBox::SetOutStyle( sal_uInt16 nNewStyle )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 // disable key input if all items are disabled
 
@@ -1959,7 +1959,7 @@ void ToolBox::ImplUpdateInputEnable()
     mpData->mbKeyInputDisabled = true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::ImplFillLayoutData() const
 {
@@ -1976,7 +1976,7 @@ void ToolBox::ImplFillLayoutData() const
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString ToolBox::GetDisplayText() const
 {
@@ -1985,7 +1985,7 @@ OUString ToolBox::GetDisplayText() const
     return mpData->m_pLayoutData ? OUString(mpData->m_pLayoutData->m_aDisplayText) : OUString();
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle ToolBox::GetCharacterBounds( sal_uInt16 nItemID, long nIndex ) const
 {
@@ -2006,7 +2006,7 @@ Rectangle ToolBox::GetCharacterBounds( sal_uInt16 nItemID, long nIndex ) const
     return (mpData->m_pLayoutData && nItemIndex != -1) ? mpData->m_pLayoutData->GetCharacterBounds( nItemIndex+nIndex ) : Rectangle();
 }
 
-// -----------------------------------------------------------------------
+
 
 long ToolBox::GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID ) const
 {
@@ -2030,7 +2030,7 @@ long ToolBox::GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID ) const
     return nIndex;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::SetDropdownClickHdl( const Link& rLink )
 {
@@ -2042,7 +2042,7 @@ const Link& ToolBox::GetDropdownClickHdl() const
     return mpData->maDropdownClickHdl;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::SetMenuType( sal_uInt16 aType )
 {
@@ -2089,7 +2089,7 @@ void ToolBox::SetMenuButtonHdl( const Link& rLink )
     mpData->maMenuButtonHdl = rLink;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ToolBox::ImplHasClippedItems()
 {
@@ -2250,7 +2250,7 @@ void ToolBox::ExecuteCustomMenu()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 // checks override first, useful during calculation of sizes
 bool ToolBox::ImplIsFloatingMode() const
@@ -2278,7 +2278,7 @@ bool ToolBox::ImplIsInPopupMode() const
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::Lock( bool bLock )
 {
@@ -2298,7 +2298,7 @@ void ToolBox::Lock( bool bLock )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ToolBox::AlwaysLocked()
 {
@@ -2372,6 +2372,6 @@ void ToolBox::SetImageListProvider(vcl::IImageListProvider* _pProvider)
     mpData->mpImageListProvider = _pProvider;
     ImplUpdateImageList();
 }
-// -----------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

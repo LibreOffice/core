@@ -52,18 +52,18 @@ namespace svt {
 
 bool DocumentLockFile::m_bAllowInteraction = true;
 
-// ----------------------------------------------------------------------
+
 DocumentLockFile::DocumentLockFile( const OUString& aOrigURL )
 : LockFileCommon( aOrigURL, OUString( ".~lock."  ) )
 {
 }
 
-// ----------------------------------------------------------------------
+
 DocumentLockFile::~DocumentLockFile()
 {
 }
 
-// ----------------------------------------------------------------------
+
 void DocumentLockFile::WriteEntryToStream( uno::Sequence< OUString > aEntry, uno::Reference< io::XOutputStream > xOutput )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -84,7 +84,7 @@ void DocumentLockFile::WriteEntryToStream( uno::Sequence< OUString > aEntry, uno
     xOutput->writeBytes( aData );
 }
 
-// ----------------------------------------------------------------------
+
 bool DocumentLockFile::CreateOwnLockFile()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -131,7 +131,7 @@ bool DocumentLockFile::CreateOwnLockFile()
     return true;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Sequence< OUString > DocumentLockFile::GetLockData()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -155,7 +155,7 @@ uno::Sequence< OUString > DocumentLockFile::GetLockData()
     return ParseEntry( aBuffer, nCurPos );
 }
 
-// ----------------------------------------------------------------------
+
 uno::Reference< io::XInputStream > DocumentLockFile::OpenStream()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -167,7 +167,7 @@ uno::Reference< io::XInputStream > DocumentLockFile::OpenStream()
     return aSourceContent.openStream();
 }
 
-// ----------------------------------------------------------------------
+
 bool DocumentLockFile::OverwriteOwnLockFile()
 {
     // allows to overwrite the lock file with the current data
@@ -194,7 +194,7 @@ bool DocumentLockFile::OverwriteOwnLockFile()
     return true;
 }
 
-// ----------------------------------------------------------------------
+
 void DocumentLockFile::RemoveFile()
 {
     ::osl::MutexGuard aGuard( m_aMutex );

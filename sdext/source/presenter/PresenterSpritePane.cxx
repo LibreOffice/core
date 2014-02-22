@@ -146,7 +146,7 @@ void SAL_CALL PresenterSpritePane::windowPaint (const awt::PaintEvent& rEvent)
     */
 }
 
-//-----------------------------------------------------------------------------
+
 
 ::boost::shared_ptr<PresenterSprite> PresenterSpritePane::GetSprite (void)
 {

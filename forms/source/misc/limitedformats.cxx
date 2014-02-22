@@ -43,7 +43,7 @@ namespace frm
     //=====================================================================
     //=
     //=====================================================================
-    //---------------------------------------------------------------------
+
     enum LocaleType
     {
         ltEnglishUS,
@@ -51,7 +51,7 @@ namespace frm
         ltSystem
     };
 
-    //---------------------------------------------------------------------
+
     static const Locale& getLocale(LocaleType _eType)
     {
         static const Locale s_aEnglishUS( OUString("en"), OUString("us"), OUString() );
@@ -75,7 +75,7 @@ namespace frm
         return s_aSystem;
     }
 
-    //---------------------------------------------------------------------
+
     struct FormatEntry
     {
         const sal_Char* pDescription;
@@ -83,7 +83,7 @@ namespace frm
         LocaleType      eLocale;
     };
 
-    //---------------------------------------------------------------------
+
     static FormatEntry* lcl_getFormatTable(sal_Int16 nTableId)
     {
         switch (nTableId)
@@ -130,7 +130,7 @@ namespace frm
     //=====================================================================
     //= OLimitedFormats
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OLimitedFormats::OLimitedFormats(const Reference< XComponentContext >& _rxContext, const sal_Int16 _nClassId)
         :m_nFormatEnumPropertyHandle(-1)
         ,m_nTableId(_nClassId)
@@ -140,13 +140,13 @@ namespace frm
         ensureTableInitialized(m_nTableId);
     }
 
-    //---------------------------------------------------------------------
+
     OLimitedFormats::~OLimitedFormats()
     {
         releaseSupplier();
     }
 
-    //---------------------------------------------------------------------
+
     void OLimitedFormats::ensureTableInitialized(const sal_Int16 _nTableId)
     {
         FormatEntry* pFormatTable = lcl_getFormatTable(_nTableId);
@@ -200,7 +200,7 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+
     void OLimitedFormats::clearTable(const sal_Int16 _nTableId)
     {
         ::osl::MutexGuard aGuard(s_aMutex);
@@ -213,7 +213,7 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+
     void OLimitedFormats::setAggregateSet(const Reference< XFastPropertySet >& _rxAggregate, sal_Int32 _nOriginalPropertyHandle)
     {
         // changes (NULL -> not NULL) and (not NULL -> NULL) are allowed
@@ -237,7 +237,7 @@ namespace frm
 #endif
     }
 
-    //---------------------------------------------------------------------
+
     void OLimitedFormats::getFormatKeyPropertyValue( Any& _rValue ) const
     {
         _rValue.clear();
@@ -268,7 +268,7 @@ namespace frm
         // TODO: should use a standard format for the control type we're working for
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OLimitedFormats::convertFormatKeyPropertyValue(Any& _rConvertedValue, Any& _rOldValue, const Any& _rNewValue)
     {
         OSL_ENSURE(m_xAggregate.is() && (-1 != m_nFormatEnumPropertyHandle), "OLimitedFormats::convertFormatKeyPropertyValue: not initialized!");
@@ -340,7 +340,7 @@ namespace frm
         return sal_False;
     }
 
-    //---------------------------------------------------------------------
+
     void OLimitedFormats::setFormatKeyPropertyValue( const Any& _rNewValue )
     {
         OSL_ENSURE(m_xAggregate.is() && (-1 != m_nFormatEnumPropertyHandle), "OLimitedFormats::setFormatKeyPropertyValue: not initialized!");
@@ -353,7 +353,7 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+
     void OLimitedFormats::acquireSupplier(const Reference< XComponentContext >& _rxContext)
     {
         ::osl::MutexGuard aGuard(s_aMutex);
@@ -363,7 +363,7 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+
     void OLimitedFormats::releaseSupplier()
     {
         ::osl::MutexGuard aGuard(s_aMutex);

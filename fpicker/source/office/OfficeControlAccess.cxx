@@ -45,10 +45,10 @@ namespace svt
     using namespace CommonFilePickerElementIds;
     using namespace InternalFilePickerElementIds;
 
-    // --------------------------------------------------------------------
+
     namespace
     {
-        // ----------------------------------------------------------------
+
         #define PROPERTY_FLAG_TEXT                  0x00000001
         #define PROPERTY_FLAG_ENDBALED              0x00000002
         #define PROPERTY_FLAG_VISIBLE               0x00000004
@@ -58,7 +58,7 @@ namespace svt
         #define PROPERTY_FLAG_SELECTEDITEMINDEX     0x00000040
         #define PROPERTY_FLAG_CHECKED               0x00000080
 
-        // ----------------------------------------------------------------
+
         // ................................................................
         struct ControlDescription
         {
@@ -121,7 +121,7 @@ namespace svt
             }
         };
 
-        // ----------------------------------------------------------------
+
         // ................................................................
         struct ControlProperty
         {
@@ -161,7 +161,7 @@ namespace svt
             }
         };
 
-        //-----------------------------------------------------------------
+
         void lcl_throwIllegalArgumentException( ) SAL_THROW( (IllegalArgumentException) )
         {
             throw IllegalArgumentException();
@@ -169,7 +169,7 @@ namespace svt
         }
     }
 
-    //---------------------------------------------------------------------
+
     OControlAccess::OControlAccess( IFilePickerController* _pController, SvtFileView* _pFileView )
         :m_pFilePickerController( _pController )
         ,m_pFileView( _pFileView )
@@ -177,7 +177,7 @@ namespace svt
         DBG_ASSERT( m_pFilePickerController, "OControlAccess::OControlAccess: invalid control locator!" );
     }
 
-    //---------------------------------------------------------------------
+
     void OControlAccess::setHelpURL( Window* _pControl, const OUString& sHelpURL, sal_Bool _bFileView )
     {
         OUString sHelpID( sHelpURL );
@@ -194,7 +194,7 @@ namespace svt
             _pControl->SetHelpId( sID );
     }
 
-    //---------------------------------------------------------------------
+
     OUString OControlAccess::getHelpURL( Window* _pControl, sal_Bool _bFileView )
     {
         OString aHelpId = _pControl->GetHelpId();
@@ -211,7 +211,7 @@ namespace svt
         return sHelpURL;
     }
 
-    // --------------------------------------------------------------------------
+
     Any OControlAccess::getControlProperty( const OUString& _rControlName, const OUString& _rControlProperty )
     {
         // look up the control
@@ -233,7 +233,7 @@ namespace svt
         return implGetControlProperty( pControl, aPropDesc->nPropertyId );
     }
 
-    //---------------------------------------------------------------------
+
     Control* OControlAccess::implGetControl( const OUString& _rControlName, sal_Int16* _pId, sal_Int32* _pPropertyMask ) const SAL_THROW( (IllegalArgumentException) )
     {
         Control* pControl = NULL;
@@ -261,7 +261,7 @@ namespace svt
         return pControl;
     }
 
-    //---------------------------------------------------------------------
+
     void OControlAccess::setControlProperty( const OUString& _rControlName, const OUString& _rControlProperty, const ::com::sun::star::uno::Any& _rValue )
     {
         // look up the control
@@ -278,7 +278,7 @@ namespace svt
         implSetControlProperty( nControlId, pControl, aPropDesc->nPropertyId, _rValue, sal_False );
     }
 
-    // --------------------------------------------------------------------------
+
     Sequence< OUString > OControlAccess::getSupportedControls(  )
     {
         Sequence< OUString > aControls( s_nControlCount );
@@ -295,7 +295,7 @@ namespace svt
         return aControls;
     }
 
-    // --------------------------------------------------------------------------
+
     Sequence< OUString > OControlAccess::getSupportedControlProperties( const OUString& _rControlName )
     {
         sal_Int16 nControlId = -1;
@@ -315,7 +315,7 @@ namespace svt
         return aProps;
     }
 
-    // --------------------------------------------------------------------------
+
     sal_Bool OControlAccess::isControlSupported( const OUString& _rControlName )
     {
         ControlDescription tmpDesc;
@@ -323,7 +323,7 @@ namespace svt
         return ::std::binary_search( s_pControls, s_pControlsEnd, tmpDesc, ControlDescriptionLookup() );
     }
 
-    // --------------------------------------------------------------------------
+
     sal_Bool OControlAccess::isControlPropertySupported( const OUString& _rControlName, const OUString& _rControlProperty )
     {
         // look up the control
@@ -341,7 +341,7 @@ namespace svt
         return 0 != ( aPropDesc->nPropertyId & nPropertyMask );
     }
 
-    //-----------------------------------------------------------------------------
+
     void OControlAccess::setValue( sal_Int16 _nControlId, sal_Int16 _nControlAction, const Any& _rValue )
     {
         Control* pControl = m_pFilePickerController->getControl( _nControlId );
@@ -392,7 +392,7 @@ namespace svt
         }
     }
 
-    //-----------------------------------------------------------------------------
+
     Any OControlAccess::getValue( sal_Int16 _nControlId, sal_Int16 _nControlAction ) const
     {
         Any aRet;
@@ -460,7 +460,7 @@ namespace svt
         return aRet;
     }
 
-    //-----------------------------------------------------------------------------
+
     void OControlAccess::setLabel( sal_Int16 nId, const OUString &rLabel )
     {
         Control* pControl = m_pFilePickerController->getControl( nId, sal_True );
@@ -469,7 +469,7 @@ namespace svt
             pControl->SetText( rLabel );
     }
 
-    //-----------------------------------------------------------------------------
+
     OUString OControlAccess::getLabel( sal_Int16 nId ) const
     {
         OUString sLabel;
@@ -482,13 +482,13 @@ namespace svt
         return sLabel;
     }
 
-    //-----------------------------------------------------------------------------
+
     void OControlAccess::enableControl( sal_Int16 _nId, sal_Bool _bEnable )
     {
         m_pFilePickerController->enableControl( _nId, _bEnable );
     }
 
-    // -----------------------------------------------------------------------
+
     void OControlAccess::implDoListboxAction( ListBox* _pListbox, sal_Int16 _nControlAction, const Any& _rValue )
     {
         switch ( _nControlAction )
@@ -532,7 +532,7 @@ namespace svt
         }
     }
 
-    //-----------------------------------------------------------------------------
+
     void OControlAccess::implSetControlProperty( sal_Int16 _nControlId, Control* _pControl, sal_Int16 _nProperty, const Any& _rValue, sal_Bool _bIgnoreIllegalArgument )
     {
         if ( !_pControl )
@@ -688,7 +688,7 @@ namespace svt
         }
     }
 
-    //-----------------------------------------------------------------------------
+
     Any OControlAccess::implGetControlProperty( Control* _pControl, sal_Int16 _nProperty ) const
     {
         DBG_ASSERT( _pControl, "OControlAccess::implGetControlProperty: invalid argument, this will crash!" );

@@ -188,7 +188,7 @@ DocumentHolder::DocumentHolder( const uno::Reference< uno::XComponentContext >& 
     m_aOutplaceFrameProps[2] <<= aArg;
 }
 
-//---------------------------------------------------------------------------
+
 DocumentHolder::~DocumentHolder()
 {
     m_refCount++; // to allow deregistration as a listener
@@ -213,7 +213,7 @@ DocumentHolder::~DocumentHolder()
         FreeOffice();
 }
 
-//---------------------------------------------------------------------------
+
 void DocumentHolder::CloseFrame()
 {
     uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster( m_xFrame, uno::UNO_QUERY );
@@ -243,7 +243,7 @@ void DocumentHolder::CloseFrame()
     m_xFrame = uno::Reference< frame::XFrame >();
 }
 
-//---------------------------------------------------------------------------
+
 void DocumentHolder::FreeOffice()
 {
     uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
@@ -269,7 +269,7 @@ void DocumentHolder::FreeOffice()
 //      }
 }
 
-//---------------------------------------------------------------------------
+
 void DocumentHolder::CloseDocument( sal_Bool bDeliverOwnership, sal_Bool bWaitForClose )
 {
     uno::Reference< util::XCloseBroadcaster > xBroadcaster( m_xComponent, uno::UNO_QUERY );
@@ -299,7 +299,7 @@ void DocumentHolder::CloseDocument( sal_Bool bDeliverOwnership, sal_Bool bWaitFo
     m_xComponent = 0;
 }
 
-//---------------------------------------------------------------------------
+
 void DocumentHolder::PlaceFrame( const awt::Rectangle& aNewRect )
 {
     OSL_ENSURE( m_xFrame.is() && m_xOwnWindow.is(),
@@ -329,7 +329,7 @@ void DocumentHolder::PlaceFrame( const awt::Rectangle& aNewRect )
     }
 }
 
-//---------------------------------------------------------------------------
+
 void DocumentHolder::ResizeWindows_Impl( const awt::Rectangle& aHatchRect )
 {
     OSL_ENSURE( m_xFrame.is() && m_xOwnWindow.is() /*&& m_xHatchWindow.is()*/,
@@ -357,7 +357,7 @@ void DocumentHolder::ResizeWindows_Impl( const awt::Rectangle& aHatchRect )
                                   awt::PosSize::POSSIZE );
 }
 
-//---------------------------------------------------------------------------
+
 sal_Bool DocumentHolder::SetFrameLMVisibility( const uno::Reference< frame::XFrame >& xFrame, sal_Bool bVisible )
 {
     sal_Bool bResult = sal_False;
@@ -387,7 +387,7 @@ sal_Bool DocumentHolder::SetFrameLMVisibility( const uno::Reference< frame::XFra
     return bResult;
 }
 
-//---------------------------------------------------------------------------
+
 sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xParent,
                                       const awt::Rectangle& aRectangleToShow,
                                       const uno::Reference< frame::XDispatchProvider >& xContDisp )
@@ -514,7 +514,7 @@ sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& 
     return sal_False;
 }
 
-//---------------------------------------------------------------------------
+
 uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
 {
     uno::Reference< container::XIndexAccess > xResult;
@@ -568,7 +568,7 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
     return xResult;
 }
 
-//---------------------------------------------------------------------------
+
 void DocumentHolder::FindConnectPoints(
         const uno::Reference< container::XIndexAccess >& xMenu,
         sal_Int32 nConnectPoints[2] )
@@ -598,7 +598,7 @@ void DocumentHolder::FindConnectPoints(
     }
 }
 
-//---------------------------------------------------------------------------
+
 uno::Reference< container::XIndexAccess > DocumentHolder::MergeMenusForInplace(
         const uno::Reference< container::XIndexAccess >& xContMenu,
         const uno::Reference< frame::XDispatchProvider >& xContDisp,
@@ -645,7 +645,7 @@ uno::Reference< container::XIndexAccess > DocumentHolder::MergeMenusForInplace(
     return uno::Reference< container::XIndexAccess >( xMergedMenu, uno::UNO_QUERY_THROW );
 }
 
-//---------------------------------------------------------------------------
+
 sal_Bool DocumentHolder::MergeMenus_Impl( const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xOwnLM,
                                                const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContLM,
                                             const uno::Reference< frame::XDispatchProvider >& xContDisp,
@@ -772,7 +772,7 @@ sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::
     return bResult;
 }
 
-//---------------------------------------------------------------------------
+
 sal_Bool DocumentHolder::HideUI( const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContainerLM )
 {
     sal_Bool bResult = sal_False;
@@ -820,7 +820,7 @@ sal_Bool DocumentHolder::HideUI( const uno::Reference< ::com::sun::star::frame::
     return bResult;
 }
 
-//---------------------------------------------------------------------------
+
 uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
 {
     // the frame for outplace activation
@@ -916,7 +916,7 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
     return m_xFrame;
 }
 
-//---------------------------------------------------------------------------
+
 void DocumentHolder::SetComponent( const uno::Reference< util::XCloseable >& xDoc, sal_Bool bReadOnly )
 {
     if ( m_xComponent.is() )
@@ -953,7 +953,7 @@ void DocumentHolder::SetComponent( const uno::Reference< util::XCloseable >& xDo
         LoadDocToFrame(sal_False);
 }
 
-//---------------------------------------------------------------------------
+
 sal_Bool DocumentHolder::LoadDocToFrame( sal_Bool bInPlace )
 {
     if ( m_xFrame.is() && m_xComponent.is() )
@@ -1002,7 +1002,7 @@ sal_Bool DocumentHolder::LoadDocToFrame( sal_Bool bInPlace )
     return sal_True;
 }
 
-//---------------------------------------------------------------------------
+
 void DocumentHolder::Show()
 {
     if( m_xFrame.is() )
@@ -1016,7 +1016,7 @@ void DocumentHolder::Show()
         GetDocFrame();
 }
 
-//---------------------------------------------------------------------------
+
 sal_Bool DocumentHolder::SetExtent( sal_Int64 nAspect, const awt::Size& aSize )
 {
     uno::Reference< embed::XVisualObject > xDocVis( m_xComponent, uno::UNO_QUERY );
@@ -1036,7 +1036,7 @@ sal_Bool DocumentHolder::SetExtent( sal_Int64 nAspect, const awt::Size& aSize )
     return sal_False;
 }
 
-//---------------------------------------------------------------------------
+
 sal_Bool DocumentHolder::GetExtent( sal_Int64 nAspect, awt::Size *pSize )
 {
     uno::Reference< embed::XVisualObject > xDocVis( m_xComponent, uno::UNO_QUERY );
@@ -1056,7 +1056,7 @@ sal_Bool DocumentHolder::GetExtent( sal_Int64 nAspect, awt::Size *pSize )
     return sal_False;
 }
 
-//---------------------------------------------------------------------------
+
 sal_Int32 DocumentHolder::GetMapUnit( sal_Int64 nAspect )
 {
     uno::Reference< embed::XVisualObject > xDocVis( m_xComponent, uno::UNO_QUERY );
@@ -1075,7 +1075,7 @@ sal_Int32 DocumentHolder::GetMapUnit( sal_Int64 nAspect )
     return 0;
 }
 
-//---------------------------------------------------------------------------
+
 awt::Rectangle DocumentHolder::CalculateBorderedArea( const awt::Rectangle& aRect )
 {
     return awt::Rectangle( aRect.X + m_aBorderWidths.Left + HATCH_BORDER_WIDTH,
@@ -1084,7 +1084,7 @@ awt::Rectangle DocumentHolder::CalculateBorderedArea( const awt::Rectangle& aRec
                              aRect.Height - m_aBorderWidths.Top - m_aBorderWidths.Bottom - 2*HATCH_BORDER_WIDTH );
 }
 
-//---------------------------------------------------------------------------
+
 awt::Rectangle DocumentHolder::AddBorderToArea( const awt::Rectangle& aRect )
 {
     return awt::Rectangle( aRect.X - m_aBorderWidths.Left - HATCH_BORDER_WIDTH,
@@ -1093,7 +1093,7 @@ awt::Rectangle DocumentHolder::AddBorderToArea( const awt::Rectangle& aRect )
                              aRect.Height + m_aBorderWidths.Top + m_aBorderWidths.Bottom + 2*HATCH_BORDER_WIDTH );
 }
 
-//---------------------------------------------------------------------------
+
 void SAL_CALL DocumentHolder::disposing( const com::sun::star::lang::EventObject& aSource )
         throw (uno::RuntimeException)
 {
@@ -1116,7 +1116,7 @@ void SAL_CALL DocumentHolder::disposing( const com::sun::star::lang::EventObject
 }
 
 
-//---------------------------------------------------------------------------
+
 void SAL_CALL DocumentHolder::queryClosing( const lang::EventObject& aSource, sal_Bool /*bGetsOwnership*/ )
         throw (util::CloseVetoException, uno::RuntimeException)
 {
@@ -1124,7 +1124,7 @@ void SAL_CALL DocumentHolder::queryClosing( const lang::EventObject& aSource, sa
         throw util::CloseVetoException();
 }
 
-//---------------------------------------------------------------------------
+
 void SAL_CALL DocumentHolder::notifyClosing( const lang::EventObject& aSource )
         throw (uno::RuntimeException)
 {
@@ -1146,7 +1146,7 @@ void SAL_CALL DocumentHolder::notifyClosing( const lang::EventObject& aSource )
     }
 }
 
-//---------------------------------------------------------------------------
+
 void SAL_CALL DocumentHolder::queryTermination( const lang::EventObject& )
         throw (frame::TerminationVetoException, uno::RuntimeException)
 {
@@ -1154,7 +1154,7 @@ void SAL_CALL DocumentHolder::queryTermination( const lang::EventObject& )
         throw frame::TerminationVetoException();
 }
 
-//---------------------------------------------------------------------------
+
 void SAL_CALL DocumentHolder::notifyTermination( const lang::EventObject& aSource )
         throw (uno::RuntimeException)
 {
@@ -1166,7 +1166,7 @@ void SAL_CALL DocumentHolder::notifyTermination( const lang::EventObject& aSourc
         xDesktop->removeTerminateListener( ( frame::XTerminateListener* )this );
 }
 
-//---------------------------------------------------------------------------
+
 void SAL_CALL DocumentHolder::modified( const lang::EventObject& aEvent )
     throw ( uno::RuntimeException )
 {
@@ -1176,7 +1176,7 @@ void SAL_CALL DocumentHolder::modified( const lang::EventObject& aEvent )
         m_pEmbedObj->PostEvent_Impl( OUString( "OnVisAreaChanged" ) );
 }
 
-//---------------------------------------------------------------------------
+
 void SAL_CALL DocumentHolder::notifyEvent( const document::EventObject& Event )
     throw ( uno::RuntimeException )
 {
@@ -1192,7 +1192,7 @@ void SAL_CALL DocumentHolder::notifyEvent( const document::EventObject& Event )
     }
 }
 
-//---------------------------------------------------------------------------
+
 void SAL_CALL DocumentHolder::borderWidthsChanged( const uno::Reference< uno::XInterface >& aObject,
                                                     const frame::BorderWidths& aNewSize )
     throw ( uno::RuntimeException )
@@ -1212,7 +1212,7 @@ void SAL_CALL DocumentHolder::borderWidthsChanged( const uno::Reference< uno::XI
     }
 }
 
-//---------------------------------------------------------------------------
+
 void SAL_CALL DocumentHolder::requestPositioning( const awt::Rectangle& aRect )
     throw (uno::RuntimeException)
 {
@@ -1226,7 +1226,7 @@ void SAL_CALL DocumentHolder::requestPositioning( const awt::Rectangle& aRect )
     }
 }
 
-//---------------------------------------------------------------------------
+
 awt::Rectangle SAL_CALL DocumentHolder::calcAdjustedRectangle( const awt::Rectangle& aRect )
     throw (uno::RuntimeException)
 {

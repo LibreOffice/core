@@ -35,7 +35,7 @@ namespace connectivity
     //================================================================
     //= OSimpleParseNode
     //================================================================
-    //----------------------------------------------------------------
+
     OSimpleParseNode::OSimpleParseNode(const OSQLParseNode* _pNode, sal_Bool _bTakeOwnership)
         :m_pFullNode(_pNode)
         ,m_bOwner(_bTakeOwnership)
@@ -43,32 +43,32 @@ namespace connectivity
         OSL_ENSURE(m_pFullNode, "OSimpleParseNode::OSimpleParseNode: invalid node given!");
     }
 
-    //----------------------------------------------------------------
+
     OSimpleParseNode::~OSimpleParseNode()
     {
         if (m_bOwner)
             delete m_pFullNode;
     }
 
-    //----------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL OSimpleParseNode::acquire()
     {
         return ORefBase::acquire();
     }
 
-    //----------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL OSimpleParseNode::release()
     {
         return ORefBase::release();
     }
 
-    //----------------------------------------------------------------
+
     void OSimpleParseNode::parseNodeToStr(OUString& _rString, const Reference< XConnection >& _rxConnection,const IParseContext* _pContext) const
     {
         m_pFullNode->parseNodeToStr( _rString, _rxConnection, _pContext );
     }
 
-    //----------------------------------------------------------------
+
     void OSimpleParseNode::parseNodeToPredicateStr(OUString& _rString, const Reference< XConnection >& _rxConnection,
         const Reference< XNumberFormatter >& _rxFormatter, const Reference< XPropertySet >& _rxField,
         const OUString &_sPredicateTableAlias,

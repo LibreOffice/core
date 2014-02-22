@@ -48,14 +48,14 @@ namespace rptui
     using namespace ::com::sun::star;
 
 
-    //--------------------------------------------------------------------
+
     FormattedFieldBeautifier::FormattedFieldBeautifier(const OReportController& _aController)
         :m_rReportController(_aController)
         ,m_nTextColor(-1)
     {
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int32 FormattedFieldBeautifier::getTextColor()
     {
         if (m_nTextColor == -1)
@@ -66,12 +66,12 @@ namespace rptui
         return m_nTextColor;
     }
 
-    //--------------------------------------------------------------------
+
     FormattedFieldBeautifier::~FormattedFieldBeautifier()
     {
     }
 
-    // -----------------------------------------------------------------------------
+
     void FormattedFieldBeautifier::setPlaceholderText( const uno::Reference< uno::XInterface >& _rxComponent )
     {
         OUString sDataField;
@@ -114,7 +114,7 @@ namespace rptui
         }
     }
 
-    // -----------------------------------------------------------------------------
+
     void FormattedFieldBeautifier::setPlaceholderText( const uno::Reference< awt::XVclWindowPeer >& _xVclWindowPeer, const OUString& _rText )
     {
         OSL_ENSURE( _xVclWindowPeer.is(), "FormattedFieldBeautifier::setPlaceholderText: invalid peer!" );
@@ -133,7 +133,7 @@ namespace rptui
         _xVclWindowPeer->setProperty(PROPERTY_FONTDESCRIPTOR, uno::makeAny(aFontDescriptorStructure));
     }
 
-    // -----------------------------------------------------------------------------
+
     void FormattedFieldBeautifier::notifyPropertyChange( const beans::PropertyChangeEvent& _rEvent )
     {
         if  ( _rEvent.PropertyName != "DataField" )
@@ -143,19 +143,19 @@ namespace rptui
         setPlaceholderText( _rEvent.Source );
     }
 
-    // -----------------------------------------------------------------------------
+
     void FormattedFieldBeautifier::handle( const uno::Reference< uno::XInterface >& _rxElement )
     {
         setPlaceholderText( _rxElement );
     }
 
-    // -----------------------------------------------------------------------------
+
     void FormattedFieldBeautifier::notifyElementInserted( const uno::Reference< uno::XInterface >& _rxElement )
     {
         handle( _rxElement );
     }
 
-    // -----------------------------------------------------------------------------
+
     uno::Reference<awt::XVclWindowPeer> FormattedFieldBeautifier::getVclWindowPeer(const uno::Reference< report::XReportComponent >& _xComponent) throw(uno::RuntimeException)
     {
         uno::Reference<awt::XVclWindowPeer> xVclWindowPeer;

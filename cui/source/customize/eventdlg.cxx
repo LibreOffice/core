@@ -53,7 +53,7 @@
 
 
 using namespace ::com::sun::star;
-// -----------------------------------------------------------------------
+
 
 SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet, SvxEventConfigPage::EarlyInit ) :
 
@@ -94,7 +94,7 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
     aSaveInListBox.SelectEntryPos( nPos, true );
 }
 
-// -----------------------------------------------------------------------
+
 void SvxEventConfigPage::LateInit( const uno::Reference< frame::XFrame >& _rxFrame  )
 {
     SetFrame( _rxFrame );
@@ -105,7 +105,7 @@ void SvxEventConfigPage::LateInit( const uno::Reference< frame::XFrame >& _rxFra
     SelectHdl_Impl( NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxEventConfigPage::~SvxEventConfigPage()
 {
@@ -126,7 +126,7 @@ SvxEventConfigPage::~SvxEventConfigPage()
     delete mpImpl->pDeletePB;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxEventConfigPage::ImplInitDocument()
 {
@@ -174,7 +174,7 @@ void SvxEventConfigPage::ImplInitDocument()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
 {
@@ -221,7 +221,7 @@ IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxEventConfigPage::FillItemSet( SfxItemSet& rSet )
 {

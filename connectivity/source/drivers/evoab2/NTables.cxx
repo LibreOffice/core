@@ -76,17 +76,17 @@ ObjectType OEvoabTables::createObject(const OUString& aName)
 
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 void OEvoabTables::impl_refresh(  ) throw(RuntimeException)
 {
     static_cast<OEvoabCatalog&>(m_rParent).refreshTables();
 }
-// -------------------------------------------------------------------------
+
 void OEvoabTables::disposing(void)
 {
 m_xMetaData.clear();
     OCollection::disposing();
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

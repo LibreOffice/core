@@ -100,7 +100,7 @@ JobURL::JobURL( /*IN*/ const OUString& sURL )
     }
 }
 
-//________________________________
+
 /**
     @short      knows, if this job URL object hold a valid URL inside
 
@@ -113,7 +113,7 @@ sal_Bool JobURL::isValid() const
     return (m_eRequest!=E_UNKNOWN);
 }
 
-//________________________________
+
 /**
     @short      get the event item of this job URL
     @descr      Because the three possible parts of such URL (event, alias, service)
@@ -146,7 +146,7 @@ sal_Bool JobURL::getEvent( /*OUT*/ OUString& sEvent ) const
     return bSet;
 }
 
-//________________________________
+
 /**
     @short      get the alias item of this job URL
     @descr      Because the three possible parts of such URL (event, alias, service)
@@ -179,7 +179,7 @@ sal_Bool JobURL::getAlias( /*OUT*/ OUString& sAlias ) const
     return bSet;
 }
 
-//________________________________
+
 /**
     @short      get the service item of this job URL
     @descr      Because the three possible parts of such URL (event, service, service)
@@ -212,7 +212,7 @@ sal_Bool JobURL::getService( /*OUT*/ OUString& sService ) const
     return bSet;
 }
 
-//________________________________
+
 /**
     @short      searches for a special identifier in the given string and split it
     @descr      If the given identifier could be found at the beginning of the given string,
@@ -274,7 +274,7 @@ sal_Bool JobURL::implst_split( /*IN*/  const OUString& sPart           ,
     return bPartFound;
 }
 
-//________________________________
+
 /**
     @short      special debug method
     @descr      It's the entry point method to start a self component check for this class.
@@ -324,7 +324,7 @@ void JobURL::impldbg_checkIt()
     JobURL::impldbg_checkURL("vnd.sun.star.job:service=css.myService?serviceArg1;alias=myAlias?aliasArg=564", E_EVENT | E_ALIAS, ""         , "myAlias", "css.myService", NULL                              , "aliasArg=564"       , "serviceArg1" );
 }
 
-//________________________________
+
 /**
     @short      helper debug method
     @descr      It uses the given parameter to create a new instance of a JobURL.
@@ -528,7 +528,7 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
     SAL_INFO("fwk.joburl", OUString(sMsg));
 }
 
-//________________________________
+
 /**
     @short      helper debug method
     @descr      It returns a representation of the internal object state
@@ -565,7 +565,7 @@ OUString JobURL::impldbg_toString() const
     return sBuffer.makeStringAndClear();
 }
 
-//________________________________
+
 
 sal_Bool JobURL::getServiceArgs( /*OUT*/ OUString& sServiceArgs ) const
 {
@@ -583,7 +583,7 @@ sal_Bool JobURL::getServiceArgs( /*OUT*/ OUString& sServiceArgs ) const
     return bSet;
 }
 
-//________________________________
+
 
 sal_Bool JobURL::getEventArgs( /*OUT*/ OUString& sEventArgs ) const
 {
@@ -601,7 +601,7 @@ sal_Bool JobURL::getEventArgs( /*OUT*/ OUString& sEventArgs ) const
     return bSet;
 }
 
-//________________________________
+
 
 sal_Bool JobURL::getAliasArgs( /*OUT*/ OUString& sAliasArgs ) const
 {

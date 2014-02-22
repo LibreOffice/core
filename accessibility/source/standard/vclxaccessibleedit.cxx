@@ -49,9 +49,9 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-// -----------------------------------------------------------------------------
+
 // VCLXAccessibleEdit
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleEdit::VCLXAccessibleEdit( VCLXWindow* pVCLWindow )
     :VCLXAccessibleTextComponent( pVCLWindow )
@@ -60,13 +60,13 @@ VCLXAccessibleEdit::VCLXAccessibleEdit( VCLXWindow* pVCLWindow )
     m_nCaretPosition = getCaretPosition();
 }
 
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleEdit::~VCLXAccessibleEdit()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
@@ -109,7 +109,7 @@ void VCLXAccessibleEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
    }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleEdit::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
@@ -125,9 +125,9 @@ void VCLXAccessibleEdit::FillAccessibleStateSet( utl::AccessibleStateSetHelper& 
     }
 }
 
-// -----------------------------------------------------------------------------
+
 // OCommonAccessibleText
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleEdit::implGetText()
 {
@@ -152,7 +152,7 @@ OUString VCLXAccessibleEdit::implGetText()
     return aText;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleEdit::implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex )
 {
@@ -165,28 +165,28 @@ void VCLXAccessibleEdit::implGetSelection( sal_Int32& nStartIndex, sal_Int32& nE
     nEndIndex = aSelection.Max;
 }
 
-// -----------------------------------------------------------------------------
+
 // XInterface
-// -----------------------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleEdit, VCLXAccessibleTextComponent, VCLXAccessibleEdit_BASE )
 
-// -----------------------------------------------------------------------------
+
 // XTypeProvider
-// -----------------------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleEdit, VCLXAccessibleTextComponent, VCLXAccessibleEdit_BASE )
 
-// -----------------------------------------------------------------------------
+
 // XServiceInfo
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleEdit::getImplementationName() throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleEdit" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > VCLXAccessibleEdit::getSupportedServiceNames() throw (RuntimeException)
 {
@@ -195,9 +195,9 @@ Sequence< OUString > VCLXAccessibleEdit::getSupportedServiceNames() throw (Runti
     return aNames;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleContext
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleEdit::getAccessibleChildCount() throw (RuntimeException)
 {
@@ -206,7 +206,7 @@ sal_Int32 VCLXAccessibleEdit::getAccessibleChildCount() throw (RuntimeException)
     return 0;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > VCLXAccessibleEdit::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -218,7 +218,7 @@ Reference< XAccessible > VCLXAccessibleEdit::getAccessibleChild( sal_Int32 i ) t
     return Reference< XAccessible >();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int16 VCLXAccessibleEdit::getAccessibleRole(  ) throw (RuntimeException)
 {
@@ -234,9 +234,9 @@ sal_Int16 VCLXAccessibleEdit::getAccessibleRole(  ) throw (RuntimeException)
     return nRole;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleAction
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleEdit::getAccessibleActionCount( ) throw (RuntimeException)
 {
@@ -246,7 +246,7 @@ sal_Int32 VCLXAccessibleEdit::getAccessibleActionCount( ) throw (RuntimeExceptio
     return 1;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleEdit::doAccessibleAction ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -266,7 +266,7 @@ sal_Bool VCLXAccessibleEdit::doAccessibleAction ( sal_Int32 nIndex ) throw (Inde
     return bDoAction;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleEdit::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -279,7 +279,7 @@ OUString VCLXAccessibleEdit::getAccessibleActionDescription ( sal_Int32 nIndex )
     return sAction;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessibleKeyBinding > VCLXAccessibleEdit::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -291,23 +291,23 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleEdit::getAccessibleActionKeyBin
     return Reference< XAccessibleKeyBinding >();
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleText
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleEdit::getCaretPosition(  ) throw (RuntimeException)
 {
     return getSelectionEnd();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleEdit::setCaretPosition( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     return setSelection( nIndex, nIndex );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Unicode VCLXAccessibleEdit::getCharacter( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -316,7 +316,7 @@ sal_Unicode VCLXAccessibleEdit::getCharacter( sal_Int32 nIndex ) throw (IndexOut
     return VCLXAccessibleTextComponent::getCharacter( nIndex );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< PropertyValue > VCLXAccessibleEdit::getCharacterAttributes( sal_Int32 nIndex, const Sequence< OUString >& aRequestedAttributes ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -325,7 +325,7 @@ Sequence< PropertyValue > VCLXAccessibleEdit::getCharacterAttributes( sal_Int32 
     return VCLXAccessibleTextComponent::getCharacterAttributes( nIndex, aRequestedAttributes );
 }
 
-// -----------------------------------------------------------------------------
+
 
 awt::Rectangle VCLXAccessibleEdit::getCharacterBounds( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -368,7 +368,7 @@ awt::Rectangle VCLXAccessibleEdit::getCharacterBounds( sal_Int32 nIndex ) throw 
     return aBounds;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleEdit::getCharacterCount(  ) throw (RuntimeException)
 {
@@ -377,7 +377,7 @@ sal_Int32 VCLXAccessibleEdit::getCharacterCount(  ) throw (RuntimeException)
     return VCLXAccessibleTextComponent::getCharacterCount();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleEdit::getIndexAtPoint( const awt::Point& aPoint ) throw (RuntimeException)
 {
@@ -386,7 +386,7 @@ sal_Int32 VCLXAccessibleEdit::getIndexAtPoint( const awt::Point& aPoint ) throw 
     return VCLXAccessibleTextComponent::getIndexAtPoint( aPoint );
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleEdit::getSelectedText(  ) throw (RuntimeException)
 {
@@ -395,7 +395,7 @@ OUString VCLXAccessibleEdit::getSelectedText(  ) throw (RuntimeException)
     return VCLXAccessibleTextComponent::getSelectedText();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleEdit::getSelectionStart(  ) throw (RuntimeException)
 {
@@ -404,7 +404,7 @@ sal_Int32 VCLXAccessibleEdit::getSelectionStart(  ) throw (RuntimeException)
     return VCLXAccessibleTextComponent::getSelectionStart();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleEdit::getSelectionEnd(  ) throw (RuntimeException)
 {
@@ -413,7 +413,7 @@ sal_Int32 VCLXAccessibleEdit::getSelectionEnd(  ) throw (RuntimeException)
     return VCLXAccessibleTextComponent::getSelectionEnd();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleEdit::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -436,7 +436,7 @@ sal_Bool VCLXAccessibleEdit::setSelection( sal_Int32 nStartIndex, sal_Int32 nEnd
     return bReturn;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleEdit::getText(  ) throw (RuntimeException)
 {
@@ -445,7 +445,7 @@ OUString VCLXAccessibleEdit::getText(  ) throw (RuntimeException)
     return VCLXAccessibleTextComponent::getText();
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleEdit::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -454,7 +454,7 @@ OUString VCLXAccessibleEdit::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEnd
     return VCLXAccessibleTextComponent::getTextRange( nStartIndex, nEndIndex );
 }
 
-// -----------------------------------------------------------------------------
+
 
 ::com::sun::star::accessibility::TextSegment VCLXAccessibleEdit::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
@@ -463,7 +463,7 @@ OUString VCLXAccessibleEdit::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEnd
     return VCLXAccessibleTextComponent::getTextAtIndex( nIndex, aTextType );
 }
 
-// -----------------------------------------------------------------------------
+
 
 ::com::sun::star::accessibility::TextSegment VCLXAccessibleEdit::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
@@ -472,7 +472,7 @@ OUString VCLXAccessibleEdit::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEnd
     return VCLXAccessibleTextComponent::getTextBeforeIndex( nIndex, aTextType );
 }
 
-// -----------------------------------------------------------------------------
+
 
 ::com::sun::star::accessibility::TextSegment VCLXAccessibleEdit::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
@@ -481,7 +481,7 @@ OUString VCLXAccessibleEdit::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEnd
     return VCLXAccessibleTextComponent::getTextBehindIndex( nIndex, aTextType );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleEdit::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -490,9 +490,9 @@ sal_Bool VCLXAccessibleEdit::copyText( sal_Int32 nStartIndex, sal_Int32 nEndInde
     return VCLXAccessibleTextComponent::copyText( nStartIndex, nEndIndex );
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleEditableText
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleEdit::cutText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -501,7 +501,7 @@ sal_Bool VCLXAccessibleEdit::cutText( sal_Int32 nStartIndex, sal_Int32 nEndIndex
     return copyText( nStartIndex, nEndIndex ) && deleteText( nStartIndex, nEndIndex );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleEdit::pasteText( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -535,7 +535,7 @@ sal_Bool VCLXAccessibleEdit::pasteText( sal_Int32 nIndex ) throw (IndexOutOfBoun
     return bReturn;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleEdit::deleteText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -544,7 +544,7 @@ sal_Bool VCLXAccessibleEdit::deleteText( sal_Int32 nStartIndex, sal_Int32 nEndIn
     return replaceText( nStartIndex, nEndIndex, OUString() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleEdit::insertText( const OUString& sText, sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -553,7 +553,7 @@ sal_Bool VCLXAccessibleEdit::insertText( const OUString& sText, sal_Int32 nIndex
     return replaceText( nIndex, nIndex, sText );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleEdit::replaceText( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const OUString& sReplacement ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -580,7 +580,7 @@ sal_Bool VCLXAccessibleEdit::replaceText( sal_Int32 nStartIndex, sal_Int32 nEndI
     return bReturn;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleEdit::setAttributes( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const Sequence<PropertyValue>& ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -592,7 +592,7 @@ sal_Bool VCLXAccessibleEdit::setAttributes( sal_Int32 nStartIndex, sal_Int32 nEn
     return sal_False;   // attributes cannot be set for an edit
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleEdit::setText( const OUString& sText ) throw (RuntimeException)
 {
@@ -610,6 +610,6 @@ sal_Bool VCLXAccessibleEdit::setText( const OUString& sText ) throw (RuntimeExce
     return bSuccess;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -276,7 +276,7 @@ void SAL_CALL AccessibleBrowseBoxBase::focusGained( const ::com::sun::star::awt:
 
     commitEvent(AccessibleEventId::STATE_CHANGED,aFocused,aEmpty);
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL AccessibleBrowseBoxBase::focusLost( const ::com::sun::star::awt::FocusEvent& ) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -513,24 +513,24 @@ sal_Int16 SAL_CALL AccessibleBrowseBoxBase::getAccessibleRole()
     }
     return nRole;
 }
-// -----------------------------------------------------------------------------
+
 Any SAL_CALL AccessibleBrowseBoxBase::getAccessibleKeyBinding()
         throw ( uno::RuntimeException )
 {
     return Any();
 }
-// -----------------------------------------------------------------------------
+
 Reference<XAccessible > SAL_CALL AccessibleBrowseBoxBase::getAccessibleAtPoint( const ::com::sun::star::awt::Point& )
         throw ( uno::RuntimeException )
 {
     return NULL;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL AccessibleBrowseBoxBase::disposing( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException)
 {
     m_xFocusWindow = NULL;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -556,7 +556,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  ) throw (::com::sun:
 
     return nColor;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getBackground(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -590,14 +590,14 @@ Reference< XAccessibleContext > SAL_CALL BrowseBoxAccessibleElement::getAccessib
     return this;
 }
 
-// ----------------------------------------------------------------------------
+
 BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const Reference< XAccessible >& rxParent, IAccessibleTableProvider& rBrowseBox,
         const Reference< awt::XWindow >& _xFocusWindow, AccessibleBrowseBoxObjType  eObjType )
     :AccessibleBrowseBoxBase( rxParent, rBrowseBox, _xFocusWindow, eObjType )
 {
 }
 
-// ----------------------------------------------------------------------------
+
 BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const Reference< XAccessible >& rxParent, IAccessibleTableProvider& rBrowseBox,
         const Reference< awt::XWindow >& _xFocusWindow, AccessibleBrowseBoxObjType  eObjType,
         const OUString& rName, const OUString& rDescription )
@@ -605,7 +605,7 @@ BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const Reference< XAccess
 {
 }
 
-// ----------------------------------------------------------------------------
+
 BrowseBoxAccessibleElement::~BrowseBoxAccessibleElement( )
 {
 }

@@ -41,7 +41,7 @@ using namespace ::com::sun::star::mozilla;
 
 namespace
 {
-    // -------------------------------------------------------------------
+
     static OUString lcl_getUserDataDirectory()
     {
         ::osl::Security   aSecurity;
@@ -59,7 +59,7 @@ namespace
         return aConfigPath + "/";
     }
 
-    // -------------------------------------------------------------------
+
     const size_t NB_PRODUCTS = 3;
     const size_t NB_CANDIDATES = 4;
 
@@ -87,7 +87,7 @@ namespace
         "MOZILLA_THUNDERBIRD_PROFILE_ROOT",
     };
 
-    // -------------------------------------------------------------------
+
     static OUString lcl_guessProfileRoot( MozillaProductType _product )
     {
         size_t productIndex = _product - 1;
@@ -144,7 +144,7 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------
+
 OUString getRegistryDir(MozillaProductType product)
 {
     if (product == MozillaProductType_Default)

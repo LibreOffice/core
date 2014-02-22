@@ -96,7 +96,7 @@ typedef struct tagMYITEM
     UINT iconId;
 } MYITEM;
 
-// -------------------------------
+
 
 static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text, int& pos, int bOwnerdraw, const OUString& module )
 {
@@ -143,7 +143,7 @@ static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text
     InsertMenuItemW( hMenu, pos++, TRUE, &mi );
 }
 
-// -------------------------------
+
 
 static HMENU createSystrayMenu( )
 {
@@ -231,7 +231,7 @@ static HMENU createSystrayMenu( )
     return hMenu;
 }
 
-// -------------------------------
+
 
 static void deleteSystrayMenu( HMENU hMenu )
 {
@@ -257,7 +257,7 @@ static void deleteSystrayMenu( HMENU hMenu )
     }
 }
 
-// -------------------------------
+
 
 static void addTaskbarIcon( HWND hWnd )
 {
@@ -282,7 +282,7 @@ static void addTaskbarIcon( HWND hWnd )
     Shell_NotifyIconW(NIM_ADD, &nid);
 }
 
-// -------------------------------
+
 
 LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -407,7 +407,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
     return 0;
 }
 
-// -------------------------------
+
 
 LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -467,7 +467,7 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
     return 0;
 }
 
-// -------------------------------
+
 
 
 DWORD WINAPI SystrayThread( LPVOID /*lpParam*/ )
@@ -497,7 +497,7 @@ DWORD WINAPI SystrayThread( LPVOID /*lpParam*/ )
     return msg.wParam; // Exit code of WM_QUIT
 }
 
-// -------------------------------
+
 
 void win32_init_sys_tray()
 {
@@ -554,7 +554,7 @@ void win32_init_sys_tray()
     }
 }
 
-// -------------------------------
+
 
 void win32_shutdown_sys_tray()
 {
@@ -574,7 +574,7 @@ void win32_shutdown_sys_tray()
 
 
 
-// -------------------------------
+
 
 void OnMeasureItem(HWND hwnd, LPMEASUREITEMSTRUCT lpmis)
 {
@@ -695,9 +695,9 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
     SetBkColor(lpdis->hDC, clrPrevBkgnd);
 }
 
-// -------------------------------
+
 // code from setup2 project
-// -------------------------------
+
 
 void _SHFree( void *pv )
 {
@@ -790,7 +790,7 @@ BOOL CreateShortcut( const OUString& rAbsObject, const OUString& rAbsObjectPath,
     return TRUE;
 }
 
-// ------------------
+
 // install/uninstall
 
 static bool FileExistsW( LPCWSTR lpPath )

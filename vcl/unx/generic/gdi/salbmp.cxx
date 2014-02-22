@@ -48,9 +48,9 @@
 #include <valgrind/memcheck.h>
 #endif
 
-// -------------
+
 // - SalBitmap -
-// -------------
+
 
 SalBitmap* X11SalInstance::CreateSalBitmap()
 {
@@ -60,7 +60,7 @@ SalBitmap* X11SalInstance::CreateSalBitmap()
 ImplSalBitmapCache* X11SalBitmap::mpCache = NULL;
 sal_uLong           X11SalBitmap::mnCacheInstCount = 0;
 
-// -----------------------------------------------------------------------------
+
 
 X11SalBitmap::X11SalBitmap()
     : mpDIB( NULL )
@@ -69,14 +69,14 @@ X11SalBitmap::X11SalBitmap()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 X11SalBitmap::~X11SalBitmap()
 {
     Destroy();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void X11SalBitmap::ImplCreateCache()
 {
@@ -84,7 +84,7 @@ void X11SalBitmap::ImplCreateCache()
         mpCache = new ImplSalBitmapCache;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void X11SalBitmap::ImplDestroyCache()
 {
@@ -94,7 +94,7 @@ void X11SalBitmap::ImplDestroyCache()
         delete mpCache, mpCache = NULL;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void X11SalBitmap::ImplRemovedFromCache()
 {
@@ -120,7 +120,7 @@ namespace
 }
 #endif
 
-// -----------------------------------------------------------------------------
+
 
 BitmapBuffer* X11SalBitmap::ImplCreateDIB(
     const Size& rSize,
@@ -211,7 +211,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
     return pDIB;
 }
 
-// -----------------------------------------------------------------------------
+
 
 BitmapBuffer* X11SalBitmap::ImplCreateDIB(
     Drawable aDrawable,
@@ -386,7 +386,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
     return pDIB;
 }
 
-// -----------------------------------------------------------------------------
+
 
 XImage* X11SalBitmap::ImplCreateXImage(
     SalDisplay *pSalDisp,
@@ -562,7 +562,7 @@ XImage* X11SalBitmap::ImplCreateXImage(
     return pImage;
 }
 
-// -----------------------------------------------------------------------------
+
 bool X11SalBitmap::ImplCreateFromDrawable(
     Drawable aDrawable,
     SalX11Screen nScreen,
@@ -579,7 +579,7 @@ bool X11SalBitmap::ImplCreateFromDrawable(
 
     return( mpDDB != NULL );
 }
-// -----------------------------------------------------------------------------
+
 
 ImplSalDDB* X11SalBitmap::ImplGetDDB(
     Drawable          aDrawable,
@@ -678,7 +678,7 @@ ImplSalDDB* X11SalBitmap::ImplGetDDB(
     return mpDDB;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void X11SalBitmap::ImplDraw(
     Drawable           aDrawable,
@@ -693,7 +693,7 @@ void X11SalBitmap::ImplDraw(
         mpDDB->ImplDraw( aDrawable, nDrawableDepth, rTwoRect, rGC );
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool X11SalBitmap::Create( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal )
 {
@@ -703,7 +703,7 @@ bool X11SalBitmap::Create( const Size& rSize, sal_uInt16 nBitCount, const Bitmap
     return( mpDIB != NULL );
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool X11SalBitmap::Create( const SalBitmap& rSSalBmp )
 {
@@ -744,21 +744,21 @@ bool X11SalBitmap::Create( const SalBitmap& rSSalBmp )
             ( rSalBmp.mpDDB && ( mpDDB != NULL ) ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool X11SalBitmap::Create( const SalBitmap&, SalGraphics* )
 {
     return false;
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool X11SalBitmap::Create( const SalBitmap&, sal_uInt16 )
 {
     return false;
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool X11SalBitmap::Create(
     const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > xBitmapCanvas,
@@ -799,7 +799,7 @@ bool X11SalBitmap::Create(
     return false;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void X11SalBitmap::Destroy()
 {
@@ -816,7 +816,7 @@ void X11SalBitmap::Destroy()
         mpCache->ImplRemove( this );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Size X11SalBitmap::GetSize() const
 {
@@ -830,7 +830,7 @@ Size X11SalBitmap::GetSize() const
     return aSize;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_uInt16 X11SalBitmap::GetBitCount() const
 {
@@ -846,7 +846,7 @@ sal_uInt16 X11SalBitmap::GetBitCount() const
     return nBitCount;
 }
 
-// -----------------------------------------------------------------------------
+
 
 BitmapBuffer* X11SalBitmap::AcquireBuffer( bool )
 {
@@ -866,7 +866,7 @@ BitmapBuffer* X11SalBitmap::AcquireBuffer( bool )
     return mpDIB;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void X11SalBitmap::ReleaseBuffer( BitmapBuffer*, bool bReadOnly )
 {
@@ -880,7 +880,7 @@ void X11SalBitmap::ReleaseBuffer( BitmapBuffer*, bool bReadOnly )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool X11SalBitmap::GetSystemData( BitmapSystemData& rData )
 {
@@ -898,9 +898,9 @@ bool X11SalBitmap::GetSystemData( BitmapSystemData& rData )
     return false;
 }
 
-// --------------
+
 // - ImplSalDDB -
-// --------------
+
 
 ImplSalDDB::ImplSalDDB( XImage* pImage, Drawable aDrawable,
                         SalX11Screen nXScreen, const SalTwoRect& rTwoRect )
@@ -932,7 +932,7 @@ ImplSalDDB::ImplSalDDB( XImage* pImage, Drawable aDrawable,
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 ImplSalDDB::ImplSalDDB(
     Drawable aDrawable,
@@ -973,7 +973,7 @@ ImplSalDDB::ImplSalDDB(
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 ImplSalDDB::~ImplSalDDB()
 {
@@ -981,7 +981,7 @@ ImplSalDDB::~ImplSalDDB()
         XFreePixmap( GetGenericData()->GetSalDisplay()->GetDisplay(), maPixmap );
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool ImplSalDDB::ImplMatches( SalX11Screen nXScreen, long nDepth, const SalTwoRect& rTwoRect ) const
 {
@@ -1017,7 +1017,7 @@ bool ImplSalDDB::ImplMatches( SalX11Screen nXScreen, long nDepth, const SalTwoRe
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ImplSalDDB::ImplDraw(
     Drawable aDrawable,
@@ -1032,7 +1032,7 @@ void ImplSalDDB::ImplDraw(
               rTwoRect.mnDestX, rTwoRect.mnDestY, rGC );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ImplSalDDB::ImplDraw(
     Drawable aSrcDrawable,
@@ -1062,9 +1062,9 @@ void ImplSalDDB::ImplDraw(
     }
 }
 
-// ----------------------
+
 // - ImplSalBitmapCache -
-// ----------------------
+
 
 struct ImplBmpObj
 {
@@ -1076,21 +1076,21 @@ struct ImplBmpObj
                     mpBmp( pBmp ), mnMemSize( nMemSize ), mnFlags( nFlags ) {}
 };
 
-// -----------------------------------------------------------------------------
+
 
 ImplSalBitmapCache::ImplSalBitmapCache() :
     mnTotalSize( 0UL )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 ImplSalBitmapCache::~ImplSalBitmapCache()
 {
     ImplClear();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ImplSalBitmapCache::ImplAdd( X11SalBitmap* pBmp, sal_uLong nMemSize, sal_uLong nFlags )
 {
@@ -1118,7 +1118,7 @@ void ImplSalBitmapCache::ImplAdd( X11SalBitmap* pBmp, sal_uLong nMemSize, sal_uL
         maBmpList.push_back( new ImplBmpObj( pBmp, nMemSize, nFlags ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ImplSalBitmapCache::ImplRemove( X11SalBitmap* pBmp )
 {
@@ -1138,7 +1138,7 @@ void ImplSalBitmapCache::ImplRemove( X11SalBitmap* pBmp )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ImplSalBitmapCache::ImplClear()
 {

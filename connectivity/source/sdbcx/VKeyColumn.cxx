@@ -26,14 +26,14 @@ using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace cppu;
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL OKeyColumn::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     if(isNew())
         return OUString("com.sun.star.sdbcx.VKeyColumnDescription");
     return OUString("com.sun.star.sdbcx.VKeyColumn");
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL OKeyColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Sequence< OUString > aSupported(1);
@@ -49,12 +49,12 @@ sal_Bool SAL_CALL OKeyColumn::supportsService( const OUString& _rServiceName ) t
 {
     return cppu::supportsService(this, _rServiceName);
 }
-// -------------------------------------------------------------------------
+
 OKeyColumn::OKeyColumn(sal_Bool _bCase) : OColumn(_bCase)
 {
     construct();
 }
-// -------------------------------------------------------------------------
+
 OKeyColumn::OKeyColumn( const OUString&  _ReferencedColumn,
                         const OUString&  _Name,
                         const OUString&  _TypeName,
@@ -89,27 +89,27 @@ OKeyColumn::OKeyColumn( const OUString&  _ReferencedColumn,
 {
     construct();
 }
-// -------------------------------------------------------------------------
+
 OKeyColumn::~OKeyColumn()
 {
 }
-// -----------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* OKeyColumn::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {
     return doCreateArrayHelper();
 }
-// -----------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper& SAL_CALL OKeyColumn::getInfoHelper()
 {
     return *OKeyColumn_PROP::getArrayHelper(isNew() ? 1 : 0);
 }
-// -------------------------------------------------------------------------
+
 void OKeyColumn::construct()
 {
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RELATEDCOLUMN),   PROPERTY_ID_RELATEDCOLUMN,  nAttrib,&m_ReferencedColumn,    ::getCppuType(static_cast< OUString*>(0)));
 }
-// -----------------------------------------------------------------------------
+
 
 
 

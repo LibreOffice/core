@@ -137,7 +137,7 @@ FltError ImportExcel::Read( void )
 
         switch( eAkt )
         {
-            // ----------------------------------------------------------------
+
             case Z_BiffNull:    // ------------------------------- Z_BiffNull -
             {
                 switch( nOpcode )
@@ -203,7 +203,7 @@ FltError ImportExcel::Read( void )
                 }
             }
                 break;
-            // ----------------------------------------------------------------
+
             case Z_Biff2:       // ---------------------------------- Z_Biff2 -
             {
                 switch( nOpcode )
@@ -262,7 +262,7 @@ FltError ImportExcel::Read( void )
                 }
             }
                 break;
-            // ----------------------------------------------------------------
+
             case Z_Biff3:       // ---------------------------------- Z_Biff3 -
             {
                 switch( nOpcode )
@@ -333,7 +333,7 @@ FltError ImportExcel::Read( void )
                 }
             }
                 break;
-            // ----------------------------------------------------------------
+
             case Z_Biff4:       // ---------------------------------- Z_Biff4 -
             {
                 switch( nOpcode )
@@ -408,7 +408,7 @@ FltError ImportExcel::Read( void )
                 }
             }
                 break;
-            // ----------------------------------------------------------------
+
             case Z_Biff4W:      // --------------------------------- Z_Biff4W -
             {
                 switch( nOpcode )
@@ -453,7 +453,7 @@ FltError ImportExcel::Read( void )
 
             }
                 break;
-            // ----------------------------------------------------------------
+
             case Z_Biff4T:       // --------------------------------- Z_Biff4T -
             {
                 switch( nOpcode )
@@ -519,7 +519,7 @@ FltError ImportExcel::Read( void )
 
             }
                 break;
-            // ----------------------------------------------------------------
+
             case Z_Biff4E:      // --------------------------------- Z_Biff4E -
             {
                 switch( nOpcode )
@@ -593,7 +593,7 @@ FltError ImportExcel::Read( void )
 
             }
                 break;
-            // ----------------------------------------------------------------
+
             case Z_Biff5TPre:   // ------------------------------- Z_Biff5Pre -
             {
                 if( nOpcode == 0x0809 )
@@ -634,7 +634,7 @@ FltError ImportExcel::Read( void )
                 }
             }
                 break;
-            // ----------------------------------------------------------------
+
             case Z_Biff5T:       // --------------------------------- Z_Biff5T -
             {
                 switch( nOpcode )
@@ -689,7 +689,7 @@ FltError ImportExcel::Read( void )
 
             }
                 break;
-            // ----------------------------------------------------------------
+
             case Z_Biff5E:      // --------------------------------- Z_Biff5E -
             {
                 switch( nOpcode )
@@ -736,7 +736,7 @@ FltError ImportExcel::Read( void )
 
             }
                 break;
-            // ----------------------------------------------------------------
+
             case Z_Ende:        // ----------------------------------- Z_Ende -
                 OSL_FAIL( "*ImportExcel::Read(): Not possible state!" );
                 break;
@@ -767,7 +767,7 @@ FltError ImportExcel::Read( void )
 }
 
 
-//___________________________________________________________________
+
 
 FltError ImportExcel8::Read( void )
 {
@@ -956,7 +956,7 @@ FltError ImportExcel8::Read( void )
 
         if( !bInUserView ) switch( eAkt )
         {
-            // ----------------------------------------------------------------
+
             // before workbook globals: wait for initial workbook globals BOF
             case EXC_STATE_BEFORE_GLOBALS:
             {
@@ -982,7 +982,7 @@ FltError ImportExcel8::Read( void )
             }
             break;
 
-            // ----------------------------------------------------------------
+
             // prefetch for workbook globals
             case EXC_STATE_GLOBALS_PRE:
             {
@@ -1023,7 +1023,7 @@ FltError ImportExcel8::Read( void )
             }
             break;
 
-            // ----------------------------------------------------------------
+
             // workbook globals
             case EXC_STATE_GLOBALS:
             {
@@ -1083,7 +1083,7 @@ FltError ImportExcel8::Read( void )
             }
             break;
 
-            // ----------------------------------------------------------------
+
             // prefetch for worksheet
             case EXC_STATE_SHEET_PRE:
             {
@@ -1149,7 +1149,7 @@ FltError ImportExcel8::Read( void )
             }
             break;
 
-            // ----------------------------------------------------------------
+
             // worksheet
             case EXC_STATE_SHEET:
             {
@@ -1240,7 +1240,7 @@ FltError ImportExcel8::Read( void )
             }
             break;
 
-            // ----------------------------------------------------------------
+
             default:;
         }
     }
@@ -1321,6 +1321,6 @@ FltError ImportExcel8::Read( void )
     return eLastErr;
 }
 
-//___________________________________________________________________
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

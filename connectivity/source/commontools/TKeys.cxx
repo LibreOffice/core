@@ -50,7 +50,7 @@ OKeysHelper::OKeysHelper(   OTableHelper* _pTable,
     ,m_pTable(_pTable)
 {
 }
-// -------------------------------------------------------------------------
+
 sdbcx::ObjectType OKeysHelper::createObject(const OUString& _rName)
 {
     sdbcx::ObjectType xRet = NULL;
@@ -69,17 +69,17 @@ sdbcx::ObjectType OKeysHelper::createObject(const OUString& _rName)
 
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 void OKeysHelper::impl_refresh() throw(RuntimeException)
 {
     m_pTable->refreshKeys();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OKeysHelper::createDescriptor()
 {
     return new OTableKeyHelper(m_pTable);
 }
-// -----------------------------------------------------------------------------
+
 /** returns the keyrule string for the primary key
 */
 OUString getKeyRuleString(sal_Bool _bUpdate,sal_Int32 _nKeyRule)
@@ -107,7 +107,7 @@ OUString getKeyRuleString(sal_Bool _bUpdate,sal_Int32 _nKeyRule)
         sRet = OUString::createFromAscii(pKeyRule);
     return sRet;
 }
-// -------------------------------------------------------------------------
+
 void OKeysHelper::cloneDescriptorColumns( const sdbcx::ObjectType& _rSourceDescriptor, const sdbcx::ObjectType& _rDestDescriptor )
 {
     Reference< XColumnsSupplier > xColSupp( _rSourceDescriptor, UNO_QUERY_THROW );
@@ -123,7 +123,7 @@ void OKeysHelper::cloneDescriptorColumns( const sdbcx::ObjectType& _rSourceDescr
         xDestAppend->appendByDescriptor( xColProp );
     }
 }
-// -------------------------------------------------------------------------
+
 // XAppend
 sdbcx::ObjectType OKeysHelper::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
@@ -254,12 +254,12 @@ sdbcx::ObjectType OKeysHelper::appendObject( const OUString& _rForName, const Re
 
     return createObject( sNewName );
 }
-// -----------------------------------------------------------------------------
+
 OUString OKeysHelper::getDropForeignKey() const
 {
     return OUString(" DROP CONSTRAINT ");
 }
-// -------------------------------------------------------------------------
+
 // XDrop
 void OKeysHelper::dropObject(sal_Int32 _nPos,const OUString _sElementName)
 {
@@ -304,8 +304,8 @@ void OKeysHelper::dropObject(sal_Int32 _nPos,const OUString _sElementName)
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 } // namespace connectivity
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -50,7 +50,7 @@ void SAL_CALL OPoolTimer::onShot()
 }
 namespace
 {
-    //--------------------------------------------------------------------
+
     static const OUString& getTimeoutNodeName()
     {
         static OUString s_sNodeName( "Timeout" );
@@ -61,7 +61,7 @@ namespace
 //==========================================================================
 //= OConnectionPool
 //==========================================================================
-//--------------------------------------------------------------------------
+
 OConnectionPool::OConnectionPool(const Reference< XDriver >& _xDriver,
                                  const Reference< XInterface >& _xDriverNode,
                                  const Reference< ::com::sun::star::reflection::XProxyFactory >& _rxProxyFactory)
@@ -86,12 +86,12 @@ OConnectionPool::OConnectionPool(const Reference< XDriver >& _xDriver,
     m_xInvalidator = new OPoolTimer(this,::salhelper::TTimeValue(m_nTimeOut,0));
     m_xInvalidator->start();
 }
-// -----------------------------------------------------------------------------
+
 OConnectionPool::~OConnectionPool()
 {
     clear(sal_False);
 }
-// -----------------------------------------------------------------------------
+
 struct TRemoveEventListenerFunctor : ::std::unary_function<TPooledConnections::value_type,void>
                                     ,::std::unary_function<TActiveConnectionMap::value_type,void>
 {
@@ -104,7 +104,7 @@ struct TRemoveEventListenerFunctor : ::std::unary_function<TPooledConnections::v
     {
         OSL_ENSURE(m_pConnectionPool,"No connection pool!");
     }
-    // -----------------------------------------------------------------------------
+
     void dispose(const Reference<XInterface>& _xComponent)
     {
         Reference< XComponent >  xComponent(_xComponent, UNO_QUERY);
@@ -116,18 +116,18 @@ struct TRemoveEventListenerFunctor : ::std::unary_function<TPooledConnections::v
                 xComponent->dispose();
         }
     }
-    // -----------------------------------------------------------------------------
+
     void operator()(const TPooledConnections::value_type& _aValue)
     {
         dispose(_aValue);
     }
-    // -----------------------------------------------------------------------------
+
     void operator()(const TActiveConnectionMap::value_type& _aValue)
     {
         dispose(_aValue.first);
     }
 };
-// -----------------------------------------------------------------------------
+
 struct TConnectionPoolFunctor : ::std::unary_function<TConnectionMap::value_type,void>
 {
     OConnectionPool* m_pConnectionPool;
@@ -142,7 +142,7 @@ struct TConnectionPoolFunctor : ::std::unary_function<TConnectionMap::value_type
         ::std::for_each(_aValue.second.aConnections.begin(),_aValue.second.aConnections.end(),TRemoveEventListenerFunctor(m_pConnectionPool,sal_True));
     }
 };
-// -----------------------------------------------------------------------------
+
 void OConnectionPool::clear(sal_Bool _bDispose)
 {
     MutexGuard aGuard(m_aMutex);
@@ -166,7 +166,7 @@ void OConnectionPool::clear(sal_Bool _bDispose)
 m_xDriverNode.clear();
 m_xDriver.clear();
 }
-//--------------------------------------------------------------------------
+
 Reference< XConnection > SAL_CALL OConnectionPool::getConnectionWithInfo( const OUString& _rURL, const Sequence< PropertyValue >& _rInfo ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
@@ -187,7 +187,7 @@ Reference< XConnection > SAL_CALL OConnectionPool::getConnectionWithInfo( const 
 
     return xConnection;
 }
-//--------------------------------------------------------------------------
+
 void SAL_CALL OConnectionPool::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (RuntimeException)
 {
     Reference<XConnection> xConnection(Source.Source,UNO_QUERY);
@@ -208,7 +208,7 @@ void SAL_CALL OConnectionPool::disposing( const ::com::sun::star::lang::EventObj
     m_xDriverNode.clear();
     }
 }
-// -----------------------------------------------------------------------------
+
 Reference< XConnection> OConnectionPool::createNewConnection(const OUString& _rURL,const Sequence< PropertyValue >& _rInfo)
 {
     // create new pooled conenction
@@ -241,7 +241,7 @@ Reference< XConnection> OConnectionPool::createNewConnection(const OUString& _rU
 
     return xConnection;
 }
-// -----------------------------------------------------------------------------
+
 void OConnectionPool::invalidatePooledConnections()
 {
     MutexGuard aGuard(m_aMutex);
@@ -276,7 +276,7 @@ void OConnectionPool::invalidatePooledConnections()
     if(!m_aPool.empty())
         m_xInvalidator->start();
 }
-// -----------------------------------------------------------------------------
+
 Reference< XConnection> OConnectionPool::getPooledConnection(TConnectionMap::iterator& _rIter)
 {
     Reference<XConnection> xConnection;
@@ -299,7 +299,7 @@ Reference< XConnection> OConnectionPool::getPooledConnection(TConnectionMap::ite
     }
     return xConnection;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OConnectionPool::propertyChange( const PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException)
 {
     if(getTimeoutNodeName() == evt.PropertyName)
@@ -308,7 +308,7 @@ void SAL_CALL OConnectionPool::propertyChange( const PropertyChangeEvent& evt ) 
         calculateTimeOuts();
     }
 }
-// -----------------------------------------------------------------------------
+
 void OConnectionPool::calculateTimeOuts()
 {
     sal_Int32 nTimeOutCorrection = 10;
@@ -318,6 +318,6 @@ void OConnectionPool::calculateTimeOuts()
     m_nTimeOut      = m_nALiveCount / nTimeOutCorrection;
     m_nALiveCount   = m_nALiveCount / m_nTimeOut;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

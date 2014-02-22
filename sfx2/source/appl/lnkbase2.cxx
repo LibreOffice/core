@@ -121,7 +121,7 @@ public:
     sal_Bool IsInDTOR() const { return bIsInDTOR; }
 };
 
-//--------------------------------------------------------------------------
+
 
 SvBaseLink::SvBaseLink()
     : m_bIsReadOnly(false)
@@ -133,7 +133,7 @@ SvBaseLink::SvBaseLink()
     bWasLastEditOK = sal_False;
 }
 
-//--------------------------------------------------------------------------
+
 
 SvBaseLink::SvBaseLink( sal_uInt16 nUpdateMode, sal_uIntPtr nContentType )
     : m_bIsReadOnly(false)
@@ -150,7 +150,7 @@ SvBaseLink::SvBaseLink( sal_uInt16 nUpdateMode, sal_uIntPtr nContentType )
     pImplData->ClientType.bIntrnlLnk = sal_False;
 }
 
-//--------------------------------------------------------------------------
+
 
 SvBaseLink::SvBaseLink( const OUString& rLinkName, sal_uInt16 nObjectType, SvLinkSource* pObj )
     : pImpl(0)
@@ -189,7 +189,7 @@ SvBaseLink::SvBaseLink( const OUString& rLinkName, sal_uInt16 nObjectType, SvLin
         xObj = pObj;
 }
 
-//--------------------------------------------------------------------------
+
 
 SvBaseLink::~SvBaseLink()
 {
@@ -220,7 +220,7 @@ IMPL_LINK( SvBaseLink, EndEditHdl, OUString*, _pNewName )
     return 0;
 }
 
-//--------------------------------------------------------------------------
+
 
 void SvBaseLink::SetObjType( sal_uInt16 nObjTypeP )
 {
@@ -230,14 +230,14 @@ void SvBaseLink::SetObjType( sal_uInt16 nObjTypeP )
     nObjType = nObjTypeP;
 }
 
-//--------------------------------------------------------------------------
+
 
 void SvBaseLink::SetName( const OUString & rNm )
 {
     aLinkName = rNm;
 }
 
-//--------------------------------------------------------------------------
+
 
 void SvBaseLink::SetObj( SvLinkSource * pObj )
 {
@@ -248,7 +248,7 @@ void SvBaseLink::SetObj( SvLinkSource * pObj )
     xObj = pObj;
 }
 
-//--------------------------------------------------------------------------
+
 
 void SvBaseLink::SetLinkSourceName( const OUString & rLnkNm )
 {
@@ -266,14 +266,14 @@ void SvBaseLink::SetLinkSourceName( const OUString & rLnkNm )
     ReleaseRef(); // should be superfluous
 }
 
-//--------------------------------------------------------------------------
+
 
 OUString  SvBaseLink::GetLinkSourceName() const
 {
     return aLinkName;
 }
 
-//--------------------------------------------------------------------------
+
 
 void SvBaseLink::SetUpdateMode( sal_uInt16 nMode )
 {

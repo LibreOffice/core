@@ -124,7 +124,7 @@ struct IsoLangOtherEntry
     const sal_Char*     mpLanguage;
 };
 
-// -----------------------------------------------------------------------
+
 
 // Entries for languages are lower case, for countries upper case, as
 // recommended by rfc5646 (obsoletes rfc4646 (obsoletes rfc3066 (obsoletes
@@ -777,7 +777,7 @@ OUString Bcp47CountryEntry::getTagString() const
     return lang::Locale( I18NLANGTAG_QLT, OUString::createFromAscii( maCountry), getTagString());
 }
 
-// -----------------------------------------------------------------------
+
 
 // In this table are the countries which should mapped to a specific
 // english language
@@ -846,7 +846,7 @@ static IsoLangEngEntry const aImplIsoLangEngEntries[] =
     { LANGUAGE_DONTKNOW,                    ""   }          // marks end of table
 };
 
-// -----------------------------------------------------------------------
+
 
 static IsoLangNoneStdEntry const aImplIsoNoneStdLangEntries[] =
 {
@@ -859,7 +859,7 @@ static IsoLangNoneStdEntry const aImplIsoNoneStdLangEntries[] =
     { LANGUAGE_DONTKNOW,                    "",   ""         }  // marks end of table
 };
 
-// -----------------------------------------------------------------------
+
 
 // in this table are only names to find the best language
 static IsoLangNoneStdEntry const aImplIsoNoneStdLangEntries2[] =
@@ -870,7 +870,7 @@ static IsoLangNoneStdEntry const aImplIsoNoneStdLangEntries2[] =
     { LANGUAGE_DONTKNOW,                    "",   ""         }  // marks end of table
 };
 
-// -----------------------------------------------------------------------
+
 
 // in this table are only names to find the best language
 static IsoLangOtherEntry const aImplOtherEntries[] =
@@ -980,7 +980,7 @@ Label_Override_Lang_Locale:
     // Not found. Passed rLocale argument remains unchanged.
 }
 
-// -----------------------------------------------------------------------
+
 
 // static
 com::sun::star::lang::Locale MsLangId::Conversion::getLocale( const IsoLanguageCountryEntry * pEntry )
@@ -1328,7 +1328,7 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OUString& rL
     return LANGUAGE_DONTKNOW;
 }
 
-// -----------------------------------------------------------------------
+
 
 // static
 LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OString& rLang,
@@ -1339,7 +1339,7 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OString& rLa
     return convertIsoNamesToLanguage( aLang, aCountry);
 }
 
-// -----------------------------------------------------------------------
+
 
 struct IsoLangGLIBCModifiersEntry
 {

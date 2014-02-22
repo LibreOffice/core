@@ -29,7 +29,7 @@
 namespace framework {
 
 
-//-----------------------------------------------
+
 VCLStatusIndicator::VCLStatusIndicator(const css::uno::Reference< css::awt::XWindow >&               xParentWindow)
     : ThreadHelpBase     (&Application::GetSolarMutex())
     , m_xParentWindow    (xParentWindow                )
@@ -43,12 +43,12 @@ VCLStatusIndicator::VCLStatusIndicator(const css::uno::Reference< css::awt::XWin
                 static_cast< css::task::XStatusIndicator* >(this));
 }
 
-//-----------------------------------------------
+
 VCLStatusIndicator::~VCLStatusIndicator()
 {
 }
 
-//-----------------------------------------------
+
 void SAL_CALL VCLStatusIndicator::start(const OUString& sText ,
                                               sal_Int32        nRange)
     throw(css::uno::RuntimeException)
@@ -89,7 +89,7 @@ void SAL_CALL VCLStatusIndicator::start(const OUString& sText ,
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+
 void SAL_CALL VCLStatusIndicator::reset()
     throw(css::uno::RuntimeException)
 {
@@ -103,7 +103,7 @@ void SAL_CALL VCLStatusIndicator::reset()
     // <- SOLAR SAFE ----------------------------
 }
 
-//-----------------------------------------------
+
 void SAL_CALL VCLStatusIndicator::end()
     throw(css::uno::RuntimeException)
 {
@@ -130,7 +130,7 @@ void SAL_CALL VCLStatusIndicator::end()
     // <- SOLAR SAFE ----------------------------
 }
 
-//-----------------------------------------------
+
 void SAL_CALL VCLStatusIndicator::setText(const OUString& sText)
     throw(css::uno::RuntimeException)
 {
@@ -149,7 +149,7 @@ void SAL_CALL VCLStatusIndicator::setText(const OUString& sText)
     // <- SOLAR SAFE ----------------------------
 }
 
-//-----------------------------------------------
+
 void SAL_CALL VCLStatusIndicator::setValue(sal_Int32 nValue)
     throw(css::uno::RuntimeException)
 {
@@ -181,7 +181,7 @@ void SAL_CALL VCLStatusIndicator::setValue(sal_Int32 nValue)
     // <- SOLAR SAFE ----------------------------
 }
 
-//-----------------------------------------------
+
 void VCLStatusIndicator::impl_recalcLayout(Window* pStatusBar   ,
                                            Window* pParentWindow)
 {

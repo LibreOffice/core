@@ -73,9 +73,9 @@ void SAL_CALL CachedDynamicResultSet
     m_xMyResultTwo = xCache;
 }
 
-//--------------------------------------------------------------------------
+
 // XInterface methods.
-//--------------------------------------------------------------------------
+
 XINTERFACE_COMMON_IMPL( CachedDynamicResultSet )
 
 Any SAL_CALL CachedDynamicResultSet
@@ -95,9 +95,9 @@ Any SAL_CALL CachedDynamicResultSet
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
-//--------------------------------------------------------------------------
+
 // XTypeProvider methods.
-//--------------------------------------------------------------------------
+
 //list all interfaces exclusive baseclasses
 XTYPEPROVIDER_IMPL_4( CachedDynamicResultSet
                     , XTypeProvider
@@ -106,17 +106,17 @@ XTYPEPROVIDER_IMPL_4( CachedDynamicResultSet
                     , XSourceInitialization
                     );
 
-//--------------------------------------------------------------------------
+
 // XServiceInfo methods.
-//--------------------------------------------------------------------------
+
 
 XSERVICEINFO_NOFACTORY_IMPL_1( CachedDynamicResultSet,
                             OUString( "com.sun.star.comp.ucb.CachedDynamicResultSet" ),
                             OUString( CACHED_DRS_SERVICE_NAME ) );
 
-//--------------------------------------------------------------------------
+
 // own methds. ( inherited )
-//--------------------------------------------------------------------------
+
 //virtual
 void SAL_CALL CachedDynamicResultSet
     ::impl_disposing( const EventObject& Source )
@@ -126,11 +126,11 @@ void SAL_CALL CachedDynamicResultSet
     m_xContentIdentifierMapping.clear();
 }
 
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 // class CachedDynamicResultSetFactory
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 
 CachedDynamicResultSetFactory::CachedDynamicResultSetFactory(
         const Reference< XComponentContext > & xContext )
@@ -142,41 +142,41 @@ CachedDynamicResultSetFactory::~CachedDynamicResultSetFactory()
 {
 }
 
-//--------------------------------------------------------------------------
+
 // CachedDynamicResultSetFactory XInterface methods.
-//--------------------------------------------------------------------------
+
 
 XINTERFACE_IMPL_3( CachedDynamicResultSetFactory,
                    XTypeProvider,
                    XServiceInfo,
                    XCachedDynamicResultSetFactory );
 
-//--------------------------------------------------------------------------
+
 // CachedDynamicResultSetFactory XTypeProvider methods.
-//--------------------------------------------------------------------------
+
 
 XTYPEPROVIDER_IMPL_3( CachedDynamicResultSetFactory,
                       XTypeProvider,
                          XServiceInfo,
                       XCachedDynamicResultSetFactory );
 
-//--------------------------------------------------------------------------
+
 // CachedDynamicResultSetFactory XServiceInfo methods.
-//--------------------------------------------------------------------------
+
 
 XSERVICEINFO_IMPL_1_CTX( CachedDynamicResultSetFactory,
                          OUString( "com.sun.star.comp.ucb.CachedDynamicResultSetFactory" ),
                          OUString( CACHED_DRS_FACTORY_NAME ) );
 
-//--------------------------------------------------------------------------
+
 // Service factory implementation.
-//--------------------------------------------------------------------------
+
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( CachedDynamicResultSetFactory );
 
-//--------------------------------------------------------------------------
+
 // CachedDynamicResultSetFactory XCachedDynamicResultSetFactory methods.
-//--------------------------------------------------------------------------
+
 
 //virtual
 Reference< XDynamicResultSet > SAL_CALL CachedDynamicResultSetFactory

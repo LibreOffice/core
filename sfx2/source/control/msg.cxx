@@ -41,7 +41,7 @@ SfxSlotKind SfxSlot::GetKind() const
         return (SfxSlotKind) SFX_KIND_ATTR;
 }
 
-//--------------------------------------------------------------------
+
 
 sal_uInt16 SfxSlot::GetWhich( const SfxItemPool &rPool ) const
 {

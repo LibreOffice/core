@@ -37,7 +37,7 @@ namespace svt
     //==================================================================================================================
     //= DrawerDeckLayouter
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     DrawerDeckLayouter::DrawerDeckLayouter( ::Window& i_rParentWindow, IToolPanelDeck& i_rPanels )
         :m_rParentWindow( i_rParentWindow )
         ,m_rPanelDeck( i_rPanels )
@@ -51,15 +51,15 @@ namespace svt
             PanelInserted( m_rPanelDeck.GetPanel( i ), i );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     DrawerDeckLayouter::~DrawerDeckLayouter()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     IMPLEMENT_IREFERENCE( DrawerDeckLayouter )
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Rectangle DrawerDeckLayouter::Layout( const Rectangle& i_rDeckPlayground )
     {
         const size_t nPanelCount( m_rPanelDeck.GetPanelCount() );
@@ -102,7 +102,7 @@ namespace svt
         );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void DrawerDeckLayouter::Destroy()
     {
         while ( !m_aDrawers.empty() )
@@ -110,7 +110,7 @@ namespace svt
         m_rPanelDeck.RemoveListener( *this );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void DrawerDeckLayouter::SetFocusToPanelSelector()
     {
         const size_t nPanelCount( m_rPanelDeck.GetPanelCount() );
@@ -124,13 +124,13 @@ namespace svt
         m_aDrawers[ *aActivePanel ]->GrabFocus();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     size_t DrawerDeckLayouter::GetAccessibleChildCount() const
     {
         return m_aDrawers.size();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XAccessible > DrawerDeckLayouter::GetAccessibleChild( const size_t i_nChildIndex, const Reference< XAccessible >& i_rParentAccessible )
     {
         ENSURE_OR_RETURN( i_nChildIndex < m_aDrawers.size(), "illegal index", NULL );
@@ -149,7 +149,7 @@ namespace svt
         return xItemAccessible;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void DrawerDeckLayouter::PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition )
     {
         OSL_PRECOND( i_nPosition <= m_aDrawers.size(), "DrawerDeckLayouter::PanelInserted: inconsistency!" );
@@ -173,14 +173,14 @@ namespace svt
         impl_triggerRearrange();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void DrawerDeckLayouter::PanelRemoved( const size_t i_nPosition )
     {
         impl_removeDrawer( i_nPosition );
         impl_triggerRearrange();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void DrawerDeckLayouter::impl_triggerRearrange() const
     {
         // this is somewhat hacky, it assumes that the parent of our panels is a tool panel deck, which, in its
@@ -188,7 +188,7 @@ namespace svt
         m_rParentWindow.Resize();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void DrawerDeckLayouter::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive )
     {
         if ( !!i_rOldActive )
@@ -206,14 +206,14 @@ namespace svt
         impl_triggerRearrange();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void DrawerDeckLayouter::LayouterChanged( const PDeckLayouter& i_rNewLayouter )
     {
         // not interested in
         (void)i_rNewLayouter;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     size_t DrawerDeckLayouter::impl_getPanelPositionFromWindow( const Window* i_pDrawerWindow ) const
     {
         for (   ::std::vector< PToolPanelDrawer >::const_iterator drawerPos = m_aDrawers.begin();
@@ -227,7 +227,7 @@ namespace svt
         return m_aDrawers.size();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void DrawerDeckLayouter::impl_removeDrawer( const size_t i_nPosition )
     {
         OSL_PRECOND( i_nPosition < m_aDrawers.size(), "DrawerDeckLayouter::impl_removeDrawer: invalid panel position!" );
@@ -236,7 +236,7 @@ namespace svt
         m_aDrawers.erase( m_aDrawers.begin() + i_nPosition );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     IMPL_LINK( DrawerDeckLayouter, OnWindowEvent, VclSimpleEvent*, i_pEvent )
     {
         const VclWindowEvent* pWindowEvent = PTR_CAST( VclWindowEvent, i_pEvent );
@@ -284,7 +284,7 @@ namespace svt
         return 0L;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void DrawerDeckLayouter::Dying()
     {
         Destroy();

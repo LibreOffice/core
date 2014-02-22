@@ -349,7 +349,7 @@ void ScHTMLExport::WriteHeader()
             sIndent, eDestEnc, &aNonConvertibleChars );
         OUT_LF();
 
-        //----------------------------------------------------------
+
         if (!xDocProps->getPrintedBy().isEmpty())
         {
             OUT_COMMENT( GLOBSTR( STR_DOC_INFO ) );
@@ -358,7 +358,7 @@ void ScHTMLExport::WriteHeader()
                 xDocProps->getPrintDate(), *ScGlobal::pLocaleData );
             OUT_COMMENT( aStrOut );
         }
-        //----------------------------------------------------------
+
     }
     OUT_LF();
 
@@ -762,7 +762,7 @@ void ScHTMLExport::WriteTables()
             }
         }
 
-        // -------------------
+
 
         // <TBODY> // Re-enable only when THEAD and TFOOT are exported
         // IncIndent(1); TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_tbody );

@@ -213,9 +213,9 @@ void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFr
     }
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 //  XComponent
-//---------------------------------------------------------------------------------------------------------
+
 void SAL_CALL LayoutManagerListener::addEventListener(
     const css::uno::Reference< css::lang::XEventListener >& )
 throw (::com::sun::star::uno::RuntimeException)
@@ -273,9 +273,9 @@ throw( css::uno::RuntimeException )
     }
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 //  XEventListener
-//---------------------------------------------------------------------------------------------------------
+
 void SAL_CALL LayoutManagerListener::disposing(
     const css::lang::EventObject& )
 throw( css::uno::RuntimeException )
@@ -286,9 +286,9 @@ throw( css::uno::RuntimeException )
     m_xFrame = css::uno::Reference< css::frame::XFrame >();
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 // XLayoutManagerEventListener
-//---------------------------------------------------------------------------------------------------------
+
 void SAL_CALL LayoutManagerListener::layoutEvent(
     const css::lang::EventObject&,
     ::sal_Int16                   eLayoutEvent,
@@ -664,7 +664,7 @@ void SfxWorkWindow::Lock_Impl( sal_Bool bLock )
         ArrangeChildren_Impl();
 }
 
-//--------------------------------------------------------------------
+
 // Helper method to release the child lists. Should the destructor not be
 // called after this, instead work continues, then space for the object bars
 // and split windows has to be reserved in the same way as in the constructor
@@ -801,7 +801,7 @@ void SfxFrameWorkWin_Impl::ArrangeChildren_Impl( sal_Bool bForce )
     ArrangeAutoHideWindows( NULL );
 }
 
-//--------------------------------------------------------------------
+
 
 SvBorder SfxWorkWindow::Arrange_Impl()
 
@@ -967,7 +967,7 @@ sal_Bool SfxWorkWindow::PrepareClose_Impl()
     return sal_True;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl( Window& rWindow,
                     SfxChildAlignment eAlign, sal_Bool bCanGetFocus )
@@ -991,7 +991,7 @@ SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl( Window& rWindow,
     return aChildren.back();
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxWorkWindow::ReleaseChild_Impl( Window& rWindow )
 {
@@ -1018,7 +1018,7 @@ void SfxWorkWindow::ReleaseChild_Impl( Window& rWindow )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 SfxChild_Impl* SfxWorkWindow::FindChild_Impl( const Window& rWindow ) const
 {
@@ -1036,7 +1036,7 @@ SfxChild_Impl* SfxWorkWindow::FindChild_Impl( const Window& rWindow ) const
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxWorkWindow::ShowChildren_Impl()
 {
@@ -1108,7 +1108,7 @@ void SfxWorkWindow::ShowChildren_Impl()
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxWorkWindow::HideChildren_Impl()
 {
@@ -1130,7 +1130,7 @@ void SfxWorkWindow::HideChildren_Impl()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void SfxWorkWindow::ResetObjectBars_Impl()
 {
@@ -1142,7 +1142,7 @@ void SfxWorkWindow::ResetObjectBars_Impl()
         aChildWins[n]->nId = 0;
 }
 
-//------------------------------------------------------------------------
+
 
 void SfxWorkWindow::SetObjectBar_Impl( sal_uInt16 nPos, sal_uInt32 nResId,
             SfxInterface* pIFace, const OUString *pName)
@@ -1179,7 +1179,7 @@ void SfxWorkWindow::SetObjectBar_Impl( sal_uInt16 nPos, sal_uInt32 nResId,
     aObjBarList.push_back( aObjBar );
 }
 
-//------------------------------------------------------------------------
+
 
 bool SfxWorkWindow::KnowsObjectBar_Impl( sal_uInt16 nPos ) const
 
@@ -1203,7 +1203,7 @@ bool SfxWorkWindow::KnowsObjectBar_Impl( sal_uInt16 nPos ) const
     return false;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxWorkWindow::IsVisible_Impl( sal_uInt16 nMode ) const
 {
@@ -1287,7 +1287,7 @@ Reference< ::com::sun::star::task::XStatusIndicator > SfxWorkWindow::GetStatusIn
     return xStatusIndicator;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxWorkWindow::IsPluginMode( SfxObjectShell* pObjShell )
 {
@@ -1301,7 +1301,7 @@ sal_Bool SfxWorkWindow::IsPluginMode( SfxObjectShell* pObjShell )
     return sal_False;
 }
 
-//------------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SfxWorkWindow::GetFrameInterface()
 {
@@ -1318,7 +1318,7 @@ sal_Bool SfxWorkWindow::IsPluginMode( SfxObjectShell* pObjShell )
     return xFrame;
 }
 
-//------------------------------------------------------------------------
+
 
 void SfxWorkWindow::UpdateObjectBars_Impl()
 {
@@ -1623,7 +1623,7 @@ void SfxWorkWindow::ResetStatusBar_Impl()
     aStatBar.nId = 0;
 }
 
-//--------------------------------------------------------------------
+
 void SfxWorkWindow::SetStatusBar_Impl( sal_uInt32 nResId, SfxShell*, SfxBindings& )
 {
     if ( nResId && bShowStatusBar && IsVisible_Impl() )
@@ -1673,7 +1673,7 @@ sal_Bool SfxWorkWindow::IsVisible_Impl()
     return nOrigMode != SFX_VISIBILITY_UNVISIBLE;
 }
 
-//------------------------------------------------------------------------
+
 void SfxWorkWindow::HidePopups_Impl(sal_Bool bHide, sal_Bool bParent, sal_uInt16 nId )
 {
     for ( sal_uInt16 n = 0; n < aChildWins.size(); ++n )
@@ -1701,7 +1701,7 @@ void SfxWorkWindow::HidePopups_Impl(sal_Bool bHide, sal_Bool bParent, sal_uInt16
         pParent->HidePopups_Impl( bHide, bParent, nId );
 }
 
-//------------------------------------------------------------------------
+
 
 void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             SfxDockingConfig eConfig, sal_uInt16 nId)
@@ -1961,7 +1961,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxWorkWindow::SetChildWindowVisible_Impl( sal_uInt32 lId, sal_Bool bEnabled, sal_uInt16 nMode )
 {
@@ -2021,7 +2021,7 @@ void SfxWorkWindow::SetChildWindowVisible_Impl( sal_uInt32 lId, sal_Bool bEnable
     pCW->nVisibility = nMode;
 }
 
-//--------------------------------------------------------------------
+
 // The on/off status of a ChildWindow is switched
 
 void SfxWorkWindow::ToggleChildWindow_Impl(sal_uInt16 nId, sal_Bool bSetFocus)
@@ -2133,7 +2133,7 @@ void SfxWorkWindow::ToggleChildWindow_Impl(sal_uInt16 nId, sal_Bool bSetFocus)
 #endif
 }
 
-//--------------------------------------------------------------------
+
 
 sal_Bool SfxWorkWindow::HasChildWindow_Impl(sal_uInt16 nId)
 {
@@ -2212,7 +2212,7 @@ sal_Bool SfxWorkWindow::IsFloating( sal_uInt16 nId )
         return sal_True;
 }
 
-//--------------------------------------------------------------------
+
 
 sal_Bool SfxWorkWindow::KnowsChildWindow_Impl(sal_uInt16 nId)
 {
@@ -2238,7 +2238,7 @@ sal_Bool SfxWorkWindow::KnowsChildWindow_Impl(sal_uInt16 nId)
         return sal_False;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxWorkWindow::SetChildWindow_Impl(sal_uInt16 nId, sal_Bool bOn, sal_Bool bSetFocus)
 {
@@ -2290,7 +2290,7 @@ void SfxWorkWindow::SetChildWindow_Impl(sal_uInt16 nId, sal_Bool bOn, sal_Bool b
         pWork->ToggleChildWindow_Impl(nId,bSetFocus);
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxWorkWindow::ShowChildWindow_Impl(sal_uInt16 nId, sal_Bool bVisible, sal_Bool bSetFocus)
 {
@@ -2378,7 +2378,7 @@ void SfxWorkWindow::ShowChildWindow_Impl(sal_uInt16 nId, sal_Bool bVisible, sal_
 #endif
 }
 
-//--------------------------------------------------------------------
+
 
 SfxChildWindow* SfxWorkWindow::GetChildWindow_Impl(sal_uInt16 nId)
 {
@@ -2395,7 +2395,7 @@ SfxChildWindow* SfxWorkWindow::GetChildWindow_Impl(sal_uInt16 nId)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 void SfxWorkWindow::ResetChildWindows_Impl()
 {
@@ -2406,7 +2406,7 @@ void SfxWorkWindow::ResetChildWindows_Impl()
     }
 }
 
-//------------------------------------------------------------------------
+
 // Virtual method that returns the size of the area (client area) of the
 // parent windows, in which the ChildWindow can be fitted.
 
@@ -2415,7 +2415,7 @@ Rectangle SfxWorkWindow::GetTopRect_Impl()
     return Rectangle (Point(), pWorkWin->GetOutputSizePixel() );
 }
 
-//------------------------------------------------------------------------
+
 // Virtual method that returns the size of the area (client area) of the
 // parent windows, in which the ChildWindow can be fitted.
 
@@ -2424,7 +2424,7 @@ Rectangle SfxFrameWorkWin_Impl::GetTopRect_Impl()
     return pMasterFrame->GetTopOuterRectPixel_Impl();
 }
 
-//------------------------------------------------------------------------
+
 // Virtual method to find out if there is room for a ChildWindow in the
 // client area of the parent.
 

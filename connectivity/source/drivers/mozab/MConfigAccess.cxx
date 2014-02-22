@@ -34,7 +34,7 @@ namespace connectivity
 {
     namespace mozab
     {
-        //-----------------------------------------------------------------
+
         Reference< XPropertySet > createDriverConfigNode( Reference< XMultiServiceFactory > _rxORB )
         {
             Reference< XPropertySet > xNode;
@@ -86,7 +86,7 @@ namespace connectivity
             return xNode;
         }
 
-        //-----------------------------------------------------------------
+
         namespace
         {
             // a private helper to accessing the point where we store the reference
@@ -98,19 +98,19 @@ namespace connectivity
             }
         }
 
-        //-----------------------------------------------------------------
+
         void setMozabServiceFactory( const Reference< XMultiServiceFactory >& _rxFactory )
         {
             accessFactoryStorage( ) = _rxFactory;
         }
 
-        //-----------------------------------------------------------------
+
         const Reference< XMultiServiceFactory >& getMozabServiceFactory( )
         {
             return accessFactoryStorage( );
         }
 
-        //-----------------------------------------------------------------
+
         OUString getDescription(const sal_Char* sNode,const OUString & sDefault)
         {
             OUString sPreferredName;
@@ -143,7 +143,7 @@ namespace connectivity
                 sDescription = sDefault;
             return sDescription;
         }
-        //-----------------------------------------------------------------
+
         OUString getPreferredProfileName( )
         {
             OUString sPreferredName;
@@ -174,7 +174,7 @@ namespace connectivity
 
 //.........................................................................
 
-//-------------------------------------------------------------------------
+
 extern "C" const sal_Unicode* SAL_CALL getUserProfile( void )
 {
     static sal_Bool         bReadConfig = sal_False;
@@ -187,7 +187,7 @@ extern "C" const sal_Unicode* SAL_CALL getUserProfile( void )
 
     return sUserProfile.getStr();
 }
-//------------------------------------------------------------------------
+
 extern "C" const sal_Char* SAL_CALL getPabDescription( void )
 {
     static sal_Bool         bReadConfig = sal_False;
@@ -207,7 +207,7 @@ extern "C" const sal_Char* SAL_CALL getPabDescription( void )
     return sPabDescription.getStr();
 }
 
-//-------------------------------------------------------------------------
+
 extern "C" const sal_Char* SAL_CALL getHisDescription( void )
 {
     static sal_Bool         bReadConfig = sal_False;
@@ -227,7 +227,7 @@ extern "C" const sal_Char* SAL_CALL getHisDescription( void )
     return sHisDescription.getStr();
 }
 
-//-------------------------------------------------------------------------
+
 // MConfigAccess was invented to allow non-UNO parts access to the configuration.
 // Unfortunately, configuration access requires a XMultiServiceFactory - which the
 // mozilla side does not have.

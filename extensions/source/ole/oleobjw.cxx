@@ -1226,7 +1226,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
 
 
 
-// --------------------------
+
 // XInitialization
 void SAL_CALL IUnknownWrapper_Impl::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
 {
@@ -1309,7 +1309,7 @@ void SAL_CALL IUnknownWrapper_Impl::initialize( const Sequence< Any >& aArgument
     }
 }
 
-// --------------------------
+
 // XDirectInvocation
 uno::Any SAL_CALL IUnknownWrapper_Impl::directInvoke( const OUString& aName, const uno::Sequence< uno::Any >& aParams )
     throw (lang::IllegalArgumentException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)

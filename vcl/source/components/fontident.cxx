@@ -41,7 +41,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::awt;
 
-// -----------------------------------------------------------------------
+
 
 namespace vcl
 {
@@ -67,7 +67,7 @@ FontIdentificator() {}
 
 };
 
-// --------------------------------------------------------------------
+
 
 FontIdentificator::~FontIdentificator()
 {

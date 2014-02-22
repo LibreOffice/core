@@ -218,7 +218,7 @@ CanvasFactory::~CanvasFactory()
 {
 }
 
-//------------------------------------------------------------------------------
+
 Reference<XInterface> create( Reference<XComponentContext> const & xContext )
 {
     return static_cast< ::cppu::OWeakObject * >(
@@ -263,7 +263,7 @@ Reference<XInterface> CanvasFactory::createInstanceWithContext(
         name, Sequence<Any>(), xContext );
 }
 
-//______________________________________________________________________________
+
 Reference<XInterface> CanvasFactory::use(
     OUString const & serviceName,
     Sequence<Any> const & args,
@@ -287,7 +287,7 @@ Reference<XInterface> CanvasFactory::use(
     }
 }
 
-//______________________________________________________________________________
+
 void CanvasFactory::checkConfigFlag( bool& r_bFlag,
                                      bool& r_CacheFlag,
                                      const OUString& nodeName ) const
@@ -306,7 +306,7 @@ void CanvasFactory::checkConfigFlag( bool& r_bFlag,
     }
 }
 
-//______________________________________________________________________________
+
 Reference<XInterface> CanvasFactory::lookupAndUse(
     OUString const & serviceName, Sequence<Any> const & args,
     Reference<XComponentContext> const & xContext ) const
@@ -465,7 +465,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     return Reference<XInterface>();
 }
 
-//______________________________________________________________________________
+
 Reference<XInterface> CanvasFactory::createInstanceWithArgumentsAndContext(
     OUString const & preferredOne, Sequence<Any> const & args,
     Reference<XComponentContext> const & xContext ) throw (Exception)
@@ -480,7 +480,7 @@ Reference<XInterface> CanvasFactory::createInstanceWithArgumentsAndContext(
 }
 
 // XMultiServiceFactory
-//______________________________________________________________________________
+
 Reference<XInterface> CanvasFactory::createInstance( OUString const & name )
     throw (Exception)
 {
@@ -488,7 +488,7 @@ Reference<XInterface> CanvasFactory::createInstance( OUString const & name )
         name, Sequence<Any>(), m_xContext );
 }
 
-//______________________________________________________________________________
+
 Reference<XInterface> CanvasFactory::createInstanceWithArguments(
     OUString const & name, Sequence<Any> const & args ) throw (Exception)
 {

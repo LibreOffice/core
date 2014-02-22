@@ -851,11 +851,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     //  bDirectPrint and bUseScrFont should have these values:
     //
     //  Outdev / RefDef  | Printer | VirtPrinter | Window
-    // ----------------------------------------------------
+
     //  Printer          | 1 - 0   | 0 - 1       | -
-    // ----------------------------------------------------
+
     //  VirtPrinter/PDF  | 0 - 1   | 0 - 1       | -
-    // ----------------------------------------------------
+
     //  Window/VirtWindow| 0 - 1   | 0 - 1       | 1 - 0
     //
     // Exception: During painting of a Writer OLE object, we do not have

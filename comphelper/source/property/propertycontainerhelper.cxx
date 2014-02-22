@@ -37,7 +37,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
-//--------------------------------------------------------------------------
+
 namespace
 {
     // comparing two property descriptions
@@ -64,18 +64,18 @@ namespace
 //==========================================================================
 //= OPropertyContainerHelper
 //==========================================================================
-//--------------------------------------------------------------------------
+
 OPropertyContainerHelper::OPropertyContainerHelper()
     :m_bUnused(false)
 {
 }
 
-// -------------------------------------------------------------------------
+
 OPropertyContainerHelper::~OPropertyContainerHelper()
 {
 }
 
-//--------------------------------------------------------------------------
+
 void OPropertyContainerHelper::registerProperty(const OUString& _rName, sal_Int32 _nHandle,
         sal_Int32 _nAttributes, void* _pPointerToMember, const Type& _rMemberType)
 {
@@ -94,7 +94,7 @@ void OPropertyContainerHelper::registerProperty(const OUString& _rName, sal_Int3
     implPushBackProperty(aNewProp);
 }
 
-//--------------------------------------------------------------------------
+
 void OPropertyContainerHelper::revokeProperty( sal_Int32 _nHandle )
 {
     PropertiesIterator aPos = searchHandle( _nHandle );
@@ -103,7 +103,7 @@ void OPropertyContainerHelper::revokeProperty( sal_Int32 _nHandle )
     m_aProperties.erase( aPos );
 }
 
-//--------------------------------------------------------------------------
+
 void OPropertyContainerHelper::registerMayBeVoidProperty(const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
         Any* _pPointerToMember, const Type& _rExpectedType)
 {
@@ -125,7 +125,7 @@ void OPropertyContainerHelper::registerMayBeVoidProperty(const OUString& _rName,
 }
 
 
-//--------------------------------------------------------------------------
+
 void OPropertyContainerHelper::registerPropertyNoMember(const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
         const Type& _rType, const void* _pInitialValue)
 {
@@ -146,13 +146,13 @@ void OPropertyContainerHelper::registerPropertyNoMember(const OUString& _rName, 
     implPushBackProperty(aNewProp);
 }
 
-//--------------------------------------------------------------------------
+
 bool OPropertyContainerHelper::isRegisteredProperty( sal_Int32 _nHandle ) const
 {
     return const_cast< OPropertyContainerHelper* >( this )->searchHandle( _nHandle ) != m_aProperties.end();
 }
 
-//--------------------------------------------------------------------------
+
 bool OPropertyContainerHelper::isRegisteredProperty( const OUString& _rName ) const
 {
     // TODO: the current structure is from a time where properties were
@@ -168,7 +168,7 @@ bool OPropertyContainerHelper::isRegisteredProperty( const OUString& _rName ) co
     return pos != m_aProperties.end();
 }
 
-//--------------------------------------------------------------------------
+
 namespace
 {
     struct ComparePropertyHandles
@@ -180,7 +180,7 @@ namespace
     };
 }
 
-//--------------------------------------------------------------------------
+
 void OPropertyContainerHelper::implPushBackProperty(const PropertyDescription& _rProp)
 {
 #ifdef DBG_UTIL
@@ -201,7 +201,7 @@ void OPropertyContainerHelper::implPushBackProperty(const PropertyDescription& _
     m_aProperties.insert( pos, _rProp );
 }
 
-//--------------------------------------------------------------------------
+
 namespace
 {
     void lcl_throwIllegalPropertyValueTypeException( const PropertyDescription& _rProperty, const Any& _rValue )
@@ -219,7 +219,7 @@ namespace
     }
 }
 
-//--------------------------------------------------------------------------
+
 bool OPropertyContainerHelper::convertFastPropertyValue(
     Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue ) SAL_THROW( (IllegalArgumentException) )
 {
@@ -365,7 +365,7 @@ bool OPropertyContainerHelper::convertFastPropertyValue(
     return bModified;
 }
 
-//--------------------------------------------------------------------------
+
 void OPropertyContainerHelper::setFastPropertyValue(sal_Int32 _nHandle, const Any& _rValue) SAL_THROW( (Exception) )
 {
     // get the property somebody is asking for
@@ -407,7 +407,7 @@ void OPropertyContainerHelper::setFastPropertyValue(sal_Int32 _nHandle, const An
     }
 }
 
-//--------------------------------------------------------------------------
+
 void OPropertyContainerHelper::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
 {
     // get the property somebody is asking for
@@ -436,7 +436,7 @@ void OPropertyContainerHelper::getFastPropertyValue(Any& _rValue, sal_Int32 _nHa
     }
 }
 
-//--------------------------------------------------------------------------
+
 OPropertyContainerHelper::PropertiesIterator OPropertyContainerHelper::searchHandle(sal_Int32 _nHandle)
 {
     PropertyDescription aHandlePropDesc;
@@ -455,7 +455,7 @@ OPropertyContainerHelper::PropertiesIterator OPropertyContainerHelper::searchHan
     return aLowerBound;
 }
 
-//--------------------------------------------------------------------------
+
 const Property& OPropertyContainerHelper::getProperty( const OUString& _rName ) const
 {
     ConstPropertiesIterator pos = ::std::find_if(
@@ -469,7 +469,7 @@ const Property& OPropertyContainerHelper::getProperty( const OUString& _rName ) 
     return pos->aProperty;
 }
 
-//--------------------------------------------------------------------------
+
 void OPropertyContainerHelper::describeProperties(Sequence< Property >& _rProps) const
 {
     Sequence< Property > aOwnProps(m_aProperties.size());

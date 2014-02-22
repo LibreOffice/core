@@ -31,9 +31,9 @@ inline sal_Int32 implMap( Window& /*rWnd*/, sal_Int32 nVal )
     return( nVal << 1 );
 }
 
-// ----------------
+
 // - ImpSVGDialog -
-// ----------------
+
 
 ImpSVGDialog::ImpSVGDialog( Window* pParent, Sequence< PropertyValue >& rFilterData ) :
     ModalDialog( pParent ),
@@ -91,13 +91,13 @@ ImpSVGDialog::ImpSVGDialog( Window* pParent, Sequence< PropertyValue >& rFilterD
     maBTHelp.Show();
 }
 
-// -----------------------------------------------------------------------------
+
 
 ImpSVGDialog::~ImpSVGDialog()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< PropertyValue > ImpSVGDialog::GetFilterData()
 {
@@ -108,7 +108,7 @@ Sequence< PropertyValue > ImpSVGDialog::GetFilterData()
     return( maConfigItem.GetFilterData() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 IMPL_LINK( ImpSVGDialog, OnToggleCheckbox, CheckBox*, pBox )
 {

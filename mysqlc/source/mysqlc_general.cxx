@@ -31,7 +31,7 @@ using com::sun::star::uno::Any;
 
 namespace mysqlc_sdbc_driver
 {
-// -----------------------------------------------------------------------------
+
 void throwFeatureNotImplementedException( const sal_Char* _pAsciiFeatureName, const Reference< XInterface >& _rxContext, const Any* _pNextException )
     throw (SQLException)
 {

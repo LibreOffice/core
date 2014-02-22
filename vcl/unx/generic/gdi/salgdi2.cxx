@@ -423,7 +423,7 @@ void X11SalGraphics::copyBits( const SalTwoRect& rPosAry,
     }
 }
 
-// --------------------------------------------------------------------------
+
 
 void X11SalGraphics::copyArea ( long nDestX,    long nDestY,
                                 long nSrcX,     long nSrcY,

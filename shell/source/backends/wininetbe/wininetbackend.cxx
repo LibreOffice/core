@@ -56,9 +56,9 @@ typedef struct
     OUString Port;
 } ProxyEntry;
 
-//------------------------------------------------------------------------
+
 // helper functions
-//------------------------------------------------------------------------
+
 
 namespace // private
 {
@@ -100,7 +100,7 @@ namespace // private
 
 } // end private namespace
 
-//------------------------------------------------------------------------------
+
 
 WinInetBackend::WinInetBackend()
 {
@@ -205,7 +205,7 @@ WinInetBackend::WinInetBackend()
 
             if( aProxyList.getLength() > 0 )
             {
-                //-------------------------------------------------
+
                 // this implementation follows the algorithm
                 // of the internet explorer
                 // if there are type-dependent proxy settings
@@ -220,7 +220,7 @@ WinInetBackend::WinInetBackend()
                 // if there is no port specified for a type independent
                 // server the ie uses the port of an http server if
                 // there is one and it has a port
-                //-------------------------------------------------
+
 
                 ProxyEntry aTypeIndepProxy = FindProxyEntry( aProxyList, OUString());
                 ProxyEntry aHttpProxy = FindProxyEntry( aProxyList, OUString(
@@ -296,20 +296,20 @@ WinInetBackend::WinInetBackend()
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 WinInetBackend::~WinInetBackend(void)
 {
 }
 
-//------------------------------------------------------------------------------
+
 
 WinInetBackend* WinInetBackend::createInstance()
 {
     return new WinInetBackend;
 }
 
-// ---------------------------------------------------------------------------------------
+
 
 void WinInetBackend::setPropertyValue(
     OUString const &, css::uno::Any const &)
@@ -360,13 +360,13 @@ css::uno::Any WinInetBackend::getPropertyValue(
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 OUString SAL_CALL WinInetBackend::getBackendName(void) {
     return OUString("com.sun.star.comp.configuration.backend.WinInetBackend") ;
 }
 
-//------------------------------------------------------------------------------
+
 
 OUString SAL_CALL WinInetBackend::getImplementationName(void)
     throw (uno::RuntimeException)

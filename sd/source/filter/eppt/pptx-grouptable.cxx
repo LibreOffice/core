@@ -31,7 +31,7 @@ GroupTable::GroupTable() :
     ImplResizeGroupTable( 32 );
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 GroupTable::~GroupTable()
 {
@@ -39,7 +39,7 @@ GroupTable::~GroupTable()
     delete[] mpGroupEntry;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 void GroupTable::ImplResizeGroupTable( sal_uInt32 nEntrys )
 {
@@ -55,7 +55,7 @@ void GroupTable::ImplResizeGroupTable( sal_uInt32 nEntrys )
     }
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_Bool GroupTable::EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rXIndexAccessRef )
 {
@@ -76,7 +76,7 @@ sal_Bool GroupTable::EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::s
     return bRet;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_uInt32 GroupTable::GetGroupsClosed()
 {
@@ -85,7 +85,7 @@ sal_uInt32 GroupTable::GetGroupsClosed()
     return nRet;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 void GroupTable::ClearGroupTable()
 {
@@ -93,7 +93,7 @@ void GroupTable::ClearGroupTable()
     mnCurrentGroupEntry = 0;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 void GroupTable::ResetGroupTable( sal_uInt32 nCount )
 {
@@ -101,7 +101,7 @@ void GroupTable::ResetGroupTable( sal_uInt32 nCount )
     mpGroupEntry[ mnCurrentGroupEntry++ ] = new GroupEntry( nCount );
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_Bool GroupTable::GetNextGroupEntry()
 {
@@ -120,6 +120,6 @@ sal_Bool GroupTable::GetNextGroupEntry()
     return sal_False;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

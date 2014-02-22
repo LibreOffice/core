@@ -318,7 +318,7 @@ private:
     boost::scoped_ptr<ScDocumentImport> mxDocImport;
 };
 
-// ----------------------------------------------------------------------------
+
 
 WorkbookGlobals::WorkbookGlobals( ExcelFilter& rFilter ) :
     mrBaseFilter( rFilter ),

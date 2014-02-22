@@ -108,16 +108,16 @@ public:
 
     type_info * getRTTI( typelib_CompoundTypeDescription * ) SAL_THROW(());
 };
-//__________________________________________________________________________________________________
+
 RTTI::RTTI() SAL_THROW(())
 {
 }
-//__________________________________________________________________________________________________
+
 RTTI::~RTTI() SAL_THROW(())
 {
 }
 
-//__________________________________________________________________________________________________
+
 type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW(())
 {
     type_info * rtti;
@@ -185,7 +185,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
     return rtti;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 extern "C" {
 static void _GLIBCXX_CDTOR_CALLABI deleteException( void * pExc )
 {

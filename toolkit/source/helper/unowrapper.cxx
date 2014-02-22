@@ -292,7 +292,7 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
     }
 }
 
-// ----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > UnoWrapper::CreateAccessible( Menu* pMenu, sal_Bool bIsMenuBar )
 {
     return maAccessibleFactoryAccess.getFactory().createAccessible( pMenu, bIsMenuBar );

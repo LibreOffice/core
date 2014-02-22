@@ -37,13 +37,13 @@ namespace frm
     //====================================================================
     //= OSelectAllDispatcher
     //====================================================================
-    //--------------------------------------------------------------------
+
     OSelectAllDispatcher::OSelectAllDispatcher( EditView& _rView, const URL&  _rURL )
         :ORichTextFeatureDispatcher( _rView, _rURL )
     {
     }
 
-    //--------------------------------------------------------------------
+
     OSelectAllDispatcher::~OSelectAllDispatcher( )
     {
         if ( !isDisposed() )
@@ -53,7 +53,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OSelectAllDispatcher::dispatch( const URL& _rURL, const Sequence< PropertyValue >& /*_rArguments*/ )
         throw (RuntimeException,
                std::exception)
@@ -78,7 +78,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     FeatureStateEvent OSelectAllDispatcher::buildStatusEvent() const
     {
         FeatureStateEvent aEvent( ORichTextFeatureDispatcher::buildStatusEvent() );
@@ -89,14 +89,14 @@ namespace frm
     //====================================================================
     //= OParagraphDirectionDispatcher
     //====================================================================
-    //--------------------------------------------------------------------
+
     OParagraphDirectionDispatcher::OParagraphDirectionDispatcher( EditView& _rView, AttributeId _nAttributeId, const URL& _rURL,
             IMultiAttributeDispatcher* _pMasterDispatcher )
         :OAttributeDispatcher( _rView, _nAttributeId, _rURL, _pMasterDispatcher )
     {
     }
 
-    //--------------------------------------------------------------------
+
     FeatureStateEvent OParagraphDirectionDispatcher::buildStatusEvent() const
     {
         FeatureStateEvent aEvent( OAttributeDispatcher::buildStatusEvent() );
@@ -112,13 +112,13 @@ namespace frm
     //====================================================================
     //= OTextDirectionDispatcher
     //====================================================================
-    //--------------------------------------------------------------------
+
     OTextDirectionDispatcher::OTextDirectionDispatcher( EditView& _rView, const URL& _rURL )
         :ORichTextFeatureDispatcher( _rView, _rURL )
     {
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OTextDirectionDispatcher::dispatch( const URL& _rURL, const Sequence< PropertyValue >& /*_rArguments*/ ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -135,7 +135,7 @@ namespace frm
         pEngine->SetVertical( !pEngine->IsVertical() );
     }
 
-    //--------------------------------------------------------------------
+
     FeatureStateEvent OTextDirectionDispatcher::buildStatusEvent() const
     {
         FeatureStateEvent aEvent( ORichTextFeatureDispatcher::buildStatusEvent() );
@@ -152,13 +152,13 @@ namespace frm
     //====================================================================
     //= OAsianFontLayoutDispatcher
     //====================================================================
-    //--------------------------------------------------------------------
+
     OAsianFontLayoutDispatcher::OAsianFontLayoutDispatcher( EditView& _rView, AttributeId _nAttributeId, const URL& _rURL, IMultiAttributeDispatcher* _pMasterDispatcher )
         :OParametrizedAttributeDispatcher( _rView, _nAttributeId, _rURL, _pMasterDispatcher )
     {
     }
 
-    //--------------------------------------------------------------------
+
     const SfxPoolItem* OAsianFontLayoutDispatcher::convertDispatchArgsToItem( const Sequence< PropertyValue >& _rArguments )
     {
         // look for the "Enable" parameter

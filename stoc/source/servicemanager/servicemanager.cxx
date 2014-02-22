@@ -206,13 +206,13 @@ public:
     virtual sal_Bool SAL_CALL hasPropertyByName( OUString const & name )
         throw (RuntimeException);
 };
-//__________________________________________________________________________________________________
+
 Sequence< beans::Property > PropertySetInfo_Impl::getProperties()
     throw (RuntimeException)
 {
     return m_properties;
 }
-//__________________________________________________________________________________________________
+
 beans::Property PropertySetInfo_Impl::getPropertyByName( OUString const & name )
     throw (beans::UnknownPropertyException, RuntimeException)
 {
@@ -225,7 +225,7 @@ beans::Property PropertySetInfo_Impl::getPropertyByName( OUString const & name )
     throw beans::UnknownPropertyException(
         "unknown property: " + name, Reference< XInterface >() );
 }
-//__________________________________________________________________________________________________
+
 sal_Bool PropertySetInfo_Impl::hasPropertyByName( OUString const & name )
     throw (RuntimeException)
 {
@@ -481,7 +481,7 @@ private:
 };
 
 
-//______________________________________________________________________________
+
 inline bool OServiceManager::is_disposed() const
     SAL_THROW( (lang::DisposedException) )
 {
@@ -489,7 +489,7 @@ inline bool OServiceManager::is_disposed() const
     return (m_bInDisposing || rBHelper.bDisposed);
 }
 
-//______________________________________________________________________________
+
 inline void OServiceManager::check_undisposed() const
     SAL_THROW( (lang::DisposedException) )
 {
@@ -609,7 +609,7 @@ public:
         throw (beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException)
         { Reference< XPropertySet >(getRoot(), UNO_QUERY_THROW)->removeVetoableChangeListener( PropertyName, aListener ); }
 };
-//__________________________________________________________________________________________________
+
 void SAL_CALL OServiceManagerWrapper::setPropertyValue(
     const OUString& PropertyName, const Any& aValue )
     throw (beans::UnknownPropertyException, beans::PropertyVetoException,
@@ -635,7 +635,7 @@ void SAL_CALL OServiceManagerWrapper::setPropertyValue(
         Reference< XPropertySet >(getRoot(), UNO_QUERY_THROW)->setPropertyValue( PropertyName, aValue );
     }
 }
-//__________________________________________________________________________________________________
+
 Any SAL_CALL OServiceManagerWrapper::getPropertyValue(
     const OUString& PropertyName )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException)
@@ -653,7 +653,7 @@ Any SAL_CALL OServiceManagerWrapper::getPropertyValue(
         return Reference< XPropertySet >(getRoot(), UNO_QUERY_THROW)->getPropertyValue( PropertyName );
     }
 }
-//__________________________________________________________________________________________________
+
 void OServiceManagerWrapper::disposing()
 {
     m_xContext.clear();
@@ -661,9 +661,9 @@ void OServiceManagerWrapper::disposing()
 // no m_root->dispose(), because every context disposes its service manager...
     m_root.clear();
 }
-//__________________________________________________________________________________________________
+
 OServiceManagerWrapper::~OServiceManagerWrapper() SAL_THROW(()) {}
-//__________________________________________________________________________________________________
+
 OServiceManagerWrapper::OServiceManagerWrapper(
     Reference< XComponentContext > const & xContext )
     SAL_THROW( (RuntimeException) )

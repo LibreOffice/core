@@ -24,41 +24,41 @@
 #include "tablerow.hxx"
 #include "tablerows.hxx"
 
-// -----------------------------------------------------------------------------
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::table;
 
-// -----------------------------------------------------------------------------
+
 
 namespace sdr { namespace table {
 
-// -----------------------------------------------------------------------------
+
 // TableRows
-// -----------------------------------------------------------------------------
+
 
 TableRows::TableRows( const TableModelRef& xTableModel )
 : mxTableModel( xTableModel )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 TableRows::~TableRows()
 {
     dispose();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableRows::dispose()
 {
     mxTableModel.clear();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableRows::throwIfDisposed() const throw (::com::sun::star::uno::RuntimeException)
 {
@@ -66,9 +66,9 @@ void TableRows::throwIfDisposed() const throw (::com::sun::star::uno::RuntimeExc
         throw DisposedException();
 }
 
-// -----------------------------------------------------------------------------
+
 // XTableRows
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TableRows::insertByIndex( sal_Int32 nIndex, sal_Int32 nCount ) throw (RuntimeException)
 {
@@ -76,7 +76,7 @@ void SAL_CALL TableRows::insertByIndex( sal_Int32 nIndex, sal_Int32 nCount ) thr
     mxTableModel->insertRows( nIndex, nCount );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TableRows::removeByIndex( sal_Int32 nIndex, sal_Int32 nCount ) throw (RuntimeException)
 {
@@ -84,9 +84,9 @@ void SAL_CALL TableRows::removeByIndex( sal_Int32 nIndex, sal_Int32 nCount ) thr
     mxTableModel->removeRows( nIndex, nCount );
 }
 
-// -----------------------------------------------------------------------------
+
 // XIndexAccess
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL TableRows::getCount() throw (RuntimeException)
 {
@@ -94,7 +94,7 @@ sal_Int32 SAL_CALL TableRows::getCount() throw (RuntimeException)
     return mxTableModel->getRowCount();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Any SAL_CALL TableRows::getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
@@ -102,9 +102,9 @@ Any SAL_CALL TableRows::getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsExc
     return Any( Reference< XCellRange >( static_cast< XCellRange* >( mxTableModel->getRow( Index ).get() ) ) );
 }
 
-// -----------------------------------------------------------------------------
+
 // XElementAccess
-// -----------------------------------------------------------------------------
+
 
 Type SAL_CALL TableRows::getElementType() throw (RuntimeException)
 {
@@ -112,7 +112,7 @@ Type SAL_CALL TableRows::getElementType() throw (RuntimeException)
     return cppu::UnoType<XCellRange>::get();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL TableRows::hasElements() throw (RuntimeException)
 {
@@ -120,7 +120,7 @@ sal_Bool SAL_CALL TableRows::hasElements() throw (RuntimeException)
     return mxTableModel->getRowCount() != 0;
 }
 
-// -----------------------------------------------------------------------------
+
 
 } }
 

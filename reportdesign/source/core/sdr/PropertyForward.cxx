@@ -86,11 +86,11 @@ OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource
     }
     osl_atomic_decrement(&m_refCount);
 }
-// -----------------------------------------------------------------------------
+
 OPropertyMediator::~OPropertyMediator()
 {
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -156,13 +156,13 @@ void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt 
         m_bInChange = sal_False;
     }
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OPropertyMediator::disposing( const ::com::sun::star::lang::EventObject& /*_rSource*/ ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     disposing();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OPropertyMediator::disposing()
 {
     stopListening();
@@ -171,7 +171,7 @@ void SAL_CALL OPropertyMediator::disposing()
     m_xDest.clear();
     m_xDestInfo.clear();
 }
-// -----------------------------------------------------------------------------
+
 void OPropertyMediator::stopListening()
 {
     if ( m_xSource.is() )
@@ -179,7 +179,7 @@ void OPropertyMediator::stopListening()
     if ( m_xDest.is() )
         m_xDest->removePropertyChangeListener(OUString(), this);
 }
-// -----------------------------------------------------------------------------
+
 void OPropertyMediator::startListening()
 {
     if ( m_xSource.is() )
@@ -187,7 +187,7 @@ void OPropertyMediator::startListening()
     if ( m_xDest.is() )
         m_xDest->addPropertyChangeListener(OUString(), this);
 }
-// -----------------------------------------------------------------------------
+
 //........................................................................
 }   // namespace dbaccess
 //........................................................................

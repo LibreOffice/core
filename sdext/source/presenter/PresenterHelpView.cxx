@@ -462,7 +462,7 @@ sal_Bool SAL_CALL PresenterHelpView::isAnchorOnly (void)
     return false;
 }
 
-//-----------------------------------------------------------------------------
+
 
 void PresenterHelpView::ProvideCanvas (void)
 {

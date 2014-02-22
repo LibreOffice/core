@@ -30,13 +30,13 @@ ScPageTableParam::ScPageTableParam()
     Reset();
 }
 
-//------------------------------------------------------------------------
+
 
 ScPageTableParam::~ScPageTableParam()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 void ScPageTableParam::Reset()
 {
@@ -50,7 +50,7 @@ void ScPageTableParam::Reset()
     nFirstPageNo = 1;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScPageTableParam::operator==( const ScPageTableParam& r ) const
 {
@@ -65,13 +65,13 @@ ScPageAreaParam::ScPageAreaParam()
     Reset();
 }
 
-//------------------------------------------------------------------------
+
 
 ScPageAreaParam::~ScPageAreaParam()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 void ScPageAreaParam::Reset()
 {
@@ -82,7 +82,7 @@ void ScPageAreaParam::Reset()
     memset( &aRepeatCol, 0, sizeof(ScRange) );
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScPageAreaParam::operator==( const ScPageAreaParam& r ) const
 {

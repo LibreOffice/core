@@ -34,7 +34,7 @@ using namespace ::comphelper;
 //=====================================================================
 //= AccessibleEventNotifier
 //=====================================================================
-//---------------------------------------------------------------------
+
 namespace
 {
     typedef ::std::pair< AccessibleEventNotifier::TClientId,
@@ -148,7 +148,7 @@ namespace comphelper
 {
 //.........................................................................
 
-    //---------------------------------------------------------------------
+
     AccessibleEventNotifier::TClientId AccessibleEventNotifier::registerClient( )
     {
         ::osl::MutexGuard aGuard( lclMutex::get() );
@@ -171,7 +171,7 @@ namespace comphelper
         return nNewClientId;
     }
 
-    //---------------------------------------------------------------------
+
     void AccessibleEventNotifier::revokeClient( const TClientId _nClient )
     {
         ::osl::MutexGuard aGuard( lclMutex::get() );
@@ -187,7 +187,7 @@ namespace comphelper
         releaseId(_nClient);
     }
 
-    //---------------------------------------------------------------------
+
     void AccessibleEventNotifier::revokeClientNotifyDisposing( const TClientId _nClient,
             const Reference< XInterface >& _rxEventSource ) SAL_THROW( ( ) )
     {
@@ -222,7 +222,7 @@ namespace comphelper
         delete pListeners;
     }
 
-    //---------------------------------------------------------------------
+
     sal_Int32 AccessibleEventNotifier::addEventListener(
         const TClientId _nClient, const Reference< XAccessibleEventListener >& _rxListener ) SAL_THROW( ( ) )
     {
@@ -239,7 +239,7 @@ namespace comphelper
         return aClientPos->second->getLength();
     }
 
-    //---------------------------------------------------------------------
+
     sal_Int32 AccessibleEventNotifier::removeEventListener(
         const TClientId _nClient, const Reference< XAccessibleEventListener >& _rxListener ) SAL_THROW( ( ) )
     {
@@ -256,7 +256,7 @@ namespace comphelper
         return aClientPos->second->getLength();
     }
 
-    //---------------------------------------------------------------------
+
     void AccessibleEventNotifier::addEvent( const TClientId _nClient, const AccessibleEventObject& _rEvent ) SAL_THROW( ( ) )
     {
         Sequence< Reference< XInterface > > aListeners;

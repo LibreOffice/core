@@ -31,7 +31,7 @@
 #include <osl/diagnose.h>
 #include <sal/macros.h>
 
-//------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_DefaultFormComponentInspectorModel()
 {
     ::pcr::OAutoRegistration< ::pcr::DefaultFormComponentInspectorModel > aAutoRegistration;
@@ -58,7 +58,7 @@ namespace pcr
     //====================================================================
     //= DefaultFormComponentInspectorModel
     //====================================================================
-    //--------------------------------------------------------------------
+
     DefaultFormComponentInspectorModel::DefaultFormComponentInspectorModel( bool _bUseFormFormComponentHandlers )
         :ImplInspectorModel()
         ,m_bUseFormComponentHandlers( _bUseFormFormComponentHandlers )
@@ -67,30 +67,30 @@ namespace pcr
     {
     }
 
-    //------------------------------------------------------------------------
+
     DefaultFormComponentInspectorModel::~DefaultFormComponentInspectorModel()
     {
     }
 
-    //------------------------------------------------------------------------
+
     OUString SAL_CALL DefaultFormComponentInspectorModel::getImplementationName(  ) throw(RuntimeException)
     {
         return getImplementationName_static();
     }
 
-    //------------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL DefaultFormComponentInspectorModel::getSupportedServiceNames(  ) throw(RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
-    //------------------------------------------------------------------------
+
     OUString DefaultFormComponentInspectorModel::getImplementationName_static(  ) throw(RuntimeException)
     {
         return OUString("org.openoffice.comp.extensions.DefaultFormComponentInspectorModel");
     }
 
-    //------------------------------------------------------------------------
+
     Sequence< OUString > DefaultFormComponentInspectorModel::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported(1);
@@ -98,13 +98,13 @@ namespace pcr
         return aSupported;
     }
 
-    //------------------------------------------------------------------------
+
     Reference< XInterface > SAL_CALL DefaultFormComponentInspectorModel::Create( const Reference< XComponentContext >& )
     {
         return *new DefaultFormComponentInspectorModel();
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< Any > SAL_CALL DefaultFormComponentInspectorModel::getHandlerFactories() throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -159,7 +159,7 @@ namespace pcr
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< PropertyCategoryDescriptor > SAL_CALL DefaultFormComponentInspectorModel::describeCategories(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -188,7 +188,7 @@ namespace pcr
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+
     ::sal_Int32 SAL_CALL DefaultFormComponentInspectorModel::getPropertyOrderIndex( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         sal_Int32 nPropertyId( m_pInfoService->getPropertyId( _rPropertyName ) );
@@ -204,7 +204,7 @@ namespace pcr
         return m_pInfoService->getPropertyPos( nPropertyId );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL DefaultFormComponentInspectorModel::initialize( const Sequence< Any >& _arguments ) throw (Exception, RuntimeException)
     {
         if ( m_bConstructed )
@@ -229,13 +229,13 @@ namespace pcr
         throw IllegalArgumentException( OUString(), *this, 0 );
     }
 
-    //--------------------------------------------------------------------
+
     void DefaultFormComponentInspectorModel::createDefault()
     {
         m_bConstructed = true;
     }
 
-    //--------------------------------------------------------------------
+
     void DefaultFormComponentInspectorModel::createWithHelpSection( sal_Int32 _nMinHelpTextLines, sal_Int32 _nMaxHelpTextLines )
     {
         if ( ( _nMinHelpTextLines <= 0 ) || ( _nMaxHelpTextLines <= 0 ) || ( _nMinHelpTextLines > _nMaxHelpTextLines ) )

@@ -110,7 +110,7 @@ namespace svxform
     //====================================================================
     //= FormControlFactory
     //====================================================================
-    //--------------------------------------------------------------------
+
     FormControlFactory::FormControlFactory( const Reference<XComponentContext>& _rContext )
         :m_pData( new FormControlFactory_Data( _rContext ) )
     {
@@ -121,12 +121,12 @@ namespace svxform
     {
     }
 
-    //--------------------------------------------------------------------
+
     FormControlFactory::~FormControlFactory()
     {
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int16 FormControlFactory::initializeControlModel( const DocumentType _eDocType, const SdrUnoObj& _rObject )
     {
         return initializeControlModel(
@@ -136,7 +136,7 @@ namespace svxform
         );
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int16 FormControlFactory::initializeControlModel( const DocumentType _eDocType, const Reference< XPropertySet >& _rxControlModel )
     {
         return initializeControlModel(
@@ -144,7 +144,7 @@ namespace svxform
         );
     }
 
-    // -----------------------------------------------------------------------------
+
     namespace
     {
         //....................................................................
@@ -391,7 +391,7 @@ namespace svxform
         }
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int16 FormControlFactory::initializeControlModel( const DocumentType _eDocType, const Reference< XPropertySet >& _rxControlModel,
         const Rectangle& _rControlBoundRect )
     {
@@ -518,7 +518,7 @@ namespace svxform
         return nClassId;
     }
 
-    //------------------------------------------------------------------------------
+
     void FormControlFactory::initializeTextFieldLineEnds( const Reference< XPropertySet >& _rxModel )
     {
         OSL_PRECOND( _rxModel.is(), "initializeTextFieldLineEnds: invalid model!" );
@@ -555,7 +555,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------------
+
     void FormControlFactory::initializeFieldDependentProperties( const Reference< XPropertySet >& _rxDatabaseField,
         const Reference< XPropertySet >& _rxControlModel, const Reference< XNumberFormats >& _rxNumberFormats )
     {
@@ -653,7 +653,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------------
+
     OUString FormControlFactory::getDefaultName( sal_Int16 _nClassId, const Reference< XServiceInfo >& _rxObject )
     {
         sal_uInt16 nResId(0);
@@ -694,7 +694,7 @@ namespace svxform
         return SVX_RESSTR(nResId);
     }
 
-    //------------------------------------------------------------------------------
+
     OUString FormControlFactory::getDefaultUniqueName_ByComponentType( const Reference< XNameAccess >& _rxContainer,
         const Reference< XPropertySet >& _rxObject )
     {
@@ -705,7 +705,7 @@ namespace svxform
         return getUniqueName( _rxContainer, sBaseName );
     }
 
-    //------------------------------------------------------------------------------
+
     OUString FormControlFactory::getUniqueName( const Reference< XNameAccess >& _rxContainer, const OUString& _rBaseName )
     {
         sal_Int32 n = 0;

@@ -57,7 +57,7 @@
 using namespace ::com::sun::star;
 
 
-//------------------------------------------------------
+
 uno::Sequence< beans::PropertyValue > GetValuableArgs_Impl( const uno::Sequence< beans::PropertyValue >& aMedDescr,
                                                             sal_Bool bCanUseDocumentBaseURL )
 {
@@ -84,7 +84,7 @@ uno::Sequence< beans::PropertyValue > GetValuableArgs_Impl( const uno::Sequence<
     return aResult;
 }
 
-//------------------------------------------------------
+
 uno::Sequence< beans::PropertyValue > addAsTemplate( const uno::Sequence< beans::PropertyValue >& aOrig )
 {
     sal_Bool bAsTemplateSet = sal_False;
@@ -113,7 +113,7 @@ uno::Sequence< beans::PropertyValue > addAsTemplate( const uno::Sequence< beans:
     return aResult;
 }
 
-//------------------------------------------------------
+
 uno::Reference< io::XInputStream > createTempInpStreamFromStor(
                                                             const uno::Reference< embed::XStorage >& xStorage,
                                                             const uno::Reference< uno::XComponentContext >& xContext )
@@ -170,7 +170,7 @@ uno::Reference< io::XInputStream > createTempInpStreamFromStor(
 
 }
 
-//------------------------------------------------------
+
 static void TransferMediaType( const uno::Reference< embed::XStorage >& i_rSource, const uno::Reference< embed::XStorage >& i_rTarget )
 {
     try
@@ -186,7 +186,7 @@ static void TransferMediaType( const uno::Reference< embed::XStorage >& i_rSourc
     }
 }
 
-//------------------------------------------------------
+
 static uno::Reference< util::XCloseable > CreateDocument( const uno::Reference< uno::XComponentContext >& _rxContext,
     const OUString& _rDocumentServiceName, bool _bEmbeddedScriptSupport, const bool i_bDocumentRecoverySupport )
 {
@@ -215,7 +215,7 @@ static uno::Reference< util::XCloseable > CreateDocument( const uno::Reference< 
     return uno::Reference< util::XCloseable >( xDocument, uno::UNO_QUERY );
 }
 
-//------------------------------------------------------
+
 static void SetDocToEmbedded( const uno::Reference< frame::XModel > xDocument, const OUString& aModuleName )
 {
     if ( xDocument.is() )
@@ -238,7 +238,7 @@ static void SetDocToEmbedded( const uno::Reference< frame::XModel > xDocument, c
     }
 }
 
-//------------------------------------------------------
+
 void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStorage >& xNewParentStorage,
                                                   const uno::Reference< embed::XStorage >& xNewObjectStorage,
                                                   const OUString& aNewName )
@@ -273,7 +273,7 @@ void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::X
     }
 }
 
-//------------------------------------------------------
+
 void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStorage >& xNewParentStorage,
                                                   const OUString& aNewName )
 {
@@ -288,7 +288,7 @@ void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::X
     SwitchOwnPersistence( xNewParentStorage, xNewOwnStorage, aNewName );
 }
 
-//------------------------------------------------------
+
 void OCommonEmbeddedObject::EmbedAndReparentDoc_Impl( const uno::Reference< util::XCloseable >& i_rxDocument ) const
 {
     SetDocToEmbedded( uno::Reference< frame::XModel >( i_rxDocument, uno::UNO_QUERY ), m_aModuleName );
@@ -305,7 +305,7 @@ void OCommonEmbeddedObject::EmbedAndReparentDoc_Impl( const uno::Reference< util
     }
 }
 
-//------------------------------------------------------
+
 uno::Reference< util::XCloseable > OCommonEmbeddedObject::InitNewDocument_Impl()
 {
     uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xContext, GetDocumentServiceName(),
@@ -365,7 +365,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::InitNewDocument_Impl()
     return xDocument;
 }
 
-//------------------------------------------------------
+
 uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
 {
     uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xContext, GetDocumentServiceName(),
@@ -437,7 +437,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
 
 }
 
-//------------------------------------------------------
+
 OUString OCommonEmbeddedObject::GetFilterName( sal_Int32 nVersion ) const
 {
     OUString aFilterName = GetPresetFilterName();
@@ -453,7 +453,7 @@ OUString OCommonEmbeddedObject::GetFilterName( sal_Int32 nVersion ) const
     return aFilterName;
 }
 
-//------------------------------------------------------
+
 void OCommonEmbeddedObject::FillDefaultLoadArgs_Impl( const uno::Reference< embed::XStorage >& i_rxStorage,
         ::comphelper::NamedValueCollection& o_rLoadArgs ) const
 {
@@ -469,7 +469,7 @@ void OCommonEmbeddedObject::FillDefaultLoadArgs_Impl( const uno::Reference< embe
     o_rLoadArgs.put( "FilterName", aFilterName );
 }
 
-//------------------------------------------------------
+
 uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorage_Impl()
 {
     ENSURE_OR_THROW( m_xObjectStorage.is(), "no object storage" );
@@ -559,7 +559,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
     return xDocument;
 }
 
-//------------------------------------------------------
+
 uno::Reference< io::XInputStream > OCommonEmbeddedObject::StoreDocumentToTempStream_Impl(
                                                                             sal_Int32 nStorageFormat,
                                                                             const OUString& aBaseURL,
@@ -612,7 +612,7 @@ uno::Reference< io::XInputStream > OCommonEmbeddedObject::StoreDocumentToTempStr
     return aResult;
 }
 
-//------------------------------------------------------
+
 void OCommonEmbeddedObject::SaveObject_Impl()
 {
     if ( m_xClientSite.is() )
@@ -638,7 +638,7 @@ void OCommonEmbeddedObject::SaveObject_Impl()
     }
 }
 
-//------------------------------------------------------
+
 OUString OCommonEmbeddedObject::GetBaseURL_Impl() const
 {
     OUString aBaseURL;
@@ -681,7 +681,7 @@ OUString OCommonEmbeddedObject::GetBaseURL_Impl() const
     return aBaseURL;
 }
 
-//------------------------------------------------------
+
 OUString OCommonEmbeddedObject::GetBaseURLFrom_Impl(
                     const uno::Sequence< beans::PropertyValue >& lArguments,
                     const uno::Sequence< beans::PropertyValue >& lObjArgs )
@@ -710,7 +710,7 @@ OUString OCommonEmbeddedObject::GetBaseURLFrom_Impl(
 }
 
 
-//------------------------------------------------------
+
 void OCommonEmbeddedObject::SwitchDocToStorage_Impl( const uno::Reference< document::XStorageBasedDocument >& xDoc, const uno::Reference< embed::XStorage >& xStorage )
 {
     xDoc->switchToStorage( xStorage );
@@ -723,7 +723,7 @@ void OCommonEmbeddedObject::SwitchDocToStorage_Impl( const uno::Reference< docum
         m_xRecoveryStorage.clear();
 }
 
-//------------------------------------------------------
+
 void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed::XStorage >& xStorage,
                                                     sal_Int32 nStorageFormat,
                                                     const OUString& aBaseURL,
@@ -784,7 +784,7 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed:
     }
 }
 
-//------------------------------------------------------
+
 uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateDocFromMediaDescr_Impl(
                                         const uno::Sequence< beans::PropertyValue >& aMedDescr )
 {
@@ -822,7 +822,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateDocFromMediaDesc
     return xDocument;
 }
 
-//------------------------------------------------------
+
 uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateTempDocFromLink_Impl()
 {
     uno::Reference< util::XCloseable > xResult;
@@ -889,7 +889,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateTempDocFromLink_
     return xResult;
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
                     const uno::Reference< embed::XStorage >& xStorage,
                     const OUString& sEntName,
@@ -1119,7 +1119,7 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
     }
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::XStorage >& xStorage,
                             const OUString& sEntName,
                             const uno::Sequence< beans::PropertyValue >& lArguments,
@@ -1245,7 +1245,7 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
     // TODO: should the listener notification be done?
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::XStorage >& xStorage,
                             const OUString& sEntName,
                             const uno::Sequence< beans::PropertyValue >& lArguments,
@@ -1387,7 +1387,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
     // TODO: should the listener notification be done here or in saveCompleted?
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
         throw ( embed::WrongStateException,
                 uno::Exception,
@@ -1470,7 +1470,7 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     }
 }
 
-//------------------------------------------------------
+
 sal_Bool SAL_CALL OCommonEmbeddedObject::hasEntry()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -1490,7 +1490,7 @@ sal_Bool SAL_CALL OCommonEmbeddedObject::hasEntry()
     return sal_False;
 }
 
-//------------------------------------------------------
+
 OUString SAL_CALL OCommonEmbeddedObject::getEntryName()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -1514,7 +1514,7 @@ OUString SAL_CALL OCommonEmbeddedObject::getEntryName()
     return m_aEntryName;
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OCommonEmbeddedObject::storeOwn()
         throw ( embed::WrongStateException,
                 io::IOException,
@@ -1602,7 +1602,7 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
     PostEvent_Impl( OUString( "OnSaveDone" ) );
 }
 
-//------------------------------------------------------
+
 sal_Bool SAL_CALL OCommonEmbeddedObject::isReadonly()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -1626,7 +1626,7 @@ sal_Bool SAL_CALL OCommonEmbeddedObject::isReadonly()
     return m_bReadOnly;
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OCommonEmbeddedObject::reload(
                 const uno::Sequence< beans::PropertyValue >& lArguments,
                 const uno::Sequence< beans::PropertyValue >& lObjArgs )
@@ -1751,7 +1751,7 @@ void SAL_CALL OCommonEmbeddedObject::reload(
     }
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XStorage >& xStorage,
                                                 const OUString& sEntName )
         throw ( lang::IllegalArgumentException,
@@ -1845,7 +1845,7 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
     m_aLinkURL = OUString();
 }
 
-//------------------------------------------------------
+
 sal_Bool SAL_CALL  OCommonEmbeddedObject::isLink()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -1857,7 +1857,7 @@ sal_Bool SAL_CALL  OCommonEmbeddedObject::isLink()
     return m_bIsLink;
 }
 
-//------------------------------------------------------
+
 OUString SAL_CALL OCommonEmbeddedObject::getLinkURL()
         throw ( embed::WrongStateException,
                 uno::Exception,

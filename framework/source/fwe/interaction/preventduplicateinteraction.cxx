@@ -31,13 +31,13 @@ PreventDuplicateInteraction::PreventDuplicateInteraction(const css::uno::Referen
 {
 }
 
-//_________________________________________________________________________________________________________________
+
 
 PreventDuplicateInteraction::~PreventDuplicateInteraction()
 {
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void PreventDuplicateInteraction::setHandler(const css::uno::Reference< css::task::XInteractionHandler >& xHandler)
 {
@@ -48,7 +48,7 @@ void PreventDuplicateInteraction::setHandler(const css::uno::Reference< css::tas
     // <- SAFE
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void PreventDuplicateInteraction::useDefaultUUIHandler()
 {
@@ -66,7 +66,7 @@ void PreventDuplicateInteraction::useDefaultUUIHandler()
     // <- SAFE
 }
 
-//_________________________________________________________________________________________________________________
+
 css::uno::Any SAL_CALL PreventDuplicateInteraction::queryInterface( const css::uno::Type& aType )
     throw (css::uno::RuntimeException)
 {
@@ -80,7 +80,7 @@ css::uno::Any SAL_CALL PreventDuplicateInteraction::queryInterface( const css::u
     return ::cppu::WeakImplHelper1< css::task::XInteractionHandler2 >::queryInterface( aType );
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css::task::XInteractionRequest >& xRequest)
     throw(css::uno::RuntimeException)
@@ -136,7 +136,7 @@ void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css
     }
 }
 
-//_________________________________________________________________________________________________________________
+
 
 ::sal_Bool SAL_CALL PreventDuplicateInteraction::handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& xRequest )
             throw (css::uno::RuntimeException)
@@ -195,7 +195,7 @@ void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css
     return false;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void PreventDuplicateInteraction::addInteractionRule(const PreventDuplicateInteraction::InteractionInfo& aInteractionInfo)
 {
@@ -222,7 +222,7 @@ void PreventDuplicateInteraction::addInteractionRule(const PreventDuplicateInter
     // <- SAFE
 }
 
-//_________________________________________________________________________________________________________________
+
 
 sal_Bool PreventDuplicateInteraction::getInteractionInfo(const css::uno::Type&                               aInteraction,
                                                                PreventDuplicateInteraction::InteractionInfo* pReturn     ) const

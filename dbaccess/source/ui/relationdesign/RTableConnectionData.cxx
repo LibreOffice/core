@@ -78,7 +78,7 @@ ORelationTableConnectionData::~ORelationTableConnectionData()
 sal_Bool ORelationTableConnectionData::DropRelation()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    // Relation loeschen
+    // delete relation
     Reference< XIndexAccess> xKeys = getReferencingTable()->getKeys();
     if( !m_aConnName.isEmpty() && xKeys.is() )
     {
@@ -107,7 +107,7 @@ sal_Bool ORelationTableConnectionData::DropRelation()
 
 void ORelationTableConnectionData::ChangeOrientation()
 {
-    // Source- und DestFieldName der Linien austauschen
+    // exchange Source- and DestFieldName of the lines
     OUString sTempString;
     OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
     OConnectionLineDataVec::iterator aEnd = m_vConnLineData.end();
@@ -118,7 +118,7 @@ void ORelationTableConnectionData::ChangeOrientation()
         (*aIter)->SetDestFieldName( sTempString );
     }
 
-    // Member anpassen
+    // adapt member
     TTableWindowData::value_type pTemp = m_pReferencingTable;
     m_pReferencingTable = m_pReferencedTable;
     m_pReferencedTable = pTemp;
@@ -184,7 +184,7 @@ sal_Bool ORelationTableConnectionData::IsConnectionPossible()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    // Wenn die SourceFelder ein PrimKey sind, ist nur die Orientierung falsch
+    // if the SourceFields are a PrimKey, it's only the orientation which is wrong
     if ( IsSourcePrimKey() && !IsDestPrimKey() )
         ChangeOrientation();
 
@@ -203,7 +203,7 @@ OConnectionLineDataRef ORelationTableConnectionData::CreateLineDataObj( const OC
 
 void ORelationTableConnectionData::CopyFrom(const OTableConnectionData& rSource)
 {
-    // wie in der Basisklasse zurueckziehen auf das (nicht-virtuelle) operator=
+    // retract to the (non-virtual) operator= like in the base class
     *this = *static_cast<const ORelationTableConnectionData*>(&rSource);
 }
 
@@ -251,7 +251,7 @@ bool operator==(const ORelationTableConnectionData& lhs, const ORelationTableCon
 sal_Bool ORelationTableConnectionData::Update()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    // Alte Relation loeschen
+    // delete old relation
     {
         DropRelation();
         if( !IsConnectionPossible() )
@@ -264,7 +264,7 @@ sal_Bool ORelationTableConnectionData::Update()
 
     if ( !xKeys.is() )
         return sal_False;
-    // Neue Relation erzeugen
+    // create new relation
     Reference<XDataDescriptorFactory> xKeyFactory(xKeys,UNO_QUERY);
     OSL_ENSURE(xKeyFactory.is(),"No XDataDescriptorFactory Interface!");
     Reference<XAppend> xAppend(xKeyFactory,UNO_QUERY);
@@ -318,7 +318,7 @@ sal_Bool ORelationTableConnectionData::Update()
         // to get the key we have to reget it because after append it is no longer valid
     }
 
-    // get the name of foreign key // search for columns
+    // get the name of foreign key; search for columns
     m_aConnName = OUString();
 xKey.clear();
     bool bDropRelation = false;
@@ -418,7 +418,7 @@ xKey.clear();
     }
     // NOTE : the caller is responsible for updating any other objects referencing the old LineDatas (for instance a ConnLine)
 
-    // Kardinalitaet bestimmen
+    // determine cardinality
     SetCardinality();
 
     return sal_True;

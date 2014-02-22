@@ -165,7 +165,7 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
 
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShadowTabPage::Construct()
 {
@@ -178,7 +178,7 @@ void SvxShadowTabPage::Construct()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
 {
@@ -232,7 +232,7 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 int SvxShadowTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
@@ -242,7 +242,7 @@ int SvxShadowTabPage::DeactivatePage( SfxItemSet* _pSet )
     return( LEAVE_PAGE );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
 {
@@ -351,7 +351,7 @@ sal_Bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
     return( bModified );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
 {
@@ -454,7 +454,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SvxShadowTabPage::Create( Window* pWindow,
                 const SfxItemSet& rAttrs )
@@ -462,14 +462,14 @@ SfxTabPage* SvxShadowTabPage::Create( Window* pWindow,
     return( new SvxShadowTabPage( pWindow, rAttrs ) );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16* SvxShadowTabPage::GetRanges()
 {
     return( pShadowRanges );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxShadowTabPage, ClickShadowHdl_Impl)
 {
@@ -488,7 +488,7 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ClickShadowHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl)
 {
@@ -531,7 +531,7 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxShadowTabPage::PointChanged( Window* pWindow, RECT_POINT eRcPt )
 {

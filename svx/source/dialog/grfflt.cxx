@@ -29,9 +29,9 @@
 #include <svx/dialogs.hrc>
 #include <svx/svxdlg.hxx>
 
-// --------------------
+
 // - SvxGraphicFilter -
-// --------------------
+
 
 sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& rFilterObject )
 {
@@ -281,7 +281,7 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObj
     return nRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SvxGraphicFilter::DisableGraphicFilterSlots( SfxItemSet& rSet )
 {

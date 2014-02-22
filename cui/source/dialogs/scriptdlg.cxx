@@ -423,9 +423,9 @@ void SFTreeListBox::ExpandedHdl()
 {
 }
 
-// ----------------------------------------------------------------------------
+
 // CuiInputDialog ------------------------------------------------------------
-// ----------------------------------------------------------------------------
+
 CuiInputDialog::CuiInputDialog(Window * pParent, sal_uInt16 nMode )
     : ModalDialog(pParent, "NewLibDialog",
         "cui/ui/newlibdialog.ui")
@@ -451,9 +451,9 @@ CuiInputDialog::CuiInputDialog(Window * pParent, sal_uInt16 nMode )
     }
 }
 
-// ----------------------------------------------------------------------------
+
 // ScriptOrgDialog ------------------------------------------------------------
-// ----------------------------------------------------------------------------
+
 SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, OUString language )
     : SfxModalDialog(pParent, "ScriptOrganizerDialog",
         "cui/ui/scriptorganizer.ui")

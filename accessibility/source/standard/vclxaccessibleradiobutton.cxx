@@ -44,22 +44,22 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-// -----------------------------------------------------------------------------
+
 // VCLXAccessibleRadioButton
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleRadioButton::VCLXAccessibleRadioButton( VCLXWindow* pVCLWindow )
     :VCLXAccessibleTextComponent( pVCLWindow )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleRadioButton::~VCLXAccessibleRadioButton()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
@@ -84,7 +84,7 @@ void VCLXAccessibleRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWi
    }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleRadioButton::FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet )
 {
@@ -108,7 +108,7 @@ void VCLXAccessibleRadioButton::FillAccessibleRelationSet( utl::AccessibleRelati
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleRadioButton::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
@@ -123,28 +123,28 @@ void VCLXAccessibleRadioButton::FillAccessibleStateSet( utl::AccessibleStateSetH
     }
 }
 
-// -----------------------------------------------------------------------------
+
 // XInterface
-// -----------------------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleRadioButton, VCLXAccessibleTextComponent, VCLXAccessibleRadioButton_BASE )
 
-// -----------------------------------------------------------------------------
+
 // XTypeProvider
-// -----------------------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleRadioButton, VCLXAccessibleTextComponent, VCLXAccessibleRadioButton_BASE )
 
-// -----------------------------------------------------------------------------
+
 // XServiceInfo
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleRadioButton::getImplementationName() throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleRadioButton" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > VCLXAccessibleRadioButton::getSupportedServiceNames() throw (RuntimeException)
 {
@@ -153,9 +153,9 @@ Sequence< OUString > VCLXAccessibleRadioButton::getSupportedServiceNames() throw
     return aNames;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleAction
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleRadioButton::getAccessibleActionCount( ) throw (RuntimeException)
 {
@@ -164,7 +164,7 @@ sal_Int32 VCLXAccessibleRadioButton::getAccessibleActionCount( ) throw (RuntimeE
     return 1;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleRadioButton::doAccessibleAction ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -180,7 +180,7 @@ sal_Bool VCLXAccessibleRadioButton::doAccessibleAction ( sal_Int32 nIndex ) thro
     return sal_True;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleRadioButton::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -192,7 +192,7 @@ OUString VCLXAccessibleRadioButton::getAccessibleActionDescription ( sal_Int32 n
     return TK_RES_STRING( RID_STR_ACC_ACTION_SELECT );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessibleKeyBinding > VCLXAccessibleRadioButton::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -231,9 +231,9 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleRadioButton::getAccessibleActio
     return xKeyBinding;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleValue
-// -----------------------------------------------------------------------------
+
 
 Any VCLXAccessibleRadioButton::getCurrentValue(  ) throw (RuntimeException)
 {
@@ -248,7 +248,7 @@ Any VCLXAccessibleRadioButton::getCurrentValue(  ) throw (RuntimeException)
     return aValue;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleRadioButton::setCurrentValue( const Any& aNumber ) throw (RuntimeException)
 {
@@ -274,7 +274,7 @@ sal_Bool VCLXAccessibleRadioButton::setCurrentValue( const Any& aNumber ) throw 
     return bReturn;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Any VCLXAccessibleRadioButton::getMaximumValue(  ) throw (RuntimeException)
 {
@@ -286,7 +286,7 @@ Any VCLXAccessibleRadioButton::getMaximumValue(  ) throw (RuntimeException)
     return aValue;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Any VCLXAccessibleRadioButton::getMinimumValue(  ) throw (RuntimeException)
 {
@@ -298,6 +298,6 @@ Any VCLXAccessibleRadioButton::getMinimumValue(  ) throw (RuntimeException)
     return aValue;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,7 +22,7 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #include <vcl/msgbox.hxx>
 
@@ -45,7 +45,7 @@ ScShowTabDlg::ScShowTabDlg(Window* pParent)
     m_pLb->SetDoubleClickHdl( LINK( this, ScShowTabDlg, DblClkHdl ) );
 }
 
-//------------------------------------------------------------------------
+
 
 void ScShowTabDlg::SetDescription(
         const OUString& rTitle, const OUString& rFixedText,
@@ -64,7 +64,7 @@ void ScShowTabDlg::Insert( const OUString& rString, bool bSelected )
         m_pLb->SelectEntryPos( m_pLb->GetEntryCount() - 1 );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 ScShowTabDlg::GetSelectEntryCount() const
 {
@@ -81,7 +81,7 @@ sal_uInt16 ScShowTabDlg::GetSelectEntryPos(sal_uInt16 nPos) const
     return m_pLb->GetSelectEntryPos(nPos);
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(ScShowTabDlg, DblClkHdl)
 {

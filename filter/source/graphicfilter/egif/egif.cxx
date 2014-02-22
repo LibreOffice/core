@@ -27,9 +27,9 @@
 #include <vcl/FilterConfigItem.hxx>
 #include "giflzwc.hxx"
 
-// -------------
+
 // - GIFWriter -
-// -------------
+
 
 class GIFWriter
 {
@@ -81,7 +81,7 @@ GIFWriter::GIFWriter(SvStream &rStream)
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
 {
@@ -170,7 +170,7 @@ sal_Bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterC
     return bStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::WriteBitmapEx( const BitmapEx& rBmpEx, const Point& rPoint,
                                sal_Bool bExtended, long nTimer, Disposal eDisposal )
@@ -200,7 +200,7 @@ void GIFWriter::WriteBitmapEx( const BitmapEx& rBmpEx, const Point& rPoint,
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::WriteAnimation( const Animation& rAnimation )
 {
@@ -225,7 +225,7 @@ void GIFWriter::WriteAnimation( const Animation& rAnimation )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::MayCallback( sal_uLong nPercent )
 {
@@ -240,7 +240,7 @@ void GIFWriter::MayCallback( sal_uLong nPercent )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool GIFWriter::CreateAccess( const BitmapEx& rBmpEx )
 {
@@ -274,7 +274,7 @@ sal_Bool GIFWriter::CreateAccess( const BitmapEx& rBmpEx )
     return bStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::DestroyAccess()
 {
@@ -282,7 +282,7 @@ void GIFWriter::DestroyAccess()
     m_pAcc = NULL;
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::WriteSignature( sal_Bool bGIF89a )
 {
@@ -295,7 +295,7 @@ void GIFWriter::WriteSignature( sal_Bool bGIF89a )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::WriteGlobalHeader( const Size& rSize )
 {
@@ -325,7 +325,7 @@ void GIFWriter::WriteGlobalHeader( const Size& rSize )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::WriteLoopExtension( const Animation& rAnimation )
 {
@@ -358,7 +358,7 @@ void GIFWriter::WriteLoopExtension( const Animation& rAnimation )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::WriteLogSizeExtension( const Size& rSize100 )
 {
@@ -377,7 +377,7 @@ void GIFWriter::WriteLogSizeExtension( const Size& rSize100 )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::WriteImageExtension( long nTimer, Disposal eDisposal )
 {
@@ -409,7 +409,7 @@ void GIFWriter::WriteImageExtension( long nTimer, Disposal eDisposal )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::WriteLocalHeader()
 {
@@ -441,7 +441,7 @@ void GIFWriter::WriteLocalHeader()
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::WritePalette()
 {
@@ -468,7 +468,7 @@ void GIFWriter::WritePalette()
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::WriteAccess()
 {
@@ -543,7 +543,7 @@ void GIFWriter::WriteAccess()
     delete[] pBuffer;
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFWriter::WriteTerminator()
 {
@@ -556,7 +556,7 @@ void GIFWriter::WriteTerminator()
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 // this needs to be kept in sync with
 // ImpFilterLibCacheEntry::GetImportFunction() from
@@ -573,7 +573,7 @@ GraphicExport( SvStream& rStream, Graphic& rGraphic,
     return aWriter.WriteGIF(rGraphic, pConfigItem);
 }
 
-// ------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

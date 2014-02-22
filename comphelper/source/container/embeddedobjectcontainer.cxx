@@ -1337,7 +1337,7 @@ namespace {
     }
 
 }
-// -----------------------------------------------------------------------------
+
 bool EmbeddedObjectContainer::StoreAsChildren(bool _bOasisFormat,bool _bCreateEmbedded,const uno::Reference < embed::XStorage >& _xStorage)
 {
     bool bResult = false;
@@ -1460,7 +1460,7 @@ bool EmbeddedObjectContainer::StoreAsChildren(bool _bOasisFormat,bool _bCreateEm
     }
     return bResult;
 }
-// -----------------------------------------------------------------------------
+
 bool EmbeddedObjectContainer::StoreChildren(bool _bOasisFormat,bool _bObjectsOnly)
 {
     bool bResult = true;
@@ -1580,7 +1580,7 @@ bool EmbeddedObjectContainer::StoreChildren(bool _bOasisFormat,bool _bObjectsOnl
     }
     return bResult;
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< io::XInputStream > EmbeddedObjectContainer::GetGraphicReplacementStream(
                                                                 sal_Int64 nViewAspect,
                                                                 const uno::Reference< embed::XEmbeddedObject >& xObj,
@@ -1607,7 +1607,7 @@ uno::Reference< io::XInputStream > EmbeddedObjectContainer::GetGraphicReplacemen
 
     return xInStream;
 }
-// -----------------------------------------------------------------------------
+
 bool EmbeddedObjectContainer::SetPersistentEntries(const uno::Reference< embed::XStorage >& _xStorage,bool _bClearModifedFlag)
 {
     bool bError = false;

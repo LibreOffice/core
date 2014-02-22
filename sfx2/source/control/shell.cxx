@@ -141,7 +141,7 @@ SfxShell::SfxShell()
     pImp->nDisableFlags = 0;
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxShell::SfxShell( SfxViewShell *pViewSh )
 
@@ -166,7 +166,7 @@ SfxShell::SfxShell( SfxViewShell *pViewSh )
     pImp->bActive = sal_False;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxShell::~SfxShell()
 
@@ -184,7 +184,7 @@ SfxShell::~SfxShell()
     delete pImp;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxShell::SetName( const OUString &rName )
 
@@ -198,7 +198,7 @@ void SfxShell::SetName( const OUString &rName )
     pImp->aObjectName = rName;
 }
 
-//--------------------------------------------------------------------
+
 
 const OUString& SfxShell::GetName() const
 
@@ -212,7 +212,7 @@ const OUString& SfxShell::GetName() const
     return pImp->aObjectName;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxDispatcher* SfxShell::GetDispatcher() const
 
@@ -229,7 +229,7 @@ SfxDispatcher* SfxShell::GetDispatcher() const
     return pImp->pFrame ? pImp->pFrame->GetDispatcher() : 0;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxViewShell* SfxShell::GetViewShell() const
 
@@ -244,7 +244,7 @@ SfxViewShell* SfxShell::GetViewShell() const
     return pImp->pViewSh;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxViewFrame* SfxShell::GetFrame() const
 
@@ -277,7 +277,7 @@ SfxViewFrame* SfxShell::GetFrame() const
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 
 const SfxPoolItem* SfxShell::GetItem
 (
@@ -306,7 +306,7 @@ const SfxPoolItem* SfxShell::GetItem
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxShell::PutItem
 (
@@ -370,7 +370,7 @@ void SfxShell::PutItem
     }
 }
 
-//--------------------------------------------------------------------
+
 
 SfxInterface* SfxShell::GetInterface() const
 
@@ -388,7 +388,7 @@ SfxInterface* SfxShell::GetInterface() const
     return GetStaticInterface();
 }
 
-//--------------------------------------------------------------------
+
 
 ::svl::IUndoManager* SfxShell::GetUndoManager()
 
@@ -405,7 +405,7 @@ SfxInterface* SfxShell::GetInterface() const
     return pUndoMgr;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxShell::SetUndoManager( ::svl::IUndoManager *pNewUndoMgr )
 
@@ -435,7 +435,7 @@ void SfxShell::SetUndoManager( ::svl::IUndoManager *pNewUndoMgr )
             officecfg::Office::Common::Undo::Steps::get());
 }
 
-//--------------------------------------------------------------------
+
 
 SfxRepeatTarget* SfxShell::GetRepeatTarget() const
 
@@ -456,7 +456,7 @@ SfxRepeatTarget* SfxShell::GetRepeatTarget() const
     return pImp->pRepeatTarget;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxShell::SetRepeatTarget( SfxRepeatTarget *pTarget )
 
@@ -478,7 +478,7 @@ void SfxShell::SetRepeatTarget( SfxRepeatTarget *pTarget )
     pImp->pRepeatTarget = pTarget;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxShell::Invalidate
 (
@@ -548,7 +548,7 @@ void SfxShell::Invalidate_Impl( SfxBindings& rBindings, sal_uInt16 nId )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxShell::DoActivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI )
 
@@ -585,7 +585,7 @@ void SfxShell::DoActivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI )
     Activate(bMDI);
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxShell::DoDeactivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI )
 
@@ -623,14 +623,14 @@ void SfxShell::DoDeactivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI )
     Deactivate(bMDI);
 }
 
-//--------------------------------------------------------------------
+
 
 sal_Bool SfxShell::IsActive() const
 {
     return pImp->bActive;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxShell::Activate
 (
@@ -661,7 +661,7 @@ void SfxShell::Activate
     BroadcastContextForActivation(true);
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxShell::Deactivate
 (
@@ -712,7 +712,7 @@ void SfxShell::ParentActivate
 {
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxShell::ParentDeactivate
 (
@@ -732,7 +732,7 @@ void SfxShell::ParentDeactivate
 {
 }
 
-//--------------------------------------------------------------------
+
 
 ResMgr* SfxShell::GetResMgr() const
 
@@ -747,7 +747,7 @@ ResMgr* SfxShell::GetResMgr() const
     return GetInterface()->GetResMgr();
 }
 
-//--------------------------------------------------------------------
+
 
 bool SfxShell::CanExecuteSlot_Impl( const SfxSlot &rSlot )
 
@@ -766,7 +766,7 @@ bool SfxShell::CanExecuteSlot_Impl( const SfxSlot &rSlot )
     return aSet.GetItemState(nId) != SFX_ITEM_DISABLED;
 }
 
-//--------------------------------------------------------------------
+
 
 long ShellCall_Impl( void* pObj, void* pArg )
 {
@@ -779,7 +779,7 @@ long ShellCall_Impl( void* pObj, void* pArg )
     Asynchronous ExecuteSlot for the RELOAD
  */
 
-//--------------------------------------------------------------------
+
 const SfxPoolItem* SfxShell::ExecuteSlot( SfxRequest& rReq, sal_Bool bAsync )
 {
     if( !bAsync )
@@ -851,7 +851,7 @@ const SfxPoolItem* SfxShell::ExecuteSlot
     return rReq.GetReturnValue();
 }
 
-//--------------------------------------------------------------------
+
 
 const SfxPoolItem* SfxShell::GetSlotState
 (
@@ -960,7 +960,7 @@ const SfxPoolItem* SfxShell::GetSlotState
     return pRetItem;
 }
 
-//--------------------------------------------------------------------
+
 
 SFX_EXEC_STUB(SfxShell, VerbExec)
 SFX_STATE_STUB(SfxShell, VerbState)
@@ -1036,14 +1036,14 @@ void SfxShell::SetVerbs(const com::sun::star::uno::Sequence < com::sun::star::em
     }
 }
 
-//--------------------------------------------------------------------
+
 
 const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& SfxShell::GetVerbs() const
 {
     return pImp->aVerbList;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxShell::VerbExec(SfxRequest& rReq)
 {
@@ -1073,13 +1073,13 @@ void SfxShell::VerbExec(SfxRequest& rReq)
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxShell::VerbState(SfxItemSet& )
 {
 }
 
-//--------------------------------------------------------------------
+
 
 const SfxSlot* SfxShell::GetVerbSlot_Impl(sal_uInt16 nId) const
 {
@@ -1095,21 +1095,21 @@ const SfxSlot* SfxShell::GetVerbSlot_Impl(sal_uInt16 nId) const
         return 0;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxShell::SetHelpId(sal_uIntPtr nId)
 {
     pImp->nHelpId = nId;
 }
 
-//--------------------------------------------------------------------
+
 
 sal_uIntPtr SfxShell::GetHelpId() const
 {
     return pImp->nHelpId;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxObjectShell* SfxShell::GetObjectShell()
 {
@@ -1119,7 +1119,7 @@ SfxObjectShell* SfxShell::GetObjectShell()
         return NULL;
 }
 
-//--------------------------------------------------------------------
+
 
 sal_Bool SfxShell::HasUIFeature( sal_uInt32 )
 {

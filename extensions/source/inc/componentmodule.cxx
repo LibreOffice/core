@@ -60,21 +60,21 @@ namespace COMPMOD_NAMESPACE
         void    setResourceFilePrefix(const OString& _rPrefix) { m_sFilePrefix = _rPrefix; }
     };
 
-    //-------------------------------------------------------------------------
+
     OModuleImpl::OModuleImpl()
         :m_pResources(NULL)
         ,m_bInitialized(sal_False)
     {
     }
 
-    //-------------------------------------------------------------------------
+
     OModuleImpl::~OModuleImpl()
     {
         if (m_pResources)
             delete m_pResources;
     }
 
-    //-------------------------------------------------------------------------
+
     ResMgr* OModuleImpl::getResManager()
     {
         // note that this method is not threadsafe, which counts for the whole class !
@@ -100,14 +100,14 @@ namespace COMPMOD_NAMESPACE
     sal_Int32       OModule::s_nClients = 0;
     OModuleImpl*    OModule::s_pImpl = NULL;
     OString  OModule::s_sResPrefix;
-    //-------------------------------------------------------------------------
+
     ResMgr* OModule::getResManager()
     {
         ENTER_MOD_METHOD();
         return s_pImpl->getResManager();
     }
 
-    //-------------------------------------------------------------------------
+
     void OModule::setResourceFilePrefix(const OString& _rPrefix)
     {
         ::osl::MutexGuard aGuard(s_aMutex);
@@ -116,14 +116,14 @@ namespace COMPMOD_NAMESPACE
             s_pImpl->setResourceFilePrefix(_rPrefix);
     }
 
-    //-------------------------------------------------------------------------
+
     void OModule::registerClient()
     {
         ::osl::MutexGuard aGuard(s_aMutex);
         ++s_nClients;
     }
 
-    //-------------------------------------------------------------------------
+
     void OModule::revokeClient()
     {
         ::osl::MutexGuard aGuard(s_aMutex);
@@ -134,7 +134,7 @@ namespace COMPMOD_NAMESPACE
         }
     }
 
-    //-------------------------------------------------------------------------
+
     void OModule::ensureImpl()
     {
         if (s_pImpl)
@@ -143,16 +143,16 @@ namespace COMPMOD_NAMESPACE
         s_pImpl->setResourceFilePrefix(s_sResPrefix);
     }
 
-    //--------------------------------------------------------------------------
+
     //- registration helper
-    //--------------------------------------------------------------------------
+
 
     Sequence< OUString >*                OModule::s_pImplementationNames = NULL;
     Sequence< Sequence< OUString > >*    OModule::s_pSupportedServices = NULL;
     Sequence< sal_Int64 >*                      OModule::s_pCreationFunctionPointers = NULL;
     Sequence< sal_Int64 >*                      OModule::s_pFactoryFunctionPointers = NULL;
 
-    //--------------------------------------------------------------------------
+
     void OModule::registerComponent(
         const OUString& _rImplementationName,
         const Sequence< OUString >& _rServiceNames,
@@ -188,7 +188,7 @@ namespace COMPMOD_NAMESPACE
         s_pFactoryFunctionPointers->getArray()[nOldLen] = reinterpret_cast<sal_Int64>(_pFactoryFunction);
     }
 
-    //--------------------------------------------------------------------------
+
     void OModule::revokeComponent(const OUString& _rImplementationName)
     {
         if (!s_pImplementationNames)
@@ -226,7 +226,7 @@ namespace COMPMOD_NAMESPACE
         }
     }
 
-    //--------------------------------------------------------------------------
+
     Reference< XInterface > OModule::getComponentFactory(
         const OUString& _rImplementationName,
         const Reference< XMultiServiceFactory >& _rxServiceManager)

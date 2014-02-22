@@ -51,11 +51,11 @@ MozillaBootstrap::MozillaBootstrap(
       m_ProfileAccess(NULL), m_ProfileManager(NULL)
 {
 }
-// -----------------------------------------------------------------------------
+
 MozillaBootstrap::~MozillaBootstrap()
 {
 }
-// -----------------------------------------------------------------------------
+
 void MozillaBootstrap::Init()
 {
     sal_Bool aProfileExists=sal_False;
@@ -72,7 +72,7 @@ void MozillaBootstrap::Init()
     bootupProfile(::com::sun::star::mozilla::MozillaProductType_Mozilla,OUString());
 }
 
-// --------------------------------------------------------------------------------
+
 void MozillaBootstrap::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -80,12 +80,12 @@ void MozillaBootstrap::disposing()
 }
 
 // static ServiceInfo
-//------------------------------------------------------------------------------
+
 OUString MozillaBootstrap::getImplementationName_Static(  ) throw(RuntimeException)
 {
     return OUString(MOZAB_MozillaBootstrap_IMPL_NAME);
 }
-//------------------------------------------------------------------------------
+
 Sequence< OUString > MozillaBootstrap::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     // which service is supported
@@ -95,7 +95,7 @@ Sequence< OUString > MozillaBootstrap::getSupportedServiceNames_Static(  ) throw
     return aSNS;
 }
 
-//------------------------------------------------------------------
+
 OUString SAL_CALL MozillaBootstrap::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
@@ -106,7 +106,7 @@ sal_Bool SAL_CALL MozillaBootstrap::supportsService( const OUString& _rServiceNa
     return cppu::supportsService(this, _rServiceName);
 }
 
-//------------------------------------------------------------------
+
 Sequence< OUString > SAL_CALL MozillaBootstrap::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();

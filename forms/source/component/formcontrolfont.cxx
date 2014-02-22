@@ -39,7 +39,7 @@ namespace frm
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
 
-    //------------------------------------------------------------------------------
+
     namespace
     {
         Any lcl_extractFontDescriptorAggregate( sal_Int32 _nHandle, const FontDescriptor& _rFont )
@@ -122,7 +122,7 @@ namespace frm
     //=====================================================================
     //= FontControlModel
     //=====================================================================
-    //---------------------------------------------------------------------
+
     FontControlModel::FontControlModel( bool _bToolkitCompatibleDefaults )
         :m_nFontRelief( FontRelief::NONE )
         ,m_nFontEmphasis( FontEmphasisMark::NONE )
@@ -130,7 +130,7 @@ namespace frm
     {
     }
 
-    //---------------------------------------------------------------------
+
     FontControlModel::FontControlModel( const FontControlModel* _pOriginal )
     {
         m_aFont = _pOriginal->m_aFont;
@@ -141,7 +141,7 @@ namespace frm
         m_bToolkitCompatibleDefaults = _pOriginal->m_bToolkitCompatibleDefaults;
     }
 
-    //---------------------------------------------------------------------
+
     bool FontControlModel::isFontRelatedProperty( sal_Int32 _nPropertyHandle ) const
     {
         return isFontAggregateProperty( _nPropertyHandle )
@@ -152,7 +152,7 @@ namespace frm
             || ( _nPropertyHandle == PROPERTY_ID_TEXTCOLOR );
     }
 
-    //---------------------------------------------------------------------
+
     bool FontControlModel::isFontAggregateProperty( sal_Int32 _nPropertyHandle ) const
     {
         return ( _nPropertyHandle == PROPERTY_ID_FONT_CHARWIDTH )
@@ -173,7 +173,7 @@ namespace frm
             || ( _nPropertyHandle == PROPERTY_ID_FONT_TYPE );
     }
 
-    //---------------------------------------------------------------------
+
     sal_Int32 FontControlModel::getTextColor( ) const
     {
         sal_Int32 nColor = COL_TRANSPARENT;
@@ -181,7 +181,7 @@ namespace frm
         return nColor;
     }
 
-    //---------------------------------------------------------------------
+
     sal_Int32 FontControlModel::getTextLineColor( ) const
     {
         sal_Int32 nColor = COL_TRANSPARENT;
@@ -189,7 +189,7 @@ namespace frm
         return nColor;
     }
 
-    //------------------------------------------------------------------------------
+
     void FontControlModel::describeFontRelatedProperties( Sequence< Property >& /* [out] */ _rProps ) const
     {
         sal_Int32 nPos = _rProps.getLength();
@@ -220,7 +220,7 @@ namespace frm
         DECL_BOOL_PROP1 ( FONT_WORDLINEMODE,                    MAYBEDEFAULT );
     }
 
-    //---------------------------------------------------------------------
+
     void FontControlModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         switch( _nHandle )
@@ -251,7 +251,7 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool FontControlModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue,
                 sal_Int32 _nHandle, const Any& _rValue ) throw( IllegalArgumentException )
     {
@@ -351,7 +351,7 @@ namespace frm
         return bModified;
     }
 
-    //------------------------------------------------------------------------------
+
     static void setFastPropertyValue_NoBroadcast_implimpl(
             FontDescriptor & rFont,
             sal_Int32 nHandle, const Any& rValue) throw (Exception)
@@ -488,7 +488,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+
     Any FontControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
     {
         Any aReturn;

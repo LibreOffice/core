@@ -35,7 +35,7 @@
 #define SC_NOTEMARK_TIME    800
 #define SC_NOTEMARK_SHORT   70
 
-// -----------------------------------------------------------------------
+
 
 ScNoteMarker::ScNoteMarker( Window* pWin, Window* pRight, Window* pBottom, Window* pDiagonal,
                             ScDocument* pD, ScAddress aPos, const OUString& rUser,

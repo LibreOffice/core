@@ -99,11 +99,11 @@ OXMLSection::OXMLSection( ORptFilter& rImport,
         OSL_FAIL("Exception catched while filling the section props");
     }
 }
-// -----------------------------------------------------------------------------
+
 OXMLSection::~OXMLSection()
 {
 }
-// -----------------------------------------------------------------------------
+
 
 SvXMLImportContext* OXMLSection::CreateChildContext(
         sal_uInt16 _nPrefix,
@@ -128,14 +128,14 @@ SvXMLImportContext* OXMLSection::CreateChildContext(
 
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 ORptFilter& OXMLSection::GetOwnImport()
 {
     return static_cast<ORptFilter&>(GetImport());
 }
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

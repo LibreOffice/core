@@ -303,7 +303,7 @@ void Pump::run()
     }
 }
 
-// ------------------------------------------------------------
+
 
 /*
  * XConnectable
@@ -315,7 +315,7 @@ void Pump::setPredecessor( const Reference< XConnectable >& xPred ) throw()
     m_xPred = xPred;
 }
 
-// ------------------------------------------------------------
+
 
 Reference< XConnectable > Pump::getPredecessor() throw()
 {
@@ -323,7 +323,7 @@ Reference< XConnectable > Pump::getPredecessor() throw()
     return m_xPred;
 }
 
-// ------------------------------------------------------------
+
 
 void Pump::setSuccessor( const Reference< XConnectable >& xSucc ) throw()
 {
@@ -331,7 +331,7 @@ void Pump::setSuccessor( const Reference< XConnectable >& xSucc ) throw()
     m_xSucc = xSucc;
 }
 
-// ------------------------------------------------------------
+
 
 Reference< XConnectable > Pump::getSuccessor() throw()
 {
@@ -339,7 +339,7 @@ Reference< XConnectable > Pump::getSuccessor() throw()
     return m_xSucc;
 }
 
-// -----------------------------------------------------------------
+
 
 /*
  * XActiveDataControl
@@ -350,14 +350,14 @@ void Pump::addListener( const Reference< XStreamListener >& xListener ) throw()
     m_cnt.addInterface( xListener );
 }
 
-// ------------------------------------------------------------
+
 
 void Pump::removeListener( const Reference< XStreamListener >& xListener ) throw()
 {
     m_cnt.removeInterface( xListener );
 }
 
-// ------------------------------------------------------------
+
 
 void Pump::start() throw( RuntimeException )
 {
@@ -377,7 +377,7 @@ void Pump::start() throw( RuntimeException )
     }
 }
 
-// ------------------------------------------------------------
+
 
 void Pump::terminate() throw()
 {
@@ -391,7 +391,7 @@ void Pump::terminate() throw()
     fireClose();
 }
 
-// ------------------------------------------------------------
+
 
 /*
  * XActiveDataSink
@@ -407,7 +407,7 @@ void Pump::setInputStream( const Reference< XInputStream >& xStream ) throw()
     // data transfer starts in XActiveDataControl::start
 }
 
-// ------------------------------------------------------------
+
 
 Reference< XInputStream > Pump::getInputStream() throw()
 {
@@ -415,7 +415,7 @@ Reference< XInputStream > Pump::getInputStream() throw()
     return m_xInput;
 }
 
-// ------------------------------------------------------------
+
 
 /*
  * XActiveDataSource

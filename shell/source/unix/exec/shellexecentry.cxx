@@ -21,9 +21,9 @@
 #include <osl/diagnose.h>
 #include "shellexec.hxx"
 
-//-----------------------------------------------------------------------
+
 // namespace directives
-//-----------------------------------------------------------------------
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
@@ -35,7 +35,7 @@ using com::sun::star::system::XSystemShellExecute;
 #define SHELLEXEC_SERVICE_NAME  "com.sun.star.system.SystemShellExecute"
 #define SHELLEXEC_IMPL_NAME     "com.sun.star.comp.system.SystemShellExecute"
 
-//-----------------------------------------------------------------------
+
 
 namespace
 {
@@ -47,9 +47,9 @@ namespace
 
 extern "C"
 {
-//----------------------------------------------------------------------
+
 // component_getFactory
-//----------------------------------------------------------------------
+
 
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL syssh_component_getFactory(
     const sal_Char* pImplName,

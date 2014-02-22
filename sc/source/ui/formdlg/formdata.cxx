@@ -34,7 +34,7 @@ ScFormEditData::ScFormEditData( const ScFormEditData& r )  : formula::FormEditDa
 {
     *this = r;
 }
-// -----------------------------------------------------------------------------
+
 void ScFormEditData::SaveValues()
 {
     ScFormEditData* pTemp = new ScFormEditData(*this);

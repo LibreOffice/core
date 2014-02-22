@@ -57,7 +57,7 @@ Sequence< OUString > SAL_CALL x11::Xdnd_dropTarget_getSupportedServiceNames()
     return aRet;
 }
 
-// ------------------------------------------------------------------------
+
 
 css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& arguments )
 {
@@ -86,14 +86,14 @@ css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequenc
     return static_cast<OWeakObject*>(pClipboard);
 }
 
-// ------------------------------------------------------------------------
+
 
 css::uno::Reference< XInterface > X11SalInstance::CreateDragSource()
 {
     return css::uno::Reference < XInterface >( ( OWeakObject * ) new SelectionManagerHolder() );
 }
 
-// ------------------------------------------------------------------------
+
 
 css::uno::Reference< XInterface > X11SalInstance::CreateDropTarget()
 {

@@ -54,7 +54,7 @@ SvEmbedTransferHelper::SvEmbedTransferHelper( const uno::Reference< embed::XEmbe
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 SvEmbedTransferHelper::~SvEmbedTransferHelper()
 {
@@ -65,7 +65,7 @@ SvEmbedTransferHelper::~SvEmbedTransferHelper()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SvEmbedTransferHelper::AddSupportedFormats()
 {
@@ -74,7 +74,7 @@ void SvEmbedTransferHelper::AddSupportedFormats()
     AddFormat( FORMAT_GDIMETAFILE );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
@@ -181,7 +181,7 @@ sal_Bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::D
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SvEmbedTransferHelper::ObjectReleased()
 {

@@ -420,7 +420,7 @@ void SAL_CALL PresenterNotesView::keyReleased (const awt::KeyEvent& rEvent)
     (void)rEvent;
 }
 
-//-----------------------------------------------------------------------------
+
 
 void PresenterNotesView::Layout (void)
 {

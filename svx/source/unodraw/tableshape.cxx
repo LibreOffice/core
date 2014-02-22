@@ -41,12 +41,12 @@ SvxTableShape::SvxTableShape( SdrObject* pObj ) throw()
     SetShapeType( OUString( "com.sun.star.drawing.TableShape" ) );
 }
 
-//----------------------------------------------------------------------
+
 SvxTableShape::~SvxTableShape() throw()
 {
 }
 
-//----------------------------------------------------------------------
+
 
 bool SvxTableShape::setPropertyValueImpl(
     const OUString& rName,

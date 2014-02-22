@@ -127,7 +127,7 @@ void SvxColorTabPage::UpdateTableName()
     m_pTableName->SetText( aString );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickLoadHdl_Impl)
 {
@@ -197,7 +197,7 @@ void SvxColorTabPage::EnableSave( bool bCanSave )
         m_pBtnSave->Disable();
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickSaveHdl_Impl)
 {
@@ -291,7 +291,7 @@ struct SvxColorTabPageShadow
     }
 };
 
-// -----------------------------------------------------------------------
+
 
 SvxColorTabPage::SvxColorTabPage(Window* pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "ColorPage", "cui/ui/colorpage.ui", rInAttrs)
@@ -394,7 +394,7 @@ SvxColorTabPage::~SvxColorTabPage()
     delete pShadow;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxColorTabPage::ImpColorCountChanged()
 {
@@ -403,7 +403,7 @@ void SvxColorTabPage::ImpColorCountChanged()
     m_pValSetColorList->SetColCount(m_pValSetColorList->getColumnCount());
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxColorTabPage::Construct()
 {
@@ -416,7 +416,7 @@ void SvxColorTabPage::Construct()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxColorTabPage::ActivatePage( const SfxItemSet& )
 {
@@ -470,7 +470,7 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
         HideLoadSaveEmbed();
 }
 
-// -----------------------------------------------------------------------
+
 
 int SvxColorTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
@@ -483,7 +483,7 @@ int SvxColorTabPage::DeactivatePage( SfxItemSet* _pSet )
     return( LEAVE_PAGE );
 }
 
-// -----------------------------------------------------------------------
+
 
 long SvxColorTabPage::CheckChanges_Impl()
 {
@@ -554,7 +554,7 @@ long SvxColorTabPage::CheckChanges_Impl()
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxColorTabPage::FillItemSet( SfxItemSet& rSet )
 {
@@ -592,7 +592,7 @@ void SvxColorTabPage::UpdateModified()
     EnableSave( bEnable );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxColorTabPage::Reset( const SfxItemSet& rSet )
 {
@@ -617,7 +617,7 @@ void SvxColorTabPage::Reset( const SfxItemSet& rSet )
     UpdateModified();
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SvxColorTabPage::Create( Window* pWindow,
                 const SfxItemSet& rOutAttrs )
@@ -625,7 +625,7 @@ SfxTabPage* SvxColorTabPage::Create( Window* pWindow,
     return( new SvxColorTabPage( pWindow, rOutAttrs ) );
 }
 
-//------------------------------------------------------------------------
+
 
 //
 // is called when the content of the MtrFields is changed for color values
@@ -661,7 +661,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ModifiedHdl_Impl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
 {
@@ -738,7 +738,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
 {
@@ -813,7 +813,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl)
 {
@@ -858,7 +858,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl)
 {
@@ -895,7 +895,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxColorTabPage, SelectColorLBHdl_Impl)
 {
@@ -918,7 +918,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectColorLBHdl_Impl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxColorTabPage, SelectValSetHdl_Impl)
 {
@@ -941,7 +941,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectValSetHdl_Impl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxColorTabPage::ConvertColorValues (Color& rColor, ColorModel eModell)
 {
@@ -1011,7 +1011,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModelHdl_Impl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 long SvxColorTabPage::ChangeColorHdl_Impl( void* )
 {
@@ -1046,7 +1046,7 @@ long SvxColorTabPage::ChangeColorHdl_Impl( void* )
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 //void SvxColorTabPage::FillValueSet_Impl( ValueSet& rVs )
 //{
@@ -1063,7 +1063,7 @@ long SvxColorTabPage::ChangeColorHdl_Impl( void* )
 //    }
 //}
 
-//------------------------------------------------------------------------
+
 
 // A RGB value is converted to a CMYK value - not in an ideal way as
 // R is converted into C, G into M and B into Y. The K value is held in an
@@ -1083,7 +1083,7 @@ void SvxColorTabPage::RgbToCmyk_Impl( Color& rColor, sal_uInt16& rK )
     rColor.SetBlue( sal::static_int_cast< sal_uInt8 >( nColor3 - rK ) );
 }
 
-//------------------------------------------------------------------------
+
 
 // reverse case to RgbToCmyk_Impl (see above)
 
@@ -1110,7 +1110,7 @@ void SvxColorTabPage::CmykToRgb_Impl( Color& rColor, const sal_uInt16 nK )
     rColor.SetBlue( (sal_uInt8)lTemp );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SvxColorTabPage::ColorToPercent_Impl( sal_uInt16 nColor )
 {
@@ -1130,7 +1130,7 @@ sal_uInt16 SvxColorTabPage::ColorToPercent_Impl( sal_uInt16 nColor )
     return ( nWert );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SvxColorTabPage::PercentToColor_Impl( sal_uInt16 nPercent )
 {
@@ -1150,7 +1150,7 @@ sal_uInt16 SvxColorTabPage::PercentToColor_Impl( sal_uInt16 nPercent )
     return ( nWert );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxColorTabPage::FillUserData()
 {
@@ -1158,7 +1158,7 @@ void SvxColorTabPage::FillUserData()
     SetUserData( OUString::number( eCM ) );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxColorTabPage::SetupForViewFrame( SfxViewFrame *pViewFrame )
 {

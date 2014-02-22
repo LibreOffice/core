@@ -56,7 +56,7 @@ uno::Reference< io::XStream > TryToGetAcceptableFormat_Impl( const uno::Referenc
 //========================================================
 // Dummy interaction handler
 //========================================================
-//--------------------------------------------------------
+
 class DummyHandler_Impl : public ::cppu::WeakImplHelper1< task::XInteractionHandler >
 {
 public:
@@ -67,12 +67,12 @@ public:
             throw( uno::RuntimeException );
 };
 
-//--------------------------------------------------------
+
 DummyHandler_Impl::~DummyHandler_Impl()
 {
 }
 
-//--------------------------------------------------------
+
 void SAL_CALL DummyHandler_Impl::handle( const uno::Reference< task::XInteractionRequest >& )
         throw( uno::RuntimeException )
 {
@@ -82,7 +82,7 @@ void SAL_CALL DummyHandler_Impl::handle( const uno::Reference< task::XInteractio
 //========================================================
 // Object viewer
 //========================================================
-//--------------------------------------------------------
+
 OwnView_Impl::OwnView_Impl( const uno::Reference< lang::XMultiServiceFactory >& xFactory,
                             const uno::Reference< io::XInputStream >& xInputStream )
 : m_xFactory( xFactory )
@@ -95,7 +95,7 @@ OwnView_Impl::OwnView_Impl( const uno::Reference< lang::XMultiServiceFactory >& 
     m_aTempFileURL = GetNewFilledTempFile_Impl( xInputStream, m_xFactory );
 }
 
-//--------------------------------------------------------
+
 OwnView_Impl::~OwnView_Impl()
 {
     try {
@@ -108,7 +108,7 @@ OwnView_Impl::~OwnView_Impl()
     } catch( uno::Exception& ) {}
 }
 
-//--------------------------------------------------------
+
 sal_Bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
 {
     sal_Bool bResult = sal_False;
@@ -177,7 +177,7 @@ sal_Bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
     return bResult;
 }
 
-//--------------------------------------------------------
+
 sal_Bool OwnView_Impl::CreateModel( sal_Bool bUseNative )
 {
     sal_Bool bResult = sal_False;
@@ -192,7 +192,7 @@ sal_Bool OwnView_Impl::CreateModel( sal_Bool bUseNative )
     return bResult;
 }
 
-//--------------------------------------------------------
+
 OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
                                                     const OUString& aNameWithExtention,
@@ -254,7 +254,7 @@ OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
     return aFilterName;
 }
 
-//--------------------------------------------------------
+
 sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io::XInputStream >& xInStream,
                                                         sal_Bool bParseHeader )
 {
@@ -402,7 +402,7 @@ sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io
     return !bFailed;
 }
 
-//--------------------------------------------------------
+
 void OwnView_Impl::CreateNative()
 {
     if ( !m_aNativeTempURL.isEmpty() )
@@ -475,7 +475,7 @@ void OwnView_Impl::CreateNative()
     {}
 }
 
-//--------------------------------------------------------
+
 sal_Bool OwnView_Impl::Open()
 {
     sal_Bool bResult = sal_False;
@@ -540,7 +540,7 @@ sal_Bool OwnView_Impl::Open()
     return bResult;
 }
 
-//--------------------------------------------------------
+
 void OwnView_Impl::Close()
 {
     uno::Reference< frame::XModel > xModel;
@@ -580,7 +580,7 @@ void OwnView_Impl::Close()
     m_bBusy = sal_False;
 }
 
-//--------------------------------------------------------
+
 void SAL_CALL OwnView_Impl::notifyEvent( const document::EventObject& aEvent )
         throw ( uno::RuntimeException )
 {
@@ -617,14 +617,14 @@ void SAL_CALL OwnView_Impl::notifyEvent( const document::EventObject& aEvent )
     }
 }
 
-//--------------------------------------------------------
+
 void SAL_CALL OwnView_Impl::queryClosing( const lang::EventObject&, sal_Bool )
         throw ( util::CloseVetoException,
                 uno::RuntimeException )
 {
 }
 
-//--------------------------------------------------------
+
 void SAL_CALL OwnView_Impl::notifyClosing( const lang::EventObject& Source )
         throw ( uno::RuntimeException )
 {
@@ -633,7 +633,7 @@ void SAL_CALL OwnView_Impl::notifyClosing( const lang::EventObject& Source )
         m_xModel = uno::Reference< frame::XModel >();
 }
 
-//--------------------------------------------------------
+
 void SAL_CALL OwnView_Impl::disposing( const lang::EventObject& Source )
         throw (uno::RuntimeException)
 {

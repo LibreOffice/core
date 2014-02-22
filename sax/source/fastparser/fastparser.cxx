@@ -350,7 +350,7 @@ sal_Int32 SAL_CALL FastLocatorImpl::getColumnNumber(void) throw (RuntimeExceptio
     return XML_GetCurrentColumnNumber( mpParser->getEntity().mpParser );
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL FastLocatorImpl::getLineNumber(void) throw (RuntimeException)
 {
@@ -358,14 +358,14 @@ sal_Int32 SAL_CALL FastLocatorImpl::getLineNumber(void) throw (RuntimeException)
     return XML_GetCurrentLineNumber( mpParser->getEntity().mpParser );
 }
 
-// --------------------------------------------------------------------
+
 
 OUString SAL_CALL FastLocatorImpl::getPublicId(void) throw (RuntimeException)
 {
     checkDispose();
     return mpParser->getEntity().maStructSource.sPublicId;
 }
-// --------------------------------------------------------------------
+
 
 OUString SAL_CALL FastLocatorImpl::getSystemId(void) throw (RuntimeException)
 {
@@ -373,7 +373,7 @@ OUString SAL_CALL FastLocatorImpl::getSystemId(void) throw (RuntimeException)
     return mpParser->getEntity().maStructSource.sSystemId;
 }
 
-// --------------------------------------------------------------------
+
 
 ParserData::ParserData()
     : mpTokenHandler( NULL )
@@ -382,7 +382,7 @@ ParserData::ParserData()
 ParserData::~ParserData()
 {}
 
-// --------------------------------------------------------------------
+
 
 Entity::Entity(const ParserData& rData)
     : ParserData(rData)
@@ -632,7 +632,7 @@ FastSaxParserImpl::FastSaxParserImpl( FastSaxParser* pFront ) :
     mxDocumentLocator.set( new FastLocatorImpl( this ) );
 }
 
-// --------------------------------------------------------------------
+
 
 FastSaxParserImpl::~FastSaxParserImpl()
 {
@@ -640,7 +640,7 @@ FastSaxParserImpl::~FastSaxParserImpl()
         mxDocumentLocator->dispose();
 }
 
-// --------------------------------------------------------------------
+
 
 void FastSaxParserImpl::DefineNamespace( const OString& rPrefix, const sal_Char* pNamespaceURL )
 {
@@ -658,7 +658,7 @@ void FastSaxParserImpl::DefineNamespace( const OString& rPrefix, const sal_Char*
     }
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Int32 FastSaxParserImpl::GetToken( const sal_Char* pToken, sal_Int32 nLen /* = 0 */ )
 {
@@ -667,7 +667,7 @@ sal_Int32 FastSaxParserImpl::GetToken( const sal_Char* pToken, sal_Int32 nLen /*
                                             pToken, nLen );
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Int32 FastSaxParserImpl::GetTokenWithPrefix( const sal_Char*pPrefix, int nPrefixLen, const sal_Char* pName, int nNameLen ) throw (SAXException)
 {
@@ -699,7 +699,7 @@ sal_Int32 FastSaxParserImpl::GetTokenWithPrefix( const sal_Char*pPrefix, int nPr
     return FastToken::DONTKNOW;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Int32 FastSaxParserImpl::GetNamespaceToken( const OUString& rNamespaceURL )
 {
@@ -710,7 +710,7 @@ sal_Int32 FastSaxParserImpl::GetNamespaceToken( const OUString& rNamespaceURL )
         return FastToken::DONTKNOW;
 }
 
-// --------------------------------------------------------------------
+
 
 OUString FastSaxParserImpl::GetNamespaceURL( const OString& rPrefix ) throw (SAXException)
 {
@@ -746,7 +746,7 @@ OUString FastSaxParserImpl::GetNamespaceURL( const sal_Char*pPrefix, int nPrefix
     throw SAXException(); // prefix that has no defined namespace url
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Int32 FastSaxParserImpl::GetTokenWithContextNamespace( sal_Int32 nNamespaceToken, const sal_Char* pName, int nNameLen )
 {
@@ -760,7 +760,7 @@ sal_Int32 FastSaxParserImpl::GetTokenWithContextNamespace( sal_Int32 nNamespaceT
     return FastToken::DONTKNOW;
 }
 
-// --------------------------------------------------------------------
+
 
 void FastSaxParserImpl::splitName( const XML_Char *pwName, const XML_Char *&rpPrefix, sal_Int32 &rPrefixLen, const XML_Char *&rpName, sal_Int32 &rNameLen )
 {
@@ -1086,11 +1086,11 @@ void FastSaxParserImpl::parse()
         produce( DONE );
 }
 
-//------------------------------------------
+
 //
 // The C-Callbacks
 //
-//-----------------------------------------
+
 
 void FastSaxParserImpl::callbackStartElement( const XML_Char* pwName, const XML_Char** awAttributes )
 {

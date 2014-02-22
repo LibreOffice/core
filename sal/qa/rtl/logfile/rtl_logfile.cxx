@@ -93,7 +93,7 @@ inline ::rtl::OUString getCurrentPID(  )
 }
 
 
-// -----------------------------------------------------------------------------
+
 /*
  * LLA:
  * check if logfile is create
@@ -196,10 +196,10 @@ namespace rtl_logfile
 
 } // namespace rtl_logfile
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION( rtl_logfile::logfile);
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 //~ do some clean up work after all test completed.

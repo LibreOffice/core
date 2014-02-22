@@ -44,7 +44,7 @@ namespace connectivity
             : m_xStream(_xStream)
         {
         }
-        // -----------------------------------------------------------------------------
+
         StreamHelper::~StreamHelper()
         {
             try
@@ -79,45 +79,45 @@ namespace connectivity
                 OSL_FAIL("Exception caught!");
             }
         }
-        // -----------------------------------------------------------------------------
+
         Reference< XInputStream> StreamHelper::getInputStream()
         {
             if ( !m_xInputStream.is() )
                 m_xInputStream = m_xStream->getInputStream();
             return m_xInputStream;
         }
-        // -----------------------------------------------------------------------------
+
         Reference< XOutputStream> StreamHelper::getOutputStream()
         {
             if ( !m_xOutputStream.is() )
                 m_xOutputStream = m_xStream->getOutputStream();
             return m_xOutputStream;
         }
-        // -----------------------------------------------------------------------------
+
         Reference< XSeekable> StreamHelper::getSeek()
         {
             if ( !m_xSeek.is() )
                 m_xSeek.set(m_xStream,UNO_QUERY);
             return m_xSeek;
         }
-        // -----------------------------------------------------------------------------
+
         TStorages& lcl_getStorageMap()
         {
             static TStorages s_aMap;
             return s_aMap;
         }
-        // -----------------------------------------------------------------------------
+
         OUString lcl_getNextCount()
         {
             static sal_Int32 s_nCount = 0;
             return OUString::number(s_nCount++);
         }
-        // -----------------------------------------------------------------------------
+
         OUString StorageContainer::removeURLPrefix(const OUString& _sURL,const OUString& _sFileURL)
         {
             return _sURL.copy(_sFileURL.getLength()+1);
         }
-        // -----------------------------------------------------------------------------
+
         OUString StorageContainer::removeOldURLPrefix(const OUString& _sURL)
         {
             OUString sRet = _sURL;
@@ -163,7 +163,7 @@ namespace connectivity
             return aStr;
         }
 
-        // -----------------------------------------------------------------------------
+
         OUString StorageContainer::registerStorage(const Reference< XStorage>& _xStorage,const OUString& _sURL)
         {
             OSL_ENSURE(_xStorage.is(),"Storage is NULL!");
@@ -181,7 +181,7 @@ namespace connectivity
 
             return aFind->first;
         }
-        // -----------------------------------------------------------------------------
+
         TStorages::mapped_type StorageContainer::getRegisteredStorage(const OUString& _sKey)
         {
             TStorages::mapped_type aRet;
@@ -193,7 +193,7 @@ namespace connectivity
 
             return aRet;
         }
-        // -----------------------------------------------------------------------------
+
         OUString StorageContainer::getRegisteredKey(const Reference< XStorage>& _xStorage)
         {
             OUString sKey;
@@ -209,7 +209,7 @@ namespace connectivity
                 sKey = aFind->first;
             return sKey;
         }
-        // -----------------------------------------------------------------------------
+
         void StorageContainer::revokeStorage(const OUString& _sKey,const Reference<XTransactionListener>& _xListener)
         {
             TStorages& rMap = lcl_getStorageMap();
@@ -234,7 +234,7 @@ namespace connectivity
                 rMap.erase(aFind);
             }
         }
-        // -----------------------------------------------------------------------------
+
         TStreamMap::mapped_type StorageContainer::registerStream(JNIEnv * env,jstring name, jstring key,sal_Int32 _nMode)
         {
             TStreamMap::mapped_type pHelper;
@@ -305,7 +305,7 @@ namespace connectivity
             }
             return pHelper;
         }
-        // -----------------------------------------------------------------------------
+
         void StorageContainer::revokeStream( JNIEnv * env,jstring name, jstring key)
         {
             TStorages& rMap = lcl_getStorageMap();
@@ -314,7 +314,7 @@ namespace connectivity
             if ( aFind != rMap.end() )
                 aFind->second.second.erase(removeURLPrefix(jstring2ustring(env,name),aFind->second.first.second));
         }
-        // -----------------------------------------------------------------------------
+
         TStreamMap::mapped_type StorageContainer::getRegisteredStream( JNIEnv * env,jstring name, jstring key)
         {
             TStreamMap::mapped_type  pRet;
@@ -330,7 +330,7 @@ namespace connectivity
 
             return pRet;
         }
-        // -----------------------------------------------------------------------------
+
         void StorageContainer::throwJavaException(const Exception& _aException,JNIEnv * env)
         {
             if (JNI_FALSE != env->ExceptionCheck())

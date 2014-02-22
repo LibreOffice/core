@@ -37,7 +37,7 @@
 
 //============================================================================
 //  Local Defines and Function
-//----------------------------------------------------------------------------
+
 
 static long nStaticTabs[]=
 {
@@ -60,7 +60,7 @@ RedlinData::~RedlinData()
 
 //============================================================================
 //  class SvxRedlinEntry (Entries for list)
-//----------------------------------------------------------------------------
+
 
 SvxRedlinEntry::SvxRedlinEntry()
     : SvTreeListEntry()
@@ -125,7 +125,7 @@ void SvLBoxColorString::Paint(
 
 //============================================================================
 //  class SvxRedlinTable
-//----------------------------------------------------------------------------
+
 
 SvxRedlinTable::SvxRedlinTable(SvSimpleTableContainer& rParent, WinBits nBits)
     : SvSimpleTable(rParent,nBits)
@@ -390,7 +390,7 @@ void SvxRedlinTable::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
 
 //============================================================================
 //  class SvxTPView
-//----------------------------------------------------------------------------
+
 
 SvxTPView::SvxTPView(Window * pParent)
     : TabPage(pParent, "RedlineViewPage", "svx/ui/redlineviewpage.ui")
@@ -551,7 +551,7 @@ IMPL_LINK( SvxTPView, PbClickHdl, PushButton*, pPushB )
 
 //============================================================================
 //  class SvxTPFilter
-//----------------------------------------------------------------------------
+
 
 SvxTPFilter::SvxTPFilter( Window * pParent)
     : TabPage(pParent, "RedlineFilterPage", "svx/ui/redlinefilterpage.ui")
@@ -1091,7 +1091,7 @@ IMPL_LINK( SvxTPFilter, RefHandle, PushButton*, pRef )
 
 //============================================================================
 //  class SvxAcceptChgCtr
-//----------------------------------------------------------------------------
+
 
 SvxAcceptChgCtr::SvxAcceptChgCtr(Window* pParent)
     : TabControl(pParent, WB_TABSTOP | WB_DIALOGCONTROL)

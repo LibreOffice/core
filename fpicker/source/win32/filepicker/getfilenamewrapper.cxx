@@ -33,10 +33,10 @@
 namespace /* private */
 {
 
-    //-----------------------------------------------
+
     // This class prevents changing of the working
     // directory.
-    //-----------------------------------------------
+
     class CurDirGuard
     {
         sal_Bool m_bValid;
@@ -106,9 +106,9 @@ namespace /* private */
         }
     };
 
-    //-----------------------------------------------
+
     //
-    //-----------------------------------------------
+
 
     struct GetFileNameParam
     {
@@ -125,9 +125,9 @@ namespace /* private */
         int             m_ExtErr;
     };
 
-    //-----------------------------------------------
+
     //
-    //-----------------------------------------------
+
 
     unsigned __stdcall ThreadProc(void* pParam)
     {
@@ -151,10 +151,10 @@ namespace /* private */
         return 0;
     }
 
-    //-----------------------------------------------
+
     // exceutes GetOpenFileName/GetSaveFileName in
     // a separat thread
-    //-----------------------------------------------
+
 
     bool ThreadExecGetFileName(LPOPENFILENAME lpofn, bool bOpen, /*out*/ int& ExtErr)
     {
@@ -174,11 +174,11 @@ namespace /* private */
         return gfnp.m_bRet;
     }
 
-    //-----------------------------------------------
+
     // This function returns true if the calling
     // thread belongs to a Multithreaded Appartment
     // (MTA)
-    //-----------------------------------------------
+
 
     bool IsMTA()
     {
@@ -196,18 +196,18 @@ namespace /* private */
 } // namespace private
 
 
-//-----------------------------------------------
+
 //
-//-----------------------------------------------
+
 
 CGetFileNameWrapper::CGetFileNameWrapper() :
     m_ExtendedDialogError(0)
 {
 }
 
-//-----------------------------------------------
+
 //
-//-----------------------------------------------
+
 
 bool CGetFileNameWrapper::getOpenFileName(LPOPENFILENAME lpofn)
 {
@@ -236,9 +236,9 @@ bool CGetFileNameWrapper::getOpenFileName(LPOPENFILENAME lpofn)
     return bRet;
 }
 
-//-----------------------------------------------
+
 //
-//-----------------------------------------------
+
 
 bool CGetFileNameWrapper::getSaveFileName(LPOPENFILENAME lpofn)
 {
@@ -262,9 +262,9 @@ bool CGetFileNameWrapper::getSaveFileName(LPOPENFILENAME lpofn)
     return bRet;
 }
 
-//-----------------------------------------------
+
 //
-//-----------------------------------------------
+
 
 int CGetFileNameWrapper::commDlgExtendedError( )
 {

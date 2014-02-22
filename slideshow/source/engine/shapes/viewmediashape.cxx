@@ -91,7 +91,7 @@ namespace slideshow
             }
         }
 
-        // ---------------------------------------------------------------------
+
 
         ViewMediaShape::~ViewMediaShape()
         {
@@ -108,14 +108,14 @@ namespace slideshow
             }
         }
 
-        // ---------------------------------------------------------------------
+
 
         ViewLayerSharedPtr ViewMediaShape::getViewLayer() const
         {
             return mpViewLayer;
         }
 
-        // ---------------------------------------------------------------------
+
 
         bool ViewMediaShape::startMedia()
         {
@@ -128,7 +128,7 @@ namespace slideshow
             return true;
         }
 
-        // ---------------------------------------------------------------------
+
 
         void ViewMediaShape::endMedia()
         {
@@ -159,7 +159,7 @@ namespace slideshow
             }
         }
 
-        // ---------------------------------------------------------------------
+
 
         void ViewMediaShape::pauseMedia()
         {
@@ -167,7 +167,7 @@ namespace slideshow
                 mxPlayer->stop();
         }
 
-        // ---------------------------------------------------------------------
+
 
         void ViewMediaShape::setMediaTime(double fTime)
         {
@@ -175,7 +175,7 @@ namespace slideshow
                 mxPlayer->setMediaTime(fTime);
         }
 
-        // ---------------------------------------------------------------------
+
 
         bool ViewMediaShape::render( const ::basegfx::B2DRectangle& rBounds ) const
         {
@@ -278,7 +278,7 @@ namespace slideshow
             return true;
         }
 
-        // ---------------------------------------------------------------------
+
 
         bool ViewMediaShape::implInitialize( const ::basegfx::B2DRectangle& rBounds )
         {
@@ -354,7 +354,7 @@ namespace slideshow
             return mxPlayer.is() || mxPlayerWindow.is();
         }
 
-        // ---------------------------------------------------------------------
+
 
         void ViewMediaShape::implSetMediaProperties( const uno::Reference< beans::XPropertySet >& rxProps )
         {
@@ -394,7 +394,7 @@ namespace slideshow
             }
         }
 
-        // ---------------------------------------------------------------------
+
 
         void ViewMediaShape::implInitializeMediaPlayer( const OUString& rMediaURL )
         {
@@ -421,7 +421,7 @@ namespace slideshow
             }
         }
 
-        // ---------------------------------------------------------------------
+
 
         bool ViewMediaShape::implInitializeVCLBasedPlayerWindow( const ::basegfx::B2DRectangle&   rBounds,
                                                                  const uno::Sequence< uno::Any >& rVCLDeviceParams)
@@ -509,7 +509,7 @@ namespace slideshow
             return mxPlayerWindow.is();
         }
 
-        // ---------------------------------------------------------------------
+
 
         bool ViewMediaShape::implInitializeDXBasedPlayerWindow( const ::basegfx::B2DRectangle&   rBounds,
                                                                 const uno::Sequence< uno::Any >& rDXDeviceParams )

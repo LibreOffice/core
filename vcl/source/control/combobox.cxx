@@ -56,7 +56,7 @@ ComboBox::ComboBox( WindowType nType ) :
     SetWidthInChars(-1);
 }
 
-// -----------------------------------------------------------------------
+
 
 ComboBox::ComboBox( Window* pParent, WinBits nStyle ) :
     Edit( WINDOW_COMBOBOX )
@@ -66,7 +66,7 @@ ComboBox::ComboBox( Window* pParent, WinBits nStyle ) :
     SetWidthInChars(-1);
 }
 
-// -----------------------------------------------------------------------
+
 
 ComboBox::ComboBox( Window* pParent, const ResId& rResId ) :
     Edit( WINDOW_COMBOBOX )
@@ -82,7 +82,7 @@ ComboBox::ComboBox( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 ComboBox::~ComboBox()
 {
@@ -97,7 +97,7 @@ ComboBox::~ComboBox()
     delete mpBtn;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::ImplInitComboBoxData()
 {
@@ -114,7 +114,7 @@ void ComboBox::ImplInitComboBoxData()
     m_nMaxWidthChars    = -1;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::ImplCalcEditHeight()
 {
@@ -140,7 +140,7 @@ void ComboBox::ImplCalcEditHeight()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -219,7 +219,7 @@ void ComboBox::ImplInit( Window* pParent, WinBits nStyle )
     SetCompoundControl( true );
 }
 
-// -----------------------------------------------------------------------
+
 
 WinBits ComboBox::ImplInitStyle( WinBits nStyle )
 {
@@ -230,7 +230,7 @@ WinBits ComboBox::ImplInitStyle( WinBits nStyle )
     return nStyle;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::ImplLoadRes( const ResId& rResId )
 {
@@ -247,7 +247,7 @@ void ComboBox::ImplLoadRes( const ResId& rResId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::EnableAutocomplete( bool bEnable, bool bMatchCase )
 {
@@ -259,14 +259,14 @@ void ComboBox::EnableAutocomplete( bool bEnable, bool bMatchCase )
         mpSubEdit->SetAutocompleteHdl( Link() );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ComboBox::IsAutocompleteEnabled() const
 {
     return mpSubEdit->GetAutocompleteHdl().IsSet();
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ComboBox, ImplClickBtnHdl)
 {
@@ -288,7 +288,7 @@ IMPL_LINK_NOARG(ComboBox, ImplClickBtnHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ComboBox, ImplPopupModeEndHdl)
 {
@@ -313,7 +313,7 @@ IMPL_LINK_NOARG(ComboBox, ImplPopupModeEndHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( ComboBox, ImplAutocompleteHdl, Edit*, pEdit )
 {
@@ -370,7 +370,7 @@ IMPL_LINK( ComboBox, ImplAutocompleteHdl, Edit*, pEdit )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ComboBox, ImplSelectHdl)
 {
@@ -476,7 +476,7 @@ IMPL_LINK_NOARG(ComboBox, ImplCancelHdl)
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( ComboBox, ImplSelectionChangedHdl, void*, n )
 {
@@ -489,7 +489,7 @@ IMPL_LINK( ComboBox, ImplSelectionChangedHdl, void*, n )
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ComboBox, ImplDoubleClickHdl)
 {
@@ -497,7 +497,7 @@ IMPL_LINK_NOARG(ComboBox, ImplDoubleClickHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::ToggleDropDown()
 {
@@ -521,21 +521,21 @@ void ComboBox::ToggleDropDown()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::Select()
 {
     ImplCallEventListenersAndHandler( VCLEVENT_COMBOBOX_SELECT, maSelectHdl, this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::DoubleClick()
 {
     ImplCallEventListenersAndHandler( VCLEVENT_COMBOBOX_DOUBLECLICK, maDoubleClickHdl, this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::EnableAutoSize( bool bAuto )
 {
@@ -554,7 +554,7 @@ void ComboBox::EnableAutoSize( bool bAuto )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::EnableDDAutoWidth( bool b )
 {
@@ -562,7 +562,7 @@ void ComboBox::EnableDDAutoWidth( bool b )
         mpFloatWin->SetAutoWidth( b );
 }
 
- // -----------------------------------------------------------------------
+
 
 void ComboBox::SetDropDownLineCount( sal_uInt16 nLines )
 {
@@ -570,7 +570,7 @@ void ComboBox::SetDropDownLineCount( sal_uInt16 nLines )
         mpFloatWin->SetDropDownLineCount( nLines );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::AdaptDropDownLineCountToMaximum()
 {
@@ -578,7 +578,7 @@ void ComboBox::AdaptDropDownLineCountToMaximum()
     SetDropDownLineCount(GetSettings().GetStyleSettings().GetListBoxMaximumLineCount());
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ComboBox::GetDropDownLineCount() const
 {
@@ -588,7 +588,7 @@ sal_uInt16 ComboBox::GetDropDownLineCount() const
     return nLines;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::setPosSizePixel( long nX, long nY, long nWidth, long nHeight,
                                 sal_uInt16 nFlags )
@@ -609,7 +609,7 @@ void ComboBox::setPosSizePixel( long nX, long nY, long nWidth, long nHeight,
     Edit::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::Resize()
 {
@@ -637,7 +637,7 @@ void ComboBox::Resize()
         mpFloatWin->SetSizePixel( mpFloatWin->CalcFloatSize() );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::FillLayoutData() const
 {
@@ -661,7 +661,7 @@ void ComboBox::FillLayoutData() const
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::StateChanged( StateChangedType nType )
 {
@@ -727,7 +727,7 @@ void ComboBox::StateChanged( StateChangedType nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -751,7 +751,7 @@ void ComboBox::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ComboBox::PreNotify( NotifyEvent& rNEvt )
 {
@@ -759,7 +759,7 @@ bool ComboBox::PreNotify( NotifyEvent& rNEvt )
     return Edit::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ComboBox::Notify( NotifyEvent& rNEvt )
 {
@@ -844,7 +844,7 @@ bool ComboBox::Notify( NotifyEvent& rNEvt )
     return nDone || Edit::Notify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::SetText( const OUString& rStr )
 {
@@ -854,7 +854,7 @@ void ComboBox::SetText( const OUString& rStr )
     ImplUpdateFloatSelection();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::SetText( const OUString& rStr, const Selection& rNewSelection )
 {
@@ -864,7 +864,7 @@ void ComboBox::SetText( const OUString& rStr, const Selection& rNewSelection )
     ImplUpdateFloatSelection();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::Modify()
 {
@@ -874,7 +874,7 @@ void ComboBox::Modify()
     Edit::Modify();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::ImplUpdateFloatSelection()
 {
@@ -925,7 +925,7 @@ void ComboBox::ImplUpdateFloatSelection()
     mpImplLB->SetCallSelectionChangedHdl( true );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ComboBox::InsertEntry(const OUString& rStr, sal_uInt16 const nPos)
 {
@@ -935,7 +935,7 @@ sal_uInt16 ComboBox::InsertEntry(const OUString& rStr, sal_uInt16 const nPos)
     return nRealPos;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::InsertEntryWithImage(
         const OUString& rStr, const Image& rImage, sal_uInt16 const nPos)
@@ -945,14 +945,14 @@ void ComboBox::InsertEntryWithImage(
     CallEventListeners( VCLEVENT_COMBOBOX_ITEMADDED, (void*) sal_IntPtr(nRealPos) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::RemoveEntry( const OUString& rStr )
 {
     RemoveEntryAt(GetEntryPos(rStr));
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::RemoveEntryAt(sal_uInt16 const nPos)
 {
@@ -960,14 +960,14 @@ void ComboBox::RemoveEntryAt(sal_uInt16 const nPos)
     CallEventListeners( VCLEVENT_COMBOBOX_ITEMREMOVED, (void*) sal_IntPtr(nPos) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::Clear()
 {
     mpImplLB->Clear();
     CallEventListeners( VCLEVENT_COMBOBOX_ITEMREMOVED, (void*) sal_IntPtr(-1) );
 }
-// -----------------------------------------------------------------------
+
 
 Image ComboBox::GetEntryImage( sal_uInt16 nPos ) const
 {
@@ -976,7 +976,7 @@ Image ComboBox::GetEntryImage( sal_uInt16 nPos ) const
     return Image();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ComboBox::GetEntryPos( const OUString& rStr ) const
 {
@@ -986,35 +986,35 @@ sal_uInt16 ComboBox::GetEntryPos( const OUString& rStr ) const
     return nPos;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString ComboBox::GetEntry( sal_uInt16 nPos ) const
 {
     return mpImplLB->GetEntryList()->GetEntryText( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ComboBox::GetEntryCount() const
 {
     return mpImplLB->GetEntryList()->GetEntryCount() - mpImplLB->GetEntryList()->GetMRUCount();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ComboBox::IsTravelSelect() const
 {
     return mpImplLB->IsTravelSelect();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ComboBox::IsInDropDown() const
 {
     return mpFloatWin && mpFloatWin->IsInPopupMode();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::EnableMultiSelection( bool bMulti )
 {
@@ -1022,28 +1022,28 @@ void ComboBox::EnableMultiSelection( bool bMulti )
     mpImplLB->SetMultiSelectionSimpleMode( true );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ComboBox::IsMultiSelectionEnabled() const
 {
     return mpImplLB->IsMultiSelectionEnabled();
 }
 
-// -----------------------------------------------------------------------
+
 
 long ComboBox::CalcWindowSizePixel( sal_uInt16 nLines ) const
 {
     return mpImplLB->GetEntryHeight() * nLines;
 }
 
-// -----------------------------------------------------------------------
+
 
 Size ComboBox::GetOptimalSize() const
 {
     return CalcMinimumSize();
 }
 
-// -----------------------------------------------------------------------
+
 
 long ComboBox::getMaxWidthScrollBarAndDownButton() const
 {
@@ -1105,7 +1105,7 @@ Size ComboBox::CalcMinimumSize() const
     return aSz;
 }
 
-// -----------------------------------------------------------------------
+
 
 Size ComboBox::CalcAdjustedSize( const Size& rPrefSize ) const
 {
@@ -1132,7 +1132,7 @@ Size ComboBox::CalcAdjustedSize( const Size& rPrefSize ) const
     return aSz;
 }
 
-// -----------------------------------------------------------------------
+
 
 Size ComboBox::CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 {
@@ -1174,7 +1174,7 @@ Size ComboBox::CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
     return aSz;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const
 {
@@ -1193,7 +1193,7 @@ void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
@@ -1299,7 +1299,7 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, s
 
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( ComboBox, ImplUserDrawHdl, UserDrawEvent*, pEvent )
 {
@@ -1307,27 +1307,27 @@ IMPL_LINK( ComboBox, ImplUserDrawHdl, UserDrawEvent*, pEvent )
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::UserDraw( const UserDrawEvent& )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::SetUserItemSize( const Size& rSz )
 {
     mpImplLB->GetMainWindow()->SetUserItemSize( rSz );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::EnableUserDraw( bool bUserDraw )
 {
     mpImplLB->GetMainWindow()->EnableUserDraw( bUserDraw );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::DrawEntry( const UserDrawEvent& rEvt, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos )
 {
@@ -1335,35 +1335,35 @@ void ComboBox::DrawEntry( const UserDrawEvent& rEvt, bool bDrawImage, bool bDraw
     mpImplLB->GetMainWindow()->DrawEntry( rEvt.GetItemId(), bDrawImage, bDrawText, bDrawTextAtImagePos );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::SetSeparatorPos( sal_uInt16 n )
 {
     mpImplLB->SetSeparatorPos( n );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::SetMRUEntries( const OUString& rEntries, sal_Unicode cSep )
 {
     mpImplLB->SetMRUEntries( rEntries, cSep );
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString ComboBox::GetMRUEntries( sal_Unicode cSep ) const
 {
     return mpImplLB->GetMRUEntries( cSep );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::SetMaxMRUCount( sal_uInt16 n )
 {
     mpImplLB->SetMaxMRUCount( n );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ComboBox::GetMaxMRUCount() const
 {
@@ -1375,28 +1375,28 @@ sal_uInt16 ComboBox::GetMRUCount() const
     return mpImplLB->GetEntryList()->GetMRUCount();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ComboBox::GetDisplayLineCount() const
 {
     return mpImplLB->GetDisplayLineCount();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::SetEntryData( sal_uInt16 nPos, void* pNewData )
 {
     mpImplLB->SetEntryData( nPos + mpImplLB->GetEntryList()->GetMRUCount(), pNewData );
 }
 
-// -----------------------------------------------------------------------
+
 
 void* ComboBox::GetEntryData( sal_uInt16 nPos ) const
 {
     return mpImplLB->GetEntryList()->GetEntryData( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ComboBox::GetTopEntry() const
 {
@@ -1406,21 +1406,21 @@ sal_uInt16 ComboBox::GetTopEntry() const
     return nPos;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ComboBox::SetProminentEntryType( ProminentEntry eType )
 {
     mpImplLB->SetProminentEntryType( eType );
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle ComboBox::GetDropDownPosSizePixel() const
 {
     return mpFloatWin ? mpFloatWin->GetWindowExtentsRelative( const_cast<ComboBox*>(this) ) : Rectangle();
 }
 
-// -----------------------------------------------------------------------
+
 
 const Wallpaper& ComboBox::GetDisplayBackground() const
 {
@@ -1435,12 +1435,12 @@ const Wallpaper& ComboBox::GetDisplayBackground() const
         return Control::GetDisplayBackground();
     return rBack;
 }
-// -----------------------------------------------------------------------------
+
 sal_uInt16 ComboBox::GetSelectEntryCount() const
 {
     return mpImplLB->GetEntryList()->GetSelectEntryCount();
 }
-// -----------------------------------------------------------------------------
+
 sal_uInt16 ComboBox::GetSelectEntryPos( sal_uInt16 nIndex ) const
 {
     sal_uInt16 nPos = mpImplLB->GetEntryList()->GetSelectEntryPos( nIndex );
@@ -1452,24 +1452,24 @@ sal_uInt16 ComboBox::GetSelectEntryPos( sal_uInt16 nIndex ) const
     }
     return nPos;
 }
-// -----------------------------------------------------------------------------
+
 bool ComboBox::IsEntryPosSelected( sal_uInt16 nPos ) const
 {
     return mpImplLB->GetEntryList()->IsEntryPosSelected( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
 }
-// -----------------------------------------------------------------------------
+
 void ComboBox::SelectEntryPos( sal_uInt16 nPos, bool bSelect)
 {
     if ( nPos < mpImplLB->GetEntryList()->GetEntryCount() )
         mpImplLB->SelectEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), bSelect );
 }
-// -----------------------------------------------------------------------------
+
 void ComboBox::SetNoSelection()
 {
     mpImplLB->SetNoSelection();
     mpSubEdit->SetText( OUString() );
 }
-// -----------------------------------------------------------------------------
+
 Rectangle ComboBox::GetBoundingRectangle( sal_uInt16 nItem ) const
 {
     Rectangle aRect = mpImplLB->GetMainWindow()->GetBoundingRectangle( nItem );
@@ -1477,7 +1477,7 @@ Rectangle ComboBox::GetBoundingRectangle( sal_uInt16 nItem ) const
     aRect.Move( aOffset.TopLeft().X(), aOffset.TopLeft().Y() );
     return aRect;
 }
-// -----------------------------------------------------------------------------
+
 
 void ComboBox::SetBorderStyle( sal_uInt16 nBorderStyle )
 {
@@ -1488,7 +1488,7 @@ void ComboBox::SetBorderStyle( sal_uInt16 nBorderStyle )
         mpImplLB->SetBorderStyle( nBorderStyle );
     }
 }
-// -----------------------------------------------------------------------------
+
 
 long ComboBox::GetIndexForPoint( const Point& rPoint, sal_uInt16& rPos ) const
 {

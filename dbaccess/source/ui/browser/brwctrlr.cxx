@@ -759,7 +759,7 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
     if ( xGridSet.is() )
         xGridSet->setPropertyValue(PROPERTY_BORDER, makeAny((sal_Int16)2));
 
-    // ----------
+
     // marry them
     Reference< ::com::sun::star::container::XNameContainer >  xNameCont(m_xRowSet, UNO_QUERY);
     {

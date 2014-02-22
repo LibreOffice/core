@@ -26,7 +26,7 @@
 
 namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
 
-// -----------------------------------------------------------------------
+
 
 ImageControl::ImageControl( Window* pParent, WinBits nStyle )
     :FixedImage( pParent, nStyle )
@@ -34,7 +34,7 @@ ImageControl::ImageControl( Window* pParent, WinBits nStyle )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 ImageControl::ImageControl( Window* pParent, const ResId& rResId )
     :FixedImage( pParent, rResId )
@@ -42,7 +42,7 @@ ImageControl::ImageControl( Window* pParent, const ResId& rResId )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImageControl::SetScaleMode( const ::sal_Int16 _nMode )
 {
@@ -53,14 +53,14 @@ void ImageControl::SetScaleMode( const ::sal_Int16 _nMode )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImageControl::Resize()
 {
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 namespace
 {
     static Size lcl_calcPaintSize( const Rectangle& _rPaintRect, const Size& _rBitmapSize )
@@ -83,7 +83,7 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImageControl::ImplDraw( OutputDevice& rDev, sal_uLong nDrawFlags, const Point& rPos, const Size& rSize ) const
 {
@@ -149,7 +149,7 @@ void ImageControl::ImplDraw( OutputDevice& rDev, sal_uLong nDrawFlags, const Poi
     }   // switch ( mnScaleMode )
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImageControl::Paint( const Rectangle& /*rRect*/ )
 {
@@ -177,7 +177,7 @@ void ImageControl::Paint( const Rectangle& /*rRect*/ )
     }
 }
 
-// -----------------------------------------------------------------------
+
 void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
     const Point     aPos  = pDev->LogicToPixel( rPos );
@@ -198,7 +198,7 @@ void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSiz
     pDev->Pop();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImageControl::GetFocus()
 {
@@ -206,7 +206,7 @@ void ImageControl::GetFocus()
     GetWindow( WINDOW_BORDER )->Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImageControl::LoseFocus()
 {

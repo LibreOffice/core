@@ -52,7 +52,7 @@ DEFINE_INIT_SERVICE(
 
 #include <typelib/typedescription.h>
 
-//--------------------------------------------------------------------------------------------------
+
 void flatten_struct_members(
     ::std::vector< Any > * vec, void const * data,
     typelib_CompoundTypeDescription * pTD )

@@ -409,7 +409,7 @@ sal_Int64 SAL_CALL ViewTabBar::getSomething (const Sequence<sal_Int8>& rId)
 
 
 
-//-----------------------------------------------------------------------------
+
 
 bool ViewTabBar::ActivatePage (void)
 {

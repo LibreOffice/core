@@ -29,7 +29,7 @@ namespace svt { namespace table
     //==================================================================================================================
     //= TableRowGeometry
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     TableRowGeometry::TableRowGeometry( TableControl_Impl const & _rControl, Rectangle const & _rBoundaries,
             RowPos const _nRow, bool const i_allowVirtualRows )
         :TableGeometry( _rControl, _rBoundaries )
@@ -47,7 +47,7 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void TableRowGeometry::impl_initRect()
     {
         if ( ( m_nRowPos >= m_rControl.m_nTopRow ) && impl_isValidRow( m_nRowPos ) )
@@ -59,13 +59,13 @@ namespace svt { namespace table
             m_aRect.SetEmpty();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool TableRowGeometry::impl_isValidRow( RowPos const i_row ) const
     {
         return m_bAllowVirtualRows || ( i_row < m_rControl.m_pModel->getRowCount() );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool TableRowGeometry::moveDown()
     {
         if ( m_nRowPos == ROW_COL_HEADERS )
@@ -86,7 +86,7 @@ namespace svt { namespace table
     //==================================================================================================================
     //= TableColumnGeometry
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     TableColumnGeometry::TableColumnGeometry( TableControl_Impl const & _rControl, Rectangle const & _rBoundaries,
             ColPos const _nCol, bool const i_allowVirtualColumns )
         :TableGeometry( _rControl, _rBoundaries )
@@ -104,7 +104,7 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void TableColumnGeometry::impl_initRect()
     {
         ColPos nLeftColumn = m_rControl.m_nLeftColumn;
@@ -121,13 +121,13 @@ namespace svt { namespace table
             m_aRect.SetEmpty();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool TableColumnGeometry::impl_isValidColumn( ColPos const i_column ) const
     {
         return m_bAllowVirtualColumns || ( i_column < ColPos( m_rControl.m_aColumnWidths.size() ) );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool TableColumnGeometry::moveRight()
     {
         if ( m_nColPos == COL_ROW_HEADERS )

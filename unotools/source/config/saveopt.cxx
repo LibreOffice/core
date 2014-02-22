@@ -389,7 +389,7 @@ Sequence< OUString > GetPropertyNames()
     return aNames;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     : ConfigItem( OUString("Office.Common/Save") )
@@ -745,7 +745,7 @@ void SvtSaveOptions_Impl::Commit()
     batch->commit();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtSaveOptions_Impl::Notify( const Sequence<OUString>& )
 {
@@ -767,7 +767,7 @@ public:
     void                    SetLoadUserSettings(bool b){bLoadUserDefinedSettings = b; SetModified();}
     bool                IsLoadUserSettings() const {return bLoadUserDefinedSettings;}
 };
-// -----------------------------------------------------------------------
+
 const sal_Char cUserDefinedSettings[] = "UserDefinedSettings";
 
 SvtLoadOptions_Impl::SvtLoadOptions_Impl()
@@ -783,11 +783,11 @@ SvtLoadOptions_Impl::SvtLoadOptions_Impl()
     if (pValues[0].getValueTypeClass() == ::com::sun::star::uno::TypeClass_BOOLEAN)
          bLoadUserDefinedSettings = *(sal_Bool *)pValues[0].getValue();
 }
-// -----------------------------------------------------------------------
+
 SvtLoadOptions_Impl::~SvtLoadOptions_Impl()
 {
 }
-// -----------------------------------------------------------------------
+
 void SvtLoadOptions_Impl::Commit()
 {
     Sequence< OUString > aNames(1);
@@ -796,12 +796,12 @@ void SvtLoadOptions_Impl::Commit()
     aValues[0].setValue(&bLoadUserDefinedSettings, ::getBooleanCppuType());
     PutProperties( aNames, aValues );
 }
-// -----------------------------------------------------------------------
+
 void SvtLoadOptions_Impl::Notify( const Sequence<OUString>& )
 {
     SAL_WARN( "unotools.config", "properties have been changed" );
 }
-// -----------------------------------------------------------------------
+
 
 namespace
 {
@@ -810,7 +810,7 @@ namespace
     };
 }
 
-// -----------------------------------------------------------------------
+
 SvtSaveOptions::SvtSaveOptions()
 {
     // Global access, must be guarded (multithreading)
@@ -827,7 +827,7 @@ SvtSaveOptions::SvtSaveOptions()
     pImp = pOptions;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvtSaveOptions::~SvtSaveOptions()
 {

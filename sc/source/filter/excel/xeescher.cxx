@@ -245,7 +245,7 @@ void XclExpDffAnchorBase::ImplCalcAnchorRect( const Rectangle&, MapUnit )
     OSL_FAIL( "XclExpDffAnchorBase::ImplCalcAnchorRect - not implemented" );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpDffSheetAnchor::XclExpDffSheetAnchor( const XclExpRoot& rRoot ) :
     XclExpDffAnchorBase( rRoot ),
@@ -267,7 +267,7 @@ void XclExpDffSheetAnchor::ImplCalcAnchorRect( const Rectangle& rRect, MapUnit e
     maAnchor.SetRect( GetRoot(), mnScTab, rRect, eMapUnit );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpDffEmbeddedAnchor::XclExpDffEmbeddedAnchor( const XclExpRoot& rRoot,
         const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 nScaleY ) :
@@ -288,7 +288,7 @@ void XclExpDffEmbeddedAnchor::ImplCalcAnchorRect( const Rectangle& rRect, MapUni
     maAnchor.SetRect( maPageSize, mnScaleX, mnScaleY, rRect, eMapUnit, true );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpDffNoteAnchor::XclExpDffNoteAnchor( const XclExpRoot& rRoot, const Rectangle& rRect ) :
     XclExpDffAnchorBase( rRoot, EXC_ESC_ANCHOR_SIZELOCKED )
@@ -296,7 +296,7 @@ XclExpDffNoteAnchor::XclExpDffNoteAnchor( const XclExpRoot& rRoot, const Rectang
     maAnchor.SetRect( rRoot, rRoot.GetCurrScTab(), rRect, MAP_100TH_MM );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpDffDropDownAnchor::XclExpDffDropDownAnchor( const XclExpRoot& rRoot, const ScAddress& rScPos ) :
     XclExpDffAnchorBase( rRoot, EXC_ESC_ANCHOR_POSLOCKED )
@@ -323,7 +323,7 @@ void XclExpMsoDrawingBase::WriteBody( XclExpStream& rStrm )
     rStrm.CopyFromStream( mrEscherEx.GetStream(), mrEscherEx.GetDffFragmentSize( mnFragmentKey ) );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpMsoDrawingGroup::XclExpMsoDrawingGroup( XclEscherEx& rEscherEx ) :
     XclExpMsoDrawingBase( rEscherEx, EXC_ID_MSODRAWINGGROUP )
@@ -355,7 +355,7 @@ XclExpMsoDrawingGroup::XclExpMsoDrawingGroup( XclEscherEx& rEscherEx ) :
     mrEscherEx.UpdateDffFragmentEnd();
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpMsoDrawing::XclExpMsoDrawing( XclEscherEx& rEscherEx ) :
     XclExpMsoDrawingBase( rEscherEx, EXC_ID_MSODRAWING )
@@ -504,7 +504,7 @@ void XclExpControlHelper::WriteFormulaSubRec( XclExpStream& rStrm, sal_uInt16 nS
     rStrm.EndRecord();
 }
 
-// ----------------------------------------------------------------------------
+
 
 //delete for exporting OCX
 //#if EXC_EXP_OCX_CTRL
@@ -1042,7 +1042,7 @@ void XclExpTbxControlObj::WriteSbs( XclExpStream& rStrm )
 
 //#endif
 
-// ----------------------------------------------------------------------------
+
 
 XclExpChartObj::XclExpChartObj( XclExpObjectManager& rObjMgr, Reference< XShape > xShape, const Rectangle* pChildAnchor ) :
     XclObj( rObjMgr, EXC_OBJTYPE_CHART ),
@@ -1637,7 +1637,7 @@ void XclExpObjectManager::InitStream( bool bTempFile )
     mxDffStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpEmbeddedObjectManager::XclExpEmbeddedObjectManager(
         const XclExpObjectManager& rParent, const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 nScaleY ) :

@@ -35,7 +35,7 @@ ImplAccelManager::~ImplAccelManager()
     delete mpSequenceList;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplAccelManager::InsertAccel( Accelerator* pAccel )
 {
@@ -53,7 +53,7 @@ bool ImplAccelManager::InsertAccel( Accelerator* pAccel )
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplAccelManager::RemoveAccel( Accelerator* pAccel )
 {
@@ -90,7 +90,7 @@ void ImplAccelManager::RemoveAccel( Accelerator* pAccel )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplAccelManager::EndSequence( bool bCancel )
 {
@@ -118,7 +118,7 @@ void ImplAccelManager::EndSequence( bool bCancel )
     mpSequenceList = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepeat )
 {

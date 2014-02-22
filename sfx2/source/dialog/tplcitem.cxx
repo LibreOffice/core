@@ -44,14 +44,14 @@ SfxTemplateControllerItem::SfxTemplateControllerItem(
     nUserEventId(0)
 {
 }
-// -----------------------------------------------------------------------
+
 SfxTemplateControllerItem::~SfxTemplateControllerItem()
 {
     if(nUserEventId)
         Application::RemoveUserEvent(nUserEventId);
 }
 
-// -----------------------------------------------------------------------
+
 // Notice about change of status, is  propagated through the Controller
 // passed on by the constructor
 

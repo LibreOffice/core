@@ -37,7 +37,7 @@
 
 using namespace ::com::sun::star;
 
-//----------------------------------------------
+
 void ODummyEmbeddedObject::CheckInit()
 {
     if ( m_bDisposed )
@@ -48,7 +48,7 @@ void ODummyEmbeddedObject::CheckInit()
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 }
 
-//----------------------------------------------
+
 void ODummyEmbeddedObject::PostEvent_Impl( const OUString& aEventName )
 {
     if ( m_pInterfaceContainer )
@@ -83,12 +83,12 @@ void ODummyEmbeddedObject::PostEvent_Impl( const OUString& aEventName )
     }
 }
 
-//----------------------------------------------
+
 ODummyEmbeddedObject::~ODummyEmbeddedObject()
 {
 }
 
-//----------------------------------------------
+
 void SAL_CALL ODummyEmbeddedObject::changeState( sal_Int32 nNewState )
         throw ( embed::UnreachableStateException,
                 embed::WrongStateException,
@@ -104,7 +104,7 @@ void SAL_CALL ODummyEmbeddedObject::changeState( sal_Int32 nNewState )
     throw embed::UnreachableStateException();
 }
 
-//----------------------------------------------
+
 uno::Sequence< sal_Int32 > SAL_CALL ODummyEmbeddedObject::getReachableStates()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -118,7 +118,7 @@ uno::Sequence< sal_Int32 > SAL_CALL ODummyEmbeddedObject::getReachableStates()
     return aResult;
 }
 
-//----------------------------------------------
+
 sal_Int32 SAL_CALL ODummyEmbeddedObject::getCurrentState()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -129,7 +129,7 @@ sal_Int32 SAL_CALL ODummyEmbeddedObject::getCurrentState()
     return m_nObjectState;
 }
 
-//----------------------------------------------
+
 void SAL_CALL ODummyEmbeddedObject::doVerb( sal_Int32 )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
@@ -143,7 +143,7 @@ void SAL_CALL ODummyEmbeddedObject::doVerb( sal_Int32 )
     // no supported verbs
 }
 
-//----------------------------------------------
+
 uno::Sequence< embed::VerbDescriptor > SAL_CALL ODummyEmbeddedObject::getSupportedVerbs()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -154,7 +154,7 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL ODummyEmbeddedObject::getSupport
     return uno::Sequence< embed::VerbDescriptor >();
 }
 
-//----------------------------------------------
+
 void SAL_CALL ODummyEmbeddedObject::setClientSite(
                 const uno::Reference< embed::XEmbeddedClient >& xClient )
         throw ( embed::WrongStateException,
@@ -166,7 +166,7 @@ void SAL_CALL ODummyEmbeddedObject::setClientSite(
     m_xClientSite = xClient;
 }
 
-//----------------------------------------------
+
 uno::Reference< embed::XEmbeddedClient > SAL_CALL ODummyEmbeddedObject::getClientSite()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -177,7 +177,7 @@ uno::Reference< embed::XEmbeddedClient > SAL_CALL ODummyEmbeddedObject::getClien
     return m_xClientSite;
 }
 
-//----------------------------------------------
+
 void SAL_CALL ODummyEmbeddedObject::update()
         throw ( embed::WrongStateException,
                 uno::Exception,
@@ -187,7 +187,7 @@ void SAL_CALL ODummyEmbeddedObject::update()
     CheckInit();
 }
 
-//----------------------------------------------
+
 void SAL_CALL ODummyEmbeddedObject::setUpdateMode( sal_Int32 )
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -196,7 +196,7 @@ void SAL_CALL ODummyEmbeddedObject::setUpdateMode( sal_Int32 )
     CheckInit();
 }
 
-//----------------------------------------------
+
 sal_Int64 SAL_CALL ODummyEmbeddedObject::getStatus( sal_Int64 )
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -207,7 +207,7 @@ sal_Int64 SAL_CALL ODummyEmbeddedObject::getStatus( sal_Int64 )
     return 0;
 }
 
-//----------------------------------------------
+
 void SAL_CALL ODummyEmbeddedObject::setContainerName( const OUString& )
         throw ( uno::RuntimeException )
 {
@@ -215,7 +215,7 @@ void SAL_CALL ODummyEmbeddedObject::setContainerName( const OUString& )
     CheckInit();
 }
 
-//----------------------------------------------
+
 void SAL_CALL ODummyEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt::Size& aSize )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
@@ -236,7 +236,7 @@ void SAL_CALL ODummyEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const 
     m_bHasCachedSize = sal_True;
 }
 
-//----------------------------------------------
+
 awt::Size SAL_CALL ODummyEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
@@ -260,7 +260,7 @@ awt::Size SAL_CALL ODummyEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
     return m_aCachedSize;
 }
 
-//----------------------------------------------
+
 sal_Int32 SAL_CALL ODummyEmbeddedObject::getMapUnit( sal_Int64 nAspect )
         throw ( uno::Exception,
                 uno::RuntimeException)
@@ -277,7 +277,7 @@ sal_Int32 SAL_CALL ODummyEmbeddedObject::getMapUnit( sal_Int64 nAspect )
     return embed::EmbedMapUnits::ONE_100TH_MM;
 }
 
-//----------------------------------------------
+
 embed::VisualRepresentation SAL_CALL ODummyEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
@@ -292,7 +292,7 @@ embed::VisualRepresentation SAL_CALL ODummyEmbeddedObject::getPreferredVisualRep
                                 uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 }
 
-//----------------------------------------------
+
 void SAL_CALL ODummyEmbeddedObject::setPersistentEntry(
                     const uno::Reference< embed::XStorage >& xStorage,
                     const OUString& sEntName,
@@ -359,7 +359,7 @@ void SAL_CALL ODummyEmbeddedObject::setPersistentEntry(
                                 3 );
 }
 
-//------------------------------------------------------
+
 void SAL_CALL ODummyEmbeddedObject::storeToEntry( const uno::Reference< embed::XStorage >& xStorage,
                             const OUString& sEntName,
                             const uno::Sequence< beans::PropertyValue >& /* lArguments */,
@@ -381,7 +381,7 @@ void SAL_CALL ODummyEmbeddedObject::storeToEntry( const uno::Reference< embed::X
     m_xParentStorage->copyElementTo( m_aEntryName, xStorage, sEntName );
 }
 
-//------------------------------------------------------
+
 void SAL_CALL ODummyEmbeddedObject::storeAsEntry( const uno::Reference< embed::XStorage >& xStorage,
                             const OUString& sEntName,
                             const uno::Sequence< beans::PropertyValue >& /* lArguments */,
@@ -409,7 +409,7 @@ void SAL_CALL ODummyEmbeddedObject::storeAsEntry( const uno::Reference< embed::X
     m_aNewEntryName = sEntName;
 }
 
-//------------------------------------------------------
+
 void SAL_CALL ODummyEmbeddedObject::saveCompleted( sal_Bool bUseNew )
         throw ( embed::WrongStateException,
                 uno::Exception,
@@ -443,7 +443,7 @@ void SAL_CALL ODummyEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     m_bWaitSaveCompleted = sal_False;
 }
 
-//------------------------------------------------------
+
 sal_Bool SAL_CALL ODummyEmbeddedObject::hasEntry()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -462,7 +462,7 @@ sal_Bool SAL_CALL ODummyEmbeddedObject::hasEntry()
     return sal_False;
 }
 
-//------------------------------------------------------
+
 OUString SAL_CALL ODummyEmbeddedObject::getEntryName()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -478,7 +478,7 @@ OUString SAL_CALL ODummyEmbeddedObject::getEntryName()
     return m_aEntryName;
 }
 
-//------------------------------------------------------
+
 void SAL_CALL ODummyEmbeddedObject::storeOwn()
         throw ( embed::WrongStateException,
                 io::IOException,
@@ -497,7 +497,7 @@ void SAL_CALL ODummyEmbeddedObject::storeOwn()
     return;
 }
 
-//------------------------------------------------------
+
 sal_Bool SAL_CALL ODummyEmbeddedObject::isReadonly()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -514,7 +514,7 @@ sal_Bool SAL_CALL ODummyEmbeddedObject::isReadonly()
     return sal_True;
 }
 
-//------------------------------------------------------
+
 void SAL_CALL ODummyEmbeddedObject::reload(
                 const uno::Sequence< beans::PropertyValue >& /* lArguments */,
                 const uno::Sequence< beans::PropertyValue >& /* lObjArgs */ )
@@ -535,7 +535,7 @@ void SAL_CALL ODummyEmbeddedObject::reload(
     // nothing to reload
 }
 
-//------------------------------------------------------
+
 uno::Sequence< sal_Int8 > SAL_CALL ODummyEmbeddedObject::getClassID()
         throw ( uno::RuntimeException )
 {
@@ -547,7 +547,7 @@ uno::Sequence< sal_Int8 > SAL_CALL ODummyEmbeddedObject::getClassID()
     return uno::Sequence< sal_Int8 >();
 }
 
-//------------------------------------------------------
+
 OUString SAL_CALL ODummyEmbeddedObject::getClassName()
         throw ( uno::RuntimeException )
 {
@@ -558,7 +558,7 @@ OUString SAL_CALL ODummyEmbeddedObject::getClassName()
     return OUString();
 }
 
-//------------------------------------------------------
+
 void SAL_CALL ODummyEmbeddedObject::setClassInfo(
                 const uno::Sequence< sal_Int8 >& /*aClassID*/, const OUString& /*aClassName*/ )
         throw ( lang::NoSupportException,
@@ -567,7 +567,7 @@ void SAL_CALL ODummyEmbeddedObject::setClassInfo(
     throw lang::NoSupportException();
 }
 
-//------------------------------------------------------
+
 uno::Reference< util::XCloseable > SAL_CALL ODummyEmbeddedObject::getComponent()
         throw ( uno::RuntimeException )
 {
@@ -577,7 +577,7 @@ uno::Reference< util::XCloseable > SAL_CALL ODummyEmbeddedObject::getComponent()
     return uno::Reference< util::XCloseable >();
 }
 
-//----------------------------------------------
+
 void SAL_CALL ODummyEmbeddedObject::addStateChangeListener( const uno::Reference< embed::XStateChangeListener >& xListener )
     throw ( uno::RuntimeException )
 {
@@ -592,7 +592,7 @@ void SAL_CALL ODummyEmbeddedObject::addStateChangeListener( const uno::Reference
                                                         xListener );
 }
 
-//----------------------------------------------
+
 void SAL_CALL ODummyEmbeddedObject::removeStateChangeListener(
                     const uno::Reference< embed::XStateChangeListener >& xListener )
     throw (uno::RuntimeException)
@@ -603,7 +603,7 @@ void SAL_CALL ODummyEmbeddedObject::removeStateChangeListener(
                                                 xListener );
 }
 
-//----------------------------------------------
+
 void SAL_CALL ODummyEmbeddedObject::close( sal_Bool bDeliverOwnership )
     throw ( util::CloseVetoException,
             uno::RuntimeException )
@@ -659,7 +659,7 @@ void SAL_CALL ODummyEmbeddedObject::close( sal_Bool bDeliverOwnership )
     m_bDisposed = sal_True; // the object is disposed now for outside
 }
 
-//----------------------------------------------
+
 void SAL_CALL ODummyEmbeddedObject::addCloseListener( const uno::Reference< util::XCloseListener >& xListener )
     throw ( uno::RuntimeException )
 {
@@ -673,7 +673,7 @@ void SAL_CALL ODummyEmbeddedObject::addCloseListener( const uno::Reference< util
     m_pInterfaceContainer->addInterface( ::getCppuType( (const uno::Reference< util::XCloseListener >*)0 ), xListener );
 }
 
-//----------------------------------------------
+
 void SAL_CALL ODummyEmbeddedObject::removeCloseListener( const uno::Reference< util::XCloseListener >& xListener )
     throw (uno::RuntimeException)
 {
@@ -683,7 +683,7 @@ void SAL_CALL ODummyEmbeddedObject::removeCloseListener( const uno::Reference< u
                                                 xListener );
 }
 
-//------------------------------------------------------
+
 void SAL_CALL ODummyEmbeddedObject::addEventListener( const uno::Reference< document::XEventListener >& xListener )
         throw ( uno::RuntimeException )
 {
@@ -697,7 +697,7 @@ void SAL_CALL ODummyEmbeddedObject::addEventListener( const uno::Reference< docu
     m_pInterfaceContainer->addInterface( ::getCppuType( (const uno::Reference< document::XEventListener >*)0 ), xListener );
 }
 
-//------------------------------------------------------
+
 void SAL_CALL ODummyEmbeddedObject::removeEventListener( const uno::Reference< document::XEventListener >& xListener )
         throw ( uno::RuntimeException )
 {

@@ -55,7 +55,7 @@ namespace svt
     //==================================================================================================================
     namespace
     {
-        //--------------------------------------------------------------------------------------------------------------
+
         static void lcl_transform( Rectangle& io_rRect, const ::basegfx::B2DHomMatrix& i_rTransformation )
         {
             ::basegfx::B2DRange aRect( io_rRect.Left(), io_rRect.Top(), io_rRect.Right(), io_rRect.Bottom() );
@@ -66,7 +66,7 @@ namespace svt
             io_rRect.Bottom() = long( aRect.getMaxY() );
         }
 
-        //--------------------------------------------------------------------------------------------------------------
+
         /** transforms the given, possible rotated playground,
         */
         void lcl_rotate( const Rectangle& i_rReference, Rectangle& io_rArea, const bool i_bRight )
@@ -92,7 +92,7 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void lcl_mirrorHorizontally( const Rectangle& i_rReferenceArea, Rectangle& io_rArea )
     {
         io_rArea.Left() = i_rReferenceArea.Left() + i_rReferenceArea.Right() - io_rArea.Left();
@@ -100,7 +100,7 @@ namespace svt
         ::std::swap( io_rArea.Left(), io_rArea.Right() );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void lcl_mirrorVertically( const Rectangle& i_rReferenceArea, Rectangle& io_rArea )
     {
         io_rArea.Top() = i_rReferenceArea.Top() + i_rReferenceArea.Bottom() - io_rArea.Top();
@@ -111,19 +111,19 @@ namespace svt
     //==================================================================================================================
     //= NormalizedArea
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     NormalizedArea::NormalizedArea()
         :m_aReference()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     NormalizedArea::NormalizedArea( const Rectangle& i_rReference, const bool i_bIsVertical )
         :m_aReference( i_bIsVertical ? Rectangle( i_rReference.TopLeft(), Size( i_rReference.GetHeight(), i_rReference.GetWidth() ) ) : i_rReference )
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Rectangle NormalizedArea::getTransformed( const Rectangle& i_rArea, const TabAlignment i_eTargetAlignment ) const
     {
         Rectangle aResult( i_rArea );
@@ -149,7 +149,7 @@ namespace svt
         return aResult;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Rectangle NormalizedArea::getNormalized( const Rectangle& i_rArea, const TabAlignment i_eTargetAlignment ) const
     {
         Rectangle aResult( i_rArea );
@@ -178,7 +178,7 @@ namespace svt
     //==================================================================================================================
     //= TabBarGeometry
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     TabBarGeometry::TabBarGeometry( const TabItemContent i_eItemContent )
         :m_eTabItemContent( i_eItemContent )
         ,m_aItemsInset()
@@ -192,12 +192,12 @@ namespace svt
         m_aItemsInset.Bottom() = ITEMS_INSET_BOTTOM;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     TabBarGeometry::~TabBarGeometry()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool TabBarGeometry::impl_fitItems( ItemDescriptors& io_rItems ) const
     {
         if ( io_rItems.empty() )
@@ -253,7 +253,7 @@ namespace svt
             &&  aFitInto.Right() >= aLastItemBottomRight.X();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Size TabBarGeometry::getOptimalSize(ItemDescriptors& io_rItems) const
     {
         if ( io_rItems.empty() )
@@ -270,7 +270,7 @@ namespace svt
                 );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void TabBarGeometry::relayout( const Size& i_rActualOutputSize, ItemDescriptors& io_rItems )
     {
         // assume all items fit
@@ -307,7 +307,7 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Point TabBarGeometry::getFirstItemPosition() const
     {
         return Point( m_aItemsInset.Left(), m_aItemsInset.Top() );

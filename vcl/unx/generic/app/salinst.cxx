@@ -78,7 +78,7 @@ X11SalInstance::~X11SalInstance()
 }
 
 
-// --------------------------------------------------------
+
 // AnyInput from sv/mow/source/app/svapp.cxx
 
 struct PredicateReturn

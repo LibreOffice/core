@@ -59,13 +59,13 @@ public:
     // XIdlField2: getType, getAccessMode and get are equal to XIdlField
     virtual void SAL_CALL set( Any & rObj, const Any & rValue ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
 };
-//__________________________________________________________________________________________________
+
 IdlEnumFieldImpl::~IdlEnumFieldImpl()
 {
 }
 
 // XInterface
-//__________________________________________________________________________________________________
+
 Any IdlEnumFieldImpl::queryInterface( const Type & rType )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -74,19 +74,19 @@ Any IdlEnumFieldImpl::queryInterface( const Type & rType )
                                       static_cast< XIdlField2 * >( this ) ) );
     return (aRet.hasValue() ? aRet : IdlMemberImpl::queryInterface( rType ));
 }
-//__________________________________________________________________________________________________
+
 void IdlEnumFieldImpl::acquire() throw()
 {
     IdlMemberImpl::acquire();
 }
-//__________________________________________________________________________________________________
+
 void IdlEnumFieldImpl::release() throw()
 {
     IdlMemberImpl::release();
 }
 
 // XTypeProvider
-//__________________________________________________________________________________________________
+
 Sequence< Type > IdlEnumFieldImpl::getTypes()
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -105,7 +105,7 @@ Sequence< Type > IdlEnumFieldImpl::getTypes()
     }
     return s_pTypes->getTypes();
 }
-//__________________________________________________________________________________________________
+
 Sequence< sal_Int8 > IdlEnumFieldImpl::getImplementationId()
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -123,13 +123,13 @@ Sequence< sal_Int8 > IdlEnumFieldImpl::getImplementationId()
 }
 
 // XIdlMember
-//__________________________________________________________________________________________________
+
 Reference< XIdlClass > IdlEnumFieldImpl::getDeclaringClass()
     throw(::com::sun::star::uno::RuntimeException)
 {
     return IdlMemberImpl::getDeclaringClass();
 }
-//__________________________________________________________________________________________________
+
 OUString IdlEnumFieldImpl::getName()
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -137,25 +137,25 @@ OUString IdlEnumFieldImpl::getName()
 }
 
 // XIdlField
-//__________________________________________________________________________________________________
+
 Reference< XIdlClass > IdlEnumFieldImpl::getType()
     throw(::com::sun::star::uno::RuntimeException)
 {
     return getDeclaringClass();
 }
-//__________________________________________________________________________________________________
+
 FieldAccessMode IdlEnumFieldImpl::getAccessMode()
     throw(::com::sun::star::uno::RuntimeException)
 {
     return FieldAccessMode_READONLY;
 }
-//__________________________________________________________________________________________________
+
 Any IdlEnumFieldImpl::get( const Any & )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     return Any( &_nValue, getTypeDescr() );
 }
-//__________________________________________________________________________________________________
+
 void IdlEnumFieldImpl::set( const Any &, const Any & )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException)
 {
@@ -163,7 +163,7 @@ void IdlEnumFieldImpl::set( const Any &, const Any & )
         OUString("enum field is constant!"),
         (XWeak *)(OWeakObject *)this );
 }
-//__________________________________________________________________________________________________
+
 void IdlEnumFieldImpl::set( Any &, const Any & )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException)
 {
@@ -177,14 +177,14 @@ void IdlEnumFieldImpl::set( Any &, const Any & )
 //##################################################################################################
 
 
-//__________________________________________________________________________________________________
+
 EnumIdlClassImpl::~EnumIdlClassImpl()
 {
     delete _pFields;
 }
 
 // IdlClassImpl modifications
-//__________________________________________________________________________________________________
+
 Reference< XIdlField > EnumIdlClassImpl::getField( const OUString & rName )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -197,7 +197,7 @@ Reference< XIdlField > EnumIdlClassImpl::getField( const OUString & rName )
     else
         return Reference< XIdlField >();
 }
-//__________________________________________________________________________________________________
+
 Sequence< Reference< XIdlField > > EnumIdlClassImpl::getFields()
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -223,7 +223,7 @@ Sequence< Reference< XIdlField > > EnumIdlClassImpl::getFields()
     }
     return *_pFields;
 }
-//__________________________________________________________________________________________________
+
 void EnumIdlClassImpl::createObject( Any & rObj )
     throw(::com::sun::star::uno::RuntimeException)
 {

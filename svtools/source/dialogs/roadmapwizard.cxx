@@ -85,7 +85,7 @@ namespace svt
         sal_Int32 getFirstDifferentIndex( const WizardPath& _rLHS, const WizardPath& _rRHS );
     };
 
-    //--------------------------------------------------------------------
+
     sal_Int32 RoadmapWizardImpl::getStateIndexInPath( WizardTypes::WizardState _nState, const WizardPath& _rPath )
     {
         sal_Int32 nStateIndexInPath = 0;
@@ -98,7 +98,7 @@ namespace svt
         return nStateIndexInPath;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int32 RoadmapWizardImpl::getStateIndexInPath( WizardTypes::WizardState _nState, PathId _nPathId )
     {
         sal_Int32 nStateIndexInPath = -1;
@@ -108,7 +108,7 @@ namespace svt
         return nStateIndexInPath;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int32 RoadmapWizardImpl::getFirstDifferentIndex( const WizardPath& _rLHS, const WizardPath& _rRHS )
     {
         sal_Int32 nMinLength = ::std::min( _rLHS.size(), _rRHS.size() );
@@ -124,14 +124,14 @@ namespace svt
     //= RoadmapWizard
     //====================================================================
     DBG_NAME( RoadmapWizard )
-    //--------------------------------------------------------------------
+
 #ifdef DBG_UTIL
     const char* CheckInvariants( const void* pVoid )
     {
         return static_cast< const RoadmapWizard* >( pVoid )->checkInvariants();
     }
 
-    //--------------------------------------------------------------------
+
     const sal_Char* RoadmapWizard::checkInvariants() const
     {
         // all paths have to start with the same state
@@ -166,7 +166,7 @@ namespace svt
     }
 #endif
 
-    //--------------------------------------------------------------------
+
     RoadmapWizard::RoadmapWizard( Window* _pParent, const ResId& _rRes, sal_uInt32 _nButtonFlags )
         :OWizardMachine( _pParent, _rRes, _nButtonFlags )
         ,m_pImpl( new RoadmapWizardImpl )
@@ -175,7 +175,7 @@ namespace svt
         impl_construct();
     }
 
-    //--------------------------------------------------------------------
+
     RoadmapWizard::RoadmapWizard( Window* _pParent, const WinBits i_nStyle, sal_uInt32 _nButtonFlags )
         :OWizardMachine( _pParent, i_nStyle, _nButtonFlags )
         ,m_pImpl( new RoadmapWizardImpl )
@@ -184,7 +184,7 @@ namespace svt
         impl_construct();
     }
 
-    //--------------------------------------------------------------------
+
     void RoadmapWizard::impl_construct()
     {
         SetLeftAlignedButtonCount( 1 );
@@ -209,26 +209,26 @@ namespace svt
         m_pImpl->pRoadmap->Show();
     }
 
-    //--------------------------------------------------------------------
+
     RoadmapWizard::~RoadmapWizard()
     {
         delete m_pImpl;
         DBG_DTOR( RoadmapWizard, CheckInvariants );
     }
 
-    //--------------------------------------------------------------------
+
     void RoadmapWizard::SetRoadmapHelpId( const OString& _rId )
     {
         m_pImpl->pRoadmap->SetHelpId( _rId );
     }
 
-    //--------------------------------------------------------------------
+
     void RoadmapWizard::SetRoadmapInteractive( sal_Bool _bInteractive )
     {
         m_pImpl->pRoadmap->SetRoadmapInteractive( _bInteractive );
     }
 
-    //--------------------------------------------------------------------
+
     void RoadmapWizard::declarePath( PathId _nPathId, const WizardPath& _lWizardStates)
     {
         DBG_CHKTHIS( RoadmapWizard, CheckInvariants );
@@ -242,7 +242,7 @@ namespace svt
             implUpdateRoadmap( );
     }
 
-    //--------------------------------------------------------------------
+
     void RoadmapWizard::declarePath( PathId _nPathId, WizardState _nFirstState, ... )
     {
         DBG_CHKTHIS( RoadmapWizard, CheckInvariants );
@@ -272,7 +272,7 @@ namespace svt
         declarePath( _nPathId, aNewPath );
     }
 
-    //--------------------------------------------------------------------
+
     void RoadmapWizard::describeState( WizardState _nState, const OUString& _rStateDisplayName, RoadmapPageFactory _pPageFactory )
     {
         OSL_ENSURE( m_pImpl->aStateDescriptors.find( _nState ) == m_pImpl->aStateDescriptors.end(),
@@ -280,7 +280,7 @@ namespace svt
         m_pImpl->aStateDescriptors[ _nState ] = StateDescriptions::mapped_type( _rStateDisplayName, _pPageFactory );
     }
 
-    //--------------------------------------------------------------------
+
     void RoadmapWizard::activatePath( PathId _nPathId, bool _bDecideForIt )
     {
         DBG_CHKTHIS( RoadmapWizard, CheckInvariants );
@@ -325,7 +325,7 @@ namespace svt
         implUpdateRoadmap( );
     }
 
-    //--------------------------------------------------------------------
+
     void RoadmapWizard::implUpdateRoadmap( )
     {
         DBG_CHKTHIS( RoadmapWizard, CheckInvariants );
@@ -432,7 +432,7 @@ namespace svt
         m_pImpl->pRoadmap->SetRoadmapComplete( !bIncompletePath );
     }
 
-    //--------------------------------------------------------------------
+
     WizardTypes::WizardState RoadmapWizard::determineNextState( WizardState _nCurrentState ) const
     {
         DBG_CHKTHIS( RoadmapWizard, CheckInvariants );
@@ -463,7 +463,7 @@ namespace svt
         return aActivePathPos->second[ nNextStateIndex ];
     }
 
-    //---------------------------------------------------------------------
+
     bool RoadmapWizard::canAdvance() const
     {
         if ( !m_pImpl->bActivePathIsDefinite )
@@ -500,7 +500,7 @@ namespace svt
         return true;
     }
 
-    //---------------------------------------------------------------------
+
     void RoadmapWizard::updateTravelUI()
     {
         OWizardMachine::updateTravelUI();
@@ -523,7 +523,7 @@ namespace svt
         implUpdateRoadmap();
     }
 
-    //--------------------------------------------------------------------
+
     IMPL_LINK_NOARG(RoadmapWizard, OnRoadmapItemSelected)
     {
         DBG_CHKTHIS( RoadmapWizard, CheckInvariants );
@@ -568,7 +568,7 @@ namespace svt
         return 1L;
     }
 
-    //--------------------------------------------------------------------
+
     void RoadmapWizard::enterState( WizardState _nState )
     {
         DBG_CHKTHIS( RoadmapWizard, CheckInvariants );
@@ -580,7 +580,7 @@ namespace svt
         m_pImpl->pRoadmap->SelectRoadmapItemByID( getCurrentState() );
     }
 
-    //--------------------------------------------------------------------
+
     OUString RoadmapWizard::getStateDisplayName( WizardState _nState ) const
     {
         OUString sDisplayName;
@@ -594,7 +594,7 @@ namespace svt
         return sDisplayName;
     }
 
-    //--------------------------------------------------------------------
+
     TabPage* RoadmapWizard::createPage( WizardState _nState )
     {
         TabPage* pPage( NULL );
@@ -611,7 +611,7 @@ namespace svt
         return pPage;
     }
 
-    //--------------------------------------------------------------------
+
     void RoadmapWizard::enableState( WizardState _nState, bool _bEnable )
     {
         DBG_CHKTHIS( RoadmapWizard, CheckInvariants );
@@ -629,7 +629,7 @@ namespace svt
         m_pImpl->pRoadmap->EnableRoadmapItem( (RoadmapTypes::ItemId)_nState, _bEnable );
     }
 
-    //--------------------------------------------------------------------
+
     bool RoadmapWizard::knowsState( WizardState i_nState ) const
     {
         for (   Paths::const_iterator path = m_pImpl->aPaths.begin();
@@ -649,13 +649,13 @@ namespace svt
         return false;
     }
 
-    //--------------------------------------------------------------------
+
     bool RoadmapWizard::isStateEnabled( WizardState _nState ) const
     {
         return m_pImpl->aDisabledStates.find( _nState ) == m_pImpl->aDisabledStates.end();
     }
 
-    //--------------------------------------------------------------------
+
     void RoadmapWizard::Resize()
     {
         OWizardMachine::Resize();
@@ -665,7 +665,7 @@ namespace svt
     }
 
 
-    //--------------------------------------------------------------------
+
     void RoadmapWizard::StateChanged( StateChangedType nType )
     {
         WizardDialog::StateChanged( nType );
@@ -674,7 +674,7 @@ namespace svt
             ResizeFixedLine();
     }
 
-    //--------------------------------------------------------------------
+
     void RoadmapWizard::ResizeFixedLine()
     {
         Size aSize( m_pImpl->pRoadmap->GetSizePixel() );
@@ -682,7 +682,7 @@ namespace svt
         m_pImpl->pFixedLine->SetSizePixel( aSize );
     }
 
-    //--------------------------------------------------------------------
+
     void RoadmapWizard::updateRoadmapItemLabel( WizardState _nState )
     {
         const WizardPath& rActivePath( m_pImpl->aPaths[ m_pImpl->nActivePath ] );

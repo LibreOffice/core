@@ -113,7 +113,7 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const OUString& rName, bool
         m_pCbProtect->Enable(false);
 }
 
-//------------------------------------------------------------------------
+
 
 void ScNewScenarioDlg::GetScenarioData( OUString& rName, OUString& rComment,
                                         Color& rColor, sal_uInt16& rFlags ) const
@@ -151,7 +151,7 @@ void ScNewScenarioDlg::SetScenarioData( const OUString& rName, const OUString& r
     m_pCbProtect->Check    ( (nFlags & SC_SCENARIO_PROTECT)     != 0 );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScNewScenarioDlg, OkHdl)
 {
@@ -177,7 +177,7 @@ IMPL_LINK_NOARG(ScNewScenarioDlg, OkHdl)
     //! beim Editieren testen, ob eine andere Tabelle den Namen hat!
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( ScNewScenarioDlg, EnableHdl, CheckBox *, pBox )
 {

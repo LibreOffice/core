@@ -62,7 +62,7 @@ namespace dxcanvas
                                  const rendering::Texture&                      texture )
         {
             // setup a linear gradient with given colors
-            // -----------------------------------------
+
 
             Gdiplus::LinearGradientBrush aBrush(
                 Gdiplus::PointF(0.0f,
@@ -250,7 +250,7 @@ namespace dxcanvas
 
 
                 // determine number of steps to use
-                // --------------------------------
+
 
                 // TODO(Q2): Unify step calculations with VCL canvas
                 int nColorSteps = 0;
@@ -288,7 +288,7 @@ namespace dxcanvas
 
 
                 // apply scaling (possibly anisotrophic) to inner polygon
-                // ------------------------------------------------------
+
 
                 // scale inner polygon according to aspect ratio: for
                 // wider-than-tall bounds (nAspectRatio > 1.0), the inner
@@ -540,7 +540,7 @@ namespace dxcanvas
         }
     }
 
-    // -------------------------------------------------------------
+
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTexturedPolyPolygon( const rendering::XCanvas*                          /*pCanvas*/,
                                                                                          const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,

@@ -97,7 +97,7 @@ using namespace ::com::sun::star;
 #define DEFAULT_PITCH           0x00
 #define FIXED_PITCH             0x01
 
-// ---------------------------------------------------------------------------------------------
+
 
 PPTExBulletProvider::PPTExBulletProvider()
 {
@@ -153,7 +153,7 @@ sal_uInt16 PPTExBulletProvider::GetId( const OString& rUniqueId, Size& rGraphicS
     return nRetValue;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_uInt32 PPTWriter::ImplVBAInfoContainer( SvStream* pStrm )
 {
@@ -172,7 +172,7 @@ sal_uInt32 PPTWriter::ImplVBAInfoContainer( SvStream* pStrm )
     return nSize;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_uInt32 PPTWriter::ImplSlideViewInfoContainer( sal_uInt32 nInstance, SvStream* pStrm )
 {
@@ -223,7 +223,7 @@ sal_uInt32 PPTWriter::ImplSlideViewInfoContainer( sal_uInt32 nInstance, SvStream
     return nSize;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_uInt32 PPTWriter::ImplOutlineViewInfoContainer( SvStream* pStrm )
 {
@@ -243,7 +243,7 @@ sal_uInt32 PPTWriter::ImplOutlineViewInfoContainer( SvStream* pStrm )
     return nSize;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_uInt32 PPTWriter::ImplProgBinaryTag( SvStream* pStrm )
 {
@@ -274,7 +274,7 @@ sal_uInt32 PPTWriter::ImplProgBinaryTag( SvStream* pStrm )
     return nSize;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_uInt32 PPTWriter::ImplProgBinaryTagContainer( SvStream* pStrm, SvMemoryStream* pBinTagStrm )
 {
@@ -305,7 +305,7 @@ sal_uInt32 PPTWriter::ImplProgBinaryTagContainer( SvStream* pStrm, SvMemoryStrea
     return nSize;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_uInt32 PPTWriter::ImplProgTagContainer( SvStream* pStrm, SvMemoryStream* pBinTagStrm )
 {
@@ -328,7 +328,7 @@ sal_uInt32 PPTWriter::ImplProgTagContainer( SvStream* pStrm, SvMemoryStream* pBi
     return nSize;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_uInt32 PPTWriter::ImplDocumentListContainer( SvStream* pStrm )
 {
@@ -353,7 +353,7 @@ sal_uInt32 PPTWriter::ImplDocumentListContainer( SvStream* pStrm )
     return nSize;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_uInt32 PPTWriter::ImplMasterSlideListContainer( SvStream* pStrm )
 {
@@ -376,7 +376,7 @@ sal_uInt32 PPTWriter::ImplMasterSlideListContainer( SvStream* pStrm )
     return nSize;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_uInt32 PPTWriter::ImplInsertBookmarkURL( const OUString& rBookmarkURL, const sal_uInt32 nType,
     const OUString& rStringVer0, const OUString& rStringVer1, const OUString& rStringVer2, const OUString& rStringVer3 )
@@ -416,7 +416,7 @@ sal_uInt32 PPTWriter::ImplInsertBookmarkURL( const OUString& rBookmarkURL, const
     return nHyperId;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_Bool PPTWriter::ImplCloseDocument()
 {
@@ -577,7 +577,7 @@ sal_Bool PPTWriter::ImplCloseDocument()
     return sal_False;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_Bool PropValue::GetPropertyValue(
     ::com::sun::star::uno::Any& rAny,
@@ -617,7 +617,7 @@ sal_Bool PropValue::GetPropertyValue(
     return bRetValue;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 ::com::sun::star::beans::PropertyState PropValue::GetPropertyState(
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
@@ -638,21 +638,21 @@ sal_Bool PropValue::GetPropertyValue(
     return eRetValue;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_Bool PropValue::ImplGetPropertyValue( const OUString& rString )
 {
     return GetPropertyValue( mAny, mXPropSet, rString );
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_Bool PropValue::ImplGetPropertyValue( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & aXPropSet, const OUString& rString )
 {
     return GetPropertyValue( mAny, aXPropSet, rString );
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_Bool PropStateValue::ImplGetPropertyValue( const OUString& rString, sal_Bool bGetPropertyState )
 {
@@ -681,7 +681,7 @@ sal_Bool PropStateValue::ImplGetPropertyValue( const OUString& rString, sal_Bool
     return bRetValue;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
 {
@@ -3890,7 +3890,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
     mpPptEscherEx->CloseContainer();
 }
 
-//----------------------------------------------------------------------------------------------------------
+
 
 void TextObjBinary::Write( SvStream* pStrm )
 {

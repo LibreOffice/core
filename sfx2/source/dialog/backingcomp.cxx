@@ -153,13 +153,13 @@ BackingComp::BackingComp( const css::uno::Reference< css::uno::XComponentContext
 {
 }
 
-//_______________________________________________
+
 
 BackingComp::~BackingComp()
 {
 }
 
-//_______________________________________________
+
 
 /** return information about supported interfaces.
 
@@ -213,7 +213,7 @@ css::uno::Any SAL_CALL BackingComp::queryInterface( /*IN*/ const css::uno::Type&
     return aResult;
 }
 
-//_______________________________________________
+
 
 /** increase ref count of this instance.
  */
@@ -224,7 +224,7 @@ void SAL_CALL BackingComp::acquire()
     OWeakObject::acquire();
 }
 
-//_______________________________________________
+
 
 /** decrease ref count of this instance.
  */
@@ -235,7 +235,7 @@ void SAL_CALL BackingComp::release()
     OWeakObject::release();
 }
 
-//_______________________________________________
+
 
 /** return collection about all supported interfaces.
 
@@ -285,7 +285,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL BackingComp::getTypes()
     return pTypeCollection->getTypes();
 }
 
-//_______________________________________________
+
 
 /** create one unique Id for all instances of this class.
 
@@ -336,7 +336,7 @@ css::uno::Sequence< OUString > SAL_CALL BackingComp::getSupportedServiceNames()
     return lNames;
 }
 
-//_______________________________________________
+
 
 /**
     attach this component to a target frame.
@@ -465,7 +465,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     /* } SAFE */
 }
 
-//_______________________________________________
+
 
 /** not supported.
 
@@ -481,7 +481,7 @@ sal_Bool SAL_CALL BackingComp::attachModel( /*IN*/ const css::uno::Reference< cs
     return sal_False;
 }
 
-//_______________________________________________
+
 
 /** not supported.
 
@@ -497,7 +497,7 @@ css::uno::Reference< css::frame::XModel > SAL_CALL BackingComp::getModel()
     return css::uno::Reference< css::frame::XModel >();
 }
 
-//_______________________________________________
+
 
 /** not supported.
 
@@ -510,7 +510,7 @@ css::uno::Any SAL_CALL BackingComp::getViewData()
     return css::uno::Any();
 }
 
-//_______________________________________________
+
 
 /** not supported.
 
@@ -523,7 +523,7 @@ void SAL_CALL BackingComp::restoreViewData( /*IN*/ const css::uno::Any& )
 {
 }
 
-//_______________________________________________
+
 
 /** returns the attached frame for this component.
 
@@ -542,7 +542,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL BackingComp::getFrame()
     /* } SAFE */
 }
 
-//_______________________________________________
+
 
 /** ask controller for it's current working state.
 
@@ -564,7 +564,7 @@ sal_Bool SAL_CALL BackingComp::suspend( /*IN*/ sal_Bool )
     return sal_True;
 }
 
-//_______________________________________________
+
 
 /** callback from our window member.
 
@@ -600,7 +600,7 @@ void SAL_CALL BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEven
     /* } SAFE */
 }
 
-//_______________________________________________
+
 
 /** kill this instance.
 
@@ -652,7 +652,7 @@ void SAL_CALL BackingComp::dispose()
     /* } SAFE */
 }
 
-//_______________________________________________
+
 
 /** not supported.
 
@@ -672,7 +672,7 @@ void SAL_CALL BackingComp::addEventListener( /*IN*/ const css::uno::Reference< c
             static_cast< ::cppu::OWeakObject* >(this));
 }
 
-//_______________________________________________
+
 
 /** not supported.
 
@@ -687,7 +687,7 @@ void SAL_CALL BackingComp::removeEventListener( /*IN*/ const css::uno::Reference
 {
 }
 
-//_______________________________________________
+
 
 /**
     force initialiation for this component.
@@ -751,7 +751,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
     /* } SAFE */
 }
 
-//_______________________________________________
+
 
 /**
  */
@@ -761,7 +761,7 @@ void SAL_CALL BackingComp::keyPressed( /*IN*/ const css::awt::KeyEvent&  )
 {
 }
 
-//_______________________________________________
+
 
 /**
  */

@@ -683,7 +683,7 @@ const SfxPoolItem& MSWordExportBase::GetItem(sal_uInt16 nWhich) const
     return *pItem;
 }
 
-//------------------------------------------------------------------------------
+
 
 WW8_WrPlc1::WW8_WrPlc1( sal_uInt16 nStructSz )
     : nStructSiz( nStructSz )
@@ -827,7 +827,7 @@ void WW8_WrMagicTable::Append( WW8_CP nCp, sal_uLong nData)
     }
 }
 
-//--------------------------------------------------------------------------
+
 
 void SwWW8Writer::FillCount( SvStream& rStrm, sal_uLong nCount )
 {
@@ -860,7 +860,7 @@ sal_uLong SwWW8Writer::FillUntil( SvStream& rStrm, sal_uLong nEndPos )
 }
 
 
-//--------------------------------------------------------------------------
+
 
 WW8_WrPlcPn::WW8_WrPlcPn( WW8Export& rWr, ePLCFT ePl, WW8_FC nStartFc )
     : rWrt(rWr), nFkpStartPage(0), ePlc(ePl), nMark(0)
@@ -981,7 +981,7 @@ void WW8_WrPlcPn::WritePlc()
     }
 }
 
-//--------------------------------------------------------------------------
+
 
 WW8_WrFkp::WW8_WrFkp(ePLCFT ePl, WW8_FC nStartFc, bool bWrtWW8)
     : ePlc(ePl), nStartGrp(511), nOldStartGrp(511),
@@ -1551,7 +1551,7 @@ void MSWordExportBase::AppendWordBookmark( const OUString& rName )
 }
 
 
-//--------------------------------------------------------------------------
+
 
 void WW8_WrtRedlineAuthor::Write( Writer& rWrt )
 {
@@ -1570,7 +1570,7 @@ sal_uInt16 WW8Export::AddRedlineAuthor( sal_uInt16 nId )
     return pRedlAuthors->AddName( SW_MOD()->GetRedlineAuthor( nId ) );
 }
 
-//--------------------------------------------------------------------------
+
 
 void WW8Export::WriteAsStringTable(const std::vector<OUString>& rStrings,
     sal_Int32& rfcSttbf, sal_Int32& rlcbSttbf, sal_uInt16 nExtraLen)

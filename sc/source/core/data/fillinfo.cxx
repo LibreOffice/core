@@ -678,7 +678,7 @@ void ScDocument::FillInfo(
 
     if(pCondFormList)
         pCondFormList->endRendering();
-    //-------------------------------------------------------------------------
+
     //  bedingte Formatierung auswerten
     ::boost::ptr_vector<ScPatternAttr> aAltPatterns;
     // favour preview over condition
@@ -741,7 +741,7 @@ void ScDocument::FillInfo(
     }
 
     //  bedingte Formatierung Ende
-    //-------------------------------------------------------------------------
+
 
                 //
                 //      Daten von zusammengefassten Zellen anpassen

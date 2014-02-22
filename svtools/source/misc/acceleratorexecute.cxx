@@ -43,11 +43,11 @@ namespace svt
 {
 
 
-//-----------------------------------------------
+
 class SVT_DLLPRIVATE AsyncAccelExec
 {
     public:
-        //---------------------------------------
+
         /** creates a new instance of this class, which can be used
             one times only!
 
@@ -60,7 +60,7 @@ class SVT_DLLPRIVATE AsyncAccelExec
         void execAsync();
 
     private:
-        //---------------------------------------
+
         /** @short  allow creation of instances of this class
                     by using our factory only!
          */
@@ -75,14 +75,14 @@ class SVT_DLLPRIVATE AsyncAccelExec
         css::util::URL m_aURL;
 };
 
-//-----------------------------------------------
+
 AcceleratorExecute::AcceleratorExecute()
     : TMutexInit      (                                                     )
     , m_aAsyncCallback(LINK(this, AcceleratorExecute, impl_ts_asyncCallback))
 {
 }
 
-//-----------------------------------------------
+
 AcceleratorExecute::AcceleratorExecute(const AcceleratorExecute&)
     : TMutexInit      (                                                     )
     , m_aAsyncCallback(LINK(this, AcceleratorExecute, impl_ts_asyncCallback))
@@ -91,20 +91,20 @@ AcceleratorExecute::AcceleratorExecute(const AcceleratorExecute&)
     // but we need this ctor to init our async callback ...
 }
 
-//-----------------------------------------------
+
 AcceleratorExecute::~AcceleratorExecute()
 {
     // does nothing real
 }
 
-//-----------------------------------------------
+
 AcceleratorExecute* AcceleratorExecute::createAcceleratorHelper()
 {
     AcceleratorExecute* pNew = new AcceleratorExecute();
     return pNew;
 }
 
-//-----------------------------------------------
+
 void AcceleratorExecute::init(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                               const css::uno::Reference< css::frame::XFrame >&              xEnv )
 {
@@ -168,14 +168,14 @@ void AcceleratorExecute::init(const css::uno::Reference< css::uno::XComponentCon
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+
 sal_Bool AcceleratorExecute::execute(const KeyCode& aVCLKey)
 {
     css::awt::KeyEvent aAWTKey = AcceleratorExecute::st_VCLKey2AWTKey(aVCLKey);
     return execute(aAWTKey);
 }
 
-//-----------------------------------------------
+
 sal_Bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
 {
     OUString sCommand = impl_ts_findCommand(aAWTKey);
@@ -211,7 +211,7 @@ sal_Bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
     return bRet;
 }
 
-//-----------------------------------------------
+
 css::awt::KeyEvent AcceleratorExecute::st_VCLKey2AWTKey(const KeyCode& aVCLKey)
 {
     css::awt::KeyEvent aAWTKey;
@@ -229,7 +229,7 @@ css::awt::KeyEvent AcceleratorExecute::st_VCLKey2AWTKey(const KeyCode& aVCLKey)
     return aAWTKey;
 }
 
-//-----------------------------------------------
+
 KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
 {
     sal_Bool bShift = ((aAWTKey.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT );
@@ -240,12 +240,12 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
 
     return KeyCode(nKey, bShift, bMod1, bMod2, bMod3);
 }
-//-----------------------------------------------
+
 OUString AcceleratorExecute::findCommand(const css::awt::KeyEvent& aKey)
 {
     return impl_ts_findCommand(aKey);
 }
-//-----------------------------------------------
+
 OUString AcceleratorExecute::impl_ts_findCommand(const css::awt::KeyEvent& aKey)
 {
     // SAFE -> ----------------------------------
@@ -363,7 +363,7 @@ OUString AcceleratorExecute::impl_ts_findCommand(const css::awt::KeyEvent& aKey)
     return OUString();
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st_openModuleConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                                                                                    const css::uno::Reference< css::frame::XFrame >&              xFrame)
 {
@@ -394,7 +394,7 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
     return xAccCfg;
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st_openDocConfig(const css::uno::Reference< css::frame::XModel >& xModel)
 {
     css::uno::Reference< css::ui::XAcceleratorConfiguration >       xAccCfg;
@@ -407,7 +407,7 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
     return xAccCfg;
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::util::XURLTransformer > AcceleratorExecute::impl_ts_getURLParser()
 {
     // SAFE -> ----------------------------------
@@ -431,14 +431,14 @@ css::uno::Reference< css::util::XURLTransformer > AcceleratorExecute::impl_ts_ge
     return xParser;
 }
 
-//-----------------------------------------------
+
 IMPL_LINK_NOARG(AcceleratorExecute, impl_ts_asyncCallback)
 {
     // replaced by AsyncAccelExec!
     return 0;
 }
 
-//-----------------------------------------------
+
 AsyncAccelExec::AsyncAccelExec(const css::uno::Reference< css::frame::XDispatch >& xDispatch,
                                const css::util::URL&                               aURL     )
     : m_aAsyncCallback(LINK(this, AsyncAccelExec, impl_ts_asyncCallback))
@@ -447,7 +447,7 @@ AsyncAccelExec::AsyncAccelExec(const css::uno::Reference< css::frame::XDispatch 
 {
 }
 
-//-----------------------------------------------
+
 AsyncAccelExec* AsyncAccelExec::createOnShotInstance(const css::uno::Reference< css::frame::XDispatch >& xDispatch,
                                                      const css::util::URL&                               aURL     )
 {
@@ -455,13 +455,13 @@ AsyncAccelExec* AsyncAccelExec::createOnShotInstance(const css::uno::Reference< 
     return pExec;
 }
 
-//-----------------------------------------------
+
 void AsyncAccelExec::execAsync()
 {
     m_aAsyncCallback.Post(0);
 }
 
-//-----------------------------------------------
+
 IMPL_LINK(AsyncAccelExec, impl_ts_asyncCallback, void*,)
 {
     if (! m_xDispatch.is())

@@ -84,9 +84,9 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::graphic;
 
-// -------------
+
 // - PDFExport -
-// -------------
+
 
 PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
                       const Reference< task::XStatusIndicator >& rxStatusIndicator,
@@ -148,13 +148,13 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 PDFExport::~PDFExport()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
     Reference< com::sun::star::view::XRenderable >& rRenderable,
@@ -999,7 +999,7 @@ void PDFExport::showErrors( const std::set< PDFWriter::ErrorCode >& rErrors )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool PDFExport::ImplExportPage( PDFWriter& rWriter, PDFExtOutDevData& rPDFExtOutDevData, const GDIMetaFile& rMtf )
 {
@@ -1041,7 +1041,7 @@ sal_Bool PDFExport::ImplExportPage( PDFWriter& rWriter, PDFExtOutDevData& rPDFEx
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void PDFExport::ImplWriteWatermark( PDFWriter& rWriter, const Size& rPageSize )
 {

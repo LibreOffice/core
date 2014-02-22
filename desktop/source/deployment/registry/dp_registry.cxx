@@ -129,7 +129,7 @@ public:
 
 };
 
-//______________________________________________________________________________
+
 inline void PackageRegistryImpl::check()
 {
     ::osl::MutexGuard guard( getMutex() );
@@ -140,7 +140,7 @@ inline void PackageRegistryImpl::check()
     }
 }
 
-//______________________________________________________________________________
+
 void PackageRegistryImpl::disposing()
 {
     // dispose all backends:
@@ -156,12 +156,12 @@ void PackageRegistryImpl::disposing()
     t_helper::disposing();
 }
 
-//______________________________________________________________________________
+
 PackageRegistryImpl::~PackageRegistryImpl()
 {
 }
 
-//______________________________________________________________________________
+
 OUString normalizeMediaType( OUString const & mediaType )
 {
     OUStringBuffer buf;
@@ -175,7 +175,7 @@ OUString normalizeMediaType( OUString const & mediaType )
     return buf.makeStringAndClear();
 }
 
-//______________________________________________________________________________
+
 
 void PackageRegistryImpl::packageRemoved(
     OUString const & url, OUString const & mediaType)
@@ -294,7 +294,7 @@ void PackageRegistryImpl::insertBackend(
     }
 }
 
-//______________________________________________________________________________
+
 Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
     OUString const & context,
     OUString const & cachePath, bool readOnly,
@@ -443,7 +443,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
 }
 
 // XUpdatable: broadcast to backends
-//______________________________________________________________________________
+
 void PackageRegistryImpl::update() throw (RuntimeException)
 {
     check();
@@ -457,7 +457,7 @@ void PackageRegistryImpl::update() throw (RuntimeException)
 }
 
 // XPackageRegistry
-//______________________________________________________________________________
+
 Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
     OUString const & url, OUString const & mediaType_, sal_Bool bRemoved,
     OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
@@ -533,7 +533,7 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
     }
 }
 
-//______________________________________________________________________________
+
 Sequence< Reference<deployment::XPackageTypeInfo> >
 PackageRegistryImpl::getSupportedPackageTypes() throw (RuntimeException)
 {

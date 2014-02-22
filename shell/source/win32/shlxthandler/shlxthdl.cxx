@@ -29,9 +29,9 @@
 #include <string>
 #include <shlobj.h>
 
-//---------------------------
+
 // Module global
-//---------------------------
+
 long g_DllRefCnt = 0;
 HINSTANCE g_hModule = NULL;
 
@@ -53,10 +53,10 @@ namespace /* private */
 
     const char* SHELL_EXTENSION_APPROVED_KEY_NAME   = "Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved";
 
-    //---------------------------
+
     // "String Placeholder" ->
     // "String Replacement"
-    //---------------------------
+
     void SubstitutePlaceholder(std::string& String, const std::string& Placeholder, const std::string& Replacement)
     {
         std::string::size_type idx = String.find(Placeholder);
@@ -298,9 +298,9 @@ namespace /* private */
 } // namespace /* private */
 
 
-//---------------------
+
 // COM exports
-//---------------------
+
 
 extern "C" STDAPI DllRegisterServer()
 {

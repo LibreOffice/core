@@ -46,18 +46,18 @@ sdbcx::ObjectType ODbaseColumns::createObject(const OUString& _rName)
     return xRet;
 }
 
-// -------------------------------------------------------------------------
+
 void ODbaseColumns::impl_refresh() throw(RuntimeException)
 {
     m_pTable->refreshColumns();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > ODbaseColumns::createDescriptor()
 {
     return new sdbcx::OColumn(isCaseSensitive());
 }
-// -----------------------------------------------------------------------------
-// -------------------------------------------------------------------------
+
+
 // XAppend
 sdbcx::ObjectType ODbaseColumns::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
@@ -67,14 +67,14 @@ sdbcx::ObjectType ODbaseColumns::appendObject( const OUString& _rForName, const 
     m_pTable->addColumn( descriptor );
     return createObject( _rForName );
 }
-// -----------------------------------------------------------------------------
-// -------------------------------------------------------------------------
+
+
 // XDrop
 void ODbaseColumns::dropObject(sal_Int32 _nPos,const OUString /*_sElementName*/)
 {
     if(!m_pTable->isNew())
         m_pTable->dropColumn(_nPos);
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

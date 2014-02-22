@@ -29,19 +29,19 @@ namespace connectivity
     //====================================================================
     //= ODataAccessCharSet
     //====================================================================
-    //----------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL ODataAccessCharSet::acquire()
     {
         return ORefBase::acquire();
     }
 
-    //----------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL ODataAccessCharSet::release()
     {
         return ORefBase::release();
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int32 ODataAccessCharSet::getSupportedTextEncodings( ::std::vector< rtl_TextEncoding >& _rEncs ) const
     {
         _rEncs.clear();

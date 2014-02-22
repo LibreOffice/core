@@ -39,7 +39,7 @@ namespace pcr
     //==================================================================
     //= ControlHelper
     //==================================================================
-    //------------------------------------------------------------------
+
     ControlHelper::ControlHelper( Window* _pControlWindow, sal_Int16 _nControlType, XPropertyControl& _rAntiImpl, IModifyListener* _pModifyListener )
         :m_pControlWindow( _pControlWindow )
         ,m_nControlType( _nControlType )
@@ -50,42 +50,42 @@ namespace pcr
         DBG_ASSERT( m_pControlWindow != NULL, "ControlHelper::ControlHelper: invalid window!" );
     }
 
-    //------------------------------------------------------------------
+
     ControlHelper::~ControlHelper()
     {
     }
 
-    //--------------------------------------------------------------------
+
     ::sal_Int16 SAL_CALL ControlHelper::getControlType() throw (RuntimeException)
     {
         return m_nControlType;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XPropertyControlContext > SAL_CALL ControlHelper::getControlContext() throw (RuntimeException)
     {
         return m_xContext;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ControlHelper::setControlContext( const Reference< XPropertyControlContext >& _controlcontext ) throw (RuntimeException)
     {
         m_xContext = _controlcontext;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XWindow > SAL_CALL ControlHelper::getControlWindow() throw (RuntimeException)
     {
         return VCLUnoHelper::GetInterface( m_pControlWindow );
     }
 
-    //--------------------------------------------------------------------
+
     ::sal_Bool SAL_CALL ControlHelper::isModified(  ) throw (RuntimeException)
     {
         return m_bModified;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ControlHelper::notifyModifiedValue(  ) throw (RuntimeException)
     {
         if ( isModified() && m_xContext.is() )
@@ -102,13 +102,13 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL ControlHelper::dispose()
     {
         DELETEZ( m_pControlWindow );
     }
 
-    //------------------------------------------------------------------
+
     void ControlHelper::autoSizeWindow()
     {
         OSL_PRECOND( m_pControlWindow, "ControlHelper::autoSizeWindow: no window!" );
@@ -123,7 +123,7 @@ namespace pcr
         // of the browser listbox/line?
     }
 
-    //------------------------------------------------------------------
+
     void ControlHelper::impl_activateNextControl_nothrow() const
     {
         try
@@ -137,7 +137,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+
     bool ControlHelper::handlePreNotify(NotifyEvent& rNEvt)
     {
         if (EVENT_KEYINPUT == rNEvt.GetType())
@@ -155,7 +155,7 @@ namespace pcr
         return false;
     }
 
-    //------------------------------------------------------------------
+
     IMPL_LINK( ControlHelper, ModifiedHdl, Window*, /*_pWin*/ )
     {
         if ( m_pModifyListener )
@@ -163,7 +163,7 @@ namespace pcr
         return 0;
     }
 
-    //------------------------------------------------------------------
+
     IMPL_LINK( ControlHelper, GetFocusHdl, Window*, /*_pWin*/ )
     {
         try
@@ -178,7 +178,7 @@ namespace pcr
         return 0;
     }
 
-    //------------------------------------------------------------------
+
     IMPL_LINK( ControlHelper, LoseFocusHdl, Window*, /*_pWin*/ )
     {
         // TODO/UNOize: should this be outside the default control's implementations? If somebody

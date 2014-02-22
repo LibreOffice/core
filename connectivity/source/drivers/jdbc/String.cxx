@@ -41,7 +41,7 @@ jclass java_lang_String::st_getMyClass()
     return theClass;
 }
 
-//--------------------------------------------------------------------------
+
 java_lang_String::operator OUString()
 {
     SDBThreadAttach t;

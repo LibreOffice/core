@@ -39,7 +39,7 @@
 using namespace ::com::sun::star;
 
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL UNOEmbeddedObjectCreator::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
@@ -48,20 +48,20 @@ uno::Sequence< OUString > SAL_CALL UNOEmbeddedObjectCreator::impl_staticGetSuppo
     return aRet;
 }
 
-//-------------------------------------------------------------------------
+
 OUString SAL_CALL UNOEmbeddedObjectCreator::impl_staticGetImplementationName()
 {
     return OUString("com.sun.star.comp.embed.EmbeddedObjectCreator");
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
     return uno::Reference< uno::XInterface >( *new UNOEmbeddedObjectCreator( comphelper::getComponentContext(xServiceManager) ) );
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceInitNew(
                                             const uno::Sequence< sal_Int8 >& aClassID,
                                             const OUString& aClassName,
@@ -106,7 +106,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     return xEmbFact->createInstanceUserInit( aClassID, aClassName, xStorage, sEntName, embed::EntryInitModes::TRUNCATE_INIT, uno::Sequence < beans::PropertyValue >(), lObjArgs);
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceInitFromEntry(
                                                                     const uno::Reference< embed::XStorage >& xStorage,
                                                                     const OUString& sEntName,
@@ -226,7 +226,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     return xResult;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceInitFromMediaDescriptor(
         const uno::Reference< embed::XStorage >& xStorage,
         const OUString& sEntName,
@@ -288,7 +288,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     return xResult;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceUserInit(
         const uno::Sequence< sal_Int8 >& aClassID,
         const OUString& sClassName,
@@ -332,7 +332,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
                                                 aObjectArgs );
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceLink(
                                             const uno::Reference< embed::XStorage >& xStorage,
                                             const OUString& sEntName,
@@ -405,7 +405,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     return xResult;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceLinkUserInit(
                                                 const uno::Sequence< sal_Int8 >& aClassID,
                                                 const OUString& aClassName,
@@ -438,7 +438,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 
 }
 
-//-------------------------------------------------------------------------
+
 OUString SAL_CALL UNOEmbeddedObjectCreator::getImplementationName()
     throw ( uno::RuntimeException )
 {
@@ -451,7 +451,7 @@ sal_Bool SAL_CALL UNOEmbeddedObjectCreator::supportsService( const OUString& Ser
     return cppu::supportsService(this, ServiceName);
 }
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL UNOEmbeddedObjectCreator::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {

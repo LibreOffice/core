@@ -177,7 +177,7 @@ void XclListColor::Merge( const XclListColor& rColor )
     AddWeighting( nWeight2 );
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** Data for each inserted original color, represented by a color ID. */
 struct XclColorIdData
@@ -224,7 +224,7 @@ typedef ::std::vector< XclNearest > XclNearestVec;
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 class XclExpPaletteImpl
 {
@@ -318,7 +318,7 @@ private:
     sal_uInt32          mnLastIdx;          /// Last insertion index for search opt.
 };
 
-// ----------------------------------------------------------------------------
+
 
 const sal_uInt32 EXC_PAL_INDEXBASE          = 0xFFFF0000;
 const sal_uInt32 EXC_PAL_MAXRAWSIZE         = 1024;
@@ -762,7 +762,7 @@ sal_Int32 XclExpPaletteImpl::GetNearPaletteColors(
     return nDist1;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpPalette::XclExpPalette( const XclExpRoot& rRoot ) :
     XclDefaultPalette( rRoot ),
@@ -939,7 +939,7 @@ bool XclExpFontHelper::CheckItems( const XclExpRoot& rRoot, const SfxItemSet& rI
     return bUsed;
 }
 
-// ----------------------------------------------------------------------------
+
 
 namespace {
 
@@ -962,7 +962,7 @@ sal_uInt32 lclCalcHash( const XclFontData& rFontData )
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 XclExpFont::XclExpFont( const XclExpRoot& rRoot,
         const XclFontData& rFontData, XclExpColorType eColorType ) :
@@ -1022,7 +1022,7 @@ void XclExpFont::WriteBody( XclExpStream& rStrm )
             << aFontName;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpBlindFont::XclExpBlindFont( const XclExpRoot& rRoot ) :
     XclExpFont( rRoot, XclFontData(), EXC_COLOR_CELLTEXT )
@@ -1205,7 +1205,7 @@ struct XclExpNumFmtPred
                             { return rFormat.mnScNumFmt == mnScNumFmt; }
 };
 
-// ----------------------------------------------------------------------------
+
 
 void XclExpNumFmt::SaveXml( XclExpXmlStream& rStrm )
 {
@@ -1216,7 +1216,7 @@ void XclExpNumFmt::SaveXml( XclExpXmlStream& rStrm )
             FSEND );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpNumFmtBuffer::XclExpNumFmtBuffer( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
@@ -1383,7 +1383,7 @@ void XclExpCellProt::SaveXml( XclExpXmlStream& rStrm ) const
             FSEND );
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool XclExpCellAlign::FillFromItemSet(
         const SfxItemSet& rItemSet, bool bForceLineBreak, XclBiff eBiff, bool bStyle )
@@ -1541,7 +1541,7 @@ void XclExpCellAlign::SaveXml( XclExpXmlStream& rStrm ) const
             FSEND );
 }
 
-// ----------------------------------------------------------------------------
+
 
 namespace {
 
@@ -1595,7 +1595,7 @@ void lclGetBorderLine(
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 XclExpCellBorder::XclExpCellBorder() :
     mnLeftColorId(   XclExpPalette::GetColorIdFromIndex( mnLeftColor ) ),
@@ -1772,7 +1772,7 @@ void XclExpCellBorder::SaveXml( XclExpXmlStream& rStrm ) const
     rStyleSheet->endElement( XML_border );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpCellArea::XclExpCellArea() :
     mnForeColorId( XclExpPalette::GetColorIdFromIndex( mnForeColor ) ),
@@ -1902,7 +1902,7 @@ void XclExpColor::SaveXml( XclExpXmlStream& rStrm ) const
     rStyleSheet->endElement( XML_fill );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpXFId::XclExpXFId() :
     mnXFId( XclExpXFBuffer::GetDefCellXFId() ),
@@ -1921,7 +1921,7 @@ void XclExpXFId::ConvertXFIndex( const XclExpRoot& rRoot )
     mnXFIndex = rRoot.GetXFBuffer().GetXFIndex( mnXFId );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpXF::XclExpXF(
         const XclExpRoot& rRoot, const ScPatternAttr& rPattern, sal_Int16 nScript,
@@ -2137,7 +2137,7 @@ void XclExpXF::SaveXml( XclExpXmlStream& rStrm )
     rStyleSheet->endElement( XML_xf );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpDefaultXF::XclExpDefaultXF( const XclExpRoot& rRoot, bool bCellXF ) :
     XclExpXF( rRoot, bCellXF )
@@ -2156,7 +2156,7 @@ void XclExpDefaultXF::SetNumFmt( sal_uInt16 nXclNumFmt )
     mbFmtUsed = true;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpStyle::XclExpStyle( sal_uInt32 nXFId, const OUString& rStyleName ) :
     XclExpRecord( EXC_ID_STYLE, 4 ),
@@ -2243,7 +2243,7 @@ void XclExpStyle::SaveXml( XclExpXmlStream& rStrm )
     // OOXTODO: XML_extLst
 }
 
-// ----------------------------------------------------------------------------
+
 
 namespace {
 
@@ -2260,7 +2260,7 @@ bool lclIsBuiltInStyle( const OUString& rStyleName )
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 XclExpXFBuffer::XclExpBuiltInInfo::XclExpBuiltInInfo() :
     mnStyleId( EXC_STYLE_USERDEF ),
@@ -2270,7 +2270,7 @@ XclExpXFBuffer::XclExpBuiltInInfo::XclExpBuiltInInfo() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** Predicate for search algorithm. */
 struct XclExpBorderPred

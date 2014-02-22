@@ -25,7 +25,7 @@
 
 // MasterPasswordCreateDialog---------------------------------------------------
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(MasterPasswordCreateDialog, EditHdl_Impl)
 {
@@ -33,7 +33,7 @@ IMPL_LINK_NOARG(MasterPasswordCreateDialog, EditHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(MasterPasswordCreateDialog, OKHdl_Impl)
 {
@@ -52,7 +52,7 @@ IMPL_LINK_NOARG(MasterPasswordCreateDialog, OKHdl_Impl)
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 MasterPasswordCreateDialog::MasterPasswordCreateDialog(Window* pParent, ResMgr* pResMgr)
     : ModalDialog(pParent, "SetMasterPasswordDialog", "uui/ui/setmasterpassworddlg.ui")

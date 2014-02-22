@@ -25,21 +25,21 @@ using namespace ::com::sun::star::accessibility;
 
 namespace accessibility
 {
-    // ---------------------------
+
     // - AccessibleSelectionBase -
-    // ---------------------------
+
 
     AccessibleSelectionBase::AccessibleSelectionBase()
     {
     }
 
-    //--------------------------------------------------------------------
+
 
     AccessibleSelectionBase::~AccessibleSelectionBase()
     {
     }
 
-    //--------------------------------------------------------------------
+
 
     void SAL_CALL AccessibleSelectionBase::selectAccessibleChild( sal_Int32 nChildIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
@@ -47,7 +47,7 @@ namespace accessibility
         OCommonAccessibleSelection::selectAccessibleChild( nChildIndex );
     }
 
-    //--------------------------------------------------------------------
+
 
     sal_Bool SAL_CALL AccessibleSelectionBase::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
@@ -55,7 +55,7 @@ namespace accessibility
         return( OCommonAccessibleSelection::isAccessibleChildSelected( nChildIndex ) );
     }
 
-    //--------------------------------------------------------------------
+
 
     void SAL_CALL AccessibleSelectionBase::clearAccessibleSelection(  ) throw (uno::RuntimeException)
     {
@@ -63,7 +63,7 @@ namespace accessibility
         OCommonAccessibleSelection::clearAccessibleSelection();
     }
 
-    //--------------------------------------------------------------------
+
 
     void SAL_CALL AccessibleSelectionBase::selectAllAccessibleChildren(  ) throw (uno::RuntimeException)
     {
@@ -71,7 +71,7 @@ namespace accessibility
         OCommonAccessibleSelection::selectAllAccessibleChildren();
     }
 
-    //--------------------------------------------------------------------
+
 
     sal_Int32 SAL_CALL AccessibleSelectionBase::getSelectedAccessibleChildCount(  ) throw (uno::RuntimeException)
     {
@@ -79,7 +79,7 @@ namespace accessibility
         return( OCommonAccessibleSelection::getSelectedAccessibleChildCount() );
     }
 
-    //--------------------------------------------------------------------
+
 
     uno::Reference< XAccessible > SAL_CALL AccessibleSelectionBase::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
@@ -87,7 +87,7 @@ namespace accessibility
         return( OCommonAccessibleSelection::getSelectedAccessibleChild( nSelectedChildIndex ) );
     }
 
-    //--------------------------------------------------------------------
+
 
     void SAL_CALL AccessibleSelectionBase::deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {

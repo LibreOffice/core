@@ -74,7 +74,7 @@ using namespace com::sun::star::accessibility;
 using namespace com::sun::star;
 using namespace comphelper;
 
-// -----------------------------------------------------------------------
+
 
 #define REMEMBER_SIZE       10
 
@@ -163,14 +163,14 @@ SearchAttrItemList::SearchAttrItemList( const SearchAttrItemList& rList ) :
             (*this)[i].pItem = (*this)[i].pItem->Clone();
 }
 
-// -----------------------------------------------------------------------
+
 
 SearchAttrItemList::~SearchAttrItemList()
 {
     Clear();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SearchAttrItemList::Put( const SfxItemSet& rSet )
 {
@@ -206,7 +206,7 @@ void SearchAttrItemList::Put( const SfxItemSet& rSet )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxItemSet& SearchAttrItemList::Get( SfxItemSet& rSet )
 {
@@ -220,7 +220,7 @@ SfxItemSet& SearchAttrItemList::Get( SfxItemSet& rSet )
     return rSet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SearchAttrItemList::Clear()
 {
@@ -230,7 +230,7 @@ void SearchAttrItemList::Clear()
     SrchAttrItemList::clear();
 }
 
-// -----------------------------------------------------------------------
+
 
 // Deletes the pointer to the items
 void SearchAttrItemList::Remove(size_t nPos, size_t nLen)
@@ -341,7 +341,7 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxChildWindow* pChildWin, Sf
     Construct_Impl();
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxSearchDialog::~SvxSearchDialog()
 {
@@ -492,7 +492,7 @@ void SvxSearchDialog::Construct_Impl()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxSearchDialog::Close()
 {
@@ -521,7 +521,7 @@ bool SvxSearchDialog::Close()
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Int32 SvxSearchDialog::GetTransliterationFlags() const
 {
@@ -541,7 +541,7 @@ void SvxSearchDialog::SetSaveToModule(bool b)
     pImpl->bSaveToModule = b;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxSearchDialog::ApplyTransliterationFlags_Impl( sal_Int32 nSettings )
 {
@@ -552,7 +552,7 @@ void SvxSearchDialog::ApplyTransliterationFlags_Impl( sal_Int32 nSettings )
     m_pJapMatchFullHalfWidthCB->Check( !bVal );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxSearchDialog::Activate()
 {
@@ -565,7 +565,7 @@ void SvxSearchDialog::Activate()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxSearchDialog::InitControls_Impl()
 {
@@ -688,7 +688,7 @@ void SvxSearchDialog::ShowOptionalControls_Impl()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 namespace {
 
@@ -990,7 +990,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
                                          const SfxItemSet* pRSet )
@@ -1050,7 +1050,7 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Control *, pCtrl )
 {
@@ -1170,7 +1170,7 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Control *, pCtrl )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
 {
@@ -1335,7 +1335,7 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, ComboBox *, pEd )
 {
@@ -1377,7 +1377,7 @@ IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, ComboBox *, pEd )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl)
 {
@@ -1465,7 +1465,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxSearchDialog::Remember_Impl( const OUString &rStr, sal_Bool _bSearch )
 {
@@ -1494,7 +1494,7 @@ void SvxSearchDialog::Remember_Impl( const OUString &rStr, sal_Bool _bSearch )
     pListBox->InsertEntry(rStr, 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxSearchDialog::TemplatesChanged_Impl( SfxStyleSheetBasePool& rPool )
 {
@@ -1534,7 +1534,7 @@ void SvxSearchDialog::TemplatesChanged_Impl( SfxStyleSheetBasePool& rPool )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxSearchDialog::EnableControls_Impl( const sal_uInt16 nFlags )
 {
@@ -1650,7 +1650,7 @@ void SvxSearchDialog::EnableControls_Impl( const sal_uInt16 nFlags )
                    ( !pSearchList || !pSearchList->Count() ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxSearchDialog::EnableControl_Impl( Control* pCtrl )
 {
@@ -1740,7 +1740,7 @@ void SvxSearchDialog::EnableControl_Impl( Control* pCtrl )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxSearchDialog::SetItem_Impl( const SvxSearchItem* pItem )
 {
@@ -1753,7 +1753,7 @@ void SvxSearchDialog::SetItem_Impl( const SvxSearchItem* pItem )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
 {
@@ -1814,7 +1814,7 @@ IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxSearchDialog, LoseFocusHdl_Impl)
 {
@@ -1822,7 +1822,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, LoseFocusHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl)
 {
@@ -1918,7 +1918,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl)
 {
@@ -1959,7 +1959,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxSearchDialog, AttributeHdl_Impl)
 {
@@ -1978,7 +1978,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, AttributeHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxSearchDialog, TimeoutHdl_Impl, Timer *, pTimer )
 {
@@ -1999,7 +1999,7 @@ IMPL_LINK( SvxSearchDialog, TimeoutHdl_Impl, Timer *, pTimer )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString& SvxSearchDialog::BuildAttrText_Impl( OUString& rStr,
                                              sal_Bool bSrchFlag ) const
@@ -2070,7 +2070,7 @@ OUString& SvxSearchDialog::BuildAttrText_Impl( OUString& rStr,
     return rStr;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxSearchDialog::PaintAttrText_Impl()
 {
@@ -2092,7 +2092,7 @@ void SvxSearchDialog::PaintAttrText_Impl()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxSearchDialog::SetModifyFlag_Impl( const Control* pCtrl )
 {
@@ -2130,7 +2130,7 @@ void SvxSearchDialog::SetModifyFlag_Impl( const Control* pCtrl )
         nModifyFlag |= MODIFY_ALLTABLES;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxSearchDialog::SaveToModule_Impl()
 {
@@ -2208,7 +2208,7 @@ void SvxSearchDialog::SaveToModule_Impl()
 
 SFX_IMPL_CHILDWINDOW_WITHID(SvxSearchDialogWrapper, SID_SEARCH_DLG);
 
-// -----------------------------------------------------------------------
+
 
 SvxSearchDialogWrapper::SvxSearchDialogWrapper( Window* _pParent, sal_uInt16 nId,
                                                 SfxBindings* pBindings,
@@ -2236,7 +2236,7 @@ SvxSearchDialog *SvxSearchDialogWrapper::getDialog ()
     return dialog;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxChildWinInfo SvxSearchDialogWrapper::GetInfo() const
 {

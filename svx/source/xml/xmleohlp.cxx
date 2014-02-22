@@ -59,7 +59,7 @@ using namespace ::com::sun::star::lang;
 #define XML_EMBEDDEDOBJECT_URL_BASE     "vnd.sun.star.EmbeddedObject:"
 #define XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE      "vnd.sun.star.GraphicObject:"
 
-// -----------------------------------------------------------------------------
+
 
 class OutputStorageWrapper_Impl : public ::cppu::WeakImplHelper1<XOutputStream>
 {

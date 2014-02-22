@@ -105,9 +105,9 @@ using namespace sw::types;
 using namespace ::com::sun::star;
 using namespace nsHdFtFlags;
 
-//-----------------------------------------
+
 //              diverses
-//-----------------------------------------
+
 
 #define MM_250 1417             // WW-Default fuer Hor. Seitenraender: 2.5 cm
 #define MM_200 1134             // WW-Default fuer u.Seitenrand: 2.0 cm
@@ -1194,9 +1194,9 @@ void SwWW8ImplReader::CopyPageDescHdFt(const SwPageDesc* pOrgPageDesc,
     }
 }
 
-//------------------------------------------------------
+
 //   Hilfsroutinen fuer Grafiken und Apos und Tabellen
-//------------------------------------------------------
+
 
 static bool _SetWW8_BRC(bool bVer67, WW8_BRC& rVar, const sal_uInt8* pS)
 {
@@ -1454,9 +1454,9 @@ bool SwWW8ImplReader::SetFlyBordersShadow(SfxItemSet& rFlySet,
     return bShadowed;
 }
 
-//-----------------------------------------
+
 //              APOs
-//-----------------------------------------
+
                             // fuer Berechnung der minimalen FrameSize
 #define MAX_BORDER_SIZE 210         // so breit ist max. der Border
 #define MAX_EMPTY_BORDER 10         // fuer +-1-Fehler, mindestens 1
@@ -6126,9 +6126,9 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
     return &aSprmSrch;
 }
 
-//-----------------------------------------
+
 //      Hilfsroutinen : SPRM finden
-//-----------------------------------------
+
 
 const SprmReadInfo& SwWW8ImplReader::GetSprmReadInfo(sal_uInt16 nId) const
 {
@@ -6154,9 +6154,9 @@ const SprmReadInfo& SwWW8ImplReader::GetSprmReadInfo(sal_uInt16 nId) const
     return *pFound;
 }
 
-//-----------------------------------------
+
 //      Hilfsroutinen : SPRMs
-//-----------------------------------------
+
 void SwWW8ImplReader::EndSprm( sal_uInt16 nId )
 {
     if( ( nId > 255 ) && ( nId < 0x0800 ) ) return;

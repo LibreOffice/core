@@ -299,7 +299,7 @@ void SAL_CALL SfxStatusDispatcher::removeStatusListener( const ::com::sun::star:
     aListeners.removeInterface( aURL.Complete, aListener );
 }
 
-//-------------------------------------------------------------------------
+
 // XUnoTunnel
 sal_Int64 SAL_CALL SfxOfficeDispatch::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException)
 {

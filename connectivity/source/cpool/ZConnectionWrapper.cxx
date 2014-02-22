@@ -26,19 +26,19 @@
 #include <comphelper/sequence.hxx>
 
 using namespace connectivity;
-//------------------------------------------------------------------------------
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
-// --------------------------------------------------------------------------------
+
 OConnectionWeakWrapper::OConnectionWeakWrapper(Reference< XAggregation >& _xConnection)
     : OConnectionWeakWrapper_BASE(m_aMutex)
 {
     setDelegation(_xConnection,m_refCount);
     OSL_ENSURE(m_xConnection.is(),"OConnectionWeakWrapper: Connection must be valid!");
 }
-//-----------------------------------------------------------------------------
+
 OConnectionWeakWrapper::~OConnectionWeakWrapper()
 {
     if ( !OConnectionWeakWrapper_BASE::rBHelper.bDisposed )
@@ -48,10 +48,10 @@ OConnectionWeakWrapper::~OConnectionWeakWrapper()
     }
 }
 // XServiceInfo
-// --------------------------------------------------------------------------------
+
 IMPLEMENT_SERVICE_INFO(OConnectionWeakWrapper, "com.sun.star.sdbc.drivers.OConnectionWeakWrapper", "com.sun.star.sdbc.Connection")
 
-// --------------------------------------------------------------------------------
+
 Reference< XStatement > SAL_CALL OConnectionWeakWrapper::createStatement(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -60,7 +60,7 @@ Reference< XStatement > SAL_CALL OConnectionWeakWrapper::createStatement(  ) thr
 
     return m_xConnection->createStatement();
 }
-// --------------------------------------------------------------------------------
+
 Reference< XPreparedStatement > SAL_CALL OConnectionWeakWrapper::prepareStatement( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -69,7 +69,7 @@ Reference< XPreparedStatement > SAL_CALL OConnectionWeakWrapper::prepareStatemen
 
     return m_xConnection->prepareStatement(sql);
 }
-// --------------------------------------------------------------------------------
+
 Reference< XPreparedStatement > SAL_CALL OConnectionWeakWrapper::prepareCall( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -78,7 +78,7 @@ Reference< XPreparedStatement > SAL_CALL OConnectionWeakWrapper::prepareCall( co
 
     return m_xConnection->prepareCall(sql);
 }
-// --------------------------------------------------------------------------------
+
 OUString SAL_CALL OConnectionWeakWrapper::nativeSQL( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -87,7 +87,7 @@ OUString SAL_CALL OConnectionWeakWrapper::nativeSQL( const OUString& sql ) throw
 
     return m_xConnection->nativeSQL(sql);
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnectionWeakWrapper::setAutoCommit( sal_Bool autoCommit ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -95,7 +95,7 @@ void SAL_CALL OConnectionWeakWrapper::setAutoCommit( sal_Bool autoCommit ) throw
 
     m_xConnection->setAutoCommit(autoCommit);
 }
-// --------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OConnectionWeakWrapper::getAutoCommit(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -104,7 +104,7 @@ sal_Bool SAL_CALL OConnectionWeakWrapper::getAutoCommit(  ) throw(SQLException, 
 
     return m_xConnection->getAutoCommit();
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnectionWeakWrapper::commit(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -113,7 +113,7 @@ void SAL_CALL OConnectionWeakWrapper::commit(  ) throw(SQLException, RuntimeExce
 
     m_xConnection->commit();
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnectionWeakWrapper::rollback(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -122,14 +122,14 @@ void SAL_CALL OConnectionWeakWrapper::rollback(  ) throw(SQLException, RuntimeEx
 
     m_xConnection->rollback();
 }
-// --------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OConnectionWeakWrapper::isClosed(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     return m_xConnection->isClosed();
 }
-// --------------------------------------------------------------------------------
+
 Reference< XDatabaseMetaData > SAL_CALL OConnectionWeakWrapper::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -138,7 +138,7 @@ Reference< XDatabaseMetaData > SAL_CALL OConnectionWeakWrapper::getMetaData(  ) 
 
     return m_xConnection->getMetaData();
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnectionWeakWrapper::setReadOnly( sal_Bool readOnly ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -147,7 +147,7 @@ void SAL_CALL OConnectionWeakWrapper::setReadOnly( sal_Bool readOnly ) throw(SQL
 
     m_xConnection->setReadOnly(readOnly);
 }
-// --------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OConnectionWeakWrapper::isReadOnly(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -156,7 +156,7 @@ sal_Bool SAL_CALL OConnectionWeakWrapper::isReadOnly(  ) throw(SQLException, Run
 
     return m_xConnection->isReadOnly();
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnectionWeakWrapper::setCatalog( const OUString& catalog ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -165,7 +165,7 @@ void SAL_CALL OConnectionWeakWrapper::setCatalog( const OUString& catalog ) thro
 
     m_xConnection->setCatalog(catalog);
 }
-// --------------------------------------------------------------------------------
+
 OUString SAL_CALL OConnectionWeakWrapper::getCatalog(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -174,7 +174,7 @@ OUString SAL_CALL OConnectionWeakWrapper::getCatalog(  ) throw(SQLException, Run
 
     return m_xConnection->getCatalog();
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnectionWeakWrapper::setTransactionIsolation( sal_Int32 level ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -183,7 +183,7 @@ void SAL_CALL OConnectionWeakWrapper::setTransactionIsolation( sal_Int32 level )
 
     m_xConnection->setTransactionIsolation(level);
 }
-// --------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OConnectionWeakWrapper::getTransactionIsolation(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -192,7 +192,7 @@ sal_Int32 SAL_CALL OConnectionWeakWrapper::getTransactionIsolation(  ) throw(SQL
 
     return m_xConnection->getTransactionIsolation();
 }
-// --------------------------------------------------------------------------------
+
 Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnectionWeakWrapper::getTypeMap(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -201,7 +201,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnectionWeakWr
 
     return m_xConnection->getTypeMap();
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnectionWeakWrapper::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -210,7 +210,7 @@ void SAL_CALL OConnectionWeakWrapper::setTypeMap( const Reference< ::com::sun::s
 
     m_xConnection->setTypeMap(typeMap);
 }
-// --------------------------------------------------------------------------------
+
 // XCloseable
 void SAL_CALL OConnectionWeakWrapper::close(  ) throw(SQLException, RuntimeException)
 {
@@ -221,7 +221,7 @@ void SAL_CALL OConnectionWeakWrapper::close(  ) throw(SQLException, RuntimeExcep
     }
     dispose();
 }
-//------------------------------------------------------------------------------
+
 void OConnectionWeakWrapper::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -229,7 +229,7 @@ void OConnectionWeakWrapper::disposing()
     OConnectionWeakWrapper_BASE::disposing();
     OConnectionWrapper::disposing();
 }
-// -----------------------------------------------------------------------------
+
 // com::sun::star::lang::XUnoTunnel
 #ifdef N_DEBUG
 IMPLEMENT_FORWARD_XINTERFACE2(OConnectionWeakWrapper,OConnectionWeakWrapper_BASE,OConnectionWrapper)

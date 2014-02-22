@@ -28,17 +28,17 @@
 #include <memory>
 #include <stdexcept>
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-//---------------------------------------------
+
 // An impl class to hide implementation details
 // from clients
-//---------------------------------------------
+
 
 class CPreviewAdapterImpl
 {
@@ -64,9 +64,9 @@ public:
 
     virtual HWND SAL_CALL getParent();
 
-    //-------------------------------------
+
     // parent notification handler
-    //-------------------------------------
+
 
     virtual void SAL_CALL notifyParentShow(sal_Bool bShow);
 
@@ -96,9 +96,9 @@ private:
     CPreviewAdapterImpl& operator=(const CPreviewAdapterImpl&);
 };
 
-//-----------------------------------------
+
 //
-//-----------------------------------------
+
 
 CPreviewAdapterImpl::CPreviewAdapterImpl(HINSTANCE instance) :
     m_Instance(instance),
@@ -108,44 +108,44 @@ CPreviewAdapterImpl::CPreviewAdapterImpl(HINSTANCE instance) :
 {
 }
 
-//-----------------------------------------
+
 //
-//-----------------------------------------
+
 
 CPreviewAdapterImpl::~CPreviewAdapterImpl()
 {
 }
 
-//-----------------------------------------
+
 //
-//-----------------------------------------
+
 
 sal_Int32 SAL_CALL CPreviewAdapterImpl::getTargetColorDepth()
 {
     return m_Preview->getTargetColorDepth();
 }
 
-//-----------------------------------------
+
 //
-//-----------------------------------------
+
 
 sal_Int32 SAL_CALL CPreviewAdapterImpl::getAvailableWidth()
 {
     return m_Preview->getAvailableWidth();
 }
 
-//-----------------------------------------
+
 //
-//-----------------------------------------
+
 
 sal_Int32 SAL_CALL CPreviewAdapterImpl::getAvailableHeight()
 {
     return m_Preview->getAvailableHeight();
 }
 
-//-----------------------------------------
+
 //
-//-----------------------------------------
+
 
 void SAL_CALL CPreviewAdapterImpl::setImage( sal_Int16 aImageFormat, const Any& aImage )
     throw (IllegalArgumentException,RuntimeException)
@@ -153,9 +153,9 @@ void SAL_CALL CPreviewAdapterImpl::setImage( sal_Int16 aImageFormat, const Any& 
     m_Preview->setImage(aImageFormat,aImage);
 }
 
-//-----------------------------------------
+
 //
-//-----------------------------------------
+
 
 sal_Bool SAL_CALL CPreviewAdapterImpl::setShowState( sal_Bool bShowState )
 {
@@ -164,18 +164,18 @@ sal_Bool SAL_CALL CPreviewAdapterImpl::setShowState( sal_Bool bShowState )
     return bRet;
 }
 
-//-----------------------------------------
+
 //
-//-----------------------------------------
+
 
 sal_Bool SAL_CALL CPreviewAdapterImpl::getShowState()
 {
     return m_Preview->getShowState();
 }
 
-//-----------------------------------------
+
 //
-//-----------------------------------------
+
 
 void SAL_CALL CPreviewAdapterImpl::setParent(HWND parent)
 {
@@ -185,18 +185,18 @@ void SAL_CALL CPreviewAdapterImpl::setParent(HWND parent)
     calcRightMargin();
 }
 
-//-----------------------------------------
+
 //
-//-----------------------------------------
+
 
 HWND SAL_CALL CPreviewAdapterImpl::getParent()
 {
     return m_FileDialog;
 }
 
-//-----------------------------------------
+
 //
-//-----------------------------------------
+
 
 void SAL_CALL CPreviewAdapterImpl::calcRightMargin()
 {
@@ -226,34 +226,34 @@ void SAL_CALL CPreviewAdapterImpl::calcRightMargin()
     m_RightMargin = rcFileDlg.right - rcFlb.right;
 }
 
-//-----------------------------------------
+
 //
-//-----------------------------------------
+
 
 void SAL_CALL CPreviewAdapterImpl::notifyParentShow(sal_Bool)
 {
 }
 
-//-----------------------------------------
+
 //
-//-----------------------------------------
+
 
 void SAL_CALL CPreviewAdapterImpl::notifyParentSizeChanged()
 {
     rearrangeLayout();
 }
 
-//-----------------------------------------
+
 //
-//-----------------------------------------
+
 
 void SAL_CALL CPreviewAdapterImpl::notifyParentWindowPosChanged()
 {
 }
 
-//-----------------------------------------
+
 //
-//-----------------------------------------
+
 
 void SAL_CALL CPreviewAdapterImpl::rearrangeLayout()
 {
@@ -346,9 +346,9 @@ void SAL_CALL CPreviewAdapterImpl::rearrangeLayout()
     }
 }
 
-//-----------------------------------------
+
 //
-//-----------------------------------------
+
 
 void SAL_CALL CPreviewAdapterImpl::initializeActivePreview() throw(std::runtime_error)
 {
@@ -368,9 +368,9 @@ void SAL_CALL CPreviewAdapterImpl::initializeActivePreview() throw(std::runtime_
     m_Preview->setImage(aImgFrmt,aImg);
 }
 
-//-----------------------------------------
+
 //
-//-----------------------------------------
+
 
 HWND SAL_CALL CPreviewAdapterImpl::findFileListbox() const
 {
@@ -392,11 +392,11 @@ HWND SAL_CALL CPreviewAdapterImpl::findFileListbox() const
 //##############################################################
 
 
-//--------------------------------------------
+
 // Implementation for Windows 95/NT/ME/2000/XP
 // because:
 //
-//--------------------------------------------
+
 
 class CWin95NTPreviewAdapterImpl : public CPreviewAdapterImpl
 {
@@ -406,18 +406,18 @@ public:
     virtual void SAL_CALL notifyParentShow(sal_Bool bShow);
 };
 
-//--------------------------------------------
+
 //
-//--------------------------------------------
+
 
 CWin95NTPreviewAdapterImpl::CWin95NTPreviewAdapterImpl(HINSTANCE instance) :
     CPreviewAdapterImpl(instance)
 {
 }
 
-//--------------------------------------------
+
 //
-//--------------------------------------------
+
 
 void SAL_CALL CWin95NTPreviewAdapterImpl::notifyParentShow(sal_Bool bShow)
 {
@@ -438,26 +438,26 @@ void SAL_CALL CWin95NTPreviewAdapterImpl::notifyParentShow(sal_Bool bShow)
 //##############################################################
 
 
-//-------------------------------
+
 // ctor
-//-------------------------------
+
 
 CPreviewAdapter::CPreviewAdapter(HINSTANCE instance)
 {
     m_pImpl.reset(new CWin95NTPreviewAdapterImpl(instance));
 }
 
-//-------------------------------
+
 //
-//-------------------------------
+
 
 CPreviewAdapter::~CPreviewAdapter()
 {
 }
 
-//-------------------------------
+
 //
-//-------------------------------
+
 
 Sequence<sal_Int16> SAL_CALL CPreviewAdapter::getSupportedImageFormats()
 {
@@ -466,36 +466,36 @@ Sequence<sal_Int16> SAL_CALL CPreviewAdapter::getSupportedImageFormats()
     return imgFormats;
 }
 
-//-------------------------------
+
 //
-//-------------------------------
+
 
 sal_Int32 SAL_CALL CPreviewAdapter::getTargetColorDepth()
 {
     return m_pImpl->getTargetColorDepth();
 }
 
-//-------------------------------
+
 //
-//-------------------------------
+
 
 sal_Int32 SAL_CALL CPreviewAdapter::getAvailableWidth()
 {
     return m_pImpl->getAvailableWidth();
 }
 
-//-------------------------------
+
 //
-//-------------------------------
+
 
 sal_Int32 SAL_CALL CPreviewAdapter::getAvailableHeight()
 {
     return m_pImpl->getAvailableHeight();
 }
 
-//-------------------------------
+
 //
-//-------------------------------
+
 
 void SAL_CALL CPreviewAdapter::setImage( sal_Int16 aImageFormat, const Any& aImage )
     throw (IllegalArgumentException, RuntimeException)
@@ -503,54 +503,54 @@ void SAL_CALL CPreviewAdapter::setImage( sal_Int16 aImageFormat, const Any& aIma
     m_pImpl->setImage(aImageFormat,aImage);
 }
 
-//-------------------------------
+
 //
-//-------------------------------
+
 
 sal_Bool SAL_CALL CPreviewAdapter::setShowState( sal_Bool bShowState )
 {
     return m_pImpl->setShowState(bShowState);
 }
 
-//-------------------------------
+
 //
-//-------------------------------
+
 
 sal_Bool SAL_CALL CPreviewAdapter::getShowState()
 {
     return m_pImpl->getShowState();
 }
 
-//-------------------------------
+
 //
-//-------------------------------
+
 
 void SAL_CALL CPreviewAdapter::setParent(HWND parent)
 {
     m_pImpl->setParent(parent);
 }
 
-//-------------------------------
+
 //
-//-------------------------------
+
 
 void SAL_CALL CPreviewAdapter::notifyParentShow(bool bShow)
 {
     m_pImpl->notifyParentShow(bShow);
 }
 
-//-------------------------------
+
 //
-//-------------------------------
+
 
 void SAL_CALL CPreviewAdapter::notifyParentSizeChanged()
 {
     m_pImpl->notifyParentSizeChanged();
 }
 
-//-------------------------------
+
 //
-//-------------------------------
+
 
 void SAL_CALL CPreviewAdapter::notifyParentWindowPosChanged()
 {

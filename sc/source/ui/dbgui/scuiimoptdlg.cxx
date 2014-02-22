@@ -57,7 +57,7 @@ private:
     sal_Int32          nIter;
 };
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 ScDelimiterTable::GetCode( const OUString& rDel ) const
 {
@@ -81,7 +81,7 @@ sal_uInt16 ScDelimiterTable::GetCode( const OUString& rDel ) const
     return nCode;
 }
 
-//------------------------------------------------------------------------
+
 
 OUString ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
 {
@@ -249,7 +249,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         SetText( *pStrTitle );
 }
 
-//------------------------------------------------------------------------
+
 
 ScImportOptionsDlg::~ScImportOptionsDlg()
 {
@@ -257,7 +257,7 @@ ScImportOptionsDlg::~ScImportOptionsDlg()
     delete pTextSepTab;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScImportOptionsDlg::GetImportOptions( ScImportOptions& rOptions ) const
 {
@@ -274,7 +274,7 @@ void ScImportOptionsDlg::GetImportOptions( ScImportOptions& rOptions ) const
     }
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
 {
@@ -302,7 +302,7 @@ sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
     return nCode;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( ScImportOptionsDlg, FixedWidthHdl, CheckBox*, pCheckBox )
 {

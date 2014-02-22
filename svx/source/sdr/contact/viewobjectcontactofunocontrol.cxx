@@ -223,31 +223,31 @@ namespace sdr { namespace contact {
         inline  const Reference< XControl >&    getControl() const  { return m_xControl; }
     };
 
-    //--------------------------------------------------------------------
+
     bool operator==( const ControlHolder& _rControl, const Reference< XInterface >& _rxCompare )
     {
         return _rControl.getControl() == _rxCompare;
     }
 
-    //--------------------------------------------------------------------
+
     bool operator==( const Reference< XInterface >& _rxCompare, const ControlHolder& _rControl )
     {
         return _rxCompare == _rControl.getControl();
     }
 
-    //--------------------------------------------------------------------
+
     bool operator==( const ControlHolder& _rControl, const Any& _rxCompare )
     {
         return _rControl == Reference< XInterface >( _rxCompare, UNO_QUERY );
     }
 
-    //--------------------------------------------------------------------
+
     bool operator==( const Any& _rxCompare, const ControlHolder& _rControl )
     {
         return Reference< XInterface >( _rxCompare, UNO_QUERY ) == _rControl;
     }
 
-    //--------------------------------------------------------------------
+
     void ControlHolder::setPosSize( const Rectangle& _rPosSize ) const
     {
         // no check whether we're valid, this is the responsibility of the caller
@@ -264,21 +264,21 @@ namespace sdr { namespace contact {
         }
     }
 
-    //--------------------------------------------------------------------
+
     ::Rectangle ControlHolder::getPosSize() const
     {
         // no check whether we're valid, this is the responsibility of the caller
         return VCLUnoHelper::ConvertToVCLRect( m_xControlWindow->getPosSize() );
     }
 
-    //--------------------------------------------------------------------
+
     void ControlHolder::setZoom( const ::basegfx::B2DVector& _rScale ) const
     {
         // no check whether we're valid, this is the responsibility of the caller
         m_xControlView->setZoom( (float)_rScale.getX(), (float)_rScale.getY() );
     }
 
-    //--------------------------------------------------------------------
+
     void ControlHolder::invalidate() const
     {
         Reference< XWindowPeer > xPeer( m_xControl->getPeer() );
@@ -291,7 +291,7 @@ namespace sdr { namespace contact {
         }
     }
 
-    //--------------------------------------------------------------------
+
     ::basegfx::B2DVector ControlHolder::getZoom() const
     {
         // no check whether we're valid, this is the responsibility of the caller
@@ -337,7 +337,7 @@ namespace sdr { namespace contact {
         UnoControlContactHelper& operator=( const UnoControlContactHelper& );   // never implemented
     };
 
-    //--------------------------------------------------------------------
+
     void UnoControlContactHelper::adjustControlGeometry_throw( const ControlHolder& _rControl, const Rectangle& _rLogicBoundingRect,
         const basegfx::B2DHomMatrix& _rViewTransformation, const ::basegfx::B2DHomMatrix& _rZoomLevelNormalization )
     {
@@ -372,7 +372,7 @@ namespace sdr { namespace contact {
         _rControl.setZoom( aScale );
     }
 
-    //--------------------------------------------------------------------
+
     void UnoControlContactHelper::disposeAndClearControl_nothrow( ControlHolder& _rControl )
     {
         try
@@ -432,13 +432,13 @@ namespace sdr { namespace contact {
         virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const;
     };
 
-    //--------------------------------------------------------------------
+
     bool SdrPageViewAccess::isDesignMode() const
     {
         return m_rPageView.GetView().IsDesignMode();
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XControlContainer > SdrPageViewAccess::getControlContainer( const OutputDevice& _rDevice ) const
     {
         Reference< XControlContainer > xControlContainer = m_rPageView.GetControlContainer( _rDevice );
@@ -447,7 +447,7 @@ namespace sdr { namespace contact {
         return xControlContainer;
     }
 
-    //--------------------------------------------------------------------
+
     bool SdrPageViewAccess::isLayerVisible( SdrLayerID _nLayerID ) const
     {
         return m_rPageView.GetVisibleLayers().IsSet( _nLayerID );
@@ -477,13 +477,13 @@ namespace sdr { namespace contact {
         virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const;
     };
 
-    //--------------------------------------------------------------------
+
     bool InvisibleControlViewAccess::isDesignMode() const
     {
         return true;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XControlContainer > InvisibleControlViewAccess::getControlContainer( const OutputDevice& _rDevice ) const
     {
         if ( !m_rControlContainer.is() )
@@ -496,7 +496,7 @@ namespace sdr { namespace contact {
         return m_rControlContainer;
     }
 
-    //--------------------------------------------------------------------
+
     bool InvisibleControlViewAccess::isLayerVisible( SdrLayerID /*_nLayerID*/ ) const
     {
         return false;
@@ -527,19 +527,19 @@ namespace sdr { namespace contact {
         virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const;
     };
 
-    //--------------------------------------------------------------------
+
     bool DummyPageViewAccess::isDesignMode() const
     {
         return true;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XControlContainer > DummyPageViewAccess::getControlContainer( const OutputDevice& /*_rDevice*/ ) const
     {
         return NULL;
     }
 
-    //--------------------------------------------------------------------
+
     bool DummyPageViewAccess::isLayerVisible( SdrLayerID /*_nLayerID*/ ) const
     {
         return true;
@@ -923,7 +923,7 @@ namespace sdr { namespace contact {
     //= ViewObjectContactOfUnoControl_Impl
     //====================================================================
     DBG_NAME( ViewObjectContactOfUnoControl_Impl )
-    //--------------------------------------------------------------------
+
     ViewObjectContactOfUnoControl_Impl::ViewObjectContactOfUnoControl_Impl( ViewObjectContactOfUnoControl* _pAntiImpl )
         :m_pAntiImpl( _pAntiImpl )
         ,m_bCreatingControl( false )
@@ -956,7 +956,7 @@ namespace sdr { namespace contact {
     #endif
    }
 
-    //--------------------------------------------------------------------
+
     ViewObjectContactOfUnoControl_Impl::~ViewObjectContactOfUnoControl_Impl()
     {
         if ( !impl_isDisposed_nofail() )
@@ -968,7 +968,7 @@ namespace sdr { namespace contact {
         DBG_DTOR( ViewObjectContactOfUnoControl_Impl, NULL );
     }
 
-    //--------------------------------------------------------------------
+
     void ViewObjectContactOfUnoControl_Impl::impl_dispose_nothrow( bool _bAlsoDisposeControl )
     {
         if ( impl_isDisposed_nofail() )
@@ -992,14 +992,14 @@ namespace sdr { namespace contact {
         m_pAntiImpl = NULL;
     }
 
-    //--------------------------------------------------------------------
+
     void ViewObjectContactOfUnoControl_Impl::dispose()
     {
         SolarMutexGuard aSolarGuard;
         impl_dispose_nothrow( true );
     }
 
-    //--------------------------------------------------------------------
+
     bool ViewObjectContactOfUnoControl_Impl::getUnoObject( SdrUnoObj*& _out_rpObject ) const
     {
         OSL_PRECOND( !impl_isDisposed_nofail(), "ViewObjectContactOfUnoControl_Impl::getUnoObject: already disposed()" );
@@ -1014,7 +1014,7 @@ namespace sdr { namespace contact {
         return ( _out_rpObject != NULL );
     }
 
-    //--------------------------------------------------------------------
+
     void ViewObjectContactOfUnoControl_Impl::positionAndZoomControl( const basegfx::B2DHomMatrix& _rViewTransformation ) const
     {
         OSL_PRECOND( m_aControl.is(), "ViewObjectContactOfUnoControl_Impl::positionAndZoomControl: no output device or no control!" );
@@ -1043,7 +1043,7 @@ namespace sdr { namespace contact {
         }
     }
 
-    //--------------------------------------------------------------------
+
     bool ViewObjectContactOfUnoControl_Impl::ensureControl( const basegfx::B2DHomMatrix* _pInitialViewTransformationOrNULL )
     {
         OSL_PRECOND( !impl_isDisposed_nofail(), "ViewObjectContactOfUnoControl_Impl::ensureControl: already disposed()" );
@@ -1071,7 +1071,7 @@ namespace sdr { namespace contact {
         );
     }
 
-    //--------------------------------------------------------------------
+
     const OutputDevice& ViewObjectContactOfUnoControl_Impl::impl_getOutputDevice_throw() const
     {
         ObjectContactOfPageView* pPageViewContact = dynamic_cast< ObjectContactOfPageView* >( &m_pAntiImpl->GetObjectContact() );
@@ -1087,7 +1087,7 @@ namespace sdr { namespace contact {
         return *pDevice;
     }
 
-    //--------------------------------------------------------------------
+
     const OutputDevice& ViewObjectContactOfUnoControl_Impl::impl_getPageViewOutputDevice_nothrow( const ObjectContactOfPageView& _rObjectContact )
     {
         // if the PageWindow has a patched PaintWindow, use the original PaintWindow
@@ -1109,7 +1109,7 @@ namespace sdr { namespace contact {
         }
     }
 
-    //--------------------------------------------------------------------
+
     bool ViewObjectContactOfUnoControl_Impl::impl_ensureControl_nothrow( IPageViewAccess& _rPageView, const OutputDevice& _rDevice,
         const basegfx::B2DHomMatrix& _rInitialViewTransformation )
     {
@@ -1188,7 +1188,7 @@ namespace sdr { namespace contact {
         return m_aControl.is();
     }
 
-    //--------------------------------------------------------------------
+
     bool ViewObjectContactOfUnoControl_Impl::createControlForDevice( IPageViewAccess& _rPageView,
         const OutputDevice& _rDevice, const SdrUnoObj& _rUnoObject, const basegfx::B2DHomMatrix& _rInitialViewTransformation,
         const basegfx::B2DHomMatrix& _rInitialZoomNormalization, ControlHolder& _out_rControl )
@@ -1254,7 +1254,7 @@ namespace sdr { namespace contact {
         return _out_rControl.is();
     }
 
-    //--------------------------------------------------------------------
+
     bool ViewObjectContactOfUnoControl_Impl::impl_getPageView_nothrow( SdrPageView*& _out_rpPageView )
     {
         OSL_PRECOND( !impl_isDisposed_nofail(), "ViewObjectContactOfUnoControl_Impl::impl_getPageView_nothrow: already disposed!" );
@@ -1271,7 +1271,7 @@ namespace sdr { namespace contact {
         return ( _out_rpPageView != NULL );
     }
 
-    //--------------------------------------------------------------------
+
     void ViewObjectContactOfUnoControl_Impl::impl_adjustControlVisibilityToLayerVisibility_throw( bool _bForce )
     {
         OSL_PRECOND( m_aControl.is(),
@@ -1289,7 +1289,7 @@ namespace sdr { namespace contact {
         impl_adjustControlVisibilityToLayerVisibility_throw( m_aControl, *pUnoObject, aPVAccess, impl_isControlVisible_nofail(), _bForce );
     }
 
-    //--------------------------------------------------------------------
+
     void ViewObjectContactOfUnoControl_Impl::impl_adjustControlVisibilityToLayerVisibility_throw( const ControlHolder& _rControl,
         const SdrUnoObj& _rUnoObject, IPageViewAccess& _rPageView, bool _bIsCurrentlyVisible, bool _bForce )
     {
@@ -1310,7 +1310,7 @@ namespace sdr { namespace contact {
         }
     }
 
-    //--------------------------------------------------------------------
+
     void ViewObjectContactOfUnoControl_Impl::impl_switchContainerListening_nothrow( bool _bStart )
     {
         OSL_PRECOND( m_xContainer.is(), "ViewObjectContactOfUnoControl_Impl::impl_switchContainerListening_nothrow: no control container!" );
@@ -1330,7 +1330,7 @@ namespace sdr { namespace contact {
         }
     }
 
-    //--------------------------------------------------------------------
+
     void ViewObjectContactOfUnoControl_Impl::impl_switchControlListening_nothrow( bool _bStart )
     {
         OSL_PRECOND( m_aControl.is(), "ViewObjectContactOfUnoControl_Impl::impl_switchControlListening_nothrow: invalid control!" );
@@ -1361,7 +1361,7 @@ namespace sdr { namespace contact {
         }
     }
 
-    //--------------------------------------------------------------------
+
     void ViewObjectContactOfUnoControl_Impl::impl_switchDesignModeListening_nothrow( bool _bStart )
     {
         if ( impl_isDesignModeListening_nofail() != _bStart )
@@ -1371,7 +1371,7 @@ namespace sdr { namespace contact {
         }
     }
 
-    //------------------------------------------------------------------------------
+
     void ViewObjectContactOfUnoControl_Impl::impl_switchPropertyListening_nothrow( bool _bStart )
     {
         OSL_PRECOND( m_aControl.is(), "ViewObjectContactOfUnoControl_Impl::impl_switchPropertyListening_nothrow: no control!" );
@@ -1392,7 +1392,7 @@ namespace sdr { namespace contact {
         }
     }
 
-    //--------------------------------------------------------------------
+
     bool ViewObjectContactOfUnoControl_Impl::isPrintableControl() const
     {
         SdrUnoObj* pUnoObject( NULL );
@@ -1413,7 +1413,7 @@ namespace sdr { namespace contact {
         return bIsPrintable;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::disposing( const EventObject& Source ) throw(RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -1439,33 +1439,33 @@ namespace sdr { namespace contact {
         DBG_ASSERT( Source.Source == m_xContainer, "ViewObjectContactOfUnoControl_Impl::disposing: Who's this?" );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::windowResized( const WindowEvent& /*e*/ ) throw(RuntimeException)
     {
         // not interested in
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::windowMoved( const WindowEvent& /*e*/ ) throw(RuntimeException)
     {
         // not interested in
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::windowShown( const EventObject& /*e*/ ) throw(RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
         m_bControlIsVisible = true;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::windowHidden( const EventObject& /*e*/ ) throw(RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
         m_bControlIsVisible = false;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::propertyChange( const PropertyChangeEvent& /*_rEvent*/ ) throw(RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -1486,7 +1486,7 @@ namespace sdr { namespace contact {
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::modeChanged( const ModeChangeEvent& _rSource ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -1508,13 +1508,13 @@ namespace sdr { namespace contact {
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::elementInserted( const ContainerEvent& /*_Event*/ ) throw (RuntimeException)
     {
         // not interested in
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::elementRemoved( const ContainerEvent& Event ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -1529,7 +1529,7 @@ namespace sdr { namespace contact {
             impl_dispose_nothrow( false );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::elementReplaced( const ContainerEvent& Event ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -1564,7 +1564,7 @@ namespace sdr { namespace contact {
         m_pAntiImpl->onControlChangedOrModified( ViewObjectContactOfUnoControl::ImplAccess() );
     }
 
-    //--------------------------------------------------------------------
+
     void ViewObjectContactOfUnoControl_Impl::setControlDesignMode( bool _bDesignMode ) const
     {
         if ( ( m_eControlDesignMode != eUnknown ) && ( _bDesignMode == impl_isControlDesignMode_nothrow() ) )
@@ -1590,7 +1590,7 @@ namespace sdr { namespace contact {
     //====================================================================
     //= LazyControlCreationPrimitive2D
     //====================================================================
-    //--------------------------------------------------------------------
+
     bool LazyControlCreationPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
     {
         if ( !BufferedDecompositionPrimitive2D::operator==( rPrimitive ) )
@@ -1609,7 +1609,7 @@ namespace sdr { namespace contact {
         return true;
     }
 
-    //--------------------------------------------------------------------
+
     void LazyControlCreationPrimitive2D::getTransformation( const ViewContactOfUnoControl& _rVOC, ::basegfx::B2DHomMatrix& _out_Transformation )
     {
         // Do use model data directly to create the correct geometry. Do NOT
@@ -1635,7 +1635,7 @@ namespace sdr { namespace contact {
         _out_Transformation.set( 1, 2, aRange.getMinY() );
     }
 
-    //--------------------------------------------------------------------
+
     ::basegfx::B2DRange LazyControlCreationPrimitive2D::getB2DRange( const ::drawinglayer::geometry::ViewInformation2D& /*rViewInformation*/ ) const
     {
         ::basegfx::B2DRange aRange( 0.0, 0.0, 1.0, 1.0 );
@@ -1643,7 +1643,7 @@ namespace sdr { namespace contact {
         return aRange;
     }
 
-    //--------------------------------------------------------------------
+
     ::drawinglayer::primitive2d::Primitive2DSequence LazyControlCreationPrimitive2D::get2DDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
     {
     #if OSL_DEBUG_LEVEL > 1
@@ -1656,7 +1656,7 @@ namespace sdr { namespace contact {
         return BufferedDecompositionPrimitive2D::get2DDecomposition( _rViewInformation );
     }
 
-    //--------------------------------------------------------------------
+
     ::drawinglayer::primitive2d::Primitive2DSequence LazyControlCreationPrimitive2D::create2DDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
     {
     #if OSL_DEBUG_LEVEL > 1
@@ -1697,14 +1697,14 @@ namespace sdr { namespace contact {
         return drawinglayer::primitive2d::Primitive2DSequence(&xRetval, 1);
     }
 
-    //--------------------------------------------------------------------
+
     ImplPrimitive2DIDBlock( LazyControlCreationPrimitive2D, PRIMITIVE2D_ID_SDRCONTROLPRIMITIVE2D )
 
     //====================================================================
     //= ViewObjectContactOfUnoControl
     //====================================================================
     DBG_NAME( ViewObjectContactOfUnoControl )
-    //--------------------------------------------------------------------
+
     ViewObjectContactOfUnoControl::ViewObjectContactOfUnoControl( ObjectContact& _rObjectContact, ViewContactOfUnoControl& _rViewContact )
         :ViewObjectContactOfSdrObj( _rObjectContact, _rViewContact )
         ,m_pImpl( new ViewObjectContactOfUnoControl_Impl( this ) )
@@ -1712,7 +1712,7 @@ namespace sdr { namespace contact {
         DBG_CTOR( ViewObjectContactOfUnoControl, NULL );
     }
 
-    //--------------------------------------------------------------------
+
     ViewObjectContactOfUnoControl::~ViewObjectContactOfUnoControl()
     {
         m_pImpl->dispose();
@@ -1721,7 +1721,7 @@ namespace sdr { namespace contact {
         DBG_DTOR( ViewObjectContactOfUnoControl, NULL );
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XControl > ViewObjectContactOfUnoControl::getControl()
     {
         SolarMutexGuard aSolarGuard;
@@ -1729,7 +1729,7 @@ namespace sdr { namespace contact {
         return m_pImpl->getExistentControl().getControl();
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XControl > ViewObjectContactOfUnoControl::getTemporaryControlForWindow(
         const Window& _rWindow, Reference< XControlContainer >& _inout_ControlContainer, const SdrUnoObj& _rUnoObject )
     {
@@ -1741,7 +1741,7 @@ namespace sdr { namespace contact {
         return aControl.getControl();
     }
 
-    //--------------------------------------------------------------------
+
     void ViewObjectContactOfUnoControl::ensureControlVisibility( bool _bVisible ) const
     {
         SolarMutexGuard aSolarGuard;
@@ -1772,7 +1772,7 @@ namespace sdr { namespace contact {
         }
     }
 
-    //--------------------------------------------------------------------
+
     void ViewObjectContactOfUnoControl::setControlDesignMode( bool _bDesignMode ) const
     {
         SolarMutexGuard aSolarGuard;
@@ -1787,7 +1787,7 @@ namespace sdr { namespace contact {
         }
     }
 
-    //--------------------------------------------------------------------
+
     drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfUnoControl::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
     {
         if ( m_pImpl->isDisposed() )
@@ -1810,7 +1810,7 @@ namespace sdr { namespace contact {
         return ::drawinglayer::primitive2d::Primitive2DSequence( &xPrimitive, 1 );
     }
 
-    //--------------------------------------------------------------------
+
     bool ViewObjectContactOfUnoControl::isPrimitiveVisible( const DisplayInfo& _rDisplayInfo ) const
     {
         SolarMutexGuard aSolarGuard;
@@ -1831,13 +1831,13 @@ namespace sdr { namespace contact {
         return ViewObjectContactOfSdrObj::isPrimitiveVisible( _rDisplayInfo );
     }
 
-    //--------------------------------------------------------------------
+
     void ViewObjectContactOfUnoControl::propertyChange()
     {
         impl_onControlChangedOrModified();
     }
 
-    //--------------------------------------------------------------------
+
     void ViewObjectContactOfUnoControl::ActionChanged()
     {
         // call parent
@@ -1863,7 +1863,7 @@ namespace sdr { namespace contact {
         }
     }
 
-    //--------------------------------------------------------------------
+
     void ViewObjectContactOfUnoControl::impl_onControlChangedOrModified()
     {
         // graphical invalidate at all views
@@ -1880,20 +1880,20 @@ namespace sdr { namespace contact {
     //= UnoControlPrintOrPreviewContact
     //====================================================================
     DBG_NAME( UnoControlPrintOrPreviewContact )
-    //--------------------------------------------------------------------
+
     UnoControlPrintOrPreviewContact::UnoControlPrintOrPreviewContact( ObjectContactOfPageView& _rObjectContact, ViewContactOfUnoControl& _rViewContact )
         :ViewObjectContactOfUnoControl( _rObjectContact, _rViewContact )
     {
         DBG_CTOR( UnoControlPrintOrPreviewContact, NULL );
     }
 
-    //--------------------------------------------------------------------
+
     UnoControlPrintOrPreviewContact::~UnoControlPrintOrPreviewContact()
     {
         DBG_DTOR( UnoControlPrintOrPreviewContact, NULL );
     }
 
-    //--------------------------------------------------------------------
+
     drawinglayer::primitive2d::Primitive2DSequence UnoControlPrintOrPreviewContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo ) const
     {
         if ( !m_pImpl->isPrintableControl() )

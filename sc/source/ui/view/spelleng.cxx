@@ -375,7 +375,7 @@ ScConversionParam::ScConversionParam( ScConversionType eConvType,
         mnOptions = i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScTextConversionEngine::ScTextConversionEngine(
         SfxItemPool* pEnginePoolP, ScViewData& rViewData,

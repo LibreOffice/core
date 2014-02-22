@@ -472,21 +472,21 @@ ScExternalRefCache::TokenRef ScExternalRefCache::Table::getEmptyOrNullToken(
     return TokenRef();
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScExternalRefCache::TableName::TableName(const OUString& rUpper, const OUString& rReal) :
     maUpperName(rUpper), maRealName(rReal)
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScExternalRefCache::CellFormat::CellFormat() :
     mbIsSet(false), mnType(NUMBERFORMAT_ALL), mnIndex(0)
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScExternalRefCache::ScExternalRefCache() {}
 
@@ -1584,7 +1584,7 @@ ScExternalRefManager::LinkListener::~LinkListener()
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScExternalRefManager::ApiGuard::ApiGuard(ScDocument* pDoc) :
     mpMgr(pDoc->GetExternalRefManager()),
@@ -1600,7 +1600,7 @@ ScExternalRefManager::ApiGuard::~ApiGuard()
     mpMgr->mbUserInteractionEnabled = mbOldInteractionEnabled;
 }
 
-// ----------------------------------------------------------------------------
+
 
 void ScExternalRefManager::getAllCachedTableNames(sal_uInt16 nFileId, vector<OUString>& rTabNames) const
 {

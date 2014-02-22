@@ -23,7 +23,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include "TConnection.hxx"
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-// -------------------------------------------------------------------------
+
 using namespace connectivity;
 using namespace connectivity::sdbcx;
 using namespace cppu;
@@ -32,14 +32,14 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL OColumn::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     if(isNew())
         return OUString("com.sun.star.sdbcx.VColumnDescription");
     return OUString("com.sun.star.sdbcx.VColumn");
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL OColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Sequence< OUString > aSupported(1);
@@ -55,7 +55,7 @@ sal_Bool SAL_CALL OColumn::supportsService( const OUString& _rServiceName ) thro
 {
     return cppu::supportsService(this, _rServiceName);
 }
-// -------------------------------------------------------------------------
+
 OColumn::OColumn(sal_Bool _bCase)
     :OColumnDescriptor_BASE(m_aMutex)
     ,ODescriptor(OColumnDescriptor_BASE::rBHelper,_bCase,sal_True)
@@ -69,7 +69,7 @@ OColumn::OColumn(sal_Bool _bCase)
 {
     construct();
 }
-// -------------------------------------------------------------------------
+
 OColumn::OColumn(   const OUString& _Name,
                     const OUString& _TypeName,
                     const OUString& _DefaultValue,
@@ -105,31 +105,31 @@ OColumn::OColumn(   const OUString& _Name,
 
     construct();
 }
-// -------------------------------------------------------------------------
+
 OColumn::~OColumn()
 {
 }
-// -----------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* OColumn::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {
     return doCreateArrayHelper();
 }
-// -----------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper& SAL_CALL OColumn::getInfoHelper()
 {
     return *OColumn_PROP::getArrayHelper(isNew() ? 1 : 0);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OColumn::acquire() throw()
 {
     OColumnDescriptor_BASE::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OColumn::release() throw()
 {
     OColumnDescriptor_BASE::release();
 }
-// -----------------------------------------------------------------------------
+
 Any SAL_CALL OColumn::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = ODescriptor::queryInterface( rType);
@@ -142,7 +142,7 @@ Any SAL_CALL OColumn::queryInterface( const Type & rType ) throw(RuntimeExceptio
     }
     return aRet;
 }
-// -------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OColumn::getTypes(  ) throw(RuntimeException)
 {
     if(isNew())
@@ -150,7 +150,7 @@ Sequence< Type > SAL_CALL OColumn::getTypes(  ) throw(RuntimeException)
 
     return ::comphelper::concatSequences(ODescriptor::getTypes(),OColumn_BASE::getTypes(),OColumnDescriptor_BASE::getTypes());
 }
-// -------------------------------------------------------------------------
+
 void OColumn::construct()
 {
     ODescriptor::construct();
@@ -171,7 +171,7 @@ void OColumn::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME),      PROPERTY_ID_SCHEMANAME,         nAttrib, &m_SchemaName,      ::getCppuType(&m_SchemaName));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TABLENAME),       PROPERTY_ID_TABLENAME,          nAttrib, &m_TableName,       ::getCppuType(&m_TableName));
 }
-// -------------------------------------------------------------------------
+
 void OColumn::disposing(void)
 {
     OPropertySetHelper::disposing();
@@ -180,7 +180,7 @@ void OColumn::disposing(void)
     checkDisposed(OColumnDescriptor_BASE::rBHelper.bDisposed);
 
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > SAL_CALL OColumn::createDataDescriptor(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -205,22 +205,22 @@ Reference< XPropertySet > SAL_CALL OColumn::createDataDescriptor(  ) throw(Runti
     pNewColumn->setNew(sal_True);
     return pNewColumn;
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OColumn::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
-// -----------------------------------------------------------------------------
+
 // XNamed
 OUString SAL_CALL OColumn::getName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return m_Name;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OColumn::setName( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
 {
     m_Name = aName;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

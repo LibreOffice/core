@@ -22,7 +22,7 @@
 #include "editutil.hxx"
 
 
-//------------------------------------------------------------------
+
 
 ScExportBase::ScExportBase( SvStream& rStrmP, ScDocument* pDocP,
                 const ScRange& rRangeP )

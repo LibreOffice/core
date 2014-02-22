@@ -42,7 +42,7 @@ SfxTemplateItem::SfxTemplateItem
 {
 }
 
-//-------------------------------------------------------------------------
+
 
 // copy constuctor
 SfxTemplateItem::SfxTemplateItem( const SfxTemplateItem& rCopy ) :
@@ -53,7 +53,7 @@ SfxTemplateItem::SfxTemplateItem( const SfxTemplateItem& rCopy ) :
 {
 }
 
-//-------------------------------------------------------------------------
+
 
 // op ==
 
@@ -63,14 +63,14 @@ bool SfxTemplateItem::operator==( const SfxPoolItem& rCmp ) const
              aStyle == ( (const SfxTemplateItem&)rCmp ).aStyle );
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxPoolItem* SfxTemplateItem::Clone( SfxItemPool *) const
 {
     return new SfxTemplateItem(*this);
 }
 
-//-------------------------------------------------------------------------
+
 bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     ::com::sun::star::frame::status::Template aTemplate;
@@ -82,7 +82,7 @@ bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nM
     return true;
 }
 
-//-------------------------------------------------------------------------
+
 bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     ::com::sun::star::frame::status::Template aTemplate;
@@ -97,7 +97,7 @@ bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 
     return false;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_uInt8 SfxTemplateItem::GetFlagCount() const
 {

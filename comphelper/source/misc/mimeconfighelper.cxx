@@ -33,7 +33,7 @@
 using namespace ::com::sun::star;
 using namespace comphelper;
 
-//-----------------------------------------------------------------------
+
 MimeConfigurationHelper::MimeConfigurationHelper( const uno::Reference< uno::XComponentContext >& rxContext )
 : m_xContext( rxContext )
 {
@@ -41,7 +41,7 @@ MimeConfigurationHelper::MimeConfigurationHelper( const uno::Reference< uno::XCo
         throw uno::RuntimeException();
 }
 
-//-----------------------------------------------------------------------
+
 OUString MimeConfigurationHelper::GetStringClassIDRepresentation( const uno::Sequence< sal_Int8 >& aClassID )
 {
     OUString aResult;
@@ -63,7 +63,7 @@ OUString MimeConfigurationHelper::GetStringClassIDRepresentation( const uno::Seq
     return aResult;
 }
 
-//-----------------------------------------------------------------------
+
 sal_uInt8 GetDigit_Impl( sal_Char aChar )
 {
     if ( aChar >= '0' && aChar <= '9' )
@@ -76,7 +76,7 @@ sal_uInt8 GetDigit_Impl( sal_Char aChar )
         return 16;
 }
 
-//-----------------------------------------------------------------------
+
 uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassIDRepresentation( const OUString& aClassID )
 {
     sal_Int32 nLength = aClassID.getLength();
@@ -112,7 +112,7 @@ uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassIDRepresentat
     return uno::Sequence< sal_Int8 >();
 }
 
-//-----------------------------------------------------------------------
+
 uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetConfigurationByPath( const OUString& aPath )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -142,7 +142,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetConfigurati
     return xConfig;
 }
 
-//-----------------------------------------------------------------------
+
 uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetObjConfiguration()
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -154,7 +154,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetObjConfigur
     return m_xObjectConfig;
 }
 
-//-----------------------------------------------------------------------
+
 uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetVerbsConfiguration()
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -166,7 +166,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetVerbsConfig
     return m_xVerbsConfig;
 }
 
-//-----------------------------------------------------------------------
+
 uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetMediaTypeConfiguration()
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -178,7 +178,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetMediaTypeCo
     return m_xMediaTypeConfig;
 }
 
-//-----------------------------------------------------------------------
+
 uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetFilterFactory()
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -191,7 +191,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetFilterFacto
     return m_xFilterFactory;
 }
 
-//-------------------------------------------------------------------------
+
 OUString MimeConfigurationHelper::GetDocServiceNameFromFilter( const OUString& aFilterName )
 {
     OUString aDocServiceName;
@@ -217,7 +217,7 @@ OUString MimeConfigurationHelper::GetDocServiceNameFromFilter( const OUString& a
     return aDocServiceName;
 }
 
-//-------------------------------------------------------------------------
+
 OUString MimeConfigurationHelper::GetDocServiceNameFromMediaType( const OUString& aMediaType )
 {
     uno::Reference< container::XContainerQuery > xTypeCFG(
@@ -260,7 +260,7 @@ OUString MimeConfigurationHelper::GetDocServiceNameFromMediaType( const OUString
     return OUString();
 }
 
-//-------------------------------------------------------------------------
+
 bool MimeConfigurationHelper::GetVerbByShortcut( const OUString& aVerbShortcut,
                                                 embed::VerbDescriptor& aDescriptor )
 {
@@ -290,7 +290,7 @@ bool MimeConfigurationHelper::GetVerbByShortcut( const OUString& aVerbShortcut,
     return bResult;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjPropsFromConfigEntry(
                                             const uno::Sequence< sal_Int8 >& aClassID,
                                             const uno::Reference< container::XNameAccess >& xObjectProps )
@@ -339,7 +339,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjPropsFromConfi
     return aResult;
 }
 
-//-----------------------------------------------------------------------
+
 OUString MimeConfigurationHelper::GetExplicitlyRegisteredObjClassID( const OUString& aMediaType )
 {
     OUString aStringClassID;
@@ -358,7 +358,7 @@ OUString MimeConfigurationHelper::GetExplicitlyRegisteredObjClassID( const OUStr
 
 }
 
-//-----------------------------------------------------------------------
+
 uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByStringClassID(
                                                                 const OUString& aStringClassID )
 {
@@ -393,7 +393,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByStri
     return aObjProps;
 }
 
-//-----------------------------------------------------------------------
+
 uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByClassID(
                                                                 const uno::Sequence< sal_Int8 >& aClassID )
 {
@@ -425,7 +425,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByClas
     return aObjProps;
 }
 
-//-----------------------------------------------------------------------
+
 uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByMediaType( const OUString& aMediaType )
 {
     uno::Sequence< beans::NamedValue > aObject =
@@ -440,7 +440,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByMedi
     return uno::Sequence< beans::NamedValue >();
 }
 
-//-----------------------------------------------------------------------
+
 uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByFilter( const OUString& aFilterName )
 {
     OUString aDocumentName = GetDocServiceNameFromFilter( aFilterName );
@@ -450,7 +450,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByFilt
     return uno::Sequence< beans::NamedValue >();
 }
 
-//-----------------------------------------------------------------------
+
 uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocumentName( const OUString& aDocName )
 {
     if ( !aDocName.isEmpty() )
@@ -483,13 +483,13 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
     return uno::Sequence< beans::NamedValue >();
 }
 
-//-----------------------------------------------------------------------
+
 OUString MimeConfigurationHelper::GetFactoryNameByClassID( const uno::Sequence< sal_Int8 >& aClassID )
 {
     return GetFactoryNameByStringClassID( GetStringClassIDRepresentation( aClassID ) );
 }
 
-//-----------------------------------------------------------------------
+
 OUString MimeConfigurationHelper::GetFactoryNameByStringClassID( const OUString& aStringClassID )
 {
     OUString aResult;
@@ -514,7 +514,7 @@ OUString MimeConfigurationHelper::GetFactoryNameByStringClassID( const OUString&
     return aResult;
 }
 
-//-----------------------------------------------------------------------
+
 OUString MimeConfigurationHelper::GetFactoryNameByDocumentName( const OUString& aDocName )
 {
     OUString aResult;
@@ -551,7 +551,7 @@ OUString MimeConfigurationHelper::GetFactoryNameByDocumentName( const OUString& 
 }
 
 
-//-----------------------------------------------------------------------
+
 OUString MimeConfigurationHelper::GetFactoryNameByMediaType( const OUString& aMediaType )
 {
     OUString aResult = GetFactoryNameByStringClassID( GetExplicitlyRegisteredObjClassID( aMediaType ) );
@@ -566,7 +566,7 @@ OUString MimeConfigurationHelper::GetFactoryNameByMediaType( const OUString& aMe
     return aResult;
 }
 
-//-----------------------------------------------------------------------
+
 OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
                                         uno::Sequence< beans::PropertyValue >& aMediaDescr,
                                         bool bIgnoreType )
@@ -711,7 +711,7 @@ sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
 }
 #endif
 
-//-----------------------------------------------------------
+
 OUString MimeConfigurationHelper::GetDefaultFilterFromServiceName( const OUString& aServiceName, sal_Int32 nVersion )
 {
     OUString aResult;
@@ -762,7 +762,7 @@ OUString MimeConfigurationHelper::GetDefaultFilterFromServiceName( const OUStrin
     return aResult;
 }
 
-//-------------------------------------------------------------------------
+
 OUString MimeConfigurationHelper::GetExportFilterFromImportFilter( const OUString& aImportFilterName )
 {
     OUString aExportFilterName;
@@ -828,7 +828,7 @@ OUString MimeConfigurationHelper::GetExportFilterFromImportFilter( const OUStrin
     return aExportFilterName;
 }
 
-//-------------------------------------------------------------------------
+
 // static
 uno::Sequence< beans::PropertyValue > MimeConfigurationHelper::SearchForFilter(
                                                         const uno::Reference< container::XContainerQuery >& xFilterQuery,
@@ -870,7 +870,7 @@ uno::Sequence< beans::PropertyValue > MimeConfigurationHelper::SearchForFilter(
 }
 
 
-//-------------------------------------------------------------------------
+
 bool MimeConfigurationHelper::ClassIDsEqual( const uno::Sequence< sal_Int8 >& aClassID1, const uno::Sequence< sal_Int8 >& aClassID2 )
 {
     if ( aClassID1.getLength() != aClassID2.getLength() )
@@ -883,7 +883,7 @@ bool MimeConfigurationHelper::ClassIDsEqual( const uno::Sequence< sal_Int8 >& aC
     return true;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
                                                 sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
                                                 sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 )

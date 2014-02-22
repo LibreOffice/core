@@ -88,7 +88,7 @@ sal_uInt16 BmkMenu_Impl::GetMID()
     return m_nMID;
 }
 
-// ------------------------------------------------------------------------
+
 
 BmkMenu::BmkMenu( Reference< XFrame >& xFrame, BmkMenu::BmkMenuType nType )
     :AddonMenu(xFrame)

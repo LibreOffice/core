@@ -34,7 +34,7 @@ void ScSortKeyItem::DisableField()
     m_pFrame->Disable();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScSortKeyItem::EnableField()
 {
@@ -56,14 +56,14 @@ ScSortKeyWindow::ScSortKeyWindow(SfxTabPage* pParent, ScSortKeyItems& rSortKeyIt
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 ScSortKeyWindow::~ScSortKeyWindow()
 {
     mrSortKeyItems.clear();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScSortKeyWindow::AddSortKey( sal_uInt16 nItemNumber )
 {
@@ -77,7 +77,7 @@ void ScSortKeyWindow::AddSortKey( sal_uInt16 nItemNumber )
     mrSortKeyItems.push_back(pSortKeyItem);
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScSortKeyWindow::DoScroll(sal_Int32 nNewPos)
 {
@@ -126,7 +126,7 @@ void ScSortKeyCtrl::setScrollRange()
     checkAutoVScroll();
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( ScSortKeyCtrl, ScrollHdl, ScrollBar*, pScrollBar )
 {
@@ -136,7 +136,7 @@ IMPL_LINK( ScSortKeyCtrl, ScrollHdl, ScrollBar*, pScrollBar )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScSortKeyCtrl::AddSortKey( sal_uInt16 nItem )
 {

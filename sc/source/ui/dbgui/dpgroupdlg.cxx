@@ -115,7 +115,7 @@ IMPL_LINK( ScDPGroupEditHelper, ClickHdl, RadioButton*, pButton )
     return 0;
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScDPNumGroupEditHelper::ScDPNumGroupEditHelper(
         RadioButton& rRbAuto, RadioButton& rRbMan, ScDoubleField& rEdValue ) :
@@ -134,7 +134,7 @@ void ScDPNumGroupEditHelper::ImplSetValue( double fValue )
     mrEdValue.SetValue( fValue );
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScDPDateGroupEditHelper::ScDPDateGroupEditHelper(
         RadioButton& rRbAuto, RadioButton& rRbMan, DateField& rEdValue, const Date& rNullDate ) :

@@ -59,9 +59,9 @@
 #include <vcl/pngread.hxx>
 #include <vcl/pngwrite.hxx>
 
-// --------------
+
 // - Namespaces -
-// --------------
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -71,9 +71,9 @@ using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::datatransfer::dnd;
 
-// --------------------------------
+
 // - TransferableObjectDescriptor -
-// --------------------------------
+
 
 #define TOD_SIG1 0x01234567
 #define TOD_SIG2 0x89abcdef
@@ -112,7 +112,7 @@ SvStream& operator>>( SvStream& rIStm, TransferableObjectDescriptor& rObjDesc )
     return rIStm;
 }
 
-// -----------------------------------------------------------------------------
+
 
 SvStream& WriteTransferableObjectDescriptor( SvStream& rOStm, const TransferableObjectDescriptor& rObjDesc )
 {
@@ -140,7 +140,7 @@ SvStream& WriteTransferableObjectDescriptor( SvStream& rOStm, const Transferable
     return rOStm;
 }
 
-// -----------------------------------------------------------------------------
+
 // the reading of the parameter is done using the special service ::com::sun::star::datatransfer::MimeContentType,
 // a similar approach should be implemented for creation of the mimetype string;
 // for now the set of acceptable characters has to be hardcoded, in future it should be part of the service that creates the mimetype
@@ -211,7 +211,7 @@ static OUString ImplGetParameterString( const TransferableObjectDescriptor& rObj
     return aParams;
 }
 
-// -----------------------------------------------------------------------------
+
 
 static void ImplSetParameterString( TransferableObjectDescriptor& rObjDesc, const DataFlavorEx& rFlavorEx )
 {
@@ -282,43 +282,43 @@ static void ImplSetParameterString( TransferableObjectDescriptor& rObjDesc, cons
     }
 }
 
-// -----------------------------------------
+
 // - TransferableHelper::TerminateListener -
-// -----------------------------------------
+
 
 TransferableHelper::TerminateListener::TerminateListener( TransferableHelper& rTransferableHelper ) :
     mrParent( rTransferableHelper )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 TransferableHelper::TerminateListener::~TerminateListener()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TransferableHelper::TerminateListener::disposing( const EventObject& ) throw( RuntimeException )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TransferableHelper::TerminateListener::queryTermination( const EventObject& ) throw( TerminationVetoException, RuntimeException )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TransferableHelper::TerminateListener::notifyTermination( const EventObject& ) throw( RuntimeException )
 {
     mrParent.ImplFlush();
 }
 
-// ----------------------
+
 // - TransferableHelper -
-// ----------------------
+
 
 TransferableHelper::TransferableHelper() :
     mpFormats( new DataFlavorExVector ),
@@ -326,7 +326,7 @@ TransferableHelper::TransferableHelper() :
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 TransferableHelper::~TransferableHelper()
 {
@@ -334,7 +334,7 @@ TransferableHelper::~TransferableHelper()
     delete mpFormats;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) throw( UnsupportedFlavorException, IOException, RuntimeException )
 {
@@ -453,7 +453,7 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
     return maAny;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors() throw( RuntimeException )
 {
@@ -480,7 +480,7 @@ Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors() thr
     return aRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& rFlavor ) throw( RuntimeException )
 {
@@ -508,7 +508,7 @@ sal_Bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& r
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TransferableHelper::lostOwnership( const Reference< XClipboard >&, const Reference< XTransferable >& ) throw( RuntimeException )
 {
@@ -531,13 +531,13 @@ void SAL_CALL TransferableHelper::lostOwnership( const Reference< XClipboard >&,
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TransferableHelper::disposing( const EventObject& ) throw( RuntimeException )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TransferableHelper::dragDropEnd( const DragSourceDropEvent& rDSDE ) throw( RuntimeException )
 {
@@ -553,31 +553,31 @@ void SAL_CALL TransferableHelper::dragDropEnd( const DragSourceDropEvent& rDSDE 
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TransferableHelper::dragEnter( const DragSourceDragEvent& ) throw( RuntimeException )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TransferableHelper::dragExit( const DragSourceEvent& ) throw( RuntimeException )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TransferableHelper::dragOver( const DragSourceDragEvent& ) throw( RuntimeException )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TransferableHelper::dropActionChanged( const DragSourceDragEvent& ) throw( RuntimeException )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int64 SAL_CALL TransferableHelper::getSomething( const Sequence< sal_Int8 >& rId ) throw( RuntimeException )
 {
@@ -594,7 +594,7 @@ sal_Int64 SAL_CALL TransferableHelper::getSomething( const Sequence< sal_Int8 >&
     return nRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TransferableHelper::ImplFlush()
 {
@@ -617,7 +617,7 @@ void TransferableHelper::ImplFlush()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TransferableHelper::AddFormat( SotFormatStringId nFormat )
 {
@@ -627,7 +627,7 @@ void TransferableHelper::AddFormat( SotFormatStringId nFormat )
         AddFormat( aFlavor );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
 {
@@ -685,7 +685,7 @@ void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TransferableHelper::RemoveFormat( SotFormatStringId nFormat )
 {
@@ -695,7 +695,7 @@ void TransferableHelper::RemoveFormat( SotFormatStringId nFormat )
         RemoveFormat( aFlavor );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TransferableHelper::RemoveFormat( const DataFlavor& rFlavor )
 {
@@ -710,7 +710,7 @@ void TransferableHelper::RemoveFormat( const DataFlavor& rFlavor )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableHelper::HasFormat( SotFormatStringId nFormat )
 {
@@ -728,7 +728,7 @@ sal_Bool TransferableHelper::HasFormat( SotFormatStringId nFormat )
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TransferableHelper::ClearFormats()
 {
@@ -736,7 +736,7 @@ void TransferableHelper::ClearFormats()
     maAny.clear();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableHelper::SetAny( const Any& rAny, const DataFlavor& )
 {
@@ -744,7 +744,7 @@ sal_Bool TransferableHelper::SetAny( const Any& rAny, const DataFlavor& )
     return( maAny.hasValue() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableHelper::SetString( const OUString& rString, const DataFlavor& rFlavor )
 {
@@ -767,7 +767,7 @@ sal_Bool TransferableHelper::SetString( const OUString& rString, const DataFlavo
     return( maAny.hasValue() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableHelper::SetBitmapEx( const BitmapEx& rBitmapEx, const DataFlavor& rFlavor )
 {
@@ -807,7 +807,7 @@ sal_Bool TransferableHelper::SetBitmapEx( const BitmapEx& rBitmapEx, const DataF
     return( maAny.hasValue() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableHelper::SetGDIMetaFile( const GDIMetaFile& rMtf, const DataFlavor& )
 {
@@ -822,7 +822,7 @@ sal_Bool TransferableHelper::SetGDIMetaFile( const GDIMetaFile& rMtf, const Data
     return( maAny.hasValue() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableHelper::SetGraphic( const Graphic& rGraphic, const DataFlavor& )
 {
@@ -839,7 +839,7 @@ sal_Bool TransferableHelper::SetGraphic( const Graphic& rGraphic, const DataFlav
     return( maAny.hasValue() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableHelper::SetImageMap( const ImageMap& rIMap, const ::com::sun::star::datatransfer::DataFlavor& )
 {
@@ -852,7 +852,7 @@ sal_Bool TransferableHelper::SetImageMap( const ImageMap& rIMap, const ::com::su
     return( maAny.hasValue() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableHelper::SetTransferableObjectDescriptor( const TransferableObjectDescriptor& rDesc,
                                                               const ::com::sun::star::datatransfer::DataFlavor& )
@@ -867,7 +867,7 @@ sal_Bool TransferableHelper::SetTransferableObjectDescriptor( const Transferable
     return( maAny.hasValue() );
  }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
                                               const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
@@ -957,7 +957,7 @@ sal_Bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
     return( maAny.hasValue() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableHelper::SetINetImage( const INetImage& rINtImg,
                                            const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
@@ -972,7 +972,7 @@ sal_Bool TransferableHelper::SetINetImage( const INetImage& rINtImg,
     return( maAny.hasValue() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjectId, const DataFlavor& rFlavor )
 {
@@ -1003,7 +1003,7 @@ sal_Bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjec
     return( maAny.hasValue() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableHelper::WriteObject( SotStorageStreamRef&, void*, sal_uInt32, const DataFlavor& )
 {
@@ -1011,19 +1011,19 @@ sal_Bool TransferableHelper::WriteObject( SotStorageStreamRef&, void*, sal_uInt3
     return sal_False;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TransferableHelper::DragFinished( sal_Int8 )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TransferableHelper::ObjectReleased()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TransferableHelper::PrepareOLE( const TransferableObjectDescriptor& rObjDesc )
 {
@@ -1034,7 +1034,7 @@ void TransferableHelper::PrepareOLE( const TransferableObjectDescriptor& rObjDes
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TransferableHelper::CopyToClipboard( Window *pWindow ) const
 {
@@ -1067,7 +1067,7 @@ void TransferableHelper::CopyToClipboard( Window *pWindow ) const
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TransferableHelper::CopyToSelection( Window *pWindow ) const
 {
@@ -1097,7 +1097,7 @@ void TransferableHelper::CopyToSelection( Window *pWindow ) const
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TransferableHelper::StartDrag( Window* pWindow, sal_Int8 nDnDSourceActions,
                                     sal_Int32 nDnDPointer, sal_Int32 nDnDImage )
@@ -1146,7 +1146,7 @@ void TransferableHelper::StartDrag( Window* pWindow, sal_Int8 nDnDSourceActions,
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TransferableHelper::ClearSelection( Window *pWindow )
 {
@@ -1157,7 +1157,7 @@ void TransferableHelper::ClearSelection( Window *pWindow )
         xSelection->setContents( NULL, NULL );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XClipboard> TransferableHelper::GetSystemClipboard()
 {
@@ -1179,9 +1179,9 @@ const Sequence< sal_Int8 >& TransferableHelper::getUnoTunnelId()
     return theTransferableHelperUnoTunnelId::get().getSeq();
 }
 
-// ---------------------------------
+
 // - TransferableClipboardNotifier -
-// ---------------------------------
+
 
 class TransferableClipboardNotifier : public ::cppu::WeakImplHelper1< XClipboardListener >
 {
@@ -1210,7 +1210,7 @@ public:
     void    dispose();
 };
 
-// -----------------------------------------------------------------------------
+
 
 TransferableClipboardNotifier::TransferableClipboardNotifier( const Reference< XClipboard >& _rxClipboard, TransferableDataHelper& _rListener, ::osl::Mutex& _rMutex )
     :mrMutex( _rMutex )
@@ -1228,7 +1228,7 @@ TransferableClipboardNotifier::TransferableClipboardNotifier( const Reference< X
     osl_atomic_decrement( &m_refCount );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TransferableClipboardNotifier::changedContents( const clipboard::ClipboardEvent& event ) throw (RuntimeException)
 {
@@ -1242,7 +1242,7 @@ void SAL_CALL TransferableClipboardNotifier::changedContents( const clipboard::C
         mpListener->Rebind( event.Contents );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TransferableClipboardNotifier::disposing( const EventObject& ) throw (RuntimeException)
 {
@@ -1250,7 +1250,7 @@ void SAL_CALL TransferableClipboardNotifier::disposing( const EventObject& ) thr
     dispose();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TransferableClipboardNotifier::dispose()
 {
@@ -1265,9 +1265,9 @@ void TransferableClipboardNotifier::dispose()
     mpListener = NULL;
 }
 
-// -------------------------------
+
 // - TransferableDataHelper_Impl -
-// -------------------------------
+
 
 struct TransferableDataHelper_Impl
 {
@@ -1280,9 +1280,9 @@ struct TransferableDataHelper_Impl
     }
 };
 
-// --------------------------
+
 // - TransferableDataHelper -
-// --------------------------
+
 
 TransferableDataHelper::TransferableDataHelper() :
     mpFormats( new DataFlavorExVector ),
@@ -1291,7 +1291,7 @@ TransferableDataHelper::TransferableDataHelper() :
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 TransferableDataHelper::TransferableDataHelper( const Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable ) :
     mxTransfer( rxTransferable ),
@@ -1302,7 +1302,7 @@ TransferableDataHelper::TransferableDataHelper( const Reference< ::com::sun::sta
     InitFormats();
 }
 
-// -----------------------------------------------------------------------------
+
 
 TransferableDataHelper::TransferableDataHelper( const TransferableDataHelper& rDataHelper ) :
     mxTransfer( rDataHelper.mxTransfer ),
@@ -1313,7 +1313,7 @@ TransferableDataHelper::TransferableDataHelper( const TransferableDataHelper& rD
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 TransferableDataHelper& TransferableDataHelper::operator=( const TransferableDataHelper& rDataHelper )
 {
@@ -1338,7 +1338,7 @@ TransferableDataHelper& TransferableDataHelper::operator=( const TransferableDat
     return *this;
 }
 
-// -----------------------------------------------------------------------------
+
 
 TransferableDataHelper::~TransferableDataHelper()
 {
@@ -1351,7 +1351,7 @@ TransferableDataHelper::~TransferableDataHelper()
     delete mpImpl;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor >& rDataFlavorSeq,
                                                      DataFlavorExVector& rDataFlavorExVector )
@@ -1446,7 +1446,7 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TransferableDataHelper::InitFormats()
 {
@@ -1471,7 +1471,7 @@ void TransferableDataHelper::InitFormats()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::HasFormat( SotFormatStringId nFormat ) const
 {
@@ -1492,7 +1492,7 @@ sal_Bool TransferableDataHelper::HasFormat( SotFormatStringId nFormat ) const
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::HasFormat( const DataFlavor& rFlavor ) const
 {
@@ -1513,7 +1513,7 @@ sal_Bool TransferableDataHelper::HasFormat( const DataFlavor& rFlavor ) const
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_uInt32 TransferableDataHelper::GetFormatCount() const
 {
@@ -1521,7 +1521,7 @@ sal_uInt32 TransferableDataHelper::GetFormatCount() const
     return mpFormats->size();
 }
 
-// -----------------------------------------------------------------------------
+
 
 
 SotFormatStringId TransferableDataHelper::GetFormat( sal_uInt32 nFormat ) const
@@ -1531,7 +1531,7 @@ SotFormatStringId TransferableDataHelper::GetFormat( sal_uInt32 nFormat ) const
     return( ( nFormat < mpFormats->size() ) ? (*mpFormats)[ nFormat ].mnSotId : 0 );
 }
 
-// -----------------------------------------------------------------------------
+
 
 DataFlavor TransferableDataHelper::GetFormatDataFlavor( sal_uInt32 nFormat ) const
 {
@@ -1546,7 +1546,7 @@ DataFlavor TransferableDataHelper::GetFormatDataFlavor( sal_uInt32 nFormat ) con
     return aRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XTransferable > TransferableDataHelper::GetXTransferable() const
 {
@@ -1571,7 +1571,7 @@ Reference< XTransferable > TransferableDataHelper::GetXTransferable() const
     return xRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Any TransferableDataHelper::GetAny( SotFormatStringId nFormat ) const
 {
@@ -1585,7 +1585,7 @@ Any TransferableDataHelper::GetAny( SotFormatStringId nFormat ) const
 }
 
 
-// -----------------------------------------------------------------------------
+
 
 Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor ) const
 {
@@ -1622,7 +1622,7 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor ) const
     return aRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetString( SotFormatStringId nFormat, OUString& rStr )
 {
@@ -1630,7 +1630,7 @@ sal_Bool TransferableDataHelper::GetString( SotFormatStringId nFormat, OUString&
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetString( aFlavor, rStr ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, OUString& rStr )
 {
@@ -1666,7 +1666,7 @@ sal_Bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, OUString&
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetBitmapEx( SotFormatStringId nFormat, BitmapEx& rBmpEx )
 {
@@ -1688,7 +1688,7 @@ sal_Bool TransferableDataHelper::GetBitmapEx( SotFormatStringId nFormat, BitmapE
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetBitmapEx( aFlavor, rBmpEx ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& rBmpEx )
 {
@@ -1775,7 +1775,7 @@ sal_Bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapE
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetGDIMetaFile( SotFormatStringId nFormat, GDIMetaFile& rMtf )
 {
@@ -1783,7 +1783,7 @@ sal_Bool TransferableDataHelper::GetGDIMetaFile( SotFormatStringId nFormat, GDIM
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetGDIMetaFile( aFlavor, rMtf ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIMetaFile& rMtf )
 {
@@ -1828,7 +1828,7 @@ sal_Bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIM
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetGraphic( SotFormatStringId nFormat, Graphic& rGraphic )
 {
@@ -1850,7 +1850,7 @@ sal_Bool TransferableDataHelper::GetGraphic( SotFormatStringId nFormat, Graphic&
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetGraphic( aFlavor, rGraphic ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetGraphic( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, Graphic& rGraphic )
 {
@@ -1896,7 +1896,7 @@ sal_Bool TransferableDataHelper::GetGraphic( const ::com::sun::star::datatransfe
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetImageMap( SotFormatStringId nFormat, ImageMap& rIMap )
 {
@@ -1904,7 +1904,7 @@ sal_Bool TransferableDataHelper::GetImageMap( SotFormatStringId nFormat, ImageMa
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetImageMap( aFlavor, rIMap ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetImageMap( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ImageMap& rIMap )
 {
@@ -1920,7 +1920,7 @@ sal_Bool TransferableDataHelper::GetImageMap( const ::com::sun::star::datatransf
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetTransferableObjectDescriptor( SotFormatStringId nFormat, TransferableObjectDescriptor& rDesc )
 {
@@ -1928,7 +1928,7 @@ sal_Bool TransferableDataHelper::GetTransferableObjectDescriptor( SotFormatStrin
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetTransferableObjectDescriptor( aFlavor, rDesc ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetTransferableObjectDescriptor( const ::com::sun::star::datatransfer::DataFlavor&, TransferableObjectDescriptor& rDesc )
 {
@@ -1936,7 +1936,7 @@ sal_Bool TransferableDataHelper::GetTransferableObjectDescriptor( const ::com::s
     return true;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetINetBookmark( SotFormatStringId nFormat, INetBookmark& rBmk )
 {
@@ -1944,7 +1944,7 @@ sal_Bool TransferableDataHelper::GetINetBookmark( SotFormatStringId nFormat, INe
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetINetBookmark( aFlavor, rBmk ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, INetBookmark& rBmk )
 {
@@ -2083,7 +2083,7 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetINetImage( SotFormatStringId nFormat,
                                                 INetImage& rINtImg )
@@ -2092,7 +2092,7 @@ sal_Bool TransferableDataHelper::GetINetImage( SotFormatStringId nFormat,
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetINetImage( aFlavor, rINtImg ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetINetImage(
         const ::com::sun::star::datatransfer::DataFlavor& rFlavor,
@@ -2106,7 +2106,7 @@ sal_Bool TransferableDataHelper::GetINetImage(
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetFileList( SotFormatStringId nFormat,
                                                 FileList& rFileList )
@@ -2115,7 +2115,7 @@ sal_Bool TransferableDataHelper::GetFileList( SotFormatStringId nFormat,
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetFileList( aFlavor, rFileList ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetFileList(
             const ::com::sun::star::datatransfer::DataFlavor&,
@@ -2151,7 +2151,7 @@ sal_Bool TransferableDataHelper::GetFileList(
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetSequence( SotFormatStringId nFormat, Sequence< sal_Int8 >& rSeq )
 {
@@ -2159,7 +2159,7 @@ sal_Bool TransferableDataHelper::GetSequence( SotFormatStringId nFormat, Sequenc
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetSequence( aFlavor, rSeq ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetSequence( const DataFlavor& rFlavor, Sequence< sal_Int8 >& rSeq )
 {
@@ -2171,7 +2171,7 @@ sal_Bool TransferableDataHelper::GetSequence( const DataFlavor& rFlavor, Sequenc
     return( aAny.hasValue() && ( aAny >>= rSeq ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetSotStorageStream( SotFormatStringId nFormat, SotStorageStreamRef& rxStream )
 {
@@ -2179,7 +2179,7 @@ sal_Bool TransferableDataHelper::GetSotStorageStream( SotFormatStringId nFormat,
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetSotStorageStream( aFlavor, rxStream ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor, SotStorageStreamRef& rxStream )
 {
@@ -2202,7 +2202,7 @@ sal_Bool TransferableDataHelper::GetInputStream( SotFormatStringId nFormat, Refe
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetInputStream( aFlavor, rxStream ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetInputStream( const DataFlavor& rFlavor, Reference < XInputStream >& rxStream )
 {
@@ -2215,7 +2215,7 @@ sal_Bool TransferableDataHelper::GetInputStream( const DataFlavor& rFlavor, Refe
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TransferableDataHelper::Rebind( const Reference< XTransferable >& _rxNewContent )
 {
@@ -2223,7 +2223,7 @@ void TransferableDataHelper::Rebind( const Reference< XTransferable >& _rxNewCon
     InitFormats();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::StartClipboardListening( )
 {
@@ -2237,7 +2237,7 @@ sal_Bool TransferableDataHelper::StartClipboardListening( )
     return mpImpl->mpClipboardListener->isListening();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TransferableDataHelper::StopClipboardListening( )
 {
@@ -2251,7 +2251,7 @@ void TransferableDataHelper::StopClipboardListening( )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( Window * pWindow )
 {
@@ -2285,7 +2285,7 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( Window
 }
 
 
-// -----------------------------------------------------------------------------
+
 
 TransferableDataHelper TransferableDataHelper::CreateFromSelection( Window* pWindow )
 {
@@ -2321,7 +2321,7 @@ TransferableDataHelper TransferableDataHelper::CreateFromSelection( Window* pWin
     return aRet;
 }
 
-// -----------------------------------------------------------------------------
+
 sal_Bool TransferableDataHelper::IsEqual( const ::com::sun::star::datatransfer::DataFlavor& rInternalFlavor,
                                           const ::com::sun::star::datatransfer::DataFlavor& rRequestFlavor,
                                           sal_Bool )

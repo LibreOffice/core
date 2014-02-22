@@ -340,7 +340,7 @@ bool lclSeekToPCDField( BiffInputStream& rStrm )
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 BiffPivotCacheFragment::BiffPivotCacheFragment(
         const WorkbookHelper& rHelper, const OUString& rStrmName, PivotCache& rPivotCache ) :

@@ -109,7 +109,7 @@ int OfaMemoryOptionsPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-// -----------------------------------------------------------------------
+
 
 OfaMemoryOptionsPage::OfaMemoryOptionsPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptMemoryPage", "cui/ui/optmemorypage.ui", rSet)
@@ -140,20 +140,20 @@ OfaMemoryOptionsPage::OfaMemoryOptionsPage(Window* pParent, const SfxItemSet& rS
     m_pNfGraphicCache->SetModifyHdl( LINK( this, OfaMemoryOptionsPage, GraphicCacheConfigHdl ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 OfaMemoryOptionsPage::~OfaMemoryOptionsPage()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* OfaMemoryOptionsPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return new OfaMemoryOptionsPage( pParent, rAttrSet );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
 {
@@ -205,7 +205,7 @@ sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
     return bModified;
 }
 
-// -----------------------------------------------------------------------
+
 
 void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
 {
@@ -251,7 +251,7 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
     m_pQuickLaunchCB->SaveValue();
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(OfaMemoryOptionsPage, GraphicCacheConfigHdl)
 {

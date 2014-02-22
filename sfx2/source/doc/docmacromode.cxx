@@ -131,32 +131,32 @@ namespace sfx2
     //====================================================================
     //= DocumentMacroMode
     //====================================================================
-    //--------------------------------------------------------------------
+
     DocumentMacroMode::DocumentMacroMode( IMacroDocumentAccess& rDocumentAccess )
         :m_pData( new DocumentMacroMode_Data( rDocumentAccess ) )
     {
     }
 
-    //--------------------------------------------------------------------
+
     DocumentMacroMode::~DocumentMacroMode()
     {
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool DocumentMacroMode::allowMacroExecution()
     {
         m_pData->m_rDocumentAccess.setCurrentMacroExecMode( MacroExecMode::ALWAYS_EXECUTE_NO_WARN );
         return sal_True;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool DocumentMacroMode::disallowMacroExecution()
     {
         m_pData->m_rDocumentAccess.setCurrentMacroExecMode( MacroExecMode::NEVER_EXECUTE );
         return sal_False;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool DocumentMacroMode::adjustMacroMode( const Reference< XInteractionHandler >& rxInteraction )
     {
         sal_uInt16 nMacroExecutionMode = m_pData->m_rDocumentAccess.getCurrentMacroExecMode();
@@ -308,13 +308,13 @@ namespace sfx2
         return ( bSecure ? allowMacroExecution() : disallowMacroExecution() );
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool DocumentMacroMode::isMacroExecutionDisallowed() const
     {
         return m_pData->m_rDocumentAccess.getCurrentMacroExecMode() == MacroExecMode::NEVER_EXECUTE;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool DocumentMacroMode::containerHasBasicMacros( const Reference< XLibraryContainer >& xContainer )
     {
         sal_Bool bHasMacroLib = sal_False;
@@ -361,7 +361,7 @@ namespace sfx2
         return bHasMacroLib;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool DocumentMacroMode::hasMacroLibrary() const
     {
         sal_Bool bHasMacroLib = sal_False;
@@ -383,7 +383,7 @@ namespace sfx2
         return bHasMacroLib;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool DocumentMacroMode::storageHasMacros( const Reference< XStorage >& rxStorage )
     {
         sal_Bool bHasMacros = sal_False;
@@ -410,7 +410,7 @@ namespace sfx2
         return bHasMacros;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool DocumentMacroMode::checkMacrosOnLoading( const Reference< XInteractionHandler >& rxInteraction )
     {
         sal_Bool bAllow = sal_False;

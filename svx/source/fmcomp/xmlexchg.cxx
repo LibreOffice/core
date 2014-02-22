@@ -32,17 +32,17 @@ namespace svx
     //====================================================================
     //= OXFormsTransferable
     //====================================================================
-    //--------------------------------------------------------------------
+
     OXFormsTransferable::OXFormsTransferable( const OXFormsDescriptor &rhs ) :
         m_aDescriptor(rhs)
     {
     }
-    //--------------------------------------------------------------------
+
     void OXFormsTransferable::AddSupportedFormats()
     {
         AddFormat( SOT_FORMATSTR_ID_XFORMS );
     }
-    //--------------------------------------------------------------------
+
     sal_Bool OXFormsTransferable::GetData( const DataFlavor& _rFlavor )
     {
         const sal_uInt32 nFormatId = SotExchange::GetFormat( _rFlavor );
@@ -52,7 +52,7 @@ namespace svx
         }
         return sal_False;
     }
-    //--------------------------------------------------------------------
+
     const OXFormsDescriptor &OXFormsTransferable::extractDescriptor( const TransferableDataHelper &_rData ) {
 
         using namespace ::com::sun::star::uno;

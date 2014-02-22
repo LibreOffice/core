@@ -130,7 +130,7 @@ static bool lcl_Find(
             return true;
     return false;
 }
-//-----------------------------------------------------------------------------
+
 void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) throw(RuntimeException)
 {
     const ElementChange* pElementChanges = rEvent.Changes.getConstArray();
@@ -764,14 +764,14 @@ bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString >& 
     }
     return bRet;
 }
-//----------------------------------------------------------------------------
+
 static inline
 OUString lcl_extractSetPropertyName( const OUString& rInPath, const OUString& rPrefix )
 {
     OUString const sSubPath = dropPrefixFromConfigurationPath( rInPath, rPrefix);
     return extractFirstFromConfigurationPath( sSubPath );
 }
-//----------------------------------------------------------------------------
+
 static
 Sequence< OUString > lcl_extractSetPropertyNames( const Sequence< PropertyValue >& rValues, const OUString& rPrefix )
 {

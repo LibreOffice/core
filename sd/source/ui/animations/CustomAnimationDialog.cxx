@@ -116,7 +116,7 @@ private:
     ListBox* mpControl;
 };
 
-// --------------------------------------------------------------------
+
 
 PresetPropertyBox::PresetPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const OUString& aPresetId, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
@@ -165,21 +165,21 @@ void PresetPropertyBox::setValue( const Any& rValue, const OUString& rPresetId )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 PresetPropertyBox::~PresetPropertyBox()
 {
     delete mpControl;
 }
 
-// --------------------------------------------------------------------
+
 
 Any PresetPropertyBox::getValue()
 {
     return makeAny( maPropertyValues[mpControl->GetSelectEntryPos()] );
 }
 
-// --------------------------------------------------------------------
+
 
 Control* PresetPropertyBox::getControl()
 {
@@ -202,7 +202,7 @@ private:
     ColorListBox* mpControl;
 };
 
-// --------------------------------------------------------------------
+
 
 ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
@@ -235,14 +235,14 @@ ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, Window* pParent, con
     }
 }
 
-// --------------------------------------------------------------------
+
 
 ColorPropertyBox::~ColorPropertyBox()
 {
     delete mpControl;
 }
 
-// --------------------------------------------------------------------
+
 
 void ColorPropertyBox::setValue( const Any& rValue, const OUString& )
 {
@@ -256,14 +256,14 @@ void ColorPropertyBox::setValue( const Any& rValue, const OUString& )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 Any ColorPropertyBox::getValue()
 {
     return makeAny( (sal_Int32)mpControl->GetSelectEntryColor().GetRGBColor() );
 }
 
-// --------------------------------------------------------------------
+
 
 Control* ColorPropertyBox::getControl()
 {
@@ -287,7 +287,7 @@ private:
     FontNameBox* mpControl;
 };
 
-// --------------------------------------------------------------------
+
 
 FontPropertyBox::FontPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
@@ -321,7 +321,7 @@ FontPropertyBox::FontPropertyBox( sal_Int32 nControlType, Window* pParent, const
     setValue( rValue, aPresetId );
 }
 
-// --------------------------------------------------------------------
+
 
 void FontPropertyBox::setValue( const Any& rValue, const OUString& )
 {
@@ -333,14 +333,14 @@ void FontPropertyBox::setValue( const Any& rValue, const OUString& )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 FontPropertyBox::~FontPropertyBox()
 {
     delete mpControl;
 }
 
-// --------------------------------------------------------------------
+
 
 Any FontPropertyBox::getValue()
 {
@@ -348,7 +348,7 @@ Any FontPropertyBox::getValue()
     return makeAny( aFontName );
 }
 
-// --------------------------------------------------------------------
+
 
 Control* FontPropertyBox::getControl()
 {
@@ -374,7 +374,7 @@ private:
     PopupMenu* mpMenu;
 };
 
-// --------------------------------------------------------------------
+
 
 DropdownMenuBox::DropdownMenuBox( Window* pParent, Edit* pSubControl, PopupMenu* pMenu )
 :   Edit( pParent, WB_BORDER|WB_TABSTOP| WB_DIALOGCONTROL ),
@@ -390,7 +390,7 @@ DropdownMenuBox::DropdownMenuBox( Window* pParent, Edit* pSubControl, PopupMenu*
     mpSubControl->Show();
 }
 
-// --------------------------------------------------------------------
+
 
 DropdownMenuBox::~DropdownMenuBox()
 {
@@ -400,7 +400,7 @@ DropdownMenuBox::~DropdownMenuBox()
     delete mpMenu;
 }
 
-// --------------------------------------------------------------------
+
 
 void DropdownMenuBox::Resize()
 {
@@ -412,7 +412,7 @@ void DropdownMenuBox::Resize()
     mpDropdownButton->setPosSizePixel( aOutSz.Width() - nSBWidth, 0, nSBWidth, aOutSz.Height() );
 }
 
-// --------------------------------------------------------------------
+
 
 bool DropdownMenuBox::PreNotify( NotifyEvent& rNEvt )
 {
@@ -439,7 +439,7 @@ bool DropdownMenuBox::PreNotify( NotifyEvent& rNEvt )
     return nResult;
 }
 
-// --------------------------------------------------------------------
+
 
 class CharHeightPropertyBox : public PropertySubControl
 {
@@ -460,7 +460,7 @@ private:
     MetricField* mpMetric;
 };
 
-// --------------------------------------------------------------------
+
 
 CharHeightPropertyBox::CharHeightPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
@@ -480,14 +480,14 @@ CharHeightPropertyBox::CharHeightPropertyBox( sal_Int32 nControlType, Window* pP
     setValue( rValue, aPresetId );
 }
 
-// --------------------------------------------------------------------
+
 
 CharHeightPropertyBox::~CharHeightPropertyBox()
 {
     delete mpControl;
 }
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK( CharHeightPropertyBox, implMenuSelectHdl, MenuButton*, pPb )
 {
@@ -504,7 +504,7 @@ IMPL_LINK( CharHeightPropertyBox, implMenuSelectHdl, MenuButton*, pPb )
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 void CharHeightPropertyBox::setValue( const Any& rValue, const OUString& )
 {
@@ -516,14 +516,14 @@ void CharHeightPropertyBox::setValue( const Any& rValue, const OUString& )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 Any CharHeightPropertyBox::getValue()
 {
     return makeAny( (double)((double)mpMetric->GetValue() / 100.0) );
 }
 
-// --------------------------------------------------------------------
+
 
 Control* CharHeightPropertyBox::getControl()
 {
@@ -555,7 +555,7 @@ private:
     Link maModifyHdl;
 };
 
-// --------------------------------------------------------------------
+
 
 TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
@@ -585,14 +585,14 @@ TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, Window
     setValue( rValue, aPresetId  );
 }
 
-// --------------------------------------------------------------------
+
 
 TransparencyPropertyBox::~TransparencyPropertyBox()
 {
     delete mpControl;
 }
 
-// --------------------------------------------------------------------
+
 
 void TransparencyPropertyBox::updateMenu()
 {
@@ -601,7 +601,7 @@ void TransparencyPropertyBox::updateMenu()
         mpMenu->CheckItem( i, nValue == i );
 }
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(TransparencyPropertyBox, implModifyHdl)
 {
@@ -611,7 +611,7 @@ IMPL_LINK_NOARG(TransparencyPropertyBox, implModifyHdl)
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK( TransparencyPropertyBox, implMenuSelectHdl, MenuButton*, pPb )
 {
@@ -624,7 +624,7 @@ IMPL_LINK( TransparencyPropertyBox, implMenuSelectHdl, MenuButton*, pPb )
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 void TransparencyPropertyBox::setValue( const Any& rValue, const OUString& )
 {
@@ -638,21 +638,21 @@ void TransparencyPropertyBox::setValue( const Any& rValue, const OUString& )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 Any TransparencyPropertyBox::getValue()
 {
     return makeAny( (double)((double)mpMetric->GetValue()) / 100.0 );
 }
 
-// --------------------------------------------------------------------
+
 
 Control* TransparencyPropertyBox::getControl()
 {
     return mpControl;
 }
 
-// --------------------------------------------------------------------
+
 
 class RotationPropertyBox : public PropertySubControl
 {
@@ -677,7 +677,7 @@ private:
     Link maModifyHdl;
 };
 
-// --------------------------------------------------------------------
+
 
 RotationPropertyBox::RotationPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
@@ -701,14 +701,14 @@ RotationPropertyBox::RotationPropertyBox( sal_Int32 nControlType, Window* pParen
     setValue( rValue, aPresetId );
 }
 
-// --------------------------------------------------------------------
+
 
 RotationPropertyBox::~RotationPropertyBox()
 {
     delete mpControl;
 }
 
-// --------------------------------------------------------------------
+
 
 void RotationPropertyBox::updateMenu()
 {
@@ -725,7 +725,7 @@ void RotationPropertyBox::updateMenu()
     mpMenu->CheckItem( CM_COUNTERCLOCKWISE, !bDirection );
 }
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(RotationPropertyBox, implModifyHdl)
 {
@@ -765,7 +765,7 @@ IMPL_LINK( RotationPropertyBox, implMenuSelectHdl, MenuButton*, pPb )
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 void RotationPropertyBox::setValue( const Any& rValue, const OUString& )
 {
@@ -779,21 +779,21 @@ void RotationPropertyBox::setValue( const Any& rValue, const OUString& )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 Any RotationPropertyBox::getValue()
 {
     return makeAny( (double)((double)mpMetric->GetValue()) );
 }
 
-// --------------------------------------------------------------------
+
 
 Control* RotationPropertyBox::getControl()
 {
     return mpControl;
 }
 
-// --------------------------------------------------------------------
+
 
 class ScalePropertyBox : public PropertySubControl
 {
@@ -819,7 +819,7 @@ private:
     int mnDirection;
 };
 
-// --------------------------------------------------------------------
+
 
 ScalePropertyBox::ScalePropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
@@ -842,14 +842,14 @@ ScalePropertyBox::ScalePropertyBox( sal_Int32 nControlType, Window* pParent, con
     setValue( rValue, aPresetId );
 }
 
-// --------------------------------------------------------------------
+
 
 ScalePropertyBox::~ScalePropertyBox()
 {
     delete mpControl;
 }
 
-// --------------------------------------------------------------------
+
 
 void ScalePropertyBox::updateMenu()
 {
@@ -865,7 +865,7 @@ void ScalePropertyBox::updateMenu()
     mpMenu->CheckItem( CM_BOTH, mnDirection == 3 );
 }
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScalePropertyBox, implModifyHdl)
 {
@@ -914,7 +914,7 @@ IMPL_LINK( ScalePropertyBox, implMenuSelectHdl, MenuButton*, pPb )
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 void ScalePropertyBox::setValue( const Any& rValue, const OUString& )
 {
@@ -946,7 +946,7 @@ void ScalePropertyBox::setValue( const Any& rValue, const OUString& )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 Any ScalePropertyBox::getValue()
 {
@@ -965,7 +965,7 @@ Any ScalePropertyBox::getValue()
     return makeAny( aValues );
 }
 
-// --------------------------------------------------------------------
+
 
 Control* ScalePropertyBox::getControl()
 {
@@ -1000,7 +1000,7 @@ private:
     sal_Int16 mnFontUnderline;
 };
 
-// --------------------------------------------------------------------
+
 
 FontStylePropertyBox::FontStylePropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
@@ -1018,14 +1018,14 @@ FontStylePropertyBox::FontStylePropertyBox( sal_Int32 nControlType, Window* pPar
     setValue( rValue, aPresetId );
 }
 
-// --------------------------------------------------------------------
+
 
 FontStylePropertyBox::~FontStylePropertyBox()
 {
     delete mpControl;
 }
 
-// --------------------------------------------------------------------
+
 
 void FontStylePropertyBox::update()
 {
@@ -1043,7 +1043,7 @@ void FontStylePropertyBox::update()
     mpEdit->Invalidate();
 }
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK( FontStylePropertyBox, implMenuSelectHdl, MenuButton*, pPb )
 {
@@ -1077,7 +1077,7 @@ IMPL_LINK( FontStylePropertyBox, implMenuSelectHdl, MenuButton*, pPb )
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 void FontStylePropertyBox::setValue( const Any& rValue, const OUString& )
 {
@@ -1091,7 +1091,7 @@ void FontStylePropertyBox::setValue( const Any& rValue, const OUString& )
     update();
 }
 
-// --------------------------------------------------------------------
+
 
 Any FontStylePropertyBox::getValue()
 {
@@ -1102,7 +1102,7 @@ Any FontStylePropertyBox::getValue()
     return makeAny( aValues );
 }
 
-// --------------------------------------------------------------------
+
 
 Control* FontStylePropertyBox::getControl()
 {
@@ -1523,7 +1523,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
             pSet->setPropertyValue( nHandleAfterEffectOnNextEffect, makeAny( bAfterEffectOnNextEffect ) );
     }
 
-    // ---
+
 
     nPos = mpLBTextAnim->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -1547,7 +1547,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
             pSet->setPropertyValue( nHandleIterateType, makeAny( nIterateType ) );
     }
 
-    // ---
+
 
     {
         double fIterateInterval = static_cast< double >( mpMFTextDelay->GetValue() ) / 10;
@@ -1930,7 +1930,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
             pSet->setPropertyValue( nHandleStart, makeAny( nStart ) );
     }
 
-    // ---
+
 
     {
         double fBegin = static_cast<double>( mpMFStartDelay->GetValue()) / 10.0;
@@ -1943,7 +1943,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
             pSet->setPropertyValue( nHandleBegin, makeAny( fBegin ) );
     }
 
-    // ---
+
 
     nPos = mpCBRepeat->GetSelectEntryPos();
     if( (nPos != LISTBOX_ENTRY_NOTFOUND) || (!mpCBRepeat->GetText().isEmpty()) )
@@ -1989,7 +1989,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
             pSet->setPropertyValue( nHandleEnd, aEnd );
     }
 
-    // ---
+
 
     double fDuration = -1.0;
     nPos = mpCBDuration->GetSelectEntryPos();
@@ -2017,7 +2017,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
             pSet->setPropertyValue( nHandleDuration, makeAny( fDuration ) );
     }
 
-    // ---
+
 
     if( mpCBXRewind->GetState() != STATE_DONTKNOW )
     {
@@ -2249,7 +2249,7 @@ IMPL_LINK_NOARG(CustomAnimationTextAnimTabPage, implSelectHdl)
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 CustomAnimationDialog::CustomAnimationDialog(Window* pParent, STLPropertySet* pSet, OString sPage)
 : TabDialog( pParent, "CustomAnimationProperties", "modules/simpress/ui/customanimationproperties.ui")

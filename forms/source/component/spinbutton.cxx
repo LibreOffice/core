@@ -21,7 +21,7 @@
 #include <comphelper/streamsection.hxx>
 #include <comphelper/basicio.hxx>
 
-//--------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_OSpinButtonModel()
 {
     static ::frm::OMultiInstanceAutoRegistration< ::frm::OSpinButtonModel >   aRegisterModel;
@@ -53,8 +53,8 @@ namespace frm
     //====================================================================
     //= OSpinButtonModel
     //====================================================================
-    //--------------------------------------------------------------------
-    //--------------------------------------------------------------------
+
+
     OSpinButtonModel::OSpinButtonModel( const Reference<XComponentContext>& _rxFactory )
         :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_SPINBUTTON, VCL_CONTROL_SPINBUTTON, sal_True, sal_True, sal_False )
         ,m_nDefaultSpinValue( 0 )
@@ -64,35 +64,35 @@ namespace frm
         initValueProperty( PROPERTY_SPIN_VALUE, PROPERTY_ID_SPIN_VALUE );
     }
 
-    //--------------------------------------------------------------------
+
     OSpinButtonModel::OSpinButtonModel( const OSpinButtonModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
         :OBoundControlModel( _pOriginal, _rxFactory )
     {
         m_nDefaultSpinValue = _pOriginal->m_nDefaultSpinValue;
     }
 
-    //--------------------------------------------------------------------
+
     OSpinButtonModel::~OSpinButtonModel( )
     {
     }
 
-    //--------------------------------------------------------------------
+
     IMPLEMENT_SERVICE_REGISTRATION_2( OSpinButtonModel, OControlModel, FRM_SUN_COMPONENT_SPINBUTTON, BINDABLE_INTEGER_VALUE_RANGE )
         // note that we're passing OControlModel as "base class". This is because
         // OBoundControlModel, our real base class, claims to support the DataAwareControlModel
         // service, which isn't really true for us. We only derive from this class
         // to benefit from the functionality for binding to spreadsheet cells
 
-    //------------------------------------------------------------------------------
+
     IMPLEMENT_DEFAULT_CLONING( OSpinButtonModel )
 
-    //------------------------------------------------------------------------------
+
     void SAL_CALL OSpinButtonModel::disposing()
     {
         OBoundControlModel::disposing();
     }
 
-    //--------------------------------------------------------------------
+
     void OSpinButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
         BEGIN_DESCRIBE_PROPERTIES( 3, OControlModel )
@@ -102,7 +102,7 @@ namespace frm
         END_DESCRIBE_PROPERTIES();
     }
 
-    //------------------------------------------------------------------------------
+
     void OSpinButtonModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         switch ( _nHandle )
@@ -116,7 +116,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+
     void OSpinButtonModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw ( Exception )
     {
         switch ( _nHandle )
@@ -131,7 +131,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+
     sal_Bool OSpinButtonModel::convertFastPropertyValue(
                 Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
                 throw ( IllegalArgumentException )
@@ -150,7 +150,7 @@ namespace frm
         return bModified;
     }
 
-    //--------------------------------------------------------------------
+
     Any OSpinButtonModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
     {
         Any aReturn;
@@ -169,33 +169,33 @@ namespace frm
         return aReturn;
     }
 
-    //------------------------------------------------------------------------------
+
     Any OSpinButtonModel::translateDbColumnToControlValue( )
     {
         OSL_FAIL( "OSpinButtonModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
         return Any();
     }
 
-    //------------------------------------------------------------------------------
+
     sal_Bool OSpinButtonModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     {
         OSL_FAIL( "OSpinButtonModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
         return sal_True;
     }
 
-    //------------------------------------------------------------------------------
+
     Any OSpinButtonModel::getDefaultForReset() const
     {
         return makeAny( (sal_Int32)m_nDefaultSpinValue );
     }
 
-    //--------------------------------------------------------------------
+
     OUString SAL_CALL OSpinButtonModel::getServiceName() throw( RuntimeException )
     {
         return OUString(FRM_SUN_COMPONENT_SPINBUTTON);
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OSpinButtonModel::write( const Reference< XObjectOutputStream >& _rxOutStream )
         throw( IOException, RuntimeException )
     {
@@ -212,7 +212,7 @@ namespace frm
         writeHelpTextCompatibly( _rxOutStream );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OSpinButtonModel::read( const Reference< XObjectInputStream>& _rxInStream ) throw( IOException, RuntimeException )
     {
         OBoundControlModel::read( _rxInStream );
@@ -235,7 +235,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     Any OSpinButtonModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
     {
         return translateExternalDoubleToControlIntValue( _rExternalValue, m_xAggregateSet,
@@ -243,14 +243,14 @@ namespace frm
             OUString( "SpinValueMax" ) );
     }
 
-    //--------------------------------------------------------------------
+
     Any OSpinButtonModel::translateControlValueToExternalValue( ) const
     {
         // by definition, the base class simply obtains the property value
         return translateControlIntToExternalDoubleValue( OBoundControlModel::translateControlValueToExternalValue() );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< Type > OSpinButtonModel::getSupportedBindingTypes()
     {
         return Sequence< Type >( &::getCppuType( static_cast< double* >( NULL ) ), 1 );

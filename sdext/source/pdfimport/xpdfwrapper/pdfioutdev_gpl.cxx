@@ -368,7 +368,7 @@ void writeImage_( OutputBuffer&     o_rOutputBuf,
 }
 
 // forwarders
-// ------------------------------------------------------------------
+
 
 inline void writeImage( OutputBuffer&     o_rOutputBuf,
                         Stream*           str,
@@ -391,7 +391,7 @@ inline void writeMaskLF( OutputBuffer&     o_rOutputBuf,
                          int               height,
                          bool              bInvert ) { writeMask_(o_rOutputBuf,str,width,height,true,bInvert); }
 
-// ------------------------------------------------------------------
+
 
 
 int PDFOutDev::parseFont( long long nNewId, GfxFont* gfxFont, GfxState* state ) const

@@ -50,7 +50,7 @@ ShapePropertiesContext::ShapePropertiesContext( ContextHandler2Helper& rParent, 
 {
 }
 
-// --------------------------------------------------------------------
+
 
 ContextHandlerRef ShapePropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {

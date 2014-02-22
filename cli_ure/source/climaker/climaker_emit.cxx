@@ -38,7 +38,7 @@ using namespace ::com::sun::star::uno;
 namespace climaker
 {
 System::String^ mapUnoPolymorphicName(System::String^ unoName);
-//------------------------------------------------------------------------------
+
 static inline ::System::String ^ to_cts_name(
     OUString const & uno_name )
 {
@@ -48,7 +48,7 @@ static inline ::System::String ^ to_cts_name(
     return ustring_to_String( buf.makeStringAndClear() );
 }
 
-//------------------------------------------------------------------------------
+
 static inline ::System::Object ^ to_cli_constant( Any const & value )
 {
     switch (value.getValueTypeClass())
@@ -95,7 +95,7 @@ static inline ::System::Object ^ to_cli_constant( Any const & value )
     }
 }
 
-//------------------------------------------------------------------------------
+
 static inline void emit_ldarg( Emit::ILGenerator ^ code, ::System::Int32 index )
 {
     switch (index)
@@ -275,7 +275,7 @@ System::String^ mapUnoPolymorphicName(System::String^ unoName)
 
 
 
-//______________________________________________________________________________
+
 Assembly ^ TypeEmitter::type_resolve(
     ::System::Object ^, ::System::ResolveEventArgs ^ args )
 {
@@ -310,7 +310,7 @@ Assembly ^ TypeEmitter::type_resolve(
     return nullptr;
 }
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::get_type(
     ::System::String ^ cts_name, bool throw_exc )
 {
@@ -358,7 +358,7 @@ Assembly ^ TypeEmitter::type_resolve(
     }
 }
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::get_type_Exception()
 {
     if (nullptr == m_type_Exception)
@@ -419,7 +419,7 @@ Assembly ^ TypeEmitter::type_resolve(
     return m_type_Exception;
 }
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::get_type_RuntimeException()
 {
     if (nullptr == m_type_RuntimeException)
@@ -473,7 +473,7 @@ Assembly ^ TypeEmitter::type_resolve(
     return m_type_RuntimeException;
 }
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::get_type(
     Reference< reflection::XConstantTypeDescription > const & xType )
 {
@@ -511,7 +511,7 @@ Assembly ^ TypeEmitter::type_resolve(
     return ret_type;
 }
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::get_type(
     Reference< reflection::XConstantsTypeDescription > const & xType )
 {
@@ -562,7 +562,7 @@ Assembly ^ TypeEmitter::type_resolve(
     return ret_type;
 }
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::get_type(
     Reference< reflection::XEnumTypeDescription > const & xType )
 {
@@ -621,7 +621,7 @@ Assembly ^ TypeEmitter::type_resolve(
     return ret_type;
 }
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::get_type(
     Reference< reflection::XCompoundTypeDescription > const & xType )
 {
@@ -696,7 +696,7 @@ Assembly ^ TypeEmitter::type_resolve(
     return ret_type;
 }
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::get_type(
     Reference< reflection::XInterfaceTypeDescription2 > const & xType )
 {
@@ -767,7 +767,7 @@ Assembly ^ TypeEmitter::type_resolve(
 }
 
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::get_type(
     Reference< reflection::XServiceTypeDescription2 > const & xType )
 {
@@ -828,7 +828,7 @@ Assembly ^ TypeEmitter::type_resolve(
 
 }
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::complete_iface_type( iface_entry ^ entry )
 {
     Emit::TypeBuilder ^ type_builder = entry->m_type_builder;
@@ -1575,7 +1575,7 @@ Assembly ^ TypeEmitter::type_resolve(
         if (attrBuilder != nullptr)
             method_builder->SetCustomAttribute(attrBuilder);
 
-        //-------------------------------------------------------------
+
         //define parameter attributes (paramarray), names etc.
         //The first parameter is the XComponentContext, which cannot be obtained
         //from reflection.
@@ -2062,7 +2062,7 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
 }
 
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::get_type(
     Reference< reflection::XTypeDescription > const & xType )
 {
@@ -2158,7 +2158,7 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
     }
 }
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::get_complete_struct( ::System::String ^ sName)
 {
     struct_entry ^ pStruct = safe_cast< struct_entry ^>(
@@ -2213,7 +2213,7 @@ TypeEmitter::~TypeEmitter()
             safe_cast< singleton_entry ^ >( enumerator->Value ) );
     }
 }
-//______________________________________________________________________________
+
 TypeEmitter::TypeEmitter(
     ::System::Reflection::Emit::ModuleBuilder ^ module_builder,
     array< ::System::Reflection::Assembly^>^ extra_assemblies )

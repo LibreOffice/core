@@ -22,7 +22,7 @@
 #include "sal/log.hxx"
 
 using namespace connectivity;
-// -----------------------------------------------------------------------------
+
 OSkipDeletedSet::OSkipDeletedSet(IResultSetHelper* _pHelper)
     : m_pHelper(_pHelper)
     ,m_bDeletedVisible(false)
@@ -30,13 +30,13 @@ OSkipDeletedSet::OSkipDeletedSet(IResultSetHelper* _pHelper)
     SAL_INFO( "connectivity.commontools", "commontools Ocke.Janssen@sun.com OSkipDeletedSet::OSkipDeletedSet" );
     m_aBookmarksPositions.reserve(256);
 }
-// -----------------------------------------------------------------------------
+
 OSkipDeletedSet::~OSkipDeletedSet()
 {
     m_aBookmarksPositions.clear();
     //m_aBookmarks.clear();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, sal_Bool _bRetrieveData)
 {
     SAL_INFO( "connectivity.commontools", "commontools Ocke.Janssen@sun.com OSkipDeletedSet::skipDeleted" );
@@ -161,7 +161,7 @@ sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPositio
 
     return bDataFound;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool OSkipDeletedSet::moveAbsolute(sal_Int32 _nPos,sal_Bool _bRetrieveData)
 {
     SAL_INFO( "connectivity.commontools", "commontools Ocke.Janssen@sun.com OSkipDeletedSet::moveAbsolute" );
@@ -224,14 +224,14 @@ sal_Bool OSkipDeletedSet::moveAbsolute(sal_Int32 _nPos,sal_Bool _bRetrieveData)
     }
     return bDataFound;
 }
-// -----------------------------------------------------------------------------
+
 void OSkipDeletedSet::clear()
 {
     SAL_INFO( "connectivity.commontools", "commontools Ocke.Janssen@sun.com OSkipDeletedSet::clear" );
     ::std::vector<sal_Int32>().swap(m_aBookmarksPositions);
     //TInt2IntMap().swap(m_aBookmarks);
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 OSkipDeletedSet::getMappedPosition(sal_Int32 _nPos) const
 {
     SAL_INFO( "connectivity.commontools", "commontools Ocke.Janssen@sun.com OSkipDeletedSet::getMappedPosition" );
@@ -244,7 +244,7 @@ sal_Int32 OSkipDeletedSet::getMappedPosition(sal_Int32 _nPos) const
     OSL_FAIL("Why!");
     return -1;
 }
-// -----------------------------------------------------------------------------
+
 void OSkipDeletedSet::insertNewPosition(sal_Int32 _nPos)
 {
     SAL_INFO( "connectivity.commontools", "commontools Ocke.Janssen@sun.com OSkipDeletedSet::insertNewPosition" );
@@ -253,7 +253,7 @@ void OSkipDeletedSet::insertNewPosition(sal_Int32 _nPos)
     //OSL_ENSURE(::std::find(m_aBookmarksPositions.begin(),m_aBookmarksPositions.end(),_nPos) == m_aBookmarksPositions.end(),"Invalid driver pos");
     m_aBookmarksPositions.push_back(_nPos);
 }
-// -----------------------------------------------------------------------------
+
 void OSkipDeletedSet::deletePosition(sal_Int32 _nBookmark)
 {
     SAL_INFO( "connectivity.commontools", "commontools Ocke.Janssen@sun.com OSkipDeletedSet::deletePosition" );
@@ -270,6 +270,6 @@ void OSkipDeletedSet::deletePosition(sal_Int32 _nBookmark)
     //m_aBookmarksPositions.erase(m_aBookmarksPositions.begin() + aFind->second-1);
     //m_aBookmarks.erase(_nPos);
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

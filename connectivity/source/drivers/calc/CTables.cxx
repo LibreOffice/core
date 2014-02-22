@@ -44,6 +44,6 @@ sdbcx::ObjectType OCalcTables::createObject(const OUString& _rName)
     pTable->construct();
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

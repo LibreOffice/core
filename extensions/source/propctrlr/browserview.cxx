@@ -36,7 +36,7 @@ namespace pcr
     //= class OPropertyBrowserView
     //========================================================================
     DBG_NAME(OPropertyBrowserView)
-    //------------------------------------------------------------------------
+
     OPropertyBrowserView::OPropertyBrowserView(Window* _pParent, WinBits nBits)
                   :Window(_pParent, nBits | WB_3DLOOK)
                   ,m_nActivePage(0)
@@ -50,7 +50,7 @@ namespace pcr
         m_pPropBox->Show();
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(OPropertyBrowserView, OnPageActivation)
     {
         m_nActivePage = m_pPropBox->GetCurPage();
@@ -59,7 +59,7 @@ namespace pcr
         return 0L;
     }
 
-    //------------------------------------------------------------------------
+
     OPropertyBrowserView::~OPropertyBrowserView()
     {
         if(m_pPropBox)
@@ -74,14 +74,14 @@ namespace pcr
         DBG_DTOR(OPropertyBrowserView, NULL);
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserView::activatePage(sal_uInt16 _nPage)
     {
         m_nActivePage = _nPage;
         getPropertyBox().SetPage(m_nActivePage);
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserView::GetFocus()
     {
         if (m_pPropBox)
@@ -90,7 +90,7 @@ namespace pcr
             Window::GetFocus();
     }
 
-    //------------------------------------------------------------------------
+
     bool OPropertyBrowserView::Notify( NotifyEvent& _rNEvt )
     {
         if ( EVENT_KEYINPUT == _rNEvt.GetType() )
@@ -106,7 +106,7 @@ namespace pcr
         return Window::Notify( _rNEvt );
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserView::Resize()
     {
         Size aSize = GetOutputSizePixel();

@@ -754,9 +754,9 @@ static void lcl_CheckForChildren(Menu* pMenu, sal_uInt16 nItemId)
         pMenu->EnableItem( nItemId, pThisPopup->GetItemCount() ? true : false );
 }
 
-//_________________________________________________________________________________________________________________
+
 // vcl handler
-//_________________________________________________________________________________________________________________
+
 
 namespace {
 

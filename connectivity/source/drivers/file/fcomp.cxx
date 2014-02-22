@@ -44,7 +44,7 @@ using namespace ::com::sun::star::container;
 using namespace com::sun::star;
 
 DBG_NAME(OPredicateCompiler)
-//------------------------------------------------------------------
+
 OPredicateCompiler::OPredicateCompiler(OSQLAnalyzer* pAnalyzer)//,OCursor& rCurs)
                      : m_pAnalyzer(pAnalyzer)
                      , m_nParamCounter(0)
@@ -53,13 +53,13 @@ OPredicateCompiler::OPredicateCompiler(OSQLAnalyzer* pAnalyzer)//,OCursor& rCurs
     DBG_CTOR(OPredicateCompiler,NULL);
 }
 
-//------------------------------------------------------------------
+
 OPredicateCompiler::~OPredicateCompiler()
 {
     Clean();
     DBG_DTOR(OPredicateCompiler,NULL);
 }
-// -----------------------------------------------------------------------------
+
 void OPredicateCompiler::dispose()
 {
     Clean();
@@ -137,7 +137,7 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
     }
 }
 
-//------------------------------------------------------------------
+
 OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
 {
     OOperand* pOperand = NULL;
@@ -223,7 +223,7 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
     return pOperand;
 }
 
-//------------------------------------------------------------------
+
 OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)  throw(SQLException, RuntimeException)
 {
     DBG_ASSERT(pPredicateNode->count() == 3,"OFILECursor: Fehler im Parse Tree");
@@ -271,7 +271,7 @@ OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)  th
     return NULL;
 }
 
-//------------------------------------------------------------------
+
 OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
 {
     DBG_ASSERT(pPredicateNode->count() == 2,"OFILECursor: Fehler im Parse Tree");
@@ -321,7 +321,7 @@ OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(
 
     return NULL;
 }
-//------------------------------------------------------------------
+
 OOperand* OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
 {
     DBG_ASSERT(pPredicateNode->count() == 2,"OFILECursor: Fehler im Parse Tree");
@@ -401,7 +401,7 @@ OOperand* OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) thr
 
     return NULL;
 }
-//------------------------------------------------------------------
+
 OOperand* OPredicateCompiler::execute_ISNULL(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
 {
     DBG_ASSERT(pPredicateNode->count() == 2,"OFILECursor: Fehler im Parse Tree");
@@ -421,7 +421,7 @@ OOperand* OPredicateCompiler::execute_ISNULL(OSQLParseNode* pPredicateNode) thro
 
     return NULL;
 }
-//------------------------------------------------------------------
+
 OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
 {
     OOperand* pOperand = NULL;
@@ -575,7 +575,7 @@ sal_Bool OPredicateInterpreter::evaluate(OCodeList& rCodeList)
         delete pOperand;
     return bResult;
 }
-// -----------------------------------------------------------------------------
+
 void OPredicateInterpreter::evaluateSelection(OCodeList& rCodeList,ORowSetValueDecoratorRef& _rVal)
 {
     OCodeList::iterator aIter = rCodeList.begin();
@@ -601,7 +601,7 @@ void OPredicateInterpreter::evaluateSelection(OCodeList& rCodeList,ORowSetValueD
     if (IS_TYPE(OOperandResult,pOperand))
         delete pOperand;
 }
-// -----------------------------------------------------------------------------
+
 OOperand* OPredicateCompiler::execute_Fold(OSQLParseNode* pPredicateNode)   throw(SQLException, RuntimeException)
 {
     DBG_ASSERT(pPredicateNode->count() >= 4,"OFILECursor: Fehler im Parse Tree");
@@ -618,7 +618,7 @@ OOperand* OPredicateCompiler::execute_Fold(OSQLParseNode* pPredicateNode)   thro
     m_aCodeList.push_back(pOperator);
     return NULL;
 }
-// -----------------------------------------------------------------------------
+
 OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    throw(SQLException, RuntimeException)
 {
     OOperator* pOperator = NULL;
@@ -906,7 +906,7 @@ OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    
     m_aCodeList.push_back(pOperator);
     return NULL;
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

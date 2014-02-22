@@ -29,7 +29,7 @@
 
 using namespace rtl;
 
-// ---------------------------------------------------------------------------
+
 
 XRenderPeer::XRenderPeer()
     : mpDisplay( GetGenericData()->GetSalDisplay()->GetDisplay() )
@@ -38,7 +38,7 @@ XRenderPeer::XRenderPeer()
     InitRenderLib();
 }
 
-// ---------------------------------------------------------------------------
+
 
 XRenderPeer& XRenderPeer::GetInstance()
 {
@@ -46,7 +46,7 @@ XRenderPeer& XRenderPeer::GetInstance()
     return aPeer;
 }
 
-// ---------------------------------------------------------------------------
+
 
 void XRenderPeer::InitRenderLib()
 {

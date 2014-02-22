@@ -300,7 +300,7 @@ public:
     virtual sal_Bool SAL_CALL hasMethod( const OUString & rName ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasProperty( const OUString & rName ) throw(::com::sun::star::uno::RuntimeException);
 };
-//__________________________________________________________________________________________________
+
 Any XLB_Invocation::invoke( const OUString & rFunctionName,
                             const Sequence< Any > & rParams,
                             Sequence< sal_Int16 > & rOutParamIndex,
@@ -539,7 +539,7 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
 
     return aRet;
 }
-//__________________________________________________________________________________________________
+
 void XLB_Invocation::setValue( const OUString & rName, const Any & rValue )
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException)
 {
@@ -580,7 +580,7 @@ void XLB_Invocation::setValue( const OUString & rName, const Any & rValue )
     else if ( rName == "RuntimeException" )
         _xLBT->setRuntimeException( *(const sal_Int32 *)rValue.getValue() );
 }
-//__________________________________________________________________________________________________
+
 Any XLB_Invocation::getValue( const OUString & rName )
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
 {
@@ -629,7 +629,7 @@ Any XLB_Invocation::getValue( const OUString & rName )
         aRet <<= _xLBT->getRuntimeException();
     return aRet;
 }
-//__________________________________________________________________________________________________
+
 sal_Bool XLB_Invocation::hasMethod( const OUString & rName )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -641,7 +641,7 @@ sal_Bool XLB_Invocation::hasMethod( const OUString & rName )
             rName == "release" ||
             rName == "queryInterface" );
 }
-//__________________________________________________________________________________________________
+
 sal_Bool XLB_Invocation::hasProperty( const OUString & rName )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -667,7 +667,7 @@ sal_Bool XLB_Invocation::hasProperty( const OUString & rName )
 
 //##################################################################################################
 
-//__________________________________________________________________________________________________
+
 void Test_Impl::setValues( sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
                            sal_Int16 nShort, sal_uInt16 nUShort,
                            sal_Int32 nLong, sal_uInt32 nULong,
@@ -685,7 +685,7 @@ void Test_Impl::setValues( sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
             eEnum, rStr, xTest, rAny, rSequence );
     _aStructData = rStruct;
 }
-//__________________________________________________________________________________________________
+
 test::TestData Test_Impl::setValues2( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte,
                                       sal_Int16& nShort, sal_uInt16& nUShort,
                                       sal_Int32& nLong, sal_uInt32& nULong,
@@ -704,7 +704,7 @@ test::TestData Test_Impl::setValues2( sal_Bool& bBool, sal_Unicode& cChar, sal_I
     _aStructData = rStruct;
     return _aStructData;
 }
-//__________________________________________________________________________________________________
+
 test::TestData Test_Impl::getValues( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte,
                                      sal_Int16& nShort, sal_uInt16& nUShort,
                                      sal_Int32& nLong, sal_uInt32& nULong,
@@ -849,7 +849,7 @@ sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
     return sal_False;
 }
 
-//__________________________________________________________________________________________________
+
 test::TestData Test_Impl::raiseException( sal_Bool& /*bBool*/, sal_Unicode& /*cChar*/, sal_Int8& /*nByte*/, sal_Int16& /*nShort*/, sal_uInt16& /*nUShort*/, sal_Int32& /*nLong*/, sal_uInt32& /*nULong*/, sal_Int64& /*nHyper*/, sal_uInt64& /*nUHyper*/, float& /*fFloat*/, double& /*fDouble*/, test::TestEnum& /*eEnum*/, OUString& /*aString*/, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& /*xInterface*/, ::com::sun::star::uno::Any& /*aAny*/, ::com::sun::star::uno::Sequence< test::TestElement >& /*aSequence*/, test::TestData& /*aStruct*/ )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
@@ -859,7 +859,7 @@ test::TestData Test_Impl::raiseException( sal_Bool& /*bBool*/, sal_Unicode& /*cC
     aExc.Context          = *this;
     throw aExc;
 }
-//__________________________________________________________________________________________________
+
 sal_Int32 Test_Impl::getRuntimeException() throw(::com::sun::star::uno::RuntimeException)
 {
     RuntimeException aExc;
@@ -867,7 +867,7 @@ sal_Int32 Test_Impl::getRuntimeException() throw(::com::sun::star::uno::RuntimeE
     aExc.Context          = *this;
     throw aExc;
 }
-//__________________________________________________________________________________________________
+
 void Test_Impl::setRuntimeException( sal_Int32 /*_runtimeexception*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
     RuntimeException aExc;

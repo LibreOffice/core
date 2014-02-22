@@ -31,14 +31,14 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::cppu;
 
-// -------------------------------------------------------------------------
+
 KabCatalog::KabCatalog(KabConnection* _pCon)
         : connectivity::sdbcx::OCatalog(_pCon),
           m_pConnection(_pCon),
           m_xMetaData(m_pConnection->getMetaData())
 {
 }
-// -------------------------------------------------------------------------
+
 void KabCatalog::refreshTables()
 {
     TStringVector aVector;
@@ -68,19 +68,19 @@ void KabCatalog::refreshTables()
     else
         m_pTables = new KabTables(m_xMetaData,*this,m_aMutex,aVector);
 }
-// -------------------------------------------------------------------------
+
 void KabCatalog::refreshViews()
 {
 }
-// -------------------------------------------------------------------------
+
 void KabCatalog::refreshGroups()
 {
 }
-// -------------------------------------------------------------------------
+
 void KabCatalog::refreshUsers()
 {
 }
-// -----------------------------------------------------------------------------
+
 
 // XTablesSupplier
 Reference< XNameAccess > SAL_CALL KabCatalog::getTables(  ) throw(RuntimeException)

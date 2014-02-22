@@ -105,9 +105,9 @@ public:
     Sequence< sal_Int8> m_seq;
 };
 
-//-------------------------------
+
 // Helper : create an input stream from a file
-//------------------------------
+
 Reference< XInputStream > createStreamFromFile(
     const char *pcFile )
 {
@@ -329,10 +329,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         Reference< XComponentContext > xContext(
             defaultBootstrap_InitialComponentContext());
 
-        //--------------------------------
+
         // parser demo
         // read xml from a file and count elements
-        //--------------------------------
+
         Reference< XParser > rParser = Parser::create(xContext);
 
         int nError = 0;

@@ -62,13 +62,13 @@ PBMWriter::PBMWriter(SvStream &rPBM)
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 PBMWriter::~PBMWriter()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool PBMWriter::WritePBM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
 {
@@ -110,7 +110,7 @@ sal_Bool PBMWriter::WritePBM( const Graphic& rGraphic, FilterConfigItem* pFilter
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool PBMWriter::ImplWriteHeader()
 {
@@ -132,7 +132,7 @@ sal_Bool PBMWriter::ImplWriteHeader()
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 void PBMWriter::ImplWriteBody()
 {
@@ -174,7 +174,7 @@ void PBMWriter::ImplWriteBody()
     }
 }
 
-// ------------------------------------------------------------------------
+
 // A decimal number in ascii format is written in the stream.
 
 void PBMWriter::ImplWriteNumber(sal_Int32 nNumber)
@@ -183,11 +183,11 @@ void PBMWriter::ImplWriteNumber(sal_Int32 nNumber)
     m_rOStm.WriteCharPtr( aNum.getStr() );
 }
 
-// ------------------------------------------------------------------------
 
-// ---------------------
+
+
 // - exported function -
-// ---------------------
+
 
 // this needs to be kept in sync with
 // ImpFilterLibCacheEntry::GetImportFunction() from
@@ -204,7 +204,7 @@ GraphicExport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterCon
     return aPBMWriter.WritePBM( rGraphic, pFilterConfigItem );
 }
 
-// ------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

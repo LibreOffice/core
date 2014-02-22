@@ -24,7 +24,7 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <cppuhelper/interfacecontainer.h>
 
-// -------------------------------------------------------------------------
+
 using namespace connectivity::mozab;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -34,7 +34,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::cppu;
 
-// -------------------------------------------------------------------------
+
 OCatalog::OCatalog(OConnection* _pCon) : connectivity::sdbcx::OCatalog(_pCon)
                 ,m_pConnection(_pCon)
                 ,m_xMetaData(m_pConnection->getMetaData(  ))
@@ -46,7 +46,7 @@ OCatalog::OCatalog(OConnection* _pCon) : connectivity::sdbcx::OCatalog(_pCon)
 //  refreshUsers();
 //  osl_atomic_decrement( &m_refCount );
 }
-// -------------------------------------------------------------------------
+
 void OCatalog::refreshTables()
 {
     TStringVector aVector;
@@ -70,19 +70,19 @@ void OCatalog::refreshTables()
     else
         m_pTables = new OTables(m_xMetaData,*this,m_aMutex,aVector);
 }
-// -------------------------------------------------------------------------
+
 void OCatalog::refreshViews()
 {
 }
-// -------------------------------------------------------------------------
+
 void OCatalog::refreshGroups()
 {
 }
-// -------------------------------------------------------------------------
+
 void OCatalog::refreshUsers()
 {
 }
-// -----------------------------------------------------------------------------
+
 
 // XTablesSupplier
 Reference< XNameAccess > SAL_CALL OCatalog::getTables(  ) throw(RuntimeException)

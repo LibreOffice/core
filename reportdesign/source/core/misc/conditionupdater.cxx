@@ -39,17 +39,17 @@ namespace rptui
     //====================================================================
     //= ConditionUpdater
     //====================================================================
-    //--------------------------------------------------------------------
+
     ConditionUpdater::ConditionUpdater()
     {
     }
 
-    //--------------------------------------------------------------------
+
     ConditionUpdater::~ConditionUpdater()
     {
     }
 
-    //--------------------------------------------------------------------
+
     void ConditionUpdater::notifyPropertyChange( const PropertyChangeEvent& _rEvent )
     {
         if ( !impl_lateInit_nothrow() )
@@ -65,7 +65,7 @@ namespace rptui
         }
     }
 
-    //--------------------------------------------------------------------
+
     bool ConditionUpdater::impl_lateInit_nothrow()
     {
         if ( !m_aConditionalExpressions.empty() )
@@ -75,7 +75,7 @@ namespace rptui
         return true;
     }
 
-    //--------------------------------------------------------------------
+
     void ConditionUpdater::impl_adjustFormatConditions_nothrow( const Reference< XReportControlModel >& _rxRptControlModel,
         const OUString& _rOldDataSource, const OUString& _rNewDataSource )
     {

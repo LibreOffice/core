@@ -186,20 +186,20 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent, const SfxItemSet& rAt
     aAktTab.GetDecimal() = rLocaleWrapper.getNumDecimalSep()[0];
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxTabulatorTabPage::~SvxTabulatorTabPage()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16* SvxTabulatorTabPage::GetRanges()
 {
     return pRanges;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxTabulatorTabPage::FillItemSet( SfxItemSet& rSet )
 {
@@ -258,7 +258,7 @@ sal_Bool SvxTabulatorTabPage::FillItemSet( SfxItemSet& rSet )
     return bModified;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SvxTabulatorTabPage::Create( Window* pParent,
                                          const SfxItemSet& rSet)
@@ -266,7 +266,7 @@ SfxTabPage* SvxTabulatorTabPage::Create( Window* pParent,
     return ( new SvxTabulatorTabPage( pParent, rSet ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxTabulatorTabPage::Reset( const SfxItemSet& rSet )
 {
@@ -314,7 +314,7 @@ void SvxTabulatorTabPage::Reset( const SfxItemSet& rSet )
     InitTabPos_Impl( nTabPos );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxTabulatorTabPage::DisableControls( const sal_uInt16 nFlag )
 {
@@ -359,7 +359,7 @@ void SvxTabulatorTabPage::DisableControls( const sal_uInt16 nFlag )
          m_pFillFrame->Disable();
 }
 
-// -----------------------------------------------------------------------
+
 
 int SvxTabulatorTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
@@ -368,7 +368,7 @@ int SvxTabulatorTabPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )
 {
@@ -424,7 +424,7 @@ void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxTabulatorTabPage::SetFillAndTabType_Impl()
 {
@@ -471,7 +471,7 @@ void SvxTabulatorTabPage::SetFillAndTabType_Impl()
     pFillBtn->Check();
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
 {
@@ -529,7 +529,7 @@ IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxTabulatorTabPage, DelHdl_Impl)
 {
@@ -572,7 +572,7 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, DelHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxTabulatorTabPage, DelAllHdl_Impl)
 {
@@ -587,7 +587,7 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, DelAllHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxTabulatorTabPage, TabTypeCheckHdl_Impl, RadioButton *, pBox )
 {
@@ -622,7 +622,7 @@ IMPL_LINK( SvxTabulatorTabPage, TabTypeCheckHdl_Impl, RadioButton *, pBox )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxTabulatorTabPage, FillTypeCheckHdl_Impl, RadioButton *, pBox )
 {
@@ -653,7 +653,7 @@ IMPL_LINK( SvxTabulatorTabPage, FillTypeCheckHdl_Impl, RadioButton *, pBox )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxTabulatorTabPage, GetFillCharHdl_Impl, Edit *, pEdit )
 {
@@ -671,7 +671,7 @@ IMPL_LINK( SvxTabulatorTabPage, GetFillCharHdl_Impl, Edit *, pEdit )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxTabulatorTabPage, GetDezCharHdl_Impl, Edit *, pEdit )
 {
@@ -688,7 +688,7 @@ IMPL_LINK( SvxTabulatorTabPage, GetDezCharHdl_Impl, Edit *, pEdit )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxTabulatorTabPage, SelectHdl_Impl)
 {
@@ -702,7 +702,7 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, SelectHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxTabulatorTabPage, ModifyHdl_Impl)
 {

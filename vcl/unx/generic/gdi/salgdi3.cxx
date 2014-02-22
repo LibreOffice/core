@@ -91,11 +91,11 @@ struct _XRegion
     BOX extents;
 };
 
-// ----------------------------------------------------------------------------
+
 //
 // X11SalGraphics
 //
-// ----------------------------------------------------------------------------
+
 
 GC
 X11SalGraphics::GetFontGC()
@@ -124,7 +124,7 @@ X11SalGraphics::GetFontGC()
     return pFontGC_;
 }
 
-//--------------------------------------------------------------------------
+
 
 bool X11SalGraphics::setFont( const FontSelectPattern *pEntry, int nFallbackLevel )
 {
@@ -194,7 +194,7 @@ void ImplServerFontEntry::HandleFontOptions( void )
     mpServerFont->SetFontOptions( mpFontOptions );
 }
 
-//--------------------------------------------------------------------------
+
 
 CairoFontsCache::LRUFonts CairoFontsCache::maLRUFonts;
 int CairoFontsCache::mnRefCount = 0;
@@ -449,7 +449,7 @@ void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
     cairo_destroy(cr);
 }
 
-//--------------------------------------------------------------------------
+
 
 const ImplFontCharMap* X11SalGraphics::GetImplFontCharMap() const
 {
@@ -467,11 +467,11 @@ bool X11SalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rGetImplFont
     return mpServerFont[0]->GetFontCapabilities(rGetImplFontCapabilities);
 }
 
-// ----------------------------------------------------------------------------
+
 //
 // SalGraphics
 //
-// ----------------------------------------------------------------------------
+
 
 sal_uInt16 X11SalGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLevel )
 {
@@ -483,7 +483,7 @@ sal_uInt16 X11SalGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLeve
     return nRetVal;
 }
 
-// ----------------------------------------------------------------------------
+
 
 void
 X11SalGraphics::SetTextColor( SalColor nSalColor )
@@ -496,7 +496,7 @@ X11SalGraphics::SetTextColor( SalColor nSalColor )
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool X11SalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     const OUString& rFileURL, const OUString& rFontName )
@@ -575,7 +575,7 @@ void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
     ImplGetSVData()->maGDIData.mbNativeFontConfig = true;
 }
 
-// ----------------------------------------------------------------------------
+
 
 void cairosubcallback(void* pPattern)
 {
@@ -600,7 +600,7 @@ ImplFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttributes, in
     return rPFM.getFontOptions(aInfo, nSize, cairosubcallback);
 }
 
-// ----------------------------------------------------------------------------
+
 
 void
 X11SalGraphics::GetFontMetric( ImplFontMetricData *pMetric, int nFallbackLevel )
@@ -615,7 +615,7 @@ X11SalGraphics::GetFontMetric( ImplFontMetricData *pMetric, int nFallbackLevel )
     }
 }
 
-// ---------------------------------------------------------------------------
+
 
 bool X11SalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
 {
@@ -647,7 +647,7 @@ bool X11SalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
     return true;
 }
 
-// ---------------------------------------------------------------------------
+
 
 bool X11SalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
     ::basegfx::B2DPolyPolygon& rPolyPoly )
@@ -667,7 +667,7 @@ bool X11SalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
     return false;
 }
 
-//--------------------------------------------------------------------------
+
 
 SalLayout* X11SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
@@ -691,7 +691,7 @@ SalLayout* X11SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     return pLayout;
 }
 
-//--------------------------------------------------------------------------
+
 
 SystemFontData X11SalGraphics::GetSysFontData( int nFallbacklevel ) const
 {
@@ -716,7 +716,7 @@ SystemFontData X11SalGraphics::GetSysFontData( int nFallbacklevel ) const
     return aSysFontData;
 }
 
-//--------------------------------------------------------------------------
+
 
 bool X11SalGraphics::CreateFontSubset(
                                    const OUString& rToFile,
@@ -746,7 +746,7 @@ bool X11SalGraphics::CreateFontSubset(
     return bSuccess;
 }
 
-//--------------------------------------------------------------------------
+
 
 const void* X11SalGraphics::GetEmbedFontData( const PhysicalFontFace* pFont, const sal_Ucs* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
 {
@@ -759,14 +759,14 @@ const void* X11SalGraphics::GetEmbedFontData( const PhysicalFontFace* pFont, con
     return GenPspGraphics::DoGetEmbedFontData( aFont, pUnicodes, pWidths, rInfo, pDataLen );
 }
 
-//--------------------------------------------------------------------------
+
 
 void X11SalGraphics::FreeEmbedFontData( const void* pData, long nLen )
 {
     GenPspGraphics::DoFreeEmbedFontData( pData, nLen );
 }
 
-//--------------------------------------------------------------------------
+
 
 const Ucs2SIntMap* X11SalGraphics::GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded )
 {
@@ -779,7 +779,7 @@ const Ucs2SIntMap* X11SalGraphics::GetFontEncodingVector( const PhysicalFontFace
     return GenPspGraphics::DoGetFontEncodingVector( aFont, pNonEncoded );
 }
 
-//--------------------------------------------------------------------------
+
 
 void X11SalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
                                    bool bVertical,

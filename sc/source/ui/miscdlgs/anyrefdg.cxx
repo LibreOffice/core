@@ -64,7 +64,7 @@ ScFormulaReferenceHelper::ScFormulaReferenceHelper(IAnyRefDialog* _pDlg,SfxBindi
     ScInputOptions aInputOption=SC_MOD()->GetInputOptions();
     bEnableColorRef=aInputOption.GetRangeFinder();
 }
-// -----------------------------------------------------------------------------
+
 ScFormulaReferenceHelper::~ScFormulaReferenceHelper()
 {
     if (bAccInserted)
@@ -79,7 +79,7 @@ ScFormulaReferenceHelper::~ScFormulaReferenceHelper()
     if ( pInputHdl )
         pInputHdl->ResetDelayTimer();   // stop the timer for disabling the input line
 }
-// -----------------------------------------------------------------------------
+
 void ScFormulaReferenceHelper::enableInput( bool bEnable )
 {
     TypeId aType(TYPE(ScDocShell));
@@ -115,7 +115,7 @@ void ScFormulaReferenceHelper::enableInput( bool bEnable )
         pDocShell = (ScDocShell*)SfxObjectShell::GetNext(*pDocShell, &aType);
     }
 }
-// -----------------------------------------------------------------------------
+
 void ScFormulaReferenceHelper::ShowSimpleReference(const OUString& rStr)
 {
     if( bEnableColorRef )
@@ -144,7 +144,7 @@ void ScFormulaReferenceHelper::ShowSimpleReference(const OUString& rStr)
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const OUString& rStr, ScDocument* pDoc )
 {
     bool bError = false;
@@ -175,7 +175,7 @@ bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const OUStr
 
     return !bError;
 }
-// -----------------------------------------------------------------------------
+
 void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
 {
     if( bEnableColorRef)
@@ -231,7 +231,7 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void ScFormulaReferenceHelper::HideReference( bool bDoneRefMode )
 {
     ScViewData* pViewData=ScDocShell::GetViewData();
@@ -252,7 +252,7 @@ void ScFormulaReferenceHelper::HideReference( bool bDoneRefMode )
         bHighlightRef=false;
     }
 }
-// -----------------------------------------------------------------------------
+
 void ScFormulaReferenceHelper::ShowReference(const OUString& rStr)
 {
     if( bEnableColorRef )
@@ -276,7 +276,7 @@ void ScFormulaReferenceHelper::ShowReference(const OUString& rStr)
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void ScFormulaReferenceHelper::ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {
     if( !pRefEdit && pEdit )
@@ -309,7 +309,7 @@ void ScFormulaReferenceHelper::ReleaseFocus( formula::RefEdit* pEdit, formula::R
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void ScFormulaReferenceHelper::Init()
 {
     ScViewData* pViewData=ScDocShell::GetViewData();    //! use pScViewShell?
@@ -328,7 +328,7 @@ void ScFormulaReferenceHelper::Init()
         nRefTab = nTab;
     }
 }
-// -----------------------------------------------------------------------------
+
 IMPL_LINK( ScFormulaReferenceHelper, AccelSelectHdl, Accelerator *, pSelAccel )
 {
     if ( !pSelAccel )
@@ -443,7 +443,7 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------------
+
 void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {
     if (!pRefEdit)
@@ -589,7 +589,7 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void ScFormulaReferenceHelper::ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {
     if( pEdit )
@@ -609,7 +609,7 @@ void ScFormulaReferenceHelper::ToggleCollapsed( formula::RefEdit* pEdit, formula
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 bool ScFormulaReferenceHelper::DoClose( sal_uInt16 nId )
 {
     SfxApplication* pSfxApp = SFX_APP();
@@ -672,7 +672,7 @@ void ScFormulaReferenceHelper::SetDispatcherLock( bool bLock )
     //  that view's dispatcher is locked when trying to create the dialog
     //  for that view (ScTabViewShell::CreateRefDialog)
 }
-// -----------------------------------------------------------------------------
+
 void ScFormulaReferenceHelper::ViewShellChanged()
 {
     enableInput( false );
@@ -715,7 +715,7 @@ void ScFormulaReferenceHelper::EnableSpreadsheets(bool bFlag, bool bChildren)
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 
 
@@ -750,7 +750,7 @@ static void lcl_InvalidateWindows()
         pDocShell = (ScDocShell*)SfxObjectShell::GetNext(*pDocShell, &aType);
     }
 }
-//----------------------------------------------------------------------------
+
 
 static void lcl_HideAllReferences()
 {
@@ -766,7 +766,7 @@ static void lcl_HideAllReferences()
 //============================================================================
 //The class of ScAnyRefDlg is rewritten by PengYunQuan for Validity Cell Range Picker
 //  class ScRefHandler
-//----------------------------------------------------------------------------
+
 
 ScRefHandler::ScRefHandler( Window &rWindow, SfxBindings* pB, bool bBindRef ):
         m_rWindow( rWindow ),
@@ -833,7 +833,7 @@ bool ScRefHandler::EnterRefMode()
     return m_bInRefMode = true;
 }
 
-//----------------------------------------------------------------------------
+
 
 ScRefHandler::~ScRefHandler()
 {
@@ -860,7 +860,7 @@ bool ScRefHandler::LeaveRefMode()
     return true;
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScRefHandler::SwitchToDocument()
 {
@@ -890,7 +890,7 @@ void ScRefHandler::SwitchToDocument()
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 bool ScRefHandler::IsDocAllowed(SfxObjectShell* pDocSh) const   // pDocSh may be 0
 {
@@ -903,14 +903,14 @@ bool ScRefHandler::IsDocAllowed(SfxObjectShell* pDocSh) const   // pDocSh may be
     return ( aDocName.isEmpty() || aDocName == aCmpName );
 }
 
-//----------------------------------------------------------------------------
+
 
 bool ScRefHandler::IsRefInputMode() const
 {
     return m_rWindow.IsVisible(); // nur wer sichtbar ist kann auch Referenzen bekommen
 }
 
-//----------------------------------------------------------------------------
+
 
 bool ScRefHandler::DoClose( sal_uInt16 nId )
 {
@@ -923,21 +923,21 @@ void ScRefHandler::SetDispatcherLock( bool bLock )
     m_aHelper.SetDispatcherLock( bLock );
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScRefHandler::ViewShellChanged()
 {
     m_aHelper.ViewShellChanged();
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScRefHandler::AddRefEntry()
 {
     //  wenn nicht ueberladen, gibt es keine Mehrfach-Referenzen
 }
 
-//----------------------------------------------------------------------------
+
 
 bool ScRefHandler::IsTableLocked() const
 {
@@ -946,12 +946,12 @@ bool ScRefHandler::IsTableLocked() const
     return false;
 }
 
-//----------------------------------------------------------------------------
+
 //
 //  RefInputStart/Done: Zoom-In (AutoHide) auf einzelnes Feld
 //  (per Button oder Bewegung)
 //
-//----------------------------------------------------------------------------
+
 
 void ScRefHandler::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {
@@ -1005,33 +1005,33 @@ IMPL_LINK_NOARG(ScRefHandler, UpdateFocusHdl)
     }
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 bool ScRefHandler::ParseWithNames( ScRangeList& rRanges, const OUString& rStr, ScDocument* pDoc )
 {
     return m_aHelper.ParseWithNames( rRanges, rStr, pDoc );
 }
-// -----------------------------------------------------------------------------
+
 void ScRefHandler::HideReference( bool bDoneRefMode )
 {
     m_aHelper.HideReference( bDoneRefMode );
 }
-// -----------------------------------------------------------------------------
+
 void ScRefHandler::ShowReference(const OUString& rStr)
 {
     m_aHelper.ShowReference(rStr);
 }
-// -----------------------------------------------------------------------------
+
 void ScRefHandler::ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {
     m_aHelper.ReleaseFocus( pEdit,pButton );
 }
-//----------------------------------------------------------------------------
+
 void ScRefHandler::RefInputDone( bool bForced )
 {
     m_aHelper.RefInputDone( bForced );
 }
 
-//-------------------------------------------------------------------------------
+
 
 ScRefHdlModalImpl::ScRefHdlModalImpl(Window* pParent, const OString& rID,
     const OUString& rUIXMLDescription)

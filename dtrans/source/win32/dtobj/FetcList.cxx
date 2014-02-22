@@ -31,9 +31,9 @@
 
 #include "MimeAttrib.hxx"
 
-//------------------------------------------------------------------------
+
 // namespace directives
-//------------------------------------------------------------------------
+
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::datatransfer;
@@ -42,34 +42,34 @@ using namespace com::sun::star::container;
 using namespace std;
 
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 LCID       CFormatRegistrar::m_TxtLocale   = 0;
 sal_uInt32 CFormatRegistrar::m_TxtCodePage = GetACP( );
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 CFormatEtcContainer::CFormatEtcContainer( )
 {
     m_EnumIterator = m_FormatMap.begin( );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void CFormatEtcContainer::addFormatEtc( const CFormatEtc& fetc )
 {
     m_FormatMap.push_back( CFormatEtc( fetc ) );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void SAL_CALL CFormatEtcContainer::removeFormatEtc( const CFormatEtc& fetc )
 {
@@ -80,18 +80,18 @@ void SAL_CALL CFormatEtcContainer::removeFormatEtc( const CFormatEtc& fetc )
         m_FormatMap.erase( iter );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void SAL_CALL CFormatEtcContainer::removeAllFormatEtc( )
 {
     m_FormatMap.clear( );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 sal_Bool CFormatEtcContainer::hasFormatEtc( const CFormatEtc& fetc ) const
 {
@@ -101,27 +101,27 @@ sal_Bool CFormatEtcContainer::hasFormatEtc( const CFormatEtc& fetc ) const
     return ( iter != m_FormatMap.end( ) );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 sal_Bool CFormatEtcContainer::hasElements( ) const
 {
     return !m_FormatMap.empty();
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void CFormatEtcContainer::beginEnumFormatEtc( )
 {
     m_EnumIterator = m_FormatMap.begin( );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 sal_uInt32 SAL_CALL CFormatEtcContainer::nextFormatEtc( LPFORMATETC lpFetc,
                                                         sal_uInt32 aNum )
@@ -142,9 +142,9 @@ sal_uInt32 SAL_CALL CFormatEtcContainer::nextFormatEtc( LPFORMATETC lpFetc,
 }
 
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL CFormatEtcContainer::skipFormatEtc( sal_uInt32 aNum )
 {
@@ -161,9 +161,9 @@ sal_Bool SAL_CALL CFormatEtcContainer::skipFormatEtc( sal_uInt32 aNum )
 //#########################################################################
 
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 CFormatRegistrar::CFormatRegistrar( const Reference< XComponentContext >& rxContext,
                                     const CDataFormatTranslator& aDataFormatTranslator ) :
@@ -173,7 +173,7 @@ CFormatRegistrar::CFormatRegistrar( const Reference< XComponentContext >& rxCont
 {
 }
 
-// ----------------------------------------------------------------------------------------
+
 // this function converts all DataFlavors of the given FlavorList into
 // an appropriate FORMATETC structure, for some formats like unicodetext,
 // text and text/html we will offer an accompany format e.g.:
@@ -193,7 +193,7 @@ CFormatRegistrar::CFormatRegistrar( const Reference< XComponentContext >& rxCont
 //
 // if some tries to register different text formats with different charsets the last
 // registered wins and the others are ignored
-// ----------------------------------------------------------------------------------------
+
 
 void SAL_CALL CFormatRegistrar::RegisterFormats(
     const Reference< XTransferable >& aXTransferable, CFormatEtcContainer& aFormatEtcContainer )
@@ -277,45 +277,45 @@ void SAL_CALL CFormatRegistrar::RegisterFormats(
     }
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL CFormatRegistrar::hasSynthesizedLocale( ) const
 {
     return m_bHasSynthesizedLocale;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 LCID SAL_CALL CFormatRegistrar::getSynthesizedLocale( ) const
 {
     return m_TxtLocale;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 sal_uInt32 SAL_CALL CFormatRegistrar::getRegisteredTextCodePage( ) const
 {
     return m_TxtCodePage;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 DataFlavor SAL_CALL CFormatRegistrar::getRegisteredTextFlavor( ) const
 {
     return m_RegisteredTextFlavor;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL CFormatRegistrar::isSynthesizeableFormat( const CFormatEtc& aFormatEtc ) const
 {
@@ -324,9 +324,9 @@ sal_Bool SAL_CALL CFormatRegistrar::isSynthesizeableFormat( const CFormatEtc& aF
              m_DataFormatTranslator.isHTMLFormat( aFormatEtc.getClipformat() ) );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 inline
 sal_Bool SAL_CALL CFormatRegistrar::needsToSynthesizeAccompanyFormats( const CFormatEtc& aFormatEtc ) const
@@ -336,9 +336,9 @@ sal_Bool SAL_CALL CFormatRegistrar::needsToSynthesizeAccompanyFormats( const CFo
              m_DataFormatTranslator.isTextHtmlFormat( aFormatEtc.getClipformat( ) ) );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 OUString SAL_CALL CFormatRegistrar::getCharsetFromDataFlavor( const DataFlavor& aFlavor )
 {
@@ -367,9 +367,9 @@ OUString SAL_CALL CFormatRegistrar::getCharsetFromDataFlavor( const DataFlavor& 
     return charset;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL CFormatRegistrar::hasUnicodeFlavor( const Reference< XTransferable >& aXTransferable ) const
 {
@@ -381,9 +381,9 @@ sal_Bool SAL_CALL CFormatRegistrar::hasUnicodeFlavor( const Reference< XTransfer
     return aXTransferable->isDataFlavorSupported( aFlavor );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 inline
 sal_Bool CFormatRegistrar::isEqualCurrentSystemCodePage( sal_uInt32 aCodePage ) const
@@ -391,9 +391,9 @@ sal_Bool CFormatRegistrar::isEqualCurrentSystemCodePage( sal_uInt32 aCodePage ) 
     return ( (aCodePage == GetOEMCP()) || (aCodePage == GetACP()) );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL CFormatRegistrar::findLocaleForTextCodePage( )
 {
@@ -402,9 +402,9 @@ sal_Bool SAL_CALL CFormatRegistrar::findLocaleForTextCodePage( )
     return ( IsValidLocale( m_TxtLocale, LCID_INSTALLED ) ) ? sal_True : sal_False;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL CFormatRegistrar::isLocaleCodePage( LCID lcid, LCTYPE lctype, sal_uInt32 codepage )
 {
@@ -420,9 +420,9 @@ sal_Bool SAL_CALL CFormatRegistrar::isLocaleCodePage( LCID lcid, LCTYPE lctype, 
     return ( localeCodePage == codepage );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 inline
 sal_Bool SAL_CALL CFormatRegistrar::isLocaleOemCodePage( LCID lcid, sal_uInt32 codepage )
@@ -430,9 +430,9 @@ sal_Bool SAL_CALL CFormatRegistrar::isLocaleOemCodePage( LCID lcid, sal_uInt32 c
     return isLocaleCodePage( lcid, LOCALE_IDEFAULTCODEPAGE, codepage );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 inline
 sal_Bool SAL_CALL CFormatRegistrar::isLocaleAnsiCodePage( LCID lcid, sal_uInt32 codepage )
@@ -440,9 +440,9 @@ sal_Bool SAL_CALL CFormatRegistrar::isLocaleAnsiCodePage( LCID lcid, sal_uInt32 
     return isLocaleCodePage( lcid, LOCALE_IDEFAULTANSICODEPAGE, codepage );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 BOOL CALLBACK CFormatRegistrar::EnumLocalesProc( LPSTR lpLocaleStr )
 {

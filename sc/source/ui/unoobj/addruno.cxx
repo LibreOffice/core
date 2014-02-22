@@ -32,7 +32,7 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 ScAddressConversionObj::ScAddressConversionObj(ScDocShell* pDocSh, bool _bIsRange) :
     pDocShell( pDocSh ),

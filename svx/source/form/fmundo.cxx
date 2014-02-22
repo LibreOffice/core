@@ -141,9 +141,9 @@ private:
 
 };
 
-//------------------------------------------------------------------------------
+
 // some helper structs for caching property infos
-//------------------------------------------------------------------------------
+
 struct PropertyInfo
 {
     sal_Bool    bIsTransientOrReadOnly  : 1;    // the property is transient or read-only, thus we need no undo action for it
@@ -168,12 +168,12 @@ sal_Bool operator < (const Reference< XPropertySet >& lhs,
 
 typedef std::map<Reference< XPropertySet >, PropertySetInfo> PropertySetInfoCache;
 
-//------------------------------------------------------------------------------
+
 
 OUString static_STR_UNDO_PROPERTY;
-//------------------------------------------------------------------------------
+
 DBG_NAME(FmXUndoEnvironment)
-//------------------------------------------------------------------------------
+
 FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)
                    :rModel( _rModel )
                    ,m_pPropertySetCache( NULL )
@@ -192,7 +192,7 @@ FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)
     }
 }
 
-//------------------------------------------------------------------------------
+
 FmXUndoEnvironment::~FmXUndoEnvironment()
 {
     DBG_DTOR(FmXUndoEnvironment,NULL);
@@ -203,7 +203,7 @@ FmXUndoEnvironment::~FmXUndoEnvironment()
         delete static_cast<PropertySetInfoCache*>(m_pPropertySetCache);
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::dispose()
 {
     OSL_ENSURE( !m_bDisposed, "FmXUndoEnvironment::dispose: disposed twice?" );
@@ -251,7 +251,7 @@ void FmXUndoEnvironment::dispose()
     m_bDisposed = true;
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::ModeChanged()
 {
     OSL_PRECOND( rModel.GetObjectShell(), "FmXUndoEnvironment::ModeChanged: no object shell anymore!" );
@@ -294,7 +294,7 @@ void FmXUndoEnvironment::ModeChanged()
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if (rHint.ISA(SdrHint))
@@ -343,7 +343,7 @@ void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
 }
 
-//------------------------------------------------------------------
+
 void FmXUndoEnvironment::Inserted(SdrObject* pObj)
 {
     if (pObj->GetObjInventor() == FmFormInventor)
@@ -359,7 +359,7 @@ void FmXUndoEnvironment::Inserted(SdrObject* pObj)
     }
 }
 
-//------------------------------------------------------------------------------
+
 namespace
 {
     sal_Bool lcl_searchElement(const Reference< XIndexAccess>& xCont, const Reference< XInterface >& xElement)
@@ -395,7 +395,7 @@ namespace
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
 {
     DBG_ASSERT( pObj, "FmXUndoEnvironment::Inserted: invalid object!" );
@@ -452,7 +452,7 @@ void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
     }
 }
 
-//------------------------------------------------------------------
+
 void FmXUndoEnvironment::Removed(SdrObject* pObj)
 {
     if ( pObj->IsVirtualObj() )
@@ -473,7 +473,7 @@ void FmXUndoEnvironment::Removed(SdrObject* pObj)
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::Removed(FmFormObj* pObj)
 {
     DBG_ASSERT( pObj, "FmXUndoEnvironment::Removed: invalid object!" );
@@ -519,7 +519,7 @@ void FmXUndoEnvironment::Removed(FmFormObj* pObj)
 }
 
 //  XEventListener
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXUndoEnvironment::disposing(const EventObject& e) throw( RuntimeException )
 {
     // check if it's an object we have cached information about
@@ -537,7 +537,7 @@ void SAL_CALL FmXUndoEnvironment::disposing(const EventObject& e) throw( Runtime
 }
 
 // XPropertyChangeListener
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
@@ -732,7 +732,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
 }
 
 // XContainerListener
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXUndoEnvironment::elementInserted(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -747,7 +747,7 @@ void SAL_CALL FmXUndoEnvironment::elementInserted(const ContainerEvent& evt) thr
     implSetModified();
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::implSetModified()
 {
     if ( !IsLocked() && rModel.GetObjectShell() )
@@ -756,7 +756,7 @@ void FmXUndoEnvironment::implSetModified()
     }
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -773,7 +773,7 @@ void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt) thr
     implSetModified();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXUndoEnvironment::elementRemoved(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -786,13 +786,13 @@ void SAL_CALL FmXUndoEnvironment::elementRemoved(const ContainerEvent& evt) thro
     implSetModified();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXUndoEnvironment::modified( const EventObject& /*aEvent*/ ) throw (RuntimeException)
 {
     implSetModified();
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::AddForms(const Reference< XNameContainer > & rForms)
 {
     Lock();
@@ -800,7 +800,7 @@ void FmXUndoEnvironment::AddForms(const Reference< XNameContainer > & rForms)
     UnLock();
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::RemoveForms(const Reference< XNameContainer > & rForms)
 {
     Lock();
@@ -808,7 +808,7 @@ void FmXUndoEnvironment::RemoveForms(const Reference< XNameContainer > & rForms)
     UnLock();
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::TogglePropertyListening(const Reference< XInterface > & Element)
 {
     // am Container horchen
@@ -835,7 +835,7 @@ void FmXUndoEnvironment::TogglePropertyListening(const Reference< XInterface > &
 }
 
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _rxContainer, bool _bStartListening ) SAL_THROW(())
 {
     OSL_PRECOND( _rxContainer.is(), "FmXUndoEnvironment::switchListening: invalid container!" );
@@ -892,7 +892,7 @@ void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _r
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObject, bool _bStartListening ) SAL_THROW(())
 {
     OSL_PRECOND( _rxObject.is(), "FmXUndoEnvironment::switchListening: how should I listen at a NULL object?" );
@@ -926,7 +926,7 @@ void FmXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObje
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::AddElement(const Reference< XInterface >& _rxElement )
 {
     OSL_ENSURE( !m_bDisposed, "FmXUndoEnvironment::AddElement: not when I'm already disposed!" );
@@ -939,7 +939,7 @@ void FmXUndoEnvironment::AddElement(const Reference< XInterface >& _rxElement )
     switchListening( _rxElement, true );
 }
 
-//------------------------------------------------------------------------------
+
 void FmXUndoEnvironment::RemoveElement(const Reference< XInterface >& _rxElement)
 {
     if ( m_bDisposed )
@@ -968,7 +968,7 @@ void FmXUndoEnvironment::RemoveElement(const Reference< XInterface >& _rxElement
 }
 
 
-//------------------------------------------------------------------------------
+
 FmUndoPropertyAction::FmUndoPropertyAction(FmFormModel& rNewMod, const PropertyChangeEvent& evt)
                      :SdrUndoAction(rNewMod)
                      ,xObj(evt.Source, UNO_QUERY)
@@ -983,7 +983,7 @@ FmUndoPropertyAction::FmUndoPropertyAction(FmFormModel& rNewMod, const PropertyC
 }
 
 
-//------------------------------------------------------------------------------
+
 void FmUndoPropertyAction::Undo()
 {
     FmXUndoEnvironment& rEnv = ((FmFormModel&)rMod).GetUndoEnv();
@@ -1003,7 +1003,7 @@ void FmUndoPropertyAction::Undo()
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmUndoPropertyAction::Redo()
 {
     FmXUndoEnvironment& rEnv = ((FmFormModel&)rMod).GetUndoEnv();
@@ -1023,7 +1023,7 @@ void FmUndoPropertyAction::Redo()
     }
 }
 
-//------------------------------------------------------------------------------
+
 OUString FmUndoPropertyAction::GetComment() const
 {
     OUString aStr(static_STR_UNDO_PROPERTY);
@@ -1034,7 +1034,7 @@ OUString FmUndoPropertyAction::GetComment() const
 
 
 DBG_NAME(FmUndoContainerAction);
-//------------------------------------------------------------------------------
+
 FmUndoContainerAction::FmUndoContainerAction(FmFormModel& _rMod,
                                              Action _eAction,
                                              const Reference< XIndexContainer > & xCont,
@@ -1071,7 +1071,7 @@ FmUndoContainerAction::FmUndoContainerAction(FmFormModel& _rMod,
     }
 }
 
-//------------------------------------------------------------------------------
+
 FmUndoContainerAction::~FmUndoContainerAction()
 {
     // if we own the object ....
@@ -1079,7 +1079,7 @@ FmUndoContainerAction::~FmUndoContainerAction()
     DBG_DTOR(FmUndoContainerAction,NULL);
 }
 
-//------------------------------------------------------------------------------
+
 
 void FmUndoContainerAction::DisposeElement( const Reference< XInterface > & xElem )
 {
@@ -1094,7 +1094,7 @@ void FmUndoContainerAction::DisposeElement( const Reference< XInterface > & xEle
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmUndoContainerAction::implReInsert( ) SAL_THROW( ( Exception ) )
 {
     if ( m_xContainer->getCount() >= m_nIndex )
@@ -1123,7 +1123,7 @@ void FmUndoContainerAction::implReInsert( ) SAL_THROW( ( Exception ) )
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmUndoContainerAction::implReRemove( ) SAL_THROW( ( Exception ) )
 {
     Reference< XInterface > xElement;
@@ -1151,7 +1151,7 @@ void FmUndoContainerAction::implReRemove( ) SAL_THROW( ( Exception ) )
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmUndoContainerAction::Undo()
 {
     FmXUndoEnvironment& rEnv = static_cast< FmFormModel& >( rMod ).GetUndoEnv();
@@ -1180,7 +1180,7 @@ void FmUndoContainerAction::Undo()
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmUndoContainerAction::Redo()
 {
     FmXUndoEnvironment& rEnv = static_cast< FmFormModel& >( rMod ).GetUndoEnv();
@@ -1208,7 +1208,7 @@ void FmUndoContainerAction::Redo()
     }
 }
 
-//------------------------------------------------------------------------------
+
 FmUndoModelReplaceAction::FmUndoModelReplaceAction(FmFormModel& _rMod, SdrUnoObj* _pObject, const Reference< XControlModel > & _xReplaced)
     :SdrUndoAction(_rMod)
     ,m_xReplaced(_xReplaced)
@@ -1216,14 +1216,14 @@ FmUndoModelReplaceAction::FmUndoModelReplaceAction(FmFormModel& _rMod, SdrUnoObj
 {
 }
 
-//------------------------------------------------------------------------------
+
 FmUndoModelReplaceAction::~FmUndoModelReplaceAction()
 {
     // dispose our element if nobody else is responsible for
     DisposeElement(m_xReplaced);
 }
 
-//------------------------------------------------------------------------------
+
 
 void FmUndoModelReplaceAction::DisposeElement( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& xReplaced )
 {
@@ -1236,7 +1236,7 @@ void FmUndoModelReplaceAction::DisposeElement( const ::com::sun::star::uno::Refe
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmUndoModelReplaceAction::Undo()
 {
     try
@@ -1275,7 +1275,7 @@ void FmUndoModelReplaceAction::Undo()
     }
 }
 
-//------------------------------------------------------------------------------
+
 OUString FmUndoModelReplaceAction::GetComment() const
 {
     return SVX_RESSTR(RID_STR_UNDO_MODEL_REPLACE);

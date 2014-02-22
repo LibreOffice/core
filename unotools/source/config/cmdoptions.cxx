@@ -52,7 +52,7 @@ using namespace ::com::sun::star::beans ;
 class SvtCmdOptions
 {
     public:
-        //---------------------------------------------------------------------------------------------------------
+
         // the only way to free memory!
         void Clear()
         {
@@ -75,7 +75,7 @@ class SvtCmdOptions
             m_aCommandHashMap.insert( CommandHashMap::value_type( aCmd, 0 ) );
         }
 
-        //---------------------------------------------------------------------------------------------------------
+
         // convert internal list to external format
         // for using it on right menus really
         // Notice:   We build a property list with 4 entries and set it on result list then.

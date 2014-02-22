@@ -82,7 +82,7 @@ class MainThreadFrameCloserRequest
         static void Start( MainThreadFrameCloserRequest* pRequest );
 };
 
-// --------------------------------------------------------
+
 void MainThreadFrameCloserRequest::Start( MainThreadFrameCloserRequest* pMTRequest )
 {
     if ( pMTRequest )
@@ -97,7 +97,7 @@ void MainThreadFrameCloserRequest::Start( MainThreadFrameCloserRequest* pMTReque
     }
 }
 
-// --------------------------------------------------------
+
 IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, MainThreadFrameCloserRequest*, pMTRequest )
 {
     (void) pThis; // unused
@@ -167,7 +167,7 @@ ODocumentCloser::ODocumentCloser(const css::uno::Sequence< css::uno::Any >& aArg
                 0 );
 }
 
-// --------------------------------------------------------
+
 ODocumentCloser::~ODocumentCloser()
 {
     if ( m_pListenersContainer )
@@ -178,7 +178,7 @@ ODocumentCloser::~ODocumentCloser()
 }
 
 // XComponent
-// --------------------------------------------------------
+
 void SAL_CALL ODocumentCloser::dispose()
     throw (uno::RuntimeException)
 {
@@ -202,7 +202,7 @@ void SAL_CALL ODocumentCloser::dispose()
     m_bDisposed = sal_True;
 }
 
-// --------------------------------------------------------
+
 void SAL_CALL ODocumentCloser::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
     throw (uno::RuntimeException)
 {
@@ -216,7 +216,7 @@ void SAL_CALL ODocumentCloser::addEventListener( const uno::Reference< lang::XEv
     m_pListenersContainer->addInterface( xListener );
 }
 
-// --------------------------------------------------------
+
 void SAL_CALL ODocumentCloser::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
     throw (uno::RuntimeException)
 {

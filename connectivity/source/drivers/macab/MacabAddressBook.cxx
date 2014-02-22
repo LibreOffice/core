@@ -33,7 +33,7 @@
 using namespace connectivity::macab;
 using namespace ::com::sun::star::uno;
 
-// -----------------------------------------------------------------------------
+
 MacabAddressBook::MacabAddressBook( )
 {
     m_aAddressBook = ABGetSharedAddressBook();
@@ -41,7 +41,7 @@ MacabAddressBook::MacabAddressBook( )
     m_bRetrievedGroups = sal_False;
 }
 
-// -----------------------------------------------------------------------------
+
 MacabAddressBook::~MacabAddressBook()
 {
     if(m_xMacabRecords != NULL)
@@ -62,7 +62,7 @@ MacabAddressBook::~MacabAddressBook()
     m_bRetrievedGroups = sal_False;
 }
 
-// -----------------------------------------------------------------------------
+
 /* Get the address book's default table name. This is the table name that
  * refers to the table containing _all_ records in the address book.
  */
@@ -75,7 +75,7 @@ const OUString & MacabAddressBook::getDefaultTableName()
     return aDefaultTableName;
 }
 
-// -----------------------------------------------------------------------------
+
 MacabRecords *MacabAddressBook::getMacabRecords()
 {
     /* If the MacabRecords don't exist, create them. */
@@ -89,7 +89,7 @@ MacabRecords *MacabAddressBook::getMacabRecords()
     return m_xMacabRecords;
 }
 
-// -----------------------------------------------------------------------------
+
 /* Get the MacabRecords for a given name: either a group name or the
  * default table name.
  */
@@ -105,7 +105,7 @@ MacabRecords *MacabAddressBook::getMacabRecords(const OUString _tableName)
     }
 }
 
-// -----------------------------------------------------------------------------
+
 MacabRecords *MacabAddressBook::getMacabRecordsMatch(const OUString _tableName)
 {
     if(match(_tableName, getDefaultTableName(), '\0'))
@@ -116,7 +116,7 @@ MacabRecords *MacabAddressBook::getMacabRecordsMatch(const OUString _tableName)
     return getMacabGroupMatch(_tableName);
 }
 
-// -----------------------------------------------------------------------------
+
 ::std::vector<MacabGroup *> MacabAddressBook::getMacabGroups()
 {
     /* If the MacabGroups haven't been created yet, create them. */
@@ -154,7 +154,7 @@ MacabRecords *MacabAddressBook::getMacabRecordsMatch(const OUString _tableName)
     return m_xMacabGroups;
 }
 
-// -----------------------------------------------------------------------------
+
 MacabGroup *MacabAddressBook::getMacabGroup(OUString _groupName)
 {
     // initialize groups if not already initialized
@@ -178,7 +178,7 @@ MacabGroup *MacabAddressBook::getMacabGroup(OUString _groupName)
     return NULL;
 }
 
-// -----------------------------------------------------------------------------
+
 MacabGroup *MacabAddressBook::getMacabGroupMatch(OUString _groupName)
 {
     // initialize groups if not already initialized
@@ -202,7 +202,7 @@ MacabGroup *MacabAddressBook::getMacabGroupMatch(OUString _groupName)
     return NULL;
 }
 
-// -------------------------------------------------------------------------
+
 void MacabAddressBook::manageDuplicateGroups(::std::vector<MacabGroup *> _xGroups) const
 {
     /* If we have two cases of groups, say, family, this makes it:

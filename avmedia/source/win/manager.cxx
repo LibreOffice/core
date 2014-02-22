@@ -29,9 +29,9 @@
 using namespace ::com::sun::star;
 
 namespace avmedia { namespace win {
-// ----------------
+
 // - Manager -
-// ----------------
+
 
 Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mxMgr( rxMgr )

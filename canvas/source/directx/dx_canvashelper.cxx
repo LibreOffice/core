@@ -337,7 +337,7 @@ namespace dxcanvas
 
 
             // Setup stroke pen
-            // ----------------
+
 
             Gdiplus::Pen aPen(
                 Gdiplus::Color(
@@ -657,7 +657,7 @@ namespace dxcanvas
     }
 
     // private helper
-    // --------------------------------------------------
+
 
     Gdiplus::CompositingMode CanvasHelper::calcCompositingMode( sal_Int8 nMode )
     {

@@ -100,7 +100,7 @@ void lclWriteString( AxAlignedOutputStream& rOutStrm, OUString& rValue, sal_uInt
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 AxBinaryPropertyWriter::ComplexProperty::~ComplexProperty()
 {
@@ -118,7 +118,7 @@ bool AxBinaryPropertyWriter::StringProperty::writeProperty( AxAlignedOutputStrea
     return true;
 }
 
-// ----------------------------------------------------------------------------
+
 
 AxBinaryPropertyWriter::AxBinaryPropertyWriter( BinaryOutputStream& rOutStrm, bool b64BitPropFlags ) :
     maOutStrm( rOutStrm ),

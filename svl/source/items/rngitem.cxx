@@ -27,14 +27,14 @@ static inline sal_uInt16 Count_Impl(const sal_uInt16 * pRanges)
     return nCount;
 }
 
-// -----------------------------------------------------------------------
+
 
 TYPEINIT1_AUTOFACTORY(SfxRangeItem, SfxPoolItem);
 TYPEINIT1_AUTOFACTORY(SfxUShortRangesItem, SfxPoolItem);
 
 sal_uInt16 Count_Impl( const sal_uInt16 *pRanges );
 
-// -----------------------------------------------------------------------
+
 
 SfxRangeItem::SfxRangeItem()
 {
@@ -42,7 +42,7 @@ SfxRangeItem::SfxRangeItem()
     nTo = 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxRangeItem::SfxRangeItem( sal_uInt16 which, sal_uInt16 from, sal_uInt16 to ):
     SfxPoolItem( which ),
@@ -51,7 +51,7 @@ SfxRangeItem::SfxRangeItem( sal_uInt16 which, sal_uInt16 from, sal_uInt16 to ):
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxRangeItem::SfxRangeItem( const SfxRangeItem& rItem ) :
     SfxPoolItem( rItem )
@@ -60,7 +60,7 @@ SfxRangeItem::SfxRangeItem( const SfxRangeItem& rItem ) :
     nTo = rItem.nTo;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxItemPresentation SfxRangeItem::GetPresentation
 (
@@ -75,7 +75,7 @@ SfxItemPresentation SfxRangeItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxRangeItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -86,14 +86,14 @@ bool SfxRangeItem::operator==( const SfxPoolItem& rItem ) const
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SfxRangeItem::Clone(SfxItemPool *) const
 {
     return new SfxRangeItem( Which(), nFrom, nTo );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SfxRangeItem::Create(SvStream &rStream, sal_uInt16) const
 {
@@ -103,7 +103,7 @@ SfxPoolItem* SfxRangeItem::Create(SvStream &rStream, sal_uInt16) const
     return new SfxRangeItem( Which(), nVon, nBis );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SfxRangeItem::Store(SvStream &rStream, sal_uInt16) const
 {

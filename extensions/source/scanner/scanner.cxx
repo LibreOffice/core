@@ -19,16 +19,16 @@
 
 #include <scanner.hxx>
 
-// ------------------
+
 // - ScannerManager -
-// ------------------
+
 
 Reference< XInterface > SAL_CALL ScannerManager_CreateInstance( const Reference< com::sun::star::lang::XMultiServiceFactory >& /*rxFactory*/ ) throw ( Exception )
 {
     return *( new ScannerManager() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 ScannerManager::ScannerManager() :
     mpData( NULL )
@@ -36,14 +36,14 @@ ScannerManager::ScannerManager() :
     AcquireData();
 }
 
-// -----------------------------------------------------------------------------
+
 
 ScannerManager::~ScannerManager()
 {
     ReleaseData();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Any SAL_CALL ScannerManager::queryInterface( const Type& rType ) throw( RuntimeException )
 {
@@ -54,35 +54,35 @@ Any SAL_CALL ScannerManager::queryInterface( const Type& rType ) throw( RuntimeE
     return( aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL ScannerManager::acquire() throw()
 {
     OWeakObject::acquire();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL ScannerManager::release() throw()
 {
     OWeakObject::release();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< sal_Int8 > SAL_CALL ScannerManager::getMaskDIB() throw()
 {
     return Sequence< sal_Int8 >();
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString ScannerManager::getImplementationName_Static() throw()
 {
     return OUString( "com.sun.star.scanner.ScannerManager" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > ScannerManager::getSupportedServiceNames_Static() throw ()
 {

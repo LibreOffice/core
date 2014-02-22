@@ -54,7 +54,7 @@ namespace xforms
     //====================================================================
     //= ODataTypeRepository
     //====================================================================
-    //--------------------------------------------------------------------
+
     ODataTypeRepository::ODataTypeRepository( )
     {
 
@@ -96,12 +96,12 @@ namespace xforms
         m_aRepository[ sName ] = new OShortIntegerType( sName, ::com::sun::star::xsd::DataTypeClass::gDay );
     }
 
-    //--------------------------------------------------------------------
+
     ODataTypeRepository::~ODataTypeRepository( )
     {
     }
 
-    //--------------------------------------------------------------------
+
     ODataTypeRepository::Repository::iterator ODataTypeRepository::implLocate( const OUString& _rName, bool _bAllowMiss ) SAL_THROW( ( NoSuchElementException ) )
     {
         Repository::iterator aTypePos = m_aRepository.find( _rName );
@@ -111,7 +111,7 @@ namespace xforms
         return aTypePos;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XDataType > SAL_CALL ODataTypeRepository::getBasicDataType( sal_Int16 dataTypeClass ) throw (NoSuchElementException, RuntimeException)
     {
         Reference< XDataType > xReturn;
@@ -131,7 +131,7 @@ namespace xforms
         return xReturn;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XDataType > SAL_CALL ODataTypeRepository::cloneDataType( const OUString& sourceName, const OUString& newName ) throw (NoSuchElementException, ElementExistException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -147,7 +147,7 @@ namespace xforms
         return pClone;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ODataTypeRepository::revokeDataType( const OUString& typeName ) throw (NoSuchElementException, VetoException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -160,7 +160,7 @@ namespace xforms
         m_aRepository.erase( aTypePos );
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XDataType > SAL_CALL ODataTypeRepository::getDataType( const OUString& typeName ) throw (NoSuchElementException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -168,19 +168,19 @@ namespace xforms
     }
 
 
-    //--------------------------------------------------------------------
+
     Reference< XEnumeration > SAL_CALL ODataTypeRepository::createEnumeration(  ) throw (RuntimeException)
     {
         return new ::comphelper::OEnumerationByName( this );
     }
 
-    //--------------------------------------------------------------------
+
     Any SAL_CALL ODataTypeRepository::getByName( const OUString& aName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         return makeAny( getDataType( aName ) );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL ODataTypeRepository::getElementNames(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -195,26 +195,26 @@ namespace xforms
         return aNames;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool SAL_CALL ODataTypeRepository::hasByName( const OUString& aName ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_aRepository.find( aName ) != m_aRepository.end();
     }
 
-    //--------------------------------------------------------------------
+
     Type SAL_CALL ODataTypeRepository::getElementType(  ) throw (RuntimeException)
     {
         return ::getCppuType( static_cast< Reference< XDataType >* >( NULL ) );
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool SAL_CALL ODataTypeRepository::hasElements(  ) throw (RuntimeException)
     {
         return !m_aRepository.empty();
     }
 
-    //--------------------------------------------------------------------
+
     // type specific implementation of registerProperties, using explicit
     // template instantiations
 

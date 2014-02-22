@@ -122,13 +122,13 @@ namespace
 // OImageControlModel
 //==============================================================================
 
-//------------------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OImageControlModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OImageControlModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> OImageControlModel::_getTypes()
 {
     return concatSequences(
@@ -137,7 +137,7 @@ Sequence<Type> OImageControlModel::_getTypes()
     );
 }
 
-//------------------------------------------------------------------
+
 OImageControlModel::OImageControlModel(const Reference<XComponentContext>& _rxFactory)
     :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_IMAGECONTROL, FRM_SUN_CONTROL_IMAGECONTROL, sal_False, sal_False, sal_False )
                     // use the old control name for compytibility reasons
@@ -153,7 +153,7 @@ OImageControlModel::OImageControlModel(const Reference<XComponentContext>& _rxFa
     implConstruct();
 }
 
-//------------------------------------------------------------------
+
 OImageControlModel::OImageControlModel( const OImageControlModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
     :OBoundControlModel( _pOriginal, _rxFactory )
                 // use the old control name for compytibility reasons
@@ -174,7 +174,7 @@ OImageControlModel::OImageControlModel( const OImageControlModel* _pOriginal, co
     osl_atomic_decrement( &m_refCount );
 }
 
-//------------------------------------------------------------------
+
 void OImageControlModel::implConstruct()
 {
     m_pImageProducer = new ImageProducer;
@@ -182,7 +182,7 @@ void OImageControlModel::implConstruct()
     m_pImageProducer->SetDoneHdl( LINK( this, OImageControlModel, OnImageImportDone ) );
 }
 
-//------------------------------------------------------------------
+
 OImageControlModel::~OImageControlModel()
 {
     if (!OComponentHelper::rBHelper.bDisposed)
@@ -194,11 +194,11 @@ OImageControlModel::~OImageControlModel()
 }
 
 // XCloneable
-//------------------------------------------------------------------------------
+
 IMPLEMENT_DEFAULT_CLONING( OImageControlModel )
 
 // XServiceInfo
-//------------------------------------------------------------------------------
+
 StringSequence  OImageControlModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
@@ -209,7 +209,7 @@ StringSequence  OImageControlModel::getSupportedServiceNames() throw()
     return aSupported;
 }
 
-//------------------------------------------------------------------------------
+
 Any SAL_CALL OImageControlModel::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
     // Order matters: we want to "override" the XImageProducer interface of the aggregate without
@@ -226,13 +226,13 @@ Any SAL_CALL OImageControlModel::queryAggregation(const Type& _rType) throw (Run
     return aReturn;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OImageControlModel::approveDbColumnType( sal_Int32 _nColumnType )
 {
     return ImageStoreInvalid != lcl_getImageStoreType( _nColumnType );
 }
 
-//------------------------------------------------------------------------------
+
 void OImageControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const
 {
     switch (nHandle)
@@ -251,7 +251,7 @@ void OImageControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) co
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) throw ( ::com::sun::star::uno::Exception)
 {
     switch (nHandle)
@@ -309,7 +309,7 @@ void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, con
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OImageControlModel::convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue)
                                 throw( IllegalArgumentException )
 {
@@ -332,7 +332,7 @@ sal_Bool OImageControlModel::convertFastPropertyValue(Any& rConvertedValue, Any&
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OImageControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 4, OBoundControlModel )
@@ -343,7 +343,7 @@ void OImageControlModel::describeFixedProperties( Sequence< Property >& _rProps 
     END_DESCRIBE_PROPERTIES();
 }
 
-//------------------------------------------------------------------------------
+
 void OImageControlModel::describeAggregateProperties( Sequence< Property >& /* [out] */ o_rAggregateProperties ) const
 {
     OBoundControlModel::describeAggregateProperties( o_rAggregateProperties );
@@ -353,13 +353,13 @@ void OImageControlModel::describeAggregateProperties( Sequence< Property >& /* [
     RemoveProperty( o_rAggregateProperties, PROPERTY_GRAPHIC );
 }
 
-//------------------------------------------------------------------------------
+
 OUString OImageControlModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return OUString(FRM_COMPONENT_IMAGECONTROL);  // old (non-sun) name for compatibility !
 }
 
-//------------------------------------------------------------------------------
+
 void OImageControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     // Base class
@@ -373,7 +373,7 @@ void OImageControlModel::write(const Reference<XObjectOutputStream>& _rxOutStrea
     writeCommonProperties(_rxOutStream);
 }
 
-//------------------------------------------------------------------------------
+
 void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OBoundControlModel::read(_rxInStream);
@@ -408,7 +408,7 @@ void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream) 
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OImageControlModel::impl_updateStreamForURL_lck( const OUString& _rURL, ValueChangeInstigator _eInstigator )
 {
     // create a stream for the image specified by the URL
@@ -450,7 +450,7 @@ sal_Bool OImageControlModel::impl_updateStreamForURL_lck( const OUString& _rURL,
     return sal_False;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OImageControlModel::impl_handleNewImageURL_lck( ValueChangeInstigator _eInstigator )
 {
     switch ( lcl_getImageStoreType( getFieldType() ) )
@@ -489,7 +489,7 @@ sal_Bool OImageControlModel::impl_handleNewImageURL_lck( ValueChangeInstigator _
     return sal_True;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OImageControlModel::commitControlValueToDbColumn( bool _bPostReset )
 {
     if ( _bPostReset )
@@ -508,7 +508,7 @@ sal_Bool OImageControlModel::commitControlValueToDbColumn( bool _bPostReset )
     return sal_True;
 }
 
-//------------------------------------------------------------------------------
+
 namespace
 {
     bool lcl_isValidDocumentURL( const OUString& _rDocURL )
@@ -517,7 +517,7 @@ namespace
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OImageControlModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 {
     OBoundControlModel::onConnectedDbColumn( _rxForm );
@@ -547,7 +547,7 @@ void OImageControlModel::onConnectedDbColumn( const Reference< XInterface >& _rx
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OImageControlModel::onDisconnectedDbColumn()
 {
     OBoundControlModel::onDisconnectedDbColumn();
@@ -555,7 +555,7 @@ void OImageControlModel::onDisconnectedDbColumn()
     m_sDocumentURL = OUString();
 }
 
-//------------------------------------------------------------------------------
+
 Any OImageControlModel::translateDbColumnToControlValue()
 {
     switch ( lcl_getImageStoreType( getFieldType() ) )
@@ -581,13 +581,13 @@ Any OImageControlModel::translateDbColumnToControlValue()
     return Any();
 }
 
-//------------------------------------------------------------------------------
+
 Any OImageControlModel::getControlValue( ) const
 {
     return makeAny( m_sImageURL );
 }
 
-//------------------------------------------------------------------------------
+
 void OImageControlModel::doSetControlValue( const Any& _rValue )
 {
     DBG_ASSERT( GetImageProducer() && m_xImageProducer.is(), "OImageControlModel::doSetControlValue: no image producer!" );
@@ -637,44 +637,44 @@ void OImageControlModel::doSetControlValue( const Any& _rValue )
 }
 
 // OComponentHelper
-//------------------------------------------------------------------
+
 void SAL_CALL OImageControlModel::disposing()
 {
     OBoundControlModel::disposing();
 }
 
-//------------------------------------------------------------------------------
+
 void OImageControlModel::resetNoBroadcast()
 {
     if ( hasField() )          // only reset when we are connected to a column
         OBoundControlModel::resetNoBroadcast( );
 }
 
-//--------------------------------------------------------------------
+
 Reference< XImageProducer > SAL_CALL OImageControlModel::getImageProducer() throw ( RuntimeException)
 {
     return this;
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL OImageControlModel::addConsumer( const Reference< XImageConsumer >& _rxConsumer ) throw (RuntimeException)
 {
     GetImageProducer()->addConsumer( _rxConsumer );
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL OImageControlModel::removeConsumer( const Reference< XImageConsumer >& _rxConsumer ) throw (RuntimeException)
 {
     GetImageProducer()->removeConsumer( _rxConsumer );
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL OImageControlModel::startProduction(  ) throw (RuntimeException)
 {
     GetImageProducer()->startProduction();
 }
 
-//------------------------------------------------------------------------------
+
 IMPL_LINK( OImageControlModel, OnImageImportDone, ::Graphic*, i_pGraphic )
 {
     const Reference< XGraphic > xGraphic( i_pGraphic != NULL ? Image( i_pGraphic->GetBitmapEx() ).GetXGraphic() : NULL );
@@ -695,13 +695,13 @@ IMPL_LINK( OImageControlModel, OnImageImportDone, ::Graphic*, i_pGraphic )
 // OImageControlControl
 //==================================================================
 
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OImageControlControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OImageControlControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> OImageControlControl::_getTypes()
 {
     return concatSequences(
@@ -710,7 +710,7 @@ Sequence<Type> OImageControlControl::_getTypes()
     );
 }
 
-//------------------------------------------------------------------------------
+
 OImageControlControl::OImageControlControl(const Reference<XComponentContext>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_IMAGECONTROL)
     ,m_aModifyListeners( m_aMutex )
@@ -726,7 +726,7 @@ OImageControlControl::OImageControlControl(const Reference<XComponentContext>& _
     decrement(m_refCount);
 }
 
-//------------------------------------------------------------------------------
+
 Any SAL_CALL OImageControlControl::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn = OBoundControl::queryAggregation( _rType );
@@ -740,7 +740,7 @@ Any SAL_CALL OImageControlControl::queryAggregation(const Type& _rType) throw (R
     return aReturn;
 }
 
-//------------------------------------------------------------------------------
+
 StringSequence  OImageControlControl::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
@@ -751,19 +751,19 @@ StringSequence  OImageControlControl::getSupportedServiceNames() throw()
     return aSupported;
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OImageControlControl::addModifyListener( const Reference< XModifyListener >& _Listener ) throw (RuntimeException)
 {
     m_aModifyListeners.addInterface( _Listener );
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OImageControlControl::removeModifyListener( const Reference< XModifyListener >& _Listener ) throw (RuntimeException)
 {
     m_aModifyListeners.removeInterface( _Listener );
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OImageControlControl::disposing()
 {
     EventObject aEvent( *this );
@@ -772,13 +772,13 @@ void SAL_CALL OImageControlControl::disposing()
     OBoundControl::disposing();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OImageControlControl::disposing( const EventObject& _Event ) throw(RuntimeException)
 {
     OBoundControl::disposing( _Event );
 }
 
-//------------------------------------------------------------------------------
+
 void OImageControlControl::implClearGraphics( sal_Bool _bForce )
 {
     Reference< XPropertySet > xSet( getModel(), UNO_QUERY );
@@ -801,7 +801,7 @@ void OImageControlControl::implClearGraphics( sal_Bool _bForce )
     }
 }
 
-//------------------------------------------------------------------------------
+
 bool OImageControlControl::implInsertGraphics()
 {
     Reference< XPropertySet > xSet( getModel(), UNO_QUERY );
@@ -867,7 +867,7 @@ bool OImageControlControl::implInsertGraphics()
     return false;
 }
 
-//------------------------------------------------------------------------------
+
 bool OImageControlControl::impl_isEmptyGraphics_nothrow() const
 {
     bool bIsEmpty = true;
@@ -888,7 +888,7 @@ bool OImageControlControl::impl_isEmptyGraphics_nothrow() const
 }
 
 // MouseListener
-//------------------------------------------------------------------------------
+
 void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -985,17 +985,17 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
     }
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OImageControlControl::mouseReleased(const awt::MouseEvent& /*e*/) throw ( RuntimeException )
 {
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OImageControlControl::mouseEntered(const awt::MouseEvent& /*e*/) throw ( RuntimeException )
 {
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OImageControlControl::mouseExited(const awt::MouseEvent& /*e*/) throw ( RuntimeException )
 {
 }

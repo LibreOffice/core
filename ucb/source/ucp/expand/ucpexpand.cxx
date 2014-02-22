@@ -89,7 +89,7 @@ public:
         throw (uno::RuntimeException);
 };
 
-//______________________________________________________________________________
+
 inline void ExpandContentProviderImpl::check() const
 {
     // xxx todo guard?
@@ -104,12 +104,12 @@ inline void ExpandContentProviderImpl::check() const
     }
 }
 
-//______________________________________________________________________________
+
 ExpandContentProviderImpl::~ExpandContentProviderImpl() throw ()
 {
 }
 
-//______________________________________________________________________________
+
 void ExpandContentProviderImpl::disposing()
 {
 }
@@ -140,7 +140,7 @@ static uno::Sequence< OUString > SAL_CALL supportedServices()
 }
 
 // XServiceInfo
-//______________________________________________________________________________
+
 OUString ExpandContentProviderImpl::getImplementationName()
     throw (uno::RuntimeException)
 {
@@ -148,7 +148,7 @@ OUString ExpandContentProviderImpl::getImplementationName()
     return implName();
 }
 
-//______________________________________________________________________________
+
 uno::Sequence< OUString > ExpandContentProviderImpl::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {
@@ -183,7 +183,7 @@ OUString ExpandContentProviderImpl::expandUri(
 }
 
 // XContentProvider
-//______________________________________________________________________________
+
 uno::Reference< ucb::XContent > ExpandContentProviderImpl::queryContent(
     uno::Reference< ucb::XContentIdentifier > const & xIdentifier )
     throw (ucb::IllegalIdentifierException, uno::RuntimeException)
@@ -204,7 +204,7 @@ uno::Reference< ucb::XContent > ExpandContentProviderImpl::queryContent(
     }
 }
 
-//______________________________________________________________________________
+
 sal_Int32 ExpandContentProviderImpl::compareContentIds(
     uno::Reference< ucb::XContentIdentifier > const & xId1,
     uno::Reference< ucb::XContentIdentifier > const & xId2 )

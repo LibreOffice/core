@@ -32,16 +32,16 @@
 
 #include <vector>
 
-//-------------------------------------------------------------
+
 // my defines
-//-------------------------------------------------------------
+
 
 #define TEST_CLIPBOARD
 #define RDB_SYSPATH  "d:\\projects\\src621\\dtrans\\wntmsci7\\bin\\applicat.rdb"
 
-//------------------------------------------------------------
+
 //  namesapces
-//------------------------------------------------------------
+
 
 using namespace ::rtl;
 using namespace ::std;
@@ -51,9 +51,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
-//----------------------------------------------------------------
+
 //
-//----------------------------------------------------------------
+
 
 void ShutdownServiceMgr( Reference< XMultiServiceFactory >& SrvMgr )
 {
@@ -68,9 +68,9 @@ void ShutdownServiceMgr( Reference< XMultiServiceFactory >& SrvMgr )
     SrvMgr.clear();
 }
 
-//----------------------------------------------------------------
+
 //
-//----------------------------------------------------------------
+
 
 sal_Bool readCntTypesFromFileIntoVector( char* fname, vector< string >& vecData )
 {
@@ -95,9 +95,9 @@ sal_Bool readCntTypesFromFileIntoVector( char* fname, vector< string >& vecData 
     return sal_True;
 }
 
-//----------------------------------------------------------------
+
 //
-//----------------------------------------------------------------
+
 
 sal_Bool processCntTypesAndWriteResultIntoFile( char* fname, vector< string >& vecData, Reference< XMimeContentTypeFactory > cnttypeFactory )
 {
@@ -152,18 +152,18 @@ sal_Bool processCntTypesAndWriteResultIntoFile( char* fname, vector< string >& v
     return sal_True;
 }
 
-//----------------------------------------------------------------
+
 //  main
-//----------------------------------------------------------------
+
 
 int SAL_CALL main( int nArgc, char* argv[] )
 {
     if ( nArgc != 3 )
         printf( "Start with: testcnttype input-file output-file\n" );
 
-    //-------------------------------------------------
+
     // get the global service-manager
-    //-------------------------------------------------
+
     OUString rdbName = OUString(  RDB_SYSPATH  );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
 
@@ -198,9 +198,9 @@ int SAL_CALL main( int nArgc, char* argv[] )
         ShutdownServiceMgr( g_xFactory );
     }
 
-    //--------------------------------------------------
+
     // shutdown the service manager
-    //--------------------------------------------------
+
 
     ShutdownServiceMgr( g_xFactory );
 

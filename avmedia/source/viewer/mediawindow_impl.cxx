@@ -40,22 +40,22 @@ using namespace ::com::sun::star;
 
 namespace avmedia { namespace priv {
 
-// ----------------------
+
 // - MediaWindowControl -
-// ----------------------
+
 
 MediaWindowControl::MediaWindowControl( Window* pParent ) :
     MediaControl( pParent, MEDIACONTROLSTYLE_MULTILINE )
 {
 }
 
-// ---------------------------------------------------------------------
+
 
 MediaWindowControl::~MediaWindowControl()
 {
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowControl::update()
 {
@@ -65,29 +65,29 @@ void MediaWindowControl::update()
     setState( aItem );
 }
 
-// ---------------------------------------------------------------------
+
 
 void  MediaWindowControl::execute( const MediaItem& rItem )
 {
     static_cast< MediaWindowImpl* >( GetParent() )->executeMediaItem( rItem );
 }
 
-// --------------------
+
 // - MediaChildWindow -
-// --------------------
+
 
 MediaChildWindow::MediaChildWindow( Window* pParent ) :
     SystemChildWindow( pParent, WB_CLIPCHILDREN )
 {
 }
 
-// ---------------------------------------------------------------------
+
 
 MediaChildWindow::~MediaChildWindow()
 {
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaChildWindow::MouseMove( const MouseEvent& rMEvt )
 {
@@ -98,7 +98,7 @@ void MediaChildWindow::MouseMove( const MouseEvent& rMEvt )
     GetParent()->MouseMove( aTransformedEvent );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaChildWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -109,7 +109,7 @@ void MediaChildWindow::MouseButtonDown( const MouseEvent& rMEvt )
     GetParent()->MouseButtonDown( aTransformedEvent );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaChildWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -120,7 +120,7 @@ void MediaChildWindow::MouseButtonUp( const MouseEvent& rMEvt )
     GetParent()->MouseButtonUp( aTransformedEvent );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaChildWindow::KeyInput( const KeyEvent& rKEvt )
 {
@@ -128,7 +128,7 @@ void MediaChildWindow::KeyInput( const KeyEvent& rKEvt )
     GetParent()->KeyInput( rKEvt );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaChildWindow::KeyUp( const KeyEvent& rKEvt )
 {
@@ -136,7 +136,7 @@ void MediaChildWindow::KeyUp( const KeyEvent& rKEvt )
     GetParent()->KeyUp( rKEvt );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaChildWindow::Command( const CommandEvent& rCEvt )
 {
@@ -147,9 +147,9 @@ void MediaChildWindow::Command( const CommandEvent& rCEvt )
     GetParent()->Command( aTransformedEvent );
 }
 
-// ----------------------
+
 // - MediaWindowImpl -
-// ----------------------
+
 
 MediaWindowImpl::MediaWindowImpl( Window* pParent, MediaWindow* pMediaWindow, bool bInternalMediaControl ) :
     Control( pParent ),
@@ -173,7 +173,7 @@ MediaWindowImpl::MediaWindowImpl( Window* pParent, MediaWindow* pMediaWindow, bo
     }
 }
 
-// ---------------------------------------------------------------------
+
 
 MediaWindowImpl::~MediaWindowImpl()
 {
@@ -527,14 +527,14 @@ void MediaWindowImpl::onURLChanged()
     }
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::setPosSize( const Rectangle& rRect )
 {
     SetPosSizePixel( rRect.TopLeft(), rRect.GetSize() );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::setPointer( const Pointer& rPointer )
 {
@@ -559,7 +559,7 @@ void MediaWindowImpl::setPointer( const Pointer& rPointer )
     }
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::Resize()
 {
@@ -583,7 +583,7 @@ void MediaWindowImpl::Resize()
     maChildWindow.SetPosSizePixel( Point( 0, 0 ), aPlayerWindowSize );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::StateChanged( StateChangedType eType )
 {
@@ -612,7 +612,7 @@ void MediaWindowImpl::StateChanged( StateChangedType eType )
     }
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::Paint( const Rectangle& )
 {
@@ -668,13 +668,13 @@ void MediaWindowImpl::Paint( const Rectangle& )
     }
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::GetFocus()
 {
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::MouseMove( const MouseEvent& rMEvt )
 {
@@ -682,7 +682,7 @@ void MediaWindowImpl::MouseMove( const MouseEvent& rMEvt )
         mpMediaWindow->MouseMove( rMEvt );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -690,7 +690,7 @@ void MediaWindowImpl::MouseButtonDown( const MouseEvent& rMEvt )
         mpMediaWindow->MouseButtonDown( rMEvt );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -698,7 +698,7 @@ void MediaWindowImpl::MouseButtonUp( const MouseEvent& rMEvt )
         mpMediaWindow->MouseButtonUp( rMEvt );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::KeyInput( const KeyEvent& rKEvt )
 {
@@ -706,7 +706,7 @@ void MediaWindowImpl::KeyInput( const KeyEvent& rKEvt )
         mpMediaWindow->KeyInput( rKEvt );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::KeyUp( const KeyEvent& rKEvt )
 {
@@ -714,7 +714,7 @@ void MediaWindowImpl::KeyUp( const KeyEvent& rKEvt )
         mpMediaWindow->KeyUp( rKEvt );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::Command( const CommandEvent& rCEvt )
 {
@@ -722,21 +722,21 @@ void MediaWindowImpl::Command( const CommandEvent& rCEvt )
         mpMediaWindow->Command( rCEvt );
 }
 
-// ---------------------------------------------------------------------
+
 
 sal_Int8 MediaWindowImpl::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     return( mpMediaWindow ? mpMediaWindow->AcceptDrop( rEvt ) : 0 );
 }
 
-// ---------------------------------------------------------------------
+
 
 sal_Int8 MediaWindowImpl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     return( mpMediaWindow ? mpMediaWindow->ExecuteDrop( rEvt ) : 0 );
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindowImpl::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 {

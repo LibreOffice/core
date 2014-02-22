@@ -116,7 +116,7 @@ Any SAL_CALL RootItemContainer::queryInterface( const Type& _rType ) throw(Runti
         aRet = OPropertySetHelper::queryInterface( _rType );
     return aRet;
 }
-//------------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL RootItemContainer::getTypes(  ) throw(RuntimeException)
 {
     return comphelper::concatSequences(

@@ -61,7 +61,7 @@ using namespace test::testtools::bridgetest;
 namespace bridge_object
 {
 
-//--------------------------------------------------------------------------------------------------
+
 inline static Sequence< OUString > getSupportedServiceNames()
 {
     OUString aName( SERVICENAME );
@@ -479,13 +479,13 @@ public:
      Dummy(): WeakComponentImplHelperBase(*Mutex::getGlobalMutex()){}
 
 };
-//__________________________________________________________________________________________________
+
 Any Test_Impl::transportAny( const Any & value ) throw ( ::com::sun::star::uno::RuntimeException)
 {
     return value;
 }
 
-//__________________________________________________________________________________________________
+
 
 namespace {
 
@@ -513,7 +513,7 @@ void Test_Impl::call( sal_Int32 nCallId , sal_Int32 nWaitMUSEC ) throw(::com::su
     m_nLastCallId = nCallId;
 }
 
-//__________________________________________________________________________________________________
+
 void Test_Impl::callOneway( sal_Int32 nCallId , sal_Int32 nWaitMUSEC ) throw (::com::sun::star::uno::RuntimeException)
 {
     wait(nWaitMUSEC);
@@ -521,13 +521,13 @@ void Test_Impl::callOneway( sal_Int32 nCallId , sal_Int32 nWaitMUSEC ) throw (::
     m_nLastCallId = nCallId;
 }
 
-//__________________________________________________________________________________________________
+
 sal_Bool Test_Impl::sequenceOfCallTestPassed() throw (::com::sun::star::uno::RuntimeException)
 {
     return m_bSequenceOfCallTestPassed;
 }
 
-//__________________________________________________________________________________________________
+
 void SAL_CALL Test_Impl::startRecursiveCall(
     const ::com::sun::star::uno::Reference< XRecursiveCall >& xCall, sal_Int32 nToCall )
     throw(::com::sun::star::uno::RuntimeException)
@@ -564,7 +564,7 @@ OUString Test_Impl::testMulti(Reference< XMulti > const & multi)
     return testtools::bridgetest::testMulti(multi);
 }
 
-//__________________________________________________________________________________________________
+
 void Test_Impl::setValues( sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
                            sal_Int16 nShort, sal_uInt16 nUShort,
                            sal_Int32 nLong, sal_uInt32 nULong,
@@ -582,7 +582,7 @@ void Test_Impl::setValues( sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
             eEnum, rStr, xTest, rAny, rSequence );
     _aStructData = rStruct;
 }
-//__________________________________________________________________________________________________
+
 TestData Test_Impl::setValues2( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte,
                                 sal_Int16& nShort, sal_uInt16& nUShort,
                                 sal_Int32& nLong, sal_uInt32& nULong,
@@ -606,7 +606,7 @@ TestData Test_Impl::setValues2( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& n
 
     return _aStructData;
 }
-//__________________________________________________________________________________________________
+
 TestData Test_Impl::getValues( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte,
                                sal_Int16& nShort, sal_uInt16& nUShort,
                                sal_Int32& nLong, sal_uInt32& nULong,
@@ -638,7 +638,7 @@ TestData Test_Impl::getValues( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nB
     rStruct = _aStructData;
     return _aStructData;
 }
-//__________________________________________________________________________________________________
+
 TestData Test_Impl::raiseException( sal_Int16 nArgumentPos, const OUString & rMsg, const Reference< XInterface > & xContext )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
@@ -692,7 +692,7 @@ void dothrow( RuntimeException const & e )
 #endif
     dothrow2( e );
 }
-//______________________________________________________________________________
+
 sal_Int32 Test_Impl::getRuntimeException()
     throw (RuntimeException)
 {
@@ -707,7 +707,7 @@ sal_Int32 Test_Impl::getRuntimeException()
     }
     return 0; // for dummy
 }
-//__________________________________________________________________________________________________
+
 void Test_Impl::setRuntimeException( sal_Int32 ) throw(::com::sun::star::uno::RuntimeException)
 {
     RuntimeException aExc;
@@ -1145,19 +1145,19 @@ Reference< XCurrentContextChecker > Test_Impl::getCurrentContextChecker()
 }
 
 // XServiceInfo
-//__________________________________________________________________________________________________
+
 OUString Test_Impl::getImplementationName()
     throw (RuntimeException)
 {
     return OUString( IMPLNAME );
 }
-//__________________________________________________________________________________________________
+
 sal_Bool Test_Impl::supportsService( const OUString & rServiceName )
     throw (RuntimeException)
 {
     return cppu::supportsService(this, rServiceName);
 }
-//__________________________________________________________________________________________________
+
 Sequence< OUString > Test_Impl::getSupportedServiceNames()
     throw (RuntimeException)
 {

@@ -62,7 +62,7 @@ private:
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 0",
                                countPixel( rDevice, aCol ) == 0);
 
-        // --------------------------------------------------
+
 
         rDevice->clear(aBgCol);
         aPoly.clear();
@@ -94,7 +94,7 @@ private:
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 7",
                                countPixel( rDevice, aCol ) == 7);
 
-        // --------------------------------------------------
+
 
         rDevice->clear(aBgCol);
         aPoly.clear();
@@ -108,7 +108,7 @@ private:
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 6",
                                countPixel( rDevice, aCol ) == 6);
 
-        // --------------------------------------------------
+
 
         rDevice->clear(aBgCol);
         aPoly.clear();

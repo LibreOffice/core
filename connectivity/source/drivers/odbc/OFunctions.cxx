@@ -80,7 +80,7 @@ T3SQLGetCursorName pODBC3SQLGetCursorName;
 T3SQLNativeSql pODBC3SQLNativeSql;
 
 sal_Bool LoadFunctions(oslModule pODBCso);
-// -------------------------------------------------------------------------
+
 // Take care of Dynamicly loading of the DLL/shared lib and Addresses:
 // Returns sal_True at success
 sal_Bool LoadLibrary_ODBC3(OUString &_rPath)
@@ -111,7 +111,7 @@ sal_Bool LoadLibrary_ODBC3(OUString &_rPath)
 
     return bLoaded = LoadFunctions(pODBCso);
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool LoadFunctions(oslModule pODBCso)
 {
@@ -227,7 +227,7 @@ sal_Bool LoadFunctions(oslModule pODBCso)
 
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 
 }
 

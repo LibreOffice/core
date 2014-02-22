@@ -1219,9 +1219,9 @@ throw (RuntimeException)
     implts_reset( sal_True );
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 // XMenuBarMergingAcceptor
-//---------------------------------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL LayoutManager::setMergedMenuBar(
     const Reference< XIndexAccess >& xMergedMenuBar )
 throw (uno::RuntimeException)
@@ -2289,9 +2289,9 @@ throw (RuntimeException)
     implts_doLayout_notify( sal_True );
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 //  ILayoutNotifications
-//---------------------------------------------------------------------------------------------------------
+
 void LayoutManager::requestLayout( Hint eHint )
 {
     if ( eHint == HINT_TOOLBARSPACE_HAS_CHANGED )
@@ -2540,9 +2540,9 @@ void LayoutManager::implts_setDockingAreaWindowSizes( const awt::Rectangle& /*rB
     }
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 //      XMenuCloser
-//---------------------------------------------------------------------------------------------------------
+
 void LayoutManager::implts_updateMenuBarClose()
 {
     WriteGuard aWriteLock( m_aLock );
@@ -2626,9 +2626,9 @@ IMPL_LINK_NOARG(LayoutManager, SettingsChanged)
     return 1;
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 //  XLayoutManagerEventBroadcaster
-//---------------------------------------------------------------------------------------------------------
+
 void SAL_CALL LayoutManager::addLayoutManagerEventListener( const uno::Reference< frame::XLayoutManagerListener >& xListener )
 throw (uno::RuntimeException)
 {
@@ -2662,9 +2662,9 @@ void LayoutManager::implts_notifyListeners( short nEvent, uno::Any aInfoParam )
     }
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 //      XWindowListener
-//---------------------------------------------------------------------------------------------------------
+
 void SAL_CALL LayoutManager::windowResized( const awt::WindowEvent& aEvent )
 throw( uno::RuntimeException )
 {
@@ -2780,9 +2780,9 @@ IMPL_LINK_NOARG(LayoutManager, AsyncLayoutHdl)
     return 0;
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 //      XFrameActionListener
-//---------------------------------------------------------------------------------------------------------
+
 void SAL_CALL LayoutManager::frameAction( const FrameActionEvent& aEvent )
 throw ( RuntimeException )
 {
@@ -3110,9 +3110,9 @@ void SAL_CALL LayoutManager::elementReplaced( const ui::ConfigurationEvent& Even
     }
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 //      OPropertySetHelper
-//---------------------------------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL LayoutManager::convertFastPropertyValue( Any&       aConvertedValue,
                                                            Any&       aOldValue,
                                                            sal_Int32  nHandle,

@@ -88,7 +88,7 @@ void SAL_CALL ConfigFlush::refresh()
     }
 }
 
-//-----------------------------------------------
+
 void SAL_CALL ConfigFlush::addRefreshListener(const css::uno::Reference< css::util::XRefreshListener >& xListener)
     throw(css::uno::RuntimeException)
 {
@@ -98,7 +98,7 @@ void SAL_CALL ConfigFlush::addRefreshListener(const css::uno::Reference< css::ut
                              xListener);
 }
 
-//-----------------------------------------------
+
 void SAL_CALL ConfigFlush::removeRefreshListener(const css::uno::Reference< css::util::XRefreshListener >& xListener)
     throw(css::uno::RuntimeException)
 {
@@ -108,13 +108,13 @@ void SAL_CALL ConfigFlush::removeRefreshListener(const css::uno::Reference< css:
                                 xListener);
 }
 
-//-----------------------------------------------
+
 OUString ConfigFlush::impl_getImplementationName()
 {
     return OUString("com.sun.star.comp.filter.config.ConfigFlush");
 }
 
-//-----------------------------------------------
+
 css::uno::Sequence< OUString > ConfigFlush::impl_getSupportedServiceNames()
 {
     css::uno::Sequence< OUString > lServiceNames(1);
@@ -122,7 +122,7 @@ css::uno::Sequence< OUString > ConfigFlush::impl_getSupportedServiceNames()
     return lServiceNames;
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::uno::XInterface > ConfigFlush::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
     ConfigFlush* pNew = new ConfigFlush(xSMGR);

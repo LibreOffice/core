@@ -62,12 +62,12 @@ namespace sdr { namespace contact {
         ViewContactOfUnoControl_Impl& operator=( const ViewContactOfUnoControl_Impl& ); // never implemented
     };
 
-    //--------------------------------------------------------------------
+
     ViewContactOfUnoControl_Impl::ViewContactOfUnoControl_Impl()
     {
     }
 
-    //--------------------------------------------------------------------
+
     ViewContactOfUnoControl_Impl::~ViewContactOfUnoControl_Impl()
     {
     }
@@ -76,7 +76,7 @@ namespace sdr { namespace contact {
     //= ViewContactOfUnoControl
     //====================================================================
     DBG_NAME( ViewContactOfUnoControl )
-    //--------------------------------------------------------------------
+
     ViewContactOfUnoControl::ViewContactOfUnoControl( SdrUnoObj& _rUnoObject )
         :ViewContactOfSdrObj( _rUnoObject )
         ,m_pImpl( new ViewContactOfUnoControl_Impl )
@@ -84,13 +84,13 @@ namespace sdr { namespace contact {
         DBG_CTOR( ViewContactOfUnoControl, NULL );
     }
 
-    //--------------------------------------------------------------------
+
     ViewContactOfUnoControl::~ViewContactOfUnoControl()
     {
         DBG_DTOR( ViewContactOfUnoControl, NULL );
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XControl > ViewContactOfUnoControl::getTemporaryControlForWindow(
         const Window& _rWindow, Reference< XControlContainer >& _inout_ControlContainer ) const
     {
@@ -101,7 +101,7 @@ namespace sdr { namespace contact {
         return ViewObjectContactOfUnoControl::getTemporaryControlForWindow( _rWindow, _inout_ControlContainer, *pUnoObject );
     }
 
-    //--------------------------------------------------------------------
+
     ViewObjectContact& ViewContactOfUnoControl::CreateObjectSpecificViewObjectContact( ObjectContact& _rObjectContact )
     {
         // print or print preview requires special handling
@@ -118,7 +118,7 @@ namespace sdr { namespace contact {
         return *new ViewObjectContactOfUnoControl( _rObjectContact, *this );
     }
 
-    //--------------------------------------------------------------------
+
     drawinglayer::primitive2d::Primitive2DSequence ViewContactOfUnoControl::createViewIndependentPrimitive2DSequence() const
     {
         // create range. Use model data directly, not getBoundRect()/getSnapRect; these will use

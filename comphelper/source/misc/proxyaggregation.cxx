@@ -36,13 +36,13 @@ namespace comphelper
     //=========================================================================
     //= OProxyAggregation
     //=========================================================================
-    //-------------------------------------------------------------------------
+
     OProxyAggregation::OProxyAggregation( const Reference< XComponentContext >& _rxContext )
         :m_xContext( _rxContext )
     {
     }
 
-    //-------------------------------------------------------------------------
+
     void OProxyAggregation::baseAggregateProxyFor( const Reference< XInterface >& _rxComponent, oslInterlockedCount& _rRefCount,
             ::cppu::OWeakObject& _rDelegator )
     {
@@ -68,13 +68,13 @@ namespace comphelper
         osl_atomic_decrement( &_rRefCount );
     }
 
-    //-------------------------------------------------------------------------
+
     Any SAL_CALL OProxyAggregation::queryAggregation( const Type& _rType ) throw (RuntimeException)
     {
         return m_xProxyAggregate.is() ? m_xProxyAggregate->queryAggregation( _rType ) : Any();
     }
 
-    //-------------------------------------------------------------------------
+
     Sequence< Type > SAL_CALL OProxyAggregation::getTypes(  ) throw (RuntimeException)
     {
         Sequence< Type > aTypes;
@@ -86,7 +86,7 @@ namespace comphelper
         return aTypes;
     }
 
-    //-------------------------------------------------------------------------
+
     OProxyAggregation::~OProxyAggregation()
     {
         if ( m_xProxyAggregate.is() )
@@ -100,7 +100,7 @@ namespace comphelper
     //=========================================================================
     //= OComponentProxyAggregationHelper
     //=========================================================================
-    //-------------------------------------------------------------------------
+
     OComponentProxyAggregationHelper::OComponentProxyAggregationHelper( const Reference< XComponentContext >& _rxContext,
         ::cppu::OBroadcastHelper& _rBHelper )
         :OProxyAggregation( _rxContext )
@@ -109,7 +109,7 @@ namespace comphelper
         OSL_ENSURE( _rxContext.is(), "OComponentProxyAggregationHelper::OComponentProxyAggregationHelper: invalid arguments!" );
     }
 
-    //-------------------------------------------------------------------------
+
     void OComponentProxyAggregationHelper::componentAggregateProxyFor(
         const Reference< XComponent >& _rxComponent, oslInterlockedCount& _rRefCount,
         ::cppu::OWeakObject& _rDelegator )
@@ -129,7 +129,7 @@ namespace comphelper
         osl_atomic_decrement( &_rRefCount );
     }
 
-    //-------------------------------------------------------------------------
+
     Any SAL_CALL OComponentProxyAggregationHelper::queryInterface( const Type& _rType ) throw (RuntimeException)
     {
         Any aReturn( BASE::queryInterface( _rType ) );
@@ -138,10 +138,10 @@ namespace comphelper
         return aReturn;
     }
 
-    //-------------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OComponentProxyAggregationHelper, BASE, OProxyAggregation )
 
-    //-------------------------------------------------------------------------
+
     OComponentProxyAggregationHelper::~OComponentProxyAggregationHelper( )
     {
         OSL_ENSURE( m_rBHelper.bDisposed, "OComponentProxyAggregationHelper::~OComponentProxyAggregationHelper: you should dispose your derived class in the dtor, if necessary!" );
@@ -156,7 +156,7 @@ namespace comphelper
         m_xInner.clear();
     }
 
-    //-------------------------------------------------------------------------
+
     void SAL_CALL OComponentProxyAggregationHelper::disposing( const EventObject& _rSource ) throw (RuntimeException)
     {
         if ( _rSource.Source == m_xInner )
@@ -168,7 +168,7 @@ namespace comphelper
         }
     }
 
-    //-------------------------------------------------------------------------
+
     void SAL_CALL OComponentProxyAggregationHelper::dispose() throw( RuntimeException )
     {
         ::osl::MutexGuard aGuard( m_rBHelper.rMutex );
@@ -188,7 +188,7 @@ namespace comphelper
     //=========================================================================
     //= OComponentProxyAggregation
     //=========================================================================
-    //-------------------------------------------------------------------------
+
     OComponentProxyAggregation::OComponentProxyAggregation( const Reference< XComponentContext >& _rxContext,
             const Reference< XComponent >& _rxComponent )
         :WeakComponentImplHelperBase( m_aMutex )
@@ -199,19 +199,19 @@ namespace comphelper
             componentAggregateProxyFor( _rxComponent, m_refCount, *this );
     }
 
-    //-------------------------------------------------------------------------
+
     OComponentProxyAggregation::~OComponentProxyAggregation()
     {
         implEnsureDisposeInDtor( );
     }
 
-    //-------------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XINTERFACE2( OComponentProxyAggregation, WeakComponentImplHelperBase, OComponentProxyAggregationHelper )
 
-    //-------------------------------------------------------------------------
+
     IMPLEMENT_GET_IMPLEMENTATION_ID( OComponentProxyAggregation )
 
-    //-------------------------------------------------------------------------
+
     Sequence< Type > SAL_CALL OComponentProxyAggregation::getTypes(  ) throw (RuntimeException)
     {
         Sequence< Type > aTypes( OComponentProxyAggregationHelper::getTypes() );
@@ -224,7 +224,7 @@ namespace comphelper
         return aTypes;
     }
 
-    //-------------------------------------------------------------------------
+
     void OComponentProxyAggregation::implEnsureDisposeInDtor( )
     {
         if ( !rBHelper.bDisposed )
@@ -234,7 +234,7 @@ namespace comphelper
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OComponentProxyAggregation::disposing( const EventObject& _rSource ) throw (RuntimeException)
     {
         // Simply disambiguate---this is necessary for MSVC to distinguish
@@ -245,14 +245,14 @@ namespace comphelper
         OComponentProxyAggregationHelper::disposing( _rSource );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OComponentProxyAggregation::disposing()  throw (RuntimeException)
     {
         // call the dispose-functionality of the base, which will dispose our aggregated component
         OComponentProxyAggregationHelper::dispose();
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OComponentProxyAggregation::dispose() throw( RuntimeException )
     {
         // simply disambiguate

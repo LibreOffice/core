@@ -85,7 +85,7 @@ namespace bs {
 
 
 // helper functions
-// ----------------
+
 inline double sqr(double x) {
     return x*x;
 }
@@ -540,9 +540,9 @@ double vanilla_trunc(double S, double vol, double rd, double rf,
 } // namespace internal
 
 
-// ---------------------------------------------------------------------
+
 // path dependent options
-// ---------------------------------------------------------------------
+
 
 namespace internal {
 

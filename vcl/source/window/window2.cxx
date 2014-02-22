@@ -192,7 +192,7 @@ void Window::ImplSaveOverlapBackground()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Window::ImplRestoreOverlapBackground( Region& rInvRegion )
 {
@@ -233,7 +233,7 @@ bool Window::ImplRestoreOverlapBackground( Region& rInvRegion )
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::ImplDeleteOverlapBackground()
 {
@@ -262,7 +262,7 @@ void Window::ImplDeleteOverlapBackground()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::ImplInvalidateAllOverlapBackgrounds()
 {
@@ -295,7 +295,7 @@ void Window::ImplInvalidateAllOverlapBackgrounds()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::ShowFocus( const Rectangle& rRect )
 {
@@ -342,7 +342,7 @@ void Window::ShowFocus( const Rectangle& rRect )
     mpWindowImpl->mbInShowFocus = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::HideFocus()
 {
@@ -377,7 +377,7 @@ void Window::HideFocus()
     mpWindowImpl->mbInHideFocus = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::Invert( const Rectangle& rRect, sal_uInt16 nFlags )
 {
@@ -412,7 +412,7 @@ void Window::Invert( const Rectangle& rRect, sal_uInt16 nFlags )
     mpGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), nSalFlags, this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::Invert( const Polygon& rPoly, sal_uInt16 nFlags )
 {
@@ -449,7 +449,7 @@ void Window::Invert( const Polygon& rPoly, sal_uInt16 nFlags )
     mpGraphics->Invert( nPoints, pPtAry, nSalFlags, this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::ShowTracking( const Rectangle& rRect, sal_uInt16 nFlags )
 {
@@ -477,7 +477,7 @@ void Window::ShowTracking( const Rectangle& rRect, sal_uInt16 nFlags )
     mpWindowImpl->mbTrackVisible              = true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::HideTracking()
 {
@@ -490,7 +490,7 @@ void Window::HideTracking()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
 {
@@ -554,7 +554,7 @@ void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::InvertTracking( const Polygon& rPoly, sal_uInt16 nFlags )
 {
@@ -607,7 +607,7 @@ void Window::InvertTracking( const Polygon& rPoly, sal_uInt16 nFlags )
     pGraphics->Invert( nPoints, pPtAry, SAL_INVERT_TRACKFRAME, this );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer )
 {
@@ -634,7 +634,7 @@ IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::StartTracking( sal_uInt16 nFlags )
 {
@@ -663,7 +663,7 @@ void Window::StartTracking( sal_uInt16 nFlags )
     CaptureMouse();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::EndTracking( sal_uInt16 nFlags )
 {
@@ -706,14 +706,14 @@ void Window::EndTracking( sal_uInt16 nFlags )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Window::IsTracking() const
 {
     return (ImplGetSVData()->maWinData.mpTrackWin == this);
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::StartAutoScroll( sal_uInt16 nFlags )
 {
@@ -730,7 +730,7 @@ void Window::StartAutoScroll( sal_uInt16 nFlags )
     pSVData->maAppData.mpWheelWindow = new ImplWheelWindow( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::EndAutoScroll()
 {
@@ -746,7 +746,7 @@ void Window::EndAutoScroll()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::SaveBackground( const Point& rPos, const Size& rSize,
                              const Point& rDestOff, VirtualDevice& rSaveDevice )
@@ -780,7 +780,7 @@ void Window::SaveBackground( const Point& rPos, const Size& rSize,
         rSaveDevice.DrawOutDev( rDestOff, rSize, rPos, rSize, *this );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uIntPtr Window::SaveFocus()
 {
@@ -796,7 +796,7 @@ sal_uIntPtr Window::SaveFocus()
         return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Window::EndSaveFocus( sal_uIntPtr nSaveId, bool bRestore )
 {
@@ -819,7 +819,7 @@ bool Window::EndSaveFocus( sal_uIntPtr nSaveId, bool bRestore )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::SetZoom( const Fraction& rZoom )
 {
@@ -830,14 +830,14 @@ void Window::SetZoom( const Fraction& rZoom )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 inline long WinFloatRound( double fVal )
 {
     return( fVal > 0.0 ? (long) ( fVal + 0.5 ) : -(long) ( -fVal + 0.5 ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::SetZoomedPointFont( const Font& rFont )
 {
@@ -877,7 +877,7 @@ void Window::SetZoomedPointFont( const Font& rFont )
         SetPointFont( rFont );
 }
 
-// -----------------------------------------------------------------------
+
 
 long Window::CalcZoom( long nCalc ) const
 {
@@ -893,7 +893,7 @@ long Window::CalcZoom( long nCalc ) const
     return nCalc;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::SetControlFont()
 {
@@ -905,7 +905,7 @@ void Window::SetControlFont()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::SetControlFont( const Font& rFont )
 {
@@ -927,7 +927,7 @@ void Window::SetControlFont( const Font& rFont )
     StateChanged( STATE_CHANGE_CONTROLFONT );
 }
 
-// -----------------------------------------------------------------------
+
 
 Font Window::GetControlFont() const
 {
@@ -940,7 +940,7 @@ Font Window::GetControlFont() const
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::SetControlForeground()
 {
@@ -952,7 +952,7 @@ void Window::SetControlForeground()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::SetControlForeground( const Color& rColor )
 {
@@ -976,7 +976,7 @@ void Window::SetControlForeground( const Color& rColor )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::SetControlBackground()
 {
@@ -988,7 +988,7 @@ void Window::SetControlBackground()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::SetControlBackground( const Color& rColor )
 {
@@ -1012,7 +1012,7 @@ void Window::SetControlBackground( const Color& rColor )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 Size Window::CalcWindowSize( const Size& rOutSz ) const
 {
@@ -1022,7 +1022,7 @@ Size Window::CalcWindowSize( const Size& rOutSz ) const
     return aSz;
 }
 
-// -----------------------------------------------------------------------
+
 
 Size Window::CalcOutputSize( const Size& rWinSz ) const
 {
@@ -1032,7 +1032,7 @@ Size Window::CalcOutputSize( const Size& rWinSz ) const
     return aSz;
 }
 
-// -----------------------------------------------------------------------
+
 
 Font Window::GetDrawPixelFont( OutputDevice* pDev ) const
 {
@@ -1044,7 +1044,7 @@ Font Window::GetDrawPixelFont( OutputDevice* pDev ) const
     return aFont;
 }
 
-// -----------------------------------------------------------------------
+
 
 long Window::GetDrawPixel( OutputDevice* pDev, long nPixels ) const
 {
@@ -1060,7 +1060,7 @@ long Window::GetDrawPixel( OutputDevice* pDev, long nPixels ) const
     return nP;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void lcl_HandleScrollHelper( ScrollBar* pScrl, long nN, bool isMultiplyByLineSize )
 {
@@ -1252,7 +1252,7 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 
 

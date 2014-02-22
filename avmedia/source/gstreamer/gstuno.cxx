@@ -22,9 +22,9 @@
 
 using namespace ::com::sun::star;
 
-// -------------------
+
 // - factory methods -
-// -------------------
+
 
 #ifdef AVMEDIA_GST_0_10
 #  define IMPL_NAME    "com.sun.star.comp.media.Manager_GStreamer_0_10"

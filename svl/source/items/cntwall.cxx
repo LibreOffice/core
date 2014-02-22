@@ -29,13 +29,13 @@
 
 TYPEINIT1( CntWallpaperItem, SfxPoolItem );
 
-// -----------------------------------------------------------------------
+
 CntWallpaperItem::CntWallpaperItem( sal_uInt16 which )
     : SfxPoolItem( which ), _nColor( COL_TRANSPARENT ), _nStyle( 0 )
 {
 }
 
-// -----------------------------------------------------------------------
+
 CntWallpaperItem::CntWallpaperItem( sal_uInt16 which, SvStream& rStream, sal_uInt16 nVersion )
     : SfxPoolItem( which ), _nColor( COL_TRANSPARENT ), _nStyle( 0 )
 {
@@ -74,7 +74,7 @@ CntWallpaperItem::CntWallpaperItem( sal_uInt16 which, SvStream& rStream, sal_uIn
     }
 }
 
-// -----------------------------------------------------------------------
+
 CntWallpaperItem::CntWallpaperItem( const CntWallpaperItem& rItem ) :
     SfxPoolItem( rItem ),
     _aURL( rItem._aURL ),
@@ -83,12 +83,12 @@ CntWallpaperItem::CntWallpaperItem( const CntWallpaperItem& rItem ) :
 {
 }
 
-// -----------------------------------------------------------------------
+
 CntWallpaperItem::~CntWallpaperItem()
 {
 }
 
-// -----------------------------------------------------------------------
+
 bool CntWallpaperItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
@@ -106,13 +106,13 @@ sal_uInt16 CntWallpaperItem::GetVersion(sal_uInt16) const
     return 1; // because it uses SfxPoolItem::read/writeUnicodeString()
 }
 
-// -----------------------------------------------------------------------
+
 SfxPoolItem* CntWallpaperItem::Create( SvStream& rStream, sal_uInt16 nVersion) const
 {
     return new CntWallpaperItem( Which(), rStream, nVersion );
 }
 
-// -----------------------------------------------------------------------
+
 SvStream& CntWallpaperItem::Store( SvStream& rStream, sal_uInt16 ) const
 {
     rStream.WriteUInt32( CNTWALLPAPERITEM_STREAM_MAGIC );
@@ -126,7 +126,7 @@ SvStream& CntWallpaperItem::Store( SvStream& rStream, sal_uInt16 ) const
     return rStream;
 }
 
-// -----------------------------------------------------------------------
+
 SfxPoolItem* CntWallpaperItem::Clone( SfxItemPool* ) const
 {
     return new CntWallpaperItem( *this );

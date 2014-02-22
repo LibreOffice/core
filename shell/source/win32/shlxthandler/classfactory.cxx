@@ -35,11 +35,11 @@ using ::std::min;
 #include "internal/thumbviewer.hxx"
 #include "internal/shlxthdl.hxx"
 
-//-----------------------------
+
 
 long CClassFactory::s_ServerLocks = 0;
 
-//-----------------------------
+
 
 CClassFactory::CClassFactory(const CLSID& clsid) :
     m_RefCnt(1),
@@ -48,16 +48,16 @@ CClassFactory::CClassFactory(const CLSID& clsid) :
     InterlockedIncrement(&g_DllRefCnt);
 }
 
-//-----------------------------
+
 
 CClassFactory::~CClassFactory()
 {
     InterlockedDecrement(&g_DllRefCnt);
 }
 
-//-----------------------------
+
 // IUnknown methods
-//-----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CClassFactory::QueryInterface(REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject)
 {
@@ -74,14 +74,14 @@ HRESULT STDMETHODCALLTYPE CClassFactory::QueryInterface(REFIID riid, void __RPC_
     return E_NOINTERFACE;
 }
 
-//-----------------------------
+
 
 ULONG STDMETHODCALLTYPE CClassFactory::AddRef(void)
 {
     return InterlockedIncrement(&m_RefCnt);
 }
 
-//-----------------------------
+
 
 ULONG STDMETHODCALLTYPE CClassFactory::Release(void)
 {
@@ -93,9 +93,9 @@ ULONG STDMETHODCALLTYPE CClassFactory::Release(void)
     return refcnt;
 }
 
-//-----------------------------
+
 // IClassFactory methods
-//-----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
             IUnknown __RPC_FAR *pUnkOuter,
@@ -132,7 +132,7 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
     return hr;
 }
 
-//-----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CClassFactory::LockServer(BOOL fLock)
 {
@@ -144,7 +144,7 @@ HRESULT STDMETHODCALLTYPE CClassFactory::LockServer(BOOL fLock)
     return S_OK;
 }
 
-//-----------------------------
+
 
 bool CClassFactory::IsLocked()
 {

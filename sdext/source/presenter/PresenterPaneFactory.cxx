@@ -216,7 +216,7 @@ void SAL_CALL PresenterPaneFactory::releaseResource (const Reference<XResource>&
     }
 }
 
-//-----------------------------------------------------------------------------
+
 
 Reference<XResource> PresenterPaneFactory::CreatePane (
     const Reference<XResourceId>& rxPaneId,

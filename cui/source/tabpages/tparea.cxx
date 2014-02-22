@@ -752,7 +752,7 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
     m_pCtlXRectPreview->set_height_request(aSize2.Height());
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxAreaTabPage::Construct()
 {
@@ -765,7 +765,7 @@ void SvxAreaTabPage::Construct()
     m_pLbBitmap->Fill( pBitmapList );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
 {
@@ -912,7 +912,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 int SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
@@ -964,7 +964,7 @@ int SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
     return( LEAVE_PAGE );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
 {
@@ -1401,7 +1401,7 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
     return( bModified );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
 {
@@ -1720,7 +1720,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
     m_pMtrFldYOffset->SaveValue();
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SvxAreaTabPage::Create( Window* pWindow,
                 const SfxItemSet& rAttrs )
@@ -1728,14 +1728,14 @@ SfxTabPage* SvxAreaTabPage::Create( Window* pWindow,
     return( new SvxAreaTabPage( pWindow, rAttrs ) );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16* SvxAreaTabPage::GetRanges()
 {
     return( pAreaRanges );
 }
 
-//------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(SvxAreaTabPage, SelectDialogTypeHdl_Impl)
 {
     switch( (XFillStyle)m_pTypeLB->GetSelectEntryPos() )
@@ -1772,7 +1772,7 @@ void SvxAreaTabPage::ClickInvisibleHdl_Impl()
     m_pCtlBitmapPreview->Invalidate();
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxAreaTabPage::ClickColorHdl_Impl()
 {
@@ -1811,7 +1811,7 @@ void SvxAreaTabPage::ClickColorHdl_Impl()
     ModifyColorHdl_Impl( this );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxAreaTabPage, ModifyColorHdl_Impl)
 {
@@ -1838,7 +1838,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyColorHdl_Impl)
 
     return( 0L );
 }
-//------------------------------------------------------------------------
+
 
 void SvxAreaTabPage::ClickGradientHdl_Impl()
 {
@@ -1882,7 +1882,7 @@ void SvxAreaTabPage::ClickGradientHdl_Impl()
     ModifyStepCountHdl_Impl( m_pTsbStepCount );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxAreaTabPage, ModifyGradientHdl_Impl)
 {
@@ -1910,7 +1910,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyGradientHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxAreaTabPage::ClickHatchingHdl_Impl()
 {
@@ -1953,7 +1953,7 @@ void SvxAreaTabPage::ClickHatchingHdl_Impl()
     ToggleHatchBckgrdColorHdl_Impl( this );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxAreaTabPage, ModifyHatchingHdl_Impl)
 {
@@ -1981,7 +1981,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyHatchingHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxAreaTabPage, ModifyHatchBckgrdColorHdl_Impl)
 {
@@ -2006,7 +2006,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyHatchBckgrdColorHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxAreaTabPage, ToggleHatchBckgrdColorHdl_Impl)
 {
@@ -2031,7 +2031,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ToggleHatchBckgrdColorHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxAreaTabPage::ClickBitmapHdl_Impl()
 {
@@ -2080,7 +2080,7 @@ void SvxAreaTabPage::ClickBitmapHdl_Impl()
     ModifyTileHdl_Impl( m_pTsbOriginal );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxAreaTabPage, ModifyBitmapHdl_Impl)
 {
@@ -2108,7 +2108,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyBitmapHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( SvxAreaTabPage, ModifyStepCountHdl_Impl, void *, p )
 {
@@ -2139,7 +2139,7 @@ IMPL_LINK( SvxAreaTabPage, ModifyStepCountHdl_Impl, void *, p )
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
 {
@@ -2278,7 +2278,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxAreaTabPage, ClickScaleHdl_Impl)
 {
@@ -2316,7 +2316,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ClickScaleHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxAreaTabPage::PointChanged( Window* pWindow, RECT_POINT eRcPt )
 {

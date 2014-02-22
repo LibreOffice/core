@@ -39,64 +39,64 @@ namespace connectivity
     //================================================================
     //= ODataAccessStaticTools
     //================================================================
-    //----------------------------------------------------------------
+
     ODataAccessStaticTools::ODataAccessStaticTools()
     {
     }
 
-    //----------------------------------------------------------------
+
     Date ODataAccessStaticTools::getStandardDate() const
     {
         return ::dbtools::DBTypeConversion::getStandardDate();
     }
 
-    //----------------------------------------------------------------
+
     double ODataAccessStaticTools::getValue(const Reference< XColumn>& _rxVariant, const Date& rNullDate ) const
     {
         return ::dbtools::DBTypeConversion::getValue( _rxVariant, rNullDate );
     }
 
-    //----------------------------------------------------------------
+
     OUString ODataAccessStaticTools::getFormattedValue(const Reference< XColumn >& _rxColumn, const Reference< XNumberFormatter >& _rxFormatter,
         const Date& _rNullDate, sal_Int32 _nKey, sal_Int16 _nKeyType) const
     {
         return ::dbtools::DBTypeConversion::getFormattedValue(_rxColumn, _rxFormatter, _rNullDate, _nKey, _nKeyType);
     }
 
-    //----------------------------------------------------------------
+
     OUString ODataAccessStaticTools::getFormattedValue( const Reference< XPropertySet>& _rxColumn, const Reference< XNumberFormatter>& _rxFormatter,
         const Locale& _rLocale, const Date& _rNullDate ) const
     {
         return ::dbtools::DBTypeConversion::getFormattedValue( _rxColumn, _rxFormatter, _rLocale, _rNullDate );
     }
 
-    //----------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL ODataAccessStaticTools::acquire()
     {
         return ORefBase::acquire();
     }
 
-    //----------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL ODataAccessStaticTools::release()
     {
         return ORefBase::release();
     }
 
-    //----------------------------------------------------------------
+
     Reference< XConnection> ODataAccessStaticTools::getConnection_withFeedback(const OUString& _rDataSourceName, const OUString& _rUser,
         const OUString& _rPwd, const Reference< XComponentContext>& _rxContext) const SAL_THROW ( (SQLException) )
     {
         return ::dbtools::getConnection_withFeedback(_rDataSourceName, _rUser, _rPwd, _rxContext);
     }
 
-    //----------------------------------------------------------------
+
     Reference< XConnection> ODataAccessStaticTools::connectRowset(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext >& _rxContext, sal_Bool _bSetAsActiveConnection) const
         SAL_THROW ( (SQLException, WrappedTargetException, RuntimeException) )
     {
         return ::dbtools::connectRowset( _rxRowSet, _rxContext, _bSetAsActiveConnection);
     }
 
-    // ------------------------------------------------
+
     Reference< XConnection> ODataAccessStaticTools::getRowSetConnection(
                 const Reference< XRowSet>& _rxRowSet)
                 const SAL_THROW ( (RuntimeException) )
@@ -104,75 +104,75 @@ namespace connectivity
         return ::dbtools::getConnection(_rxRowSet);
     }
 
-    //----------------------------------------------------------------
+
     Reference< XNumberFormatsSupplier> ODataAccessStaticTools::getNumberFormats(const Reference< XConnection>& _rxConn, sal_Bool _bAllowDefault) const
     {
         return ::dbtools::getNumberFormats(_rxConn, _bAllowDefault);
     }
 
-    //----------------------------------------------------------------
+
     sal_Int32 ODataAccessStaticTools::getDefaultNumberFormat( const Reference< XPropertySet >& _rxColumn, const Reference< XNumberFormatTypes >& _rxTypes,
         const Locale& _rLocale ) const
     {
         return ::dbtools::getDefaultNumberFormat( _rxColumn, _rxTypes, _rLocale );
     }
 
-    //----------------------------------------------------------------
+
     void ODataAccessStaticTools::TransferFormComponentProperties(const Reference< XPropertySet>& _rxOld, const Reference< XPropertySet>& _rxNew, const Locale& _rLocale) const
     {
         ::dbtools::TransferFormComponentProperties(_rxOld, _rxNew, _rLocale);
     }
 
-    //----------------------------------------------------------------
+
     OUString ODataAccessStaticTools::quoteName(const OUString& _rQuote, const OUString& _rName) const
     {
         return ::dbtools::quoteName(_rQuote, _rName);
     }
 
-    //----------------------------------------------------------------
+
     OUString ODataAccessStaticTools::composeTableNameForSelect( const Reference< XConnection >& _rxConnection, const OUString& _rCatalog, const OUString& _rSchema, const OUString& _rName ) const
     {
         return ::dbtools::composeTableNameForSelect( _rxConnection, _rCatalog, _rSchema, _rName );
     }
 
-    //----------------------------------------------------------------
+
     OUString ODataAccessStaticTools::composeTableNameForSelect( const Reference< XConnection >& _rxConnection, const Reference< XPropertySet>& _xTable ) const
     {
         return ::dbtools::composeTableNameForSelect( _rxConnection, _xTable );
     }
 
-    //----------------------------------------------------------------
+
     SQLContext ODataAccessStaticTools::prependContextInfo(SQLException& _rException, const Reference< XInterface >& _rxContext,
         const OUString& _rContextDescription, const OUString& _rContextDetails) const
     {
         return ::dbtools::prependContextInfo(_rException, _rxContext, _rContextDescription, _rContextDetails);
     }
 
-    //----------------------------------------------------------------
+
     Reference< XDataSource > ODataAccessStaticTools::getDataSource( const OUString& _rsRegisteredName, const Reference< XComponentContext>& _rxContext ) const
     {
         return ::dbtools::getDataSource( _rsRegisteredName, _rxContext );
     }
 
-    //----------------------------------------------------------------
+
     sal_Bool ODataAccessStaticTools::canInsert(const Reference< XPropertySet>& _rxCursorSet) const
     {
         return ::dbtools::canInsert( _rxCursorSet );
     }
 
-    //----------------------------------------------------------------
+
     sal_Bool ODataAccessStaticTools::canUpdate(const Reference< XPropertySet>& _rxCursorSet) const
     {
         return ::dbtools::canUpdate( _rxCursorSet );
     }
 
-    //----------------------------------------------------------------
+
     sal_Bool ODataAccessStaticTools::canDelete(const Reference< XPropertySet>& _rxCursorSet) const
     {
         return ::dbtools::canDelete( _rxCursorSet );
     }
 
-    //----------------------------------------------------------------
+
     Reference< XNameAccess > ODataAccessStaticTools::getFieldsByCommandDescriptor( const Reference< XConnection >& _rxConnection,
         const sal_Int32 _nCommandType, const OUString& _rCommand,
             Reference< XComponent >& _rxKeepFieldsAlive, ::dbtools::SQLExceptionInfo* _pErrorInfo ) SAL_THROW( ( ) )
@@ -181,7 +181,7 @@ namespace connectivity
             _rxKeepFieldsAlive, _pErrorInfo );
     }
 
-    //----------------------------------------------------------------
+
     Sequence< OUString > ODataAccessStaticTools::getFieldNamesByCommandDescriptor(
         const Reference< XConnection >& _rxConnection, const sal_Int32 _nCommandType,
         const OUString& _rCommand, ::dbtools::SQLExceptionInfo* _pErrorInfo ) SAL_THROW( ( ) )
@@ -190,7 +190,7 @@ namespace connectivity
             _rCommand, _pErrorInfo );
     }
 
-    // ------------------------------------------------
+
     bool ODataAccessStaticTools::isEmbeddedInDatabase( const Reference< XInterface >& _rxComponent, Reference< XConnection >& _rxActualConnection )
     {
         return ::dbtools::isEmbeddedInDatabase( _rxComponent, _rxActualConnection );
