@@ -2250,8 +2250,8 @@ void SAL_CALL SdXImpressDocument::dispose() throw (::com::sun::star::uno::Runtim
             // that dispose() is called again.  It is important to forward this
             // second dispose() to the base class, too.
             // As a consequence the following code has to be able to be run twice.
-            SfxBaseModel::dispose();
             mbDisposed = true;
+            SfxBaseModel::dispose();
 
             uno::Reference< container::XNameAccess > xStyles(mxStyleFamilies);
             if( xStyles.is() )
