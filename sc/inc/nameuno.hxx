@@ -87,7 +87,8 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setReferencePosition(
                                 const ::com::sun::star::table::CellAddress& aReferencePosition )
-                                    throw(::com::sun::star::uno::RuntimeException);
+                                    throw (::com::sun::star::uno::RuntimeException,
+                                           std::exception);
     virtual sal_Int32       SAL_CALL getType() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setType( sal_Int32 nType ) throw(::com::sun::star::uno::RuntimeException);
 
