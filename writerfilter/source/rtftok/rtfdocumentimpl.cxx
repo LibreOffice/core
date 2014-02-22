@@ -525,7 +525,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
 {
     SAL_INFO("writerfilter", OSL_THIS_FUNC << ": final? " << bFinal << ", needed? " << m_bNeedSect);
     bool bNeedSect = m_bNeedSect;
-    RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_sprm::LN_SBkc);
+    RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_ooxml::LN_EG_SectPrContents_type);
     bool bContinuous = pBreak.get() && pBreak->getInt() == 0;
     // If there is no paragraph in this section, then insert a dummy one, as required by Writer,
     // unless this is the end of the doc, we had nothing since the last section break and this is not a continuous one.
@@ -550,7 +550,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
     {
         // In case the last section is a continuous one, we don't need to output a section break.
         if (bFinal && bContinuous)
-            m_aStates.top().aSectionSprms.erase(NS_sprm::LN_SBkc);
+            m_aStates.top().aSectionSprms.erase(NS_ooxml::LN_EG_SectPrContents_type);
     }
 
     // Section properties are a paragraph sprm.
@@ -2019,7 +2019,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         case RTF_PAGE:
             {
                 // If we're inside a continuous section, we should send a section break, not a page one.
-                RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_sprm::LN_SBkc);
+                RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_ooxml::LN_EG_SectPrContents_type);
                 // Unless we're on a title page.
                 RTFValue::Pointer_t pTitlePg = m_aStates.top().aSectionSprms.find(NS_ooxml::LN_EG_SectPrContents_titlePg);
                 if ((pBreak.get() && !pBreak->getInt()) && !(pTitlePg.get() && pTitlePg->getInt()))
@@ -2208,7 +2208,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     if (nParam >= 0)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
-        m_aStates.top().aSectionSprms.set(NS_sprm::LN_SBkc, pValue);
+        m_aStates.top().aSectionSprms.set(NS_ooxml::LN_EG_SectPrContents_type, pValue);
         return 0;
     }
 

@@ -1631,7 +1631,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         }
         break;
 
-    case NS_sprm::LN_SBkc: // sprmSBkc
+    case NS_ooxml::LN_EG_SectPrContents_type:
         /* break type
           0 - No break
           1 - New Column

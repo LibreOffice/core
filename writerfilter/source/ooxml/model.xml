@@ -22958,7 +22958,7 @@
       <element name="rtlGutter" tokenid="ooxml:EG_SectPrContents_rtlGutter"/>
       <element name="textDirection" tokenid="ooxml:EG_SectPrContents_textDirection"/>
       <element name="titlePg" tokenid="ooxml:EG_SectPrContents_titlePg"/>
-      <element name="type" tokenid="sprm:SBkc"/>
+      <element name="type" tokenid="ooxml:EG_SectPrContents_type"/>
       <element name="vAlign" tokenid="ooxml:EG_SectPrContents_vAlign"/>
     </resource>
     <resource name="CT_SectPrBase" resource="Properties" tag="section"/>
