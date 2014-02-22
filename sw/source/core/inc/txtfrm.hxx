@@ -109,7 +109,6 @@ class SwTxtFrm: public SwCntntFrm
                        const sal_Int32 nStrLen, const bool bDummy );
 
     bool bLocked        : 1;        // im Format?
-    bool bFormatted     : 1;        // nach Format auf true
     bool bWidow         : 1;        // sind wir ein Widow
     bool bJustWidow     : 1;        // haben wir soeben Widow angefordert
     bool bEmpty         : 1;        // sind wir ein leerer Absatz
@@ -130,7 +129,6 @@ class SwTxtFrm: public SwCntntFrm
     void ResetPreps();
     inline void Lock() { bLocked = true; }
     inline void Unlock() { bLocked = false; }
-    inline void SetFormatted( const bool bNew ) { bFormatted = bNew; }
     inline void SetWidow( const bool bNew ) { bWidow = bNew; }
     inline void SetJustWidow( const bool bNew ) { bJustWidow = bNew; }
     inline void SetEmpty( const bool bNew ) { bEmpty = bNew; }
@@ -363,7 +361,6 @@ public:
 
     // Locking
     inline bool IsLocked()      const { return bLocked;     }
-    inline bool IsFormatted()   const { return bFormatted;  }
 
     inline bool IsWidow()       const { return bWidow;      }
     inline bool IsJustWidow()   const { return bJustWidow;  }
