@@ -68,7 +68,7 @@ liborcus_CPPFLAGS+=-D_GLIBCXX_DEBUG
 endif
 endif
 
-liborcus_CXXFLAGS=$(CXXFLAGS) $(gb_LTOFLAGS)
+liborcus_CXXFLAGS=$(CXXFLAGS)
 liborcus_LDFLAGS=$(LDFLAGS) $(gb_LTOFLAGS)
 ifeq ($(COM),MSC)
 liborcus_CXXFLAGS+=$(BOOST_CXXFLAGS)

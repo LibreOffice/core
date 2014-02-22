@@ -51,7 +51,7 @@ else
 # create a symlink "LO_lib" because the .so are in a directory with platform
 # specific name like build/lib.linux-x86_64-3.3
 
-python3_cflags = $(ZLIB_CFLAGS) $(gb_LTOFLAGS)
+python3_cflags = $(ZLIB_CFLAGS)
 ifneq (,$(ENABLE_VALGRIND))
     python3_cflags += $(VALGRIND_CFLAGS)
 endif
