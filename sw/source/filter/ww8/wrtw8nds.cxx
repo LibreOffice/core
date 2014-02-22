@@ -2281,10 +2281,13 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         if ( aAttrIter.IsParaRTL())
             bParaRTL = true;
 
-        if( rNode.IsNumbered())
+        int nNumberLevel = -1;
+        if (rNode.IsNumbered())
+            nNumberLevel = rNode.GetActualListLevel();
+        if (nNumberLevel >= 0 && nNumberLevel < MAXLEVEL)
         {
             const SwNumRule* pRule = rNode.GetNumRule();
-            sal_uInt8 nLvl = static_cast< sal_uInt8 >( rNode.GetActualListLevel() );
+            sal_uInt8 nLvl = static_cast< sal_uInt8 >(nNumberLevel);
             const SwNumFmt* pFmt = pRule->GetNumFmt( nLvl );
             if( !pFmt )
                 pFmt = &pRule->Get( nLvl );
