@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a890539_2d09ed95",
+        "filename": "vcl/quartz/ctfonts.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-02-22T21:19:26Z",
+      "side": 1,
+      "message": "why _adding_ commented out code ?",
+      "revId": "d182c3dc06ecd00e1ee54f0dbfc328c94dad8d55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a890539_4dfe396d",
+        "filename": "vcl/quartz/salgdi.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-02-22T21:19:26Z",
+      "side": 1,
+      "message": "can we stick to https://en.wikipedia.org/wiki/Indent_style#Allman_style please.",
+      "revId": "d182c3dc06ecd00e1ee54f0dbfc328c94dad8d55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
