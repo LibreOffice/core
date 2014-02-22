@@ -25,9 +25,7 @@
 #include <basic/sbxfac.hxx>
 #include <basic/basicdllapi.h>
 
-//--------------------
 // class SbStdFactory
-//--------------------
 class BASIC_DLLPUBLIC SbStdFactory : public SbxFactory
 {
 public:
@@ -36,9 +34,7 @@ public:
     virtual SbxObject*  CreateObject( const OUString& rClassName );
 };
 
-//--------------------
 // class SbStdPicture
-//--------------------
 class BASIC_DLLPUBLIC SbStdPicture : public SbxObject
 {
 protected:
@@ -62,9 +58,7 @@ public:
     void    SetGraphic( const Graphic& rGrf ) { aGraphic = rGrf; }
 };
 
-//-----------------
 // class SbStdFont
-//-----------------
 class BASIC_DLLPUBLIC SbStdFont : public SbxObject
 {
 protected:
@@ -106,9 +100,7 @@ public:
     OUString GetFontName() const { return aName; }
 };
 
-//----------------------
 // class SbStdClipboard
-//----------------------
 class BASIC_DLLPUBLIC SbStdClipboard : public SbxObject
 {
 protected:

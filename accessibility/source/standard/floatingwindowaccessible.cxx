@@ -19,7 +19,6 @@
 
 #include <floatingwindowaccessible.hxx>
 
-
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/window.hxx>
@@ -28,21 +27,13 @@ namespace uno = ::com::sun::star::uno;
 
 using ::com::sun::star::accessibility::AccessibleRelation;
 namespace AccessibleRelationType = ::com::sun::star::accessibility::AccessibleRelationType;
-
-//-------------------------------------------------------------------
-
 FloatingWindowAccessible::FloatingWindowAccessible(VCLXWindow* pWindow) :
     VCLXAccessibleComponent(pWindow)
 {
 }
-
-//-------------------------------------------------------------------
-
 FloatingWindowAccessible::~FloatingWindowAccessible()
 {
 }
-
-//-------------------------------------------------------------------
 
 void FloatingWindowAccessible::FillAccessibleRelationSet(utl::AccessibleRelationSetHelper& rRelationSet)
 {

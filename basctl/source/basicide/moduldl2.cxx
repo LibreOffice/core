@@ -74,7 +74,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::ui::dialogs;
 
-
 typedef ::cppu::WeakImplHelper1< task::XInteractionHandler > HandlerImpl_BASE;
 
 namespace
@@ -97,9 +96,7 @@ public:
     }
 };
 
-//----------------------------------------------------------------------------
-//  LibUserData
-//----------------------------------------------------------------------------
+// LibUserData
 class LibUserData
 {
 private:
@@ -112,10 +109,7 @@ public:
     const ScriptDocument& GetDocument() const { return m_aDocument; }
 };
 
-//----------------------------------------------------------------------------
 //  LibLBoxString
-//----------------------------------------------------------------------------
-
 class LibLBoxString : public SvLBoxString
 {
 public:
@@ -124,8 +118,6 @@ public:
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
 };
-
-//----------------------------------------------------------------------------
 
 void LibLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
 {
@@ -156,11 +148,7 @@ void LibLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDa
 
 } // namespace
 
-
-//----------------------------------------------------------------------------
 //  basctl::CheckBox
-//----------------------------------------------------------------------------
-
 CheckBox::CheckBox(Window* pParent, WinBits nStyle)
     : SvTabListBox(pParent, nStyle)
     , eMode(ObjectMode::Module)
@@ -181,8 +169,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCheckBox(Window *pParent, V
     return new CheckBox(pParent, nWinBits);
 }
 
-//----------------------------------------------------------------------------
-
 CheckBox::~CheckBox()
 {
     delete pCheckButton;
@@ -196,8 +182,6 @@ CheckBox::~CheckBox()
     }
 }
 
-//----------------------------------------------------------------------------
-
 void CheckBox::Init()
 {
     pCheckButton = new SvLBoxButtonData(this);
@@ -210,8 +194,6 @@ void CheckBox::Init()
     SetHighlightRange();
 }
 
-//----------------------------------------------------------------------------
-
 void CheckBox::SetMode (ObjectMode::Mode e)
 {
     eMode = e;
@@ -222,14 +204,10 @@ void CheckBox::SetMode (ObjectMode::Mode e)
         EnableCheckButton( 0 );
 }
 
-//----------------------------------------------------------------------------
-
 SvTreeListEntry* CheckBox::DoInsertEntry( const OUString& rStr, sal_uLong nPos )
 {
     return SvTabListBox::InsertEntryToColumn( rStr, nPos, 0 );
 }
-
-//----------------------------------------------------------------------------
 
 SvTreeListEntry* CheckBox::FindEntry( const OUString& rName )
 {
@@ -244,8 +222,6 @@ SvTreeListEntry* CheckBox::FindEntry( const OUString& rName )
     return 0;
 }
 
-//----------------------------------------------------------------------------
-
 void CheckBox::CheckEntryPos( sal_uLong nPos )
 {
     if ( nPos < GetEntryCount() )
@@ -257,16 +233,12 @@ void CheckBox::CheckEntryPos( sal_uLong nPos )
     }
 }
 
-//----------------------------------------------------------------------------
-
 bool CheckBox::IsChecked( sal_uLong nPos ) const
 {
     if ( nPos < GetEntryCount() )
         return GetCheckButtonState(GetEntry(nPos)) == SV_BUTTON_CHECKED;
     return false;
 }
-
-//----------------------------------------------------------------------------
 
 void CheckBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rTxt,
     const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind )
@@ -285,8 +257,6 @@ void CheckBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rTxt,
         }
     }
 }
-
-//----------------------------------------------------------------------------
 
 sal_Bool CheckBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
 {
@@ -334,8 +304,6 @@ sal_Bool CheckBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
     return true;
 }
 
-//----------------------------------------------------------------------------
-
 sal_Bool CheckBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewName )
 {
     bool bValid = rNewName.getLength() <= 30 && IsValidSbxName(rNewName);
@@ -382,10 +350,7 @@ sal_Bool CheckBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewNam
     return bValid;
 }
 
-//----------------------------------------------------------------------------
 // NewObjectDialog
-//----------------------------------------------------------------------------
-
 IMPL_LINK_NOARG(NewObjectDialog, OkButtonHandler)
 {
     if (IsValidSbxName(m_pEdit->GetText()))
@@ -429,10 +394,7 @@ NewObjectDialog::NewObjectDialog(Window * pParent, ObjectMode::Mode eMode,
         m_pOKButton->SetClickHdl(LINK(this, NewObjectDialog, OkButtonHandler));
 }
 
-//----------------------------------------------------------------------------
 // GotoLineDialog
-//----------------------------------------------------------------------------
-
 GotoLineDialog::GotoLineDialog(Window * pParent )
     : ModalDialog(pParent, "GotoLineDialog",
         "modules/BasicIDE/ui/gotolinedialog.ui")
@@ -457,11 +419,7 @@ IMPL_LINK_NOARG(GotoLineDialog, OkButtonHandler)
     return 0;
 }
 
-
-//----------------------------------------------------------------------------
 // ExportDialog
-//----------------------------------------------------------------------------
-
 IMPL_LINK_NOARG(ExportDialog, OkButtonHandler)
 {
     mbExportAsPackage = m_pExportAsPackageButton->IsChecked();
@@ -481,10 +439,7 @@ ExportDialog::ExportDialog(Window * pParent)
     m_pOKButton->SetClickHdl(LINK(this, ExportDialog, OkButtonHandler));
 }
 
-//----------------------------------------------------------------------------
-//  LibPage
-//----------------------------------------------------------------------------
-
+// LibPage
 LibPage::LibPage(Window * pParent)
     : TabPage(pParent, "LibPage",
         "modules/BasicIDE/ui/libpage.ui")
@@ -529,8 +484,6 @@ LibPage::LibPage(Window * pParent)
     CheckButtons();
 }
 
-//----------------------------------------------------------------------------
-
 LibPage::~LibPage()
 {
     sal_uInt16 nCount = m_pBasicsBox->GetEntryCount();
@@ -540,8 +493,6 @@ LibPage::~LibPage()
         delete pEntry;
     }
 }
-
-//----------------------------------------------------------------------------
 
 void LibPage::CheckButtons()
 {
@@ -594,22 +545,14 @@ void LibPage::CheckButtons()
     }
 }
 
-//----------------------------------------------------------------------------
-
 void LibPage::ActivatePage()
 {
     SetCurLib();
 }
 
-//----------------------------------------------------------------------------
-
-
 void LibPage::DeactivatePage()
 {
 }
-
-//----------------------------------------------------------------------------
-
 
 IMPL_LINK_INLINE_START( LibPage, TreeListHighlightHdl, SvTreeListBox *, pBox )
 {
@@ -619,8 +562,6 @@ IMPL_LINK_INLINE_START( LibPage, TreeListHighlightHdl, SvTreeListBox *, pBox )
 }
 IMPL_LINK_INLINE_END( LibPage, TreeListHighlightHdl, SvTreeListBox *, pBox )
 
-//----------------------------------------------------------------------------
-
 IMPL_LINK_INLINE_START( LibPage, BasicSelectHdl, ListBox *, pBox )
 {
     (void)pBox;
@@ -629,8 +570,6 @@ IMPL_LINK_INLINE_START( LibPage, BasicSelectHdl, ListBox *, pBox )
     return 0;
 }
 IMPL_LINK_INLINE_END( LibPage, BasicSelectHdl, ListBox *, pBox )
-
-//----------------------------------------------------------------------------
 
 IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
 {
@@ -722,8 +661,6 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
     return 0;
 }
 
-//----------------------------------------------------------------------------
-
 IMPL_LINK_INLINE_START( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg )
 {
     long nRet = 0;
@@ -750,14 +687,10 @@ IMPL_LINK_INLINE_START( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg )
 }
 IMPL_LINK_INLINE_END( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg )
 
-//----------------------------------------------------------------------------
-
 void LibPage::NewLib()
 {
     createLibImpl( static_cast<Window*>( this ), m_aCurDocument, m_pLibBox, NULL);
 }
-
-//----------------------------------------------------------------------------
 
 void LibPage::InsertLib()
 {
@@ -1119,8 +1052,6 @@ void LibPage::InsertLib()
     }
 }
 
-//----------------------------------------------------------------------------
-
 void LibPage::Export( void )
 {
     SvTreeListEntry* pCurEntry = m_pLibBox->GetCurEntry();
@@ -1145,7 +1076,6 @@ void LibPage::Export( void )
         if ( !bOK )
             return;
     }
-
 
     ExportDialog aNewDlg(this);
     if (aNewDlg.Execute() == RET_OK)
@@ -1178,10 +1108,7 @@ void LibPage::implExportLib( const OUString& aLibName, const OUString& aTargetUR
         xDlgLibContainerExport->exportLibrary( aOULibName, aTargetURL, Handler );
 }
 
-
-//===========================================================================
 // Implementation XCommandEnvironment
-
 typedef cppu::WeakImplHelper1< XCommandEnvironment > LibCommandEnvironmentHelper;
 
 class OLibCommandEnvironment : public LibCommandEnvironmentHelper
@@ -1212,8 +1139,6 @@ Reference< XProgressHandler > OLibCommandEnvironment::getProgressHandler()
     Reference< XProgressHandler > xRet;
     return xRet;
 }
-
-
 
 void LibPage::ExportAsPackage( const OUString& aLibName )
 {
@@ -1364,8 +1289,6 @@ void LibPage::ExportAsBasic( const OUString& aLibName )
     }
 }
 
-//----------------------------------------------------------------------------
-
 void LibPage::DeleteCurrent()
 {
     SvTreeListEntry* pCurEntry = m_pLibBox->GetCurEntry();
@@ -1402,16 +1325,12 @@ void LibPage::DeleteCurrent()
     }
 }
 
-//----------------------------------------------------------------------------
-
 void LibPage::EndTabDialog( sal_uInt16 nRet )
 {
     DBG_ASSERT( pTabDlg, "TabDlg nicht gesetzt!" );
     if ( pTabDlg )
         pTabDlg->EndDialog( nRet );
 }
-
-//----------------------------------------------------------------------------
 
 void LibPage::FillListBox()
 {
@@ -1428,16 +1347,12 @@ void LibPage::FillListBox()
     }
 }
 
-//----------------------------------------------------------------------------
-
 void LibPage::InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
     OUString aEntryText( rDocument.getTitle( eLocation ) );
     sal_uInt16 nPos = m_pBasicsBox->InsertEntry( aEntryText, LISTBOX_APPEND );
     m_pBasicsBox->SetEntryData( nPos, new DocumentEntry(rDocument, eLocation) );
 }
-
-//----------------------------------------------------------------------------
 
 void LibPage::SetCurLib()
 {
@@ -1477,8 +1392,6 @@ void LibPage::SetCurLib()
     }
 }
 
-//----------------------------------------------------------------------------
-
 SvTreeListEntry* LibPage::ImpInsertLibEntry( const OUString& rLibName, sal_uLong nPos )
 {
     // check, if library is password protected
@@ -1513,8 +1426,6 @@ SvTreeListEntry* LibPage::ImpInsertLibEntry( const OUString& rLibName, sal_uLong
 
     return pNewEntry;
 }
-
-//----------------------------------------------------------------------------
 
 // Helper function
 void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
@@ -1624,9 +1535,6 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
         }
     }
 }
-
-//----------------------------------------------------------------------------
-
 } // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
