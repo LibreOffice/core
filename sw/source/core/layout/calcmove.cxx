@@ -1898,7 +1898,7 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                     if ( bSecondRet && bOldSplit && nOldSpace >= 0 )
                     {
                         bRet = sal_True;
-                        bSplit = sal_True;
+                        bSplit = true;
                     }
                 }
             }
