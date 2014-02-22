@@ -124,13 +124,18 @@ const short ROLE_TABLE[][2] =
         {CHART,                     IA2_ROLE_SHAPE},
         {EDIT_BAR,                  IA2_ROLE_EDITBAR},
         {FORM,                      IA2_ROLE_FORM},
-        {IMAGE_MAP ,              IA2_ROLE_IMAGE_MAP},
+        {IMAGE_MAP ,                IA2_ROLE_IMAGE_MAP},
         {NOTE,                      IA2_ROLE_NOTE},
         {PAGE,                      IA2_ROLE_PAGE},
-        {RULER ,                  IA2_ROLE_RULER},
+        {RULER ,                    IA2_ROLE_RULER},
         {SECTION,                   IA2_ROLE_SECTION},
-        {TREE_ITEM ,              ROLE_SYSTEM_OUTLINEITEM},
-        {TREE_TABLE,                ROLE_SYSTEM_OUTLINE}
+        {TREE_ITEM ,                ROLE_SYSTEM_OUTLINEITEM},
+        {TREE_TABLE,                ROLE_SYSTEM_OUTLINE},
+        {COMMENT,                   IA2_ROLE_TEXT_FRAME },
+        {COMMENT_END,               IA2_ROLE_TEXT_FRAME },
+        {DOCUMENT_PRESENTATION,     ROLE_SYSTEM_DOCUMENT },
+        {DOCUMENT_SPREADSHEET,      ROLE_SYSTEM_DOCUMENT },
+        {DOCUMENT_TEXT,             ROLE_SYSTEM_DOCUMENT }
     };
 
 
