@@ -79,7 +79,7 @@ class SwTxtFormatter : public SwTxtPainter
 
         Determines the next object, that reaches into the rest of the line and
         constructs the appropriate FlyPortion.
-        SwTxtFly::GetFrm(const SwRect&, sal_Bool) will be needed for this.
+        SwTxtFly::GetFrm(const SwRect&, bool) will be needed for this.
 
         The right edge can be shortened by flys
      */
