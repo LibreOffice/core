@@ -26,7 +26,7 @@ namespace vcl {
 
 /** This class provides information about an icon theme.
  */
-class SAL_DLLPUBLIC_EXPORT IconThemeInfo {
+class VCL_DLLPUBLIC IconThemeInfo {
 
 public:
 

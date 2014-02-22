@@ -28,7 +28,7 @@ class IconThemeInfo;
  * -# When high contrast mode is enabled, the high contrast icon theme is selected (if it is installed).
  * -# When a preferred theme has been set (e.g., in the gnome desktop settings), that theme is selected.
  */
-class SAL_DLLPUBLIC_EXPORT IconThemeSelector {
+class VCL_DLLPUBLIC IconThemeSelector {
 public:
     IconThemeSelector();
 

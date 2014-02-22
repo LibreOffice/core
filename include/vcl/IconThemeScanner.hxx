@@ -31,7 +31,7 @@ class IconThemeInfo;
 
 /** This class scans a folder for icon themes and provides the results.
  */
-class SAL_DLLPUBLIC_EXPORT IconThemeScanner
+class VCL_DLLPUBLIC IconThemeScanner
 {
 public:
     ~IconThemeScanner();
