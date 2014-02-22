@@ -37,14 +37,8 @@
 #include <vcl/settings.hxx>
 
 
-// =======================================================================
-
 #define DOCKWIN_FLOATSTYLES         (WB_SIZEABLE | WB_MOVEABLE | WB_CLOSEABLE | WB_STANDALONE | WB_PINABLE | WB_ROLLABLE )
 
-// =======================================================================
-
-
-// =======================================================================
 
 class ImplDockFloatWin2 : public FloatingWindow
 {
@@ -81,7 +75,6 @@ public:
     sal_uLong GetLastTicks() const { return mnLastTicks; }
 };
 
-// =======================================================================
 
 ImplDockFloatWin2::ImplDockFloatWin2( Window* pParent, WinBits nWinBits,
                                     ImplDockingWindowWrapper* pDockingWin ) :
@@ -91,7 +84,7 @@ ImplDockFloatWin2::ImplDockFloatWin2( Window* pParent, WinBits nWinBits,
         mbInMove( false ),
         mnLastUserEvent( 0 )
 {
-    // Daten vom DockingWindow uebernehmen
+    // copy state of DockingWindow
     if ( pDockingWin )
     {
         SetSettings( pDockingWin->GetWindow()->GetSettings() );
@@ -110,7 +103,6 @@ ImplDockFloatWin2::ImplDockFloatWin2( Window* pParent, WinBits nWinBits,
     maEndDockTimer.SetTimeout( 50 );
 }
 
-// -----------------------------------------------------------------------
 
 ImplDockFloatWin2::~ImplDockFloatWin2()
 {
@@ -118,7 +110,6 @@ ImplDockFloatWin2::~ImplDockFloatWin2()
         Application::RemoveUserEvent( mnLastUserEvent );
 }
 
-// -----------------------------------------------------------------------
 
 IMPL_LINK_NOARG(ImplDockFloatWin2, DockTimerHdl)
 {
@@ -240,7 +231,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl)
     mbInMove = false;
     return 0;
 }
-// -----------------------------------------------------------------------
+
 
 void ImplDockFloatWin2::Move()
 {
@@ -264,7 +255,6 @@ void ImplDockFloatWin2::Move()
         mnLastUserEvent = Application::PostUserEvent( LINK( this, ImplDockFloatWin2, DockingHdl ) );
 }
 
-// -----------------------------------------------------------------------
 
 void ImplDockFloatWin2::Resize()
 {
@@ -273,7 +263,7 @@ void ImplDockFloatWin2::Resize()
     {
         FloatingWindow::Resize();
         Size aSize( GetSizePixel() );
-        mpDockWin->GetWindow()->ImplPosSizeWindow( 0, 0, aSize.Width(), aSize.Height(), WINDOW_POSSIZE_POSSIZE ); // is this needed ???
+        mpDockWin->GetWindow()->ImplPosSizeWindow( 0, 0, aSize.Width(), aSize.Height(), WINDOW_POSSIZE_POSSIZE ); // TODO: is this needed ???
     }
 }
 
@@ -284,8 +274,6 @@ void ImplDockFloatWin2::setPosSizePixel( long nX, long nY,
     FloatingWindow::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 }
 
-// -----------------------------------------------------------------------
-
 
 void ImplDockFloatWin2::TitleButtonClick( sal_uInt16 nButton )
 {
@@ -293,7 +281,6 @@ void ImplDockFloatWin2::TitleButtonClick( sal_uInt16 nButton )
     mpDockWin->TitleButtonClick( nButton );
 }
 
-// -----------------------------------------------------------------------
 
 void ImplDockFloatWin2::Pin()
 {
@@ -301,7 +288,6 @@ void ImplDockFloatWin2::Pin()
     mpDockWin->Pin();
 }
 
-// -----------------------------------------------------------------------
 
 void ImplDockFloatWin2::Roll()
 {
@@ -309,7 +295,6 @@ void ImplDockFloatWin2::Roll()
     mpDockWin->Roll();
 }
 
-// -----------------------------------------------------------------------
 
 void ImplDockFloatWin2::PopupModeEnd()
 {
@@ -317,7 +302,6 @@ void ImplDockFloatWin2::PopupModeEnd()
     mpDockWin->PopupModeEnd();
 }
 
-// -----------------------------------------------------------------------
 
 void ImplDockFloatWin2::Resizing( Size& rSize )
 {
@@ -325,14 +309,12 @@ void ImplDockFloatWin2::Resizing( Size& rSize )
     mpDockWin->Resizing( rSize );
 }
 
-// -----------------------------------------------------------------------
 
 bool ImplDockFloatWin2::Close()
 {
     return mpDockWin->Close();
 }
 
-// =======================================================================
 
 DockingManager::DockingManager()
 {
@@ -437,7 +419,6 @@ bool DockingManager::IsInPopupMode( const Window *pWindow )
         return false;
 }
 
-// -----------------------------------------------------------------------
 
 void DockingManager::EndPopupMode( const Window *pWin )
 {
@@ -446,7 +427,6 @@ void DockingManager::EndPopupMode( const Window *pWin )
         pWrapper->GetFloatingWindow()->EndPopupMode();
 }
 
-// -----------------------------------------------------------------------
 
 void DockingManager::AddWindow( const Window *pWindow )
 {
@@ -838,8 +818,6 @@ void ImplPopupFloatWin::Tracking( const TrackingEvent& rTEvt )
 }
 
 
-// =======================================================================
-
 ImplDockingWindowWrapper::ImplDockingWindowWrapper( const Window *pWindow )
 {
     ImplInitData();
@@ -866,7 +844,6 @@ ImplDockingWindowWrapper::~ImplDockingWindowWrapper()
     }
 }
 
-// -----------------------------------------------------------------------
 
 bool ImplDockingWindowWrapper::ImplStartDocking( const Point& rPos )
 {
@@ -882,7 +859,7 @@ bool ImplDockingWindowWrapper::ImplStartDocking( const Point& rPos )
     mbLastFloatMode = IsFloatingMode();
     mbStartFloat    = mbLastFloatMode;
 
-    // FloatingBorder berechnen
+    // calculate FloatingBorder
     FloatingWindow* pWin;
     if ( mpFloatWin )
         pWin = mpFloatWin;
@@ -925,7 +902,6 @@ bool ImplDockingWindowWrapper::ImplStartDocking( const Point& rPos )
     return true;
 }
 
-// =======================================================================
 
 void ImplDockingWindowWrapper::ImplInitData()
 {
@@ -943,7 +919,6 @@ void ImplDockingWindowWrapper::ImplInitData()
     maMaxOutSize        = Size( SHRT_MAX, SHRT_MAX );
 }
 
-// -----------------------------------------------------------------------
 
 void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
 {
@@ -1021,8 +996,7 @@ void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
 
             GetWindow()->ShowTracking( aShowTrackRect, nTrackStyle );
 
-            // Maus-Offset neu berechnen, da Rechteck veraendert werden
-            // konnte
+            // calculate mouse offset again, as the rectangle was changed
             maMouseOff.X()  = aPos.X() - aTrackRect.Left();
             maMouseOff.Y()  = aPos.Y() - aTrackRect.Top();
 
@@ -1035,8 +1009,6 @@ void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
 }
 
 
-// -----------------------------------------------------------------------
-
 void ImplDockingWindowWrapper::StartDocking( const Point& rPoint, Rectangle& rRect )
 {
     DockingData data( rPoint, rRect, IsFloatingMode() );
@@ -1045,7 +1017,6 @@ void ImplDockingWindowWrapper::StartDocking( const Point& rPoint, Rectangle& rRe
     mbDocking = true;
 }
 
-// -----------------------------------------------------------------------
 
 bool ImplDockingWindowWrapper::Docking( const Point& rPoint, Rectangle& rRect )
 {
@@ -1056,7 +1027,6 @@ bool ImplDockingWindowWrapper::Docking( const Point& rPoint, Rectangle& rRect )
     return data.mbFloating;
 }
 
-// -----------------------------------------------------------------------
 
 void ImplDockingWindowWrapper::EndDocking( const Rectangle& rRect, bool bFloatMode )
 {
@@ -1097,7 +1067,6 @@ void ImplDockingWindowWrapper::EndDocking( const Rectangle& rRect, bool bFloatMo
     mbStartDockingEnabled = false;
 }
 
-// -----------------------------------------------------------------------
 
 bool ImplDockingWindowWrapper::PrepareToggleFloatingMode()
 {
@@ -1106,7 +1075,6 @@ bool ImplDockingWindowWrapper::PrepareToggleFloatingMode()
     return bFloating;
 }
 
-// -----------------------------------------------------------------------
 
 bool ImplDockingWindowWrapper::Close()
 {
@@ -1114,7 +1082,6 @@ bool ImplDockingWindowWrapper::Close()
     return true;
 }
 
-// -----------------------------------------------------------------------
 
 void ImplDockingWindowWrapper::ToggleFloatingMode()
 {
@@ -1131,7 +1098,6 @@ void ImplDockingWindowWrapper::ToggleFloatingMode()
     mbStartDockingEnabled = false;
 }
 
-// -----------------------------------------------------------------------
 
 void ImplDockingWindowWrapper::TitleButtonClick( sal_uInt16 nType )
 {
@@ -1149,28 +1115,24 @@ void ImplDockingWindowWrapper::TitleButtonClick( sal_uInt16 nType )
     }
 }
 
-// -----------------------------------------------------------------------
 
 void ImplDockingWindowWrapper::Pin()
 {
     // TODO: send event
 }
 
-// -----------------------------------------------------------------------
 
 void ImplDockingWindowWrapper::Roll()
 {
     // TODO: send event
 }
 
-// -----------------------------------------------------------------------
 
 void ImplDockingWindowWrapper::PopupModeEnd()
 {
     // TODO: send event
 }
 
-// -----------------------------------------------------------------------
 
 void ImplDockingWindowWrapper::Resizing( Size& rSize )
 {
@@ -1180,7 +1142,6 @@ void ImplDockingWindowWrapper::Resizing( Size& rSize )
         pDockingWindow->Resizing( rSize );
 }
 
-// -----------------------------------------------------------------------
 
 void ImplDockingWindowWrapper::ShowTitleButton( sal_uInt16 nButton, bool bVisible )
 {
@@ -1195,7 +1156,6 @@ void ImplDockingWindowWrapper::ShowTitleButton( sal_uInt16 nButton, bool bVisibl
     }
 }
 
-// -----------------------------------------------------------------------
 
 void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, sal_uLong nFlags )
 {
@@ -1299,7 +1259,6 @@ bool ImplDockingWindowWrapper::IsInPopupMode() const
         return false;
 }
 
-// -----------------------------------------------------------------------
 
 void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
 {
@@ -1339,8 +1298,7 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
                 GetWindow()->mpWindowImpl->mnRightBorder   = 0;
                 GetWindow()->mpWindowImpl->mnBottomBorder  = 0;
 
-                // Falls Parent zerstoert wird, muessen wir auch vom
-                // BorderWindow den Parent umsetzen
+                // if the parent gets destroyed, we also have to reset the parent of the BorderWindow
                 if ( mpOldBorderWin )
                     mpOldBorderWin->SetParent( pWin );
                 GetWindow()->SetParent( pWin );
@@ -1353,7 +1311,7 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
                 pWin->SetText( GetWindow()->GetText() );
                 pWin->SetOutputSizePixel( GetWindow()->GetSizePixel() );
                 pWin->SetPosPixel( maFloatPos );
-                // DockingDaten ans FloatingWindow weiterreichen
+                // pass on DockingData to FloatingWindow
                 pWin->ShowTitleButton( TITLE_BUTTON_DOCKING, mbDockBtn );
                 pWin->ShowTitleButton( TITLE_BUTTON_HIDE, mbHideBtn );
                 pWin->SetPin( mbPined );
@@ -1376,7 +1334,7 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
             {
                 GetWindow()->Show( false, SHOW_NOFOCUSCHANGE );
 
-                // FloatingDaten wird im FloatingWindow speichern
+                // store FloatingData in FloatingWindow
                 maFloatPos      = mpFloatWin->GetPosPixel();
                 mbDockBtn       = mpFloatWin->IsTitleButtonVisible( TITLE_BUTTON_DOCKING );
                 mbHideBtn       = mpFloatWin->IsTitleButtonVisible( TITLE_BUTTON_HIDE );
@@ -1414,21 +1372,18 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
     }
 }
 
-// -----------------------------------------------------------------------
 
 void ImplDockingWindowWrapper::SetFloatStyle( WinBits nStyle )
 {
     mnFloatBits = nStyle;
 }
 
-// -----------------------------------------------------------------------
 
 WinBits ImplDockingWindowWrapper::GetFloatStyle() const
 {
     return mnFloatBits;
 }
 
-// -----------------------------------------------------------------------
 
 void ImplDockingWindowWrapper::setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
@@ -1440,7 +1395,6 @@ void ImplDockingWindowWrapper::setPosSizePixel( long nX, long nY,
         GetWindow()->setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 }
 
-// -----------------------------------------------------------------------
 
 Point ImplDockingWindowWrapper::GetPosPixel() const
 {
@@ -1450,7 +1404,6 @@ Point ImplDockingWindowWrapper::GetPosPixel() const
         return mpDockingWindow->GetPosPixel();
 }
 
-// -----------------------------------------------------------------------
 
 Size ImplDockingWindowWrapper::GetSizePixel() const
 {
