@@ -286,17 +286,19 @@ OUString SAL_CALL ValueSetAcc::getAccessibleName()
     const SolarMutexGuard aSolarGuard;
     OUString              aRet;
 
-    if ( mpParent )
+    if (mpParent)
+    {
         aRet = mpParent->GetAccessibleName();
 
-    if ( aRet.isEmpty() )
-    {
-        Window* pLabel = mpParent->GetAccessibleRelationLabeledBy();
-        if ( pLabel && pLabel != mpParent )
-            aRet = OutputDevice::GetNonMnemonicString( pLabel->GetText() );
+        if ( aRet.isEmpty() )
+        {
+            Window* pLabel = mpParent->GetAccessibleRelationLabeledBy();
+            if ( pLabel && pLabel != mpParent )
+                aRet = OutputDevice::GetNonMnemonicString( pLabel->GetText() );
 
-        if (aRet.isEmpty())
-             aRet = mpParent->GetQuickHelpText();
+            if (aRet.isEmpty())
+                 aRet = mpParent->GetQuickHelpText();
+        }
     }
 
     return aRet;
