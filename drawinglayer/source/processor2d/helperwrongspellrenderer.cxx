@@ -42,8 +42,6 @@ namespace drawinglayer
         const sal_uInt32 nFontPixelHeight(basegfx::fround(aFontVectorPixel.getLength()));
 
         static const sal_uInt32 nMinimumFontHeight(5); // #define WRONG_SHOW_MIN         5
-        static const sal_uInt32 nSmallFontHeight(11);  // #define WRONG_SHOW_SMALL      11
-        static const sal_uInt32 nMediumFontHeight(15); // #define WRONG_SHOW_MEDIUM     15
 
         if(nFontPixelHeight > nMinimumFontHeight)
         {
@@ -51,16 +49,6 @@ namespace drawinglayer
             const basegfx::B2DPoint aStop(aLocalTransform * basegfx::B2DPoint(rWrongSpellCandidate.getStop(), 0.0));
             const Point aVclStart(basegfx::fround(aStart.getX()), basegfx::fround(aStart.getY()));
             const Point aVclStop(basegfx::fround(aStop.getX()), basegfx::fround(aStop.getY()));
-            sal_uInt16 nWaveStyle(WAVE_FLAT);
-
-            if(nFontPixelHeight > nMediumFontHeight)
-            {
-                nWaveStyle = WAVE_NORMAL;
-            }
-            else if(nFontPixelHeight > nSmallFontHeight)
-            {
-                nWaveStyle = WAVE_SMALL;
-            }
 
             // #i101075# draw it. Do not forget to use the evtl. offsetted origin of the target device,
             // e.g. when used with mask/transparence buffer device
@@ -72,7 +60,7 @@ namespace drawinglayer
             rOutputDevice.EnableMapMode(false);
             rOutputDevice.SetLineColor(Color(aProcessedColor));
             rOutputDevice.SetFillColor();
-            rOutputDevice.DrawWaveLine(aOrigin + aVclStart, aOrigin + aVclStop, nWaveStyle);
+            rOutputDevice.DrawWaveLine(aOrigin + aVclStart, aOrigin + aVclStop);
             rOutputDevice.EnableMapMode(bMapModeEnabledState);
         }
 

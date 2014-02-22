@@ -5303,8 +5303,7 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
         mpAlphaVDev->DrawTextLine( rPos, nWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );
 }
 
-void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos,
-                                 sal_uInt16 nStyle )
+void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos )
 {
 
     if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
@@ -5344,32 +5343,22 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos,
 
     long nWaveHeight;
 
-    if ( nStyle == WAVE_NORMAL )
+    nWaveHeight = 3;
+    nStartY++;
+    nEndY++;
+
+    if (mnDPIScaleFactor > 1)
     {
-        nWaveHeight = 3;
-        nStartY++;
-        nEndY++;
+        nWaveHeight *= mnDPIScaleFactor;
 
-        if (mnDPIScaleFactor > 1)
+        nStartY += mnDPIScaleFactor - 1; // Shift down additional pixel(s) to create more visual separation.
+
+        // odd heights look better than even
+        if (mnDPIScaleFactor % 2 == 0)
         {
-            nWaveHeight *= mnDPIScaleFactor;
-
-            // odd heights look better than even
-            if (mnDPIScaleFactor % 2 == 0)
-            {
-                nStartY++; // Shift down an additional pixel to create more visual separation.
-                nWaveHeight--;
-            }
+            nWaveHeight--;
         }
     }
-    else if( nStyle == WAVE_SMALL )
-    {
-        nWaveHeight = 2;
-        nStartY++;
-        nEndY++;
-    }
-    else // WAVE_FLAT
-        nWaveHeight = 1;
 
     // #109280# make sure the waveline does not exceed the descent to avoid paint problems
     ImplFontEntry* pFontEntry = mpFontEntry;
@@ -5381,7 +5370,7 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos,
             mnDPIScaleFactor, nOrientation, GetLineColor());
 
     if( mpAlphaVDev )
-        mpAlphaVDev->DrawWaveLine( rStartPos, rEndPos, nStyle );
+        mpAlphaVDev->DrawWaveLine( rStartPos, rEndPos );
 }
 
 void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
