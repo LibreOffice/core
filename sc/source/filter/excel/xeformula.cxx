@@ -1938,7 +1938,7 @@ void XclExpFmlaCompImpl::ProcessCellRef( const XclExpScToken& rTokData )
             mxData->mpLinkMgr->StoreCell(aRefData, *mxData->mpScBasePos);
 
         // create the tRef, tRefErr, tRefN, tRef3d, or tRefErr3d token
-        if (!mxData->mrCfg.mb3DRefOnly && IsRef2D(aRefData, mxData->mpLinkMgr))
+        if (!mxData->mrCfg.mb3DRefOnly && IsRef2D(aRefData, mxData->mpLinkMgr != 0))
         {
             // 2D reference (not in defined names, but allowed in range lists)
             sal_uInt8 nBaseId = (!mxData->mpScBasePos && lclIsRefRel2D( aRefData )) ? EXC_TOKID_REFN :
@@ -1983,7 +1983,7 @@ void XclExpFmlaCompImpl::ProcessRangeRef( const XclExpScToken& rTokData )
         mxData->mpLinkMgr->StoreCellRange(aRefData, *mxData->mpScBasePos);
 
     // create the tArea, tAreaErr, tAreaN, tArea3d, or tAreaErr3d token
-    if (!mxData->mrCfg.mb3DRefOnly && IsRef2D(aRefData, mxData->mpLinkMgr))
+    if (!mxData->mrCfg.mb3DRefOnly && IsRef2D(aRefData, mxData->mpLinkMgr != 0))
     {
         // 2D reference (not in name formulas, but allowed in range lists)
         sal_uInt8 nBaseId = (!mxData->mpScBasePos && lclIsRefRel2D( aRefData )) ? EXC_TOKID_AREAN :
