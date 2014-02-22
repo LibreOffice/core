@@ -80,9 +80,11 @@ CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
          ((mpFontData->GetWeight() < WEIGHT_SEMIBOLD) &&
           (mpFontData->GetWeight() != WEIGHT_DONTKNOW)) )
     {
+#ifdef MAC_OS_X_VERSION_MAX_ALLOWED >= 10.6 /*#ifdef kCTStrokeWidthAttributeName*/ /* 10.6 and above */
         int nStroke = -10.0;
         CFNumberRef rStroke = CFNumberCreate(NULL, kCFNumberSInt32Type, &nStroke);
         CFDictionarySetValue(mpStyleDict, kCTStrokeWidthAttributeName, rStroke);
+#endif
     }
 
     // fake italic
@@ -336,8 +338,17 @@ ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool
     // get font-enabled status
     if( bFontEnabled ) {
         int bEnabled = FALSE;
+#ifdef MAC_OS_X_VERSION_MAX_ALLOWED >= 1060 /* 10.6 and above */
         CFNumberRef pEnabled = (CFNumberRef)CTFontDescriptorCopyAttribute( pFD, kCTFontEnabledAttribute );
         CFNumberGetValue( pEnabled, kCFNumberIntType, &bEnabled );
+#else
+        bEnabled = TRUE;
+/* # ifdef ATSFontIsEnabled //10.5 and later (ApplicationServices.framework)
+        CTFontRef ctFontRef = CTFontCreateWithFontDescriptor( pFD, 0, NULL );
+        ATSFontRef atsFontRef = CTFontGetPlatformFont( ctFontRef, NULL );
+        bEnabled = ATSFontIsEnabled( atsFontRef );
+# endif */
+#endif
         *bFontEnabled = bEnabled;
     }
 
