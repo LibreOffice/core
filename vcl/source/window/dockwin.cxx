@@ -34,14 +34,7 @@
 #include <salframe.hxx>
 
 
-
-// =======================================================================
-
 #define DOCKWIN_FLOATSTYLES         (WB_SIZEABLE | WB_MOVEABLE | WB_CLOSEABLE | WB_STANDALONE | WB_PINABLE | WB_ROLLABLE )
-
-// =======================================================================
-
-
 
 class DockingWindow::ImplData
 {
@@ -62,8 +55,6 @@ DockingWindow::ImplData::ImplData()
 DockingWindow::ImplData::~ImplData()
 {
 }
-
-
 
 class ImplDockFloatWin : public FloatingWindow
 {
@@ -104,7 +95,7 @@ ImplDockFloatWin::ImplDockFloatWin( Window* pParent, WinBits nWinBits,
         mbInMove( false ),
         mnLastUserEvent( 0 )
 {
-    // Daten vom DockingWindow uebernehmen
+    // copy settings of DockingWindow
     if ( pDockingWin )
     {
         SetSettings( pDockingWin->GetSettings() );
@@ -121,15 +112,11 @@ ImplDockFloatWin::ImplDockFloatWin( Window* pParent, WinBits nWinBits,
     maDockTimer.SetTimeout( 50 );
 }
 
-
-
 ImplDockFloatWin::~ImplDockFloatWin()
 {
     if( mnLastUserEvent )
         Application::RemoveUserEvent( mnLastUserEvent );
 }
-
-
 
 IMPL_LINK_NOARG(ImplDockFloatWin, DockTimerHdl)
 {
@@ -220,8 +207,6 @@ void ImplDockFloatWin::Move()
         mnLastUserEvent = Application::PostUserEvent( LINK( this, ImplDockFloatWin, DockingHdl ) );
 }
 
-
-
 void ImplDockFloatWin::Resize()
 {
     FloatingWindow::Resize();
@@ -229,15 +214,11 @@ void ImplDockFloatWin::Resize()
     mpDockWin->ImplPosSizeWindow( 0, 0, aSize.Width(), aSize.Height(), WINDOW_POSSIZE_POSSIZE );
 }
 
-
-
 void ImplDockFloatWin::TitleButtonClick( sal_uInt16 nButton )
 {
     FloatingWindow::TitleButtonClick( nButton );
     mpDockWin->TitleButtonClick( nButton );
 }
-
-
 
 void ImplDockFloatWin::Pin()
 {
@@ -245,15 +226,11 @@ void ImplDockFloatWin::Pin()
     mpDockWin->Pin();
 }
 
-
-
 void ImplDockFloatWin::Roll()
 {
     FloatingWindow::Roll();
     mpDockWin->Roll();
 }
-
-
 
 void ImplDockFloatWin::PopupModeEnd()
 {
@@ -261,22 +238,17 @@ void ImplDockFloatWin::PopupModeEnd()
     mpDockWin->PopupModeEnd();
 }
 
-
-
 void ImplDockFloatWin::Resizing( Size& rSize )
 {
     FloatingWindow::Resizing( rSize );
     mpDockWin->Resizing( rSize );
 }
 
-
-
 bool ImplDockFloatWin::Close()
 {
     return mpDockWin->Close();
 }
 
-// =======================================================================
 
 bool DockingWindow::ImplStartDocking( const Point& rPos )
 {
@@ -289,7 +261,7 @@ bool DockingWindow::ImplStartDocking( const Point& rPos )
     mbLastFloatMode = IsFloatingMode();
     mbStartFloat    = mbLastFloatMode;
 
-    // FloatingBorder berechnen
+    // calculate FloatingBorder
     FloatingWindow* pWin;
     if ( mpFloatWin )
         pWin = mpFloatWin;
@@ -331,7 +303,6 @@ bool DockingWindow::ImplStartDocking( const Point& rPos )
     return true;
 }
 
-// =======================================================================
 
 void DockingWindow::ImplInitDockingWindowData()
 {
@@ -348,8 +319,6 @@ void DockingWindow::ImplInitDockingWindowData()
     mbDockBtn               = false;
     mbHideBtn               = false;
 }
-
-
 
 void DockingWindow::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -368,12 +337,10 @@ void DockingWindow::ImplInit( Window* pParent, WinBits nStyle )
     ImplInitSettings();
 }
 
-
-
 void DockingWindow::ImplInitSettings()
 {
-    // Hack, damit man auch DockingWindows ohne Hintergrund bauen kann
-    // und noch nicht alles umgestellt ist
+    // Hack: to be able to build DockingWindows w/o background before switching
+    // TODO: Hack
     if ( IsBackground() )
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -389,8 +356,6 @@ void DockingWindow::ImplInitSettings()
     }
 }
 
-
-
 void DockingWindow::ImplLoadRes( const ResId& rResId )
 {
     Window::ImplLoadRes( rResId );
@@ -400,7 +365,7 @@ void DockingWindow::ImplLoadRes( const ResId& rResId )
     if ( (RSC_DOCKINGWINDOW_XYMAPMODE | RSC_DOCKINGWINDOW_X |
           RSC_DOCKINGWINDOW_Y) & nMask )
     {
-        // Groessenangabe aus der Resource verwenden
+        // use Sizes of the Resource
         Point   aPos;
         MapUnit ePosMap = MAP_PIXEL;
 
@@ -429,15 +394,11 @@ void DockingWindow::ImplLoadRes( const ResId& rResId )
     }
 }
 
-
-
 DockingWindow::DockingWindow( WindowType nType ) :
     Window( nType )
 {
     ImplInitDockingWindowData();
 }
-
-
 
 DockingWindow::DockingWindow( Window* pParent, WinBits nStyle ) :
     Window( WINDOW_DOCKINGWINDOW )
@@ -445,8 +406,6 @@ DockingWindow::DockingWindow( Window* pParent, WinBits nStyle ) :
     ImplInitDockingWindowData();
     ImplInit( pParent, nStyle );
 }
-
-
 
 DockingWindow::DockingWindow( Window* pParent, const ResId& rResId ) :
     Window( WINDOW_DOCKINGWINDOW )
@@ -461,8 +420,6 @@ DockingWindow::DockingWindow( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-
-
 DockingWindow::~DockingWindow()
 {
     if ( IsFloatingMode() )
@@ -472,8 +429,6 @@ DockingWindow::~DockingWindow()
     }
     delete mpImplData;
 }
-
-
 
 void DockingWindow::Tracking( const TrackingEvent& rTEvt )
 {
@@ -487,7 +442,7 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
             mbDocking = false;
             if ( mbDragFull )
             {
-                // Bei Abbruch alten Zustand wieder herstellen
+                // reset old state on Cancel
                 if ( rTEvt.IsTrackingCanceled() )
                 {
                     StartDocking();
@@ -508,7 +463,7 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
                     EndDocking( Rectangle( Point( mnTrackX, mnTrackY ), Size( mnTrackWidth, mnTrackHeight ) ), mbLastFloatMode );
             }
         }
-        // Docking nur bei nicht synthetischen MouseEvents
+        // dock only for non-synthetic MouseEvents
         else if ( !rTEvt.GetMouseEvent().IsSynthetic() || rTEvt.GetMouseEvent().IsModifierChanged() )
         {
             Point   aMousePos = rTEvt.GetMouseEvent().GetPosPixel();
@@ -561,8 +516,7 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
                 Point aPos;
                 Point aOldPos = OutputToScreenPixel( aPos );
                 EndDocking( aTrackRect, mbLastFloatMode );
-                // Wenn der Status bzw. die Position sich
-                // geaendert hat, dann neu ausgeben
+                // repaint if state or position has changed
                 if ( aOldPos != OutputToScreenPixel( aPos ) )
                 {
                     ImplUpdateAll();
@@ -581,8 +535,7 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
                 aShowTrackRect.SetPos( ImplFrameToOutput( aShowTrackRect.TopLeft() ) );
                 ShowTracking( aShowTrackRect, nTrackStyle );
 
-                // Maus-Offset neu berechnen, da Rechteck veraendert werden
-                // konnte
+                // recalculate mouse offset, as the rectangle was changed
                 maMouseOff.X()  = aFramePos.X() - aTrackRect.Left();
                 maMouseOff.Y()  = aFramePos.Y() - aTrackRect.Top();
             }
@@ -594,8 +547,6 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
         }
     }
 }
-
-
 
 bool DockingWindow::Notify( NotifyEvent& rNEvt )
 {
@@ -649,21 +600,15 @@ bool DockingWindow::Notify( NotifyEvent& rNEvt )
     return Window::Notify( rNEvt );
 }
 
-
-
 void DockingWindow::StartDocking()
 {
     mbDocking = true;
 }
 
-
-
 bool DockingWindow::Docking( const Point&, Rectangle& )
 {
     return IsFloatingMode();
 }
-
-
 
 void DockingWindow::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode )
 {
@@ -691,14 +636,10 @@ void DockingWindow::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode )
     mbDocking = false;
 }
 
-
-
 bool DockingWindow::PrepareToggleFloatingMode()
 {
     return true;
 }
-
-
 
 bool DockingWindow::Close()
 {
@@ -716,43 +657,29 @@ bool DockingWindow::Close()
     return true;
 }
 
-
-
 void DockingWindow::ToggleFloatingMode()
 {
 }
-
-
 
 void DockingWindow::TitleButtonClick( sal_uInt16 )
 {
 }
 
-
-
 void DockingWindow::Pin()
 {
 }
-
-
 
 void DockingWindow::Roll()
 {
 }
 
-
-
 void DockingWindow::PopupModeEnd()
 {
 }
 
-
-
 void DockingWindow::Resizing( Size& )
 {
 }
-
-
 
 void DockingWindow::StateChanged( StateChangedType nType )
 {
@@ -774,8 +701,6 @@ void DockingWindow::StateChanged( StateChangedType nType )
     Window::StateChanged( nType );
 }
 
-
-
 void DockingWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -787,8 +712,6 @@ void DockingWindow::DataChanged( const DataChangedEvent& rDCEvt )
     else
         Window::DataChanged( rDCEvt );
 }
-
-
 
 void DockingWindow::SetFloatingMode( bool bFloatMode )
 {
@@ -824,8 +747,7 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
                 mpWindowImpl->mnTopBorder     = 0;
                 mpWindowImpl->mnRightBorder   = 0;
                 mpWindowImpl->mnBottomBorder  = 0;
-                // Falls Parent zerstoert wird, muessen wir auch vom
-                // BorderWindow den Parent umsetzen
+                // if the parent gets destroyed, we also have to reset the parent of the BorderWindow
                 if ( mpOldBorderWin )
                     mpOldBorderWin->SetParent( pWin );
 
@@ -841,7 +763,7 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
                 pWin->SetText( Window::GetText() );
                 pWin->SetOutputSizePixel( Window::GetSizePixel() );
                 pWin->SetPosPixel( maFloatPos );
-                // DockingDaten ans FloatingWindow weiterreichen
+                // pass on DockingData to FloatingWindow
                 pWin->ShowTitleButton( TITLE_BUTTON_DOCKING, mbDockBtn );
                 pWin->ShowTitleButton( TITLE_BUTTON_HIDE, mbHideBtn );
                 pWin->SetPin( mbPined );
@@ -862,7 +784,7 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
             {
                 Show( false, SHOW_NOFOCUSCHANGE );
 
-                // FloatingDaten wird im FloatingWindow speichern
+                // store FloatingData in FloatingWindow
                 maFloatPos      = mpFloatWin->GetPosPixel();
                 mbDockBtn       = mpFloatWin->IsTitleButtonVisible( TITLE_BUTTON_DOCKING );
                 mbHideBtn       = mpFloatWin->IsTitleButtonVisible( TITLE_BUTTON_HIDE );
@@ -896,8 +818,6 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
     }
 }
 
-
-
 void DockingWindow::SetFloatStyle( WinBits nStyle )
 {
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
@@ -910,8 +830,6 @@ void DockingWindow::SetFloatStyle( WinBits nStyle )
     mnFloatBits = nStyle;
 }
 
-
-
 WinBits DockingWindow::GetFloatStyle() const
 {
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
@@ -922,8 +840,6 @@ WinBits DockingWindow::GetFloatStyle() const
 
     return mnFloatBits;
 }
-
-
 
 void DockingWindow::setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
@@ -945,8 +861,6 @@ void DockingWindow::setPosSizePixel( long nX, long nY,
         Window::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 }
 
-
-
 Point DockingWindow::GetPosPixel() const
 {
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
@@ -963,8 +877,6 @@ Point DockingWindow::GetPosPixel() const
     else
         return Window::GetPosPixel();
 }
-
-
 
 Size DockingWindow::GetSizePixel() const
 {
@@ -983,8 +895,6 @@ Size DockingWindow::GetSizePixel() const
         return Window::GetSizePixel();
 }
 
-
-
 void DockingWindow::SetOutputSizePixel( const Size& rNewSize )
 {
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
@@ -1002,8 +912,6 @@ void DockingWindow::SetOutputSizePixel( const Size& rNewSize )
     else
         Window::SetOutputSizePixel( rNewSize );
 }
-
-
 
 Size DockingWindow::GetOutputSizePixel() const
 {
