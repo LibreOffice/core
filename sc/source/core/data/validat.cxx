@@ -605,7 +605,7 @@ rtl_uString* ScStringTokenIterator::Next()
     return (mbSkipEmpty && maCurString.isValid() && maCurString.isEmpty()) ? Next() : maCurString.getData();
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** Returns the number format of the passed cell, or the standard format. */
 sal_uLong lclGetCellFormat( ScDocument& rDoc, const ScAddress& rPos )
@@ -618,7 +618,7 @@ sal_uLong lclGetCellFormat( ScDocument& rDoc, const ScAddress& rPos )
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 bool ScValidationData::HasSelectionList() const
 {
@@ -839,7 +839,7 @@ bool ScValidationData::FillSelectionList(std::vector<ScTypedStrData>& rStrColl, 
     return bOk;
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool ScValidationData::IsEqualToTokenArray( ScRefCellValue& rCell, const ScAddress& rPos, const ScTokenArray& rTokArr ) const
 {

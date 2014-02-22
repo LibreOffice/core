@@ -654,7 +654,7 @@ ServiceInfo_Impl * SvxLinguData_Impl::GetInfoByImplName( const OUString &rSvcImp
 }
 
 
-//-----------------------------------------------------------------------------
+
 
 static void lcl_MergeLocales(Sequence< Locale >& aAllLocales, const Sequence< Locale >& rAdd)
 {
@@ -1163,7 +1163,7 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent, const SfxItemSet& rSet ) :
         pItem = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxLinguTabPage::~SvxLinguTabPage()
 {
@@ -1171,7 +1171,7 @@ SvxLinguTabPage::~SvxLinguTabPage()
         delete pLinguData;
 }
 
-//------------------------------------------------------------------------
+
 
 // don't throw away overloaded
 sal_uInt16* SvxLinguTabPage::GetRanges()
@@ -1180,7 +1180,7 @@ sal_uInt16* SvxLinguTabPage::GetRanges()
     return pRanges;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxTabPage* SvxLinguTabPage::Create( Window* pParent,
                                      const SfxItemSet& rAttrSet )
@@ -1188,7 +1188,7 @@ SfxTabPage* SvxLinguTabPage::Create( Window* pParent,
     return ( new SvxLinguTabPage( pParent, rAttrSet ) );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
 {
@@ -1353,7 +1353,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
     return bModified;
 }
 
-// ----------------------------------------------------------------------
+
 
 sal_uLong SvxLinguTabPage::GetDicUserData( const uno::Reference< XDictionary > &rxDic, sal_uInt16 nIdx )
 {
@@ -1396,7 +1396,7 @@ void SvxLinguTabPage::AddDicBoxEntry(
     m_pLinguDicsCLB->SetUpdateMode(sal_True);
 }
 
-// ----------------------------------------------------------------------
+
 
 void SvxLinguTabPage::UpdateDicBox_Impl()
 {
@@ -1415,7 +1415,7 @@ void SvxLinguTabPage::UpdateDicBox_Impl()
     m_pLinguDicsCLB->SetUpdateMode(sal_True);
 }
 
-// ----------------------------------------------------------------------
+
 
 void SvxLinguTabPage::UpdateModulesBox_Impl()
 {
@@ -1438,7 +1438,7 @@ void SvxLinguTabPage::UpdateModulesBox_Impl()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
 {
@@ -1549,7 +1549,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
     m_pLinguOptionsCLB->SetUpdateMode(sal_True);
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxLinguTabPage, BoxDoubleClickHdl_Impl, SvTreeListBox *, pBox )
 {
@@ -1568,7 +1568,7 @@ IMPL_LINK( SvxLinguTabPage, BoxDoubleClickHdl_Impl, SvTreeListBox *, pBox )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLinguTabPage, PostDblClickHdl_Impl)
 {
@@ -1576,7 +1576,7 @@ IMPL_LINK_NOARG(SvxLinguTabPage, PostDblClickHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLinguTabPage, OpenURLHdl_Impl)
 {
@@ -1585,7 +1585,7 @@ IMPL_LINK_NOARG(SvxLinguTabPage, OpenURLHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxLinguTabPage, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox )
 {
@@ -1616,7 +1616,7 @@ IMPL_LINK( SvxLinguTabPage, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
 {
@@ -1800,7 +1800,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxLinguTabPage, SelectHdl_Impl, SvxCheckListBox *, pBox )
 {
@@ -1836,7 +1836,7 @@ IMPL_LINK( SvxLinguTabPage, SelectHdl_Impl, SvxCheckListBox *, pBox )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvTreeListEntry* SvxLinguTabPage::CreateEntry( OUString& rTxt, sal_uInt16 nCol )
 {
@@ -1856,7 +1856,7 @@ SvTreeListEntry* SvxLinguTabPage::CreateEntry( OUString& rTxt, sal_uInt16 nCol )
     return pEntry;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
 {
@@ -2339,7 +2339,7 @@ IMPL_LINK_NOARG(SvxEditModulesDlg, BackHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxEditModulesDlg, OpenURLHdl_Impl)
 {

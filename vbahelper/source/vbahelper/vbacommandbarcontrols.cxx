@@ -265,7 +265,7 @@ public:
         { return false; }
 };
 
-// ----------------------------------------------------------------------------
+
 
 VbaDummyCommandBarControls::VbaDummyCommandBarControls(
         const uno::Reference< XHelperInterface >& xParent,

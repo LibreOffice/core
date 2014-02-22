@@ -143,23 +143,23 @@ namespace toolkit
         }
     };
 
-    //--------------------------------------------------------------------
+
     AccessibleDummyFactory::AccessibleDummyFactory()
     {
     }
 
-    //--------------------------------------------------------------------
+
     AccessibleDummyFactory::~AccessibleDummyFactory()
     {
     }
 
-    //--------------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL AccessibleDummyFactory::acquire()
     {
         return osl_atomic_increment( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL AccessibleDummyFactory::release()
     {
         if ( 0 == osl_atomic_decrement( &m_refCount ) )
@@ -173,13 +173,13 @@ namespace toolkit
     //====================================================================
     //= AccessibilityClient
     //====================================================================
-    //--------------------------------------------------------------------
+
     AccessibilityClient::AccessibilityClient()
         :m_bInitialized( false )
     {
     }
 
-    //--------------------------------------------------------------------
+
 #ifndef DISABLE_DYNLOADING
     extern "C" { static void SAL_CALL thisModule() {} }
 #else
@@ -240,7 +240,7 @@ namespace toolkit
         m_bInitialized = true;
     }
 
-    //--------------------------------------------------------------------
+
     AccessibilityClient::~AccessibilityClient()
     {
         if ( m_bInitialized )
@@ -262,7 +262,7 @@ namespace toolkit
         }
     }
 
-    //--------------------------------------------------------------------
+
     IAccessibleFactory& AccessibilityClient::getFactory()
     {
         ensureInitialized();

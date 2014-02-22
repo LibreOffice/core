@@ -78,14 +78,14 @@ namespace svxform
     //====================================================================
     namespace
     {
-        //----------------------------------------------------------------
+
         struct ModuleInfo
         {
             const sal_Char* pAsciiModuleOrServiceName;
             DocumentType    eType;
         };
 
-        //----------------------------------------------------------------
+
         const ModuleInfo* lcl_getModuleInfo()
         {
             static const ModuleInfo aModuleInfo[] =
@@ -108,7 +108,7 @@ namespace svxform
     //====================================================================
     //= DocumentClassification
     //====================================================================
-    //--------------------------------------------------------------------
+
     DocumentType DocumentClassification::classifyDocument( const Reference< XModel >& _rxDocumentModel ) SAL_THROW(())
     {
         DocumentType eType( eUnknownDocumentType );
@@ -147,7 +147,7 @@ namespace svxform
         return eType;
     }
 
-    //--------------------------------------------------------------------
+
     DocumentType DocumentClassification::classifyHostDocument( const Reference< XInterface >& _rxFormComponent ) SAL_THROW(())
     {
         DocumentType eType( eUnknownDocumentType );
@@ -167,7 +167,7 @@ namespace svxform
         return eType;
     }
 
-    //--------------------------------------------------------------------
+
     DocumentType DocumentClassification::getDocumentTypeForModuleIdentifier( const OUString& _rModuleIdentifier )
     {
         const ModuleInfo* pModuleInfo = lcl_getModuleInfo();
@@ -180,7 +180,7 @@ namespace svxform
         return eUnknownDocumentType;
     }
 
-    //--------------------------------------------------------------------
+
     OUString DocumentClassification::getModuleIdentifierForDocumentType( DocumentType _eType )
     {
         const ModuleInfo* pModuleInfo = lcl_getModuleInfo();

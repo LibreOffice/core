@@ -234,7 +234,7 @@ void ScMyStyleRanges::SetStylesToRanges(const OUString* pStyleName, ScXMLImport&
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 ScMyStylesImportHelper::ScMyStylesImportHelper(ScXMLImport& rTempImport)
     :

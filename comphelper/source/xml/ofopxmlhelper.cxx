@@ -37,7 +37,7 @@ using namespace ::com::sun::star;
 
 namespace comphelper {
 
-// -----------------------------------
+
 uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadRelationsInfoSequence( const uno::Reference< io::XInputStream >& xInStream, const OUString aStreamName, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
@@ -46,7 +46,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::Read
     return ReadSequence_Impl( xInStream, aStringID, RELATIONINFO_FORMAT, xContext );
 }
 
-// -----------------------------------
+
 uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadContentTypeSequence( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
@@ -54,7 +54,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::Read
     return ReadSequence_Impl( xInStream, aStringID, CONTENTTYPE_FORMAT, xContext );
 }
 
-// -----------------------------------
+
 void SAL_CALL OFOPXMLHelper::WriteRelationsInfoSequence( const uno::Reference< io::XOutputStream >& xOutStream, const uno::Sequence< uno::Sequence< beans::StringPair > >& aSequence, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
@@ -115,7 +115,7 @@ void SAL_CALL OFOPXMLHelper::WriteRelationsInfoSequence( const uno::Reference< i
     xWriter->endDocument();
 }
 
-// -----------------------------------
+
 void SAL_CALL OFOPXMLHelper::WriteContentSequence( const uno::Reference< io::XOutputStream >& xOutStream, const uno::Sequence< beans::StringPair >& aDefaultsSequence, const uno::Sequence< beans::StringPair >& aOverridesSequence, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
@@ -178,7 +178,7 @@ void SAL_CALL OFOPXMLHelper::WriteContentSequence( const uno::Reference< io::XOu
 
 // ==================================================================================
 
-// -----------------------------------
+
 uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadSequence_Impl( const uno::Reference< io::XInputStream >& xInStream, const OUString& aStringID, sal_uInt16 nFormat, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
@@ -199,7 +199,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::Read
     return pHelper->GetParsingResult();
 }
 
-// -----------------------------------
+
 OFOPXMLHelper::OFOPXMLHelper( sal_uInt16 nFormat )
 : m_nFormat( nFormat )
 , m_aRelListElement( "Relationships" )
@@ -217,12 +217,12 @@ OFOPXMLHelper::OFOPXMLHelper( sal_uInt16 nFormat )
 {
 }
 
-// -----------------------------------
+
 OFOPXMLHelper::~OFOPXMLHelper()
 {
 }
 
-// -----------------------------------
+
 uno::Sequence< uno::Sequence< beans::StringPair > > OFOPXMLHelper::GetParsingResult()
 {
     if ( m_aElementsSeq.getLength() )
@@ -231,19 +231,19 @@ uno::Sequence< uno::Sequence< beans::StringPair > > OFOPXMLHelper::GetParsingRes
     return m_aResultSeq;
 }
 
-// -----------------------------------
+
 void SAL_CALL OFOPXMLHelper::startDocument()
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
-// -----------------------------------
+
 void SAL_CALL OFOPXMLHelper::endDocument()
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
-// -----------------------------------
+
 void SAL_CALL OFOPXMLHelper::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
         throw( xml::sax::SAXException, uno::RuntimeException )
 {
@@ -391,7 +391,7 @@ void SAL_CALL OFOPXMLHelper::startElement( const OUString& aName, const uno::Ref
         throw xml::sax::SAXException(); // TODO: no other elements expected!
 }
 
-// -----------------------------------
+
 void SAL_CALL OFOPXMLHelper::endElement( const OUString& aName )
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
@@ -408,25 +408,25 @@ void SAL_CALL OFOPXMLHelper::endElement( const OUString& aName )
     }
 }
 
-// -----------------------------------
+
 void SAL_CALL OFOPXMLHelper::characters( const OUString& /*aChars*/ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
-// -----------------------------------
+
 void SAL_CALL OFOPXMLHelper::ignorableWhitespace( const OUString& /*aWhitespaces*/ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
-// -----------------------------------
+
 void SAL_CALL OFOPXMLHelper::processingInstruction( const OUString& /*aTarget*/, const OUString& /*aData*/ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
-// -----------------------------------
+
 void SAL_CALL OFOPXMLHelper::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /*xLocator*/ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {

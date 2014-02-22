@@ -98,7 +98,7 @@ SvxPageWindow::SvxPageWindow( Window* pParent ) :
     SetBackground();
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxPageWindow::~SvxPageWindow()
 {
@@ -113,7 +113,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxPageWindow(Window *pPare
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void SvxPageWindow::Paint( const Rectangle& )
 {
@@ -167,7 +167,7 @@ void SvxPageWindow::Paint( const Rectangle& )
     }
 }
 
-// -----------------------------------------------------------------------
+
 void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const sal_Bool bEnabled )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -353,7 +353,7 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const s
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPageWindow::SetBorder( const SvxBoxItem& rNew )
 {
@@ -361,7 +361,7 @@ void SvxPageWindow::SetBorder( const SvxBoxItem& rNew )
     pImpl->pBorder = new SvxBoxItem( rNew );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPageWindow::SetBitmap( Bitmap* pBmp )
 {
@@ -374,14 +374,14 @@ void SvxPageWindow::SetBitmap( Bitmap* pBmp )
         pImpl->bBitmap = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPageWindow::SetHdBorder( const SvxBoxItem& rNew )
 {
     delete pHdBorder;
     pHdBorder = new SvxBoxItem( rNew );
 }
-// -----------------------------------------------------------------------
+
 
 void SvxPageWindow::SetFtBorder( const SvxBoxItem& rNew )
 {

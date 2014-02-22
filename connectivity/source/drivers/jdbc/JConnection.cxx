@@ -249,9 +249,9 @@ bool loadClass(
 
 }
 
-//------------------------------------------------------------------------------
+
 IMPLEMENT_SERVICE_INFO(java_sql_Connection,"com.sun.star.sdbcx.JConnection","com.sun.star.sdbc.Connection");
-//------------------------------------------------------------------------------
+
 //**************************************************************
 //************ Class: java.sql.Connection
 //**************************************************************
@@ -271,7 +271,7 @@ java_sql_Connection::java_sql_Connection( const java_sql_Driver& _rDriver )
     ,m_bIgnoreCurrency(sal_False)
 {
 }
-// -----------------------------------------------------------------------------
+
 java_sql_Connection::~java_sql_Connection()
 {
     ::rtl::Reference< jvmaccess::VirtualMachine > xTest = java_lang_Object::getVM();
@@ -291,12 +291,12 @@ java_sql_Connection::~java_sql_Connection()
         t.releaseRef();
     }
 }
-//-----------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Connection::release() throw()
 {
     relase_ChildImpl();
 }
-//------------------------------------------------------------------------------
+
 void java_sql_Connection::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -312,7 +312,7 @@ void java_sql_Connection::disposing()
         callVoidMethod("close",mID);
     }
 }
-// -------------------------------------------------------------------------
+
 jclass java_sql_Connection::getMyClass() const
 {
     // the class must be fetched only once, therefore static
@@ -321,7 +321,7 @@ jclass java_sql_Connection::getMyClass() const
     return theClass;
 }
 
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL java_sql_Connection::getCatalog(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -330,7 +330,7 @@ OUString SAL_CALL java_sql_Connection::getCatalog(  ) throw(SQLException, Runtim
     static jmethodID mID(NULL);
     return callStringMethod("getCatalog",mID);
 }
-// -------------------------------------------------------------------------
+
 Reference< XDatabaseMetaData > SAL_CALL java_sql_Connection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -352,18 +352,18 @@ Reference< XDatabaseMetaData > SAL_CALL java_sql_Connection::getMetaData(  ) thr
 
     return xMetaData;
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Connection::close(  ) throw(SQLException, RuntimeException)
 {
     dispose();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Connection::commit(  ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     callVoidMethod("commit",mID);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL java_sql_Connection::isClosed(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -371,7 +371,7 @@ sal_Bool SAL_CALL java_sql_Connection::isClosed(  ) throw(SQLException, RuntimeE
     static jmethodID mID(NULL);
     return callBooleanMethod( "isClosed", mID ) && java_sql_Connection_BASE::rBHelper.bDisposed;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL java_sql_Connection::isReadOnly(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -379,37 +379,37 @@ sal_Bool SAL_CALL java_sql_Connection::isReadOnly(  ) throw(SQLException, Runtim
     static jmethodID mID(NULL);
     return callBooleanMethod( "isReadOnly", mID );
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Connection::setCatalog( const OUString& catalog ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     callVoidMethodWithStringArg("setCatalog",mID,catalog);
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Connection::rollback(  ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     callVoidMethod("rollback",mID);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL java_sql_Connection::getAutoCommit(  ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return callBooleanMethod( "getAutoCommit", mID );
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Connection::setReadOnly( sal_Bool readOnly ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     callVoidMethodWithBoolArg("setReadOnly",mID,readOnly);
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Connection::setAutoCommit( sal_Bool autoCommit ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     callVoidMethodWithBoolArg("setAutoCommit",mID,autoCommit);
 }
-// -------------------------------------------------------------------------
+
 Reference< ::com::sun::star::container::XNameAccess > SAL_CALL java_sql_Connection::getTypeMap(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -421,7 +421,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL java_sql_Connecti
     // WARNING: the caller becomes the owner of the returned pointer
     return 0;
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Connection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -430,7 +430,7 @@ void SAL_CALL java_sql_Connection::setTypeMap( const Reference< ::com::sun::star
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setTypeMap", *this );
 }
 
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL java_sql_Connection::getTransactionIsolation(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -439,7 +439,7 @@ sal_Int32 SAL_CALL java_sql_Connection::getTransactionIsolation(  ) throw(SQLExc
     static jmethodID mID(NULL);
     return callIntMethod("getTransactionIsolation",mID);
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Connection::setTransactionIsolation( sal_Int32 level ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -448,7 +448,7 @@ void SAL_CALL java_sql_Connection::setTransactionIsolation( sal_Int32 level ) th
     static jmethodID mID(NULL);
     callVoidMethodWithIntArg("setTransactionIsolation",mID,level);
 }
-// -------------------------------------------------------------------------
+
 Reference< XStatement > SAL_CALL java_sql_Connection::createStatement(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -463,7 +463,7 @@ Reference< XStatement > SAL_CALL java_sql_Connection::createStatement(  ) throw(
     m_aLogger.log( LogLevel::FINE, STR_LOG_CREATED_STATEMENT_ID, pStatement->getStatementObjectID() );
     return xStmt;
 }
-// -----------------------------------------------------------------------------
+
 OUString java_sql_Connection::transFormPreparedStatement(const OUString& _sSQL)
 {
     OUString sSqlStatement = _sSQL;
@@ -489,7 +489,7 @@ OUString java_sql_Connection::transFormPreparedStatement(const OUString& _sSQL)
     }
     return sSqlStatement;
 }
-// -------------------------------------------------------------------------
+
 Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareStatement( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -507,7 +507,7 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareStatement( 
     m_aLogger.log( LogLevel::FINE, STR_LOG_PREPARED_STATEMENT_ID, pStatement->getStatementObjectID() );
     return xReturn;
 }
-// -------------------------------------------------------------------------
+
 Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareCall( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -525,7 +525,7 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareCall( const
     m_aLogger.log( LogLevel::FINE, STR_LOG_PREPARED_CALL_ID, pStatement->getStatementObjectID() );
     return xStmt;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL java_sql_Connection::nativeSQL( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -553,13 +553,13 @@ OUString SAL_CALL java_sql_Connection::nativeSQL( const OUString& sql ) throw(SQ
 
     return aStr;
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Connection::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     callVoidMethod("clearWarnings",mID);
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL java_sql_Connection::getWarnings(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -588,7 +588,7 @@ Any SAL_CALL java_sql_Connection::getWarnings(  ) throw(SQLException, RuntimeExc
     return Any();
 }
 
-// -----------------------------------------------------------------------------
+
 namespace
 {
     OUString lcl_getDriverLoadErrorMessage( const ::connectivity::SharedResources& _aResource,const OUString& _rDriverClass, const OUString& _rDriverClassPath )
@@ -609,7 +609,7 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------------
+
 namespace
 {
     bool lcl_setSystemProperties_nothrow( const java::sql::ConnectionLog& _rLogger,
@@ -655,7 +655,7 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------------
+
 void java_sql_Connection::loadDriverFromProperties( const OUString& _sDriverClass, const OUString& _sDriverClassPath,
     const Sequence< NamedValue >& _rSystemProperties )
 {
@@ -755,7 +755,7 @@ void java_sql_Connection::loadDriverFromProperties( const OUString& _sDriverClas
     enableAutoRetrievingEnabled( bAutoRetrievingEnabled );
     setAutoRetrievingStatement( sGeneratedValueStatement );
 }
-// -----------------------------------------------------------------------------
+
 OUString java_sql_Connection::impl_getJavaDriverClassPath_nothrow(const OUString& _sDriverClass)
 {
     static const OUString s_sNodeName("org.openoffice.Office.DataAccess/JDBC/DriverClassPaths");
@@ -769,7 +769,7 @@ OUString java_sql_Connection::impl_getJavaDriverClassPath_nothrow(const OUString
     }
     return sURL;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool java_sql_Connection::construct(const OUString& url,
                                     const Sequence< PropertyValue >& info)
 {
@@ -861,6 +861,6 @@ sal_Bool java_sql_Connection::construct(const OUString& url,
     } //t.pEnv
      return object != NULL;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

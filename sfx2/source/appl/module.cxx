@@ -176,14 +176,14 @@ SfxModule::~SfxModule()
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxSlotPool* SfxModule::GetSlotPool() const
 {
     return pImpl->pSlotPool;
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
 {
@@ -205,7 +205,7 @@ void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
     pImpl->pFactArr->push_back( pFact );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxModule::RegisterToolBoxControl( SfxTbxCtrlFactory *pFact )
 {
@@ -227,7 +227,7 @@ void SfxModule::RegisterToolBoxControl( SfxTbxCtrlFactory *pFact )
     pImpl->pTbxCtrlFac->push_back( pFact );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxModule::RegisterStatusBarControl( SfxStbCtrlFactory *pFact )
 {
@@ -249,7 +249,7 @@ void SfxModule::RegisterStatusBarControl( SfxStbCtrlFactory *pFact )
     pImpl->pStbCtrlFac->push_back( pFact );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxModule::RegisterMenuControl( SfxMenuCtrlFactory *pFact )
 {
@@ -271,28 +271,28 @@ void SfxModule::RegisterMenuControl( SfxMenuCtrlFactory *pFact )
     pImpl->pMenuCtrlFac->push_back( pFact );
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxTbxCtrlFactArr_Impl*  SfxModule::GetTbxCtrlFactories_Impl() const
 {
     return pImpl->pTbxCtrlFac;
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxStbCtrlFactArr_Impl*  SfxModule::GetStbCtrlFactories_Impl() const
 {
     return pImpl->pStbCtrlFac;
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxMenuCtrlFactArr_Impl* SfxModule::GetMenuCtrlFactories_Impl() const
 {
     return pImpl->pMenuCtrlFac;
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxChildWinFactArr_Impl* SfxModule::GetChildWinFactories_Impl() const
 {

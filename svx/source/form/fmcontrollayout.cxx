@@ -70,7 +70,7 @@ namespace svxform
     namespace VisualEffect = ::com::sun::star::awt::VisualEffect;
     namespace ScriptType = ::com::sun::star::i18n::ScriptType;
 
-    //--------------------------------------------------------------------
+
     namespace
     {
         //....................................................................
@@ -193,7 +193,7 @@ namespace svxform
     //====================================================================
     //= ControlLayouter
     //====================================================================
-    //--------------------------------------------------------------------
+
     Reference< XPropertySet > ControlLayouter::getDefaultDocumentTextStyle( const Reference< XPropertySet >& _rxModel )
     {
         // the style family collection
@@ -210,7 +210,7 @@ namespace svxform
         return Reference< XPropertySet >( xStyleFamily->getByName( sStyleName ), UNO_QUERY_THROW );
     }
 
-    //--------------------------------------------------------------------
+
     void ControlLayouter::initializeControlLayout( const Reference< XPropertySet >& _rxControlModel, DocumentType _eDocType )
     {
         DBG_ASSERT( _rxControlModel.is(), "ControlLayouter::initializeControlLayout: invalid model!" );
@@ -279,7 +279,7 @@ namespace svxform
         }
     }
 
-    //--------------------------------------------------------------------
+
     ::utl::OConfigurationNode ControlLayouter::getLayoutSettings( DocumentType _eDocType )
     {
         OUString sConfigName = "/org.openoffice.Office.Common/Forms/ControlLayout/";
@@ -289,7 +289,7 @@ namespace svxform
             sConfigName );
     }
 
-    //--------------------------------------------------------------------
+
     bool ControlLayouter::useDynamicBorderColor( DocumentType _eDocType )
     {
         OConfigurationNode aConfig = getLayoutSettings( _eDocType );
@@ -299,7 +299,7 @@ namespace svxform
         return bDynamicBorderColor;
     }
 
-    //--------------------------------------------------------------------
+
     bool ControlLayouter::useDocumentReferenceDevice( DocumentType _eDocType )
     {
         if ( _eDocType == eUnknownDocumentType )

@@ -49,7 +49,7 @@ using namespace com::sun::star::beans;
 
 static bool lcl_canUsePDFAxialShading(const Gradient& rGradient);
 
-// -----------------------------------------------------------------------------
+
 
 void PDFWriterImpl::implWriteGradient( const PolyPolygon& i_rPolyPoly, const Gradient& i_rGradient,
                                        VirtualDevice* i_pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& i_rContext )
@@ -64,7 +64,7 @@ void PDFWriterImpl::implWriteGradient( const PolyPolygon& i_rPolyPoly, const Gra
     m_rOuterFace.Pop();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSize, const BitmapEx& i_rBitmapEx,
                                        VirtualDevice* i_pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& i_rContext )
@@ -243,7 +243,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
 }
 
 
-// -----------------------------------------------------------------------------
+
 
 void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevData* i_pOutDevData, const vcl::PDFWriter::PlayMetafileContext& i_rContext, VirtualDevice* pDummyVDev )
 {

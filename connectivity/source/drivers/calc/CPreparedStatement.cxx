@@ -23,12 +23,12 @@
 using namespace connectivity::calc;
 using namespace connectivity::file;
 using namespace com::sun::star::uno;
-// -------------------------------------------------------------------------
+
 OResultSet* OCalcPreparedStatement::createResultSet()
 {
     return new OCalcResultSet(this,m_aSQLIterator);
 }
-// -------------------------------------------------------------------------
+
 IMPLEMENT_SERVICE_INFO(OCalcPreparedStatement,"com.sun.star.sdbc.driver.calc.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

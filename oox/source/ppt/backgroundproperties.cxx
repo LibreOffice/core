@@ -27,7 +27,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace ppt {
-// ---------------------------------------------------------------------
+
 
 BackgroundPropertiesContext::BackgroundPropertiesContext( FragmentHandler2& rParent, ::oox::drawingml::FillProperties& rFillProperties )
 : FragmentHandler2( rParent )

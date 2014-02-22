@@ -26,7 +26,7 @@
 #include <comphelper/types.hxx>
 
 
-// -------------------------------------------------------------------------
+
 using namespace connectivity;
 using namespace connectivity::hsqldb;
 using namespace ::com::sun::star::uno;
@@ -35,12 +35,12 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-// -------------------------------------------------------------------------
+
 OHCatalog::OHCatalog(const Reference< XConnection >& _xConnection) : sdbcx::OCatalog(_xConnection)
                 ,m_xConnection(_xConnection)
 {
 }
-// -----------------------------------------------------------------------------
+
 void OHCatalog::refreshObjects(const Sequence< OUString >& _sKindOfObject,TStringVector& _rNames)
 {
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
@@ -49,7 +49,7 @@ void OHCatalog::refreshObjects(const Sequence< OUString >& _sKindOfObject,TStrin
                                                             _sKindOfObject);
     fillNames(xResult,_rNames);
 }
-// -------------------------------------------------------------------------
+
 void OHCatalog::refreshTables()
 {
     TStringVector aVector;
@@ -67,7 +67,7 @@ void OHCatalog::refreshTables()
     else
         m_pTables = new OTables(m_xMetaData,*this,m_aMutex,aVector);
 }
-// -------------------------------------------------------------------------
+
 void OHCatalog::refreshViews()
 {
     Sequence< OUString > aTypes(1);
@@ -99,11 +99,11 @@ void OHCatalog::refreshViews()
     else
         m_pViews = new HViews( m_xConnection, *this, m_aMutex, aVector );
 }
-// -------------------------------------------------------------------------
+
 void OHCatalog::refreshGroups()
 {
 }
-// -------------------------------------------------------------------------
+
 void OHCatalog::refreshUsers()
 {
     TStringVector aVector;
@@ -124,7 +124,7 @@ void OHCatalog::refreshUsers()
     else
         m_pUsers = new OUsers(*this,m_aMutex,aVector,m_xConnection,this);
 }
-// -----------------------------------------------------------------------------
+
 Any SAL_CALL OHCatalog::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     if ( rType == ::getCppuType((const Reference<XGroupsSupplier>*)0) )
@@ -132,7 +132,7 @@ Any SAL_CALL OHCatalog::queryInterface( const Type & rType ) throw(RuntimeExcept
 
     return OCatalog::queryInterface(rType);
 }
-// -----------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OHCatalog::getTypes(  ) throw(RuntimeException)
 {
     Sequence< Type > aTypes = OCatalog::getTypes();
@@ -150,7 +150,7 @@ Sequence< Type > SAL_CALL OHCatalog::getTypes(  ) throw(RuntimeException)
     const Type* pTypes = aOwnTypes.empty() ? 0 : &aOwnTypes[0];
     return Sequence< Type >(pTypes, aOwnTypes.size());
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

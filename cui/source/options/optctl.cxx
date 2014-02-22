@@ -56,16 +56,16 @@ SvxCTLOptionsPage::SvxCTLOptionsPage( Window* pParent, const SfxItemSet& rSet ) 
 
     m_pNumeralsLB->SetDropDownLineCount( m_pNumeralsLB->GetEntryCount() );
 }
-// -----------------------------------------------------------------------------
+
 SvxCTLOptionsPage::~SvxCTLOptionsPage()
 {
 }
-// -----------------------------------------------------------------------------
+
 SfxTabPage* SvxCTLOptionsPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return new SvxCTLOptionsPage( pParent, rAttrSet );
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SvxCTLOptionsPage::FillItemSet( SfxItemSet& )
 {
     sal_Bool bModified = sal_False;
@@ -112,7 +112,7 @@ sal_Bool SvxCTLOptionsPage::FillItemSet( SfxItemSet& )
 
     return bModified;
 }
-// -----------------------------------------------------------------------------
+
 void SvxCTLOptionsPage::Reset( const SfxItemSet& )
 {
     SvtCTLOptions aCTLOptions;

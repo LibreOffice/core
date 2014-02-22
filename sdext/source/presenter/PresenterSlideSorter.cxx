@@ -681,7 +681,7 @@ Reference<drawing::XDrawPage> SAL_CALL PresenterSlideSorter::getCurrentPage (voi
     return NULL;
 }
 
-//-----------------------------------------------------------------------------
+
 
 void PresenterSlideSorter::UpdateLayout (void)
 {

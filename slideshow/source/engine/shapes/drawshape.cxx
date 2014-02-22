@@ -207,7 +207,7 @@ namespace slideshow
 
 
             // determine what has to be updated
-            // --------------------------------
+
 
             // do we have an attribute layer?
             if( mpAttributeLayer )
@@ -327,7 +327,7 @@ namespace slideshow
 
 
                         // retrieve bounds for subset of whole metafile
-                        // --------------------------------------------
+
 
                         ::basegfx::B2DRange aTotalBounds;
 

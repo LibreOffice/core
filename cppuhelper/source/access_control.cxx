@@ -41,7 +41,7 @@ namespace
 
 namespace cppu
 {
-//__________________________________________________________________________________________________
+
 AccessControl::AccessControl( Reference< XComponentContext > const & xContext )
     SAL_THROW( (RuntimeException) )
 {
@@ -51,7 +51,7 @@ AccessControl::AccessControl( Reference< XComponentContext > const & xContext )
             "no access controller!", Reference< XInterface >() );
     }
 }
-//__________________________________________________________________________________________________
+
 AccessControl::AccessControl(
     Reference< security::XAccessController > const & xController )
     SAL_THROW( (RuntimeException) )
@@ -63,7 +63,7 @@ AccessControl::AccessControl(
             "no access controller!", Reference< XInterface >() );
     }
 }
-//__________________________________________________________________________________________________
+
 AccessControl::AccessControl( AccessControl const & ac )
     SAL_THROW( (RuntimeException) )
     : m_xController( ac.m_xController )
@@ -88,7 +88,7 @@ AccessControl::AccessControl( AccessControl const & ac )
 #pragma pack(pop)
 #endif
 
-//--------------------------------------------------------------------------------------------------
+
 inline void __checkPermission(
     Reference< security::XAccessController > const & xController,
     Type const & type, rtl_uString * str1, rtl_uString * str2 )
@@ -104,7 +104,7 @@ inline void __checkPermission(
 
     xController->checkPermission( * static_cast< Any * >( &a ) );
 }
-//__________________________________________________________________________________________________
+
 void AccessControl::checkRuntimePermission(
     OUString const & name )
     SAL_THROW( (RuntimeException) )
@@ -113,7 +113,7 @@ void AccessControl::checkRuntimePermission(
         m_xController,
         ::getCppuType( (security::RuntimePermission *)0 ), name.pData, 0 );
 }
-//__________________________________________________________________________________________________
+
 void AccessControl::checkFilePermission(
     OUString const & url,
     OUString const & actions )
@@ -123,7 +123,7 @@ void AccessControl::checkFilePermission(
         m_xController,
         ::getCppuType( (io::FilePermission *)0 ), url.pData, actions.pData );
 }
-//__________________________________________________________________________________________________
+
 void AccessControl::checkSocketPermission(
     OUString const & host,
     OUString const & actions )

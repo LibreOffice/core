@@ -214,7 +214,7 @@ void SfxObjectShell::UpdateDocInfoForSave()
     }
 }
 
-//--------------------------------------------------------------------
+
 
 static void
 lcl_add(util::Duration & rDur, Time const& rTime)
@@ -286,7 +286,7 @@ void SfxObjectShell::UpdateTime_Impl(
     }
 }
 
-//--------------------------------------------------------------------
+
 
 SfxDocumentInfoDialog* SfxObjectShell::CreateDocumentInfoDialog
 (
@@ -297,7 +297,7 @@ SfxDocumentInfoDialog* SfxObjectShell::CreateDocumentInfoDialog
     return new SfxDocumentInfoDialog(pParent, rSet);
 }
 
-//--------------------------------------------------------------------
+
 
 SfxStyleSheetBasePool* SfxObjectShell::GetStyleSheetPool()
 {
@@ -362,7 +362,7 @@ void SfxObjectShell::LoadStyles
     delete [] pFound;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxObjectShell::UpdateFromTemplate_Impl(  )
 

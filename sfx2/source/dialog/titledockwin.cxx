@@ -35,7 +35,7 @@ namespace sfx2
     //==================================================================================================================
     //= TitledDockingWindow
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     TitledDockingWindow::TitledDockingWindow( SfxBindings* i_pBindings, SfxChildWindow* i_pChildWindow, Window* i_pParent,
             WinBits i_nStyle )
         :SfxDockingWindow( i_pBindings, i_pChildWindow, i_pParent, i_nStyle )
@@ -49,7 +49,7 @@ namespace sfx2
         impl_construct();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     TitledDockingWindow::TitledDockingWindow( SfxBindings* i_pBindings, SfxChildWindow* i_pChildWindow, Window* i_pParent,
             const ResId& i_rResId )
         :SfxDockingWindow( i_pBindings, i_pChildWindow, i_pParent, i_rResId )
@@ -62,7 +62,7 @@ namespace sfx2
         impl_construct();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void TitledDockingWindow::impl_construct()
     {
         SetBackground( Wallpaper() );
@@ -76,19 +76,19 @@ namespace sfx2
         m_aContentWindow.Show();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     TitledDockingWindow::~TitledDockingWindow()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void TitledDockingWindow::SetTitle( const OUString& i_rTitle )
     {
         m_sTitle = i_rTitle;
         Invalidate();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void TitledDockingWindow::SetText( const OUString& i_rText )
     {
         SfxDockingWindow::SetText( i_rText );
@@ -97,26 +97,26 @@ namespace sfx2
             Invalidate();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void TitledDockingWindow::Resize()
     {
         SfxDockingWindow::Resize();
         impl_scheduleLayout();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void TitledDockingWindow::onLayoutDone()
     {
         // not interested in
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void TitledDockingWindow::impl_scheduleLayout()
     {
         m_bLayoutPending = true;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void TitledDockingWindow::impl_layout()
     {
         m_bLayoutPending = false;
@@ -153,7 +153,7 @@ namespace sfx2
         onLayoutDone();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void TitledDockingWindow::Paint( const Rectangle& i_rArea )
     {
         if ( m_bLayoutPending )
@@ -220,13 +220,13 @@ namespace sfx2
         Pop();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     OUString TitledDockingWindow::impl_getTitle() const
     {
         return !m_sTitle.isEmpty() ? m_sTitle : GetText();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void TitledDockingWindow::impl_resetToolBox()
     {
         m_aToolbox.Clear();
@@ -237,7 +237,7 @@ namespace sfx2
         m_aToolbox.ShowItem( 1 );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     sal_uInt16 TitledDockingWindow::impl_addDropDownToolBoxItem( const OUString& i_rItemText, const OString& i_nHelpId, const Link& i_rCallback )
     {
         // Add the menu before the closer button.
@@ -256,7 +256,7 @@ namespace sfx2
         return nItemId;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     IMPL_LINK( TitledDockingWindow, OnToolboxItemSelected, ToolBox*, pToolBox )
     {
         const sal_uInt16 nId = pToolBox->GetCurItemId();
@@ -278,7 +278,7 @@ namespace sfx2
         return 0;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void TitledDockingWindow::StateChanged( StateChangedType i_nType )
     {
         switch ( i_nType )
@@ -290,7 +290,7 @@ namespace sfx2
         SfxDockingWindow::StateChanged( i_nType );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void TitledDockingWindow::EndDocking( const Rectangle& i_rRect, sal_Bool i_bFloatMode )
     {
         SfxDockingWindow::EndDocking( i_rRect, i_bFloatMode );
@@ -299,7 +299,7 @@ namespace sfx2
             m_aEndDockingHdl.Call( this );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void TitledDockingWindow::DataChanged( const DataChangedEvent& i_rDataChangedEvent )
     {
         SfxDockingWindow::DataChanged( i_rDataChangedEvent );

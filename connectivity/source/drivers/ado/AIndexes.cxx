@@ -42,17 +42,17 @@ sdbcx::ObjectType OIndexes::createObject(const OUString& _rName)
 {
     return new OAdoIndex(isCaseSensitive(),m_pConnection,m_aCollection.GetItem(_rName));
 }
-// -------------------------------------------------------------------------
+
 void OIndexes::impl_refresh() throw(RuntimeException)
 {
     m_aCollection.Refresh();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OIndexes::createDescriptor()
 {
     return new OAdoIndex(isCaseSensitive(),m_pConnection);
 }
-// -------------------------------------------------------------------------
+
 // XAppend
 sdbcx::ObjectType OIndexes::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
@@ -69,13 +69,13 @@ sdbcx::ObjectType OIndexes::appendObject( const OUString& _rForName, const Refer
 
     return new OAdoIndex(isCaseSensitive(),m_pConnection,pIndex->getImpl());
 }
-// -------------------------------------------------------------------------
+
 // XDrop
 void OIndexes::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
 {
     m_aCollection.Delete(_sElementName);
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

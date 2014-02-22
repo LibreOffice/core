@@ -38,9 +38,9 @@ using namespace ::com::sun::star;
 
 namespace unogallery {
 
-// -----------------
+
 // - GalleryTheme -
-// -----------------
+
 
 GalleryTheme::GalleryTheme( const OUString& rThemeName )
 {
@@ -51,7 +51,7 @@ GalleryTheme::GalleryTheme( const OUString& rThemeName )
         StartListening( *mpGallery );
 }
 
-// ------------------------------------------------------------------------------
+
 
 GalleryTheme::~GalleryTheme()
 {
@@ -70,7 +70,7 @@ GalleryTheme::~GalleryTheme()
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 OUString GalleryTheme::getImplementationName_Static()
     throw()
@@ -78,7 +78,7 @@ OUString GalleryTheme::getImplementationName_Static()
     return OUString( "com.sun.star.comp.gallery.GalleryTheme" );
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Sequence< OUString > GalleryTheme::getSupportedServiceNames_Static()
     throw()
@@ -134,7 +134,7 @@ uno::Sequence< sal_Int8 > SAL_CALL GalleryTheme::getImplementationId()
     return theGalleryThemeImplementationId::get().getSeq();
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Type SAL_CALL GalleryTheme::getElementType()
     throw (uno::RuntimeException)
@@ -142,7 +142,7 @@ uno::Type SAL_CALL GalleryTheme::getElementType()
     return ::getCppuType( (const uno::Reference< gallery::XGalleryItem >*) 0);
 }
 
-// ------------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL GalleryTheme::hasElements()
     throw (uno::RuntimeException)
@@ -152,7 +152,7 @@ sal_Bool SAL_CALL GalleryTheme::hasElements()
     return( ( mpTheme != NULL ) && ( mpTheme->GetObjectCount() > 0 ) );
 }
 
-// ------------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL GalleryTheme::getCount()
     throw (uno::RuntimeException)
@@ -162,7 +162,7 @@ sal_Int32 SAL_CALL GalleryTheme::getCount()
     return( mpTheme ? mpTheme->GetObjectCount() : 0 );
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Any SAL_CALL GalleryTheme::getByIndex( ::sal_Int32 nIndex )
     throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
@@ -188,7 +188,7 @@ uno::Any SAL_CALL GalleryTheme::getByIndex( ::sal_Int32 nIndex )
     return aRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 OUString SAL_CALL GalleryTheme::getName(  )
     throw (uno::RuntimeException)
@@ -202,7 +202,7 @@ OUString SAL_CALL GalleryTheme::getName(  )
     return aRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL GalleryTheme::update(  )
     throw (uno::RuntimeException)
@@ -216,7 +216,7 @@ void SAL_CALL GalleryTheme::update(  )
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 ::sal_Int32 SAL_CALL GalleryTheme::insertURLByIndex(
     const OUString& rURL, ::sal_Int32 nIndex )
@@ -249,7 +249,7 @@ void SAL_CALL GalleryTheme::update(  )
     return nRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 ::sal_Int32 SAL_CALL GalleryTheme::insertGraphicByIndex(
     const uno::Reference< graphic::XGraphic >& rxGraphic, sal_Int32 nIndex )
@@ -277,7 +277,7 @@ void SAL_CALL GalleryTheme::update(  )
     return nRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 ::sal_Int32 SAL_CALL GalleryTheme::insertDrawingByIndex(
     const uno::Reference< lang::XComponent >& Drawing, sal_Int32 nIndex )
@@ -333,7 +333,7 @@ void SAL_CALL GalleryTheme::update(  )
     return nRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL GalleryTheme::removeByIndex( sal_Int32 nIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
@@ -349,7 +349,7 @@ void SAL_CALL GalleryTheme::removeByIndex( sal_Int32 nIndex )
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 void GalleryTheme::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
@@ -386,7 +386,7 @@ void GalleryTheme::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 void GalleryTheme::implReleaseItems( GalleryObject* pObj )
 {
@@ -404,14 +404,14 @@ void GalleryTheme::implReleaseItems( GalleryObject* pObj )
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 ::GalleryTheme* GalleryTheme::implGetTheme() const
 {
     return mpTheme;
 }
 
-// ------------------------------------------------------------------------------
+
 
 void GalleryTheme::implRegisterGalleryItem( ::unogallery::GalleryItem& rItem )
 {
@@ -421,7 +421,7 @@ void GalleryTheme::implRegisterGalleryItem( ::unogallery::GalleryItem& rItem )
     maItemList.push_back( &rItem );
 }
 
-// ------------------------------------------------------------------------------
+
 
 void GalleryTheme::implDeregisterGalleryItem( ::unogallery::GalleryItem& rItem )
 {

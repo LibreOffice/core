@@ -122,7 +122,7 @@ SvxBitmapTabPage::~SvxBitmapTabPage()
     delete m_pBitmapCtl;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxBitmapTabPage::Construct()
 {
@@ -132,7 +132,7 @@ void SvxBitmapTabPage::Construct()
     m_pLbBitmaps->Fill( pBitmapList );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
 {
@@ -210,7 +210,7 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 int SvxBitmapTabPage::DeactivatePage( SfxItemSet* _pSet)
 {
@@ -223,7 +223,7 @@ int SvxBitmapTabPage::DeactivatePage( SfxItemSet* _pSet)
     return LEAVE_PAGE;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxBitmapTabPage::FillItemSet( SfxItemSet& _rOutAttrs )
 {
@@ -252,7 +252,7 @@ sal_Bool SvxBitmapTabPage::FillItemSet( SfxItemSet& _rOutAttrs )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxBitmapTabPage::Reset( const SfxItemSet&  )
 {
@@ -287,7 +287,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet&  )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SvxBitmapTabPage::Create( Window* pWindow,
                 const SfxItemSet& rSet )
@@ -295,7 +295,7 @@ SfxTabPage* SvxBitmapTabPage::Create( Window* pWindow,
     return new SvxBitmapTabPage( pWindow, rSet );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
 {
@@ -415,7 +415,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 long SvxBitmapTabPage::CheckChanges_Impl()
 {
@@ -463,7 +463,7 @@ long SvxBitmapTabPage::CheckChanges_Impl()
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
 {
@@ -573,7 +573,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
 /******************************************************************************/
 
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
 {
@@ -657,7 +657,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
 {
@@ -722,7 +722,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl_Impl)
 {
@@ -756,7 +756,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl_Impl)
     return 0L;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
 {
@@ -848,7 +848,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
     return 0L;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickSaveHdl_Impl)
 {
@@ -908,7 +908,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickSaveHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ChangePixelColorHdl_Impl)
 {
@@ -927,7 +927,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangePixelColorHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBackgrndColorHdl_Impl)
 {
@@ -946,7 +946,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBackgrndColorHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxBitmapTabPage::PointChanged( Window* pWindow, RECT_POINT )
 {

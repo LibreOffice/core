@@ -578,14 +578,14 @@ public:
     static bool             CheckFontData( const PhysicalFontFace& r ) { return r.CheckMagic( PSPFD_MAGIC ); }
 };
 
-//--------------------------------------------------------------------------
+
 
 ImplPspFontData::ImplPspFontData( const psp::FastPrintFontInfo& rInfo )
 :   PhysicalFontFace( GenPspGraphics::Info2DevFontAttributes(rInfo), PSPFD_MAGIC ),
     mnFontId( rInfo.m_nID )
 {}
 
-//--------------------------------------------------------------------------
+
 
 ImplFontEntry* ImplPspFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
 {
@@ -612,7 +612,7 @@ private:
     bool                mbArtBold;
 };
 
-//--------------------------------------------------------------------------
+
 
 PspFontLayout::PspFontLayout( ::psp::PrinterGfx& rGfx )
 :   mrPrinterGfx( rGfx )
@@ -625,7 +625,7 @@ PspFontLayout::PspFontLayout( ::psp::PrinterGfx& rGfx )
     mbArtBold    = mrPrinterGfx.GetArtificialBold();
 }
 
-//--------------------------------------------------------------------------
+
 
 bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
@@ -725,7 +725,7 @@ void PspServerFontLayout::InitFont() const
                           mnOrientation, mbVertical, mbArtItalic, mbArtBold );
 }
 
-//--------------------------------------------------------------------------
+
 
 static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx, bool bIsPspServerFontLayout )
 {
@@ -782,7 +782,7 @@ static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx
     }
 }
 
-//--------------------------------------------------------------------------
+
 
 void PspFontLayout::InitFont() const
 {
@@ -790,7 +790,7 @@ void PspFontLayout::InitFont() const
         mnOrientation, mbVertical, mbArtItalic, mbArtBold );
 }
 
-//--------------------------------------------------------------------------
+
 
 void PspFontLayout::DrawText( SalGraphics& ) const
 {
@@ -1006,7 +1006,7 @@ SalLayout* GenPspGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     return pLayout;
 }
 
-//--------------------------------------------------------------------------
+
 
 bool GenPspGraphics::CreateFontSubset(
                                    const OUString& rToFile,
@@ -1036,7 +1036,7 @@ bool GenPspGraphics::CreateFontSubset(
     return bSuccess;
 }
 
-//--------------------------------------------------------------------------
+
 
 const Ucs2SIntMap* GenPspGraphics::GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded )
 {
@@ -1049,7 +1049,7 @@ const Ucs2SIntMap* GenPspGraphics::GetFontEncodingVector( const PhysicalFontFace
     return GenPspGraphics::DoGetFontEncodingVector( aFont, pNonEncoded );
 }
 
-//--------------------------------------------------------------------------
+
 
 void GenPspGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
                                   bool bVertical,
@@ -1088,7 +1088,7 @@ void GenPspGraphics::DoGetGlyphWidths( psp::fontID aFont,
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     rMgr.getGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
 }
-// ----------------------------------------------------------------------------
+
 
 ImplDevFontAttributes GenPspGraphics::Info2DevFontAttributes( const psp::FastPrintFontInfo& rInfo )
 {
@@ -1165,7 +1165,7 @@ namespace vcl
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void GenPspGraphics::AnnounceFonts( ImplDevFontList* pFontList, const psp::FastPrintFontInfo& aInfo )
 {

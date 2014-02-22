@@ -52,7 +52,7 @@ namespace svt { namespace uno
     //==================================================================================================================
     namespace
     {
-        //--------------------------------------------------------------------------------------------------------------
+
         sal_Int16 lcl_determineFirstPageID( const Sequence< Sequence< sal_Int16 > >& i_rPaths )
         {
             ENSURE_OR_THROW( ( i_rPaths.getLength() > 0 ) && ( i_rPaths[0].getLength() > 0 ), "illegal paths" );
@@ -63,7 +63,7 @@ namespace svt { namespace uno
     //==================================================================================================================
     //= WizardShell
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     WizardShell::WizardShell( Window* i_pParent, const Reference< XWizard >& i_rWizard, const Reference< XWizardController >& i_rController,
             const Sequence< Sequence< sal_Int16 > >& i_rPaths )
         :WizardShell_Base( i_pParent, WB_MOVEABLE | WB_CLOSEABLE )
@@ -93,19 +93,19 @@ namespace svt { namespace uno
         enableAutomaticNextButtonState();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     WizardShell::~WizardShell()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     short WizardShell::Execute()
     {
         ActivatePage();
         return WizardShell_Base::Execute();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     sal_Int16 WizardShell::convertCommitReasonToTravelType( const CommitPageReason i_eReason )
     {
         switch ( i_eReason )
@@ -126,7 +126,7 @@ namespace svt { namespace uno
         return WizardTravelType::FINISH;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void WizardShell::enterState( WizardState i_nState )
     {
         WizardShell_Base::enterState( i_nState );
@@ -144,7 +144,7 @@ namespace svt { namespace uno
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     sal_Bool WizardShell::leaveState( WizardState i_nState )
     {
         if ( !WizardShell_Base::leaveState( i_nState ) )
@@ -165,7 +165,7 @@ namespace svt { namespace uno
         return sal_True;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     PWizardPageController WizardShell::impl_getController( TabPage* i_pPage ) const
     {
         Page2ControllerMap::const_iterator pos = m_aPageControllers.find( i_pPage );
@@ -173,7 +173,7 @@ namespace svt { namespace uno
         return pos->second;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XWizardPage > WizardShell::getCurrentWizardPage() const
     {
         const WizardState eState = getCurrentState();
@@ -184,13 +184,13 @@ namespace svt { namespace uno
         return pController->getWizardPage();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void WizardShell::enablePage( const sal_Int16 i_nPageID, const sal_Bool i_bEnable )
     {
         enableState( impl_pageIdToState( i_nPageID ), i_bEnable );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     TabPage* WizardShell::createPage( WizardState i_nState )
     {
         ENSURE_OR_RETURN( m_xController.is(), "WizardShell::createPage: no WizardController!", NULL );
@@ -209,13 +209,13 @@ namespace svt { namespace uno
         return pPage;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     IWizardPageController* WizardShell::getPageController( TabPage* i_pCurrentPage ) const
     {
         return impl_getController( i_pCurrentPage ).get();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     OUString WizardShell::getStateDisplayName( WizardState i_nState ) const
     {
         try
@@ -231,7 +231,7 @@ namespace svt { namespace uno
         return OUString::number(i_nState);
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool WizardShell::canAdvance() const
     {
         try
@@ -247,7 +247,7 @@ namespace svt { namespace uno
         return WizardShell_Base::canAdvance();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     sal_Bool WizardShell::onFinish()
     {
         try

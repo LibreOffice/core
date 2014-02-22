@@ -53,7 +53,7 @@ namespace svt { namespace uno
     //==================================================================================================================
     //= WizardPageController
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     WizardPageController::WizardPageController( WizardShell& i_rParent, const Reference< XWizardController >& i_rController,
             const sal_Int16 i_nPageId )
         :m_xController( i_rController )
@@ -81,7 +81,7 @@ namespace svt { namespace uno
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     WizardPageController::~WizardPageController()
     {
         try
@@ -95,7 +95,7 @@ namespace svt { namespace uno
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     TabPage* WizardPageController::getTabPage() const
     {
         ENSURE_OR_RETURN( m_xWizardPage.is(), "WizardPageController::getTabPage: no external wizard page!", NULL );
@@ -122,7 +122,7 @@ namespace svt { namespace uno
         return NULL;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void WizardPageController::initializePage()
     {
         if ( !m_xWizardPage.is() )
@@ -138,7 +138,7 @@ namespace svt { namespace uno
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     sal_Bool WizardPageController::commitPage( WizardTypes::CommitPageReason i_eReason )
     {
         if ( !m_xWizardPage.is() )
@@ -156,7 +156,7 @@ namespace svt { namespace uno
         return sal_True;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool WizardPageController::canAdvance() const
     {
         if ( !m_xWizardPage.is() )

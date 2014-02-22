@@ -71,7 +71,7 @@ static sal_uInt16 pCaptionRanges[] =
     0
 };
 
-// -----------------------------------------------------------------------
+
 
 SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "CalloutPage", "cui/ui/calloutpage.ui", rInAttrs)
@@ -130,7 +130,7 @@ SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs
     m_pCB_LAENGE->SetClickHdl(LINK(this,SvxCaptionTabPage,LineOptHdl_Impl));
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxCaptionTabPage::Construct()
 {
@@ -138,7 +138,7 @@ void SvxCaptionTabPage::Construct()
     DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
 {
@@ -210,7 +210,7 @@ sal_Bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
     return( sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxCaptionTabPage::Reset( const SfxItemSet&  )
 {
@@ -328,7 +328,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
     SetupType_Impl( nCaptionType+1 );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SvxCaptionTabPage::Create( Window* pWindow,
                 const SfxItemSet& rOutAttrs )
@@ -336,14 +336,14 @@ SfxTabPage* SvxCaptionTabPage::Create( Window* pWindow,
     return( new SvxCaptionTabPage( pWindow, rOutAttrs ) );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16* SvxCaptionTabPage::GetRanges()
 {
     return( pCaptionRanges );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
 {
@@ -401,7 +401,7 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_INLINE_START( SvxCaptionTabPage, AnsatzSelectHdl_Impl, ListBox *, pListBox )
 {
@@ -413,7 +413,7 @@ IMPL_LINK_INLINE_START( SvxCaptionTabPage, AnsatzSelectHdl_Impl, ListBox *, pLis
 }
 IMPL_LINK_INLINE_END( SvxCaptionTabPage, AnsatzSelectHdl_Impl, ListBox *, pListBox )
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_INLINE_START( SvxCaptionTabPage, AnsatzRelSelectHdl_Impl, ListBox *, pListBox )
 {
@@ -425,7 +425,7 @@ IMPL_LINK_INLINE_START( SvxCaptionTabPage, AnsatzRelSelectHdl_Impl, ListBox *, p
 }
 IMPL_LINK_INLINE_END( SvxCaptionTabPage, AnsatzRelSelectHdl_Impl, ListBox *, pListBox )
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( SvxCaptionTabPage, LineOptHdl_Impl, Button *, pButton )
 {
@@ -445,7 +445,7 @@ IMPL_LINK( SvxCaptionTabPage, LineOptHdl_Impl, Button *, pButton )
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(SvxCaptionTabPage, SelectCaptTypeHdl_Impl)
 {
@@ -454,7 +454,7 @@ IMPL_LINK_NOARG_INLINE_START(SvxCaptionTabPage, SelectCaptTypeHdl_Impl)
 }
 IMPL_LINK_NOARG_INLINE_END(SvxCaptionTabPage, SelectCaptTypeHdl_Impl)
 
-//------------------------------------------------------------------------
+
 
 void SvxCaptionTabPage::SetupType_Impl( sal_uInt16 nType )
 {
@@ -486,7 +486,7 @@ void SvxCaptionTabPage::SetupType_Impl( sal_uInt16 nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxCaptionTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -496,7 +496,7 @@ void SvxCaptionTabPage::DataChanged( const DataChangedEvent& rDCEvt )
             FillValueSet();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxCaptionTabPage::FillValueSet()
 {

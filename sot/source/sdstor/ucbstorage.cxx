@@ -105,7 +105,7 @@ protected:
     void checkError();
 };
 
-//------------------------------------------------------------------
+
 FileStreamWrapper_Impl::FileStreamWrapper_Impl( const OUString& rName )
     : m_aURL( rName )
     , m_pSvStream(0)
@@ -113,7 +113,7 @@ FileStreamWrapper_Impl::FileStreamWrapper_Impl( const OUString& rName )
     // if no URL is provided the stream is empty
 }
 
-//------------------------------------------------------------------
+
 FileStreamWrapper_Impl::~FileStreamWrapper_Impl()
 {
     if ( m_pSvStream )
@@ -128,7 +128,7 @@ FileStreamWrapper_Impl::~FileStreamWrapper_Impl()
         ::utl::UCBContentHelper::Kill( m_aURL );
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL FileStreamWrapper_Impl::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
                 throw( NotConnectedException, BufferSizeExceededException, RuntimeException )
 {
@@ -157,7 +157,7 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::readBytes(Sequence< sal_Int8 >& aData
     return nRead;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL FileStreamWrapper_Impl::readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw( NotConnectedException, BufferSizeExceededException, RuntimeException )
 {
     if ( m_aURL.isEmpty() )
@@ -180,7 +180,7 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::readSomeBytes(Sequence< sal_Int8 >& a
         return readBytes(aData, nMaxBytesToRead);
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FileStreamWrapper_Impl::skipBytes(sal_Int32 nBytesToSkip) throw( NotConnectedException, BufferSizeExceededException, RuntimeException )
 {
     if ( m_aURL.isEmpty() )
@@ -193,7 +193,7 @@ void SAL_CALL FileStreamWrapper_Impl::skipBytes(sal_Int32 nBytesToSkip) throw( N
     checkError();
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL FileStreamWrapper_Impl::available() throw( NotConnectedException, RuntimeException )
 {
     if ( m_aURL.isEmpty() )
@@ -215,7 +215,7 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::available() throw( NotConnectedExcept
     return nAvailable;
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FileStreamWrapper_Impl::closeInput() throw( NotConnectedException, RuntimeException )
 {
     if ( m_aURL.isEmpty() )
@@ -231,7 +231,7 @@ void SAL_CALL FileStreamWrapper_Impl::closeInput() throw( NotConnectedException,
     m_aURL = "";
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FileStreamWrapper_Impl::seek( sal_Int64 _nLocation ) throw (IllegalArgumentException, IOException, RuntimeException)
 {
     if ( m_aURL.isEmpty() )
@@ -244,7 +244,7 @@ void SAL_CALL FileStreamWrapper_Impl::seek( sal_Int64 _nLocation ) throw (Illega
     checkError();
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int64 SAL_CALL FileStreamWrapper_Impl::getPosition(  ) throw (IOException, RuntimeException)
 {
     if ( m_aURL.isEmpty() )
@@ -258,7 +258,7 @@ sal_Int64 SAL_CALL FileStreamWrapper_Impl::getPosition(  ) throw (IOException, R
     return (sal_Int64)nPos;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int64 SAL_CALL FileStreamWrapper_Impl::getLength(  ) throw (IOException, RuntimeException)
 {
     if ( m_aURL.isEmpty() )
@@ -279,7 +279,7 @@ sal_Int64 SAL_CALL FileStreamWrapper_Impl::getLength(  ) throw (IOException, Run
     return (sal_Int64)nEndPos;
 }
 
-//------------------------------------------------------------------------------
+
 void FileStreamWrapper_Impl::checkConnected()
 {
     if ( m_aURL.isEmpty() )
@@ -293,7 +293,7 @@ void FileStreamWrapper_Impl::checkConnected()
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FileStreamWrapper_Impl::checkError()
 {
     checkConnected();

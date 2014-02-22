@@ -43,28 +43,28 @@ using namespace ::com::sun::star::util;
 // OGroupBoxModel
 //==================================================================
 
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OGroupBoxModel_CreateInstance(const Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return *(new OGroupBoxModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------
-//------------------------------------------------------------------
+
+
 OGroupBoxModel::OGroupBoxModel(const Reference<XComponentContext>& _rxFactory)
     :OControlModel(_rxFactory, VCL_CONTROLMODEL_GROUPBOX, VCL_CONTROL_GROUPBOX)
 {
     m_nClassId = FormComponentType::GROUPBOX;
 }
 
-//------------------------------------------------------------------
+
 OGroupBoxModel::OGroupBoxModel( const OGroupBoxModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OControlModel( _pOriginal, _rxFactory )
 {
 }
 
 // XServiceInfo
-//------------------------------------------------------------------------------
+
 StringSequence SAL_CALL OGroupBoxModel::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OControlModel::getSupportedServiceNames();
@@ -75,15 +75,15 @@ StringSequence SAL_CALL OGroupBoxModel::getSupportedServiceNames() throw(Runtime
     return aSupported;
 }
 
-//------------------------------------------------------------------
+
 OGroupBoxModel::~OGroupBoxModel()
 {
 }
 
-//------------------------------------------------------------------------------
+
 IMPLEMENT_DEFAULT_CLONING( OGroupBoxModel )
 
-//------------------------------------------------------------------------------
+
 void OGroupBoxModel::describeAggregateProperties( Sequence< Property >& _rAggregateProps ) const
 {
     OControlModel::describeAggregateProperties( _rAggregateProps );
@@ -91,13 +91,13 @@ void OGroupBoxModel::describeAggregateProperties( Sequence< Property >& _rAggreg
     RemoveProperty(_rAggregateProps, PROPERTY_TABSTOP);
 }
 
-//------------------------------------------------------------------------------
+
 OUString SAL_CALL OGroupBoxModel::getServiceName() throw(RuntimeException)
 {
     return OUString(FRM_COMPONENT_GROUPBOX);  // old (non-sun) name for compatibility !
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OGroupBoxModel::write(const Reference< XObjectOutputStream>& _rxOutStream)
     throw(IOException, RuntimeException)
 {
@@ -108,7 +108,7 @@ void SAL_CALL OGroupBoxModel::write(const Reference< XObjectOutputStream>& _rxOu
     writeHelpTextCompatibly(_rxOutStream);
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OGroupBoxModel::read(const Reference< XObjectInputStream>& _rxInStream) throw(IOException, RuntimeException)
 {
     OControlModel::read( _rxInStream );
@@ -131,19 +131,19 @@ void SAL_CALL OGroupBoxModel::read(const Reference< XObjectInputStream>& _rxInSt
 // OGroupBoxControl
 //==================================================================
 
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OGroupBoxControl_CreateInstance(const Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return *(new OGroupBoxControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 OGroupBoxControl::OGroupBoxControl(const Reference<XComponentContext>& _rxFactory)
                    :OControl(_rxFactory, VCL_CONTROL_GROUPBOX)
 {
 }
 
-//------------------------------------------------------------------------------
+
 StringSequence SAL_CALL OGroupBoxControl::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OControl::getSupportedServiceNames();

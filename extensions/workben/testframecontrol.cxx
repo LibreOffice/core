@@ -84,7 +84,7 @@ public:
     void                removeAllListeners( const XControlRef& xControl );
 };
 
-//--------------------------------------------------------------------------------------------------
+
 void Listener_Impl::addAllListeners( const XControlRef& xControl )
 {
     XWindowRef xWindow( xControl, USR_QUERY );
@@ -99,7 +99,7 @@ void Listener_Impl::addAllListeners( const XControlRef& xControl )
     xControl->addEventListener( (XEventListener*)(XPaintListener*)this );
 }
 
-//--------------------------------------------------------------------------------------------------
+
 void Listener_Impl::removeAllListeners( const XControlRef& xControl )
 {
     XWindowRef xWindow( xControl, USR_QUERY );
@@ -114,10 +114,10 @@ void Listener_Impl::removeAllListeners( const XControlRef& xControl )
     xControl->removeEventListener( (XEventListener*)(XPaintListener*)this );
 }
 
-//--------------------------------------------------------------------------------------------------
+
 SMART_UNO_IMPLEMENTATION( Listener_Impl, UsrObject );
 
-//--------------------------------------------------------------------------------------------------
+
 BOOL Listener_Impl::queryInterface( Uik aUik, XInterfaceRef& rOut )
 {
     if (aUik == XMouseListener::getSmartUik())
@@ -140,7 +140,7 @@ BOOL Listener_Impl::queryInterface( Uik aUik, XInterfaceRef& rOut )
     return TRUE;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 // XMouseListener
 void Listener_Impl::mousePressed( const VclMouseEvent& evt )    {}
 void Listener_Impl::mouseReleased( const VclMouseEvent& evt )   {}
@@ -213,7 +213,7 @@ Application* pApp = &g_App;
 #endif
 
 
-//--------------------------------------------------------------------------------------------------
+
 void FrameControlApplication::init()
 {
     XMultiServiceFactoryRef xMgr = createRegistryServiceManager( L"test.rdb" );
@@ -262,7 +262,7 @@ void FrameControlApplication::init()
     }
 }
 
-//--------------------------------------------------------------------------------------------------
+
 void FrameControlApplication::deinit()
 {
     if (_pListener)
@@ -281,7 +281,7 @@ void FrameControlApplication::deinit()
 }
 
 
-//--------------------------------------------------------------------------------------------------
+
 void FrameControlApplication::Main()
 {
 //      void TestErrcodes();

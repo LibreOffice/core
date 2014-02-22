@@ -68,7 +68,7 @@ namespace sd
 const sal_uInt32 SMART_TAG_HDL_NUM = SAL_MAX_UINT32;
 static const int DRGPIX     = 2;                               // Drag MinMove in Pixel
 
-// --------------------------------------------------------------------
+
 
 class PathDragMove : public SdrDragMove
 {
@@ -132,7 +132,7 @@ bool PathDragMove::EndSdrDrag(bool /*bCopy*/)
         mxTag->MovePath( DragStat().GetDX(), DragStat().GetDY() );
     return true;
 }
-// --------------------------------------------------------------------
+
 
 class PathDragResize : public SdrDragResize
 {
@@ -193,7 +193,7 @@ bool PathDragResize::EndSdrDrag(bool /*bCopy*/)
     return true;
 }
 
-// --------------------------------------------------------------------
+
 
 class PathDragObjOwn : public SdrDragObjOwn
 {
@@ -245,7 +245,7 @@ bool PathDragObjOwn::EndSdrDrag(bool /*bCopy*/)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 class SdPathHdl : public SmartHdl
 {
@@ -262,7 +262,7 @@ private:
     rtl::Reference< MotionPathTag > mxTag;
 };
 
-// --------------------------------------------------------------------
+
 
 SdPathHdl::SdPathHdl( const SmartTagReference& xTag, SdrPathObj* pPathObj )
 : SmartHdl( xTag, pPathObj->GetCurrentBoundRect().TopLeft() )
@@ -271,13 +271,13 @@ SdPathHdl::SdPathHdl( const SmartTagReference& xTag, SdrPathObj* pPathObj )
 {
 }
 
-// --------------------------------------------------------------------
+
 
 SdPathHdl::~SdPathHdl()
 {
 }
 
-// --------------------------------------------------------------------
+
 
 void SdPathHdl::CreateB2dIAObject()
 {
@@ -317,21 +317,21 @@ void SdPathHdl::CreateB2dIAObject()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool SdPathHdl::IsFocusHdl() const
 {
     return sal_False;
 }
 
-// --------------------------------------------------------------------
+
 
 bool SdPathHdl::isMarkable() const
 {
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 Pointer SdPathHdl::GetSdrDragPointer() const
 {
@@ -408,7 +408,7 @@ MotionPathTag::MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, con
     }
 }
 
-// --------------------------------------------------------------------
+
 
 MotionPathTag::~MotionPathTag()
 {
@@ -416,7 +416,7 @@ MotionPathTag::~MotionPathTag()
     Dispose();
 }
 
-// --------------------------------------------------------------------
+
 
 void MotionPathTag::updatePathAttributes()
 {
@@ -446,7 +446,7 @@ void MotionPathTag::updatePathAttributes()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void MotionPathTag::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
@@ -465,7 +465,7 @@ void MotionPathTag::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void MotionPathTag::MovePath( int nDX, int nDY )
 {
@@ -476,7 +476,7 @@ void MotionPathTag::MovePath( int nDX, int nDY )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 /** returns true if the MotionPathTag handled the event. */
 bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
@@ -606,7 +606,7 @@ bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 /** returns true if the SmartTag consumes this event. */
 bool MotionPathTag::KeyInput( const KeyEvent& rKEvt )
@@ -816,7 +816,7 @@ bool MotionPathTag::OnMove( const KeyEvent& rKEvt )
     return true;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_uLong MotionPathTag::GetMarkablePointCount() const
 {
@@ -830,7 +830,7 @@ sal_uLong MotionPathTag::GetMarkablePointCount() const
     }
 }
 
-// --------------------------------------------------------------------
+
 
 sal_uLong MotionPathTag::GetMarkedPointCount() const
 {
@@ -845,7 +845,7 @@ sal_uLong MotionPathTag::GetMarkedPointCount() const
     }
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool MotionPathTag::MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark )
 {
@@ -866,7 +866,7 @@ sal_Bool MotionPathTag::MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark )
     return bRet;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool MotionPathTag::MarkPoints(const Rectangle* pRect, sal_Bool bUnmark )
 {
@@ -897,7 +897,7 @@ sal_Bool MotionPathTag::MarkPoints(const Rectangle* pRect, sal_Bool bUnmark )
     return bChgd;
 }
 
-// --------------------------------------------------------------------
+
 
 bool MotionPathTag::getContext( SdrViewContext& rContext )
 {
@@ -912,7 +912,7 @@ bool MotionPathTag::getContext( SdrViewContext& rContext )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void MotionPathTag::CheckPossibilities()
 {
@@ -941,7 +941,7 @@ void MotionPathTag::CheckPossibilities()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
 {
@@ -1054,7 +1054,7 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void MotionPathTag::disposing()
 {
@@ -1082,7 +1082,7 @@ void MotionPathTag::disposing()
     SmartTag::disposing();
 }
 
-// --------------------------------------------------------------------
+
 
 void MotionPathTag::deselect()
 {
@@ -1107,9 +1107,9 @@ void MotionPathTag::selectionChanged()
         rBindings.InvalidateAll(sal_True);
     }
 }
-// --------------------------------------------------------------------
+
 // IPolyPolygonEditorController
-// --------------------------------------------------------------------
+
 
 void MotionPathTag::DeleteMarkedPoints()
 {

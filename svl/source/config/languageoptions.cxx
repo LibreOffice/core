@@ -157,7 +157,7 @@ sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
     }
     return nScript;
 }
-// -----------------------------------------------------------------------------
+
 
 SvtSystemLanguageOptions::SvtSystemLanguageOptions() :
     utl::ConfigItem( "System/L10N")

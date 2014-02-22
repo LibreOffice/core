@@ -26,7 +26,7 @@
 #include <comphelper/basicio.hxx>
 #include <comphelper/processfactory.hxx>
 
-//--------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_ONavigationBarModel()
 {
     static ::frm::OMultiInstanceAutoRegistration< ::frm::ONavigationBarModel > aAutoRegistration;
@@ -56,7 +56,7 @@ namespace frm
     //==================================================================
     // ONavigationBarModel
     //==================================================================
-    //------------------------------------------------------------------
+
     ONavigationBarModel::ONavigationBarModel( const Reference< XComponentContext >& _rxFactory )
         :OControlModel( _rxFactory, OUString() )
         ,FontControlModel( true )
@@ -79,7 +79,7 @@ namespace frm
         getPropertyDefaultByHandle( PROPERTY_ID_CONTEXT_WRITING_MODE    ) >>= m_nContextWritingMode;
     }
 
-    //------------------------------------------------------------------
+
     ONavigationBarModel::ONavigationBarModel( const ONavigationBarModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
         :OControlModel( _pOriginal, _rxFactory )
         ,FontControlModel( _pOriginal )
@@ -105,7 +105,7 @@ namespace frm
         m_nContextWritingMode   = _pOriginal->m_nContextWritingMode;
     }
 
-    //------------------------------------------------------------------
+
     void ONavigationBarModel::implInitPropertyContainer()
     {
         REGISTER_PROP_2( DEFAULTCONTROL,      m_sDefaultControl,        BOUND, MAYBEDEFAULT );
@@ -127,7 +127,7 @@ namespace frm
         REGISTER_VOID_PROP( BACKGROUNDCOLOR, m_aBackgroundColor, sal_Int32 );
     }
 
-    //------------------------------------------------------------------
+
     ONavigationBarModel::~ONavigationBarModel()
     {
         if ( !OComponentHelper::rBHelper.bDisposed )
@@ -138,7 +138,7 @@ namespace frm
 
     }
 
-    //------------------------------------------------------------------
+
     Any SAL_CALL ONavigationBarModel::queryAggregation( const Type& _rType ) throw ( RuntimeException )
     {
         Any aReturn = ONavigationBarModel_BASE::queryInterface( _rType );
@@ -149,31 +149,31 @@ namespace frm
         return aReturn;
     }
 
-    //------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ONavigationBarModel, OControlModel, ONavigationBarModel_BASE )
 
-    //------------------------------------------------------------------------------
+
     IMPLEMENT_DEFAULT_CLONING( ONavigationBarModel )
 
-    //------------------------------------------------------------------
+
     OUString SAL_CALL ONavigationBarModel::getImplementationName()  throw(RuntimeException)
     {
         return getImplementationName_Static();
     }
 
-    //------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL ONavigationBarModel::getSupportedServiceNames()  throw(RuntimeException)
     {
         return getSupportedServiceNames_Static();
     }
 
-    //------------------------------------------------------------------
+
     OUString SAL_CALL ONavigationBarModel::getImplementationName_Static()
     {
         return OUString( "com.sun.star.comp.form.ONavigationBarModel" );
     }
 
-    //------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL ONavigationBarModel::getSupportedServiceNames_Static()
     {
         Sequence< OUString > aSupported = OControlModel::getSupportedServiceNames_Static();
@@ -185,25 +185,25 @@ namespace frm
         return aSupported;
     }
 
-    //------------------------------------------------------------------
+
     Reference< XInterface > SAL_CALL ONavigationBarModel::Create( const Reference< XMultiServiceFactory >& _rxFactory )
     {
         return *( new ONavigationBarModel( comphelper::getComponentContext(_rxFactory) ) );
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL ONavigationBarModel::disposing()
     {
         OControlModel::disposing( );
     }
 
-    //------------------------------------------------------------------
+
     OUString SAL_CALL ONavigationBarModel::getServiceName() throw ( RuntimeException )
     {
         return OUString(FRM_SUN_COMPONENT_NAVTOOLBAR);
     }
 
-    //------------------------------------------------------------------
+
     #define PERSIST_TABSTOP         0x0001
     #define PERSIST_BACKGROUND      0x0002
     #define PERSIST_TEXTCOLOR       0x0004
@@ -217,7 +217,7 @@ namespace frm
     #define PERSIST_SHOW_ACTIONS    0x0020
     #define PERSIST_SHOW_FILTERSORT 0x0040
 
-    //------------------------------------------------------------------
+
     void SAL_CALL ONavigationBarModel::write( const Reference< XObjectOutputStream >& _rxOutStream ) throw ( IOException, RuntimeException )
     {
         // open a section for compatibility - if we later on write additional members,
@@ -290,7 +290,7 @@ namespace frm
         _rxOutStream->writeLong ( m_nDelay  );
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL ONavigationBarModel::read( const Reference< XObjectInputStream >& _rxInStream ) throw ( IOException, RuntimeException )
     {
         OStreamSection aEnsureBlockCompat( _rxInStream );
@@ -351,7 +351,7 @@ namespace frm
         m_nDelay  = _rxInStream->readLong();
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL ONavigationBarModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         if ( isRegisteredProperty( _nHandle ) )
@@ -368,7 +368,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+
     sal_Bool SAL_CALL ONavigationBarModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue,
         sal_Int32 _nHandle, const Any& _rValue ) throw( IllegalArgumentException )
     {
@@ -390,7 +390,7 @@ namespace frm
         return bModified;
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL ONavigationBarModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw ( Exception )
     {
         if ( isRegisteredProperty( _nHandle ) )
@@ -409,7 +409,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+
     Any ONavigationBarModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
     {
         Any aDefault;
@@ -464,7 +464,7 @@ namespace frm
         return aDefault;
     }
 
-    //------------------------------------------------------------------
+
     void ONavigationBarModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
         BEGIN_DESCRIBE_PROPERTIES( 1, OControlModel )

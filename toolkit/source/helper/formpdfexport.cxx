@@ -58,7 +58,7 @@ namespace toolkitform
 
     namespace
     {
-        //--------------------------------------------------------------------
+
         /** determines the FormComponentType of a form control
         */
         sal_Int16 classifyFormControl( const Reference< XPropertySet >& _rxModel ) SAL_THROW(( Exception ))
@@ -77,7 +77,7 @@ namespace toolkitform
             return nControlType;
         }
 
-        //--------------------------------------------------------------------
+
         /** (default-)creates a PDF widget according to a given FormComponentType
         */
         ::vcl::PDFWriter::AnyWidget* createDefaultWidget( sal_Int16 _nFormComponentType )
@@ -107,7 +107,7 @@ namespace toolkitform
             return NULL;
         }
 
-        //--------------------------------------------------------------------
+
         /** determines a unique number for the radio group which the given radio
             button model belongs to
 
@@ -238,7 +238,7 @@ namespace toolkitform
             return -1;
         }
 
-        //--------------------------------------------------------------------
+
         /** copies a StringItemList to a PDF widget's list
         */
         void getStringItemVector( const Reference< XPropertySet >& _rxModel, ::std::vector< OUString >& _rVector )
@@ -251,7 +251,7 @@ namespace toolkitform
         }
     }
 
-    //--------------------------------------------------------------------
+
     /** creates a PDF compatible control descriptor for the given control
     */
     void TOOLKIT_DLLPUBLIC describePDFControl( const Reference< XControl >& _rxControl,
@@ -280,7 +280,7 @@ namespace toolkitform
             // ================================
             // set the common widget properties
 
-            // --------------------------------
+
             // Name, Description, Text
             OSL_VERIFY( xModelProps->getPropertyValue( OUString(FM_PROP_NAME) ) >>= _rpDescriptor->Name );
             static const OUString FM_PROP_HELPTEXT("HelpText");
@@ -295,13 +295,13 @@ namespace toolkitform
             if ( aText.hasValue() )
                 OSL_VERIFY( aText >>= _rpDescriptor->Text );
 
-            // --------------------------------
+
             // readonly
             static const OUString FM_PROP_READONLY("ReadOnly");
             if ( xPSI->hasPropertyByName( FM_PROP_READONLY ) )
                 OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_READONLY ) >>= _rpDescriptor->ReadOnly );
 
-            // --------------------------------
+
             // border
             {
                 static const OUString FM_PROP_BORDER("Border");
@@ -323,7 +323,7 @@ namespace toolkitform
                 }
             }
 
-            // --------------------------------
+
             // background color
             static const OUString FM_PROP_BACKGROUNDCOLOR("BackgroundColor");
             if ( xPSI->hasPropertyByName( FM_PROP_BACKGROUNDCOLOR ) )
@@ -334,7 +334,7 @@ namespace toolkitform
                 _rpDescriptor->BackgroundColor = Color( nBackColor );
             }
 
-            // --------------------------------
+
             // text color
             static const OUString FM_PROP_TEXTCOLOR("TextColor");
             if ( xPSI->hasPropertyByName( FM_PROP_TEXTCOLOR ) )
@@ -344,7 +344,7 @@ namespace toolkitform
                 _rpDescriptor->TextColor = Color( nTextColor );
             }
 
-            // --------------------------------
+
             // text style
             _rpDescriptor->TextStyle = 0;
             // ............................
@@ -416,7 +416,7 @@ namespace toolkitform
 
             // ================================
             // special widget properties
-            // --------------------------------
+
             // edits
             if ( _rpDescriptor->getType() == ::vcl::PDFWriter::Edit )
             {
@@ -452,7 +452,7 @@ namespace toolkitform
                 }
             }
 
-            // --------------------------------
+
             // buttons
             if ( _rpDescriptor->getType() == ::vcl::PDFWriter::PushButton )
             {
@@ -516,7 +516,7 @@ namespace toolkitform
                     pButtonWidget->TextStyle = TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER;
             }
 
-            // --------------------------------
+
             // check boxes
             static const OUString FM_PROP_STATE("State");
             if ( _rpDescriptor->getType() == ::vcl::PDFWriter::CheckBox )
@@ -527,7 +527,7 @@ namespace toolkitform
                 pCheckBoxWidget->Checked = ( nState != 0 );
             }
 
-            // --------------------------------
+
             // radio buttons
             if ( _rpDescriptor->getType() == ::vcl::PDFWriter::RadioButton )
             {
@@ -547,7 +547,7 @@ namespace toolkitform
                 }
             }
 
-            // --------------------------------
+
             // list boxes
             if ( _rpDescriptor->getType() == ::vcl::PDFWriter::ListBox )
             {
@@ -581,7 +581,7 @@ namespace toolkitform
                 }
             }
 
-            // --------------------------------
+
             // combo boxes
             if ( _rpDescriptor->getType() == ::vcl::PDFWriter::ComboBox )
             {
@@ -595,7 +595,7 @@ namespace toolkitform
 
             // ================================
             // some post-processing
-            // --------------------------------
+
             // text line ends
             // some controls may (always or dependent on other settings) return UNIX line ends
             _rpDescriptor->Text = convertLineEnd(_rpDescriptor->Text, LINEEND_CRLF);

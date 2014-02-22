@@ -56,7 +56,7 @@ namespace rptui
     using namespace util;
     using namespace container;
     using namespace report;
-//----------------------------------------------------------------------------
+
 ::std::mem_fun_t<uno::Reference<report::XSection> , OGroupHelper> OGroupHelper::getMemberFunction(const Reference< XSection >& _xSection)
 {
     ::std::mem_fun_t<uno::Reference<report::XSection> , OGroupHelper> pMemFunSection = ::std::mem_fun(&OGroupHelper::getFooter);
@@ -65,7 +65,7 @@ namespace rptui
         pMemFunSection = ::std::mem_fun(&OGroupHelper::getHeader);
     return pMemFunSection;
 }
-// -----------------------------------------------------------------------------
+
 ::std::mem_fun_t<uno::Reference<report::XSection> , OReportHelper> OReportHelper::getMemberFunction(const Reference< XSection >& _xSection)
 {
     uno::Reference< report::XReportDefinition> xReportDefinition(_xSection->getReportDefinition());
@@ -81,9 +81,9 @@ namespace rptui
     return pMemFunSection;
 }
 
-//------------------------------------------------------------------------------
+
 TYPEINIT1( OCommentUndoAction,          SdrUndoAction );
-//----------------------------------------------------------------------------
+
 OCommentUndoAction::OCommentUndoAction(SdrModel& _rMod,sal_uInt16 nCommentID)
     :SdrUndoAction(_rMod)
 {
@@ -94,15 +94,15 @@ OCommentUndoAction::OCommentUndoAction(SdrModel& _rMod,sal_uInt16 nCommentID)
 OCommentUndoAction::~OCommentUndoAction()
 {
 }
-//----------------------------------------------------------------------------
+
 void OCommentUndoAction::Undo()
 {
 }
-//----------------------------------------------------------------------------
+
 void OCommentUndoAction::Redo()
 {
 }
-//------------------------------------------------------------------------------
+
 OUndoContainerAction::OUndoContainerAction(SdrModel& _rMod
                                              ,Action _eAction
                                              ,const uno::Reference< container::XIndexContainer > _xContainer
@@ -118,7 +118,7 @@ OUndoContainerAction::OUndoContainerAction(SdrModel& _rMod
         // we now own the element
         m_xOwnElement = m_xElement;
 }
-//------------------------------------------------------------------------------
+
 OUndoContainerAction::~OUndoContainerAction()
 {
     // if we own the object ....
@@ -150,7 +150,7 @@ OUndoContainerAction::~OUndoContainerAction()
         }
     }
 }
-//------------------------------------------------------------------------------
+
 void OUndoContainerAction::implReInsert( ) SAL_THROW( ( Exception ) )
 {
     if ( m_xContainer.is() )
@@ -162,7 +162,7 @@ void OUndoContainerAction::implReInsert( ) SAL_THROW( ( Exception ) )
     m_xOwnElement = NULL;
 }
 
-//------------------------------------------------------------------------------
+
 void OUndoContainerAction::implReRemove( ) SAL_THROW( ( Exception ) )
 {
     OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
@@ -188,7 +188,7 @@ void OUndoContainerAction::implReRemove( ) SAL_THROW( ( Exception ) )
     m_xOwnElement = m_xElement;
 }
 
-//------------------------------------------------------------------------------
+
 void OUndoContainerAction::Undo()
 {
     if ( m_xElement.is() )
@@ -217,7 +217,7 @@ void OUndoContainerAction::Undo()
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OUndoContainerAction::Redo()
 {
     if ( m_xElement.is() )
@@ -244,7 +244,7 @@ void OUndoContainerAction::Redo()
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 OUndoGroupSectionAction::OUndoGroupSectionAction(SdrModel& _rMod
                                              ,Action _eAction
                                              ,::std::mem_fun_t< uno::Reference< report::XSection >
@@ -257,7 +257,7 @@ OUndoGroupSectionAction::OUndoGroupSectionAction(SdrModel& _rMod
 ,m_pMemberFunction(_pMemberFunction)
 {
 }
-//------------------------------------------------------------------------------
+
 void OUndoGroupSectionAction::implReInsert( ) SAL_THROW( ( Exception ) )
 {
     OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
@@ -274,7 +274,7 @@ void OUndoGroupSectionAction::implReInsert( ) SAL_THROW( ( Exception ) )
     m_xOwnElement = NULL;
 }
 
-//------------------------------------------------------------------------------
+
 void OUndoGroupSectionAction::implReRemove( ) SAL_THROW( ( Exception ) )
 {
         OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
@@ -290,7 +290,7 @@ void OUndoGroupSectionAction::implReRemove( ) SAL_THROW( ( Exception ) )
     // from now on, we own this object
     m_xOwnElement = m_xElement;
 }
-//----------------------------------------------------------------------------
+
 OUndoReportSectionAction::OUndoReportSectionAction(SdrModel& _rMod
                                              ,Action _eAction
                                              ,::std::mem_fun_t< uno::Reference< report::XSection >
@@ -303,7 +303,7 @@ OUndoReportSectionAction::OUndoReportSectionAction(SdrModel& _rMod
 ,m_pMemberFunction(_pMemberFunction)
 {
 }
-//------------------------------------------------------------------------------
+
 void OUndoReportSectionAction::implReInsert( ) SAL_THROW( ( Exception ) )
 {
     OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
@@ -326,7 +326,7 @@ void OUndoReportSectionAction::implReInsert( ) SAL_THROW( ( Exception ) )
     m_xOwnElement = NULL;
 }
 
-//------------------------------------------------------------------------------
+
 void OUndoReportSectionAction::implReRemove( ) SAL_THROW( ( Exception ) )
 {
     OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
@@ -341,7 +341,7 @@ void OUndoReportSectionAction::implReRemove( ) SAL_THROW( ( Exception ) )
     // from now on, we own this object
     m_xOwnElement = m_xElement;
 }
-//------------------------------------------------------------------------------
+
 ORptUndoPropertyAction::ORptUndoPropertyAction(SdrModel& rNewMod, const PropertyChangeEvent& evt)
                      :OCommentUndoAction(rNewMod,0)
                      ,m_xObj(evt.Source, UNO_QUERY)
@@ -350,23 +350,23 @@ ORptUndoPropertyAction::ORptUndoPropertyAction(SdrModel& rNewMod, const Property
                      ,m_aOldValue(evt.OldValue)
 {
 }
-//------------------------------------------------------------------------------
+
 void ORptUndoPropertyAction::Undo()
 {
     setProperty(sal_True);
 }
 
-//------------------------------------------------------------------------------
+
 void ORptUndoPropertyAction::Redo()
 {
     setProperty(sal_False);
 }
-// -----------------------------------------------------------------------------
+
 Reference< XPropertySet> ORptUndoPropertyAction::getObject()
 {
     return m_xObj;
 }
-// -----------------------------------------------------------------------------
+
 void ORptUndoPropertyAction::setProperty(sal_Bool _bOld)
 {
     Reference< XPropertySet> xObj = getObject();
@@ -402,12 +402,12 @@ OUndoPropertyGroupSectionAction::OUndoPropertyGroupSectionAction(SdrModel& _rMod
 ,m_pMemberFunction(_pMemberFunction)
 {
 }
-// -----------------------------------------------------------------------------
+
 Reference< XPropertySet> OUndoPropertyGroupSectionAction::getObject()
 {
     return m_pMemberFunction(&m_aGroupHelper).get();
 }
-// -----------------------------------------------------------------------------
+
 OUndoPropertyReportSectionAction::OUndoPropertyReportSectionAction(SdrModel& _rMod
                                              ,const PropertyChangeEvent& evt
                                              ,::std::mem_fun_t< uno::Reference< report::XSection >
@@ -419,7 +419,7 @@ OUndoPropertyReportSectionAction::OUndoPropertyReportSectionAction(SdrModel& _rM
 ,m_pMemberFunction(_pMemberFunction)
 {
 }
-// -----------------------------------------------------------------------------
+
 Reference< XPropertySet> OUndoPropertyReportSectionAction::getObject()
 {
     return m_pMemberFunction(&m_aReportHelper).get();

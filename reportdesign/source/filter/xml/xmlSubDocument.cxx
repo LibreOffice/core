@@ -50,13 +50,13 @@ OXMLSubDocument::OXMLSubDocument( ORptFilter& rImport,
 {
 
 }
-// -----------------------------------------------------------------------------
+
 
 OXMLSubDocument::~OXMLSubDocument()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 SvXMLImportContext* OXMLSubDocument::_CreateChildContext(
         sal_uInt16 _nPrefix,
         const OUString& _rLocalName,
@@ -99,7 +99,7 @@ SvXMLImportContext* OXMLSubDocument::_CreateChildContext(
 
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 void OXMLSubDocument::EndElement()
 {
     if ( m_bContainsShape )
@@ -138,14 +138,14 @@ void OXMLSubDocument::EndElement()
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void OXMLSubDocument::addMasterDetailPair(const ::std::pair< OUString,OUString >& _aPair)
 {
     m_aMasterFields.push_back(_aPair.first);
     m_aDetailFields.push_back(_aPair.second);
 }
-//----------------------------------------------------------------------------
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

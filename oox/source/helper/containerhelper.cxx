@@ -48,7 +48,7 @@ struct ValueRangeComp
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 void ValueRangeSet::insert( const ValueRange& rRange )
 {

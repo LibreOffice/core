@@ -49,7 +49,7 @@ namespace svt
         SetDropDownLineCount(5);
     }
 
-    //------------------------------------------------------------------
+
     bool ComboBoxControl::PreNotify( NotifyEvent& rNEvt )
     {
         switch (rNEvt.GetType())
@@ -82,13 +82,13 @@ namespace svt
     //==================================================================
     //= ComboBoxCellController
     //==================================================================
-    //------------------------------------------------------------------
+
     ComboBoxCellController::ComboBoxCellController(ComboBoxControl* pWin)
                              :CellController(pWin)
     {
     }
 
-    //------------------------------------------------------------------
+
     sal_Bool ComboBoxCellController::MoveAllowed(const KeyEvent& rEvt) const
     {
         ComboBoxControl& rBox = GetComboBox();
@@ -126,19 +126,19 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------
+
     sal_Bool ComboBoxCellController::IsModified() const
     {
         return GetComboBox().GetSavedValue() != GetComboBox().GetText();
     }
 
-    //------------------------------------------------------------------
+
     void ComboBoxCellController::ClearModified()
     {
         GetComboBox().SaveValue();
     }
 
-    //------------------------------------------------------------------
+
     void ComboBoxCellController::SetModifyHdl(const Link& rLink)
     {
         GetComboBox().SetModifyHdl(rLink);
@@ -147,7 +147,7 @@ namespace svt
     //==================================================================
     //= ListBoxControl
     //==================================================================
-    //------------------------------------------------------------------
+
     ListBoxControl::ListBoxControl(Window* pParent, WinBits nWinStyle)
                   :ListBox(pParent, nWinStyle|WB_DROPDOWN|WB_NOBORDER)
     {
@@ -156,7 +156,7 @@ namespace svt
         SetDropDownLineCount(20);
     }
 
-    //------------------------------------------------------------------
+
     bool ListBoxControl::PreNotify( NotifyEvent& rNEvt )
     {
         switch (rNEvt.GetType())
@@ -192,13 +192,13 @@ namespace svt
     //==================================================================
     //= ListBoxCellController
     //==================================================================
-    //------------------------------------------------------------------
+
     ListBoxCellController::ListBoxCellController(ListBoxControl* pWin)
                              :CellController(pWin)
     {
     }
 
-    //------------------------------------------------------------------
+
     sal_Bool ListBoxCellController::MoveAllowed(const KeyEvent& rEvt) const
     {
         ListBoxControl& rBox = GetListBox();
@@ -222,19 +222,19 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------
+
     sal_Bool ListBoxCellController::IsModified() const
     {
         return GetListBox().GetSelectEntryPos() != GetListBox().GetSavedValue();
     }
 
-    //------------------------------------------------------------------
+
     void ListBoxCellController::ClearModified()
     {
         GetListBox().SaveValue();
     }
 
-    //------------------------------------------------------------------
+
     void ListBoxCellController::SetModifyHdl(const Link& rLink)
     {
         GetListBox().SetSelectHdl(rLink);
@@ -243,7 +243,7 @@ namespace svt
     //==================================================================
     //= CheckBoxControl
     //==================================================================
-    //------------------------------------------------------------------
+
     CheckBoxControl::CheckBoxControl(Window* pParent, WinBits nWinStyle)
                    :Control(pParent, nWinStyle)
     {
@@ -266,34 +266,34 @@ namespace svt
         pBox->Show();
     }
 
-    //------------------------------------------------------------------
+
     CheckBoxControl::~CheckBoxControl()
     {
         delete pBox;
     }
 
-    //------------------------------------------------------------------
+
     IMPL_LINK_NOARG(CheckBoxControl, OnClick)
     {
         m_aClickLink.Call(pBox);
         return m_aModifyLink.Call(pBox);
     }
 
-    //------------------------------------------------------------------
+
     void CheckBoxControl::Resize()
     {
         Control::Resize();
         pBox->SetPosSizePixel(Point(0,0),GetSizePixel());
     }
 
-    //------------------------------------------------------------------------------
+
     void CheckBoxControl::DataChanged( const DataChangedEvent& _rEvent )
     {
         if ( _rEvent.GetType() == DATACHANGED_SETTINGS )
             pBox->SetSettings( GetSettings() );
     }
 
-    //------------------------------------------------------------------------------
+
     void CheckBoxControl::StateChanged( StateChangedType nStateChange )
     {
         Control::StateChanged(nStateChange);
@@ -301,19 +301,19 @@ namespace svt
             pBox->SetZoom(GetZoom());
     }
 
-    //------------------------------------------------------------------
+
     void CheckBoxControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
     {
         pBox->Draw(pDev,rPos,rSize,nFlags);
     }
 
-    //------------------------------------------------------------------
+
     void CheckBoxControl::GetFocus()
     {
         pBox->GrabFocus();
     }
 
-    //------------------------------------------------------------------
+
     void CheckBoxControl::Paint(const Rectangle& rClientRect)
     {
         Control::Paint(rClientRect);
@@ -321,7 +321,7 @@ namespace svt
             ShowFocus(aFocusRect);
     }
 
-    //------------------------------------------------------------------
+
     bool CheckBoxControl::PreNotify(NotifyEvent& rEvt)
     {
         switch (rEvt.GetType())
@@ -338,31 +338,31 @@ namespace svt
     //==================================================================
     //= CheckBoxCellController
     //==================================================================
-    //------------------------------------------------------------------
+
     sal_Bool CheckBoxCellController::WantMouseEvent() const
     {
         return sal_True;
     }
 
-    //------------------------------------------------------------------
+
     CheckBox& CheckBoxCellController::GetCheckBox() const
     {
         return ((CheckBoxControl &)GetWindow()).GetBox();
     }
 
-    //------------------------------------------------------------------
+
     sal_Bool CheckBoxCellController::IsModified() const
     {
         return GetCheckBox().GetSavedValue() != GetCheckBox().GetState();
     }
 
-    //------------------------------------------------------------------
+
     void CheckBoxCellController::ClearModified()
     {
         GetCheckBox().SaveValue();
     }
 
-    //------------------------------------------------------------------
+
     void CheckBoxCellController::SetModifyHdl(const Link& rLink)
     {
         ((CheckBoxControl &)GetWindow()).SetModifyHdl(rLink);
@@ -371,13 +371,13 @@ namespace svt
     //==================================================================
     //= MultiLineEditImplementation
     //==================================================================
-    //------------------------------------------------------------------
+
     OUString MultiLineEditImplementation::GetText( LineEnd aSeparator ) const
     {
         return const_cast< MultiLineEditImplementation* >( this )->GetEditWindow().GetText( aSeparator );
     }
 
-    //------------------------------------------------------------------
+
     OUString MultiLineEditImplementation::GetSelected( LineEnd aSeparator ) const
     {
         return const_cast< MultiLineEditImplementation* >( this )->GetEditWindow().GetSelected( aSeparator );
@@ -386,7 +386,7 @@ namespace svt
     //==================================================================
     //= EditCellController
     //==================================================================
-    //------------------------------------------------------------------
+
     EditCellController::EditCellController( Edit* _pEdit )
         :CellController( _pEdit )
         ,m_pEditImplementation( new EditImplementation( *_pEdit ) )
@@ -394,7 +394,7 @@ namespace svt
     {
     }
 
-    //------------------------------------------------------------------
+
     EditCellController::EditCellController( IEditImplementation* _pImplementation )
         :CellController( &_pImplementation->GetControl() )
         ,m_pEditImplementation( _pImplementation )
@@ -402,26 +402,26 @@ namespace svt
     {
     }
 
-    //-----------------------------------------------------------------------------
+
     EditCellController::~EditCellController( )
     {
         if ( m_bOwnImplementation )
             DELETEZ( m_pEditImplementation );
     }
 
-    //-----------------------------------------------------------------------------
+
     void EditCellController::SetModified()
     {
         m_pEditImplementation->SetModified();
     }
 
-    //-----------------------------------------------------------------------------
+
     void EditCellController::ClearModified()
     {
         m_pEditImplementation->ClearModified();
     }
 
-    //------------------------------------------------------------------
+
     sal_Bool EditCellController::MoveAllowed(const KeyEvent& rEvt) const
     {
         sal_Bool bResult;
@@ -445,13 +445,13 @@ namespace svt
         return bResult;
     }
 
-    //------------------------------------------------------------------
+
     sal_Bool EditCellController::IsModified() const
     {
         return m_pEditImplementation->IsModified();
     }
 
-    //------------------------------------------------------------------
+
     void EditCellController::SetModifyHdl(const Link& rLink)
     {
         m_pEditImplementation->SetModifyHdl(rLink);
@@ -460,25 +460,25 @@ namespace svt
     //==================================================================
     //= SpinCellController
     //==================================================================
-    //------------------------------------------------------------------
+
     SpinCellController::SpinCellController(SpinField* pWin)
                          :CellController(pWin)
     {
     }
 
-    //-----------------------------------------------------------------------------
+
     void SpinCellController::SetModified()
     {
         GetSpinWindow().SetModifyFlag();
     }
 
-    //-----------------------------------------------------------------------------
+
     void SpinCellController::ClearModified()
     {
         GetSpinWindow().ClearModifyFlag();
     }
 
-    //------------------------------------------------------------------
+
     sal_Bool SpinCellController::MoveAllowed(const KeyEvent& rEvt) const
     {
         sal_Bool bResult;
@@ -502,13 +502,13 @@ namespace svt
         return bResult;
     }
 
-    //------------------------------------------------------------------
+
     sal_Bool SpinCellController::IsModified() const
     {
         return GetSpinWindow().IsModified();
     }
 
-    //------------------------------------------------------------------
+
     void SpinCellController::SetModifyHdl(const Link& rLink)
     {
         GetSpinWindow().SetModifyHdl(rLink);
@@ -517,13 +517,13 @@ namespace svt
     //==================================================================
     //= FormattedFieldCellController
     //==================================================================
-    //------------------------------------------------------------------
+
     FormattedFieldCellController::FormattedFieldCellController( FormattedField* _pFormatted )
         :EditCellController( _pFormatted )
     {
     }
 
-    //------------------------------------------------------------------
+
     void FormattedFieldCellController::CommitModifications()
     {
         static_cast< FormattedField& >( GetWindow() ).Commit();
@@ -532,14 +532,14 @@ namespace svt
     //==================================================================
     //= MultiLineTextCell
     //==================================================================
-    //------------------------------------------------------------------
+
     void MultiLineTextCell::Modify()
     {
         GetTextEngine()->SetModified( true );
         MultiLineEdit::Modify();
     }
 
-    //------------------------------------------------------------------
+
     sal_Bool MultiLineTextCell::dispatchKeyEvent( const KeyEvent& _rEvent )
     {
         Selection aOldSelection( GetSelection() );
@@ -567,7 +567,7 @@ namespace svt
         return sal_False;
     }
 
-    //------------------------------------------------------------------
+
     bool MultiLineTextCell::PreNotify( NotifyEvent& rNEvt )
     {
         if ( rNEvt.GetType() == EVENT_KEYINPUT )

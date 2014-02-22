@@ -62,9 +62,9 @@ using ::rtl::OString;
 const char * pTestString1 = "test socket";
 const char * pTestString2 = " Passed#OK";
 
-//------------------------------------------------------------------------
+
 // helper functions
-//------------------------------------------------------------------------
+
 
 // just used to test socket::close() when accepting
 class AcceptorThread : public Thread
@@ -256,7 +256,7 @@ public:
 
 };
 
-// -----------------------------------------------------------------------------
+
 // Helper functions, to create buffers, check buffers
 class ValueCheckProvider
 {
@@ -309,7 +309,7 @@ public:
 
 };
 
-// -----------------------------------------------------------------------------
+
 /** Client Socket Thread, served as a temp little client to communicate with server.
  */
 
@@ -487,7 +487,7 @@ public:
         }
 };
 
-// -----------------------------------------------------------------------------
+
 
 namespace osl_StreamSocket
 {
@@ -692,7 +692,7 @@ namespace osl_StreamSocket
         CPPUNIT_TEST_SUITE_END();
     }; // class send_recv
 
-// -----------------------------------------------------------------------------
+
 
     class SendClientThread : public Thread
     {
@@ -897,7 +897,7 @@ namespace osl_StreamSocket
         CPPUNIT_TEST_SUITE_END();
     }; // class isExceptionPending
 
-// -----------------------------------------------------------------------------
+
 /** Client Socket Thread, served as a temp little client to communicate with server.
  */
 
@@ -1017,7 +1017,7 @@ namespace osl_StreamSocket
 
     };
 
-    // -----------------------------------------------------------------------------
+
 
     class justtest : public CppUnit::TestFixture
     {
@@ -1075,7 +1075,7 @@ namespace osl_StreamSocket
                 aSocket.close();
             }
 
-        // -----------------------------------------------------------------------------
+
 
         void send_Connector(rtl::OString const& _sAddr, osl::Condition &/*_aCondition*/ )
             {
@@ -1178,7 +1178,7 @@ namespace osl_StreamSocket
                 send_Connector_2_margritte(sAddr);
             }
 
-        // -----------------------------------------------------------------------------
+
 
         void send_recv()
             {
@@ -1372,7 +1372,7 @@ namespace osl_StreamSocket
                 aSocket.close();
             }
 
-// -----------------------------------------------------------------------------
+
 
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamSocket::ctors);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamSocket::send_recv);
@@ -1383,7 +1383,7 @@ namespace osl_StreamSocket
 
 } // namespace osl_StreamSocket
 
-// -----------------------------------------------------------------------------
+
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

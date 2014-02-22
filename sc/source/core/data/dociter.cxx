@@ -350,7 +350,7 @@ bool ScDBQueryDataIterator::IsQueryValid(
     return rDoc.maTabs[nTab]->ValidQuery(nRow, rParam, pCell);
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(const ScDBQueryDataIterator* pParent, ScDBQueryParamInternal* pParam, ScDocument* pDoc) :
     DataAccess(pParent),
@@ -536,7 +536,7 @@ void ScDBQueryDataIterator::DataAccessInternal::setPos(size_t nPos)
     nRow = nPos;
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScDBQueryDataIterator::DataAccessMatrix::DataAccessMatrix(const ScDBQueryDataIterator* pParent, ScDBQueryParamMatrix* pParam) :
     DataAccess(pParent),
@@ -765,7 +765,7 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
     return false;
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScDBQueryDataIterator::Value::Value() :
     mnError(0), mbIsNumber(true)
@@ -773,7 +773,7 @@ ScDBQueryDataIterator::Value::Value() :
     ::rtl::math::setNan(&mfValue);
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScDBQueryDataIterator::ScDBQueryDataIterator(ScDocument* pDocument, ScDBQueryParamBase* pParam) :
     mpParam (pParam)
@@ -1054,7 +1054,7 @@ bool ScCellIterator::next()
     return getCurrent();
 }
 
-//-------------------------------------------------------------------------------
+
 
 ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, SCTAB nTable,
              const ScQueryParam& rParam, bool bMod ) :
@@ -1922,7 +1922,7 @@ bool ScQueryCellIterator::BinarySearch()
 }
 
 
-//-------------------------------------------------------------------------------
+
 
 ScHorizontalCellIterator::ScHorizontalCellIterator(ScDocument* pDocument, SCTAB nTable,
                                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) :
@@ -2155,7 +2155,7 @@ void ScHorizontalCellIterator::SkipInvalid()
         mbMore = false;
 }
 
-//------------------------------------------------------------------------
+
 
 ScHorizontalValueIterator::ScHorizontalValueIterator( ScDocument* pDocument,
         const ScRange& rRange, bool bSTotal, bool bTextZero ) :
@@ -2277,7 +2277,7 @@ bool ScHorizontalValueIterator::GetNext( double& rValue, sal_uInt16& rErr )
     return bFound;
 }
 
-//-------------------------------------------------------------------------------
+
 
 ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB nTable,
                             SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) :
@@ -2422,7 +2422,7 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
     }
 }
 
-//-------------------------------------------------------------------------------
+
 
 inline bool IsGreater( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
@@ -2526,7 +2526,7 @@ const ScRefCellValue& ScUsedAreaIterator::GetCell() const
     return maFoundCell;
 }
 
-//-------------------------------------------------------------------------------
+
 
 ScDocAttrIterator::ScDocAttrIterator(ScDocument* pDocument, SCTAB nTable,
                                     SCCOL nCol1, SCROW nRow1,
@@ -2659,7 +2659,7 @@ void ScDocRowHeightUpdater::updateAll()
     }
 }
 
-//-------------------------------------------------------------------------------
+
 
 ScAttrRectIterator::ScAttrRectIterator(ScDocument* pDocument, SCTAB nTable,
                                     SCCOL nCol1, SCROW nRow1,

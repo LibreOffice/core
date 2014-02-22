@@ -122,9 +122,9 @@ public:
         return aSeq;
     }
 
-    //---------------------------------------------------------------------------------------------------------
+
     //  XSimpleTabController
-    //---------------------------------------------------------------------------------------------------------
+
 
     virtual sal_Int32 SAL_CALL insertTab() throw ( css::uno::RuntimeException );
     virtual void SAL_CALL removeTab( sal_Int32 nID ) throw ( css::lang::IndexOutOfBoundsException, css::uno::RuntimeException );
@@ -135,9 +135,9 @@ public:
     virtual void SAL_CALL addTabListener( const css::uno::Reference< css::awt::XTabListener >& Listener ) throw ( css::uno::RuntimeException );
     virtual void SAL_CALL removeTabListener( const css::uno::Reference< css::awt::XTabListener >& Listener ) throw ( css::uno::RuntimeException );
 
-    //---------------------------------------------------------------------------------------------------------
+
     //  XComponent
-    //---------------------------------------------------------------------------------------------------------
+
 
     virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException );
     virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw ( css::uno::RuntimeException );

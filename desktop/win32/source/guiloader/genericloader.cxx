@@ -40,7 +40,7 @@
 #include "tools/pathutils.hxx"
 #include "../extendloaderenvironment.hxx"
 
-//---------------------------------------------------------------------------
+
 
 static int GenericMain()
 {
@@ -142,7 +142,7 @@ static int GenericMain()
     return dwExitCode;
 }
 
-//---------------------------------------------------------------------------
+
 
 #ifdef __MINGW32__
 int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
@@ -153,7 +153,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
     return GenericMain();
 }
 
-//---------------------------------------------------------------------------
+
 
 #ifdef __MINGW32__
 int __cdecl main()

@@ -95,7 +95,7 @@ SfxObjectShell* SfxMacroLoader::GetObjectShell_Impl()
     return pDocShell;
 }
 
-// -----------------------------------------------------------------------
+
 uno::Reference<frame::XDispatch> SAL_CALL SfxMacroLoader::queryDispatch(
     const util::URL&   aURL            ,
     const OUString&               /*sTargetFrameName*/,
@@ -107,7 +107,7 @@ uno::Reference<frame::XDispatch> SAL_CALL SfxMacroLoader::queryDispatch(
     return xDispatcher;
 }
 
-// -----------------------------------------------------------------------
+
 uno::Sequence< uno::Reference<frame::XDispatch> > SAL_CALL
                 SfxMacroLoader::queryDispatches( const uno::Sequence < frame::DispatchDescriptor >& seqDescriptor )
                     throw( uno::RuntimeException )
@@ -121,7 +121,7 @@ uno::Sequence< uno::Reference<frame::XDispatch> > SAL_CALL
     return lDispatcher;
 }
 
-// -----------------------------------------------------------------------
+
 void SAL_CALL SfxMacroLoader::dispatchWithNotification(
     const util::URL& aURL, const uno::Sequence<beans::PropertyValue>& /*lArgs*/,
     const uno::Reference<frame::XDispatchResultListener>& xListener )
@@ -177,7 +177,7 @@ void SAL_CALL SfxMacroLoader::addStatusListener(
      */
 }
 
-// -----------------------------------------------------------------------
+
 void SAL_CALL SfxMacroLoader::removeStatusListener(
     const uno::Reference< frame::XStatusListener >&,
     const util::URL&                                                  )

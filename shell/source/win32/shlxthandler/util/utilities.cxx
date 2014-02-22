@@ -25,9 +25,9 @@
 #include "internal/config.hxx"
 #include "internal/utilities.hxx"
 
-//-----------------------------
+
 // constants
-//-----------------------------
+
 
 const size_t MAX_RES_STRING = 1024;
 const wchar_t SPACE_CHAR = _T(' ');
@@ -60,7 +60,7 @@ static std::string WStringToString(const std::wstring& String, int codepage)
     return std::string(buff);
 }
 
-//---------------------------------
+
 /**
 */
 std::wstring StringToWString(const std::string& String)
@@ -68,7 +68,7 @@ std::wstring StringToWString(const std::string& String)
     return StringToWString(String, CP_ACP);
 }
 
-//---------------------------------
+
 /**
 */
 std::string WStringToString(const std::wstring& String)
@@ -76,7 +76,7 @@ std::string WStringToString(const std::wstring& String)
     return WStringToString(String, CP_ACP);
 }
 
-//---------------------------------
+
 /**
 */
 std::wstring UTF8ToWString(const std::string& String)
@@ -84,7 +84,7 @@ std::wstring UTF8ToWString(const std::string& String)
     return StringToWString(String, CP_UTF8);
 }
 
-//---------------------------------
+
 /**
 */
 std::wstring GetResString(int ResId)
@@ -99,7 +99,7 @@ std::wstring GetResString(int ResId)
     return std::wstring(szResStr);
 }
 
-//---------------------------------
+
 /**
 */
 bool is_windows_xp_or_above()
@@ -118,7 +118,7 @@ bool is_windows_xp_or_above()
     return false;
 }
 
-//---------------------------------
+
 /** helper function to judge if the string is only has spaces.
     @returns
         <TRUE>if the provided string contains only but at least one space
@@ -141,7 +141,7 @@ bool HasOnlySpaces(const std::wstring& String)
     return true;
 }
 
-//---------------------------------
+
 /** helper function to convert windows paths to short form.
     @returns
         shortend path.

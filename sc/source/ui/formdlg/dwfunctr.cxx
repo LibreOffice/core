@@ -40,7 +40,7 @@
 #include "dwfunctr.hrc"
 #include "dwfunctr.hxx"
 
-// -----------------------------------------------------------------------
+
 
 SFX_IMPL_DOCKINGWINDOW_WITHID( ScFunctionChildWindow, FID_FUNCTION_BOX )
 
@@ -801,7 +801,7 @@ void ScFunctionDockWin::UpdateFunctionList()
     }
 
 
-    //------------------------------------------------------
+
     pAllFuncList->SetUpdateMode( true );
 
     if ( pAllFuncList->GetEntryCount() > 0 )
@@ -1099,7 +1099,7 @@ void ScFunctionDockWin::Initialize(SfxChildWinInfo *pInfo)
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 void ScFunctionDockWin::FillInfo(SfxChildWinInfo& rInfo) const
 {

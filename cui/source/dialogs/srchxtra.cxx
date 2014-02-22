@@ -171,7 +171,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(Window* pParent,
     m_pAttrLB->SelectEntryPos( 0 );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl)
 {

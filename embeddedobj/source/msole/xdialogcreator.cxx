@@ -69,7 +69,7 @@ typedef UINT STDAPICALLTYPE OleUIInsertObjectA_Type(LPOLEUIINSERTOBJECTA);
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;
-//-------------------------------------------------------------------------
+
 uno::Sequence< sal_Int8 > GetRelatedInternalID_Impl( const uno::Sequence< sal_Int8 >& aClassID )
 {
     // Writer
@@ -105,7 +105,7 @@ uno::Sequence< sal_Int8 > GetRelatedInternalID_Impl( const uno::Sequence< sal_In
     return aClassID;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL MSOLEDialogObjectCreator::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
@@ -114,20 +114,20 @@ uno::Sequence< OUString > SAL_CALL MSOLEDialogObjectCreator::impl_staticGetSuppo
     return aRet;
 }
 
-//-------------------------------------------------------------------------
+
 OUString SAL_CALL MSOLEDialogObjectCreator::impl_staticGetImplementationName()
 {
     return OUString("com.sun.star.comp.embed.MSOLEObjectSystemCreator");
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL MSOLEDialogObjectCreator::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
     return uno::Reference< uno::XInterface >( *new MSOLEDialogObjectCreator( xServiceManager ) );
 }
 
-//-------------------------------------------------------------------------
+
 embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDialog(
             const uno::Reference< embed::XStorage >& xStorage,
             const OUString& sEntName,
@@ -281,7 +281,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
 #endif
 }
 
-//-------------------------------------------------------------------------
+
 embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceInitFromClipboard(
                 const uno::Reference< embed::XStorage >& xStorage,
                 const OUString& sEntryName,
@@ -333,21 +333,21 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceInitF
 #endif
 }
 
-//-------------------------------------------------------------------------
+
 OUString SAL_CALL MSOLEDialogObjectCreator::getImplementationName()
     throw ( uno::RuntimeException )
 {
     return impl_staticGetImplementationName();
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SAL_CALL MSOLEDialogObjectCreator::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL MSOLEDialogObjectCreator::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {

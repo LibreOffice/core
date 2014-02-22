@@ -80,17 +80,17 @@ SAL_CALL FormulaOpCodeMapperObj::getAvailableMappings(
         throw lang::IllegalArgumentException();
     return xMap->createSequenceOfAvailableMappings( *m_pCompiler,nGroups);
 }
-//--------------------------------------------------------------------------
+
 OUString SAL_CALL FormulaOpCodeMapperObj::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL FormulaOpCodeMapperObj::getImplementationName_Static()
 {
     return OUString( "simple.formula.FormulaOpCodeMapperObj" );
 }
-// --------------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
@@ -110,7 +110,7 @@ uno::Reference< uno::XInterface > SAL_CALL FormulaOpCodeMapperObj::create(
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-// -----------------------------------------------------------------------------
+
 
 // =============================================================================
 } // formula

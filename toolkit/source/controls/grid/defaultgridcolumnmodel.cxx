@@ -132,25 +132,25 @@ private:
             m_aColumns.swap( aColumns );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     DefaultGridColumnModel::~DefaultGridColumnModel()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     ::sal_Int32 SAL_CALL DefaultGridColumnModel::getColumnCount() throw (RuntimeException)
     {
         return m_aColumns.size();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XGridColumn > SAL_CALL DefaultGridColumnModel::createColumn(  ) throw (RuntimeException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return new GridColumn();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     ::sal_Int32 SAL_CALL DefaultGridColumnModel::addColumn( const Reference< XGridColumn > & i_column )
         throw (RuntimeException, css::lang::IllegalArgumentException)
     {
@@ -176,7 +176,7 @@ private:
         return index;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL DefaultGridColumnModel::removeColumn( ::sal_Int32 i_columnIndex )
         throw (RuntimeException, css::lang::IndexOutOfBoundsException)
     {
@@ -226,14 +226,14 @@ private:
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Sequence< Reference< XGridColumn > > SAL_CALL DefaultGridColumnModel::getColumns() throw (RuntimeException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return ::comphelper::containerToSequence( m_aColumns );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XGridColumn > SAL_CALL DefaultGridColumnModel::getColumn(::sal_Int32 index)
         throw (css::lang::IndexOutOfBoundsException, RuntimeException)
     {
@@ -245,7 +245,7 @@ private:
         throw css::lang::IndexOutOfBoundsException();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL DefaultGridColumnModel::setDefaultColumns(sal_Int32 rowElements) throw (RuntimeException)
     {
         ::std::vector< ContainerEvent > aRemovedColumns;
@@ -329,7 +329,7 @@ private:
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     OUString SAL_CALL DefaultGridColumnModel::getImplementationName(  ) throw (RuntimeException)
     {
         return OUString("stardiv.Toolkit.DefaultGridColumnModel");
@@ -347,21 +347,21 @@ private:
         return aSeq;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL DefaultGridColumnModel::addContainerListener( const Reference< XContainerListener >& i_listener ) throw (RuntimeException)
     {
         if ( i_listener.is() )
             m_aContainerListeners.addInterface( i_listener );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL DefaultGridColumnModel::removeContainerListener( const Reference< XContainerListener >& i_listener ) throw (RuntimeException)
     {
         if ( i_listener.is() )
             m_aContainerListeners.removeInterface( i_listener );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL DefaultGridColumnModel::disposing()
     {
         DefaultGridColumnModel_Base::disposing();
@@ -391,7 +391,7 @@ private:
         m_aColumns.swap( aEmpty );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< css::util::XCloneable > SAL_CALL DefaultGridColumnModel::createClone(  ) throw (RuntimeException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );

@@ -30,7 +30,7 @@
 #include "externalrefmgr.hxx"
 #include "document.hxx"
 
-//___________________________________________________________________
+
 // class XclImpChangeTrack
 
 XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStream& rBookStrm ) :
@@ -497,7 +497,7 @@ void XclImpChangeTrack::Apply()
     }
 }
 
-//___________________________________________________________________
+
 // class XclImpChTrFmlConverter
 
 XclImpChTrFmlConverter::~XclImpChTrFmlConverter()

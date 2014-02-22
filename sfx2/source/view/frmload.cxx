@@ -117,9 +117,9 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (css::uno::RuntimeException);
 
-    //----------------------------------------------------------------------------------
+
     // XSynchronousFrameLoader
-    //----------------------------------------------------------------------------------
+
     virtual sal_Bool SAL_CALL load( const css::uno::Sequence< css::beans::PropertyValue >& _rArgs, const css::uno::Reference< css::frame::XFrame >& _rxFrame ) throw( css::uno::RuntimeException );
     virtual void SAL_CALL cancel() throw( css::uno::RuntimeException );
 
@@ -206,7 +206,7 @@ SfxFrameLoader_Impl::~SfxFrameLoader_Impl()
 {
 }
 
-// --------------------------------------------------------------------------------------------------------------------
+
 const SfxFilter* SfxFrameLoader_Impl::impl_detectFilterForURL( const OUString& sURL,
         const ::comphelper::NamedValueCollection& i_rDescriptor, const SfxFilterMatcher& rMatcher ) const
 {
@@ -253,7 +253,7 @@ const SfxFilter* SfxFrameLoader_Impl::impl_detectFilterForURL( const OUString& s
     return pFilter;
 }
 
-// --------------------------------------------------------------------------------------------------------------------
+
 const SfxFilter* SfxFrameLoader_Impl::impl_getFilterFromServiceName_nothrow( const OUString& i_rServiceName ) const
 {
     try
@@ -298,7 +298,7 @@ const SfxFilter* SfxFrameLoader_Impl::impl_getFilterFromServiceName_nothrow( con
     return NULL;
 }
 
-// --------------------------------------------------------------------------------------------------------------------
+
 OUString SfxFrameLoader_Impl::impl_askForFilter_nothrow( const Reference< XInteractionHandler >& i_rxHandler,
                                                                  const OUString& i_rDocumentURL ) const
 {
@@ -320,7 +320,7 @@ OUString SfxFrameLoader_Impl::impl_askForFilter_nothrow( const Reference< XInter
     return sFilterName;
 }
 
-// --------------------------------------------------------------------------------------------------------------------
+
 namespace
 {
     sal_Bool lcl_getDispatchResult( const SfxPoolItem* _pResult )
@@ -342,7 +342,7 @@ namespace
     }
 }
 
-// --------------------------------------------------------------------------------------------------------------------
+
 sal_Bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const sal_uInt16 _nSlotID, const Reference< XFrame >& i_rxFrame,
                                                               const bool i_bHidden )
 {
@@ -353,7 +353,7 @@ sal_Bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const sal_uInt16 _
     return lcl_getDispatchResult( SFX_APP()->ExecuteSlot( aRequest ) );
 }
 
-// --------------------------------------------------------------------------------------------------------------------
+
 void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollection& io_rDescriptor ) const
 {
     const OUString     sURL         = io_rDescriptor.getOrDefault( "URL",                OUString() );
@@ -402,7 +402,7 @@ void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollecti
     }
 }
 
-// --------------------------------------------------------------------------------------------------------------------
+
 SfxObjectShellRef SfxFrameLoader_Impl::impl_findObjectShell( const Reference< XModel2 >& i_rxDocument ) const
 {
     for ( SfxObjectShell* pDoc = SfxObjectShell::GetFirst( NULL, sal_False ); pDoc; pDoc = SfxObjectShell::GetNext( *pDoc, NULL, sal_False ) )
@@ -417,7 +417,7 @@ SfxObjectShellRef SfxFrameLoader_Impl::impl_findObjectShell( const Reference< XM
     return NULL;
 }
 
-// --------------------------------------------------------------------------------------------------------------------
+
 bool SfxFrameLoader_Impl::impl_determineTemplateDocument( ::comphelper::NamedValueCollection& io_rDescriptor ) const
 {
     try
@@ -468,7 +468,7 @@ bool SfxFrameLoader_Impl::impl_determineTemplateDocument( ::comphelper::NamedVal
     return false;
 }
 
-// --------------------------------------------------------------------------------------------------------------------
+
 sal_uInt16 SfxFrameLoader_Impl::impl_findSlotParam( const OUString& i_rFactoryURL ) const
 {
     OUString sSlotParam;
@@ -487,7 +487,7 @@ sal_uInt16 SfxFrameLoader_Impl::impl_findSlotParam( const OUString& i_rFactoryUR
     return 0;
 }
 
-// --------------------------------------------------------------------------------------------------------------------
+
 void SfxFrameLoader_Impl::impl_handleCaughtError_nothrow( const Any& i_rCaughtError, const ::comphelper::NamedValueCollection& i_rDescriptor ) const
 {
     try
@@ -519,7 +519,7 @@ void SfxFrameLoader_Impl::impl_handleCaughtError_nothrow( const Any& i_rCaughtEr
     }
 }
 
-// --------------------------------------------------------------------------------------------------------------------
+
 void SfxFrameLoader_Impl::impl_removeLoaderArguments( ::comphelper::NamedValueCollection& io_rDescriptor )
 {
     // remove the arguments which are for the loader only, and not for a call to attachResource
@@ -527,7 +527,7 @@ void SfxFrameLoader_Impl::impl_removeLoaderArguments( ::comphelper::NamedValueCo
     io_rDescriptor.remove( "Model" );
 }
 
-// --------------------------------------------------------------------------------------------------------------------
+
 ::comphelper::NamedValueCollection SfxFrameLoader_Impl::impl_extractViewCreationArgs( ::comphelper::NamedValueCollection& io_rDescriptor )
 {
     const sal_Char* pKnownViewArgs[] = {
@@ -546,7 +546,7 @@ void SfxFrameLoader_Impl::impl_removeLoaderArguments( ::comphelper::NamedValueCo
     return aViewArgs;
 }
 
-// --------------------------------------------------------------------------------------------------------------------
+
 sal_Int16 SfxFrameLoader_Impl::impl_determineEffectiveViewId_nothrow( const SfxObjectShell& i_rDocument, const ::comphelper::NamedValueCollection& i_rDescriptor )
 {
     sal_Int16 nViewId = i_rDescriptor.getOrDefault( "ViewId", sal_Int16( 0 ) );
@@ -592,7 +592,7 @@ sal_Int16 SfxFrameLoader_Impl::impl_determineEffectiveViewId_nothrow( const SfxO
     return nViewId;
 }
 
-// --------------------------------------------------------------------------------------------------------------------
+
 Reference< XController2 > SfxFrameLoader_Impl::impl_createDocumentView( const Reference< XModel2 >& i_rModel,
         const Reference< XFrame >& i_rFrame, const ::comphelper::NamedValueCollection& i_rViewFactoryArgs,
         const OUString& i_rViewName )
@@ -614,7 +614,7 @@ Reference< XController2 > SfxFrameLoader_Impl::impl_createDocumentView( const Re
     return xController;
 }
 
-// --------------------------------------------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rArgs,
                                              const Reference< XFrame >& _rTargetFrame )
     throw( RuntimeException )

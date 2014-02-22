@@ -49,7 +49,7 @@ DEFINE_INIT_SERVICE(
     }
 )
 
-//_____________________________________________________________________________
+
 /**
     @short  standard constructor to create instance
     @descr  Because an instance will be initialized by her interface methods
@@ -64,7 +64,7 @@ DispatchRecorderSupplier::DispatchRecorderSupplier( const css::uno::Reference< c
 {
 }
 
-//_____________________________________________________________________________
+
 /**
     @short  standard destructor
     @descr  We are a helper and not a real service. So we don't provide
@@ -76,7 +76,7 @@ DispatchRecorderSupplier::~DispatchRecorderSupplier()
     m_xDispatchRecorder = NULL;
 }
 
-//_____________________________________________________________________________
+
 /**
     @short      set a new dispatch recorder on this supplier
     @descr      Because there can exist more then one recorder implementations
@@ -101,7 +101,7 @@ void SAL_CALL DispatchRecorderSupplier::setDispatchRecorder( const css::uno::Ref
     m_xDispatchRecorder=xRecorder;
     // => SAFE
 }
-//_____________________________________________________________________________
+
 /**
     @short      provides access to the dispatch recorder of this supplier
     @descr      Such recorder can be used outside to record dispatches.
@@ -124,7 +124,7 @@ css::uno::Reference< css::frame::XDispatchRecorder > SAL_CALL DispatchRecorderSu
     // => SAFE
 }
 
-//_____________________________________________________________________________
+
 /**
     @short      execute a dispatch request and record it
     @descr      If given dispatch object provides right recording interface it

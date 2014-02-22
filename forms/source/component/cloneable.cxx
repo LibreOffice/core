@@ -34,7 +34,7 @@ namespace frm
     //====================================================================
     //= OCloneableAggregation
     //====================================================================
-    //------------------------------------------------------------------
+
     Reference< XAggregation > OCloneableAggregation::createAggregateClone( const OCloneableAggregation* _pOriginal )
     {
         Reference< XCloneable > xAggregateCloneable;    // will be the aggregate's XCloneable

@@ -39,26 +39,26 @@ namespace sfx2
     //====================================================================
     //=
     //====================================================================
-    //--------------------------------------------------------------------
+
     DocumentStorageModifyListener::DocumentStorageModifyListener( IModifiableDocument& _rDocument, comphelper::SolarMutex& _rMutex )
         :m_pDocument( &_rDocument )
         ,m_rMutex( _rMutex )
     {
     }
 
-    //--------------------------------------------------------------------
+
     DocumentStorageModifyListener::~DocumentStorageModifyListener()
     {
     }
 
-    //--------------------------------------------------------------------
+
     void DocumentStorageModifyListener::dispose()
     {
         ::osl::Guard< comphelper::SolarMutex > aGuard( m_rMutex );
         m_pDocument = NULL;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL DocumentStorageModifyListener::modified( const EventObject& /*aEvent*/ ) throw (RuntimeException)
     {
         ::osl::Guard< comphelper::SolarMutex > aGuard( m_rMutex );
@@ -67,7 +67,7 @@ namespace sfx2
             m_pDocument->storageIsModified();
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL DocumentStorageModifyListener::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
     {
         // not interested in. In particular, we do *not* dispose ourself when a storage we're

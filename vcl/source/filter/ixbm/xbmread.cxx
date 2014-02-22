@@ -23,9 +23,9 @@
 #include <comphelper/string.hxx>
 #include "xbmread.hxx"
 
-// -------------
+
 // - XBMReader -
-// -------------
+
 
 XBMReader::XBMReader( SvStream& rStm ) :
             rIStm           ( rStm ),
@@ -40,7 +40,7 @@ XBMReader::XBMReader( SvStream& rStm ) :
     InitTable();
 }
 
-// ------------------------------------------------------------------------
+
 
 XBMReader::~XBMReader()
 {
@@ -50,7 +50,7 @@ XBMReader::~XBMReader()
         aBmp1.ReleaseAccess( pAcc1 );
 }
 
-// ------------------------------------------------------------------------
+
 
 void XBMReader::InitTable()
 {
@@ -88,7 +88,7 @@ void XBMReader::InitTable()
     pHexTable[(int)'\0'] = -1;
 }
 
-// ------------------------------------------------------------------------
+
 
 OString XBMReader::FindTokenLine( SvStream* pInStm, const char* pTok1,
                                  const char* pTok2, const char* pTok3 )
@@ -135,7 +135,7 @@ OString XBMReader::FindTokenLine( SvStream* pInStm, const char* pTok1,
     return aRet;
 }
 
-// ------------------------------------------------------------------------
+
 
 long XBMReader::ParseDefine( const sal_Char* pDefine )
 {
@@ -184,7 +184,7 @@ long XBMReader::ParseDefine( const sal_Char* pDefine )
     return nRet;
 }
 
-// ------------------------------------------------------------------------
+
 
 bool XBMReader::ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat eFormat )
 {
@@ -257,7 +257,7 @@ bool XBMReader::ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat
     return true;
 }
 
-// ------------------------------------------------------------------------
+
 
 ReadState XBMReader::ReadXBM( Graphic& rGraphic )
 {
@@ -353,9 +353,9 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
     return eReadState;
 }
 
-// -------------
+
 // - ImportXBM -
-// -------------
+
 
 bool ImportXBM( SvStream& rStm, Graphic& rGraphic )
 {

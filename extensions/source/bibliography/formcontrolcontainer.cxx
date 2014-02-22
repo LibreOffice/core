@@ -36,7 +36,7 @@ namespace bib
     //=====================================================================
     //= FormControlContainer
     //=====================================================================
-    //---------------------------------------------------------------------
+
     FormControlContainer::FormControlContainer( )
         :OLoadListener( m_aMutex )
         ,m_pFormAdapter( NULL )

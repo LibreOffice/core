@@ -30,7 +30,7 @@
 
 DBG_NAME(SfxItemDesruptor_Impl);
 
-// -----------------------------------------------------------------------
+
 
 class SfxItemDesruptor_Impl
 {
@@ -47,7 +47,7 @@ public:
     ~SfxItemDesruptor_Impl();
 };
 
-// ------------------------------------------------------------------------
+
 SfxItemDesruptor_Impl::SfxItemDesruptor_Impl( SfxPoolItem *pItemToDesrupt ):
     pItem(pItemToDesrupt),
     aLink( LINK(this, SfxItemDesruptor_Impl, Delete) )
@@ -64,7 +64,7 @@ void SfxItemDesruptor_Impl::LaunchDeleteOnIdle()
     GetpApp()->InsertIdleHdl( aLink, 1 );
 }
 
-// ------------------------------------------------------------------------
+
 SfxItemDesruptor_Impl::~SfxItemDesruptor_Impl()
 {
     DBG_DTOR(SfxItemDesruptor_Impl, 0);
@@ -78,7 +78,7 @@ SfxItemDesruptor_Impl::~SfxItemDesruptor_Impl()
     delete pItem;
 }
 
-// ------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(SfxItemDesruptor_Impl, Delete)
 {
     {DBG_CHKTHIS(SfxItemDesruptor_Impl, 0);}

@@ -19,35 +19,35 @@
 
 #include "customcontrol.hxx"
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 CCustomControl::~CCustomControl()
 {
 }
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 void SAL_CALL CCustomControl::AddControl(CCustomControl*)
 {
     // will be implemented by custom control containers
 }
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 void SAL_CALL CCustomControl::RemoveControl(CCustomControl*)
 {
     // will be implemented by custom control containers
 }
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 void SAL_CALL CCustomControl::RemoveAllControls()
 {

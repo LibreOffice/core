@@ -20,7 +20,7 @@
 #include "desktopresid.hxx"
 #include "app.hxx"
 
-// -----------------------------------------------------------------------
+
 namespace desktop
 {
 

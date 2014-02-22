@@ -43,7 +43,7 @@ public:
     virtual Any SAL_CALL mapAny( Any const & any )
         throw (RuntimeException);
 };
-//__________________________________________________________________________________________________
+
 Any Transport::mapAny( Any const & any )
     throw (RuntimeException)
 {

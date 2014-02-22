@@ -74,7 +74,7 @@ sal_Bool SfxApplication::QueryExit_Impl()
     return sal_True;
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxApplication::Deinitialize()
 {

@@ -44,7 +44,7 @@ namespace abp
     //=====================================================================
     //= OABSPilotUno
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OABSPilotUno::OABSPilotUno(const Reference< XComponentContext >& _rxORB)
         :OGenericUnoDialog(_rxORB)
     {
@@ -52,26 +52,26 @@ namespace abp
             &m_sDataSourceName, ::getCppuType( &m_sDataSourceName ) );
     }
 
-    //--------------------------------------------------------------------------
+
     Any SAL_CALL OABSPilotUno::queryInterface( const Type& aType ) throw (RuntimeException)
     {
         Any aReturn = OABSPilotUno_DBase::queryInterface( aType );
         return aReturn.hasValue() ? aReturn : OABSPilotUno_JBase::queryInterface( aType );
     }
 
-    //--------------------------------------------------------------------------
+
     void SAL_CALL OABSPilotUno::acquire(  ) throw ()
     {
         OABSPilotUno_DBase::acquire();
     }
 
-    //--------------------------------------------------------------------------
+
     void SAL_CALL OABSPilotUno::release(  ) throw ()
     {
         OABSPilotUno_DBase::release();
     }
 
-    //---------------------------------------------------------------------
+
     Sequence< Type > SAL_CALL OABSPilotUno::getTypes(  ) throw (RuntimeException)
     {
         return ::comphelper::concatSequences(
@@ -80,7 +80,7 @@ namespace abp
         );
     }
 
-    //---------------------------------------------------------------------
+
     Sequence<sal_Int8> SAL_CALL OABSPilotUno::getImplementationId(  ) throw(RuntimeException)
     {
         static ::cppu::OImplementationId* s_pId;
@@ -96,31 +96,31 @@ namespace abp
         return s_pId->getImplementationId();
     }
 
-    //---------------------------------------------------------------------
+
     Reference< XInterface > SAL_CALL OABSPilotUno::Create(const Reference< XMultiServiceFactory >& _rxFactory)
     {
         return *(new OABSPilotUno( comphelper::getComponentContext(_rxFactory) ));
     }
 
-    //---------------------------------------------------------------------
+
     OUString SAL_CALL OABSPilotUno::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_Static();
     }
 
-    //---------------------------------------------------------------------
+
     OUString OABSPilotUno::getImplementationName_Static() throw(RuntimeException)
     {
         return OUString("org.openoffice.comp.abp.OAddressBookSourcePilot");
     }
 
-    //---------------------------------------------------------------------
+
     ::comphelper::StringSequence SAL_CALL OABSPilotUno::getSupportedServiceNames() throw(RuntimeException)
     {
         return getSupportedServiceNames_Static();
     }
 
-    //---------------------------------------------------------------------
+
     ::comphelper::StringSequence OABSPilotUno::getSupportedServiceNames_Static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
@@ -128,20 +128,20 @@ namespace abp
         return aSupported;
     }
 
-    //---------------------------------------------------------------------
+
     Reference<XPropertySetInfo>  SAL_CALL OABSPilotUno::getPropertySetInfo() throw(RuntimeException)
     {
         Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
     }
 
-    //---------------------------------------------------------------------
+
     ::cppu::IPropertyArrayHelper& OABSPilotUno::getInfoHelper()
     {
         return *const_cast<OABSPilotUno*>(this)->getArrayHelper();
     }
 
-    //--------------------------------------------------------------------------
+
     ::cppu::IPropertyArrayHelper* OABSPilotUno::createArrayHelper( ) const
     {
         Sequence< Property > aProps;
@@ -161,13 +161,13 @@ namespace abp
         }
     }
 
-    //--------------------------------------------------------------------------
+
     Dialog* OABSPilotUno::createDialog(Window* _pParent)
     {
         return new OAddessBookSourcePilot(_pParent, m_aContext );
     }
 
-    //--------------------------------------------------------------------------
+
     Any SAL_CALL OABSPilotUno::execute( const Sequence< NamedValue >& /*lArgs*/ ) throw (IllegalArgumentException, Exception, RuntimeException)
     {
         // not interested in the context, not interested in the args
@@ -184,7 +184,7 @@ namespace abp
         lProtocol[0].Value <<= sal_True;
         return makeAny( lProtocol );
     }
-    // -----------------------------------------------------------------------------
+
     void OABSPilotUno::executedDialog(sal_Int16 _nExecutionResult)
     {
         if ( _nExecutionResult == RET_OK )

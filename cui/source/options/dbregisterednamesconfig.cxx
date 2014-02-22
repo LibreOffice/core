@@ -44,7 +44,7 @@ namespace svx
     //====================================================================
     //= DbRegisteredNamesConfig
     //====================================================================
-    //--------------------------------------------------------------------
+
     void DbRegisteredNamesConfig::GetOptions( SfxItemSet& _rFillItems )
     {
         DatabaseRegistrations aSettings;
@@ -73,7 +73,7 @@ namespace svx
         _rFillItems.Put( DatabaseMapItem( SID_SB_DB_REGISTER, aSettings ) );
     }
 
-    //--------------------------------------------------------------------
+
     void DbRegisteredNamesConfig::SetOptions(const SfxItemSet& _rSourceItems)
     {
         // the settings for the single drivers

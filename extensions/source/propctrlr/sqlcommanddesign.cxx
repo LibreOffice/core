@@ -89,7 +89,7 @@ namespace pcr
     //====================================================================
     //= ISQLCommandAdapter
     //====================================================================
-    //--------------------------------------------------------------------
+
     ISQLCommandAdapter::~ISQLCommandAdapter()
     {
     }
@@ -97,7 +97,7 @@ namespace pcr
     //====================================================================
     //= SQLCommandDesigner
     //====================================================================
-    //--------------------------------------------------------------------
+
     SQLCommandDesigner::SQLCommandDesigner( const Reference< XComponentContext >& _rxContext,
             const ::rtl::Reference< ISQLCommandAdapter >& _rxPropertyAdapter,
             const ::dbtools::SharedConnection& _rConnection, const Link& _rCloseLink )
@@ -114,12 +114,12 @@ namespace pcr
         impl_doOpenDesignerFrame_nothrow();
     }
 
-    //--------------------------------------------------------------------
+
     SQLCommandDesigner::~SQLCommandDesigner()
     {
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL SQLCommandDesigner::propertyChange( const PropertyChangeEvent& Event ) throw (RuntimeException)
     {
         OSL_ENSURE( m_xDesigner.is() && ( Event.Source == m_xDesigner ), "SQLCommandDesigner::propertyChange: where did this come from?" );
@@ -150,7 +150,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL SQLCommandDesigner::disposing( const EventObject& Source ) throw (RuntimeException)
     {
         if ( m_xDesigner.is() && ( Source.Source == m_xDesigner ) )
@@ -160,7 +160,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SQLCommandDesigner::dispose()
     {
         if ( impl_isDisposed() )
@@ -174,28 +174,28 @@ namespace pcr
         m_xORB.clear();
     }
 
-    //--------------------------------------------------------------------
+
     void SQLCommandDesigner::impl_checkDisposed_throw() const
     {
         if ( impl_isDisposed() )
             throw DisposedException();
     }
 
-    //--------------------------------------------------------------------
+
     void SQLCommandDesigner::raise() const
     {
         impl_checkDisposed_throw();
         impl_raise_nothrow();
     }
 
-    //------------------------------------------------------------------------
+
     bool SQLCommandDesigner::suspend() const
     {
         impl_checkDisposed_throw();
         return impl_trySuspendDesigner_nothrow();
     }
 
-    //--------------------------------------------------------------------
+
     void SQLCommandDesigner::impl_raise_nothrow() const
     {
         OSL_PRECOND( isActive(), "SQLCommandDesigner::impl_raise_nothrow: not active!" );
@@ -218,7 +218,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SQLCommandDesigner::impl_doOpenDesignerFrame_nothrow()
     {
         OSL_PRECOND( !isActive(),
@@ -284,7 +284,7 @@ namespace pcr
         osl_atomic_decrement(&m_refCount);
     }
 
-    //------------------------------------------------------------------------
+
     Reference< XFrame > SQLCommandDesigner::impl_createEmptyParentlessTask_nothrow( ) const
     {
         OSL_PRECOND( m_xORB.is(), "SQLCommandDesigner::impl_createEmptyParentlessTask_nothrow: this will crash!" );
@@ -306,14 +306,14 @@ namespace pcr
         return xFrame;
     }
 
-    //------------------------------------------------------------------------
+
     void SQLCommandDesigner::impl_designerClosed_nothrow()
     {
         if ( m_aCloseLink.IsSet() )
             m_aCloseLink.Call( this );
     }
 
-    //------------------------------------------------------------------------
+
     void SQLCommandDesigner::impl_closeDesigner_nothrow()
     {
         OSL_PRECOND( isActive(), "SQLCommandDesigner::impl_closeDesigner_nothrow: invalid calle!" );
@@ -355,7 +355,7 @@ namespace pcr
         m_xDesigner.clear();
     }
 
-    //------------------------------------------------------------------------
+
     bool SQLCommandDesigner::impl_trySuspendDesigner_nothrow() const
     {
         OSL_PRECOND( isActive(), "SQLCommandDesigner::impl_trySuspendDesigner_nothrow: no active designer, this will crash!" );

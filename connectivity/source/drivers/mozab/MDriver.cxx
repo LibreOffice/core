@@ -36,14 +36,14 @@ namespace connectivity
 {
     namespace mozab
     {
-        //------------------------------------------------------------------
+
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL MozabDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
         {
             return *(new MozabDriver( _rxFactory ));
         }
     }
 }
-// --------------------------------------------------------------------------------
+
 MozabDriver::MozabDriver(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
     : ODriver_BASE(m_aMutex), m_xMSFactory( _rxFactory )
@@ -51,11 +51,11 @@ MozabDriver::MozabDriver(
     ,m_pCreationFunc(NULL)
 {
 }
-// -----------------------------------------------------------------------------
+
 MozabDriver::~MozabDriver()
 {
 }
-// --------------------------------------------------------------------------------
+
 void MozabDriver::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -80,14 +80,14 @@ void MozabDriver::disposing()
 }
 
 // static ServiceInfo
-//------------------------------------------------------------------------------
+
 OUString MozabDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
     return OUString(MOZAB_DRIVER_IMPL_NAME);
         // this name is referenced in the configuration and in the mozab.xml
         // Please take care when changing it.
 }
-//------------------------------------------------------------------------------
+
 Sequence< OUString > MozabDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     // which service is supported
@@ -97,7 +97,7 @@ Sequence< OUString > MozabDriver::getSupportedServiceNames_Static(  ) throw (Run
     return aSNS;
 }
 
-//------------------------------------------------------------------
+
 OUString SAL_CALL MozabDriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
@@ -108,13 +108,13 @@ sal_Bool SAL_CALL MozabDriver::supportsService( const OUString& _rServiceName ) 
     return cppu::supportsService(this, _rServiceName);
 }
 
-//------------------------------------------------------------------
+
 Sequence< OUString > SAL_CALL MozabDriver::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 
-// --------------------------------------------------------------------------------
+
 Reference< XConnection > SAL_CALL MozabDriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     if ( !ensureInit() )
@@ -150,7 +150,7 @@ Reference< XConnection > SAL_CALL MozabDriver::connect( const OUString& url, con
 
     return xCon;
 }
-// --------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL MozabDriver::acceptsURL( const OUString& url )
         throw(SQLException, RuntimeException)
 {
@@ -160,7 +160,7 @@ sal_Bool SAL_CALL MozabDriver::acceptsURL( const OUString& url )
     // here we have to look if we support this url format
     return impl_classifyURL(url) != Unknown;
 }
-// --------------------------------------------------------------------------------
+
 Sequence< DriverPropertyInfo > SAL_CALL MozabDriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
     if ( !ensureInit() )
@@ -194,17 +194,17 @@ Sequence< DriverPropertyInfo > SAL_CALL MozabDriver::getPropertyInfo( const OUSt
     // if you have something special to say return it here :-)
     return Sequence< DriverPropertyInfo >();
 }
-// --------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL MozabDriver::getMajorVersion(  ) throw(RuntimeException)
 {
     return 1; // depends on you
 }
-// --------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL MozabDriver::getMinorVersion(  ) throw(RuntimeException)
 {
     return 0; // depends on you
 }
-// --------------------------------------------------------------------------------
+
 EDriverType MozabDriver::impl_classifyURL( const OUString& url )
 {
     // Skip 'sdbc:mozab: part of URL
@@ -252,7 +252,7 @@ EDriverType MozabDriver::impl_classifyURL( const OUString& url )
     return Unknown;
 }
 
-// --------------------------------------------------------------------------------
+
 namespace
 {
     template< typename FUNCTION >
@@ -277,7 +277,7 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------------
+
 extern "C" { static void SAL_CALL thisModule() {} }
 
 bool MozabDriver::ensureInit()
@@ -314,6 +314,6 @@ bool MozabDriver::ensureInit()
 
     return true;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

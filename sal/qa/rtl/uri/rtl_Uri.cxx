@@ -28,11 +28,11 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-// -----------------------------------------------------------------------------
+
 
 namespace Stringtest
 {
-    // -----------------------------------------------------------------------------
+
 
     class Convert : public CppUnit::TestFixture
     {

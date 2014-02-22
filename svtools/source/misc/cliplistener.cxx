@@ -29,7 +29,7 @@
 
 using namespace ::com::sun::star;
 
-// -----------------------------------------------------------------------------
+
 
 TransferableClipboardListener::TransferableClipboardListener( const Link& rCallback ) :
     aLink( rCallback )

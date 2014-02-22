@@ -52,17 +52,17 @@ sdbcx::ObjectType ODbaseTables::createObject(const OUString& _rName)
     pRet->construct();
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 void ODbaseTables::impl_refresh(  ) throw(RuntimeException)
 {
     static_cast<ODbaseCatalog*>(&m_rParent)->refreshTables();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > ODbaseTables::createDescriptor()
 {
     return new ODbaseTable(this,(ODbaseConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection());
 }
-// -------------------------------------------------------------------------
+
 // XAppend
 sdbcx::ObjectType ODbaseTables::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
@@ -90,7 +90,7 @@ sdbcx::ObjectType ODbaseTables::appendObject( const OUString& _rForName, const R
     }
     return createObject( _rForName );
 }
-// -------------------------------------------------------------------------
+
 // XDrop
 void ODbaseTables::dropObject(sal_Int32 _nPos,const OUString _sElementName)
 {
@@ -120,13 +120,13 @@ void ODbaseTables::dropObject(sal_Int32 _nPos,const OUString _sElementName)
         ::dbtools::throwGenericSQLException( sError, NULL );
     }
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL ODbaseTables::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     typedef sdbcx::OCollection OTables_BASE;
     return OTables_BASE::queryInterface(rType);
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

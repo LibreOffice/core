@@ -45,13 +45,13 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OFileControlModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OFileControlModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> OFileControlModel::_getTypes()
 {
     static Sequence<Type> aTypes;
@@ -71,7 +71,7 @@ Sequence<Type> OFileControlModel::_getTypes()
 
 
 // XServiceInfo
-//------------------------------------------------------------------------------
+
 StringSequence  OFileControlModel::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OControlModel::getSupportedServiceNames();
@@ -82,8 +82,8 @@ StringSequence  OFileControlModel::getSupportedServiceNames() throw(RuntimeExcep
     return aSupported;
 }
 
-//------------------------------------------------------------------
-//------------------------------------------------------------------
+
+
 OFileControlModel::OFileControlModel(const Reference<XComponentContext>& _rxFactory)
                     :OControlModel(_rxFactory, VCL_CONTROLMODEL_FILECONTROL)
                     ,m_aResetListeners(m_aMutex)
@@ -91,7 +91,7 @@ OFileControlModel::OFileControlModel(const Reference<XComponentContext>& _rxFact
     m_nClassId = FormComponentType::FILECONTROL;
 }
 
-//------------------------------------------------------------------
+
 OFileControlModel::OFileControlModel( const OFileControlModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OControlModel( _pOriginal, _rxFactory )
     ,m_aResetListeners( m_aMutex )
@@ -100,7 +100,7 @@ OFileControlModel::OFileControlModel( const OFileControlModel* _pOriginal, const
     m_sDefaultValue = _pOriginal->m_sDefaultValue;
 }
 
-//------------------------------------------------------------------
+
 OFileControlModel::~OFileControlModel()
 {
     if (!OComponentHelper::rBHelper.bDisposed)
@@ -110,10 +110,10 @@ OFileControlModel::~OFileControlModel()
     }
 }
 
-//------------------------------------------------------------------------------
+
 IMPLEMENT_DEFAULT_CLONING( OFileControlModel )
 
-//------------------------------------------------------------------------------
+
 Any SAL_CALL OFileControlModel::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn = OControlModel::queryAggregation(_rType);
@@ -126,7 +126,7 @@ Any SAL_CALL OFileControlModel::queryAggregation(const Type& _rType) throw (Runt
 }
 
 // OComponentHelper
-//-----------------------------------------------------------------------------
+
 void OFileControlModel::disposing()
 {
     OControlModel::disposing();
@@ -135,7 +135,7 @@ void OFileControlModel::disposing()
     m_aResetListeners.disposeAndClear(aEvt);
 }
 
-//------------------------------------------------------------------------------
+
 Any OFileControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
 {
     switch ( _nHandle )
@@ -146,7 +146,7 @@ Any OFileControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
     return OControlModel::getPropertyDefaultByHandle( _nHandle );
 }
 
-//------------------------------------------------------------------------------
+
 void OFileControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const
 {
     switch (nHandle)
@@ -157,7 +157,7 @@ void OFileControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) con
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OFileControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) throw ( ::com::sun::star::uno::Exception)
 {
     switch (nHandle)
@@ -171,7 +171,7 @@ void OFileControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OFileControlModel::convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue)
                             throw( IllegalArgumentException )
 {
@@ -184,7 +184,7 @@ sal_Bool OFileControlModel::convertFastPropertyValue(Any& rConvertedValue, Any& 
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OFileControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 2, OControlModel )
@@ -193,13 +193,13 @@ void OFileControlModel::describeFixedProperties( Sequence< Property >& _rProps )
     END_DESCRIBE_PROPERTIES();
 }
 
-//------------------------------------------------------------------------------
+
 OUString SAL_CALL OFileControlModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return OUString(FRM_COMPONENT_FILECONTROL);   // old (non-sun) name for compatibility !
 }
 
-//------------------------------------------------------------------------------
+
 void OFileControlModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OControlModel::write(_rxOutStream);
@@ -213,7 +213,7 @@ void OFileControlModel::write(const Reference<stario::XObjectOutputStream>& _rxO
     writeHelpTextCompatibly(_rxOutStream);
 }
 
-//------------------------------------------------------------------------------
+
 void OFileControlModel::read(const Reference<stario::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OControlModel::read(_rxInStream);
@@ -239,7 +239,7 @@ void OFileControlModel::read(const Reference<stario::XObjectInputStream>& _rxInS
 //  _reset();
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL OFileControlModel::reset() throw ( ::com::sun::star::uno::RuntimeException)
 {
     ::cppu::OInterfaceIteratorHelper aIter(m_aResetListeners);
@@ -259,19 +259,19 @@ void SAL_CALL OFileControlModel::reset() throw ( ::com::sun::star::uno::RuntimeE
     }
 }
 
-//-----------------------------------------------------------------------------
+
 void OFileControlModel::addResetListener(const Reference<XResetListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException)
 {
     m_aResetListeners.addInterface(_rxListener);
 }
 
-//-----------------------------------------------------------------------------
+
 void OFileControlModel::removeResetListener(const Reference<XResetListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException)
 {
     m_aResetListeners.removeInterface(_rxListener);
 }
 
-//------------------------------------------------------------------------------
+
 void OFileControlModel::_reset()
 {
     {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties

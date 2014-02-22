@@ -185,13 +185,13 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 
 OXMLGroup::~OXMLGroup()
 {
 
 }
-// -----------------------------------------------------------------------------
+
 SvXMLImportContext* OXMLGroup::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -244,12 +244,12 @@ SvXMLImportContext* OXMLGroup::CreateChildContext(
 
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 ORptFilter& OXMLGroup::GetOwnImport()
 {
     return static_cast<ORptFilter&>(GetImport());
 }
-// -----------------------------------------------------------------------------
+
 void OXMLGroup::EndElement()
 {
     try
@@ -261,9 +261,9 @@ void OXMLGroup::EndElement()
         OSL_FAIL("Exception catched!");
     }
 }
-// -----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
+
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

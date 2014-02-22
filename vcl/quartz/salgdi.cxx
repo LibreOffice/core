@@ -73,7 +73,7 @@ CoreTextFontData::CoreTextFontData( const CoreTextFontData& rSrc )
         mpCharMap->AddReference();
 }
 
-// -----------------------------------------------------------------------
+
 
 CoreTextFontData::CoreTextFontData( const ImplDevFontAttributes& rDFA, sal_IntPtr nFontId )
 :   PhysicalFontFace( rDFA, 0 )
@@ -86,7 +86,7 @@ CoreTextFontData::CoreTextFontData( const ImplDevFontAttributes& rDFA, sal_IntPt
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 CoreTextFontData::~CoreTextFontData()
 {
@@ -94,14 +94,14 @@ CoreTextFontData::~CoreTextFontData()
         mpCharMap->DeReference();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_IntPtr CoreTextFontData::GetFontId() const
 {
     return (sal_IntPtr)mnFontId;
 }
 
-// -----------------------------------------------------------------------
+
 
 static unsigned GetUShort( const unsigned char* p ){return((p[0]<<8)+p[1]);}
 
@@ -188,7 +188,7 @@ bool CoreTextFontData::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapab
     return !rFontCapabilities.maUnicodeRange.empty() || !rFontCapabilities.maCodePageRange.empty();
 }
 
-// -----------------------------------------------------------------------
+
 
 void CoreTextFontData::ReadOs2Table( void ) const
 {
@@ -240,7 +240,7 @@ void CoreTextFontData::ReadMacCmapEncoding( void ) const
         return;
 }
 
-// -----------------------------------------------------------------------
+
 
 AquaSalGraphics::AquaSalGraphics()
 #ifdef MACOSX
@@ -319,14 +319,14 @@ void AquaSalGraphics::SetTextColor( SalColor nSalColor )
         mpTextStyle->SetTextColor( maTextColor );
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int /*nFallbackLevel*/ )
 {
     mpTextStyle->GetFontMetric( *pMetric );
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool AddTempDevFont(const OUString& rFontFileURL)
 {
@@ -410,7 +410,7 @@ void AquaSalGraphics::ClearDevFontCache()
     pSalData->mpFontList = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalGraphics::AddTempDevFont( ImplDevFontList*,
     const OUString& rFontFileURL, const OUString& /*rFontName*/ )
@@ -418,7 +418,7 @@ bool AquaSalGraphics::AddTempDevFont( ImplDevFontList*,
     return ::AddTempDevFont(rFontFileURL);
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolygon& rPolyPoly )
 {
@@ -426,7 +426,7 @@ bool AquaSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPol
     return bRC;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
 {
@@ -434,13 +434,13 @@ bool AquaSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect 
     return bRC;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalGraphics::DrawServerFontLayout( const ServerFontLayout& )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbackLevel*/ )
 {
@@ -476,7 +476,7 @@ sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbac
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 SalLayout* AquaSalGraphics::GetTextLayout( ImplLayoutArgs& /*rArgs*/, int /*nFallbackLevel*/ )
 {
@@ -484,7 +484,7 @@ SalLayout* AquaSalGraphics::GetTextLayout( ImplLayoutArgs& /*rArgs*/, int /*nFal
     return pSalLayout;
 }
 
-// -----------------------------------------------------------------------
+
 
 const ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
 {
@@ -502,7 +502,7 @@ bool AquaSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabi
     return mpFontData->GetImplFontCapabilities(rFontCapabilities);
 }
 
-// -----------------------------------------------------------------------
+
 
 // fake a SFNT font directory entry for a font table
 // see http://developer.apple.com/fonts/TTRefMan/RM06/Chap6.html#Directory
@@ -686,7 +686,7 @@ bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontData,
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bVertical,
     Int32Vector& rGlyphWidths, Ucs2UIntMap& rUnicodeEnc )
@@ -757,7 +757,7 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 const Ucs2SIntMap* AquaSalGraphics::GetFontEncodingVector(
     const PhysicalFontFace*, const Ucs2OStrMap** /*ppNonEncoded*/ )
@@ -765,7 +765,7 @@ const Ucs2SIntMap* AquaSalGraphics::GetFontEncodingVector(
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 const void* AquaSalGraphics::GetEmbedFontData( const PhysicalFontFace*,
                               const sal_Ucs* /*pUnicodes*/,
@@ -776,7 +776,7 @@ const void* AquaSalGraphics::GetEmbedFontData( const PhysicalFontFace*,
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalGraphics::FreeEmbedFontData( const void* pData, long /*nDataLen*/ )
 {
@@ -786,7 +786,7 @@ void AquaSalGraphics::FreeEmbedFontData( const void* pData, long /*nDataLen*/ )
     DBG_ASSERT( (pData!=NULL), "AquaSalGraphics::FreeEmbedFontData() is not implemented\n");
 }
 
-// -----------------------------------------------------------------------
+
 
 SystemFontData AquaSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
 {
@@ -899,5 +899,5 @@ CGContextRef SvpSalGraphics::GetContext()
 }
 
 #endif
- 
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

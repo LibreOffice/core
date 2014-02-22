@@ -139,7 +139,7 @@ inline Point WMFReader::ReadPoint()
     return Point( nX, nY );
 }
 
-// ------------------------------------------------------------------------
+
 
 inline Point WMFReader::ReadYX()
 {
@@ -148,7 +148,7 @@ inline Point WMFReader::ReadYX()
     return Point( nX, nY );
 }
 
-// ------------------------------------------------------------------------
+
 
 Rectangle WMFReader::ReadRectangle()
 {
@@ -160,7 +160,7 @@ Rectangle WMFReader::ReadRectangle()
     return Rectangle( aTL, aBR );
 }
 
-// ------------------------------------------------------------------------
+
 
 Size WMFReader::ReadYXExt()
 {
@@ -169,7 +169,7 @@ Size WMFReader::ReadYXExt()
     return Size( nW, nH );
 }
 
-// ------------------------------------------------------------------------
+
 
 void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 {
@@ -1089,7 +1089,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 bool WMFReader::ReadHeader()
 {
@@ -1304,7 +1304,7 @@ void WMFReader::ReadWMF()
         pWMF->Seek( nStartPos );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
 {

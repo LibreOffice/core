@@ -90,7 +90,7 @@ AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 AquaSalInfoPrinter::~AquaSalInfoPrinter()
 {
@@ -101,7 +101,7 @@ AquaSalInfoPrinter::~AquaSalInfoPrinter()
         CFRelease( mrContext );
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
 {
@@ -146,7 +146,7 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SalGraphics* AquaSalInfoPrinter::GetGraphics()
 {
@@ -155,21 +155,21 @@ SalGraphics* AquaSalInfoPrinter::GetGraphics()
     return pGraphics;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInfoPrinter::ReleaseGraphics( SalGraphics* )
 {
     mbGraphics = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalInfoPrinter::Setup( SalFrame*, ImplJobSetup* )
 {
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
 {
@@ -217,7 +217,7 @@ bool AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
     return bSuccess;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInfoPrinter::setPaperSize( long i_nWidth, long i_nHeight, Orientation i_eSetOrientation )
 {
@@ -239,7 +239,7 @@ void AquaSalInfoPrinter::setPaperSize( long i_nWidth, long i_nHeight, Orientatio
     mePageOrientation = i_eSetOrientation;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalInfoPrinter::SetData( sal_uLong i_nFlags, ImplJobSetup* io_pSetupData )
 {
@@ -279,21 +279,21 @@ bool AquaSalInfoPrinter::SetData( sal_uLong i_nFlags, ImplJobSetup* io_pSetupDat
     return mpPrintInfo != nil;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uLong AquaSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* )
 {
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString AquaSalInfoPrinter::GetPaperBinName( const ImplJobSetup*, sal_uLong )
 {
     return OUString();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uLong AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup*, sal_uInt16 i_nType )
 {
@@ -327,7 +327,7 @@ sal_uLong AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup*, sal_uInt16 i
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
                                   long& o_rOutWidth, long& o_rOutHeight,
@@ -560,7 +560,7 @@ sal_Bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
     return bSuccess;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool AquaSalInfoPrinter::EndJob()
 {
@@ -569,7 +569,7 @@ sal_Bool AquaSalInfoPrinter::EndJob()
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool AquaSalInfoPrinter::AbortJob()
 {
@@ -579,7 +579,7 @@ sal_Bool AquaSalInfoPrinter::AbortJob()
     return sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 SalGraphics* AquaSalInfoPrinter::StartPage( ImplJobSetup* i_pSetupData, sal_Bool i_bNewJobData )
 {
@@ -593,7 +593,7 @@ SalGraphics* AquaSalInfoPrinter::StartPage( ImplJobSetup* i_pSetupData, sal_Bool
     return mpGraphics;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool AquaSalInfoPrinter::EndPage()
 {
@@ -601,7 +601,7 @@ sal_Bool AquaSalInfoPrinter::EndPage()
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uLong AquaSalInfoPrinter::GetErrorCode() const
 {
@@ -615,13 +615,13 @@ AquaSalPrinter::AquaSalPrinter( AquaSalInfoPrinter* i_pInfoPrinter ) :
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 AquaSalPrinter::~AquaSalPrinter()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalPrinter::StartJob( const OUString* i_pFileName,
                                const OUString& i_rJobName,
@@ -632,7 +632,7 @@ bool AquaSalPrinter::StartJob( const OUString* i_pFileName,
     return mpInfoPrinter->StartJob( i_pFileName, i_rJobName, i_rAppName, i_pSetupData, i_rController );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalPrinter::StartJob( const OUString* /*i_pFileName*/,
                                const OUString& /*i_rJobName*/,
@@ -646,35 +646,35 @@ bool AquaSalPrinter::StartJob( const OUString* /*i_pFileName*/,
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalPrinter::EndJob()
 {
     return mpInfoPrinter->EndJob();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalPrinter::AbortJob()
 {
     return mpInfoPrinter->AbortJob();
 }
 
-// -----------------------------------------------------------------------
+
 
 SalGraphics* AquaSalPrinter::StartPage( ImplJobSetup* i_pSetupData, sal_Bool i_bNewJobData )
 {
     return mpInfoPrinter->StartPage( i_pSetupData, i_bNewJobData );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalPrinter::EndPage()
 {
     return mpInfoPrinter->EndPage();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uLong AquaSalPrinter::GetErrorCode()
 {

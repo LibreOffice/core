@@ -30,7 +30,7 @@ using namespace ::com::sun::star::xml::sax;
 // CT_LineProperties
 
 namespace oox { namespace drawingml {
-// ---------------------------------------------------------------------
+
 
 LinePropertiesContext::LinePropertiesContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs,
     LineProperties& rLineProperties ) throw()

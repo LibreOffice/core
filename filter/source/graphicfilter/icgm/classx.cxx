@@ -21,7 +21,7 @@
 #include <main.hxx>
 #include <outact.hxx>
 
-// ---------------------------------------------------------------
+
 
 #define ImplSetUnderlineMode()                                  \
                                                                 \
@@ -36,7 +36,7 @@
     }                                                           \
     pElement->nUnderlineColor = ImplGetBitmapColor();
 
-// ---------------------------------------------------------------
+
 
 void CGM::ImplDoClass6()
 {
@@ -197,7 +197,7 @@ void CGM::ImplDoClass6()
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGM::ImplDoClass8()
 {
@@ -216,7 +216,7 @@ void CGM::ImplDoClass8()
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGM::ImplDoClass9()
 {
@@ -236,7 +236,7 @@ void CGM::ImplDoClass9()
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGM::ImplDoClass15()
 {
@@ -249,6 +249,6 @@ void CGM::ImplDoClass15()
     }
 };
 
-// ---------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

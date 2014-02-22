@@ -51,18 +51,18 @@ namespace sd { namespace colortoolpanel
     //==================================================================================================================
     //= ToolPanelFactory
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     ToolPanelFactory::ToolPanelFactory( const Reference< XComponentContext >& i_rContext )
         :m_xContext( i_rContext )
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     ToolPanelFactory::~ToolPanelFactory()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XUIElement > SAL_CALL ToolPanelFactory::createUIElement( const OUString& i_rResourceURL, const Sequence< PropertyValue >& i_rArgs ) throw (NoSuchElementException, IllegalArgumentException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -127,7 +127,7 @@ namespace sd { namespace colortoolpanel
         return aServiceNames;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XInterface > SAL_CALL ToolPanelFactory::Create( const Reference< XComponentContext >& i_rContext ) throw (RuntimeException)
     {
         return *( new ToolPanelFactory( i_rContext ) );

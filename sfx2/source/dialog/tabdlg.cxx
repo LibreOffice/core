@@ -239,7 +239,7 @@ SfxTabPage::SfxTabPage(Window *pParent, const OString& rID, const OUString& rUIX
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage::~SfxTabPage()
 
@@ -252,14 +252,14 @@ SfxTabPage::~SfxTabPage()
     delete pImpl;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SfxTabPage::FillItemSet( SfxItemSet& rSet )
 {
     return pImpl->maItemConn.DoFillItemSet( rSet, GetItemSet() );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxTabPage::Reset( const SfxItemSet& rSet )
 {
@@ -267,7 +267,7 @@ void SfxTabPage::Reset( const SfxItemSet& rSet )
     pImpl->maItemConn.DoReset( rSet );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxTabPage::ActivatePage( const SfxItemSet& )
 
@@ -281,7 +281,7 @@ void SfxTabPage::ActivatePage( const SfxItemSet& )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 int SfxTabPage::DeactivatePage( SfxItemSet* )
 
@@ -304,7 +304,7 @@ int SfxTabPage::DeactivatePage( SfxItemSet* )
     return LEAVE_PAGE;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxTabPage::FillUserData()
 
@@ -318,14 +318,14 @@ void SfxTabPage::FillUserData()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SfxTabPage::IsReadOnly() const
 {
     return sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 const SfxPoolItem* SfxTabPage::GetItem( const SfxItemSet& rSet, sal_uInt16 nSlot, sal_Bool bDeep )
 
@@ -346,7 +346,7 @@ const SfxPoolItem* SfxTabPage::GetItem( const SfxItemSet& rSet, sal_uInt16 nSlot
     return pItem;
 }
 
-// -----------------------------------------------------------------------
+
 
 const SfxPoolItem* SfxTabPage::GetOldItem( const SfxItemSet& rSet,
                                            sal_uInt16 nSlot, sal_Bool bDeep )
@@ -376,7 +376,7 @@ void SfxTabPage::PageCreated( SfxAllItemSet /*aSet*/ )
     DBG_ASSERT(false, "SfxTabPage::PageCreated should not be called");
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxTabPage::AddItemConnection( sfx::ItemConnectionBase* pConnection )
 {
@@ -388,7 +388,7 @@ SfxTabDialog* SfxTabPage::GetTabDialog() const
     return dynamic_cast<SfxTabDialog*>(GetParentDialog());
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabDialog::SfxTabDialog
 (
@@ -414,7 +414,7 @@ SfxTabDialog::SfxTabDialog
     Init_Impl( bFmt, NULL, NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabDialog::SfxTabDialog
 
@@ -446,7 +446,7 @@ SfxTabDialog::SfxTabDialog
     DBG_WARNING( "Please use the Construtor with the ViewFrame" );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabDialog::~SfxTabDialog()
 {
@@ -502,7 +502,7 @@ SfxTabDialog::~SfxTabDialog()
         delete m_pBox;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const OUString* pUserButtonText, const ResId *pResId )
 
@@ -626,7 +626,7 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const OUString* pUserButtonText
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxTabDialog::RemoveResetButton()
 {
@@ -634,7 +634,7 @@ void SfxTabDialog::RemoveResetButton()
     pImpl->bHideResetBtn = sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 short SfxTabDialog::Execute()
 {
@@ -644,7 +644,7 @@ short SfxTabDialog::Execute()
     return TabDialog::Execute();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxTabDialog::StartExecuteModal( const Link& rEndDialogHdl )
 {
@@ -654,7 +654,7 @@ void SfxTabDialog::StartExecuteModal( const Link& rEndDialogHdl )
     TabDialog::StartExecuteModal( rEndDialogHdl );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxTabDialog::Start( sal_Bool bShow )
 {
@@ -668,7 +668,7 @@ void SfxTabDialog::Start( sal_Bool bShow )
         GrabFocusToFirstControl();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxTabDialog::SetApplyHandler(const Link& _rHdl)
 {
@@ -677,7 +677,7 @@ void SfxTabDialog::SetApplyHandler(const Link& _rHdl)
         m_pApplyBtn->SetClickHdl( _rHdl );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxTabDialog::Start_Impl()
 {
@@ -757,7 +757,7 @@ sal_uInt16 SfxTabDialog::AddTabPage
     return nPageId;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxTabDialog::AddTabPage
 
@@ -783,7 +783,7 @@ void SfxTabDialog::AddTabPage
         new Data_Impl( nId, pCreateFunc, pRangesFunc, bItemsOnDemand ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxTabDialog::RemoveTabPage( sal_uInt16 nId )
 
@@ -829,7 +829,7 @@ void SfxTabDialog::RemoveTabPage(const OString &rName)
     RemoveTabPage(m_pTabCtrl->GetPageId(rName));
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxTabDialog::PageCreated
 
@@ -847,7 +847,7 @@ void SfxTabDialog::PageCreated
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxItemSet* SfxTabDialog::GetInputSetImpl()
 
@@ -861,7 +861,7 @@ SfxItemSet* SfxTabDialog::GetInputSetImpl()
     return (SfxItemSet*)pSet;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SfxTabDialog::GetTabPage( sal_uInt16 nPageId ) const
 
@@ -887,7 +887,7 @@ void SfxTabDialog::SavePosAndId()
     aDlgOpt.SetPageID( m_pTabCtrl->GetCurPageId() );
 }
 
-// -----------------------------------------------------------------------
+
 
 short SfxTabDialog::Ok()
 
@@ -956,7 +956,7 @@ short SfxTabDialog::Ok()
     return bModified ? RET_OK : RET_CANCEL;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SfxTabDialog, CancelHdl)
 {
@@ -964,7 +964,7 @@ IMPL_LINK_NOARG(SfxTabDialog, CancelHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxItemSet* SfxTabDialog::CreateInputItemSet( sal_uInt16 )
 
@@ -979,7 +979,7 @@ SfxItemSet* SfxTabDialog::CreateInputItemSet( sal_uInt16 )
     return new SfxAllItemSet( SFX_APP()->GetPool() );
 }
 
-// -----------------------------------------------------------------------
+
 
 const SfxItemSet* SfxTabDialog::GetRefreshedSet()
 
@@ -995,7 +995,7 @@ const SfxItemSet* SfxTabDialog::GetRefreshedSet()
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SfxTabDialog, OkHdl)
 
@@ -1029,7 +1029,7 @@ bool SfxTabDialog::Apply()
     return bApplied;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxTabDialog::PrepareLeaveCurrentPage()
 {
@@ -1065,7 +1065,7 @@ bool SfxTabDialog::PrepareLeaveCurrentPage()
 }
 
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SfxTabDialog, UserHdl)
 
@@ -1091,7 +1091,7 @@ IMPL_LINK_NOARG(SfxTabDialog, UserHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SfxTabDialog, ResetHdl)
 
@@ -1118,7 +1118,7 @@ IMPL_LINK_NOARG(SfxTabDialog, ResetHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SfxTabDialog, BaseFmtHdl)
 
@@ -1195,7 +1195,7 @@ IMPL_LINK_NOARG(SfxTabDialog, BaseFmtHdl)
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
@@ -1277,7 +1277,7 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
 
@@ -1362,7 +1362,7 @@ IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
         return sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxTabDialog::ShowPage( sal_uInt16 nId )
 
@@ -1376,7 +1376,7 @@ void SfxTabDialog::ShowPage( sal_uInt16 nId )
     ActivatePageHdl( m_pTabCtrl );
 }
 
-// -----------------------------------------------------------------------
+
 
 const sal_uInt16* SfxTabDialog::GetInputRanges( const SfxItemPool& rPool )
 
@@ -1444,7 +1444,7 @@ const sal_uInt16* SfxTabDialog::GetInputRanges( const SfxItemPool& rPool )
     return pRanges;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxTabDialog::SetInputSet( const SfxItemSet* pInSet )
 

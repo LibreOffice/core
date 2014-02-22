@@ -335,7 +335,7 @@ public:
     void initServiceRdbFiles();
 };
 
-//______________________________________________________________________________
+
 
 BackendImpl::ComponentPackageImpl::ComponentPackageImpl(
     ::rtl::Reference<PackageRegistryBackend> const & myBackend,
@@ -389,19 +389,19 @@ BackendImpl * BackendImpl::ComponentPackageImpl::getMyBackend() const
 }
 
 
-//______________________________________________________________________________
+
 void BackendImpl::ComponentPackageImpl::disposing()
 {
     Package::disposing();
 }
 
-//______________________________________________________________________________
+
 void BackendImpl::TypelibraryPackageImpl::disposing()
 {
     Package::disposing();
 }
 
-//______________________________________________________________________________
+
 void BackendImpl::disposing()
 {
     try {
@@ -599,7 +599,7 @@ void BackendImpl::revokeEntryFromDb(OUString const & url)
 }
 
 // XPackageRegistry
-//______________________________________________________________________________
+
 Sequence< Reference<deployment::XPackageTypeInfo> >
 BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 {
@@ -615,7 +615,7 @@ void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaT
 }
 
 // PackageRegistryBackend
-//______________________________________________________________________________
+
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString const & url, OUString const & mediaType_,
     sal_Bool bRemoved, OUString const & identifier,
@@ -746,7 +746,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
 }
 
 
-//______________________________________________________________________________
+
 void BackendImpl::unorc_verify_init(
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
@@ -866,7 +866,7 @@ void BackendImpl::unorc_verify_init(
     }
 }
 
-//______________________________________________________________________________
+
 void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
 {
     if (transientMode())
@@ -990,7 +990,7 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
     m_unorc_modified = false;
 }
 
-//______________________________________________________________________________
+
 bool BackendImpl::addToUnoRc( RcItem kind, OUString const & url_,
                               Reference<XCommandEnvironment> const & xCmdEnv )
 {
@@ -1009,7 +1009,7 @@ bool BackendImpl::addToUnoRc( RcItem kind, OUString const & url_,
         return false;
 }
 
-//______________________________________________________________________________
+
 bool BackendImpl::removeFromUnoRc(
     RcItem kind, OUString const & url_,
     Reference<XCommandEnvironment> const & xCmdEnv )
@@ -1024,7 +1024,7 @@ bool BackendImpl::removeFromUnoRc(
     return true;
 }
 
-//______________________________________________________________________________
+
 bool BackendImpl::hasInUnoRc(
     RcItem kind, OUString const & url_ )
 {
@@ -1043,14 +1043,14 @@ css::uno::Reference< css::uno::XComponentContext > BackendImpl::getRootContext()
     return rootContext.is() ? rootContext : getComponentContext();
 }
 
-//______________________________________________________________________________
+
 void BackendImpl::releaseObject( OUString const & id )
 {
     const ::osl::MutexGuard guard( getMutex() );
     m_backendObjects.erase( id );
 }
 
-//______________________________________________________________________________
+
 Reference<XInterface> BackendImpl::getObject( OUString const & id )
 {
     const ::osl::MutexGuard guard( getMutex() );
@@ -1061,7 +1061,7 @@ Reference<XInterface> BackendImpl::getObject( OUString const & id )
         return iFind->second;
 }
 
-//______________________________________________________________________________
+
 Reference<XInterface> BackendImpl::insertObject(
     OUString const & id, Reference<XInterface> const & xObject )
 {
@@ -1072,7 +1072,7 @@ Reference<XInterface> BackendImpl::insertObject(
     return insertion.first->second;
 }
 
-//------------------------------------------------------------------------------
+
 Reference<XComponentContext> raise_uno_process(
     Reference<XComponentContext> const & xContext,
     ::rtl::Reference<AbortChannel> const & abortChannel )
@@ -1123,7 +1123,7 @@ Reference<XComponentContext> raise_uno_process(
     }
 }
 
-//------------------------------------------------------------------------------
+
 namespace {
 
 void extractComponentData(
@@ -1294,7 +1294,7 @@ void BackendImpl::ComponentPackageImpl::componentLiveRemoval(
 }
 
 // Package
-//______________________________________________________________________________
+
 //We could use here BackendImpl::hasActiveEntry. However, this check is just as well.
 //And it also shows the problem if another extension has overwritten an implementation
 //entry, because it contains the same service implementation
@@ -1375,7 +1375,7 @@ BackendImpl::ComponentPackageImpl::isRegistered_(
             m_registered == REG_REGISTERED, bAmbiguous) );
 }
 
-//______________________________________________________________________________
+
 void BackendImpl::ComponentPackageImpl::processPackage_(
     ::osl::ResettableMutexGuard &,
     bool doRegisterPackage,
@@ -1488,7 +1488,7 @@ BackendImpl * BackendImpl::TypelibraryPackageImpl::getMyBackend() const
     }
     return pBackend;
 }
-//______________________________________________________________________________
+
 beans::Optional< beans::Ambiguous<sal_Bool> >
 BackendImpl::TypelibraryPackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard &,
@@ -1504,7 +1504,7 @@ BackendImpl::TypelibraryPackageImpl::isRegistered_(
             false /* IsAmbiguous */ ) );
 }
 
-//______________________________________________________________________________
+
 void BackendImpl::TypelibraryPackageImpl::processPackage_(
     ::osl::ResettableMutexGuard &,
     bool doRegisterPackage,

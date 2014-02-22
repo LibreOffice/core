@@ -52,7 +52,7 @@ MainThreadExecutor_Impl::MainThreadExecutor_Impl( const uno::Reference< task::XJ
 {
 }
 
-//-------------------------------------------------------------------------
+
 uno::Any SAL_CALL UNOMainThreadExecutor::execute( const uno::Sequence< beans::NamedValue >& aArguments )
     throw ( lang::IllegalArgumentException,
             uno::Exception,
@@ -82,7 +82,7 @@ uno::Any SAL_CALL UNOMainThreadExecutor::execute( const uno::Sequence< beans::Na
     return uno::Any();
 }
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL UNOMainThreadExecutor::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(1);
@@ -90,20 +90,20 @@ uno::Sequence< OUString > SAL_CALL UNOMainThreadExecutor::impl_staticGetSupporte
     return aRet;
 }
 
-//-------------------------------------------------------------------------
+
 OUString SAL_CALL UNOMainThreadExecutor::impl_staticGetImplementationName()
 {
     return OUString("com.sun.star.comp.thread.MainThreadExecutor");
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL UNOMainThreadExecutor::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
     return uno::Reference< uno::XInterface >( *new UNOMainThreadExecutor( xServiceManager ) );
 }
 
-//-------------------------------------------------------------------------
+
 OUString SAL_CALL UNOMainThreadExecutor::getImplementationName()
     throw ( uno::RuntimeException )
 {
@@ -116,7 +116,7 @@ sal_Bool SAL_CALL UNOMainThreadExecutor::supportsService( const OUString& Servic
     return cppu::supportsService(this, ServiceName);
 }
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL UNOMainThreadExecutor::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {

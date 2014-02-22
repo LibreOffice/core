@@ -87,7 +87,7 @@ SvxShapeCollection::SvxShapeCollection() throw()
 {
 }
 
-//----------------------------------------------------------------------
+
 SvxShapeCollection::~SvxShapeCollection() throw()
 {
 }
@@ -204,25 +204,25 @@ void SAL_CALL SvxShapeCollection::removeEventListener( const ::com::sun::star::u
 }
 
 // XShapes
-//----------------------------------------------------------------------
+
 void SAL_CALL SvxShapeCollection::add( const Reference< drawing::XShape >& xShape ) throw( uno::RuntimeException )
 {
     maShapeContainer.addInterface( xShape );
 }
 
-//----------------------------------------------------------------------
+
 void SAL_CALL SvxShapeCollection::remove( const uno::Reference< drawing::XShape >& xShape ) throw( uno::RuntimeException )
 {
     maShapeContainer.removeInterface( xShape );
 }
 
-//----------------------------------------------------------------------
+
 sal_Int32 SAL_CALL SvxShapeCollection::getCount() throw( uno::RuntimeException )
 {
     return maShapeContainer.getLength();
 }
 
-//----------------------------------------------------------------------
+
 uno::Any SAL_CALL SvxShapeCollection::getByIndex( sal_Int32 Index )
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException )
 {

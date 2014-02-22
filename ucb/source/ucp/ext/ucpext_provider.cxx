@@ -50,30 +50,30 @@ namespace ucb { namespace ucp { namespace ext
     //==================================================================================================================
     //= ContentProvider
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     ContentProvider::ContentProvider( const Reference< XComponentContext >& rxContext )
         :ContentProvider_Base( rxContext )
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     ContentProvider::~ContentProvider()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     OUString SAL_CALL ContentProvider::getImplementationName_static() throw (RuntimeException)
     {
         return OUString(  "org.openoffice.comp.ucp.ext.ContentProvider"  );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     OUString SAL_CALL ContentProvider::getImplementationName() throw (RuntimeException)
     {
         return getImplementationName_static();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL ContentProvider::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aServiceNames(2);
@@ -82,31 +82,31 @@ namespace ucb { namespace ucp { namespace ext
         return aServiceNames;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL ContentProvider::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XInterface > ContentProvider::Create( const Reference< XComponentContext >& i_rContext )
     {
         return *( new ContentProvider( i_rContext ) );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     OUString ContentProvider::getRootURL()
     {
         return OUString(  "vnd.sun.star.extension://"  );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     OUString ContentProvider::getArtificialNodeContentType()
     {
         return OUString(  "application/vnd.sun.star.extension-content"  );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     namespace
     {
         void lcl_ensureAndTransfer( OUString& io_rIdentifierFragment, OUStringBuffer& o_rNormalization, const sal_Unicode i_nLeadingChar )
@@ -118,7 +118,7 @@ namespace ucb { namespace ucp { namespace ext
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XContent > SAL_CALL ContentProvider::queryContent( const Reference< XContentIdentifier  >& i_rIdentifier )
         throw( IllegalIdentifierException, RuntimeException )
     {

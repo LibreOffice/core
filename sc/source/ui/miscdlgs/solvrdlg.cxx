@@ -74,13 +74,13 @@ ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     Init();
 }
 
-//----------------------------------------------------------------------------
+
 
 ScSolverDlg::~ScSolverDlg()
 {
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScSolverDlg::Init()
 {
@@ -107,14 +107,14 @@ void ScSolverDlg::Init()
     pEdActive = m_pEdFormulaCell;
 }
 
-//----------------------------------------------------------------------------
+
 
 bool ScSolverDlg::Close()
 {
     return DoClose( ScSolverDlgWrapper::GetChildWindowId() );
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScSolverDlg::SetActive()
 {
@@ -131,7 +131,7 @@ void ScSolverDlg::SetActive()
     RefInputDone();
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
@@ -155,7 +155,7 @@ void ScSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScSolverDlg::RaiseError( ScSolverErr eError )
 {
@@ -183,14 +183,14 @@ void ScSolverDlg::RaiseError( ScSolverErr eError )
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 bool ScSolverDlg::IsRefInputMode() const
 {
     return pEdActive != NULL;
 }
 
-//----------------------------------------------------------------------------
+
 
 bool ScSolverDlg::CheckTargetValue( const OUString& rStrVal )
 {
@@ -200,7 +200,7 @@ bool ScSolverDlg::CheckTargetValue( const OUString& rStrVal )
     return pDoc->GetFormatTable()->IsNumberFormat( rStrVal, n1, n2 );
 }
 
-//----------------------------------------------------------------------------
+
 // Handler:
 
 IMPL_LINK( ScSolverDlg, BtnHdl, PushButton*, pBtn )
@@ -261,7 +261,7 @@ IMPL_LINK( ScSolverDlg, BtnHdl, PushButton*, pBtn )
     return 0;
 }
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScSolverDlg, GetFocusHdl, Control*, pCtrl )
 {
@@ -281,7 +281,7 @@ IMPL_LINK( ScSolverDlg, GetFocusHdl, Control*, pCtrl )
     return 0;
 }
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScSolverDlg, LoseFocusHdl)
 {

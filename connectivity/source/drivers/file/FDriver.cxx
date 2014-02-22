@@ -35,14 +35,14 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
-// --------------------------------------------------------------------------------
+
 OFileDriver::OFileDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
     : ODriver_BASE(m_aMutex)
     ,m_xContext(_rxContext)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileDriver::OFileDriver" );
 }
-// --------------------------------------------------------------------------------
+
 void OFileDriver::disposing()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileDriver::disposing" );
@@ -61,12 +61,12 @@ void OFileDriver::disposing()
 }
 
 // static ServiceInfo
-//------------------------------------------------------------------------------
+
 OUString OFileDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
     return OUString("com.sun.star.sdbc.driver.file.Driver");
 }
-//------------------------------------------------------------------------------
+
 Sequence< OUString > OFileDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     Sequence< OUString > aSNS( 2 );
@@ -75,7 +75,7 @@ Sequence< OUString > OFileDriver::getSupportedServiceNames_Static(  ) throw (Run
     return aSNS;
 }
 
-//------------------------------------------------------------------
+
 OUString SAL_CALL OFileDriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
@@ -86,13 +86,13 @@ sal_Bool SAL_CALL OFileDriver::supportsService( const OUString& _rServiceName ) 
     return cppu::supportsService(this, _rServiceName);
 }
 
-//------------------------------------------------------------------
+
 Sequence< OUString > SAL_CALL OFileDriver::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 
-// --------------------------------------------------------------------------------
+
 Reference< XConnection > SAL_CALL OFileDriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileDriver::connect" );
@@ -106,14 +106,14 @@ Reference< XConnection > SAL_CALL OFileDriver::connect( const OUString& url, con
 
     return xCon;
 }
-// --------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OFileDriver::acceptsURL( const OUString& url )
                 throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileDriver::acceptsURL" );
     return url.startsWith("sdbc:file:");
 }
-// --------------------------------------------------------------------------------
+
 Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileDriver::getPropertyInfo" );
@@ -176,20 +176,20 @@ Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const OUSt
     } // if ( ! acceptsURL(url) )
     return Sequence< DriverPropertyInfo >();
 }
-// --------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OFileDriver::getMajorVersion(  ) throw(RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileDriver::getMajorVersion" );
     return 1;
 }
-// --------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OFileDriver::getMinorVersion(  ) throw(RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileDriver::getMinorVersion" );
     return 0;
 }
-// --------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------
+
+
 // XDataDefinitionSupplier
 Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection( const Reference< ::com::sun::star::sdbc::XConnection >& connection ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
@@ -218,7 +218,7 @@ Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection
     return xTab;
 }
 
-// --------------------------------------------------------------------------------
+
 Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByURL( const OUString& url, const Sequence< PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileDriver::getDataDefinitionByURL" );
@@ -231,13 +231,13 @@ Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByURL( const
     return getDataDefinitionByConnection(connect(url,info));
 }
 
-// -----------------------------------------------------------------------------
+
 OOperandAttr::OOperandAttr(sal_uInt16 _nPos,const Reference< XPropertySet>& _xColumn)
     : OOperandRow(_nPos,::comphelper::getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
     , m_xColumn(_xColumn)
 {
 }
-// -----------------------------------------------------------------------------
+
 
 
 

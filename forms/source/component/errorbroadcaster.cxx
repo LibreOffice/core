@@ -35,14 +35,14 @@ namespace frm
     //=====================================================================
     //= OErrorBroadcaster
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OErrorBroadcaster::OErrorBroadcaster( ::cppu::OBroadcastHelper& _rBHelper )
         :m_rBHelper( _rBHelper )
         ,m_aErrorListeners( _rBHelper.rMutex )
     {
     }
 
-    //---------------------------------------------------------------------
+
     OErrorBroadcaster::~OErrorBroadcaster( )
     {
         SAL_WARN_IF( !m_rBHelper.bDisposed && !m_rBHelper.bInDispose, "forms.component",
@@ -54,14 +54,14 @@ namespace frm
         // either we're not disposed, or the derived class did not call our dispose from within their dispose
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OErrorBroadcaster::disposing()
     {
         EventObject aDisposeEvent( static_cast< XSQLErrorBroadcaster* >( this ) );
         m_aErrorListeners.disposeAndClear( aDisposeEvent );
     }
 
-    //------------------------------------------------------------------------------
+
     void SAL_CALL OErrorBroadcaster::onError( const SQLException& _rException, const OUString& _rContextDescription )
     {
         Any aError;
@@ -73,7 +73,7 @@ namespace frm
         onError( SQLErrorEvent( static_cast< XSQLErrorBroadcaster* >( this ), aError ) );
     }
 
-    //------------------------------------------------------------------------------
+
     void SAL_CALL OErrorBroadcaster::onError( const ::com::sun::star::sdb::SQLErrorEvent& _rError )
     {
         if ( m_aErrorListeners.getLength() )
@@ -85,13 +85,13 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+
     void SAL_CALL OErrorBroadcaster::addSQLErrorListener( const Reference< XSQLErrorListener >& _rxListener ) throw( RuntimeException )
     {
         m_aErrorListeners.addInterface( _rxListener );
     }
 
-    //------------------------------------------------------------------------------
+
     void SAL_CALL OErrorBroadcaster::removeSQLErrorListener( const Reference< XSQLErrorListener >& _rxListener ) throw( RuntimeException )
     {
         m_aErrorListeners.removeInterface( _rxListener );

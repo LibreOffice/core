@@ -1079,7 +1079,7 @@ void SAL_CALL PresenterController::mouseDragged (const css::awt::MouseEvent& rEv
     (void)rEvent;
 }
 
-//-----------------------------------------------------------------------------
+
 
 void PresenterController::InitializeMainPane (const Reference<XPane>& rxPane)
 {

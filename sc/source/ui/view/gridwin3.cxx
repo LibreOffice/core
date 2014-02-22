@@ -43,7 +43,7 @@
 #include "userdat.hxx"
 #include "unitconv.hxx"
 #include <svx/svdpage.hxx>
-// -----------------------------------------------------------------------
+
 
 bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
 {

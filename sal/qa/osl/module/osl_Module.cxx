@@ -18,9 +18,9 @@
  */
 
 
-//------------------------------------------------------------------------
+
 // include files
-//------------------------------------------------------------------------
+
 #include <osl_Module_Const.h>
 
 using namespace osl;
@@ -28,9 +28,9 @@ using namespace osl;
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OString;
-//------------------------------------------------------------------------
+
 // helper functions and classes
-//------------------------------------------------------------------------
+
 
 /** print Boolean value.
 */
@@ -143,9 +143,9 @@ inline void deleteTestFile( const ::rtl::OUString filename )
 }
 
 
-//------------------------------------------------------------------------
+
 // test code start here
-//------------------------------------------------------------------------
+
 
 namespace osl_Module
 {
@@ -449,7 +449,7 @@ namespace osl_Module
         CPPUNIT_TEST_SUITE_END( );
     }; // class getFunctionSymbol
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::getUrlFromAddress);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::load);
@@ -458,11 +458,11 @@ CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::is);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::getSymbol);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::optr_oslModule);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::getFunctionSymbol);
-// -----------------------------------------------------------------------------
+
 
 } // namespace osl_Module
 
-// -----------------------------------------------------------------------------
+
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

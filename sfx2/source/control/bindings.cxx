@@ -158,7 +158,7 @@ public:
     InvalidateSlotMap       m_aInvalidateSlots; // store slots which are invalidated while in update
 };
 
-//--------------------------------------------------------------------
+
 
 struct SfxFoundCache_Impl
 {
@@ -195,7 +195,7 @@ struct SfxFoundCache_Impl
     { return nWhichId== r.nWhichId; }
 };
 
-//--------------------------------------------------------------------------
+
 
 class SfxFoundCacheArr_Impl : public std::vector<SfxFoundCache_Impl*>
 {
@@ -273,7 +273,7 @@ SfxBindings::~SfxBindings()
     delete pImp;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxBindings::DeleteControllers_Impl()
 {
@@ -339,7 +339,7 @@ void SfxBindings::DeleteControllers_Impl()
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxBindings::HidePopups( bool bHide )
 {
@@ -376,7 +376,7 @@ void SfxBindings::HidePopupCtrls_Impl( bool bHide )
     pImp->ePopupAction = SFX_POPUP_DELETE;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxBindings::Update_Impl
 (
@@ -439,7 +439,7 @@ void SfxBindings::Update_Impl
     DBG_PROFSTOP(SfxBindingsUpdate_Impl);
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxBindings::InvalidateSlotsInMap_Impl()
 {
@@ -452,14 +452,14 @@ void SfxBindings::InvalidateSlotsInMap_Impl()
     pImp->m_aInvalidateSlots.clear();
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxBindings::AddSlotToInvalidateSlotsMap_Impl( sal_uInt16 nId )
 {
     pImp->m_aInvalidateSlots[nId] = true;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxBindings::Update
 (
@@ -524,7 +524,7 @@ void SfxBindings::Update
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxBindings::Update()
 {
@@ -548,7 +548,7 @@ void SfxBindings::Update()
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxBindings::SetState
 (
@@ -592,7 +592,7 @@ void SfxBindings::SetState
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxBindings::SetState
 (
@@ -626,7 +626,7 @@ void SfxBindings::SetState
 }
 
 
-//--------------------------------------------------------------------
+
 
 SfxStateCache* SfxBindings::GetAnyStateCache_Impl( sal_uInt16 nId )
 {
@@ -668,7 +668,7 @@ SfxStateCache* SfxBindings::GetStateCache
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxBindings::InvalidateAll
 (
@@ -709,7 +709,7 @@ void SfxBindings::InvalidateAll
     DBG_PROFSTOP(SfxBindingsInvalidateAll);
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxBindings::Invalidate
 (
@@ -765,7 +765,7 @@ void SfxBindings::Invalidate
     DBG_PROFSTOP(SfxBindingsInvalidateAll);
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxBindings::InvalidateShell
 (
@@ -828,7 +828,7 @@ void SfxBindings::InvalidateShell
     DBG_PROFSTOP(SfxBindingsInvalidateAll);
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxBindings::Invalidate
 (
@@ -863,7 +863,7 @@ void SfxBindings::Invalidate
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxBindings::Invalidate
 (
@@ -900,7 +900,7 @@ void SfxBindings::Invalidate
     }
 }
 
-//--------------------------------------------------------------------
+
 
 sal_Bool SfxBindings::IsBound( sal_uInt16 nSlotId, sal_uInt16 nStartSearchAt )
 {
@@ -908,7 +908,7 @@ sal_Bool SfxBindings::IsBound( sal_uInt16 nSlotId, sal_uInt16 nStartSearchAt )
     return GetStateCache(nSlotId, &nStartSearchAt ) != 0;
 }
 
-//--------------------------------------------------------------------
+
 
 sal_uInt16 SfxBindings::GetSlotPos( sal_uInt16 nId, sal_uInt16 nStartSearchAt )
 {
@@ -980,7 +980,7 @@ sal_uInt16 SfxBindings::GetSlotPos( sal_uInt16 nId, sal_uInt16 nStartSearchAt )
     DBG_PROFSTOP(SfxBindingsMsgPos);
     return nPos;
 }
-//--------------------------------------------------------------------
+
 void SfxBindings::RegisterInternal_Impl( SfxControllerItem& rItem )
 {
     Register_Impl( rItem, sal_True );
@@ -1026,7 +1026,7 @@ void SfxBindings::Register_Impl( SfxControllerItem& rItem, sal_Bool bInternal )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxBindings::Release( SfxControllerItem& rItem )
 {
@@ -1072,7 +1072,7 @@ void SfxBindings::Release( SfxControllerItem& rItem )
     LEAVEREGISTRATIONS();
 }
 
-//--------------------------------------------------------------------
+
 const SfxPoolItem* SfxBindings::ExecuteSynchron( sal_uInt16 nId, const SfxPoolItem** ppItems, sal_uInt16 nModi,
             const SfxPoolItem **ppInternalArgs )
 {
@@ -1293,7 +1293,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
         pDispatcher->_Execute( *pShell, *pSlot, aReq, aReq.GetCallMode() | SFX_CALLMODE_RECORD );
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxBindings::UpdateSlotServer_Impl()
 {
@@ -1328,7 +1328,7 @@ void SfxBindings::UpdateSlotServer_Impl()
     DBG_PROFSTOP(SfxBindingsUpdateServers);
 }
 
-//--------------------------------------------------------------------
+
 
 SfxItemSet* SfxBindings::CreateSet_Impl
 (
@@ -1470,7 +1470,7 @@ SfxItemSet* SfxBindings::CreateSet_Impl
     return pSet;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxBindings::UpdateControllers_Impl
 (
@@ -1581,7 +1581,7 @@ void SfxBindings::UpdateControllers_Impl
 }
 
 
-//--------------------------------------------------------------------
+
 
 IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
 {
@@ -1716,7 +1716,7 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
 #endif
 }
 
-//--------------------------------------------------------------------
+
 
 sal_uInt16 SfxBindings::EnterRegistrations(const char *pFile, int nLine)
 {
@@ -1757,7 +1757,7 @@ sal_uInt16 SfxBindings::EnterRegistrations(const char *pFile, int nLine)
 
     return nRegLevel;
 }
-//--------------------------------------------------------------------
+
 
 void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, const char *pFile, int nLine )
 {
@@ -1827,7 +1827,7 @@ void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, const char *pFile, int 
                 ? SAL_STREAM("File: " << pFile << " Line: " << nLine) : ""));
 }
 
-//--------------------------------------------------------------------
+
 
 const SfxSlot* SfxBindings::GetSlot(sal_uInt16 nSlotId)
 {
@@ -1844,7 +1844,7 @@ const SfxSlot* SfxBindings::GetSlot(sal_uInt16 nSlotId)
             pCache->GetSlotServer(*pDispatcher, pImp->xProv)->GetSlot(): 0;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxBindings::SetDispatcher( SfxDispatcher *pDisp )
 {
@@ -1911,7 +1911,7 @@ void SfxBindings::SetDispatcher( SfxDispatcher *pDisp )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxBindings::ClearCache_Impl( sal_uInt16 nSlotId )
 {
@@ -1921,7 +1921,7 @@ void SfxBindings::ClearCache_Impl( sal_uInt16 nSlotId )
     pCache->ClearCache();
 }
 
-//--------------------------------------------------------------------
+
 void SfxBindings::StartUpdate_Impl( sal_Bool bComplete )
 {
     if ( pImp->pSubBindings )
@@ -1935,7 +1935,7 @@ void SfxBindings::StartUpdate_Impl( sal_Bool bComplete )
         NextJob_Impl(0);
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
 {

@@ -48,7 +48,7 @@ SdCharDlg::SdCharDlg( Window* pParent, const SfxItemSet* pAttr,
     mnCharPosition =  AddTabPage( "RID_SVXPAGE_CHAR_POSITION", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), 0 );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {

@@ -141,21 +141,21 @@ namespace connectivity { namespace mozab {
     //====================================================================
     //= MLdapAttributeMap
     //====================================================================
-    // -------------------------------------------------------------------
+
     MLdapAttributeMap::MLdapAttributeMap()
         :m_pData( new AttributeMap_Data )
     {
     }
 
-    // -------------------------------------------------------------------
+
     MLdapAttributeMap::~MLdapAttributeMap()
     {
     }
 
-    // -------------------------------------------------------------------
+
     NS_IMPL_THREADSAFE_ISUPPORTS1( MLdapAttributeMap, nsIAbLDAPAttributeMap )
 
-    // -------------------------------------------------------------------
+
     NS_IMETHODIMP MLdapAttributeMap::GetAttributeList(const nsACString & aProperty, nsACString & _retval)
     {
         OString sProperty( MTypeConverter::nsACStringToOString( aProperty ) );
@@ -175,7 +175,7 @@ namespace connectivity { namespace mozab {
         return NS_OK;
     }
 
-    // -------------------------------------------------------------------
+
     NS_IMETHODIMP MLdapAttributeMap::GetAttributes(const nsACString & aProperty, PRUint32* aCount, char*** aAttrs)
     {
         OSL_FAIL( "MLdapAttributeMap::GetAttributes: not implemented!" );
@@ -185,7 +185,7 @@ namespace connectivity { namespace mozab {
         return NS_ERROR_NOT_IMPLEMENTED;
     }
 
-    // -------------------------------------------------------------------
+
     NS_IMETHODIMP MLdapAttributeMap::GetFirstAttribute(const nsACString & aProperty, nsACString & _retval)
     {
         OString sProperty( MTypeConverter::nsACStringToOString( aProperty ) );
@@ -207,7 +207,7 @@ namespace connectivity { namespace mozab {
         return NS_OK;
     }
 
-    // -------------------------------------------------------------------
+
     NS_IMETHODIMP MLdapAttributeMap::SetAttributeList(const nsACString & aProperty, const nsACString & aAttributeList, PRBool allowInconsistencies)
     {
         OSL_FAIL( "MLdapAttributeMap::SetAttributeList: not implemented!" );
@@ -217,7 +217,7 @@ namespace connectivity { namespace mozab {
         return NS_ERROR_NOT_IMPLEMENTED;
     }
 
-    // -------------------------------------------------------------------
+
     NS_IMETHODIMP MLdapAttributeMap::GetProperty(const nsACString & aAttribute, nsACString & _retval)
     {
         OSL_FAIL( "MLdapAttributeMap::GetProperty: not implemented!" );
@@ -226,7 +226,7 @@ namespace connectivity { namespace mozab {
         return NS_ERROR_NOT_IMPLEMENTED;
     }
 
-    // -------------------------------------------------------------------
+
     NS_IMETHODIMP MLdapAttributeMap::GetAllCardAttributes(nsACString & _retval)
     {
         const MapPropertiesToAttributes& rPropertyMap( lcl_getPropertyMap() );
@@ -246,14 +246,14 @@ namespace connectivity { namespace mozab {
         return NS_OK;
     }
 
-    // -------------------------------------------------------------------
+
     NS_IMETHODIMP MLdapAttributeMap::CheckState(void)
     {
         // we do not allow modifying the map, so we're always in a valid state
         return NS_OK;
     }
 
-    // -------------------------------------------------------------------
+
     NS_IMETHODIMP MLdapAttributeMap::SetFromPrefs(const nsACString & aPrefBranchName)
     {
         OSL_FAIL( "MLdapAttributeMap::SetFromPrefs: not implemented!" );
@@ -261,7 +261,7 @@ namespace connectivity { namespace mozab {
         return NS_ERROR_NOT_IMPLEMENTED;
     }
 
-    // -------------------------------------------------------------------
+
     NS_IMETHODIMP MLdapAttributeMap::SetCardPropertiesFromLDAPMessage(nsILDAPMessage* aMessage, nsIAbCard* aCard)
     {
         NS_ENSURE_ARG_POINTER( aMessage );
@@ -313,7 +313,7 @@ namespace connectivity { namespace mozab {
         return NS_OK;
     }
 
-    // -------------------------------------------------------------------
+
     namespace
     {
         struct PreferMailFormatType
@@ -347,7 +347,7 @@ namespace connectivity { namespace mozab {
         }
     }
 
-    // -------------------------------------------------------------------
+
     void MLdapAttributeMap::fillCardFromResult( nsIAbCard& _card, const MQueryHelperResultEntry& _result )
     {
         _card.SetPreferMailFormat( nsIAbPreferMailFormat::unknown );
@@ -391,7 +391,7 @@ namespace connectivity { namespace mozab {
         }
     }
 
-    // -------------------------------------------------------------------
+
     void MLdapAttributeMap::fillResultFromCard( MQueryHelperResultEntry& _result, nsIAbCard& _card )
     {
         nsXPIDLString value;

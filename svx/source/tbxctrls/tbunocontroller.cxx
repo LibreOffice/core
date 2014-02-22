@@ -135,7 +135,7 @@ SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
     SetText( "" );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFontSizeBox_Impl::ReleaseFocus_Impl()
 {
@@ -149,7 +149,7 @@ void SvxFontSizeBox_Impl::ReleaseFocus_Impl()
         m_xFrame->getContainerWindow()->setFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFontSizeBox_Impl::Select()
 {
@@ -173,7 +173,7 @@ void SvxFontSizeBox_Impl::Select()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFontSizeBox_Impl::statusChanged_Impl( long nPoint, bool bErase )
 {
@@ -195,7 +195,7 @@ void SvxFontSizeBox_Impl::statusChanged_Impl( long nPoint, bool bErase )
     SaveValue();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFontSizeBox_Impl::UpdateFont( const ::com::sun::star::awt::FontDescriptor& rCurrentFont )
 {
@@ -221,7 +221,7 @@ void SvxFontSizeBox_Impl::UpdateFont( const ::com::sun::star::awt::FontDescripto
     m_aCurText = GetText(); // zum R"ucksetzen bei ESC merken
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxFontSizeBox_Impl::Notify( NotifyEvent& rNEvt )
 {
@@ -271,7 +271,7 @@ void SvxFontSizeBox_Impl::SetOptimalSize()
     SetDropDownSizePixel(aDropSize);
 }
 
-// ---------------------------------------------------------------------------
+
 
 void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {

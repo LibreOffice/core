@@ -40,7 +40,7 @@ using namespace ::com::sun::star;
 uno::Sequence< beans::PropertyValue > GetValuableArgs_Impl( const uno::Sequence< beans::PropertyValue >& aMedDescr,
                                                             sal_Bool bCanUseDocumentBaseURL );
 
-//------------------------------------------------------
+
 OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< uno::XComponentContext >& rxContext,
                                                 const uno::Sequence< beans::NamedValue >& aObjProps )
 : m_pDocHolder( NULL )
@@ -64,7 +64,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< uno::XCompon
     CommonInit_Impl( aObjProps );
 }
 
-//------------------------------------------------------
+
 OCommonEmbeddedObject::OCommonEmbeddedObject(
         const uno::Reference< uno::XComponentContext >& rxContext,
         const uno::Sequence< beans::NamedValue >& aObjProps,
@@ -92,7 +92,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject(
     LinkInit_Impl( aObjProps, aMediaDescr, aObjectDescr );
 }
 
-//------------------------------------------------------
+
 void OCommonEmbeddedObject::CommonInit_Impl( const uno::Sequence< beans::NamedValue >& aObjectProps )
 {
     OSL_ENSURE( m_xContext.is(), "No ServiceFactory is provided!\n" );
@@ -215,7 +215,7 @@ void OCommonEmbeddedObject::CommonInit_Impl( const uno::Sequence< beans::NamedVa
     }
 }
 
-//------------------------------------------------------
+
 void OCommonEmbeddedObject::LinkInit_Impl(
                                 const uno::Sequence< beans::NamedValue >& aObjectProps,
                                 const uno::Sequence< beans::PropertyValue >& aMediaDescr,
@@ -259,7 +259,7 @@ void OCommonEmbeddedObject::LinkInit_Impl(
         m_pDocHolder->SetOutplaceDispatchInterceptor( xDispatchInterceptor );
 }
 
-//------------------------------------------------------
+
 OCommonEmbeddedObject::~OCommonEmbeddedObject()
 {
     if ( m_pInterfaceContainer || m_pDocHolder )
@@ -293,7 +293,7 @@ OCommonEmbeddedObject::~OCommonEmbeddedObject()
     }
 }
 
-//------------------------------------------------------
+
 void OCommonEmbeddedObject::requestPositioning( const awt::Rectangle& aRect )
 {
     // the method is called in case object is inplace active and the object window was resized
@@ -317,7 +317,7 @@ void OCommonEmbeddedObject::requestPositioning( const awt::Rectangle& aRect )
     }
 }
 
-//------------------------------------------------------
+
 void OCommonEmbeddedObject::PostEvent_Impl( const OUString& aEventName )
 {
     if ( m_pInterfaceContainer )
@@ -352,7 +352,7 @@ void OCommonEmbeddedObject::PostEvent_Impl( const OUString& aEventName )
     }
 }
 
-//------------------------------------------------------
+
 uno::Any SAL_CALL OCommonEmbeddedObject::queryInterface( const uno::Type& rType )
         throw( uno::RuntimeException )
 {
@@ -386,21 +386,21 @@ uno::Any SAL_CALL OCommonEmbeddedObject::queryInterface( const uno::Type& rType 
 
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OCommonEmbeddedObject::acquire()
         throw()
 {
     ::cppu::OWeakObject::acquire() ;
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OCommonEmbeddedObject::release()
         throw()
 {
     ::cppu::OWeakObject::release() ;
 }
 
-//------------------------------------------------------
+
 uno::Sequence< uno::Type > SAL_CALL OCommonEmbeddedObject::getTypes()
         throw( uno::RuntimeException )
 {
@@ -442,7 +442,7 @@ uno::Sequence< uno::Type > SAL_CALL OCommonEmbeddedObject::getTypes()
 
 }
 
-//------------------------------------------------------
+
 uno::Sequence< sal_Int8 > SAL_CALL OCommonEmbeddedObject::getImplementationId()
         throw( uno::RuntimeException )
 {
@@ -461,7 +461,7 @@ uno::Sequence< sal_Int8 > SAL_CALL OCommonEmbeddedObject::getImplementationId()
     return pID->getImplementationId() ;
 }
 
-//------------------------------------------------------
+
 uno::Sequence< sal_Int8 > SAL_CALL OCommonEmbeddedObject::getClassID()
         throw ( uno::RuntimeException )
 {
@@ -471,7 +471,7 @@ uno::Sequence< sal_Int8 > SAL_CALL OCommonEmbeddedObject::getClassID()
     return m_aClassID;
 }
 
-//------------------------------------------------------
+
 OUString SAL_CALL OCommonEmbeddedObject::getClassName()
         throw ( uno::RuntimeException )
 {
@@ -481,7 +481,7 @@ OUString SAL_CALL OCommonEmbeddedObject::getClassName()
     return m_aClassName;
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OCommonEmbeddedObject::setClassInfo(
                 const uno::Sequence< sal_Int8 >& /*aClassID*/, const OUString& /*aClassName*/ )
         throw ( lang::NoSupportException,
@@ -491,7 +491,7 @@ void SAL_CALL OCommonEmbeddedObject::setClassInfo(
     throw lang::NoSupportException(); //TODO:
 }
 
-//------------------------------------------------------
+
 uno::Reference< util::XCloseable > SAL_CALL OCommonEmbeddedObject::getComponent()
         throw ( uno::RuntimeException )
 {
@@ -510,7 +510,7 @@ uno::Reference< util::XCloseable > SAL_CALL OCommonEmbeddedObject::getComponent(
     return uno::Reference< util::XCloseable >( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
 }
 
-//----------------------------------------------
+
 void SAL_CALL OCommonEmbeddedObject::addStateChangeListener( const uno::Reference< embed::XStateChangeListener >& xListener )
     throw ( uno::RuntimeException )
 {
@@ -525,7 +525,7 @@ void SAL_CALL OCommonEmbeddedObject::addStateChangeListener( const uno::Referenc
                                                         xListener );
 }
 
-//----------------------------------------------
+
 void SAL_CALL OCommonEmbeddedObject::removeStateChangeListener(
                     const uno::Reference< embed::XStateChangeListener >& xListener )
     throw (uno::RuntimeException)
@@ -536,7 +536,7 @@ void SAL_CALL OCommonEmbeddedObject::removeStateChangeListener(
                                                 xListener );
 }
 
-//----------------------------------------------
+
 void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
     throw ( util::CloseVetoException,
             uno::RuntimeException )
@@ -641,7 +641,7 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
     m_bClosed = sal_True; // the closing succeeded
 }
 
-//----------------------------------------------
+
 void SAL_CALL OCommonEmbeddedObject::addCloseListener( const uno::Reference< util::XCloseListener >& xListener )
     throw ( uno::RuntimeException )
 {
@@ -655,7 +655,7 @@ void SAL_CALL OCommonEmbeddedObject::addCloseListener( const uno::Reference< uti
     m_pInterfaceContainer->addInterface( ::getCppuType( (const uno::Reference< util::XCloseListener >*)0 ), xListener );
 }
 
-//----------------------------------------------
+
 void SAL_CALL OCommonEmbeddedObject::removeCloseListener( const uno::Reference< util::XCloseListener >& xListener )
     throw (uno::RuntimeException)
 {
@@ -665,7 +665,7 @@ void SAL_CALL OCommonEmbeddedObject::removeCloseListener( const uno::Reference< 
                                                 xListener );
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OCommonEmbeddedObject::addEventListener( const uno::Reference< document::XEventListener >& xListener )
         throw ( uno::RuntimeException )
 {
@@ -679,7 +679,7 @@ void SAL_CALL OCommonEmbeddedObject::addEventListener( const uno::Reference< doc
     m_pInterfaceContainer->addInterface( ::getCppuType( (const uno::Reference< document::XEventListener >*)0 ), xListener );
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OCommonEmbeddedObject::removeEventListener( const uno::Reference< document::XEventListener >& xListener )
         throw ( uno::RuntimeException )
 {

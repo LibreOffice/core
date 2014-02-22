@@ -83,9 +83,9 @@ static const char CMD_PROTOCOL[]                = ".uno:";
 static const char ADDDIRECT_CMD[]               = ".uno:AddDirect" ;
 static const char AUTOPILOTMENU_CMD[]           = ".uno:AutoPilotMenu" ;
 
-//_________________________________________________________________________________________________________________
+
 //  using namespaces
-//_________________________________________________________________________________________________________________
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -151,7 +151,7 @@ static void ExtractMenuParameters( const Sequence< PropertyValue > rProp,
 }
 
 
-// -----------------------------------------------------------------------------
+
 // Base class implementation
 
 ReadMenuDocumentHandlerBase::ReadMenuDocumentHandlerBase() :
@@ -222,7 +222,7 @@ void ReadMenuDocumentHandlerBase::initPropertyCommon(
     rProps[5].Value <<= ::com::sun::star::ui::ItemType::DEFAULT;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OReadMenuDocumentHandler::OReadMenuDocumentHandler(
     const Reference< XIndexContainer >& rMenuBarContainer )
@@ -305,7 +305,7 @@ void SAL_CALL OReadMenuDocumentHandler::endElement( const OUString& aName )
 }
 
 
-// -----------------------------------------------------------------------------
+
 
 OReadMenuBarHandler::OReadMenuBarHandler(
     const Reference< XIndexContainer >& rMenuBarContainer,
@@ -455,7 +455,7 @@ void OReadMenuBarHandler::endElement( const OUString& aName )
 }
 
 
-// -----------------------------------------------------------------------------
+
 
 
 OReadMenuHandler::OReadMenuHandler(
@@ -541,7 +541,7 @@ void SAL_CALL OReadMenuHandler::endElement( const OUString& aName )
 }
 
 
-// -----------------------------------------------------------------------------
+
 
 
 OReadMenuPopupHandler::OReadMenuPopupHandler(

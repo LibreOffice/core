@@ -56,13 +56,13 @@ namespace dbp
     //=====================================================================
     //= OGroupBoxSI
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OUString OGroupBoxSI::getImplementationName() const
     {
         return OUString("org.openoffice.comp.dbp.OGroupBoxWizard");
     }
 
-    //---------------------------------------------------------------------
+
     Sequence< OUString > OGroupBoxSI::getServiceNames() const
     {
         Sequence< OUString > aReturn(1);
@@ -73,13 +73,13 @@ namespace dbp
     //=====================================================================
     //= OListComboSI
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OUString OListComboSI::getImplementationName() const
     {
         return OUString("org.openoffice.comp.dbp.OListComboWizard");
     }
 
-    //---------------------------------------------------------------------
+
     Sequence< OUString > OListComboSI::getServiceNames() const
     {
         Sequence< OUString > aReturn(1);
@@ -90,13 +90,13 @@ namespace dbp
     //=====================================================================
     //= OGridSI
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OUString OGridSI::getImplementationName() const
     {
         return OUString("org.openoffice.comp.dbp.OGridWizard");
     }
 
-    //---------------------------------------------------------------------
+
     Sequence< OUString > OGridSI::getServiceNames() const
     {
         Sequence< OUString > aReturn(1);

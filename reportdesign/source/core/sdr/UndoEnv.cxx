@@ -58,7 +58,7 @@ namespace rptui
     using namespace util;
     using namespace container;
     using namespace report;
-//----------------------------------------------------------------------------
+
 
 
 struct PropertyInfo
@@ -92,7 +92,7 @@ struct ObjectInfo
 
 typedef ::std::map< Reference< XPropertySet >, ObjectInfo, ::comphelper::OInterfaceCompare< XPropertySet > >    PropertySetInfoCache;
 
-// -----------------------------------------------------------------------------
+
 
 class OXUndoEnvironmentImpl
 {
@@ -122,19 +122,19 @@ OXUndoEnvironmentImpl::OXUndoEnvironmentImpl(OReportModel& _rModel) : m_rModel(_
 {
 }
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+
+
 OXUndoEnvironment::OXUndoEnvironment(OReportModel& _rModel)
                    :m_pImpl(new OXUndoEnvironmentImpl(_rModel) )
 {
     StartListening(m_pImpl->m_rModel);
 }
 
-//------------------------------------------------------------------------------
+
 OXUndoEnvironment::~OXUndoEnvironment()
 {
 }
-// -----------------------------------------------------------------------------
+
 void OXUndoEnvironment::Lock()
 {
     OSL_ENSURE(m_refCount,"Illegal call to dead object!");
@@ -147,7 +147,7 @@ void OXUndoEnvironment::UnLock()
     osl_atomic_decrement( &m_pImpl->m_nLocks );
 }
 sal_Bool OXUndoEnvironment::IsLocked() const { return m_pImpl->m_nLocks != 0; }
-// -----------------------------------------------------------------------------
+
 void OXUndoEnvironment::RemoveSection(OReportPage* _pPage)
 {
     if ( _pPage )
@@ -157,7 +157,7 @@ void OXUndoEnvironment::RemoveSection(OReportPage* _pPage)
             RemoveElement( xSection );
     }
 }
-//------------------------------------------------------------------------------
+
 void OXUndoEnvironment::Clear(const Accessor& /*_r*/)
 {
     OUndoEnvLock aLock(*this);
@@ -185,7 +185,7 @@ void OXUndoEnvironment::Clear(const Accessor& /*_r*/)
         EndListening(m_pImpl->m_rModel);
 }
 
-//------------------------------------------------------------------------------
+
 void OXUndoEnvironment::ModeChanged()
 {
     m_pImpl->m_bReadOnly = !m_pImpl->m_bReadOnly;
@@ -196,15 +196,15 @@ void OXUndoEnvironment::ModeChanged()
         EndListening(m_pImpl->m_rModel);
 }
 
-//------------------------------------------------------------------------------
+
 void OXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if (rHint.ISA(SfxSimpleHint) && ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_MODECHANGED )
         ModeChanged();
 }
-// -----------------------------------------------------------------------------
+
 //  XEventListener
-//------------------------------------------------------------------------------
+
 void SAL_CALL OXUndoEnvironment::disposing(const EventObject& e) throw( RuntimeException )
 {
     // check if it's an object we have cached information about
@@ -220,7 +220,7 @@ void SAL_CALL OXUndoEnvironment::disposing(const EventObject& e) throw( RuntimeE
 }
 
 // XPropertyChangeListener
-//------------------------------------------------------------------------------
+
 void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEvent ) throw(uno::RuntimeException)
 {
 
@@ -346,7 +346,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     m_pImpl->m_rModel.GetSdrUndoManager()->AddUndoAction( pUndo );
     pController->InvalidateAll();
 }
-// -----------------------------------------------------------------------------
+
 ::std::vector< uno::Reference< container::XChild> >::const_iterator OXUndoEnvironment::getSection(const Reference<container::XChild>& _xContainer) const
 {
     ::std::vector< uno::Reference< container::XChild> >::const_iterator aFind = m_pImpl->m_aSections.end();
@@ -363,7 +363,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     return aFind;
 }
 // XContainerListener
-//------------------------------------------------------------------------------
+
 void SAL_CALL OXUndoEnvironment::elementInserted(const ContainerEvent& evt) throw(uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -414,13 +414,13 @@ void SAL_CALL OXUndoEnvironment::elementInserted(const ContainerEvent& evt) thro
     implSetModified();
 }
 
-//------------------------------------------------------------------------------
+
 void OXUndoEnvironment::implSetModified()
 {
     m_pImpl->m_rModel.SetModified( sal_True );
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OXUndoEnvironment::elementReplaced(const ContainerEvent& evt) throw(uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -436,7 +436,7 @@ void SAL_CALL OXUndoEnvironment::elementReplaced(const ContainerEvent& evt) thro
     implSetModified();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OXUndoEnvironment::elementRemoved(const ContainerEvent& evt) throw(uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -481,13 +481,13 @@ void SAL_CALL OXUndoEnvironment::elementRemoved(const ContainerEvent& evt) throw
     implSetModified();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OXUndoEnvironment::modified( const EventObject& /*aEvent*/ ) throw (RuntimeException)
 {
     implSetModified();
 }
 
-//------------------------------------------------------------------------------
+
 void OXUndoEnvironment::AddSection(const Reference< report::XSection > & _xSection)
 {
     OUndoEnvLock aLock(*this);
@@ -505,7 +505,7 @@ void OXUndoEnvironment::AddSection(const Reference< report::XSection > & _xSecti
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OXUndoEnvironment::RemoveSection(const Reference< report::XSection > & _xSection)
 {
     OUndoEnvLock aLock(*this);
@@ -520,7 +520,7 @@ void OXUndoEnvironment::RemoveSection(const Reference< report::XSection > & _xSe
     catch(uno::Exception&){}
 }
 
-//------------------------------------------------------------------------------
+
 void OXUndoEnvironment::TogglePropertyListening(const Reference< XInterface > & Element)
 {
     // am Container horchen
@@ -547,7 +547,7 @@ void OXUndoEnvironment::TogglePropertyListening(const Reference< XInterface > & 
 }
 
 
-//------------------------------------------------------------------------------
+
 void OXUndoEnvironment::switchListening( const Reference< XIndexAccess >& _rxContainer, bool _bStartListening ) SAL_THROW(())
 {
     OSL_PRECOND( _rxContainer.is(), "OXUndoEnvironment::switchListening: invalid container!" );
@@ -584,7 +584,7 @@ void OXUndoEnvironment::switchListening( const Reference< XIndexAccess >& _rxCon
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObject, bool _bStartListening ) SAL_THROW(())
 {
     OSL_PRECOND( _rxObject.is(), "OXUndoEnvironment::switchListening: how should I listen at a NULL object?" );
@@ -617,7 +617,7 @@ void OXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObjec
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OXUndoEnvironment::AddElement(const Reference< XInterface >& _rxElement )
 {
     if ( !IsLocked() )
@@ -631,7 +631,7 @@ void OXUndoEnvironment::AddElement(const Reference< XInterface >& _rxElement )
     switchListening( _rxElement, true );
 }
 
-//------------------------------------------------------------------------------
+
 void OXUndoEnvironment::RemoveElement(const Reference< XInterface >& _rxElement)
 {
     uno::Reference<beans::XPropertySet> xProp(_rxElement,uno::UNO_QUERY);

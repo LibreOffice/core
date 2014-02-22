@@ -23,7 +23,7 @@
 #include "svx/txenctab.hxx"
 #include <tools/shl.hxx>
 
-//------------------------------------------------------------------------
+
 
 SvxTextEncodingTable::SvxTextEncodingTable()
     :
@@ -31,13 +31,13 @@ SvxTextEncodingTable::SvxTextEncodingTable()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SvxTextEncodingTable::~SvxTextEncodingTable()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 const OUString SvxTextEncodingTable::GetTextString( const rtl_TextEncoding nEnc ) const
 {
@@ -49,7 +49,7 @@ const OUString SvxTextEncodingTable::GetTextString( const rtl_TextEncoding nEnc 
     return OUString();
 }
 
-//------------------------------------------------------------------------
+
 
 rtl_TextEncoding SvxTextEncodingTable::GetTextEncoding( const OUString& rStr ) const
 {

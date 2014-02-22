@@ -424,7 +424,7 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
     return sres;
 }
 
-//---------------------------------------------------------------------
+
 
 bool TextSearch::IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const
 {
@@ -792,7 +792,7 @@ void TextSearch::RESrchPrepare( const ::com::sun::star::util::SearchOptions& rOp
     }
 }
 
-//---------------------------------------------------------------------------
+
 
 static bool lcl_findRegex( RegexMatcher * pRegexMatcher, sal_Int32 nStartPos, UErrorCode & rIcuErr )
 {
@@ -932,7 +932,7 @@ SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
     return aRet;
 }
 
-//---------------------------------------------------------------------------
+
 
 // search for words phonetically
 SearchResult TextSearch::ApproxSrchFrwrd( const OUString& searchStr,

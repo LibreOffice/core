@@ -44,7 +44,7 @@ namespace abp
     //=====================================================================
     //= FinalPage
     //=====================================================================
-    //---------------------------------------------------------------------
+
     FinalPage::FinalPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_FINAL))
         ,m_aExplanation         ( this, ModuleRes( FT_FINISH_EXPL ) )
@@ -65,7 +65,7 @@ namespace abp
         m_aRegisterName.Check(true);
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool FinalPage::isValidName() const
     {
         OUString sCurrentName(m_aName.GetText());
@@ -81,7 +81,7 @@ namespace abp
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+
     void FinalPage::setFields()
     {
         AddressSettings& rSettings = getSettings();
@@ -116,7 +116,7 @@ namespace abp
         OnRegister(&m_aRegisterName);
     }
 
-    //---------------------------------------------------------------------
+
     void FinalPage::initializePage()
     {
         AddressBookSourcePage::initializePage();
@@ -124,7 +124,7 @@ namespace abp
         setFields();
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool FinalPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!AddressBookSourcePage::commitPage(_eReason))
@@ -144,7 +144,7 @@ namespace abp
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+
     void FinalPage::ActivatePage()
     {
         AddressBookSourcePage::ActivatePage();
@@ -160,7 +160,7 @@ namespace abp
         getDialog()->defaultButton( WZB_FINISH );
     }
 
-    //---------------------------------------------------------------------
+
     void FinalPage::DeactivatePage()
     {
         AddressBookSourcePage::DeactivatePage();
@@ -171,13 +171,13 @@ namespace abp
         getDialog()->enableButtons( WZB_FINISH, sal_False );
     }
 
-    //---------------------------------------------------------------------
+
     bool FinalPage::canAdvance() const
     {
         return false;
     }
 
-    //---------------------------------------------------------------------
+
     void FinalPage::implCheckName()
     {
         sal_Bool bValidName = isValidName();
@@ -191,14 +191,14 @@ namespace abp
         m_aDuplicateNameError.Show( !bValidName && !bEmptyName );
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK( FinalPage, OnNameModified, Edit*, /**/ )
     {
         implCheckName();
         return 0L;
     }
 
-    // -----------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(FinalPage, OnRegister)
     {
         sal_Bool bEnable = m_aRegisterName.IsChecked();

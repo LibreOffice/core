@@ -48,9 +48,9 @@
 
 using namespace ::com::sun::star;
 
-// -------------------------------
+
 // - ooo elements and attributes -
-// -------------------------------
+
 
 #define NSPREFIX "ooo:"
 
@@ -311,9 +311,9 @@ sal_Bool operator==( const TextField & aLhsTextField, const TextField & aRhsText
 
 
 
-// -------------
+
 // - SVGExport -
-// -------------
+
 
 SVGExport::SVGExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
@@ -360,7 +360,7 @@ SVGExport::SVGExport(
 
 }
 
-// -----------------------------------------------------------------------------
+
 
 SVGExport::~SVGExport()
 {
@@ -368,16 +368,16 @@ SVGExport::~SVGExport()
 }
 
 
-// ------------------------
+
 // - ObjectRepresentation -
-// ------------------------
+
 
 ObjectRepresentation::ObjectRepresentation() :
     mpMtf( NULL )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 ObjectRepresentation::ObjectRepresentation( const Reference< XInterface >& rxObject,
                                             const GDIMetaFile& rMtf ) :
@@ -386,7 +386,7 @@ ObjectRepresentation::ObjectRepresentation( const Reference< XInterface >& rxObj
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 ObjectRepresentation::ObjectRepresentation( const ObjectRepresentation& rPresentation ) :
     mxObject( rPresentation.mxObject ),
@@ -394,14 +394,14 @@ ObjectRepresentation::ObjectRepresentation( const ObjectRepresentation& rPresent
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 ObjectRepresentation::~ObjectRepresentation()
 {
     delete mpMtf;
 }
 
-// -----------------------------------------------------------------------------
+
 
 ObjectRepresentation& ObjectRepresentation::operator=( const ObjectRepresentation& rPresentation )
 {
@@ -414,7 +414,7 @@ ObjectRepresentation& ObjectRepresentation::operator=( const ObjectRepresentatio
     return *this;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool ObjectRepresentation::operator==( const ObjectRepresentation& rPresentation ) const
 {
@@ -422,7 +422,7 @@ sal_Bool ObjectRepresentation::operator==( const ObjectRepresentation& rPresenta
             ( *mpMtf == *rPresentation.mpMtf ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_uLong GetBitmapChecksum( const MetaAction* pAction )
 {
@@ -452,7 +452,7 @@ sal_uLong GetBitmapChecksum( const MetaAction* pAction )
     }
     return nChecksum;
 }
-// -----------------------------------------------------------------------------
+
 
 void MetaBitmapActionGetPoint( const MetaAction* pAction, Point& rPt )
 {
@@ -481,7 +481,7 @@ void MetaBitmapActionGetPoint( const MetaAction* pAction, Point& rPt )
 
 }
 
-// -----------------------------------------------------------------------------
+
 
 size_t HashBitmap::operator()( const ObjectRepresentation& rObjRep ) const
 {
@@ -497,7 +497,7 @@ size_t HashBitmap::operator()( const ObjectRepresentation& rObjRep ) const
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool EqualityBitmap::operator()( const ObjectRepresentation& rObjRep1,
                                      const ObjectRepresentation& rObjRep2 ) const
@@ -518,9 +518,9 @@ bool EqualityBitmap::operator()( const ObjectRepresentation& rObjRep1,
 }
 
 
-// -------------
+
 // - SVGFilter -
-// -------------
+
 
 sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
@@ -631,7 +631,7 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XWriter > SVGFilter::implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm )
 {
@@ -646,7 +646,7 @@ Reference< XWriter > SVGFilter::implCreateExportDocumentHandler( const Reference
     return xSaxWriter;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SVGFilter::implLookForFirstVisiblePage()
 {
@@ -677,7 +677,7 @@ sal_Bool SVGFilter::implLookForFirstVisiblePage()
     return ( mnVisiblePage != -1 );
 }
 
-// -----------------------------------------------------------------------------
+
 sal_Bool SVGFilter::implExportDocument()
 {
     OUString         aAttr;
@@ -820,7 +820,7 @@ sal_Bool SVGFilter::implExportDocument()
 }
 
 
-//------------------------------------------------------------------------------
+
 // Append aField to aFieldSet if it is not already present in the set
 // and create the field id sFieldId
 //
@@ -853,7 +853,7 @@ OUString implGenerateFieldId( std::vector< TextField* > & aFieldSet,
     return sFieldId;
 }
 
-//------------------------------------------------------------------------------
+
 
 sal_Bool SVGFilter::implGenerateMetaData()
 {
@@ -1072,7 +1072,7 @@ sal_Bool SVGFilter::implGenerateMetaData()
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SVGFilter::implExportAnimations()
 {
@@ -1138,7 +1138,7 @@ sal_Bool SVGFilter::implExportAnimations()
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SVGFilter::implExportTextShapeIndex()
 {
@@ -1164,7 +1164,7 @@ void SVGFilter::implExportTextShapeIndex()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SVGFilter::implEmbedBulletGlyphs()
 {
@@ -1191,7 +1191,7 @@ void SVGFilter::implEmbedBulletGlyphs()
     implEmbedBulletGlyph( 8211, sPathData );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SVGFilter::implEmbedBulletGlyph( sal_Unicode cBullet, const OUString & sPathData )
 {
@@ -1210,7 +1210,7 @@ void SVGFilter::implEmbedBulletGlyph( sal_Unicode cBullet, const OUString & sPat
 
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** SVGFilter::implExportTextEmbeddedBitmaps
  *  We export bitmaps embedded into text shapes, such as those used by list
@@ -1281,7 +1281,7 @@ sal_Bool SVGFilter::implExportTextEmbeddedBitmaps()
     return sal_True;
 }
 
-// -----------------------------------------------------------------------------
+
 
 #define SVGFILTER_EXPORT_SVGSCRIPT( z, n, aFragment ) \
         xExtDocHandler->unknown( OUString::createFromAscii( aFragment ## n ) );
@@ -1303,7 +1303,7 @@ sal_Bool SVGFilter::implGenerateScript()
     return sal_True;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Any SVGFilter::implSafeGetPagePropSet( const OUString & sPropertyName,
                                             const Reference< XPropertySet > & rxPropSet,
@@ -1317,7 +1317,7 @@ Any SVGFilter::implSafeGetPagePropSet( const OUString & sPropertyName,
     return result;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /*  SVGFilter::implGetPagePropSet
  *
@@ -1382,7 +1382,7 @@ sal_Bool SVGFilter::implGetPagePropSet( const Reference< XDrawPage > & rxPage )
 }
 
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SVGFilter::implExportMasterPages( const SVGFilter::XDrawPageSequence & rxPages,
                                            sal_Int32 nFirstPage, sal_Int32 nLastPage )
@@ -1415,7 +1415,7 @@ sal_Bool SVGFilter::implExportMasterPages( const SVGFilter::XDrawPageSequence & 
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SVGFilter::implExportDrawPages( const SVGFilter::XDrawPageSequence & rxPages,
                                            sal_Int32 nFirstPage, sal_Int32 nLastPage )
@@ -1467,7 +1467,7 @@ sal_Bool SVGFilter::implExportDrawPages( const SVGFilter::XDrawPageSequence & rx
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 sal_Bool SVGFilter::implExportPage( const OUString & sPageId,
                                     const Reference< XDrawPage > & rxPage,
                                     const Reference< XShapes > & xShapes,
@@ -1570,7 +1570,7 @@ sal_Bool SVGFilter::implExportPage( const OUString & sPageId,
 }
 
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SVGFilter::implExportShapes( const Reference< XShapes >& rxShapes,
                                       sal_Bool bMaster )
@@ -1589,7 +1589,7 @@ sal_Bool SVGFilter::implExportShapes( const Reference< XShapes >& rxShapes,
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape,
                                      sal_Bool bMaster )
@@ -1763,7 +1763,7 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape,
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SVGFilter::implCreateObjects()
 {
@@ -1819,7 +1819,7 @@ sal_Bool SVGFilter::implCreateObjects()
     return sal_True;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SVGFilter::implCreateObjectsFromShapes( const Reference< XDrawPage > & rxPage, const Reference< XShapes >& rxShapes )
 {
@@ -1837,7 +1837,7 @@ sal_Bool SVGFilter::implCreateObjectsFromShapes( const Reference< XDrawPage > & 
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & rxPage, const Reference< XShape >& rxShape )
 {
@@ -1955,7 +1955,7 @@ sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & r
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SVGFilter::implCreateObjectsFromBackground( const Reference< XDrawPage >& rxDrawPage )
 {
@@ -1983,7 +1983,7 @@ sal_Bool SVGFilter::implCreateObjectsFromBackground( const Reference< XDrawPage 
     return sal_True;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString SVGFilter::implGetClassFromShape( const Reference< XShape >& rxShape )
 {
@@ -2014,7 +2014,7 @@ OUString SVGFilter::implGetClassFromShape( const Reference< XShape >& rxShape )
     return aRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SVGFilter::implRegisterInterface( const Reference< XInterface >& rxIf )
 {
@@ -2022,14 +2022,14 @@ void SVGFilter::implRegisterInterface( const Reference< XInterface >& rxIf )
         (mpSVGExport->getInterfaceToIdentifierMapper()).registerReference( rxIf );
 }
 
-// -----------------------------------------------------------------------------
+
 
 const OUString & SVGFilter::implGetValidIDFromInterface( const Reference< XInterface >& rxIf )
 {
    return (mpSVGExport->getInterfaceToIdentifierMapper()).getIdentifier( rxIf );
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString SVGFilter::implGetInterfaceName( const Reference< XInterface >& rxIf )
 {
@@ -2042,7 +2042,7 @@ OUString SVGFilter::implGetInterfaceName( const Reference< XInterface >& rxIf )
     return aRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
 {
@@ -2282,7 +2282,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
     return ( bFieldProcessed ? 0 : maOldFieldHdl.Call( pInfo ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SVGExport::writeMtf( const GDIMetaFile& rMtf )
 {

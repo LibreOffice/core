@@ -1536,7 +1536,7 @@ Output::Output( const Reference< XComponentContext >& rxContext, const OUString&
         mxStrm->writeString( OUString( OOX_DUMP_BOM ) );
 }
 
-// ----------------------------------------------------------------------------
+
 
 void Output::newLine()
 {
@@ -1692,7 +1692,7 @@ void Output::endMultiItems()
         newLine();
 }
 
-// ----------------------------------------------------------------------------
+
 
 void Output::writeChar( sal_Unicode cChar, sal_Int32 nCount )
 {
@@ -1741,7 +1741,7 @@ void Output::writeDateTime( const util::DateTime& rDateTime )
     writeDec( rDateTime.Seconds, 2, '0' );
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool Output::implIsValid() const
 {

@@ -53,7 +53,7 @@ DBG_NAME(SfxAppMainCHAOSReg)
 
 TYPEINIT2(SfxApplication,SfxShell,SfxBroadcaster);
 
-//--------------------------------------------------------------------
+
 void SfxApplication::Init
 (
 )
@@ -77,7 +77,7 @@ void SfxApplication::Init
 {
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxApplication::Exit()
 
@@ -98,7 +98,7 @@ void SfxApplication::Exit()
 {
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxFilterMatcher& SfxApplication::GetFilterMatcher()
 {

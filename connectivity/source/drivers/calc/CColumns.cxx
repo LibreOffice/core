@@ -41,6 +41,6 @@ sdbcx::ObjectType OCalcColumns::createObject(const OUString& _rName)
         xRet = sdbcx::ObjectType(*aIter,UNO_QUERY);
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

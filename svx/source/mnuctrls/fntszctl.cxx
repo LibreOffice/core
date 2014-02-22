@@ -40,7 +40,7 @@
 
 SFX_IMPL_MENU_CONTROL(SvxFontSizeMenuControl, SvxFontHeightItem);
 
-//--------------------------------------------------------------------
+
 
 /*  [Beschreibung]
 
@@ -65,7 +65,7 @@ IMPL_LINK( SvxFontSizeMenuControl, MenuSelect, FontSizeMenu*, pMen )
     return 1;
 }
 
-//--------------------------------------------------------------------
+
 
 /*  [Beschreibung]
 
@@ -149,7 +149,7 @@ void SvxFontSizeMenuControl::StateChanged(
     }
 }
 
-//--------------------------------------------------------------------
+
 
 /*  [Beschreibung]
 
@@ -174,7 +174,7 @@ SvxFontSizeMenuControl::SvxFontSizeMenuControl
     pMenu->SetSelectHdl( LINK( this, SvxFontSizeMenuControl, MenuSelect ) );
 }
 
-//--------------------------------------------------------------------
+
 
 /*  [Beschreibung]
 
@@ -186,7 +186,7 @@ SvxFontSizeMenuControl::~SvxFontSizeMenuControl()
     delete pMenu;
 }
 
-//--------------------------------------------------------------------
+
 
 /*  [Beschreibung]
 

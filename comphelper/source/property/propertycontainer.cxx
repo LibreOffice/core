@@ -40,18 +40,18 @@ using namespace ::com::sun::star::beans;
 //==========================================================================
 //= OPropertyContainer
 //==========================================================================
-//--------------------------------------------------------------------------
+
 OPropertyContainer::OPropertyContainer(::cppu::OBroadcastHelper& _rBHelper)
     :OPropertySetHelper(_rBHelper)
 {
 }
 
-// -------------------------------------------------------------------------
+
 OPropertyContainer::~OPropertyContainer()
 {
 }
 
-//--------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OPropertyContainer::getTypes() throw (RuntimeException)
 {
     // just the types from our one and only base class
@@ -63,27 +63,27 @@ Sequence< Type > SAL_CALL OPropertyContainer::getTypes() throw (RuntimeException
     return aTypes.getTypes();
 }
 
-//--------------------------------------------------------------------------
+
 void SAL_CALL OPropertyContainer::setFastPropertyValue( sal_Int32 nHandle, const Any& rValue ) throw ( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     OPropertySetHelper::setFastPropertyValue( nHandle, rValue );
 }
 
-//--------------------------------------------------------------------------
+
 sal_Bool OPropertyContainer::convertFastPropertyValue(
     Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue ) throw (IllegalArgumentException)
 {
     return OPropertyContainerHelper::convertFastPropertyValue( _rConvertedValue, _rOldValue, _nHandle, _rValue );
 }
 
-//--------------------------------------------------------------------------
+
 void OPropertyContainer::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue)
     throw (Exception, std::exception)
 {
     OPropertyContainerHelper::setFastPropertyValue( _nHandle, _rValue );
 }
 
-//--------------------------------------------------------------------------
+
 void OPropertyContainer::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
 {
     OPropertyContainerHelper::getFastPropertyValue( _rValue, _nHandle );

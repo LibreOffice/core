@@ -57,7 +57,7 @@ using ::boost::unordered_map;
 
 // STATIC DATA -----------------------------------------------------------
 
-// -----------------------------------------------------------------------
+
 
 DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW nRow ) const
 {
@@ -240,7 +240,7 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
     }
 }
 
-// -----------------------------------------------------------------------
+
 //
 //  Data Pilot interaction
 //
@@ -627,7 +627,7 @@ void ScGridWindow::DPMouseButtonUp( const MouseEvent& rMEvt )
     SetPointer( Pointer( POINTER_ARROW ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScGridWindow::UpdateDragRect( bool bShowRange, const Rectangle& rPosRect )
 {
@@ -656,7 +656,7 @@ void ScGridWindow::UpdateDragRect( bool bShowRange, const Rectangle& rPosRect )
     UpdateDragRectOverlay();
 }
 
-// -----------------------------------------------------------------------
+
 
 //  Page-Break-Modus
 

@@ -35,7 +35,7 @@ XclDocViewData::XclDocViewData() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclTabViewData::XclTabViewData() :
     maFirstXclPos( ScAddress::UNINITIALIZED ),

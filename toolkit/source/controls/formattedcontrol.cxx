@@ -40,7 +40,7 @@ namespace toolkit
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::util;
 
-    // -------------------------------------------------------------------
+
     namespace
     {
         // ...............................................................
@@ -111,7 +111,7 @@ namespace toolkit
     // ===================================================================
     // = UnoControlFormattedFieldModel
     // ===================================================================
-    // -------------------------------------------------------------------
+
     UnoControlFormattedFieldModel::UnoControlFormattedFieldModel( const Reference< XComponentContext >& rxContext )
         :UnoControlModel( rxContext )
         ,m_bRevokedAsClient( false )
@@ -157,18 +157,18 @@ namespace toolkit
         lcl_registerDefaultFormatsClient();
     }
 
-    // -------------------------------------------------------------------
+
     UnoControlFormattedFieldModel::~UnoControlFormattedFieldModel()
     {
     }
 
-    // -------------------------------------------------------------------
+
     OUString UnoControlFormattedFieldModel::getServiceName() throw(RuntimeException)
     {
         return OUString::createFromAscii( szServiceName_UnoControlFormattedFieldModel );
     }
 
-    // -------------------------------------------------------------------
+
     void SAL_CALL UnoControlFormattedFieldModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
     {
         UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
@@ -190,7 +190,7 @@ namespace toolkit
         }
     }
 
-    // -------------------------------------------------------------------
+
     void UnoControlFormattedFieldModel::impl_updateTextFromValue_nothrow()
     {
         if ( !m_xCachedFormatter.is() )
@@ -225,7 +225,7 @@ namespace toolkit
         }
     }
 
-    // -------------------------------------------------------------------
+
     void UnoControlFormattedFieldModel::impl_updateCachedFormatter_nothrow()
     {
         Any aFormatsSupplier;
@@ -251,7 +251,7 @@ namespace toolkit
         }
     }
 
-    // -------------------------------------------------------------------
+
     void UnoControlFormattedFieldModel::impl_updateCachedFormatKey_nothrow()
     {
         Any aFormatKey;
@@ -259,7 +259,7 @@ namespace toolkit
         m_aCachedFormat = aFormatKey;
     }
 
-    // -------------------------------------------------------------------
+
     void UnoControlFormattedFieldModel::dispose(  ) throw(RuntimeException)
     {
         UnoControlModel::dispose();
@@ -272,7 +272,7 @@ namespace toolkit
         }
     }
 
-    // -------------------------------------------------------------------
+
     void UnoControlFormattedFieldModel::ImplNormalizePropertySequence( const sal_Int32 _nCount, sal_Int32* _pHandles,
         Any* _pValues, sal_Int32* _pValidHandles ) const SAL_THROW(())
     {
@@ -281,7 +281,7 @@ namespace toolkit
         UnoControlModel::ImplNormalizePropertySequence( _nCount, _pHandles, _pValues, _pValidHandles );
     }
 
-    // -------------------------------------------------------------------
+
     namespace
     {
         class ResetFlagOnExit
@@ -301,7 +301,7 @@ namespace toolkit
         };
     }
 
-    // -------------------------------------------------------------------
+
     void SAL_CALL UnoControlFormattedFieldModel::setPropertyValues( const Sequence< OUString >& _rPropertyNames, const Sequence< Any >& _rValues ) throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
     {
         bool bSettingValue = false;
@@ -323,7 +323,7 @@ namespace toolkit
         UnoControlModel::setPropertyValues( _rPropertyNames, _rValues );
     }
 
-    // -------------------------------------------------------------------
+
     sal_Bool UnoControlFormattedFieldModel::convertFastPropertyValue(
                 Any& rConvertedValue, Any& rOldValue, sal_Int32 nPropId,
                 const Any& rValue ) throw (IllegalArgumentException)
@@ -372,7 +372,7 @@ namespace toolkit
         return UnoControlModel::convertFastPropertyValue( rConvertedValue, rOldValue, nPropId, rValue );
     }
 
-    // -------------------------------------------------------------------
+
     Any UnoControlFormattedFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     {
         Any aReturn;
@@ -397,7 +397,7 @@ namespace toolkit
         return aReturn;
     }
 
-    // -------------------------------------------------------------------
+
     ::cppu::IPropertyArrayHelper& UnoControlFormattedFieldModel::getInfoHelper()
     {
         static UnoPropertyArrayHelper* pHelper = NULL;
@@ -410,7 +410,7 @@ namespace toolkit
     }
 
     // beans::XMultiPropertySet
-    // -------------------------------------------------------------------
+
     Reference< XPropertySetInfo > UnoControlFormattedFieldModel::getPropertySetInfo(  ) throw(RuntimeException)
     {
         static Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -420,19 +420,19 @@ namespace toolkit
     // ===================================================================
     // = UnoFormattedFieldControl
     // ===================================================================
-    // -------------------------------------------------------------------
+
     UnoFormattedFieldControl::UnoFormattedFieldControl()
         :UnoSpinFieldControl()
     {
     }
 
-    // -------------------------------------------------------------------
+
     OUString UnoFormattedFieldControl::GetComponentServiceName()
     {
         return OUString("FormattedField");
     }
 
-    // -------------------------------------------------------------------
+
     void UnoFormattedFieldControl::textChanged(const TextEvent& e) throw(RuntimeException)
     {
         Reference< XVclWindowPeer >  xPeer(getPeer(), UNO_QUERY);

@@ -35,7 +35,7 @@ namespace pcr
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
 
-    //------------------------------------------------------------------------
+
     OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
     {
         PcrClient aResourceAccess;
@@ -113,7 +113,7 @@ namespace pcr
         return sClassName;
     }
 
-    //------------------------------------------------------------------------
+
     sal_Int16 classifyComponent( const Reference< XInterface >& _rxComponent )
     {
         Reference< XPropertySet > xComponentProps( _rxComponent, UNO_QUERY_THROW );

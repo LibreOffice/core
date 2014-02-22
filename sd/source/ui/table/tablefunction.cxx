@@ -220,7 +220,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void DrawViewShell::GetTableMenuState( SfxItemSet &rSet )
 {
@@ -244,7 +244,7 @@ void DrawViewShell::GetTableMenuState( SfxItemSet &rSet )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void CreateTableFromRTF( SvStream& rStream, SdDrawDocument* pModel )
 {

@@ -28,7 +28,7 @@
 using css::uno::Reference;
 using css::uno::Sequence;
 
-// -------------------------------------------------------------------------------------
+
 
 #define DECLARE_CREATEINSTANCE( ImplName ) \
     Reference< css::uno::XInterface > SAL_CALL ImplName##_CreateInstance( const Reference< css::lang::XMultiServiceFactory >& );
@@ -37,7 +37,7 @@ DECLARE_CREATEINSTANCE( SvNumberFormatterServiceObj )
 DECLARE_CREATEINSTANCE( SvNumberFormatsSupplierServiceObject )
 DECLARE_CREATEINSTANCE( PathService )
 
-// -------------------------------------------------------------------------------------
+
 
 extern "C"
 {

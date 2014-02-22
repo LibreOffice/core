@@ -37,7 +37,7 @@
 
 using namespace ::com::sun::star;
 
-//---------------------------------------------------------------------------------------
+
 
 void Ppt97AnimationInfoAtom::ReadStream( SvStream& rIn )
 {
@@ -57,7 +57,7 @@ void Ppt97AnimationInfoAtom::ReadStream( SvStream& rIn )
     rIn.ReadUChar( nUnknown2 );
 }
 
-//---------------------------------------------------------------------------------------
+
 
 #define MEMBER_CONSTRUCTOR_LIST() \
     m_aAtom() \

@@ -38,9 +38,9 @@ inline static Mutex & getWeakMutex() SAL_THROW(())
     return *s_pMutex;
 }
 
-//------------------------------------------------------------------------
+
 //-- OWeakConnectionPoint ----------------------------------------------------
-//------------------------------------------------------------------------
+
 class OWeakConnectionPoint : public XAdapter
 {
 public:
@@ -166,9 +166,9 @@ void SAL_CALL OWeakConnectionPoint::removeReference(const Reference< XReference 
 }
 
 
-//------------------------------------------------------------------------
+
 //-- OWeakObject -------------------------------------------------------
-//------------------------------------------------------------------------
+
 
 #ifdef _MSC_VER
 // Accidentally occurs in msvc mapfile = > had to be outlined.
@@ -247,9 +247,9 @@ Reference< XAdapter > SAL_CALL OWeakObject::queryAdapter()
     return m_pWeakConnectionPoint;
 }
 
-//------------------------------------------------------------------------
+
 //-- OWeakAggObject ----------------------------------------------------
-//------------------------------------------------------------------------
+
 OWeakAggObject::~OWeakAggObject() SAL_THROW( (RuntimeException) )
 {
 }
@@ -313,9 +313,9 @@ namespace uno
 {
 
 
-//------------------------------------------------------------------------
+
 //-- OWeakRefListener -----------------------------------------------------
-//------------------------------------------------------------------------
+
 class OWeakRefListener : public XReference
 {
 public:
@@ -428,9 +428,9 @@ void SAL_CALL OWeakRefListener::dispose()
         xAdp->removeReference((XReference*)this);
 }
 
-//------------------------------------------------------------------------
+
 //-- WeakReferenceHelper ----------------------------------------------------------
-//------------------------------------------------------------------------
+
 WeakReferenceHelper::WeakReferenceHelper(const Reference< XInterface >& xInt) SAL_THROW(())
     : m_pImpl( 0 )
 {

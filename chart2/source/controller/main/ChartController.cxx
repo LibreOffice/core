@@ -58,17 +58,17 @@
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/document/XUndoAction.hpp>
 
-//-------
+
 // header for define RET_OK
 #include <vcl/msgbox.hxx>
-//-------
 
-//-------
+
+
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-//-------
+
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 

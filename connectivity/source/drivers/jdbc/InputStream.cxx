@@ -75,7 +75,7 @@ void SAL_CALL java_io_InputStream::closeInput(  ) throw(::com::sun::star::io::No
     static jmethodID mID(NULL);
     callVoidMethod("close",mID);
 }
-// -----------------------------------------------------
+
 sal_Int32 SAL_CALL java_io_InputStream::readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     if (nBytesToRead < 0)

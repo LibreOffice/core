@@ -60,17 +60,12 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 
-
-//----------------------------------------------------------------------------
-
 extern "C" {
     SAL_DLLPUBLIC_EXPORT long basicide_handle_basic_error( void* pPtr )
     {
         return HandleBasicError( (StarBASIC*)pPtr );
     }
 }
-
-//----------------------------------------------------------------------------
 
 SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
 {
@@ -160,8 +155,6 @@ SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
     return pMethod;
 }
 
-//----------------------------------------------------------------------------
-
 bool RenameDialog (
     Window* pErrorParent,
     ScriptDocument const& rDocument,
@@ -226,8 +219,6 @@ bool RenameDialog (
     return true;
 }
 
-//----------------------------------------------------------------------------
-
 bool RemoveDialog( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rDlgName )
 {
     if (Shell* pShell = GetShell())
@@ -242,8 +233,6 @@ bool RemoveDialog( const ScriptDocument& rDocument, const OUString& rLibName, co
     return rDocument.removeDialog( rLibName, rDlgName );
 }
 
-//----------------------------------------------------------------------------
-
 StarBASIC* FindBasic( const SbxVariable* pVar )
 {
     SbxVariable const* pSbx = pVar;
@@ -251,8 +240,6 @@ StarBASIC* FindBasic( const SbxVariable* pVar )
         pSbx = pSbx->GetParent();
     return (StarBASIC*)pSbx;
 }
-
-//----------------------------------------------------------------------------
 
 BasicManager* FindBasicManager( StarBASIC* pLib )
 {
@@ -281,8 +268,6 @@ BasicManager* FindBasicManager( StarBASIC* pLib )
     return NULL;
 }
 
-//----------------------------------------------------------------------------
-
 void MarkDocumentModified( const ScriptDocument& rDocument )
 {
     // does not have to come from a document...
@@ -307,16 +292,12 @@ void MarkDocumentModified( const ScriptDocument& rDocument )
     }
 }
 
-//----------------------------------------------------------------------------
-
 void RunMethod( SbMethod* pMethod )
 {
     SbxValues aRes;
     aRes.eType = SbxVOID;
     pMethod->Get( aRes );
 }
-
-//----------------------------------------------------------------------------
 
 void StopBasic()
 {
@@ -335,8 +316,6 @@ void StopBasic()
     BasicStopped();
 }
 
-//----------------------------------------------------------------------------
-
 void BasicStopped(
     bool* pbAppWindowDisabled,
     bool* pbDispatcherLocked,
@@ -346,7 +325,6 @@ void BasicStopped(
 {
     // maybe there are some locks to be removed after an error
     // or an explicit cancelling of the basic...
-
     if ( pbAppWindowDisabled )
         *pbAppWindowDisabled = false;
     if ( pbDispatcherLocked )
@@ -358,7 +336,7 @@ void BasicStopped(
     if ( ppSWLockViewCount )
         *ppSWLockViewCount = 0;
 
-    // AppWait ?
+    // AppWait?
     if (Shell* pShell = GetShell())
     {
         sal_uInt16 nWait = 0;
@@ -380,8 +358,6 @@ void BasicStopped(
     }
 
 }
-
-//----------------------------------------------------------------------------
 
 void InvalidateDebuggerSlots()
 {
@@ -405,8 +381,6 @@ void InvalidateDebuggerSlots()
         pBindings->Update( SID_BASICIDE_STAT_POS );
     }
 }
-
-//----------------------------------------------------------------------------
 
 long HandleBasicError( StarBASIC* pBasic )
 {
@@ -465,8 +439,6 @@ long HandleBasicError( StarBASIC* pBasic )
     return nRet;
 }
 
-//----------------------------------------------------------------------------
-
 SfxBindings* GetBindingsPtr()
 {
     SfxBindings* pBindings = NULL;
@@ -495,8 +467,6 @@ SfxBindings* GetBindingsPtr()
     return pBindings;
 }
 
-//----------------------------------------------------------------------------
-
 SfxDispatcher* GetDispatcher ()
 {
     if (Shell* pShell = GetShell())
@@ -505,8 +475,6 @@ SfxDispatcher* GetDispatcher ()
                 return pDispatcher;
     return 0;
 }
-
-//----------------------------------------------------------------------------
 } // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

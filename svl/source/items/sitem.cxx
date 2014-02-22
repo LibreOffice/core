@@ -26,7 +26,7 @@
 
 DBG_NAME(SfxSetItem)
 
-// --------------------------------------------------------------------------
+
 
 SfxSetItem::SfxSetItem( sal_uInt16 which, const SfxItemSet &rSet) :
     SfxPoolItem(which),
@@ -35,7 +35,7 @@ SfxSetItem::SfxSetItem( sal_uInt16 which, const SfxItemSet &rSet) :
     DBG_CTOR(SfxSetItem, 0);
 }
 
-// --------------------------------------------------------------------------
+
 
 SfxSetItem::SfxSetItem( sal_uInt16 which, SfxItemSet *pS) :
     SfxPoolItem(which),
@@ -45,7 +45,7 @@ SfxSetItem::SfxSetItem( sal_uInt16 which, SfxItemSet *pS) :
     DBG_ASSERT(pS, "SfxSetItem without set constructed" );
 }
 
-// --------------------------------------------------------------------------
+
 
 SfxSetItem::SfxSetItem( const SfxSetItem& rCopy, SfxItemPool *pPool ) :
     SfxPoolItem(rCopy.Which()),
@@ -54,7 +54,7 @@ SfxSetItem::SfxSetItem( const SfxSetItem& rCopy, SfxItemPool *pPool ) :
     DBG_CTOR(SfxSetItem, 0);
 }
 
-// --------------------------------------------------------------------------
+
 
 SfxSetItem::~SfxSetItem()
 {
@@ -62,7 +62,7 @@ SfxSetItem::~SfxSetItem()
     delete pSet; pSet = 0;
 }
 
-// --------------------------------------------------------------------------
+
 
 bool SfxSetItem::operator==( const SfxPoolItem& rCmp) const
 {
@@ -71,7 +71,7 @@ bool SfxSetItem::operator==( const SfxPoolItem& rCmp) const
     return *pSet == *(((const SfxSetItem &)rCmp).pSet);
 }
 
-// --------------------------------------------------------------------------
+
 
 SfxItemPresentation SfxSetItem::GetPresentation
 (
@@ -86,7 +86,7 @@ SfxItemPresentation SfxSetItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-// --------------------------------------------------------------------------
+
 
 SvStream& SfxSetItem::Store(SvStream& rStream, sal_uInt16) const
 {

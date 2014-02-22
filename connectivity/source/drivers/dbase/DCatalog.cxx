@@ -29,13 +29,13 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
-// -------------------------------------------------------------------------
+
 using namespace connectivity::dbase;
-// -------------------------------------------------------------------------
+
 ODbaseCatalog::ODbaseCatalog(ODbaseConnection* _pCon) : file::OFileCatalog(_pCon)
 {
 }
-// -------------------------------------------------------------------------
+
 void ODbaseCatalog::refreshTables()
 {
     TStringVector aVector;

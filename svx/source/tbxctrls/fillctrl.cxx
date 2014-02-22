@@ -516,7 +516,7 @@ FillControl::FillControl( Window* pParent, WinBits nStyle ) :
     aDelayTimer.Start();
 }
 
-//------------------------------------------------------------------------
+
 
 FillControl::~FillControl()
 {
@@ -524,7 +524,7 @@ FillControl::~FillControl()
     delete pLbFillAttr;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(FillControl, DelayHdl)
 {
@@ -535,7 +535,7 @@ IMPL_LINK_NOARG_INLINE_START(FillControl, DelayHdl)
 }
 IMPL_LINK_INLINE_END( FillControl, DelayHdl, Timer *, pTimer )
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( FillControl, SelectFillTypeHdl, ListBox *, pBox )
 {
@@ -641,7 +641,7 @@ IMPL_LINK( FillControl, SelectFillTypeHdl, ListBox *, pBox )
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
 {
@@ -772,7 +772,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 void FillControl::Resize()
 {

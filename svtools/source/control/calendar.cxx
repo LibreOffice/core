@@ -72,7 +72,7 @@ static void ImplCalendarSelectDate( IntDateSet* pTable, const Date& rDate, sal_B
         pTable->erase( rDate.GetDate() );
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplCalendarSelectDateRange( IntDateSet* pTable,
                                          const Date& rStartDate,
@@ -112,7 +112,7 @@ static void ImplCalendarSelectDateRange( IntDateSet* pTable,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplCalendarUnSelectDateRange( IntDateSet* pTable,
                                            IntDateSet* pOldTable,
@@ -150,7 +150,7 @@ static void ImplCalendarUnSelectDateRange( IntDateSet* pTable,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 inline void ImplCalendarClearSelectDate( IntDateSet* pTable )
 {
@@ -225,7 +225,7 @@ void Calendar::ImplInit( WinBits nWinStyle )
     ImplInitSettings();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::ImplInitSettings()
 {
@@ -236,7 +236,7 @@ void Calendar::ImplInitSettings()
     SetBackground( Wallpaper( rStyleSettings.GetFieldColor() ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 Calendar::Calendar( Window* pParent, WinBits nWinStyle ) :
     Control( pParent, nWinStyle & (WB_TABSTOP | WB_GROUP | WB_BORDER | WB_3DLOOK | WB_RANGESELECT | WB_MULTISELECT) ),
@@ -253,7 +253,7 @@ Calendar::Calendar( Window* pParent, WinBits nWinStyle ) :
     ImplInit( nWinStyle );
 }
 
-// -----------------------------------------------------------------------
+
 
 Calendar::~Calendar()
 {
@@ -266,7 +266,7 @@ Calendar::~Calendar()
     delete mpRestoreSelectTable;
 }
 
-// -----------------------------------------------------------------------
+
 
 DayOfWeek Calendar::ImplGetWeekStart() const
 {
@@ -303,7 +303,7 @@ DayOfWeek Calendar::ImplGetWeekStart() const
     return eDay;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::ImplGetWeekFont( Font& rFont ) const
 {
@@ -315,7 +315,7 @@ void Calendar::ImplGetWeekFont( Font& rFont ) const
     rFont.SetWeight( WEIGHT_NORMAL );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::ImplFormat()
 {
@@ -494,7 +494,7 @@ void Calendar::ImplFormat()
     mbFormat = sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
 {
@@ -625,7 +625,7 @@ sal_uInt16 Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplDrawSpinArrow( OutputDevice* pDev, const Rectangle& rRect,
                                sal_Bool bPrev )
@@ -671,7 +671,7 @@ static void ImplDrawSpinArrow( OutputDevice* pDev, const Rectangle& rRect,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::ImplDrawSpin( sal_Bool bDrawPrev, sal_Bool bDrawNext )
 {
@@ -700,7 +700,7 @@ void Calendar::ImplDrawSpin( sal_Bool bDrawPrev, sal_Bool bDrawNext )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::ImplDrawDate( long nX, long nY,
                              sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear,
@@ -799,7 +799,7 @@ void Calendar::ImplDrawDate( long nX, long nY,
         SetFont( aOldFont );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::ImplDraw( sal_Bool bPaint )
 {
@@ -1042,7 +1042,7 @@ void Calendar::ImplDraw( sal_Bool bPaint )
         ImplDrawSpin();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::ImplUpdateDate( const Date& rDate )
 {
@@ -1059,7 +1059,7 @@ void Calendar::ImplUpdateDate( const Date& rDate )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::ImplUpdateSelection( IntDateSet* pOld )
 {
@@ -1086,7 +1086,7 @@ void Calendar::ImplUpdateSelection( IntDateSet* pOld )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
                                 sal_Bool bMove, sal_Bool bExpand, sal_Bool bExtended )
@@ -1199,7 +1199,7 @@ void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
     delete pOldSel;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::ImplUpdate( sal_Bool bCalcNew )
 {
@@ -1225,7 +1225,7 @@ void Calendar::ImplUpdate( sal_Bool bCalcNew )
     mbFormat = sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::ImplInvertDropPos()
 {
@@ -1235,7 +1235,7 @@ void Calendar::ImplInvertDropPos()
     Invert( aRect );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::ImplScroll( sal_Bool bPrev )
 {
@@ -1252,7 +1252,7 @@ void Calendar::ImplScroll( sal_Bool bPrev )
     mbDirect = sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::ImplShowMenu( const Point& rPos, const Date& rDate )
 {
@@ -1317,7 +1317,7 @@ void Calendar::ImplShowMenu( const Point& rPos, const Date& rDate )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::ImplTracking( const Point& rPos, sal_Bool bRepeat )
 {
@@ -1340,7 +1340,7 @@ void Calendar::ImplTracking( const Point& rPos, sal_Bool bRepeat )
         ImplMouseSelect( aTempDate, nHitTest, sal_True, sal_False, sal_False );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::ImplEndTracking( sal_Bool bCancel )
 {
@@ -1408,7 +1408,7 @@ void Calendar::ImplEndTracking( sal_Bool bCancel )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_STATIC_LINK( Calendar, ScrollHdl, Timer*, EMPTYARG )
 {
@@ -1423,7 +1423,7 @@ IMPL_STATIC_LINK( Calendar, ScrollHdl, Timer*, EMPTYARG )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -1486,7 +1486,7 @@ void Calendar::MouseButtonDown( const MouseEvent& rMEvt )
     Control::MouseButtonDown( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -1496,7 +1496,7 @@ void Calendar::MouseButtonUp( const MouseEvent& rMEvt )
         Control::MouseButtonUp( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::MouseMove( const MouseEvent& rMEvt )
 {
@@ -1506,7 +1506,7 @@ void Calendar::MouseMove( const MouseEvent& rMEvt )
         Control::MouseMove( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::Tracking( const TrackingEvent& rTEvt )
 {
@@ -1518,7 +1518,7 @@ void Calendar::Tracking( const TrackingEvent& rTEvt )
         ImplTracking( aMousePos, rTEvt.IsTrackingRepeat() );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::KeyInput( const KeyEvent& rKEvt )
 {
@@ -1636,14 +1636,14 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::Paint( const Rectangle& )
 {
     ImplDraw( sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::GetFocus()
 {
@@ -1651,7 +1651,7 @@ void Calendar::GetFocus()
     Control::GetFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::LoseFocus()
 {
@@ -1659,7 +1659,7 @@ void Calendar::LoseFocus()
     Control::LoseFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::Resize()
 {
@@ -1667,7 +1667,7 @@ void Calendar::Resize()
     Control::Resize();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::RequestHelp( const HelpEvent& rHEvt )
 {
@@ -1716,7 +1716,7 @@ void Calendar::RequestHelp( const HelpEvent& rHEvt )
     Control::RequestHelp( rHEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::Command( const CommandEvent& rCEvt )
 {
@@ -1763,7 +1763,7 @@ void Calendar::Command( const CommandEvent& rCEvt )
     Control::Command( rCEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::StateChanged( StateChangedType nType )
 {
@@ -1773,7 +1773,7 @@ void Calendar::StateChanged( StateChangedType nType )
         ImplFormat();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -1789,42 +1789,42 @@ void Calendar::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::SelectionChanging()
 {
     maSelectionChangingHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::DateRangeChanged()
 {
     maDateRangeChangedHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::RequestDateInfo()
 {
     maRequestDateInfoHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::DoubleClick()
 {
     maDoubleClickHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::Select()
 {
     maSelectHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::SelectDate( const Date& rDate, sal_Bool bSelect )
 {
@@ -1847,7 +1847,7 @@ void Calendar::SelectDate( const Date& rDate, sal_Bool bSelect )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::SetNoSelection()
 {
@@ -1867,14 +1867,14 @@ void Calendar::SetNoSelection()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool Calendar::IsDateSelected( const Date& rDate ) const
 {
     return mpSelectTable->find( rDate.GetDate() ) != mpSelectTable->end();
 }
 
-// -----------------------------------------------------------------------
+
 
 Date Calendar::GetFirstSelectedDate() const
 {
@@ -1887,7 +1887,7 @@ Date Calendar::GetFirstSelectedDate() const
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::SetCurDate( const Date& rNewDate )
 {
@@ -1945,7 +1945,7 @@ void Calendar::SetCurDate( const Date& rNewDate )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::SetFirstDate( const Date& rNewFirstDate )
 {
@@ -1957,7 +1957,7 @@ void Calendar::SetFirstDate( const Date& rNewFirstDate )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 Date Calendar::GetFirstMonth() const
 {
@@ -1972,7 +1972,7 @@ Date Calendar::GetFirstMonth() const
         return maFirstDate;
 }
 
-// -----------------------------------------------------------------------
+
 
 Date Calendar::GetLastMonth() const
 {
@@ -1984,7 +1984,7 @@ Date Calendar::GetLastMonth() const
     return aDate;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 Calendar::GetMonthCount() const
 {
@@ -1994,7 +1994,7 @@ sal_uInt16 Calendar::GetMonthCount() const
         return (sal_uInt16)(mnMonthPerLine*mnLines);
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool Calendar::GetDate( const Point& rPos, Date& rDate ) const
 {
@@ -2009,7 +2009,7 @@ sal_Bool Calendar::GetDate( const Point& rPos, Date& rDate ) const
         return sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle Calendar::GetDateRect( const Date& rDate ) const
 {
@@ -2111,7 +2111,7 @@ Rectangle Calendar::GetDateRect( const Date& rDate ) const
     return aRect;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::StartSelection()
 {
@@ -2123,7 +2123,7 @@ void Calendar::StartSelection()
     mbSelection = sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Calendar::EndSelection()
 {
@@ -2141,7 +2141,7 @@ void Calendar::EndSelection()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 Size Calendar::CalcWindowSizePixel( long nCalcMonthPerLine,
                                     long nCalcLines ) const
@@ -2225,7 +2225,7 @@ public:
     virtual bool    Notify( NotifyEvent& rNEvt );
 };
 
-// -----------------------------------------------------------------------
+
 
 ImplCFieldFloatWin::ImplCFieldFloatWin( Window* pParent ) :
     FloatingWindow( pParent, WB_BORDER | WB_SYSTEMWINDOW | WB_NOSHADOW  )
@@ -2236,7 +2236,7 @@ ImplCFieldFloatWin::ImplCFieldFloatWin( Window* pParent ) :
     mpFixedLine = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplCFieldFloatWin::~ImplCFieldFloatWin()
 {
@@ -2245,7 +2245,7 @@ ImplCFieldFloatWin::~ImplCFieldFloatWin()
     delete mpFixedLine;
 }
 
-// -----------------------------------------------------------------------
+
 
 PushButton* ImplCFieldFloatWin::EnableTodayBtn( sal_Bool bEnable )
 {
@@ -2277,7 +2277,7 @@ PushButton* ImplCFieldFloatWin::EnableTodayBtn( sal_Bool bEnable )
     return mpTodayBtn;
 }
 
-// -----------------------------------------------------------------------
+
 
 PushButton* ImplCFieldFloatWin::EnableNoneBtn( sal_Bool bEnable )
 {
@@ -2309,7 +2309,7 @@ PushButton* ImplCFieldFloatWin::EnableNoneBtn( sal_Bool bEnable )
     return mpNoneBtn;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplCFieldFloatWin::ArrangeButtons()
 {
@@ -2375,7 +2375,7 @@ void ImplCFieldFloatWin::ArrangeButtons()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplCFieldFloatWin::Notify( NotifyEvent& rNEvt )
 {
@@ -2402,7 +2402,7 @@ CalendarField::CalendarField( Window* pParent, WinBits nWinStyle ) :
     mbNone          = sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 CalendarField::~CalendarField()
 {
@@ -2413,7 +2413,7 @@ CalendarField::~CalendarField()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( CalendarField, ImplSelectHdl, Calendar*, pCalendar )
 {
@@ -2434,7 +2434,7 @@ IMPL_LINK( CalendarField, ImplSelectHdl, Calendar*, pCalendar )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( CalendarField, ImplClickHdl, PushButton*, pBtn )
 {
@@ -2466,7 +2466,7 @@ IMPL_LINK( CalendarField, ImplClickHdl, PushButton*, pBtn )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(CalendarField, ImplPopupModeEndHdl)
 {
@@ -2476,14 +2476,14 @@ IMPL_LINK_NOARG(CalendarField, ImplPopupModeEndHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void CalendarField::Select()
 {
     maSelectHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool CalendarField::ShowDropDown( sal_Bool bShow )
 {
@@ -2533,14 +2533,14 @@ bool CalendarField::ShowDropDown( sal_Bool bShow )
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 Calendar* CalendarField::CreateCalendar( Window* pParent )
 {
     return new Calendar( pParent, mnCalendarStyle | WB_TABSTOP );
 }
 
-// -----------------------------------------------------------------------
+
 
 Calendar* CalendarField::GetCalendar()
 {
@@ -2556,7 +2556,7 @@ Calendar* CalendarField::GetCalendar()
     return mpCalendar;
 }
 
-// -----------------------------------------------------------------------
+
 
 void CalendarField::StateChanged( StateChangedType nStateChange )
 {

@@ -107,11 +107,11 @@ template<typename T> T CachedContentResultSet::rowOriginGet(
     return aRet;
 }
 
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 // CCRS_Cache methoeds.
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 
 CachedContentResultSet::CCRS_Cache::CCRS_Cache(
     const Reference< XContentIdentifierMapping > & xMapping )
@@ -364,11 +364,11 @@ const Reference< XContent >& SAL_CALL CachedContentResultSet::CCRS_Cache
     }
 }
 
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 // class CCRS_PropertySetInfo
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 
 class CCRS_PropertySetInfo :
                 public cppu::OWeakObject,
@@ -513,26 +513,26 @@ CCRS_PropertySetInfo::~CCRS_PropertySetInfo()
     delete m_pProperties;
 }
 
-//--------------------------------------------------------------------------
+
 // XInterface methods.
-//--------------------------------------------------------------------------
+
 //list all interfaces inclusive baseclasses of interfaces
 XINTERFACE_IMPL_2( CCRS_PropertySetInfo
                   , XTypeProvider
                   , XPropertySetInfo
                   );
 
-//--------------------------------------------------------------------------
+
 // XTypeProvider methods.
-//--------------------------------------------------------------------------
+
 //list all interfaces exclusive baseclasses
 XTYPEPROVIDER_IMPL_2( CCRS_PropertySetInfo
                     , XTypeProvider
                     , XPropertySetInfo
                     );
-//--------------------------------------------------------------------------
+
 // XPropertySetInfo methods.
-//--------------------------------------------------------------------------
+
 //virtual
 Sequence< Property > SAL_CALL CCRS_PropertySetInfo
     ::getProperties() throw( RuntimeException )
@@ -563,9 +563,9 @@ sal_Bool SAL_CALL CCRS_PropertySetInfo
     return ( impl_getPos( Name ) != -1 );
 }
 
-//--------------------------------------------------------------------------
+
 // impl_ methods.
-//--------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL CCRS_PropertySetInfo
             ::impl_getPos( const OUString& rName ) const
@@ -635,11 +635,11 @@ sal_Int32 SAL_CALL CCRS_PropertySetInfo
     return nHandle;
 }
 
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 // class CachedContentResultSet
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 
 CachedContentResultSet::CachedContentResultSet(
                   const Reference< XComponentContext > & rxContext
@@ -691,9 +691,9 @@ CachedContentResultSet::~CachedContentResultSet()
     //do not delete m_pMyPropSetInfo, cause it is hold via reference
 };
 
-//--------------------------------------------------------------------------
+
 // impl_ methods.
-//--------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL CachedContentResultSet
     ::applyPositionToOrigin( sal_Int32 nRow )
@@ -701,7 +701,7 @@ sal_Bool SAL_CALL CachedContentResultSet
            RuntimeException )
 {
     impl_EnsureNotDisposed();
-    //-------------------------------------------------------------------------
+
     /**
     @returns
         <TRUE/> if the cursor is on a valid row; <FALSE/> if it is off
@@ -802,11 +802,11 @@ sal_Bool SAL_CALL CachedContentResultSet
     return sal_True;
 };
 
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 //define for fetching data
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 
 #define FETCH_XXX( aCache, fetchInterface, fetchMethod )            \
 sal_Bool bDirection = !!(                                           \
@@ -911,9 +911,9 @@ void SAL_CALL CachedContentResultSet
     m_xPropertySetInfo = m_xMyPropertySetInfo;
 }
 
-//--------------------------------------------------------------------------
+
 // XInterface methods. ( inherited )
-//--------------------------------------------------------------------------
+
 XINTERFACE_COMMON_IMPL( CachedContentResultSet )
 
 Any SAL_CALL CachedContentResultSet
@@ -933,9 +933,9 @@ Any SAL_CALL CachedContentResultSet
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
-//--------------------------------------------------------------------------
+
 // XTypeProvider methods.
-//--------------------------------------------------------------------------
+
 //list all interfaces exclusive baseclasses
 XTYPEPROVIDER_IMPL_11( CachedContentResultSet
                     , XTypeProvider
@@ -953,9 +953,9 @@ XTYPEPROVIDER_IMPL_11( CachedContentResultSet
                     , XResultSet
                     , XRow );
 
-//--------------------------------------------------------------------------
+
 // XServiceInfo methods.
-//--------------------------------------------------------------------------
+
 
 XSERVICEINFO_NOFACTORY_IMPL_1( CachedContentResultSet,
                                OUString(
@@ -963,9 +963,9 @@ XSERVICEINFO_NOFACTORY_IMPL_1( CachedContentResultSet,
                             OUString(
                             CACHED_CONTENT_RESULTSET_SERVICE_NAME ) );
 
-//--------------------------------------------------------------------------
+
 // XPropertySet methods. ( inherited )
-//--------------------------------------------------------------------------
+
 
 // virtual
 void SAL_CALL CachedContentResultSet
@@ -1079,7 +1079,7 @@ void SAL_CALL CachedContentResultSet
     }
 }
 
-//--------------------------------------------------------------------------
+
 // virtual
 Any SAL_CALL CachedContentResultSet
     ::getPropertyValue( const OUString& rPropertyName )
@@ -1139,9 +1139,9 @@ Any SAL_CALL CachedContentResultSet
     return aValue;
 }
 
-//--------------------------------------------------------------------------
+
 // own methods.  ( inherited )
-//--------------------------------------------------------------------------
+
 
 //virtual
 void SAL_CALL CachedContentResultSet
@@ -1168,7 +1168,7 @@ void SAL_CALL CachedContentResultSet
     PropertyChangeEvent aEvt( rEvt );
     aEvt.Source = static_cast< XPropertySet * >( this );
     aEvt.Further = sal_False;
-    //---------
+
 
     if( CCRS_PropertySetInfo
             ::impl_isMyPropertyName( rEvt.PropertyName ) )
@@ -1211,7 +1211,7 @@ void SAL_CALL CachedContentResultSet
         return;
     }
 
-    //-----------
+
     impl_notifyPropertyChangeListeners( aEvt );
 }
 
@@ -1239,9 +1239,9 @@ void SAL_CALL CachedContentResultSet
     impl_notifyVetoableChangeListeners( aEvt );
 }
 
-//--------------------------------------------------------------------------
+
 // XContentAccess methods. ( inherited ) ( -- position dependent )
-//--------------------------------------------------------------------------
+
 
 #define XCONTENTACCESS_queryXXX( queryXXX, XXX, TYPE )              \
 impl_EnsureNotDisposed();                                   \
@@ -1277,7 +1277,7 @@ if( !m_aCache##XXX.hasRow( nRow ) )                         \
 }                                                           \
 return m_aCache##XXX.get##XXX( nRow );
 
-//--------------------------------------------------------------------------
+
 // virtual
 OUString SAL_CALL CachedContentResultSet
     ::queryContentIdentifierString()
@@ -1286,7 +1286,7 @@ OUString SAL_CALL CachedContentResultSet
     XCONTENTACCESS_queryXXX( queryContentIdentifierString, ContentIdentifierString, OUString )
 }
 
-//--------------------------------------------------------------------------
+
 // virtual
 Reference< XContentIdentifier > SAL_CALL CachedContentResultSet
     ::queryContentIdentifier()
@@ -1295,7 +1295,7 @@ Reference< XContentIdentifier > SAL_CALL CachedContentResultSet
     XCONTENTACCESS_queryXXX( queryContentIdentifier, ContentIdentifier, Reference< XContentIdentifier > )
 }
 
-//--------------------------------------------------------------------------
+
 // virtual
 Reference< XContent > SAL_CALL CachedContentResultSet
     ::queryContent()
@@ -1304,9 +1304,9 @@ Reference< XContent > SAL_CALL CachedContentResultSet
     XCONTENTACCESS_queryXXX( queryContent, Content, Reference< XContent > )
 }
 
-//-----------------------------------------------------------------
+
 // XResultSet methods. ( inherited )
-//-----------------------------------------------------------------
+
 //virtual
 
 sal_Bool SAL_CALL CachedContentResultSet
@@ -1889,9 +1889,9 @@ Reference< XInterface > SAL_CALL CachedContentResultSet
     return Reference< XInterface >();
 }
 
-//-----------------------------------------------------------------
+
 // XRow methods. ( inherited )
-//-----------------------------------------------------------------
+
 
 //virtual
 sal_Bool SAL_CALL CachedContentResultSet
@@ -2134,9 +2134,9 @@ Reference< XArray > SAL_CALL CachedContentResultSet
         &css::sdbc::XRow::getArray, columnIndex);
 }
 
-//-----------------------------------------------------------------
+
 // Type Converter Support
-//-----------------------------------------------------------------
+
 
 const Reference< XTypeConverter >& CachedContentResultSet::getTypeConverter()
 {
@@ -2154,11 +2154,11 @@ const Reference< XTypeConverter >& CachedContentResultSet::getTypeConverter()
     return m_xTypeConverter;
 }
 
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 // class CachedContentResultSetFactory
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 
 CachedContentResultSetFactory::CachedContentResultSetFactory(
         const Reference< XComponentContext > & rxContext )
@@ -2170,41 +2170,41 @@ CachedContentResultSetFactory::~CachedContentResultSetFactory()
 {
 }
 
-//--------------------------------------------------------------------------
+
 // CachedContentResultSetFactory XInterface methods.
-//--------------------------------------------------------------------------
+
 
 XINTERFACE_IMPL_3( CachedContentResultSetFactory,
                    XTypeProvider,
                    XServiceInfo,
                    XCachedContentResultSetFactory );
 
-//--------------------------------------------------------------------------
+
 // CachedContentResultSetFactory XTypeProvider methods.
-//--------------------------------------------------------------------------
+
 
 XTYPEPROVIDER_IMPL_3( CachedContentResultSetFactory,
                       XTypeProvider,
                          XServiceInfo,
                       XCachedContentResultSetFactory );
 
-//--------------------------------------------------------------------------
+
 // CachedContentResultSetFactory XServiceInfo methods.
-//--------------------------------------------------------------------------
+
 
 XSERVICEINFO_IMPL_1_CTX( CachedContentResultSetFactory,
                      OUString( "com.sun.star.comp.ucb.CachedContentResultSetFactory" ),
                      OUString( CACHED_CONTENT_RESULTSET_FACTORY_NAME ) );
 
-//--------------------------------------------------------------------------
+
 // Service factory implementation.
-//--------------------------------------------------------------------------
+
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( CachedContentResultSetFactory );
 
-//--------------------------------------------------------------------------
+
 // CachedContentResultSetFactory XCachedContentResultSetFactory methods.
-//--------------------------------------------------------------------------
+
 
     //virtual
 Reference< XResultSet > SAL_CALL CachedContentResultSetFactory

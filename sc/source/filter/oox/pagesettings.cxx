@@ -342,7 +342,7 @@ enum HFPortionId
     HF_COUNT
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct HFPortionInfo
 {
@@ -441,7 +441,7 @@ private:
     FontModel           maFontModel;            /// Font attributes of current text range.
 };
 
-// ----------------------------------------------------------------------------
+
 
 namespace {
 
@@ -468,7 +468,7 @@ static const sal_Char* const sppcItalicNames[] =
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 HeaderFooterParser::HeaderFooterParser( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -881,7 +881,7 @@ void HeaderFooterParser::setNewPortion( HFPortionId ePortion )
 
 // ============================================================================
 
-// ----------------------------------------------------------------------------
+
 
 PageSettingsConverter::HFHelperData::HFHelperData( sal_Int32 nLeftPropId, sal_Int32 nRightPropId ) :
     mnLeftPropId( nLeftPropId ),
@@ -894,7 +894,7 @@ PageSettingsConverter::HFHelperData::HFHelperData( sal_Int32 nLeftPropId, sal_In
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 PageSettingsConverter::PageSettingsConverter( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),

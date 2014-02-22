@@ -47,7 +47,7 @@ namespace pcr
     // OSelectLabelDialog
     //========================================================================
     DBG_NAME(OSelectLabelDialog)
-    //------------------------------------------------------------------------
+
     OSelectLabelDialog::OSelectLabelDialog( Window* pParent, Reference< XPropertySet >  _xControlModel )
         :ModalDialog(pParent, PcrRes(RID_DLG_SELECTLABELCONTROL))
         ,m_aMainDesc(this, PcrRes(1))
@@ -150,7 +150,7 @@ namespace pcr
         FreeResource();
     }
 
-    //------------------------------------------------------------------------
+
     OSelectLabelDialog::~OSelectLabelDialog()
     {
         // delete the entry datas of the listbox entries
@@ -166,7 +166,7 @@ namespace pcr
         DBG_DTOR(OSelectLabelDialog,NULL);
     }
 
-    //------------------------------------------------------------------------
+
     sal_Int32 OSelectLabelDialog::InsertEntries(const Reference< XInterface > & _xContainer, SvTreeListEntry* pContainerEntry)
     {
         Reference< XIndexAccess >  xContainer(_xContainer, UNO_QUERY);
@@ -241,7 +241,7 @@ namespace pcr
         return nChildren;
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK(OSelectLabelDialog, OnEntrySelected, SvTreeListBox*, pLB)
     {
         DBG_ASSERT(pLB == &m_aControlTree, "OSelectLabelDialog::OnEntrySelected : where did this come from ?");
@@ -259,7 +259,7 @@ namespace pcr
         return 0L;
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK(OSelectLabelDialog, OnNoAssignmentClicked, Button*, pButton)
     {
         DBG_ASSERT(pButton == &m_aNoAssignment, "OSelectLabelDialog::OnNoAssignmentClicked : where did this come from ?");

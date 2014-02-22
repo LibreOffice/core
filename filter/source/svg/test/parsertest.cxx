@@ -194,7 +194,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-// -----------------------------------------------------------------------------
+
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TestParser, "test svg parser fragments");
 

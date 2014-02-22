@@ -42,7 +42,7 @@ void XclAddress::Write( XclExpStream& rStrm, bool bCol16Bit ) const
         rStrm << static_cast< sal_uInt8 >( mnCol );
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool XclRange::Contains( const XclAddress& rPos ) const
 {
@@ -73,7 +73,7 @@ void XclRange::Write( XclExpStream& rStrm, bool bCol16Bit ) const
         rStrm << static_cast< sal_uInt8 >( maFirst.mnCol ) << static_cast< sal_uInt8 >( maLast.mnCol );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclRange XclRangeList::GetEnclosingRange() const
 {

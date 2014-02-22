@@ -100,7 +100,7 @@ namespace dbtools
                 if(aIter->second)
                     rtl_uString_release(aIter->second);
         }
-        // ------------------------------------------------------------------------------
+
         OUString OPropertyMap::getNameByIndex(sal_Int32 _nIndex) const
         {
             OUString sRet;
@@ -111,7 +111,7 @@ namespace dbtools
                 sRet = aIter->second;
             return sRet;
         }
-        // ------------------------------------------------------------------------------
+
         OUString OPropertyMap::fillValue(sal_Int32 _nIndex)
         {
             rtl_uString* pStr = NULL;

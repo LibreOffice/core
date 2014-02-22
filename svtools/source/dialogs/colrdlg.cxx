@@ -35,9 +35,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::ui::dialogs;
 
-// ---------------
+
 // - ColorDialog -
-// ---------------
+
 
 SvColorDialog::SvColorDialog( Window* pWindow )
 : mpParent( pWindow )
@@ -54,21 +54,21 @@ void SvColorDialog::SetColor( const Color& rColor )
     maColor = rColor;
 }
 
-// -----------------------------------------------------------------------
+
 
 const Color& SvColorDialog::GetColor() const
 {
     return maColor;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvColorDialog::SetMode( sal_Int16 eMode )
 {
     meMode = eMode;
 }
 
-// -----------------------------------------------------------------------
+
 
 short SvColorDialog::Execute()
 {

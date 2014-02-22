@@ -155,9 +155,9 @@ const sal_Char cDataSourceName[] = "DataSourceName";
 const sal_Char cSelection[] = "Selection";
 const sal_Char cActiveConnection[] = "ActiveConnection";
 
-// -----------------------------------------------------------------------------
+
 // Use nameless namespace to avoid to rubbish the global namespace
-// -----------------------------------------------------------------------------
+
 namespace
 {
 

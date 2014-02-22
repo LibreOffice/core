@@ -65,9 +65,9 @@ void    CALLBACK OnClipboardContentChange( void );
 LRESULT CALLBACK WndProc( HWND, UINT, WPARAM, LPARAM );
 LRESULT CALLBACK About( HWND, UINT, WPARAM, LPARAM );
 
-//----------------------------------------------------
+
 // WinMain
-//----------------------------------------------------
+
 
 int APIENTRY WinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,

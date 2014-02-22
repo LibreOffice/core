@@ -71,7 +71,7 @@ X11Clipboard::X11Clipboard( SelectionManager& rManager, Atom aSelection ) :
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 X11Clipboard::~X11Clipboard()
 {
@@ -90,7 +90,7 @@ X11Clipboard::~X11Clipboard()
 }
 
 
-// ------------------------------------------------------------------------
+
 
 void X11Clipboard::fireChangedContentsEvent()
 {
@@ -111,7 +111,7 @@ void X11Clipboard::fireChangedContentsEvent()
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void X11Clipboard::clearContents()
 {
@@ -134,7 +134,7 @@ void X11Clipboard::clearContents()
         xOwner->lostOwnership(xThis, m_aContents);
 }
 
-// ------------------------------------------------------------------------
+
 
 Reference< XTransferable > SAL_CALL X11Clipboard::getContents()
     throw(RuntimeException)
@@ -146,7 +146,7 @@ Reference< XTransferable > SAL_CALL X11Clipboard::getContents()
     return m_aContents;
 }
 
-// ------------------------------------------------------------------------
+
 
 void SAL_CALL X11Clipboard::setContents(
     const Reference< XTransferable >& xTrans,
@@ -181,7 +181,7 @@ void SAL_CALL X11Clipboard::setContents(
     fireChangedContentsEvent();
 }
 
-// ------------------------------------------------------------------------
+
 
 OUString SAL_CALL X11Clipboard::getName()
     throw(RuntimeException)
@@ -189,7 +189,7 @@ OUString SAL_CALL X11Clipboard::getName()
     return m_rSelectionManager.getString( m_aSelection );
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Int8 SAL_CALL X11Clipboard::getRenderingCapabilities()
     throw(RuntimeException)
@@ -198,7 +198,7 @@ sal_Int8 SAL_CALL X11Clipboard::getRenderingCapabilities()
 }
 
 
-// ------------------------------------------------------------------------
+
 void SAL_CALL X11Clipboard::addClipboardListener( const Reference< XClipboardListener >& listener )
     throw(RuntimeException)
 {
@@ -206,7 +206,7 @@ void SAL_CALL X11Clipboard::addClipboardListener( const Reference< XClipboardLis
     m_aListeners.push_back( listener );
 }
 
-// ------------------------------------------------------------------------
+
 
 void SAL_CALL X11Clipboard::removeClipboardListener( const Reference< XClipboardListener >& listener )
     throw(RuntimeException)
@@ -216,35 +216,35 @@ void SAL_CALL X11Clipboard::removeClipboardListener( const Reference< XClipboard
 }
 
 
-// ------------------------------------------------------------------------
+
 
 Reference< XTransferable > X11Clipboard::getTransferable()
 {
     return getContents();
 }
 
-// ------------------------------------------------------------------------
+
 
 void X11Clipboard::clearTransferable()
 {
     clearContents();
 }
 
-// ------------------------------------------------------------------------
+
 
 void X11Clipboard::fireContentsChanged()
 {
     fireChangedContentsEvent();
 }
 
-// ------------------------------------------------------------------------
+
 
 Reference< XInterface > X11Clipboard::getReference() throw()
 {
     return Reference< XInterface >( static_cast< OWeakObject* >(this) );
 }
 
-// ------------------------------------------------------------------------
+
 
 OUString SAL_CALL X11Clipboard::getImplementationName(  )
     throw(RuntimeException)

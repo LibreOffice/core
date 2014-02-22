@@ -229,7 +229,7 @@ namespace cppcanvas
             }
 
 
-            // -------------------------------------------------------------------------------
+
 
             class TexturedPolyPolyAction : public CachedPrimitiveBase
             {
@@ -343,7 +343,7 @@ namespace cppcanvas
                 return 1;
             }
 
-            // -------------------------------------------------------------------------------
+
 
             class StrokedPolyPolyAction : public CachedPrimitiveBase
             {

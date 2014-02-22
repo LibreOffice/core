@@ -104,7 +104,7 @@ OFormatProperties::OFormatProperties()
     aFontDescriptor.Weight = awt::FontWeight::NORMAL;
     aFontDescriptor.CharacterWidth = awt::FontWidth::NORMAL;
 }
-// -----------------------------------------------------------------------------
+
 void OReportComponentProperties::setShape(uno::Reference< drawing::XShape >& _xShape,const uno::Reference< report::XReportComponent>& _xTunnel,oslInterlockedCount& _rRefCount)
 {
     osl_atomic_increment( &_rRefCount );
@@ -123,7 +123,7 @@ void OReportComponentProperties::setShape(uno::Reference< drawing::XShape >& _xS
     }
     osl_atomic_decrement( &_rRefCount );
 }
-// -----------------------------------------------------------------------------
+
 OReportComponentProperties::~OReportComponentProperties()
 {
     if ( m_xProxy.is() )

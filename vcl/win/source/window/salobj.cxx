@@ -52,7 +52,7 @@ static sal_Bool ImplIsSysWindowOrChild( HWND hWndParent, HWND hWndChild )
     return FALSE;
 }
 
-// -----------------------------------------------------------------------
+
 
 WinSalObject* ImplFindSalObject( HWND hWndChild )
 {
@@ -69,7 +69,7 @@ WinSalObject* ImplFindSalObject( HWND hWndChild )
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 WinSalFrame* ImplFindSalObjectFrame( HWND hWnd )
 {
@@ -92,7 +92,7 @@ WinSalFrame* ImplFindSalObjectFrame( HWND hWnd )
     return pFrame;
 }
 
-// -----------------------------------------------------------------------
+
 
 LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
 {
@@ -149,7 +149,7 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
     return CallNextHookEx( pSalData->mhSalObjMsgHook, nCode, wParam, lParam );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool ImplSalPreDispatchMsg( MSG* pMsg )
 {
@@ -234,7 +234,7 @@ sal_Bool ImplSalPreDispatchMsg( MSG* pMsg )
     return FALSE;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplSalPostDispatchMsg( MSG* pMsg, LRESULT /* nDispatchResult */ )
 {
@@ -388,7 +388,7 @@ LRESULT CALLBACK SalSysObjWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM 
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 LRESULT CALLBACK SalSysObjChildWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
 {
@@ -584,7 +584,7 @@ WinSalObject::WinSalObject()
     pSalData->mpFirstObject = this;
 }
 
-// -----------------------------------------------------------------------
+
 
 WinSalObject::~WinSalObject()
 {
@@ -626,21 +626,21 @@ WinSalObject::~WinSalObject()
         ImplSendMessage( hWndParent, SAL_MSG_FORCEPALETTE, 0, 0 );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalObject::ResetClipRegion()
 {
     SetWindowRgn( mhWnd, 0, TRUE );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 WinSalObject::GetClipRegionType()
 {
     return SAL_OBJECT_CLIP_INCLUDERECTS;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalObject::BeginSetClipRegion( sal_uLong nRectCount )
 {
@@ -662,7 +662,7 @@ void WinSalObject::BeginSetClipRegion( sal_uLong nRectCount )
     mbFirstClipRect       = TRUE;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 {
@@ -701,7 +701,7 @@ void WinSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight 
     mpNextClipRect++;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalObject::EndSetClipRegion()
 {
@@ -726,7 +726,7 @@ void WinSalObject::EndSetClipRegion()
     SetWindowRgn( mhWnd, hRegion, TRUE );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 {
@@ -742,7 +742,7 @@ void WinSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
                   SWP_NOZORDER | SWP_NOACTIVATE | nStyle );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalObject::Show( sal_Bool bVisible )
 {
@@ -752,14 +752,14 @@ void WinSalObject::Show( sal_Bool bVisible )
         ShowWindow( mhWnd, SW_HIDE );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalObject::Enable( sal_Bool bEnable )
 {
     EnableWindow( mhWnd, bEnable );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalObject::GrabFocus()
 {

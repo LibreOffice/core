@@ -30,21 +30,21 @@ namespace svt
         typedef ::com::sun::star::uno::WeakReference< XInterface >  InterfaceAdapter;
         typedef ::std::vector< InterfaceAdapter  >                  InterfaceArray;
 
-        // ----------------------------------------------------------------
+
         InterfaceArray& getFolderPickerHistory()
         {
             static InterfaceArray s_aHistory;
             return s_aHistory;
         }
 
-        // ----------------------------------------------------------------
+
         InterfaceArray& getFilePickerHistory()
         {
             static InterfaceArray s_aHistory;
             return s_aHistory;
         }
 
-        // ----------------------------------------------------------------
+
         void implPushBackPicker( InterfaceArray& _rHistory, const Reference< XInterface >& _rxPicker )
         {
             if ( !_rxPicker.is() )

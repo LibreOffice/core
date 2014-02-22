@@ -26,7 +26,7 @@
 #include "svx/svdstr.hrc"
 #include "svx/svdglob.hxx"
 
-// -----------------------------------------------------------------------------
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -34,51 +34,51 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::table;
 
-// -----------------------------------------------------------------------------
+
 
 namespace sdr { namespace table {
 
-// -----------------------------------------------------------------------------
+
 // CellCursor
-// -----------------------------------------------------------------------------
+
 
 CellCursor::CellCursor( const TableModelRef & xTable, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
 : CellCursorBase( xTable, nLeft, nTop, nRight, nBottom )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 CellCursor::~CellCursor()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 // XCellCursor
-// -----------------------------------------------------------------------------
+
 
 Reference< XCell > SAL_CALL CellCursor::getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     return CellRange::getCellByPosition( nColumn, nRow );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XCellRange > SAL_CALL CellCursor::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     return CellRange::getCellRangeByPosition( nLeft, nTop, nRight, nBottom );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XCellRange > SAL_CALL CellCursor::getCellRangeByName( const OUString& aRange ) throw (RuntimeException)
 {
     return CellRange::getCellRangeByName( aRange );
 }
 
-// -----------------------------------------------------------------------------
+
 // XCellCursor
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL CellCursor::gotoStart(  ) throw (RuntimeException)
 {
@@ -86,7 +86,7 @@ void SAL_CALL CellCursor::gotoStart(  ) throw (RuntimeException)
     mnBottom = mnTop;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL CellCursor::gotoEnd(  ) throw (RuntimeException)
 {
@@ -94,7 +94,7 @@ void SAL_CALL CellCursor::gotoEnd(  ) throw (RuntimeException)
     mnTop = mnBottom;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL CellCursor::gotoNext(  ) throw (RuntimeException)
 {
@@ -123,7 +123,7 @@ void SAL_CALL CellCursor::gotoNext(  ) throw (RuntimeException)
     mnTop = mnBottom;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL CellCursor::gotoPrevious(  ) throw (RuntimeException)
 {
@@ -144,7 +144,7 @@ void SAL_CALL CellCursor::gotoPrevious(  ) throw (RuntimeException)
     mnBottom = mnTop;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL CellCursor::gotoOffset( ::sal_Int32 nColumnOffset, ::sal_Int32 nRowOffset ) throw (RuntimeException)
 {
@@ -160,9 +160,9 @@ void SAL_CALL CellCursor::gotoOffset( ::sal_Int32 nColumnOffset, ::sal_Int32 nRo
     }
 }
 
-// -----------------------------------------------------------------------------
+
 // XMergeableCellCursor
-// -----------------------------------------------------------------------------
+
 
 /** returns true and the merged cell positions if a merge is valid or false if a merge is
     not valid for that range */
@@ -243,7 +243,7 @@ bool CellCursor::GetMergedSelection( CellPos& rStart, CellPos& rEnd )
     return false;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL CellCursor::merge(  ) throw (NoSupportException, RuntimeException)
 {
@@ -278,7 +278,7 @@ void SAL_CALL CellCursor::merge(  ) throw (NoSupportException, RuntimeException)
         pModel->SetChanged();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void CellCursor::split_column( sal_Int32 nCol, sal_Int32 nColumns, std::vector< sal_Int32 >& rLeftOvers )
 {
@@ -382,7 +382,7 @@ void CellCursor::split_column( sal_Int32 nCol, sal_Int32 nColumns, std::vector< 
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void CellCursor::split_horizontal( sal_Int32 nColumns )
 {
@@ -394,7 +394,7 @@ void CellCursor::split_horizontal( sal_Int32 nColumns )
         split_column( nCol, nColumns, aLeftOvers );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void CellCursor::split_row( sal_Int32 nRow, sal_Int32 nRows, std::vector< sal_Int32 >& rLeftOvers )
 {
@@ -498,7 +498,7 @@ void CellCursor::split_row( sal_Int32 nRow, sal_Int32 nRows, std::vector< sal_In
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void CellCursor::split_vertical( sal_Int32 nRows )
 {
@@ -510,7 +510,7 @@ void CellCursor::split_vertical( sal_Int32 nRows )
         split_row( nRow, nRows, aLeftOvers );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL CellCursor::split( sal_Int32 nColumns, sal_Int32 nRows ) throw (NoSupportException, IllegalArgumentException, RuntimeException)
 {
@@ -549,7 +549,7 @@ void SAL_CALL CellCursor::split( sal_Int32 nColumns, sal_Int32 nRows ) throw (No
         pModel->SetChanged();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL CellCursor::isMergeable(  ) throw (RuntimeException)
 {
@@ -557,7 +557,7 @@ sal_Bool SAL_CALL CellCursor::isMergeable(  ) throw (RuntimeException)
     return GetMergedSelection( aStart, aEnd ) ? sal_True : sal_False;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL CellCursor::isUnmergeable(  ) throw (RuntimeException)
 {
@@ -574,7 +574,7 @@ sal_Bool SAL_CALL CellCursor::isUnmergeable(  ) throw (RuntimeException)
     return sal_False;
 }
 
-// -----------------------------------------------------------------------------
+
 
 } }
 

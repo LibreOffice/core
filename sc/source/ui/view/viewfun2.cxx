@@ -101,7 +101,7 @@ void VBA_DeleteModule( ScDocShell& rDocSh, const OUString& sModuleName );
 // STATIC DATA ---------------------------------------------------------------
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
 {
@@ -163,7 +163,7 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, bool bPaint )
 {
@@ -203,7 +203,7 @@ bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, bool bPaint )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 enum ScAutoSum
 {
@@ -236,7 +236,7 @@ static ScAutoSum lcl_IsAutoSumData( ScDocument* pDoc, SCCOL nCol, SCROW nRow,
 }
 
 
-//----------------------------------------------------------------------------
+
 
 #define SC_AUTOSUM_MAXCOUNT     20
 
@@ -271,7 +271,7 @@ static ScAutoSum lcl_SeekAutoSumData( ScDocument* pDoc, SCCOL& nCol, SCROW& nRow
 
 #undef SC_AUTOSUM_MAXCOUNT
 
-//----------------------------------------------------------------------------
+
 
 static bool lcl_FindNextSumEntryInColumn( ScDocument* pDoc, SCCOL nCol, SCROW& nRow,
                                    SCTAB nTab, SCCOLROW& nExtend, SCROW nMinRow )
@@ -290,7 +290,7 @@ static bool lcl_FindNextSumEntryInColumn( ScDocument* pDoc, SCCOL nCol, SCROW& n
     return false;
 }
 
-//----------------------------------------------------------------------------
+
 
 static bool lcl_FindNextSumEntryInRow( ScDocument* pDoc, SCCOL& nCol, SCROW nRow,
                                 SCTAB nTab, SCCOLROW& nExtend, SCROW nMinCol )
@@ -309,7 +309,7 @@ static bool lcl_FindNextSumEntryInRow( ScDocument* pDoc, SCCOL& nCol, SCROW nRow
     return false;
 }
 
-//----------------------------------------------------------------------------
+
 
 static bool lcl_GetAutoSumForColumnRange( ScDocument* pDoc, ScRangeList& rRangeList, const ScRange& rRange )
 {
@@ -353,7 +353,7 @@ static bool lcl_GetAutoSumForColumnRange( ScDocument* pDoc, ScRangeList& rRangeL
     return true;
 }
 
-//----------------------------------------------------------------------------
+
 
 static bool lcl_GetAutoSumForRowRange( ScDocument* pDoc, ScRangeList& rRangeList, const ScRange& rRange )
 {
@@ -397,7 +397,7 @@ static bool lcl_GetAutoSumForRowRange( ScDocument* pDoc, ScRangeList& rRangeList
     return true;
 }
 
-//----------------------------------------------------------------------------
+
 
 bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
 {
@@ -503,7 +503,7 @@ bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
     return false;
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScViewFunc::EnterAutoSum(const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr)
 {
@@ -511,7 +511,7 @@ void ScViewFunc::EnterAutoSum(const ScRangeList& rRangeList, bool bSubTotal, con
     EnterBlock( aFormula, NULL );
 }
 
-//----------------------------------------------------------------------------
+
 
 bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor, bool bContinue )
 {
@@ -712,7 +712,7 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
     return true;
 }
 
-//----------------------------------------------------------------------------
+
 
 OUString ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr )
 {
@@ -757,7 +757,7 @@ OUString ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSub
     return aBuf.makeStringAndClear();
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pData )
 {
@@ -846,7 +846,7 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
 }
 
 
-//----------------------------------------------------------------------------
+
 //  manual page break
 
 void ScViewFunc::InsertPageBreak( bool bColumn, bool bRecord, const ScAddress* pPos,
@@ -867,7 +867,7 @@ void ScViewFunc::InsertPageBreak( bool bColumn, bool bRecord, const ScAddress* p
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScViewFunc::DeletePageBreak( bool bColumn, bool bRecord, const ScAddress* pPos,
                                     bool bSetModified )
@@ -886,7 +886,7 @@ void ScViewFunc::DeletePageBreak( bool bColumn, bool bRecord, const ScAddress* p
         UpdatePageBreakData( true );    // for PageBreak-Mode
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScViewFunc::RemoveManualBreaks()
 {
@@ -912,7 +912,7 @@ void ScViewFunc::RemoveManualBreaks()
     pDocSh->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID );
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScViewFunc::SetPrintZoom(sal_uInt16 nScale, sal_uInt16 nPages)
 {
@@ -929,7 +929,7 @@ void ScViewFunc::AdjustPrintZoom()
     GetViewData()->GetDocShell()->AdjustPrintZoom( aRange );
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
                                 const OUString* pRepCol, const OUString* pRepRow,
@@ -1041,7 +1041,7 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
     pDocSh->SetDocumentModified();
 }
 
-//----------------------------------------------------------------------------
+
 //  Merge cells
 
 bool ScViewFunc::TestMergeCells()           // pre-test (for menu)
@@ -1059,7 +1059,7 @@ bool ScViewFunc::TestMergeCells()           // pre-test (for menu)
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bRecord, bool bCenter )
 {
@@ -1156,7 +1156,7 @@ bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bRecord, bool bC
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScViewFunc::TestRemoveMerge()
 {
@@ -1172,7 +1172,7 @@ bool ScViewFunc::TestRemoveMerge()
 }
 
 
-//----------------------------------------------------------------------------
+
 
 static bool lcl_extendMergeRange(ScCellMergeOption& rOption, const ScRange& rRange)
 {
@@ -1248,7 +1248,7 @@ bool ScViewFunc::RemoveMerge( bool bRecord )
     return true;        //! bOk ??
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScViewFunc::FillSimple( FillDir eDir, bool bRecord )
 {
@@ -1268,7 +1268,7 @@ void ScViewFunc::FillSimple( FillDir eDir, bool bRecord )
         ErrorMessage(STR_NOMULTISELECT);
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScViewFunc::FillSeries( FillDir eDir, FillCmd eCmd, FillDateCmd eDateCmd,
                              double fStart, double fStep, double fMax, bool bRecord )
@@ -1293,7 +1293,7 @@ void ScViewFunc::FillSeries( FillDir eDir, FillCmd eCmd, FillDateCmd eDateCmd,
         ErrorMessage(STR_NOMULTISELECT);
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScViewFunc::FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
                             SCCOL nEndCol, SCROW nEndRow, sal_uLong nCount, bool bRecord )
@@ -1338,7 +1338,7 @@ void ScViewFunc::FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScViewFunc::FillTab( sal_uInt16 nFlags, sal_uInt16 nFunction, bool bSkipEmpty, bool bAsLink )
 {
@@ -1407,7 +1407,7 @@ void ScViewFunc::FillTab( sal_uInt16 nFlags, sal_uInt16 nFunction, bool bSkipEmp
     pDocSh->PostDataChanged();
 }
 
-//----------------------------------------------------------------------------
+
 
 /** Downward fill of selected cell(s) by double-clicking cross-hair cursor
 
@@ -1482,7 +1482,7 @@ void ScViewFunc::FillCrossDblClick()
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScViewFunc::TransliterateText( sal_Int32 nType )
 {
@@ -1503,7 +1503,7 @@ void ScViewFunc::TransliterateText( sal_Int32 nType )
     }
 }
 
-//----------------------------------------------------------------------------
+
 //  AutoFormat
 
 ScAutoFormatData* ScViewFunc::CreateAutoFormatData()
@@ -1528,7 +1528,7 @@ ScAutoFormatData* ScViewFunc::CreateAutoFormatData()
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScViewFunc::AutoFormat( sal_uInt16 nFormatNo, bool bRecord )
 {
@@ -1547,7 +1547,7 @@ void ScViewFunc::AutoFormat( sal_uInt16 nFormatNo, bool bRecord )
 }
 
 
-//----------------------------------------------------------------------------
+
 //  Suchen & Ersetzen
 
 bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
@@ -1765,7 +1765,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
 }
 
 
-//----------------------------------------------------------------------------
+
 //  Zielwertsuche
 
 void ScViewFunc::Solve( const ScSolveParam& rParam )
@@ -1841,7 +1841,7 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
 }
 
 
-//----------------------------------------------------------------------------
+
 //  multi operation
 
 void ScViewFunc::TabOp( const ScTabOpParam& rParam, bool bRecord )
@@ -1858,7 +1858,7 @@ void ScViewFunc::TabOp( const ScTabOpParam& rParam, bool bRecord )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScViewFunc::MakeScenario( const OUString& rName, const OUString& rComment,
                                     const Color& rColor, sal_uInt16 nFlags )
@@ -1881,7 +1881,7 @@ void ScViewFunc::MakeScenario( const OUString& rName, const OUString& rComment,
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScViewFunc::ExtendScenario()
 {
@@ -1902,7 +1902,7 @@ void ScViewFunc::ExtendScenario()
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScViewFunc::UseScenario( const OUString& rName )
 {
@@ -1915,7 +1915,7 @@ void ScViewFunc::UseScenario( const OUString& rName )
 }
 
 
-//----------------------------------------------------------------------------
+
 //  Insert table
 
 bool ScViewFunc::InsertTable( const OUString& rName, SCTAB nTab, bool bRecord )
@@ -1929,7 +1929,7 @@ bool ScViewFunc::InsertTable( const OUString& rName, SCTAB nTab, bool bRecord )
     return bSuccess;
 }
 
-//----------------------------------------------------------------------------
+
 //  Insert tables
 
 bool ScViewFunc::InsertTables(std::vector<OUString>& aNames, SCTAB nTab,
@@ -1980,7 +1980,7 @@ bool ScViewFunc::InsertTables(std::vector<OUString>& aNames, SCTAB nTab,
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScViewFunc::AppendTable( const OUString& rName, bool bRecord )
 {
@@ -2014,7 +2014,7 @@ bool ScViewFunc::AppendTable( const OUString& rName, bool bRecord )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScViewFunc::DeleteTable( SCTAB nTab, bool bRecord )
 {
@@ -2206,7 +2206,7 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScViewFunc::RenameTable( const OUString& rName, SCTAB nTab )
 {
@@ -2222,7 +2222,7 @@ bool ScViewFunc::RenameTable( const OUString& rName, SCTAB nTab )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScViewFunc::SetTabBgColor( const Color& rColor, SCTAB nTab )
 {
@@ -2244,7 +2244,7 @@ bool ScViewFunc::SetTabBgColor( ScUndoTabColorInfo::List& rUndoSetTabBgColorInfo
     return bSuccess;
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScViewFunc::InsertAreaLink( const OUString& rFile,
                                     const OUString& rFilter, const OUString& rOptions,
@@ -2260,7 +2260,7 @@ void ScViewFunc::InsertAreaLink( const OUString& rFile,
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScViewFunc::InsertTableLink( const OUString& rFile,
                                     const OUString& rFilter, const OUString& rOptions,
@@ -2296,7 +2296,7 @@ void ScViewFunc::InsertTableLink( const OUString& rFile,
 }
 
 
-//----------------------------------------------------------------------------
+
 //  Copy/link tables from another document
 
 void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
@@ -2420,7 +2420,7 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
 }
 
 
-//----------------------------------------------------------------------------
+
 //  Move/Copy table to another document
 
 void ScViewFunc::MoveTable(
@@ -2776,7 +2776,7 @@ void ScViewFunc::MoveTable(
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScViewFunc::ShowTable( const std::vector<OUString>& rNames )
 {
@@ -2816,7 +2816,7 @@ void ScViewFunc::ShowTable( const std::vector<OUString>& rNames )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScViewFunc::HideTable( const ScMarkData& rMark )
 {
@@ -2867,7 +2867,7 @@ void ScViewFunc::HideTable( const ScMarkData& rMark )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScViewFunc::InsertSpecialChar( const OUString& rStr, const Font& rFont )
 {
@@ -2904,7 +2904,7 @@ void ScViewFunc::InsertSpecialChar( const OUString& rStr, const Font& rFont )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScViewFunc::UpdateLineAttrs( SvxBorderLine&       rLine,
                                   const SvxBorderLine* pDestLine,
@@ -2943,7 +2943,7 @@ void ScViewFunc::UpdateLineAttrs( SvxBorderLine&       rLine,
     }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
                                          bool bColorOnly )
@@ -2987,7 +2987,7 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
                                             ATTR_PATTERN_START,
                                             ATTR_PATTERN_END );
 
-            //------------------------------------------------------------
+
             const SvxBorderLine*    pBoxLine = NULL;
             SvxBorderLine           aLine;
 
@@ -3060,7 +3060,7 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
 
 #undef SET_LINE_ATTRIBUTES
 
-//----------------------------------------------------------------------------
+
 
 void ScViewFunc::SetValidation( const ScValidationData& rNew )
 {

@@ -383,7 +383,7 @@ void FormulaDlg_Impl::StoreFormEditData(FormEditData* pData)
     }
 }
 
-// -----------------------------------------------------------------------------
+
 void FormulaDlg_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     sal_uInt16 nSwitch=rNEvt.GetType();
@@ -460,7 +460,7 @@ namespace
         }
     };
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
 {
     if ( !m_aTokenList.hasElements() )
@@ -570,7 +570,7 @@ sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
 
     return nFuncPos;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool FormulaDlg_Impl::CalcValue( const OUString& rStrExp, OUString& rStrResult )
 {
     sal_Bool bResult = sal_True;
@@ -646,7 +646,7 @@ sal_Bool FormulaDlg_Impl::CalcStruct( const OUString& rStrExp)
     return bResult;
 }
 
-// -----------------------------------------------------------------------------
+
 void FormulaDlg_Impl::MakeTree(IStructHelper* _pTree,SvTreeListEntry* pParent,FormulaToken* _pToken,long Count)
 {
     if( _pToken != NULL && Count > 0 )
@@ -780,7 +780,7 @@ void FormulaDlg_Impl::FillDialog(sal_Bool nFlag)
     }
 }
 
-// -----------------------------------------------------------------------------
+
 void FormulaDlg_Impl::FillListboxes()
 {
     //  Switch between the "Pages"
@@ -811,7 +811,7 @@ void FormulaDlg_Impl::FillListboxes()
     m_pParent->SetHelpId( aOldHelp );
     m_pParent->SetUniqueId( aOldUnique );
 }
-// -----------------------------------------------------------------------------
+
 void FormulaDlg_Impl::FillControls(sal_Bool &rbNext, sal_Bool &rbPrev)
 {
     //  Switch between the "Pages"
@@ -910,7 +910,7 @@ void FormulaDlg_Impl::FillControls(sal_Bool &rbNext, sal_Bool &rbPrev)
     pData->SetFStart(nTempStart);
     rbPrev = m_aFormulaHelper.GetNextFunc( aFormula, true, nTempStart );
 }
-// -----------------------------------------------------------------------------
+
 
 void FormulaDlg_Impl::ClearAllParas()
 {
@@ -978,7 +978,7 @@ void FormulaDlg_Impl::DoEnter(bool bOk)
     //  Close dialog
     m_pHelper->doClose(bOk);
 }
-// -----------------------------------------------------------------------------
+
 
 IMPL_LINK( FormulaDlg_Impl, BtnHdl, PushButton*, pBtn )
 {
@@ -1014,14 +1014,14 @@ IMPL_LINK( FormulaDlg_Impl, BtnHdl, PushButton*, pBtn )
 
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 
 
 //  --------------------------------------------------------------------------
 //                          Functions for 1. Page
 //  --------------------------------------------------------------------------
 
-// -----------------------------------------------------------------------------
+
 
 // Handler for Listboxes
 
@@ -1056,7 +1056,7 @@ IMPL_LINK_NOARG(FormulaDlg_Impl, DblClkHdl)
 
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 
 //  --------------------------------------------------------------------------
 //                          Functions for right Page
@@ -1086,7 +1086,7 @@ void FormulaDlg_Impl::SetData(sal_Int32 nFStart, sal_Int32 nNextFStart, sal_Int3
 
     FillDialog();
 }
-// -----------------------------------------------------------------------------
+
 void FormulaDlg_Impl::EditThisFunc(sal_Int32 nFStart)
 {
     FormEditData* pData = m_pHelper->getFormEditData();
@@ -1581,9 +1581,9 @@ void FormulaDlg_Impl::UpdateParaWin(const Selection& _rSelection, const OUString
     theSel.Max() = theSel.Min() + _sRefStr.getLength();
     aEdRef.SetSelection( theSel );
 
-    //-------------------------------------
+
     // Manual Update of the results' fields:
-    //-------------------------------------
+
     sal_uInt16 nPrivActiv = pParaWin->GetActiveLine();
     pParaWin->SetArgument(nPrivActiv,aEdRef.GetText());
     pParaWin->UpdateParas();
@@ -1630,7 +1630,7 @@ void FormulaDlg_Impl::SetEdSelection()
         pEd->SetSelection(theSel);
     } // if( pEd )
 }
-// -----------------------------------------------------------------------------
+
 const FormulaHelper& FormulaDlg_Impl::GetFormulaHelper()  const
 {
     return m_aFormulaHelper;
@@ -1654,24 +1654,24 @@ FormulaModalDialog::FormulaModalDialog( Window* pParent
 FormulaModalDialog::~FormulaModalDialog()
 {
 }
-// -----------------------------------------------------------------------------
+
 void FormulaModalDialog::Update(const OUString& _sExp)
 {
     m_pImpl->Update(_sExp);
 }
 
-// -----------------------------------------------------------------------------
+
 void FormulaModalDialog::SetMeText(const OUString& _sText)
 {
     m_pImpl->SetMeText(_sText);
 }
 
-// -----------------------------------------------------------------------------
+
 bool FormulaModalDialog::CheckMatrix(OUString& aFormula)
 {
     return m_pImpl->CheckMatrix(aFormula);
 }
-// -----------------------------------------------------------------------------
+
 void FormulaModalDialog::Update()
 {
     m_pImpl->Update();
@@ -1743,39 +1743,39 @@ FormulaDlg::FormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
 FormulaDlg::~FormulaDlg()
 {
 }
-// -----------------------------------------------------------------------------
+
 void FormulaDlg::Update(const OUString& _sExp)
 {
     m_pImpl->Update(_sExp);
 }
 
-// -----------------------------------------------------------------------------
+
 void FormulaDlg::SetMeText(const OUString& _sText)
 {
     m_pImpl->SetMeText(_sText);
 }
 
-// -----------------------------------------------------------------------------
+
 FormulaDlgMode FormulaDlg::SetMeText(const OUString& _sText, sal_Int32 PrivStart, sal_Int32 PrivEnd, bool bMatrix, bool _bSelect, bool _bUpdate)
 {
     return m_pImpl->SetMeText(_sText,PrivStart, PrivEnd,bMatrix,_bSelect,_bUpdate);
 }
-// -----------------------------------------------------------------------------
+
 void FormulaDlg::CheckMatrix()
 {
     m_pImpl->aBtnMatrix.Check();
 }
-// -----------------------------------------------------------------------------
+
 bool FormulaDlg::CheckMatrix(OUString& aFormula)
 {
     return m_pImpl->CheckMatrix(aFormula);
 }
-// -----------------------------------------------------------------------------
+
 OUString FormulaDlg::GetMeText() const
 {
     return m_pImpl->pMEdit->GetText();
 }
-// -----------------------------------------------------------------------------
+
 void FormulaDlg::Update()
 {
     m_pImpl->Update();
@@ -1836,13 +1836,13 @@ void FormulaDlg::StoreFormEditData(FormEditData* pData)
     m_pImpl->StoreFormEditData(pData);
 }
 
-// -----------------------------------------------------------------------------
+
 const IFunctionDescription* FormulaDlg::getCurrentFunctionDescription() const
 {
     OSL_VERIFY(!m_pImpl->pFuncDesc || m_pImpl->pFuncDesc->getSuppressedArgumentCount() == m_pImpl->nArgs);
     return m_pImpl->pFuncDesc;
 }
-// -----------------------------------------------------------------------------
+
 void FormulaDlg::UpdateParaWin(const Selection& _rSelection,const OUString& _sRefStr)
 {
     m_pImpl->UpdateParaWin(_rSelection,_sRefStr);
@@ -1851,17 +1851,17 @@ bool FormulaDlg::UpdateParaWin(Selection& _rSelection)
 {
     return m_pImpl->UpdateParaWin(_rSelection);
 }
-// -----------------------------------------------------------------------------
+
 RefEdit*    FormulaDlg::GetActiveEdit()
 {
     return m_pImpl->pParaWin->GetActiveEdit();
 }
-// -----------------------------------------------------------------------------
+
 const FormulaHelper& FormulaDlg::GetFormulaHelper() const
 {
     return m_pImpl->GetFormulaHelper();
 }
-// -----------------------------------------------------------------------------
+
 void FormulaDlg::SetEdSelection()
 {
     m_pImpl->SetEdSelection();
@@ -1879,7 +1879,7 @@ IMPL_LINK_NOARG(FormulaDlg, UpdateFocusHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------------
+
 void FormEditData::SaveValues()
 {
     FormEditData* pTemp = new FormEditData(*this);
@@ -1887,7 +1887,7 @@ void FormEditData::SaveValues()
     Reset();
     pParent = pTemp;
 }
-// -----------------------------------------------------------------------------
+
 void FormEditData::Reset()
 {
     pParent = NULL;
@@ -1903,7 +1903,7 @@ void FormEditData::Reset()
     aSelection.Max()=0;
     aUndoStr = "";
 }
-// -----------------------------------------------------------------------------
+
 const FormEditData& FormEditData::operator=( const FormEditData& r )
 {
     pParent         = r.pParent;
@@ -1919,7 +1919,7 @@ const FormEditData& FormEditData::operator=( const FormEditData& r )
     aSelection      = r.aSelection;
     return *this;
 }
-// -----------------------------------------------------------------------------
+
 FormEditData::FormEditData()
 {
     Reset();
@@ -1935,8 +1935,8 @@ FormEditData::FormEditData( const FormEditData& r )
     *this = r;
 }
 
-// -----------------------------------------------------------------------------
+
 } // formula
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -82,7 +82,7 @@ namespace slideshow
                 ::com::sun::star::drawing::XShape > getXShape() const;
 
             // View layer methods
-            //------------------------------------------------------------------
+
 
             virtual void addViewLayer( const ViewLayerSharedPtr&    rNewLayer,
                                        bool                         bRedrawLayer );
@@ -91,7 +91,7 @@ namespace slideshow
 
 
             // attribute methods
-            //------------------------------------------------------------------
+
 
             virtual ::basegfx::B2DRectangle getBounds() const;
             virtual ::basegfx::B2DRectangle getDomBounds() const;
@@ -102,7 +102,7 @@ namespace slideshow
 
 
             // render methods
-            //------------------------------------------------------------------
+
 
             virtual bool update() const;
             virtual bool render() const;
@@ -149,7 +149,7 @@ namespace slideshow
 
             // there is a special background shape, add it
             // as the first one
-            // ---------------------------------------------------
+
 
             sal_Int32 nDocWidth=0;
             sal_Int32 nDocHeight=0;

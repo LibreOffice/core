@@ -70,7 +70,7 @@ namespace svt
         virtual ::sal_Int64 SAL_CALL getLength(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     };
 
-    //--------------------------------------------------------------------
+
     StreamSupplier::StreamSupplier( const Reference< XInputStream >& _rxInput, const Reference< XOutputStream >& _rxOutput )
         :m_xInput( _rxInput )
         ,m_xOutput( _rxOutput )
@@ -81,19 +81,19 @@ namespace svt
         OSL_ENSURE( m_xSeekable.is(), "StreamSupplier::StreamSupplier: at least one of both must be seekable!" );
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XInputStream > SAL_CALL StreamSupplier::getInputStream(  ) throw (RuntimeException)
     {
         return m_xInput;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XOutputStream > SAL_CALL StreamSupplier::getOutputStream(  ) throw (RuntimeException)
     {
         return m_xOutput;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL StreamSupplier::seek( ::sal_Int64 location ) throw (IllegalArgumentException, IOException, RuntimeException)
     {
         if ( !m_xSeekable.is() )
@@ -102,7 +102,7 @@ namespace svt
         m_xSeekable->seek( location );
     }
 
-    //--------------------------------------------------------------------
+
     ::sal_Int64 SAL_CALL StreamSupplier::getPosition(  ) throw (IOException, RuntimeException)
     {
         if ( !m_xSeekable.is() )
@@ -111,7 +111,7 @@ namespace svt
         return m_xSeekable->getPosition();
     }
 
-    //--------------------------------------------------------------------
+
     ::sal_Int64 SAL_CALL StreamSupplier::getLength(  ) throw (IOException, RuntimeException)
     {
         if ( !m_xSeekable.is() )
@@ -123,7 +123,7 @@ namespace svt
     //====================================================================
     //= GraphicAccess
     //====================================================================
-    //--------------------------------------------------------------------
+
     bool GraphicAccess::isSupportedURL( const OUString& _rURL )
     {
         if  (  _rURL.startsWith( "private:resource/" )
@@ -136,7 +136,7 @@ namespace svt
         return false;
     }
 
-    //--------------------------------------------------------------------
+
     SvStream* GraphicAccess::getImageStream( const Reference< XComponentContext >& _rxContext, const OUString& _rImageResourceURL )
     {
         SvStream* pReturn = NULL;
@@ -180,7 +180,7 @@ namespace svt
         return pReturn;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XInputStream > GraphicAccess::getImageXStream( const Reference< XComponentContext >& _rxContext, const OUString& _rImageResourceURL )
     {
         return new OSeekableInputStreamWrapper( getImageStream( _rxContext, _rImageResourceURL ), true );   // take ownership

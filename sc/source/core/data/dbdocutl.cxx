@@ -30,14 +30,14 @@
 
 using namespace ::com::sun::star;
 
-// ----------------------------------------------------------------------------
+
 
 ScDatabaseDocUtil::StrData::StrData() :
     mbSimpleText(true), mnStrLength(0)
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const uno::Reference<sdbc::XRow>& xRow, long nRowPos,

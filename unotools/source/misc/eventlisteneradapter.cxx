@@ -55,7 +55,7 @@ namespace utl
         virtual void SAL_CALL disposing( const EventObject& _rSource ) throw (RuntimeException);
     };
 
-    //---------------------------------------------------------------------
+
     OEventListenerImpl::OEventListenerImpl( OEventListenerAdapter* _pAdapter, const Reference< XComponent >& _rxComp )
         :m_pAdapter(_pAdapter)
     {
@@ -72,7 +72,7 @@ namespace utl
         m_xKeepMeAlive = xMeMyselfAndI;
     }
 
-    //---------------------------------------------------------------------
+
     void OEventListenerImpl::dispose()
     {
         if (m_xComponent.is())
@@ -83,7 +83,7 @@ namespace utl
         }
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OEventListenerImpl::disposing( const EventObject& _rSource ) throw (RuntimeException)
     {
         Reference< XEventListener > xDeleteUponLeaving = m_xKeepMeAlive;
@@ -105,13 +105,13 @@ namespace utl
     //=====================================================================
     //= OEventListenerAdapter
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OEventListenerAdapter::OEventListenerAdapter()
         :m_pImpl(new OEventListenerAdapterImpl)
     {
     }
 
-    //---------------------------------------------------------------------
+
     OEventListenerAdapter::~OEventListenerAdapter()
     {
         stopAllComponentListening( );
@@ -119,7 +119,7 @@ namespace utl
         m_pImpl = NULL;
     }
 
-    //---------------------------------------------------------------------
+
     void OEventListenerAdapter::stopComponentListening( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxComp )
     {
         if ( m_pImpl->aListeners.empty() )
@@ -141,7 +141,7 @@ namespace utl
         while ( dispose != m_pImpl->aListeners.end() );
     }
 
-    //---------------------------------------------------------------------
+
     void OEventListenerAdapter::stopAllComponentListening(  )
     {
         for (   ::std::vector< void* >::const_iterator aDisposeLoop = m_pImpl->aListeners.begin();
@@ -156,7 +156,7 @@ namespace utl
         m_pImpl->aListeners.clear();
     }
 
-    //---------------------------------------------------------------------
+
     void OEventListenerAdapter::startComponentListening( const Reference< XComponent >& _rxComp )
     {
         if (!_rxComp.is())

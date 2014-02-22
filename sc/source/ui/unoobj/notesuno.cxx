@@ -38,7 +38,7 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 static const SvxItemPropertySet* lcl_GetAnnotationPropertySet()
 {
@@ -54,12 +54,12 @@ static const SvxItemPropertySet* lcl_GetAnnotationPropertySet()
     return &aAnnotationPropertySet_Impl;
 }
 
-//------------------------------------------------------------------------
+
 
 SC_SIMPLE_SERVICE_INFO( ScAnnotationObj, "ScAnnotationObj", "com.sun.star.sheet.CellAnnotation" )
 //SC_SIMPLE_SERVICE_INFO( ScAnnotationShapeObj, "ScAnnotationShapeObj", "com.sun.star.sheet.CellAnnotationShape" )
 
-//------------------------------------------------------------------------
+
 
 ScAnnotationObj::ScAnnotationObj(ScDocShell* pDocSh, const ScAddress& rPos) :
     pDocShell( pDocSh ),

@@ -58,7 +58,7 @@ using namespace com::sun::star::util;
 
 TYPEINIT1_FACTORY(SvxSearchItem, SfxPoolItem, new SvxSearchItem(0));
 
-// -----------------------------------------------------------------------
+
 
 static Sequence< OUString > lcl_GetNotifyNames()
 {
@@ -96,7 +96,7 @@ static Sequence< OUString > lcl_GetNotifyNames()
     return aNames;
 }
 
-// -----------------------------------------------------------------------
+
 SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 
     SfxPoolItem( nId ),
@@ -185,7 +185,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
 
@@ -209,19 +209,19 @@ SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
     EnableNotification( lcl_GetNotifyNames() );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxSearchItem::~SvxSearchItem()
 {
 }
 
-// -----------------------------------------------------------------------
+
 SfxPoolItem* SvxSearchItem::Clone( SfxItemPool *) const
 {
     return new SvxSearchItem(*this);
 }
 
-// -----------------------------------------------------------------------
+
 
 //! used below
 static bool operator == ( const SearchOptions& rItem1, const SearchOptions& rItem2 )
@@ -446,7 +446,7 @@ bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMembe
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {

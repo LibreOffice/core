@@ -26,20 +26,16 @@
 #include <cppuhelper/implbase1.hxx>
 #include "errorbroadcaster.hxx"
 
-//.........................................................................
 namespace frm
 {
-
-    //==================================================================
-    //= OFormattedModel
-    //==================================================================
-
-    class OFormattedModel
+class OFormattedModel
                     :public OEditBaseModel
                     ,public OErrorBroadcaster
     {
-        // das Original, falls ich die Format-Properties meines aggregierten Models gefaket, d.h. von dem Feld, an das
-        // ich gebunden bin, weitergereicht habe (nur gueltig wenn loaded)
+        // the original, in case I faked the format properties of my aggregated model,
+        // i.e. I just passed on the attributes of the field to which I am bound
+        // (only valid if loaded)
+
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>   m_xOriginalFormatter;
         ::com::sun::star::util::Date        m_aNullDate;
         ::com::sun::star::uno::Any          m_aSaveValue;
@@ -47,7 +43,7 @@ namespace frm
         sal_Int32                           m_nFieldType;
         sal_Int16                           m_nKeyType;
         sal_Bool                            m_bOriginalNumeric      : 1,
-                                            m_bNumeric              : 1;    // analog fuer TreatAsNumeric-Property
+                                            m_bNumeric              : 1;    // analogous for the TreatAsNumeric-property
 
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>  calcDefaultFormatsSupplier() const;
@@ -59,38 +55,38 @@ namespace frm
         friend class OFormattedFieldWrapper;
 
     protected:
-    // XInterface
+        // XInterface
         DECLARE_UNO3_AGG_DEFAULTS( OFormattedModel, OEditBaseModel );
 
-    // XTypeProvider
+        // XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
-    // XAggregation
+        // XAggregation
         virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException);
 
-    // OComponentHelper
+        // OComponentHelper
         virtual void SAL_CALL disposing();
 
-    // XServiceInfo
+        // XServiceInfo
         IMPLEMENTATION_NAME(OFormattedModel);
         virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
-    // XPersistObject
+        // XPersistObject
         virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
         virtual OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
 
-    // XPropertySet
+        // XPropertySet
         virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
         virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue,
                                               sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
                                             throw(::com::sun::star::lang::IllegalArgumentException);
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw ( ::com::sun::star::uno::Exception);
 
-    // XLoadListener
+        // XLoadListener
         virtual void SAL_CALL loaded(const ::com::sun::star::lang::EventObject& rEvent) throw ( ::com::sun::star::uno::RuntimeException);
 
-    // XPropertyState
+        // XPropertyState
         void setPropertyToDefaultByHandle(sal_Int32 nHandle);
         ::com::sun::star::uno::Any getPropertyDefaultByHandle(sal_Int32 nHandle) const;
 
@@ -105,16 +101,16 @@ namespace frm
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
 
-    // XPropertyChangeListener
+        // XPropertyChangeListener
         virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
 
-    // prevent method hiding
+        // prevent method hiding
         using OEditBaseModel::disposing;
         using OEditBaseModel::getFastPropertyValue;
 
     protected:
         virtual sal_uInt16 getPersistenceFlags() const;
-            // as we have an own version handling for persistence
+        // as we have an own version handling for persistence
 
         // OBoundControlModel overridables
         virtual ::com::sun::star::uno::Any
@@ -144,9 +140,7 @@ namespace frm
         void    updateFormatterNullDate();
     };
 
-    //==================================================================
-    //= OFormattedControl
-    //==================================================================
+    // OFormattedControl
     typedef ::cppu::ImplHelper1< ::com::sun::star::awt::XKeyListener> OFormattedControl_BASE;
     class OFormattedControl :    public OBoundControl
                                 ,public OFormattedControl_BASE
@@ -162,31 +156,27 @@ namespace frm
 
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
-    // ::com::sun::star::lang::XServiceInfo
+        // ::com::sun::star::lang::XServiceInfo
         IMPLEMENTATION_NAME(OFormattedControl);
         virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
-    // ::com::sun::star::lang::XEventListener
+        // ::com::sun::star::lang::XEventListener
         virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::awt::XKeyListener
+        // ::com::sun::star::awt::XKeyListener
         virtual void SAL_CALL keyPressed(const ::com::sun::star::awt::KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL keyReleased(const ::com::sun::star::awt::KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::awt::XControl
+        // ::com::sun::star::awt::XControl
         virtual void SAL_CALL setDesignMode(sal_Bool bOn) throw ( ::com::sun::star::uno::RuntimeException);
 
-    // disambiguation
+        // disambiguation
         using OBoundControl::disposing;
 
     private:
         DECL_LINK( OnKeyPressed, void* );
     };
-
-//.........................................................................
 }
-//.........................................................................
-
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_FORMATTEDFIELD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

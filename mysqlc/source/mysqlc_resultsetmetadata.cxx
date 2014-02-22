@@ -28,7 +28,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 
-// -------------------------------------------------------------------------
+
 OResultSetMetaData::~OResultSetMetaData()
 {
 }

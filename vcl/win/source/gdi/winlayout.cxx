@@ -102,7 +102,7 @@ private:
     mutable int             mnMinKashidaGlyph;
 };
 
-// -----------------------------------------------------------------------
+
 
 inline void ImplWinFontEntry::CacheGlyphWidth( int nCharCode, int nCharWidth )
 {
@@ -198,14 +198,14 @@ WinLayout::WinLayout( HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rW
     mrWinFontEntry( rWFE )
 {}
 
-// -----------------------------------------------------------------------
+
 
 void WinLayout::InitFont() const
 {
     ::SelectObject( mhDC, mhFont );
 }
 
-// -----------------------------------------------------------------------
+
 
 // Using reasonably sized fonts to emulate huge fonts works around
 // a lot of problems in printer and display drivers. Huge fonts are
@@ -251,7 +251,7 @@ SimpleWinLayout::SimpleWinLayout( HDC hDC, BYTE nCharSet,
     mbDisableGlyphs = true;
 }
 
-// -----------------------------------------------------------------------
+
 
 SimpleWinLayout::~SimpleWinLayout()
 {
@@ -265,7 +265,7 @@ SimpleWinLayout::~SimpleWinLayout()
     delete[] mpOutGlyphs;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
@@ -530,7 +530,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 int SimpleWinLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIds, Point& rPos, int& nStart,
     long* pGlyphAdvances, int* pCharIndexes,
@@ -599,7 +599,7 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIds, Point& rPo
     return nCount;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SimpleWinLayout::DrawText( SalGraphics& rGraphics ) const
 {
@@ -647,7 +647,7 @@ void SimpleWinLayout::DrawText( SalGraphics& rGraphics ) const
         DeleteFont( SelectFont( aHDC, hOrigFont ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 long SimpleWinLayout::FillDXArray( long* pDXArray ) const
 {
@@ -667,7 +667,7 @@ long SimpleWinLayout::FillDXArray( long* pDXArray ) const
     return mnWidth;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Int32 SimpleWinLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 // NOTE: the nFactor is used to prevent rounding errors for small nCharExtra values
@@ -692,7 +692,7 @@ sal_Int32 SimpleWinLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nF
     return -1;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SimpleWinLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
 {
@@ -736,7 +736,7 @@ void SimpleWinLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SimpleWinLayout::Justify( long nNewWidth )
 {
@@ -773,7 +773,7 @@ void SimpleWinLayout::Justify( long nNewWidth )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SimpleWinLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
@@ -812,7 +812,7 @@ void SimpleWinLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SimpleWinLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
 {
@@ -857,7 +857,7 @@ void SimpleWinLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SimpleWinLayout::MoveGlyph( int nStart, long nNewXPos )
 {
@@ -885,14 +885,14 @@ void SimpleWinLayout::MoveGlyph( int nStart, long nNewXPos )
         mnBaseAdv += nDelta;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SimpleWinLayout::DropGlyph( int nStart )
 {
     mpOutGlyphs[ nStart ] = DROPPED_OUTGLYPH;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SimpleWinLayout::Simplify( bool /*bIsBase*/ )
 {
@@ -995,7 +995,7 @@ public:
     bool            HasKashidas() const { return mbHasKashidas; }
 };
 
-// -----------------------------------------------------------------------
+
 
 class UniscribeLayout : public WinLayout
 {
@@ -1067,7 +1067,7 @@ static bool bUspInited = false;
 
 static bool bManualCellAlign = true;
 
-// -----------------------------------------------------------------------
+
 
 static bool InitUSP()
 {
@@ -1107,7 +1107,7 @@ static bool InitUSP()
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 UniscribeLayout::UniscribeLayout( HDC hDC,
     const ImplWinFontData& rWinFontData, ImplWinFontEntry& rWinFontEntry )
@@ -1132,7 +1132,7 @@ UniscribeLayout::UniscribeLayout( HDC hDC,
     mbDisableGlyphInjection( false )
 {}
 
-// -----------------------------------------------------------------------
+
 
 UniscribeLayout::~UniscribeLayout()
 {
@@ -1148,7 +1148,7 @@ UniscribeLayout::~UniscribeLayout()
     delete[] mpGlyphs2Chars;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
@@ -1568,7 +1568,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 // calculate the range of relevant glyphs for this visual item
 bool UniscribeLayout::GetItemSubrange( const VisualItem& rVisualItem,
@@ -1631,7 +1631,7 @@ bool UniscribeLayout::GetItemSubrange( const VisualItem& rVisualItem,
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
     int& nStartx8, sal_Int32* pGlyphAdvances, int* pCharPosAry,
@@ -1898,7 +1898,7 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
     return nCount;
 }
 
-// -----------------------------------------------------------------------
+
 
 void UniscribeLayout::MoveGlyph( int nStartx8, long nNewXPos )
 {
@@ -1965,7 +1965,7 @@ void UniscribeLayout::MoveGlyph( int nStartx8, long nNewXPos )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void UniscribeLayout::DropGlyph( int nStartx8 )
 {
@@ -1994,7 +1994,7 @@ void UniscribeLayout::DropGlyph( int nStartx8 )
     mpOutGlyphs[ nStart ] = DROPPED_OUTGLYPH;
 }
 
-// -----------------------------------------------------------------------
+
 
 void UniscribeLayout::Simplify( bool /*bIsBase*/ )
 {
@@ -2097,7 +2097,7 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void UniscribeLayout::DrawText( SalGraphics& ) const
 {
@@ -2149,7 +2149,7 @@ void UniscribeLayout::DrawText( SalGraphics& ) const
         DeleteFont( SelectFont( mhDC, hOrigFont ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 long UniscribeLayout::FillDXArray( long* pDXArray ) const
 {
@@ -2180,7 +2180,7 @@ long UniscribeLayout::FillDXArray( long* pDXArray ) const
     return nWidth;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Int32 UniscribeLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
@@ -2225,7 +2225,7 @@ sal_Int32 UniscribeLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nF
     return -1;
 }
 
-// -----------------------------------------------------------------------
+
 
 void UniscribeLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
 {
@@ -2294,7 +2294,7 @@ void UniscribeLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void UniscribeLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
@@ -2307,7 +2307,7 @@ void UniscribeLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         Justify( rArgs.mnLayoutWidth );
 }
 
-// -----------------------------------------------------------------------
+
 
 void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
 {
@@ -2446,7 +2446,7 @@ void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void UniscribeLayout::InitKashidaHandling()
 {
@@ -2590,7 +2590,7 @@ bool UniscribeLayout::KashidaWordFix ( int nMinGlyphPos, int nEndGlyphPos, int* 
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void UniscribeLayout::Justify( long nNewWidth )
 {
@@ -2642,7 +2642,7 @@ void UniscribeLayout::Justify( long nNewWidth )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool UniscribeLayout::IsKashidaPosValid ( int nCharPos ) const
 {
@@ -2950,7 +2950,7 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     return pWinLayout;
 }
 
-// -----------------------------------------------------------------------
+
 
 int    WinSalGraphics::GetMinKashidaWidth()
 {
@@ -2974,7 +2974,7 @@ ImplWinFontEntry::ImplWinFontEntry( FontSelectPattern& rFSD )
     maScriptCache = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplWinFontEntry::~ImplWinFontEntry()
 {
@@ -2983,14 +2983,14 @@ ImplWinFontEntry::~ImplWinFontEntry()
     delete[] mpKerningPairs;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplWinFontEntry::HasKernData() const
 {
     return (mnKerningPairs >= 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplWinFontEntry::SetKernData( int nPairCount, const KERNINGPAIR* pPairData )
 {
@@ -2999,7 +2999,7 @@ void ImplWinFontEntry::SetKernData( int nPairCount, const KERNINGPAIR* pPairData
     ::memcpy( mpKerningPairs, (const void*)pPairData, nPairCount*sizeof(KERNINGPAIR) );
 }
 
-// -----------------------------------------------------------------------
+
 
 int ImplWinFontEntry::GetKerning( sal_Unicode cLeft, sal_Unicode cRight ) const
 {
@@ -3020,7 +3020,7 @@ int ImplWinFontEntry::GetKerning( sal_Unicode cLeft, sal_Unicode cRight ) const
     return nKernAmount;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplWinFontEntry::InitKashidaHandling( HDC hDC )
 {
@@ -3059,7 +3059,7 @@ PhysicalFontFace* ImplWinFontData::Clone() const
     return pClone;
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplFontEntry* ImplWinFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
 {

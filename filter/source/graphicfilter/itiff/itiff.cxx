@@ -138,7 +138,7 @@ void TIFFReader::MayCallback( sal_uLong /*nPercent*/ )
 {
 }
 
-// ---------------------------------------------------------------------------------
+
 
 sal_uLong TIFFReader::DataTypeSize()
 {
@@ -172,7 +172,7 @@ sal_uLong TIFFReader::DataTypeSize()
     return nSize;
 }
 
-// ---------------------------------------------------------------------------------
+
 
 sal_uLong TIFFReader::ReadIntData()
 {
@@ -235,7 +235,7 @@ sal_uLong TIFFReader::ReadIntData()
     return nUINT32a;
 }
 
-// ---------------------------------------------------------------------------------
+
 
 double TIFFReader::ReadDoubleData()
 {
@@ -255,7 +255,7 @@ double TIFFReader::ReadDoubleData()
     return nd;
 }
 
-// ---------------------------------------------------------------------------------
+
 
 void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
 {
@@ -481,7 +481,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
         bStatus = sal_False;
 }
 
-// ---------------------------------------------------------------------------------
+
 
 sal_Bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
 {
@@ -717,7 +717,7 @@ sal_uLong TIFFReader::GetBits( const sal_uInt8 * pSrc, sal_uLong nBitsPos, sal_u
     return nRes;
 }
 
-// ---------------------------------------------------------------------------------
+
 
 sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
 {
@@ -1024,7 +1024,7 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
     return sal_True;
 }
 
-// ---------------------------------------------------------------------------------
+
 
 void TIFFReader::MakePalCol( void )
 {
@@ -1075,7 +1075,7 @@ void TIFFReader::MakePalCol( void )
     }
 }
 
-// ---------------------------------------------------------------------------------
+
 
 void TIFFReader::ReadHeader()
 {
@@ -1105,7 +1105,7 @@ bool TIFFReader::HasAlphaChannel() const
            );
 }
 
-// ---------------------------------------------------------------------------------
+
 
 sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 {

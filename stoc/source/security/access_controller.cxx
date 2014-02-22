@@ -95,7 +95,7 @@ public:
         Any const & perm )
         throw (RuntimeException);
 };
-//__________________________________________________________________________________________________
+
 inline acc_Intersection::acc_Intersection(
     Reference< security::XAccessControlContext > const & x1,
     Reference< security::XAccessControlContext > const & x2 )
@@ -103,11 +103,11 @@ inline acc_Intersection::acc_Intersection(
     : m_x1( x1 )
     , m_x2( x2 )
 {}
-//__________________________________________________________________________________________________
+
 acc_Intersection::~acc_Intersection()
     SAL_THROW(())
 {}
-//--------------------------------------------------------------------------------------------------
+
 inline Reference< security::XAccessControlContext > acc_Intersection::create(
     Reference< security::XAccessControlContext > const & x1,
     Reference< security::XAccessControlContext > const & x2 )
@@ -119,7 +119,7 @@ inline Reference< security::XAccessControlContext > acc_Intersection::create(
         return x1;
     return new acc_Intersection( x1, x2 );
 }
-//__________________________________________________________________________________________________
+
 void acc_Intersection::checkPermission(
     Any const & perm )
     throw (RuntimeException)
@@ -154,7 +154,7 @@ public:
         Any const & perm )
         throw (RuntimeException);
 };
-//__________________________________________________________________________________________________
+
 inline acc_Union::acc_Union(
     Reference< security::XAccessControlContext > const & x1,
     Reference< security::XAccessControlContext > const & x2 )
@@ -162,11 +162,11 @@ inline acc_Union::acc_Union(
     : m_x1( x1 )
     , m_x2( x2 )
 {}
-//__________________________________________________________________________________________________
+
 acc_Union::~acc_Union()
     SAL_THROW(())
 {}
-//--------------------------------------------------------------------------------------------------
+
 inline Reference< security::XAccessControlContext > acc_Union::create(
     Reference< security::XAccessControlContext > const & x1,
     Reference< security::XAccessControlContext > const & x2 )
@@ -178,7 +178,7 @@ inline Reference< security::XAccessControlContext > acc_Union::create(
         return Reference< security::XAccessControlContext >(); // unrestricted
     return new acc_Union( x1, x2 );
 }
-//__________________________________________________________________________________________________
+
 void acc_Union::checkPermission(
     Any const & perm )
     throw (RuntimeException)
@@ -212,17 +212,17 @@ public:
         Any const & perm )
         throw (RuntimeException);
 };
-//__________________________________________________________________________________________________
+
 inline acc_Policy::acc_Policy(
     PermissionCollection const & permissions )
     SAL_THROW(())
     : m_permissions( permissions )
 {}
-//__________________________________________________________________________________________________
+
 acc_Policy::~acc_Policy()
     SAL_THROW(())
 {}
-//__________________________________________________________________________________________________
+
 void acc_Policy::checkPermission(
     Any const & perm )
     throw (RuntimeException)
@@ -257,7 +257,7 @@ public:
     virtual Any SAL_CALL getValueByName( OUString const & name )
         throw (RuntimeException);
 };
-//__________________________________________________________________________________________________
+
 inline acc_CurrentContext::acc_CurrentContext(
     Reference< XCurrentContext > const & xDelegate,
     Reference< security::XAccessControlContext > const & xRestriction )
@@ -271,17 +271,17 @@ inline acc_CurrentContext::acc_CurrentContext(
     }
     // return empty any otherwise on getValueByName(), not null interface
 }
-//__________________________________________________________________________________________________
+
 acc_CurrentContext::~acc_CurrentContext()
     SAL_THROW(())
 {}
-//__________________________________________________________________________________________________
+
 void acc_CurrentContext::acquire()
     throw ()
 {
     osl_atomic_increment( &m_refcount );
 }
-//__________________________________________________________________________________________________
+
 void acc_CurrentContext::release()
     throw ()
 {
@@ -290,7 +290,7 @@ void acc_CurrentContext::release()
         delete this;
     }
 }
-//__________________________________________________________________________________________________
+
 Any acc_CurrentContext::getValueByName( OUString const & name )
     throw (RuntimeException)
 {
@@ -427,7 +427,7 @@ public:
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw (RuntimeException);
 };
-//__________________________________________________________________________________________________
+
 AccessController::AccessController( Reference< XComponentContext > const & xComponentContext )
     SAL_THROW( (RuntimeException) )
     : t_helper( m_mutex )
@@ -490,11 +490,11 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
         m_user2permissions.setSize( cacheSize );
     }
 }
-//__________________________________________________________________________________________________
+
 AccessController::~AccessController()
     SAL_THROW(())
 {}
-//__________________________________________________________________________________________________
+
 void AccessController::disposing()
 {
     m_mode = OFF; // avoid checks from now on xxx todo review/ better DYNAMIC_ONLY?
@@ -503,7 +503,7 @@ void AccessController::disposing()
 }
 
 // XInitialization impl
-//__________________________________________________________________________________________________
+
 void AccessController::initialize(
     Sequence< Any > const & arguments )
     throw (Exception)
@@ -527,7 +527,7 @@ void AccessController::initialize(
     m_singleUser_init = false;
 }
 
-//__________________________________________________________________________________________________
+
 Reference< security::XPolicy > const & AccessController::getPolicy()
     SAL_THROW( (RuntimeException) )
 {
@@ -583,13 +583,13 @@ static void dumpPermissions(
 #endif
 
 
-//__________________________________________________________________________________________________
+
 inline void AccessController::clearPostPoned() SAL_THROW(())
 {
     delete reinterpret_cast< t_rec_vec * >( m_rec.getData() );
     m_rec.setData( 0 );
 }
-//__________________________________________________________________________________________________
+
 void AccessController::checkAndClearPostPoned() SAL_THROW( (RuntimeException) )
 {
     // check postponed permissions
@@ -648,7 +648,7 @@ void AccessController::checkAndClearPostPoned() SAL_THROW( (RuntimeException) )
         }
     }
 }
-//__________________________________________________________________________________________________
+
 /** this is the only function calling the policy singleton and thus has to take care
     of recurring calls!
 
@@ -833,7 +833,7 @@ PermissionCollection AccessController::getEffectivePermissions(
 }
 
 // XAccessController impl
-//__________________________________________________________________________________________________
+
 void AccessController::checkPermission(
     Any const & perm )
     throw (RuntimeException)
@@ -862,7 +862,7 @@ void AccessController::checkPermission(
     // then static check
     getEffectivePermissions( xContext, perm ).checkPermission( perm );
 }
-//__________________________________________________________________________________________________
+
 Any AccessController::doRestricted(
     Reference< security::XAction > const & xAction,
     Reference< security::XAccessControlContext > const & xRestriction )
@@ -895,7 +895,7 @@ Any AccessController::doRestricted(
         return xAction->run();
     }
 }
-//__________________________________________________________________________________________________
+
 Any AccessController::doPrivileged(
     Reference< security::XAction > const & xAction,
     Reference< security::XAccessControlContext > const & xRestriction )
@@ -932,7 +932,7 @@ Any AccessController::doPrivileged(
         return xAction->run();
     }
 }
-//__________________________________________________________________________________________________
+
 Reference< security::XAccessControlContext > AccessController::getContext()
     throw (RuntimeException)
 {
@@ -956,19 +956,19 @@ Reference< security::XAccessControlContext > AccessController::getContext()
 }
 
 // XServiceInfo impl
-//__________________________________________________________________________________________________
+
 OUString AccessController::getImplementationName()
     throw (RuntimeException)
 {
     return OUString("com.sun.star.security.comp.stoc.AccessController");
 }
-//__________________________________________________________________________________________________
+
 sal_Bool AccessController::supportsService( OUString const & serviceName )
     throw (RuntimeException)
 {
     return cppu::supportsService(this, serviceName);
 }
-//__________________________________________________________________________________________________
+
 Sequence< OUString > AccessController::getSupportedServiceNames()
     throw (RuntimeException)
 {

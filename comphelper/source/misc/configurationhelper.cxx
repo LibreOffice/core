@@ -28,7 +28,7 @@
 
 namespace comphelper{
 
-//-----------------------------------------------
+
 css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                                                             const OUString&                                    sPackage,
                                                                                   sal_Int32                                           eMode   )
@@ -74,7 +74,7 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
     return xCFG;
 }
 
-//-----------------------------------------------
+
 css::uno::Any ConfigurationHelper::readRelativeKey(const css::uno::Reference< css::uno::XInterface > xCFG    ,
                                                    const OUString&                            sRelPath,
                                                    const OUString&                            sKey    )
@@ -97,7 +97,7 @@ css::uno::Any ConfigurationHelper::readRelativeKey(const css::uno::Reference< cs
     return xProps->getPropertyValue(sKey);
 }
 
-//-----------------------------------------------
+
 void ConfigurationHelper::writeRelativeKey(const css::uno::Reference< css::uno::XInterface > xCFG    ,
                                            const OUString&                            sRelPath,
                                            const OUString&                            sKey    ,
@@ -121,7 +121,7 @@ void ConfigurationHelper::writeRelativeKey(const css::uno::Reference< css::uno::
     xProps->setPropertyValue(sKey, aValue);
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::uno::XInterface > ConfigurationHelper::makeSureSetNodeExists(const css::uno::Reference< css::uno::XInterface > xCFG         ,
                                                                                        const OUString&                            sRelPathToSet,
                                                                                        const OUString&                            sSetNode     )
@@ -155,7 +155,7 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::makeSureSetNode
     return xNode;
 }
 
-//-----------------------------------------------
+
 css::uno::Any ConfigurationHelper::readDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,
                                                  const OUString&                                       sPackage,
                                                  const OUString&                                       sRelPath,
@@ -166,7 +166,7 @@ css::uno::Any ConfigurationHelper::readDirectKey(const css::uno::Reference< css:
     return ConfigurationHelper::readRelativeKey(xCFG, sRelPath, sKey);
 }
 
-//-----------------------------------------------
+
 void ConfigurationHelper::writeDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,
                                          const OUString&                                       sPackage,
                                          const OUString&                                       sRelPath,
@@ -179,7 +179,7 @@ void ConfigurationHelper::writeDirectKey(const css::uno::Reference< css::uno::XC
     ConfigurationHelper::flush(xCFG);
 }
 
-//-----------------------------------------------
+
 void ConfigurationHelper::flush(const css::uno::Reference< css::uno::XInterface >& xCFG)
 {
     css::uno::Reference< css::util::XChangesBatch > xBatch(xCFG, css::uno::UNO_QUERY_THROW);

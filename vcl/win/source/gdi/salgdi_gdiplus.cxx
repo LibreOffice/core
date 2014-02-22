@@ -61,7 +61,7 @@
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-// -----------------------------------------------------------------------
+
 
 void impAddB2DPolygonToGDIPlusGraphicsPathReal(Gdiplus::GpPath *pPath, const basegfx::B2DPolygon& rPolygon, bool bNoLineJoin)
 {
@@ -324,7 +324,7 @@ bool WinSalGraphics::drawPolyLine(
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void paintToGdiPlus(
     Gdiplus::Graphics& rGraphics,
@@ -359,7 +359,7 @@ void paintToGdiPlus(
         0);
 }
 
-// -----------------------------------------------------------------------
+
 
 void setInterpolationMode(
     Gdiplus::Graphics& rGraphics,
@@ -459,7 +459,7 @@ bool WinSalGraphics::drawAlphaBitmap(
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool WinSalGraphics::drawTransformedBitmap(
     const basegfx::B2DPoint& rNull,

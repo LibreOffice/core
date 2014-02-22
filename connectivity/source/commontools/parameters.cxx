@@ -62,7 +62,7 @@ namespace dbtools
     //====================================================================
     //= ParameterManager
     //====================================================================
-    //--------------------------------------------------------------------
+
     ParameterManager::ParameterManager( ::osl::Mutex& _rMutex, const Reference< XComponentContext >& _rxContext )
         :m_rMutex             ( _rMutex )
         ,m_aParameterListeners( _rMutex )
@@ -74,7 +74,7 @@ namespace dbtools
         OSL_ENSURE( m_xContext.is(), "ParameterManager::ParameterManager: no service factory!" );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::initialize( const Reference< XPropertySet >& _rxComponent, const Reference< XAggregation >& _rxComponentAggregate )
     {
         OSL_ENSURE( !m_xComponent.get().is(), "ParameterManager::initialize: already initialized!" );
@@ -88,7 +88,7 @@ namespace dbtools
             return;
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::dispose( )
     {
         clearAllParameterInformation();
@@ -100,7 +100,7 @@ namespace dbtools
         m_xAggregatedRowSet.clear();
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::clearAllParameterInformation()
     {
        m_xInnerParamColumns.clear();
@@ -118,12 +118,12 @@ namespace dbtools
         m_bUpToDate = false;
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::disposing( const EventObject& /*_rDisposingEvent*/ )
     {
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::setAllParametersNull() SAL_THROW( ( SQLException, RuntimeException ) )
     {
         OSL_PRECOND( isAlive(), "ParameterManager::setAllParametersNull: not initialized, or already disposed!" );
@@ -134,7 +134,7 @@ namespace dbtools
             m_xInnerParamUpdate->setNull( i, DataType::VARCHAR );
     }
 
-    //--------------------------------------------------------------------
+
     bool ParameterManager::initializeComposerByComponent( const Reference< XPropertySet >& _rxComponent )
     {
         OSL_PRECOND( _rxComponent.is(), "ParameterManager::initializeComposerByComponent: invalid !" );
@@ -164,7 +164,7 @@ namespace dbtools
         return m_xInnerParamColumns.is();
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::collectInnerParameters( bool _bSecondRun )
     {
         OSL_PRECOND( m_xInnerParamColumns.is(), "ParameterManager::collectInnerParameters: missing some internal data!" );
@@ -219,7 +219,7 @@ namespace dbtools
         }
     }
 
-    //--------------------------------------------------------------------
+
     OUString ParameterManager::createFilterConditionFromColumnLink(
         const OUString& _rMasterColumn, const OUString& _rDetailLink, OUString& _rNewParamName )
     {
@@ -241,7 +241,7 @@ namespace dbtools
         return sFilter += _rNewParamName;
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::classifyLinks( const Reference< XNameAccess >& _rxParentColumns,
         const Reference< XNameAccess >& _rxColumns, ::std::vector< OUString >& _out_rAdditionalFilterComponents ) SAL_THROW(( Exception ))
     {
@@ -334,7 +334,7 @@ namespace dbtools
         }
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::analyzeFieldLinks( FilterManager& _rFilterManager, bool& /* [out] */ _rColumnsInLinkDetails )
     {
         OSL_PRECOND( isAlive(), "ParameterManager::analyzeFieldLinks: not initialized, or already disposed!" );
@@ -408,7 +408,7 @@ namespace dbtools
         }
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::createOuterParameters()
     {
         OSL_PRECOND( !m_pOuterParameters.is(), "ParameterManager::createOuterParameters: outer parameters not initialized!" );
@@ -481,7 +481,7 @@ namespace dbtools
 #endif
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::updateParameterInfo( FilterManager& _rFilterManager )
     {
         OSL_PRECOND( isAlive(), "ParameterManager::updateParameterInfo: not initialized, or already disposed!" );
@@ -535,7 +535,7 @@ namespace dbtools
         m_bUpToDate = true;
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::fillLinkedParameters( const Reference< XNameAccess >& _rxParentColumns )
     {
         OSL_PRECOND( isAlive(), "ParameterManager::fillLinkedParameters: not initialized, or already disposed!" );
@@ -621,7 +621,7 @@ namespace dbtools
         }
     }
 
-    //--------------------------------------------------------------------
+
     bool ParameterManager::completeParameters( const Reference< XInteractionHandler >& _rxCompletionHandler, const Reference< XConnection > _rxConnection )
     {
         OSL_PRECOND( isAlive(), "ParameterManager::completeParameters: not initialized, or already disposed!" );
@@ -684,7 +684,7 @@ namespace dbtools
         return true;
     }
 
-    //--------------------------------------------------------------------
+
     bool ParameterManager::consultParameterListeners( ::osl::ResettableMutexGuard& _rClearForNotifies )
     {
         bool bCanceled = false;
@@ -707,7 +707,7 @@ namespace dbtools
         return !bCanceled;
     }
 
-    //--------------------------------------------------------------------
+
     bool ParameterManager::fillParameterValues( const Reference< XInteractionHandler >& _rxCompletionHandler, ::osl::ResettableMutexGuard& _rClearForNotifies )
     {
         OSL_PRECOND( isAlive(), "ParameterManager::fillParameterValues: not initialized, or already disposed!" );
@@ -733,7 +733,7 @@ namespace dbtools
         return consultParameterListeners( _rClearForNotifies );
     }
 
-    //--------------------------------------------------------------------
+
     bool ParameterManager::getConnection( Reference< XConnection >& /* [out] */ _rxConnection )
     {
         OSL_PRECOND( isAlive(), "ParameterManager::getConnection: not initialized, or already disposed!" );
@@ -755,7 +755,7 @@ namespace dbtools
         return _rxConnection.is();
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::cacheConnectionInfo() SAL_THROW(( ))
     {
         try
@@ -777,7 +777,7 @@ namespace dbtools
         }
     }
 
-    //--------------------------------------------------------------------
+
     bool ParameterManager::getColumns( Reference< XNameAccess >& /* [out] */ _rxColumns, bool _bFromComposer ) SAL_THROW(( Exception ))
     {
         _rxColumns.clear();
@@ -794,7 +794,7 @@ namespace dbtools
         return _rxColumns.is();
     }
 
-    //--------------------------------------------------------------------
+
     bool ParameterManager::getParentColumns( Reference< XNameAccess >& /* [out] */ _out_rxParentColumns, bool _bFromComposer )
     {
         OSL_PRECOND( isAlive(), "ParameterManager::getParentColumns: not initialized, or already disposed!" );
@@ -834,20 +834,20 @@ namespace dbtools
         return _out_rxParentColumns.is();
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::addParameterListener( const Reference< XDatabaseParameterListener >& _rxListener )
     {
         if ( _rxListener.is() )
             m_aParameterListeners.addInterface( _rxListener );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::removeParameterListener( const Reference< XDatabaseParameterListener >& _rxListener )
     {
         m_aParameterListeners.removeInterface( _rxListener );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::resetParameterValues( ) SAL_THROW(())
     {
         OSL_PRECOND( isAlive(), "ParameterManager::resetParameterValues: not initialized, or already disposed!" );
@@ -933,7 +933,7 @@ namespace dbtools
 
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::externalParameterVisited( sal_Int32 _nIndex )
     {
         if ( m_aParametersVisited.size() < (size_t)_nIndex )
@@ -953,139 +953,139 @@ namespace dbtools
         m_xInnerParamUpdate->method; \
         externalParameterVisited( _nIndex ) \
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::setNull( sal_Int32 _nIndex, sal_Int32 sqlType )
     {
         VISIT_PARAMETER( setNull( _nIndex, sqlType ) );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::setObjectNull( sal_Int32 _nIndex, sal_Int32 sqlType, const OUString& typeName )
     {
         VISIT_PARAMETER( setObjectNull( _nIndex, sqlType, typeName ) );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::setBoolean( sal_Int32 _nIndex, sal_Bool x )
     {
         VISIT_PARAMETER( setBoolean( _nIndex, x ) );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::setByte( sal_Int32 _nIndex, sal_Int8 x )
     {
         VISIT_PARAMETER( setByte( _nIndex, x ) );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::setShort( sal_Int32 _nIndex, sal_Int16 x )
     {
         VISIT_PARAMETER( setShort( _nIndex, x ) );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::setInt( sal_Int32 _nIndex, sal_Int32 x )
     {
         VISIT_PARAMETER( setInt( _nIndex, x ) );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::setLong( sal_Int32 _nIndex, sal_Int64 x )
     {
         VISIT_PARAMETER( setLong( _nIndex, x ) );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::setFloat( sal_Int32 _nIndex, float x )
     {
         VISIT_PARAMETER( setFloat( _nIndex, x ) );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::setDouble( sal_Int32 _nIndex, double x )
     {
         VISIT_PARAMETER( setDouble( _nIndex, x ) );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::setString( sal_Int32 _nIndex, const OUString& x )
     {
         VISIT_PARAMETER( setString( _nIndex, x ) );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::setBytes( sal_Int32 _nIndex, const ::com::sun::star::uno::Sequence< sal_Int8 >& x )
     {
         VISIT_PARAMETER( setBytes( _nIndex, x ) );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::setDate( sal_Int32 _nIndex, const ::com::sun::star::util::Date& x )
     {
         VISIT_PARAMETER( setDate( _nIndex, x ) );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::setTime( sal_Int32 _nIndex, const ::com::sun::star::util::Time& x )
     {
         VISIT_PARAMETER( setTime( _nIndex, x ) );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::setTimestamp( sal_Int32 _nIndex, const ::com::sun::star::util::DateTime& x )
     {
         VISIT_PARAMETER( setTimestamp( _nIndex, x ) );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::setBinaryStream( sal_Int32 _nIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>& x, sal_Int32 length )
     {
         VISIT_PARAMETER( setBinaryStream( _nIndex, x, length ) );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::setCharacterStream( sal_Int32 _nIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>& x, sal_Int32 length )
     {
         VISIT_PARAMETER( setCharacterStream( _nIndex, x, length ) );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::setObject( sal_Int32 _nIndex, const ::com::sun::star::uno::Any& x )
     {
         VISIT_PARAMETER( setObject( _nIndex, x ) );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::setObjectWithInfo( sal_Int32 _nIndex, const ::com::sun::star::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale )
     {
         VISIT_PARAMETER( setObjectWithInfo( _nIndex, x, targetSqlType, scale ) );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::setRef( sal_Int32 _nIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRef>& x )
     {
         VISIT_PARAMETER( setRef( _nIndex, x ) );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::setBlob( sal_Int32 _nIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob>& x )
     {
         VISIT_PARAMETER( setBlob( _nIndex, x ) );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::setClob( sal_Int32 _nIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XClob>& x )
     {
         VISIT_PARAMETER( setClob( _nIndex, x ) );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::setArray( sal_Int32 _nIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XArray>& x )
     {
         VISIT_PARAMETER( setArray( _nIndex, x ) );
     }
 
-    //--------------------------------------------------------------------
+
     void ParameterManager::clearParameters( )
     {
         if ( m_xInnerParamUpdate.is() )
@@ -1095,7 +1095,7 @@ namespace dbtools
     //====================================================================
     //= OParameterContinuation
     //====================================================================
-    //--------------------------------------------------------------------
+
     void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyValue >& _rValues ) throw( RuntimeException )
     {
         m_aValues = _rValues;

@@ -67,12 +67,12 @@ struct ExceptionThrower : public uno_Interface, XExceptionThrower
 extern "C"
 {
 
-//------------------------------------------------------------------------------
+
 static void SAL_CALL ExceptionThrower_acquire_release_nop(
     SAL_UNUSED_PARAMETER uno_Interface * )
 {}
 
-//------------------------------------------------------------------------------
+
 static void SAL_CALL ExceptionThrower_dispatch(
     uno_Interface * pUnoI, typelib_TypeDescription const * pMemberType,
     void * pReturn, void * pArgs [], uno_Any ** ppException )
@@ -131,7 +131,7 @@ static void SAL_CALL ExceptionThrower_dispatch(
 
 } // extern "C"
 
-//______________________________________________________________________________
+
 Any ExceptionThrower::queryInterface( Type const & type )
     throw (RuntimeException)
 {
@@ -145,29 +145,29 @@ Any ExceptionThrower::queryInterface( Type const & type )
     return Any();
 }
 
-//______________________________________________________________________________
+
 void ExceptionThrower::acquire() throw ()
 {
 }
-//______________________________________________________________________________
+
 void ExceptionThrower::release() throw ()
 {
 }
 
-//______________________________________________________________________________
+
 void ExceptionThrower::throwException( Any const & exc ) throw (Exception)
 {
     OSL_FAIL( "unexpected!" );
     throwException( exc );
 }
 
-//______________________________________________________________________________
+
 void ExceptionThrower::rethrowException() throw (Exception)
 {
     throw;
 }
 
-//______________________________________________________________________________
+
 inline ExceptionThrower::ExceptionThrower()
 {
     uno_Interface::acquire = ExceptionThrower_acquire_release_nop;

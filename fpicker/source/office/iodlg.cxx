@@ -124,7 +124,7 @@ using namespace InternalFilePickerElementIds;
 namespace
 {
 
-    //-----------------------------------------------------------------------------
+
     OUString getMostCurrentFilter( SvtExpFileDlg_Impl* pImpl )
     {
         DBG_ASSERT( pImpl, "invalid impl pointer" );
@@ -139,7 +139,7 @@ namespace
         return pFilter->GetType();
     }
 
-    //-----------------------------------------------------------------------------
+
     sal_Bool restoreCurrentFilter( SvtExpFileDlg_Impl* _pImpl )
     {
         DBG_ASSERT( _pImpl->GetCurFilter(), "restoreCurrentFilter: no current filter!" );
@@ -156,7 +156,7 @@ namespace
         return _pImpl->m_bNeedDelayedFilterExecute;
     }
 
-    //-----------------------------------------------------------------------------
+
     OUString GetFsysExtension_Impl( const OUString& rFile, const OUString& rLastFilterExt )
     {
         sal_Int32 nDotPos = rFile.lastIndexOf( '.' );
@@ -173,7 +173,7 @@ namespace
         return OUString();
     }
 
-    //-----------------------------------------------------------------------------
+
     void SetFsysExtension_Impl( OUString& rFile, const OUString& rExtension )
     {
         const sal_Unicode* p0 = rFile.getStr();
@@ -189,7 +189,7 @@ namespace
         rFile += rExtension;
     }
 
-    //-----------------------------------------------------------------------------
+
     // move the control with the given offset
     void lcl_MoveControl( Control* _pControl, sal_Int32 _nDeltaX, sal_Int32 _nDeltaY, sal_Int32* _pMaxY = NULL )
     {
@@ -209,7 +209,7 @@ namespace
         }
     }
 
-    //-------------------------------------------------------------------------
+
     void lcl_autoUpdateFileExtension( SvtFileDialog* _pDialog, const OUString& _rLastFilterExt )
     {
         // if auto extension is enabled ....
@@ -264,7 +264,7 @@ namespace
         }
     }
 
-    //-------------------------------------------------------------------------
+
     sal_Bool lcl_getHomeDirectory( const OUString& _rForURL, OUString& /* [out] */ _rHomeDir )
     {
         _rHomeDir = "";
@@ -300,7 +300,7 @@ namespace
         return !_rHomeDir.isEmpty();
     }
 
-    //---------------------------------------------------------------------
+
     static OUString lcl_ensureFinalSlash( const OUString& _rDir )
     {
         INetURLObject aWorkPathObj( _rDir, INET_PROT_FILE );
@@ -308,7 +308,7 @@ namespace
         return  aWorkPathObj.GetMainURL( INetURLObject::NO_DECODE );
     }
 
-    // -----------------------------------------------------------------------
+
     /** retrieves the value of an environment variable
         @return <TRUE/> if and only if the retrieved string value is not empty
     */
@@ -802,7 +802,7 @@ IMPL_STATIC_LINK_NOINSTANCE( SvtFileDialog, ViewHdl_Impl, ImageButton*, EMPTYARG
     return 0;
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool SvtFileDialog::createNewUserFilter( const OUString& _rNewFilter, sal_Bool _bAllowUserDefExt )
 {
     // delete the old user filter and create a new one
@@ -845,13 +845,13 @@ sal_Bool SvtFileDialog::createNewUserFilter( const OUString& _rNewFilter, sal_Bo
     return bIsAllFiles;
 }
 
-//-----------------------------------------------------------------------------
+
 #define FLT_NONEMPTY        0x0001
 #define FLT_CHANGED         0x0002
 #define FLT_USERFILTER      0x0004
 #define FLT_ALLFILESFILTER  0x0008
 
-//-----------------------------------------------------------------------------
+
 sal_uInt16 SvtFileDialog::adjustFilter( const OUString& _rFilter )
 {
     sal_uInt16 nReturn = 0;
@@ -916,7 +916,7 @@ sal_uInt16 SvtFileDialog::adjustFilter( const OUString& _rFilter )
     return nReturn;
 }
 
-//-----------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(SvtFileDialog, CancelHdl_Impl)
 {
     if ( m_pCurrentAsyncAction.is() )
@@ -931,7 +931,7 @@ IMPL_LINK_NOARG(SvtFileDialog, CancelHdl_Impl)
     return 1L;
 }
 
-//-----------------------------------------------------------------------------
+
 IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
 {
     if ( pThis->_pImp->_bMultiSelection && pThis->_pFileView->GetSelectionCount() > 1 )
@@ -1766,7 +1766,7 @@ public:
 
 //*****************************************************************************
 
-//---------------------------------------------------------------------
+
 void SvtFileDialog::updateListboxLabelSizes()
 {
     sal_Int16 nLineControlId[5] = {
@@ -1816,7 +1816,7 @@ bool implIsInvalid( const OUString & rURL )
 
 }
 
-//---------------------------------------------------------------------
+
 OUString SvtFileDialog::implGetInitialURL( const OUString& _rPath, const OUString& _rFallback )
 {
     // an URL parser for the fallback
@@ -1868,7 +1868,7 @@ OUString SvtFileDialog::implGetInitialURL( const OUString& _rPath, const OUStrin
     return aURLParser.GetMainURL( INetURLObject::NO_DECODE );
 }
 
-//---------------------------------------------------------------------
+
 short SvtFileDialog::Execute()
 {
     if ( !PrepareExecute() )
@@ -1900,7 +1900,7 @@ short SvtFileDialog::Execute()
     return nResult;
 }
 
-//---------------------------------------------------------------------
+
 void SvtFileDialog::StartExecuteModal( const Link& rEndDialogHdl )
 {
     PrepareExecute();
@@ -1909,7 +1909,7 @@ void SvtFileDialog::StartExecuteModal( const Link& rEndDialogHdl )
     ModalDialog::StartExecuteModal( rEndDialogHdl );
 }
 
-//-----------------------------------------------------------------------------
+
 void SvtFileDialog::onAsyncOperationStarted()
 {
     EnableUI( sal_False );
@@ -1918,7 +1918,7 @@ void SvtFileDialog::onAsyncOperationStarted()
     _pImp->_pBtnCancel->GrabFocus();
 }
 
-//-----------------------------------------------------------------------------
+
 void SvtFileDialog::onAsyncOperationFinished()
 {
     EnableUI( sal_True );
@@ -1929,13 +1929,13 @@ void SvtFileDialog::onAsyncOperationFinished()
         // and to the user, the operation appears to be synchronous)
 }
 
-//-----------------------------------------------------------------------------
+
 void SvtFileDialog::RemovablePlaceSelected(bool enable)
 {
     _pImp->_pPlaces->SetDelEnabled( enable );
 }
 
-//-------------------------------------------------------------------------
+
 void SvtFileDialog::displayIOException( const OUString& _rURL, IOErrorCode _eCode )
 {
     try
@@ -1973,7 +1973,7 @@ void SvtFileDialog::displayIOException( const OUString& _rURL, IOErrorCode _eCod
     }
 }
 
-//-----------------------------------------------------------------------------
+
 void SvtFileDialog::EnableUI( sal_Bool _bEnable )
 {
     Enable( _bEnable );
@@ -1990,7 +1990,7 @@ void SvtFileDialog::EnableUI( sal_Bool _bEnable )
     }
 }
 
-//-----------------------------------------------------------------------------
+
 void SvtFileDialog::EnableControl( Control* _pControl, sal_Bool _bEnable )
 {
     if ( !_pControl )
@@ -2011,7 +2011,7 @@ void SvtFileDialog::EnableControl( Control* _pControl, sal_Bool _bEnable )
         m_aDisabledControls.insert( _pControl );
 }
 
-//----------------------------------------------------------------------------
+
 
 short SvtFileDialog::PrepareExecute()
 {
@@ -2196,7 +2196,7 @@ short SvtFileDialog::PrepareExecute()
     return 1;
 }
 
-//-----------------------------------------------------------------------------
+
 void SvtFileDialog::executeAsync( ::svt::AsyncPickerAction::Action _eAction,
                                     const OUString& _rURL, const OUString& _rFilter )
 {
@@ -2325,7 +2325,7 @@ void SvtFileDialog::AddFilterGroup( const OUString& _rFilter, const Sequence< St
         implAddFilter( pSubFilters->First, pSubFilters->Second );
 }
 
-//-----------------------------------------------------------------------------
+
 void SvtFileDialog::SetCurFilter( const OUString& rFilter )
 {
     DBG_ASSERT( !IsInExecute(), "SvtFileDialog::SetCurFilter: currently executing!" );
@@ -2554,7 +2554,7 @@ sal_Bool SvtFileDialog::IsolateFilterFromPath_Impl( OUString& rPath, OUString& r
     return sal_True;
 }
 
-//-----------------------------------------------------------------------------
+
 void SvtFileDialog::implUpdateImages( )
 {
     m_aImages = ImageList( SvtResId( RID_FILEPICKER_IMAGES ) );
@@ -2567,7 +2567,7 @@ void SvtFileDialog::implUpdateImages( )
         _pImp->_pBtnNewFolder->SetModeImage( GetButtonImage( IMG_FILEDLG_CREATEFOLDER ) );
 }
 
-//-----------------------------------------------------------------------------
+
 void SvtFileDialog::DataChanged( const DataChangedEvent& _rDCEvt )
 {
     if ( DATACHANGED_SETTINGS == _rDCEvt.GetType() )
@@ -2576,7 +2576,7 @@ void SvtFileDialog::DataChanged( const DataChangedEvent& _rDCEvt )
     ModalDialog::DataChanged( _rDCEvt );
 }
 
-//-----------------------------------------------------------------------------
+
 void SvtFileDialog::Resize()
 {
     if ( IsRollUp() )
@@ -2629,7 +2629,7 @@ void SvtFileDialog::Resize()
         // This resize was only called to show or hide the indicator.
         return;
 
-    // -------------
+
     // move controls
 
     // controls to move vertically
@@ -2672,7 +2672,7 @@ void SvtFileDialog::Resize()
             lcl_MoveControl( *ppMoveControls, nDeltaX, 0 );
     }
 
-    // ---------------
+
     // resize controls
     {
         Control* aSizeControls[] =
@@ -2717,7 +2717,7 @@ void SvtFileDialog::Resize()
         _pFileNotifier->notify( DIALOG_SIZE_CHANGED, 0 );
 }
 
-//-----------------------------------------------------------------------------
+
 Control* SvtFileDialog::getControl( sal_Int16 _nControlId, sal_Bool _bLabelControl ) const
 {
     Control* pReturn = NULL;
@@ -2842,7 +2842,7 @@ Control* SvtFileDialog::getControl( sal_Int16 _nControlId, sal_Bool _bLabelContr
     return pReturn;
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileDialog::enableControl( sal_Int16 _nControlId, sal_Bool _bEnable )
 {
     Control* pControl = getControl( _nControlId, sal_False );
@@ -2853,7 +2853,7 @@ void SvtFileDialog::enableControl( sal_Int16 _nControlId, sal_Bool _bEnable )
         EnableControl( pLabel, _bEnable );
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileDialog::AddControls_Impl( )
 {
     // create the "insert as link" checkbox, if needed
@@ -2968,7 +2968,7 @@ void SvtFileDialog::AddControls_Impl( )
     initDefaultPlaces();
 }
 
-// -----------------------------------------------------------------------
+
 sal_Int32 SvtFileDialog::getTargetColorDepth()
 {
     if ( _pPrevBmp )
@@ -2977,7 +2977,7 @@ sal_Int32 SvtFileDialog::getTargetColorDepth()
         return 0;
 }
 
-// -----------------------------------------------------------------------
+
 sal_Int32 SvtFileDialog::getAvailableWidth()
 {
     if ( _pPrevBmp )
@@ -2986,7 +2986,7 @@ sal_Int32 SvtFileDialog::getAvailableWidth()
         return 0;
 }
 
-// -----------------------------------------------------------------------
+
 sal_Int32 SvtFileDialog::getAvailableHeight()
 {
     if ( _pPrevBmp )
@@ -2995,7 +2995,7 @@ sal_Int32 SvtFileDialog::getAvailableHeight()
         return 0;
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileDialog::setImage( sal_Int16 /*aImageFormat*/, const Any& rImage )
 {
     if ( ! _pPrevBmp || ! _pPrevBmp->IsVisible() )
@@ -3020,7 +3020,7 @@ void SvtFileDialog::setImage( sal_Int16 /*aImageFormat*/, const Any& rImage )
     }
 }
 
-// -----------------------------------------------------------------------
+
 sal_Bool SvtFileDialog::setShowState( sal_Bool /*bShowState*/ )
 {
     // #97633 for the system filedialog it's
@@ -3038,7 +3038,7 @@ sal_Bool SvtFileDialog::setShowState( sal_Bool /*bShowState*/ )
     return sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 OUString SvtFileDialog::getCurrentFileText( ) const
 {
     OUString sReturn;
@@ -3047,7 +3047,7 @@ OUString SvtFileDialog::getCurrentFileText( ) const
     return sReturn;
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileDialog::setCurrentFileText( const OUString& _rText, bool _bSelectAll )
 {
     if ( _pImp && _pImp->_pEdFileName )
@@ -3058,13 +3058,13 @@ void SvtFileDialog::setCurrentFileText( const OUString& _rText, bool _bSelectAll
     }
 }
 
-// -----------------------------------------------------------------------
+
 sal_Bool SvtFileDialog::isAutoExtensionEnabled()
 {
     return _pImp->_pCbAutoExtension && _pImp->_pCbAutoExtension->IsChecked();
 }
 
-// -----------------------------------------------------------------------
+
 sal_Bool SvtFileDialog::getShowState()
 {
     if ( _pPrevBmp )
@@ -3073,7 +3073,7 @@ sal_Bool SvtFileDialog::getShowState()
         return sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileDialog::ReleaseOwnership( Window* pUserControl )
 
 /*
@@ -3351,7 +3351,7 @@ QueryFolderNameDialog::QueryFolderNameDialog(Window* _pParent,
         m_pNameLine->set_label( *pGroupName );
 };
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(QueryFolderNameDialog, OKHdl)
 {
     // trim the strings
@@ -3360,7 +3360,7 @@ IMPL_LINK_NOARG(QueryFolderNameDialog, OKHdl)
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(QueryFolderNameDialog, NameHdl)
 {
     // trim the strings

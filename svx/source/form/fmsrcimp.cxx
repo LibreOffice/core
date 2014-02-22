@@ -68,13 +68,13 @@ using namespace ::svxform;
 
 //========================================================================
 // = FmSearchThread
-//------------------------------------------------------------------------
+
 void FmSearchThread::run()
 {
     m_pEngine->SearchNextImpl();
 };
 
-//------------------------------------------------------------------------
+
 void FmSearchThread::onTerminated()
 {
     if (m_aTerminationHdl.IsSet())
@@ -88,7 +88,7 @@ void FmSearchThread::onTerminated()
 //  SMART_UNO_IMPLEMENTATION(FmRecordCountListener, UsrObject);
 
 DBG_NAME(FmRecordCountListener);
-//------------------------------------------------------------------------
+
 FmRecordCountListener::FmRecordCountListener(const Reference< ::com::sun::star::sdbc::XResultSet > & dbcCursor)
 {
     DBG_CTOR(FmRecordCountListener,NULL);
@@ -107,7 +107,7 @@ FmRecordCountListener::FmRecordCountListener(const Reference< ::com::sun::star::
     m_xListening->addPropertyChangeListener(FM_PROP_ROWCOUNT, (::com::sun::star::beans::XPropertyChangeListener*)this);
 }
 
-//------------------------------------------------------------------------
+
 Link FmRecordCountListener::SetPropChangeHandler(const Link& lnk)
 {
     Link lnkReturn = m_lnkWhoWantsToKnow;
@@ -119,14 +119,14 @@ Link FmRecordCountListener::SetPropChangeHandler(const Link& lnk)
     return lnkReturn;
 }
 
-//------------------------------------------------------------------------
+
 FmRecordCountListener::~FmRecordCountListener()
 {
 
     DBG_DTOR(FmRecordCountListener,NULL);
 }
 
-//------------------------------------------------------------------------
+
 void FmRecordCountListener::DisConnect()
 {
     if(m_xListening.is())
@@ -134,14 +134,14 @@ void FmRecordCountListener::DisConnect()
     m_xListening = NULL;
 }
 
-//------------------------------------------------------------------------
+
 void SAL_CALL FmRecordCountListener::disposing(const ::com::sun::star::lang::EventObject& /*Source*/) throw( RuntimeException )
 {
     DBG_ASSERT(m_xListening.is(), "FmRecordCountListener::disposing should never have been called without a propset !");
     DisConnect();
 }
 
-//------------------------------------------------------------------------
+
 void FmRecordCountListener::NotifyCurrentCount()
 {
     if (m_lnkWhoWantsToKnow.IsSet())
@@ -152,7 +152,7 @@ void FmRecordCountListener::NotifyCurrentCount()
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmRecordCountListener::propertyChange(const  ::com::sun::star::beans::PropertyChangeEvent& /*evt*/) throw(::com::sun::star::uno::RuntimeException)
 {
     NotifyCurrentCount();
@@ -160,7 +160,7 @@ void FmRecordCountListener::propertyChange(const  ::com::sun::star::beans::Prope
 
 //========================================================================
 // FmSearchEngine - local classes
-//------------------------------------------------------------------------
+
 SimpleTextWrapper::SimpleTextWrapper(const Reference< ::com::sun::star::awt::XTextComponent > & _xText)
     :ControlTextWrapper(_xText.get())
     ,m_xText(_xText)
@@ -168,13 +168,13 @@ SimpleTextWrapper::SimpleTextWrapper(const Reference< ::com::sun::star::awt::XTe
     DBG_ASSERT(m_xText.is(), "FmSearchEngine::SimpleTextWrapper::SimpleTextWrapper : invalid argument !");
 }
 
-//------------------------------------------------------------------------
+
 OUString SimpleTextWrapper::getCurrentText() const
 {
     return m_xText->getText();
 }
 
-//------------------------------------------------------------------------
+
 ListBoxWrapper::ListBoxWrapper(const Reference< ::com::sun::star::awt::XListBox > & _xBox)
     :ControlTextWrapper(_xBox.get())
     ,m_xBox(_xBox)
@@ -182,13 +182,13 @@ ListBoxWrapper::ListBoxWrapper(const Reference< ::com::sun::star::awt::XListBox 
     DBG_ASSERT(m_xBox.is(), "FmSearchEngine::ListBoxWrapper::ListBoxWrapper : invalid argument !");
 }
 
-//------------------------------------------------------------------------
+
 OUString ListBoxWrapper::getCurrentText() const
 {
     return m_xBox->getSelectedItem();
 }
 
-//------------------------------------------------------------------------
+
 CheckBoxWrapper::CheckBoxWrapper(const Reference< ::com::sun::star::awt::XCheckBox > & _xBox)
     :ControlTextWrapper(_xBox.get())
     ,m_xBox(_xBox)
@@ -196,7 +196,7 @@ CheckBoxWrapper::CheckBoxWrapper(const Reference< ::com::sun::star::awt::XCheckB
     DBG_ASSERT(m_xBox.is(), "FmSearchEngine::CheckBoxWrapper::CheckBoxWrapper : invalid argument !");
 }
 
-//------------------------------------------------------------------------
+
 OUString CheckBoxWrapper::getCurrentText() const
 {
     switch ((TriState)m_xBox->getState())
@@ -210,7 +210,7 @@ OUString CheckBoxWrapper::getCurrentText() const
 
 //========================================================================
 // = FmSearchEngine
-//------------------------------------------------------------------------
+
 sal_Bool FmSearchEngine::MoveCursor()
 {
     sal_Bool bSuccess = sal_True;
@@ -269,7 +269,7 @@ sal_Bool FmSearchEngine::MoveCursor()
     return bSuccess;
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmSearchEngine::MoveField(sal_Int32& nPos, FieldCollection::iterator& iter, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd)
 {
     sal_Bool bSuccess(sal_True);
@@ -297,7 +297,7 @@ sal_Bool FmSearchEngine::MoveField(sal_Int32& nPos, FieldCollection::iterator& i
     return bSuccess;
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::BuildAndInsertFieldInfo(const Reference< ::com::sun::star::container::XIndexAccess > & xAllFields, sal_Int32 nField)
 {
     DBG_ASSERT( xAllFields.is() && ( nField >= 0 ) && ( nField < xAllFields->getCount() ),
@@ -328,7 +328,7 @@ void FmSearchEngine::BuildAndInsertFieldInfo(const Reference< ::com::sun::star::
     m_arrUsedFields.insert(m_arrUsedFields.end(), fiCurrent);
 
 }
-//------------------------------------------------------------------------
+
 OUString FmSearchEngine::FormatField(const FieldInfo& rField)
 {
     DBG_ASSERT(!m_bUsingTextComponents, "FmSearchEngine::FormatField : im UsingTextComponents-Mode bitte FormatField(sal_Int32) benutzen !");
@@ -361,7 +361,7 @@ OUString FmSearchEngine::FormatField(const FieldInfo& rField)
     return sReturn;
 }
 
-//------------------------------------------------------------------------
+
 OUString FmSearchEngine::FormatField(sal_Int32 nWhich)
 {
     if (m_bUsingTextComponents)
@@ -397,7 +397,7 @@ OUString FmSearchEngine::FormatField(sal_Int32 nWhich)
     }
 }
 
-//------------------------------------------------------------------------
+
 FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchSpecial(sal_Bool _bSearchForNull, sal_Int32& nFieldPos,
     FieldCollection::iterator& iterFieldLoop, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd)
 {
@@ -407,7 +407,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchSpecial(sal_Bool _bSearchFor
     catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); return SR_ERROR; }
     FieldCollection::iterator iterInitialField = iterFieldLoop;
 
-    // --------------------------------------------------------------
+
     sal_Bool bFound(sal_False);
     sal_Bool bMovedAround(sal_False);
     do
@@ -462,7 +462,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchSpecial(sal_Bool _bSearchFor
     return bFound ? SR_FOUND : SR_NOTFOUND;
 }
 
-//------------------------------------------------------------------------
+
 FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const OUString& strExpression, sal_Int32& nFieldPos,
     FieldCollection::iterator& iterFieldLoop, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd)
 {
@@ -474,7 +474,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const OUString& str
 
     WildCard aSearchExpression(strExpression);
 
-    // --------------------------------------------------------------
+
     sal_Bool bFound(sal_False);
     sal_Bool bMovedAround(sal_False);
     do
@@ -540,7 +540,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const OUString& str
     return bFound ? SR_FOUND : SR_NOTFOUND;
 }
 
-//------------------------------------------------------------------------
+
 FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString& strExpression, sal_Int32& nFieldPos,
     FieldCollection::iterator& iterFieldLoop, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd)
 {
@@ -576,7 +576,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
     aParam.Locale = SvtSysLocale().GetLanguageTag().getLocale();
     ::utl::TextSearch aLocalEngine(aParam);
 
-    // --------------------------------------------------------------
+
     bool bFound = false;
     sal_Bool bMovedAround(sal_False);
     do
@@ -667,7 +667,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
 
 
 DBG_NAME(FmSearchEngine);
-//------------------------------------------------------------------------
+
 FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
             const Reference< XResultSet > & xCursor, const OUString& sVisibleFields,
             const Reference< XNumberFormatsSupplier > & xFormatSupplier, FMSEARCH_MODE eMode)
@@ -706,7 +706,7 @@ FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
     Init(sVisibleFields);
 }
 
-//------------------------------------------------------------------------
+
 FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
         const Reference< XResultSet > & xCursor, const OUString& sVisibleFields,
         const InterfaceArray& arrFields, FMSEARCH_MODE eMode)
@@ -741,7 +741,7 @@ FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
     Init(sVisibleFields);
 }
 
-//------------------------------------------------------------------------
+
 FmSearchEngine::~FmSearchEngine()
 {
     clearControlTexts();
@@ -749,7 +749,7 @@ FmSearchEngine::~FmSearchEngine()
     DBG_DTOR(FmSearchEngine,NULL);
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::SetIgnoreWidthCJK(sal_Bool bSet)
 {
     if (bSet)
@@ -758,13 +758,13 @@ void FmSearchEngine::SetIgnoreWidthCJK(sal_Bool bSet)
         m_nTransliterationFlags &= ~TransliterationModules_IGNORE_WIDTH;
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmSearchEngine::GetIgnoreWidthCJK() const
 {
     return 0 != (m_nTransliterationFlags & TransliterationModules_IGNORE_WIDTH);
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::SetCaseSensitive(sal_Bool bSet)
 {
     if (bSet)
@@ -773,13 +773,13 @@ void FmSearchEngine::SetCaseSensitive(sal_Bool bSet)
         m_nTransliterationFlags |= TransliterationModules_IGNORE_CASE;
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmSearchEngine::GetCaseSensitive() const
 {
     return 0 == (m_nTransliterationFlags & TransliterationModules_IGNORE_CASE);
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::clearControlTexts()
 {
     for (   ControlTextSuppliers::iterator aIter = m_aControlTexts.begin();
@@ -792,7 +792,7 @@ void FmSearchEngine::clearControlTexts()
     m_aControlTexts.clear();
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::fillControlTexts(const InterfaceArray& arrFields)
 {
     clearControlTexts();
@@ -823,7 +823,7 @@ void FmSearchEngine::fillControlTexts(const InterfaceArray& arrFields)
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::Init(const OUString& sVisibleFields)
 {
     // analyze the fields
@@ -904,7 +904,7 @@ void FmSearchEngine::Init(const OUString& sVisibleFields)
 
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::SetFormatterUsing(sal_Bool bSet)
 {
     if (m_bFormatter == bSet)
@@ -943,7 +943,7 @@ void FmSearchEngine::SetFormatterUsing(sal_Bool bSet)
         InvalidatePreviousLoc();
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::PropagateProgress(sal_Bool _bDontPropagateOverflow)
 {
     if (m_aProgressHandler.IsSet())
@@ -967,7 +967,7 @@ void FmSearchEngine::PropagateProgress(sal_Bool _bDontPropagateOverflow)
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::SearchNextImpl()
 {
     DBG_ASSERT(!(m_bWildcard && m_bRegular) && !(m_bRegular && m_bLevenshtein) && !(m_bLevenshtein && m_bWildcard),
@@ -1068,7 +1068,7 @@ void FmSearchEngine::SearchNextImpl()
         InvalidatePreviousLoc();
 }
 
-//------------------------------------------------------------------------
+
 IMPL_LINK(FmSearchEngine, OnSearchTerminated, FmSearchThread*, /*pThread*/)
 {
     if (!m_aProgressHandler.IsSet())
@@ -1110,7 +1110,7 @@ IMPL_LINK(FmSearchEngine, OnSearchTerminated, FmSearchThread*, /*pThread*/)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 IMPL_LINK(FmSearchEngine, OnNewRecordCount, void*, pCounterAsVoid)
 {
     if (!m_aProgressHandler.IsSet())
@@ -1124,7 +1124,7 @@ IMPL_LINK(FmSearchEngine, OnNewRecordCount, void*, pCounterAsVoid)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmSearchEngine::CancelRequested()
 {
     m_aCancelAsynchAccess.acquire();
@@ -1133,7 +1133,7 @@ sal_Bool FmSearchEngine::CancelRequested()
     return bReturn;
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::CancelSearch()
 {
     m_aCancelAsynchAccess.acquire();
@@ -1141,7 +1141,7 @@ void FmSearchEngine::CancelSearch()
     m_aCancelAsynchAccess.release();
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmSearchEngine::SwitchToContext(const Reference< ::com::sun::star::sdbc::XResultSet > & xCursor, const OUString& sVisibleFields, const InterfaceArray& arrFields,
     sal_Int32 nFieldIndex)
 {
@@ -1162,7 +1162,7 @@ sal_Bool FmSearchEngine::SwitchToContext(const Reference< ::com::sun::star::sdbc
     return sal_True;
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::ImplStartNextSearch()
 {
     m_bCancelAsynchRequest = sal_False;
@@ -1185,7 +1185,7 @@ void FmSearchEngine::ImplStartNextSearch()
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::SearchNext(const OUString& strExpression)
 {
     m_strSearchExpression = strExpression;
@@ -1193,14 +1193,14 @@ void FmSearchEngine::SearchNext(const OUString& strExpression)
     ImplStartNextSearch();
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::SearchNextSpecial(sal_Bool _bSearchForNull)
 {
     m_eSearchForType = _bSearchForNull ? SEARCHFOR_NULL : SEARCHFOR_NOTNULL;
     ImplStartNextSearch();
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::StartOver(const OUString& strExpression)
 {
     try
@@ -1220,7 +1220,7 @@ void FmSearchEngine::StartOver(const OUString& strExpression)
     SearchNext(strExpression);
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::StartOverSpecial(sal_Bool _bSearchForNull)
 {
     try
@@ -1240,14 +1240,14 @@ void FmSearchEngine::StartOverSpecial(sal_Bool _bSearchForNull)
     SearchNextSpecial(_bSearchForNull);
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::InvalidatePreviousLoc()
 {
     m_aPreviousLocBookmark.setValue(0,getVoidCppuType());
     m_iterPreviousLocField = m_arrUsedFields.end();
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::RebuildUsedFields(sal_Int32 nFieldIndex, sal_Bool bForce)
 {
     if (!bForce && (nFieldIndex == m_nCurrentFieldIndex))

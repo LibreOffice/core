@@ -260,7 +260,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(sorted_vector_test);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

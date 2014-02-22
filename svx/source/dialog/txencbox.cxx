@@ -58,14 +58,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxTextEncodingBox(Window *
     return pListBox;
 }
 
-//------------------------------------------------------------------------
+
 
 SvxTextEncodingBox::~SvxTextEncodingBox()
 {
     delete m_pEncTable;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SvxTextEncodingBox::EncodingToPos_Impl( rtl_TextEncoding nEnc ) const
 {
@@ -78,7 +78,7 @@ sal_uInt16 SvxTextEncodingBox::EncodingToPos_Impl( rtl_TextEncoding nEnc ) const
     return LISTBOX_ENTRY_NOTFOUND;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxTextEncodingBox::FillFromTextEncodingTable(
         sal_Bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags,
@@ -128,7 +128,7 @@ void SvxTextEncodingBox::FillFromTextEncodingTable(
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxTextEncodingBox::FillFromDbTextEncodingMap(
         sal_Bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags,
@@ -189,7 +189,7 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
 #endif
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxTextEncodingBox::FillWithMimeAndSelectBest()
 {
@@ -198,7 +198,7 @@ void SvxTextEncodingBox::FillWithMimeAndSelectBest()
     SelectTextEncoding( nEnc );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc,
             const OUString& rEntry, sal_uInt16 nPos )
@@ -207,7 +207,7 @@ void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc,
     SetEntryData( nAt, (void*)(sal_uIntPtr)nEnc );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc, sal_uInt16 nPos )
 {
@@ -218,7 +218,7 @@ void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc, sal_uI
         SAL_WARN( "svx.dialog", "SvxTextEncodingBox::InsertTextEncoding: no resource string for text encoding: " << static_cast<sal_Int32>( nEnc ) );
 }
 
-//------------------------------------------------------------------------
+
 
 rtl_TextEncoding SvxTextEncodingBox::GetSelectTextEncoding() const
 {
@@ -230,7 +230,7 @@ rtl_TextEncoding SvxTextEncodingBox::GetSelectTextEncoding() const
         return RTL_TEXTENCODING_DONTKNOW;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxTextEncodingBox::SelectTextEncoding( const rtl_TextEncoding nEnc, sal_Bool bSelect )
 {

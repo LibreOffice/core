@@ -573,7 +573,7 @@ private:
     WhiteSpaceVec       maClosingSpaces;            /// List of whitespaces before closing parenthesis.
 };
 
-// ----------------------------------------------------------------------------
+
 
 FormulaParserImpl::FormulaParserImpl( const FormulaParser& rParent ) :
     FormulaFinalizer( rParent ),
@@ -1290,7 +1290,7 @@ private:
     bool                mbNeedExtRefs;      /// True = parser needs initialization of external reference info.
 };
 
-// ----------------------------------------------------------------------------
+
 
 OoxFormulaParserImpl::OoxFormulaParserImpl( const FormulaParser& rParent ) :
     FormulaParserImpl( rParent ),
@@ -1842,7 +1842,7 @@ bool lclIsValidNlrRange( const BiffNlr& rNlr, const BinRange& rRange, bool bRow 
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 class BiffFormulaParserImpl : public FormulaParserImpl
 {
@@ -1919,7 +1919,7 @@ private:
     bool                pushBiffFunction( sal_uInt16 nFuncId );
     bool                pushBiffFunction( sal_uInt16 nFuncId, sal_uInt8 nParamCount );
 
-    // ------------------------------------------------------------------------
+
 private:
     typedef bool (BiffFormulaParserImpl::*ImportTokenFunc)( BiffInputStream& );
     typedef bool (BiffFormulaParserImpl::*ImportRefTokenFunc)( BiffInputStream&, bool, bool );
@@ -1947,7 +1947,7 @@ private:
     sal_uInt16          mnRefIdSize;                /// Size of unused data following a reference identifier.
 };
 
-// ----------------------------------------------------------------------------
+
 
 BiffFormulaParserImpl::BiffFormulaParserImpl( const FormulaParser& rParent ) :
     FormulaParserImpl( rParent ),
@@ -2764,7 +2764,7 @@ bool lclExtractRefId( sal_Int32& rnRefId, OUString& rRemainder, const OUString& 
 
 }
 
-// ----------------------------------------------------------------------------
+
 
 FormulaParser::FormulaParser( const WorkbookHelper& rHelper ) :
     FormulaProcessorBase( rHelper )

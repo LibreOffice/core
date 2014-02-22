@@ -41,7 +41,7 @@ IProgressBar::~IProgressBar()
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ISegmentProgressBar::~ISegmentProgressBar()
 {
@@ -100,7 +100,7 @@ private:
     double              mfFreeStart;
 };
 
-// ----------------------------------------------------------------------------
+
 
 SubSegment::SubSegment( IProgressBar& rParentProgress, double fStartPos, double fLength ) :
     mrParentProgress( rParentProgress ),

@@ -57,7 +57,7 @@ namespace abp
     //=====================================================================
     //= OAddessBookSourcePilot
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OAddessBookSourcePilot::OAddessBookSourcePilot(Window* _pParent, const Reference< XComponentContext >& _rxORB)
         :OAddessBookSourcePilot_Base( _pParent, ModuleRes( RID_DLG_ADDRESSBOOKSOURCEPILOT ),
             WZB_HELP | WZB_FINISH | WZB_CANCEL | WZB_NEXT | WZB_PREVIOUS )
@@ -133,7 +133,7 @@ namespace abp
         FreeResource();
     }
 
-    //---------------------------------------------------------------------
+
     OUString OAddessBookSourcePilot::getStateDisplayName( WizardState _nState ) const
     {
         sal_uInt16 nResId = 0;
@@ -157,7 +157,7 @@ namespace abp
         return sDisplayName;
     }
 
-    //---------------------------------------------------------------------
+
     void OAddessBookSourcePilot::implCommitAll()
     {
         // in real, the data source already exists in the data source context
@@ -179,14 +179,14 @@ namespace abp
         fieldmapping::writeTemplateAddressFieldMapping( getORB(), m_aSettings.aFieldMapping );
     }
 
-    //---------------------------------------------------------------------
+
     void OAddessBookSourcePilot::implCleanup()
     {
         if ( m_aNewDataSource.isValid() )
             m_aNewDataSource.remove();
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK( OAddessBookSourcePilot, OnCancelClicked, void*, /*NOTINTERESTEDIN*/ )
     {
         // do cleanups
@@ -200,7 +200,7 @@ namespace abp
         return 0L;
     }
 
-    //---------------------------------------------------------------------
+
     bool OAddessBookSourcePilot::Close()
     {
         implCleanup();
@@ -208,7 +208,7 @@ namespace abp
         return OAddessBookSourcePilot_Base::Close();
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OAddessBookSourcePilot::onFinish()
     {
         if ( !OAddessBookSourcePilot_Base::onFinish() )
@@ -221,7 +221,7 @@ namespace abp
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+
     void OAddessBookSourcePilot::enterState( WizardState _nState )
     {
         switch ( _nState )
@@ -243,7 +243,7 @@ namespace abp
         OAddessBookSourcePilot_Base::enterState(_nState);
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OAddessBookSourcePilot::prepareLeaveCurrentState( CommitPageReason _eReason )
     {
         if ( !OAddessBookSourcePilot_Base::prepareLeaveCurrentState( _eReason ) )
@@ -297,7 +297,7 @@ namespace abp
         return bAllow;
     }
 
-    //---------------------------------------------------------------------
+
     void OAddessBookSourcePilot::implDefaultTableName()
     {
         const StringBag& rTableNames = getDataSource().getTableNames();
@@ -323,7 +323,7 @@ namespace abp
             getSettings().sSelectedTable = sGuess;
     }
 
-    //---------------------------------------------------------------------
+
     void OAddessBookSourcePilot::implDoAutoFieldMapping()
     {
         DBG_ASSERT( !needManualFieldMapping( ), "OAddessBookSourcePilot::implDoAutoFieldMapping: invalid call!" );
@@ -331,7 +331,7 @@ namespace abp
         fieldmapping::defaultMapping( getORB(), m_aSettings.aFieldMapping );
     }
 
-    //---------------------------------------------------------------------
+
     void OAddessBookSourcePilot::implCreateDataSource()
     {
         if (m_aNewDataSource.isValid())
@@ -400,7 +400,7 @@ namespace abp
         m_eNewDataSourceType = m_aSettings.eType;
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OAddessBookSourcePilot::connectToDataSource( sal_Bool _bForceReConnect )
     {
         DBG_ASSERT( m_aNewDataSource.isValid(), "OAddessBookSourcePilot::implConnect: invalid current data source!" );
@@ -412,7 +412,7 @@ namespace abp
         return m_aNewDataSource.connect( this );
     }
 
-    //---------------------------------------------------------------------
+
     OWizardPage* OAddessBookSourcePilot::createPage(WizardState _nState)
     {
         switch (_nState)
@@ -438,7 +438,7 @@ namespace abp
         }
     }
 
-    //---------------------------------------------------------------------
+
     void OAddessBookSourcePilot::impl_updateRoadmap( AddressSourceType _eType )
     {
         bool bSettingsPage = needAdminInvokationPage( _eType );
@@ -467,7 +467,7 @@ namespace abp
         );
     }
 
-    //---------------------------------------------------------------------
+
     void OAddessBookSourcePilot::typeSelectionChanged( AddressSourceType _eType )
     {
         PathId nCurrentPathID( PATH_COMPLETE );

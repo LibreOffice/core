@@ -40,7 +40,7 @@ using namespace ::rtl;
 namespace jni_uno
 {
 
-//______________________________________________________________________________
+
 JNI_type_info::JNI_type_info(
     JNI_context const & jni, typelib_TypeDescription * td )
     : m_td( td ),
@@ -57,7 +57,7 @@ JNI_type_info::JNI_type_info(
 }
 
 
-//______________________________________________________________________________
+
 void JNI_interface_type_info::destroy( JNIEnv * jni_env )
 {
     JNI_type_info::destruct( jni_env );
@@ -67,7 +67,7 @@ void JNI_interface_type_info::destroy( JNIEnv * jni_env )
     delete this;
 }
 
-//______________________________________________________________________________
+
 JNI_interface_type_info::JNI_interface_type_info(
     JNI_context const & jni, typelib_TypeDescription * td_ )
     : JNI_type_info( jni, td_ )
@@ -222,7 +222,7 @@ JNI_interface_type_info::JNI_interface_type_info(
 }
 
 
-//______________________________________________________________________________
+
 void JNI_compound_type_info::destroy( JNIEnv * jni_env )
 {
     JNI_type_info::destruct( jni_env );
@@ -230,7 +230,7 @@ void JNI_compound_type_info::destroy( JNIEnv * jni_env )
     delete this;
 }
 
-//______________________________________________________________________________
+
 JNI_compound_type_info::JNI_compound_type_info(
     JNI_context const & jni, typelib_TypeDescription * td_ )
     : JNI_type_info( jni, td_ ),
@@ -343,7 +343,7 @@ JNI_compound_type_info::JNI_compound_type_info(
 }
 
 
-//______________________________________________________________________________
+
 JNI_type_info const * JNI_info::create_type_info(
     JNI_context const & jni, typelib_TypeDescription * td ) const
 {
@@ -389,7 +389,7 @@ JNI_type_info const * JNI_info::create_type_info(
     return info;
 }
 
-//______________________________________________________________________________
+
 JNI_type_info const * JNI_info::get_type_info(
     JNI_context const & jni, typelib_TypeDescription * td ) const
 {
@@ -416,7 +416,7 @@ JNI_type_info const * JNI_info::get_type_info(
     return info;
 }
 
-//______________________________________________________________________________
+
 JNI_type_info const * JNI_info::get_type_info(
     JNI_context const & jni, typelib_TypeDescriptionReference * type ) const
 {
@@ -443,7 +443,7 @@ JNI_type_info const * JNI_info::get_type_info(
     return info;
 }
 
-//______________________________________________________________________________
+
 JNI_type_info const * JNI_info::get_type_info(
     JNI_context const & jni, OUString const & uno_name ) const
 {
@@ -474,7 +474,7 @@ JNI_type_info const * JNI_info::get_type_info(
     return info;
 }
 
-//______________________________________________________________________________
+
 JNI_info::JNI_info(
     JNIEnv * jni_env, jobject class_loader, jclass classClass,
     jmethodID methodForName )
@@ -859,7 +859,7 @@ JNI_info::JNI_info(
     }
 }
 
-//______________________________________________________________________________
+
 void JNI_info::destruct( JNIEnv * jni_env )
 {
     t_str2type::const_iterator iPos( m_type_map.begin() );
@@ -901,7 +901,7 @@ void JNI_info::destruct( JNIEnv * jni_env )
     jni_env->DeleteGlobalRef( m_class_Any );
 }
 
-//______________________________________________________________________________
+
 JNI_info const * JNI_info::get_jni_info(
     rtl::Reference< jvmaccess::UnoVirtualMachine > const & uno_vm )
 {
@@ -966,7 +966,7 @@ JNI_info const * JNI_info::get_jni_info(
 extern "C"
 {
 
-//------------------------------------------------------------------------------
+
 SAL_JNI_EXPORT void
 JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1info_1holder_finalize__J(
     JNIEnv * jni_env, SAL_UNUSED_PARAMETER jobject, jlong jni_info_handle )

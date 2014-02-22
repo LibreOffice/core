@@ -137,7 +137,7 @@ struct Impl_IMEInfos
     void        DestroyAttribs();
 };
 
-// -----------------------------------------------------------------------
+
 
 Impl_IMEInfos::Impl_IMEInfos(sal_Int32 nP, const OUString& rOldTextAfterStartPos)
     : aOldTextAfterStartPos(rOldTextAfterStartPos)
@@ -149,14 +149,14 @@ Impl_IMEInfos::Impl_IMEInfos(sal_Int32 nP, const OUString& rOldTextAfterStartPos
     bWasCursorOverwrite = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 Impl_IMEInfos::~Impl_IMEInfos()
 {
     delete[] pAttribs;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Impl_IMEInfos::CopyAttribs(const sal_uInt16* pA, sal_Int32 nL)
 {
@@ -166,7 +166,7 @@ void Impl_IMEInfos::CopyAttribs(const sal_uInt16* pA, sal_Int32 nL)
     memcpy( pAttribs, pA, nL*sizeof(sal_uInt16) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Impl_IMEInfos::DestroyAttribs()
 {
@@ -183,7 +183,7 @@ Edit::Edit( WindowType nType ) :
     ImplInitEditData();
 }
 
-// -----------------------------------------------------------------------
+
 
 Edit::Edit( Window* pParent, WinBits nStyle ) :
     Control( WINDOW_EDIT )
@@ -264,7 +264,7 @@ bool Edit::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 Edit::~Edit()
 {
@@ -298,7 +298,7 @@ Edit::~Edit()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::ImplInitEditData()
 {
@@ -330,7 +330,7 @@ void Edit::ImplInitEditData()
     mxDnDListener = pDnDWrapper;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Edit::ImplUseNativeBorder( WinBits nStyle )
 {
@@ -385,7 +385,7 @@ void Edit::ImplInit( Window* pParent, WinBits nStyle )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 WinBits Edit::ImplInitStyle( WinBits nStyle )
 {
@@ -397,7 +397,7 @@ WinBits Edit::ImplInitStyle( WinBits nStyle )
     return nStyle;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Edit::IsCharInput( const KeyEvent& rKeyEvent )
 {
@@ -409,7 +409,7 @@ bool Edit::IsCharInput( const KeyEvent& rKeyEvent )
             !rKeyEvent.GetKeyCode().IsMod1() );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::ImplModified()
 {
@@ -417,7 +417,7 @@ void Edit::ImplModified()
     Modify();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 {
@@ -461,7 +461,7 @@ void Edit::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 long Edit::ImplGetExtraOffset() const
 {
@@ -476,7 +476,7 @@ long Edit::ImplGetExtraOffset() const
 }
 
 
-// -----------------------------------------------------------------------
+
 
 OUString Edit::ImplGetText() const
 {
@@ -495,7 +495,7 @@ OUString Edit::ImplGetText() const
         return maText.toString();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::ImplInvalidateOrRepaint()
 {
@@ -510,7 +510,7 @@ void Edit::ImplInvalidateOrRepaint()
         ImplRepaint();
 }
 
-// -----------------------------------------------------------------------
+
 
 long Edit::ImplGetTextYPosition() const
 {
@@ -521,7 +521,7 @@ long Edit::ImplGetTextYPosition() const
     return ( GetOutputSizePixel().Height() - GetTextHeight() ) / 2;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::ImplRepaint(bool bLayout)
 {
@@ -743,7 +743,7 @@ void Edit::ImplRepaint(bool bLayout)
     delete [] pDXBuffer;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uInt8 nMode )
 {
@@ -813,7 +813,7 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
     mbInternModified = true;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString Edit::ImplGetValidString( const OUString& rString ) const
 {
@@ -824,7 +824,7 @@ OUString Edit::ImplGetValidString( const OUString& rString ) const
     return aValidString;
 }
 
-// -----------------------------------------------------------------------
+
 uno::Reference < i18n::XBreakIterator > Edit::ImplGetBreakIterator() const
 {
     //!! since we don't want to become incompatible in the next minor update
@@ -833,7 +833,7 @@ uno::Reference < i18n::XBreakIterator > Edit::ImplGetBreakIterator() const
     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     return i18n::BreakIterator::create(xContext);
 }
-// -----------------------------------------------------------------------
+
 
 uno::Reference < i18n::XExtendedInputSequenceChecker > Edit::ImplGetInputSequenceChecker()
 {
@@ -845,7 +845,7 @@ uno::Reference < i18n::XExtendedInputSequenceChecker > Edit::ImplGetInputSequenc
     return mxISC;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::ShowTruncationWarning( Window* pParent )
 {
@@ -857,7 +857,7 @@ void Edit::ShowTruncationWarning( Window* pParent )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Edit::ImplTruncateToMaxLen( OUString& rStr, sal_Int32 nSelectionLen ) const
 {
@@ -871,7 +871,7 @@ bool Edit::ImplTruncateToMaxLen( OUString& rStr, sal_Int32 nSelectionLen ) const
     return bWasTruncated;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool bIsUserInput )
 {
@@ -974,7 +974,7 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool 
     mbInternModified = true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::ImplSetText( const OUString& rText, const Selection* pNewSelection )
 {
@@ -1009,7 +1009,7 @@ void Edit::ImplSetText( const OUString& rText, const Selection* pNewSelection )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 int Edit::ImplGetNativeControlType() const
 {
@@ -1140,7 +1140,7 @@ void Edit::ImplPaintBorder( long nXStart, long nXEnd )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::ImplShowCursor( bool bOnlyIfVisible )
 {
@@ -1222,7 +1222,7 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
         delete [] pDXBuffer;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::ImplAlign()
 {
@@ -1262,7 +1262,7 @@ void Edit::ImplAlign()
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void Edit::ImplAlignAndPaint()
 {
@@ -1271,7 +1271,7 @@ void Edit::ImplAlignAndPaint()
     ImplShowCursor();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
 {
@@ -1332,7 +1332,7 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
     return nIndex;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::ImplSetCursorPos( sal_Int32 nChar, bool bSelect )
 {
@@ -1343,7 +1343,7 @@ void Edit::ImplSetCursorPos( sal_Int32 nChar, bool bSelect )
     ImplSetSelection( aSelection );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::ImplLoadRes( const ResId& rResId )
 {
@@ -1354,7 +1354,7 @@ void Edit::ImplLoadRes( const ResId& rResId )
         SetMaxTextLen( nTextLength );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::ImplCopyToSelectionClipboard()
 {
@@ -1370,7 +1370,7 @@ void Edit::ImplCopy( uno::Reference< datatransfer::clipboard::XClipboard >& rxCl
     ::vcl::unohelper::TextDataObject::CopyStringTo( GetSelected(), rxClipboard );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard )
 {
@@ -1410,7 +1410,7 @@ void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -1455,7 +1455,7 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
     mbInMBDown = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -1474,7 +1474,7 @@ void Edit::MouseButtonUp( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::Tracking( const TrackingEvent& rTEvt )
 {
@@ -1504,7 +1504,7 @@ void Edit::Tracking( const TrackingEvent& rTEvt )
         mpUpdateDataTimer->Start();//do not update while the user is still travelling in the control
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
 {
@@ -1837,7 +1837,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
     return bDone;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::KeyInput( const KeyEvent& rKEvt )
 {
@@ -1848,7 +1848,7 @@ void Edit::KeyInput( const KeyEvent& rKEvt )
         Control::KeyInput( rKEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::FillLayoutData() const
 {
@@ -1856,7 +1856,7 @@ void Edit::FillLayoutData() const
     const_cast<Edit*>(this)->ImplRepaint(true);
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::Paint( const Rectangle& )
 {
@@ -1864,7 +1864,7 @@ void Edit::Paint( const Rectangle& )
         ImplRepaint();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::Resize()
 {
@@ -1879,7 +1879,7 @@ void Edit::Resize()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
@@ -1968,7 +1968,7 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_u
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::ImplInvalidateOutermostBorder( Window* pWin )
 {
@@ -2036,7 +2036,7 @@ void Edit::GetFocus()
     Control::GetFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 Window* Edit::GetPreferredKeyInputWindow()
 {
@@ -2046,7 +2046,7 @@ Window* Edit::GetPreferredKeyInputWindow()
         return this;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::LoseFocus()
 {
@@ -2075,7 +2075,7 @@ void Edit::LoseFocus()
     Control::LoseFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::Command( const CommandEvent& rCEvt )
 {
@@ -2314,7 +2314,7 @@ void Edit::Command( const CommandEvent& rCEvt )
         Control::Command( rCEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::StateChanged( StateChangedType nType )
 {
@@ -2415,7 +2415,7 @@ void Edit::StateChanged( StateChangedType nType )
     Control::StateChanged( nType );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -2435,7 +2435,7 @@ void Edit::DataChanged( const DataChangedEvent& rDCEvt )
     Control::DataChanged( rDCEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::ImplShowDDCursor()
 {
@@ -2452,7 +2452,7 @@ void Edit::ImplShowDDCursor()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::ImplHideDDCursor()
 {
@@ -2463,7 +2463,7 @@ void Edit::ImplHideDDCursor()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::Modify()
 {
@@ -2493,14 +2493,14 @@ void Edit::Modify()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::UpdateData()
 {
     maUpdateDataHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(Edit, ImplUpdateDataHdl)
 {
@@ -2508,7 +2508,7 @@ IMPL_LINK_NOARG(Edit, ImplUpdateDataHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::EnableUpdateData( sal_uLong nTimeout )
 {
@@ -2526,7 +2526,7 @@ void Edit::EnableUpdateData( sal_uLong nTimeout )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::SetEchoChar( sal_Unicode c )
 {
@@ -2535,7 +2535,7 @@ void Edit::SetEchoChar( sal_Unicode c )
         mpSubEdit->SetEchoChar( c );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::SetReadOnly( sal_Bool bReadOnly )
 {
@@ -2549,7 +2549,7 @@ void Edit::SetReadOnly( sal_Bool bReadOnly )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::SetAutocompleteHdl( const Link& rHdl )
 {
@@ -2558,7 +2558,7 @@ void Edit::SetAutocompleteHdl( const Link& rHdl )
         mpSubEdit->SetAutocompleteHdl( rHdl );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::SetInsertMode( bool bInsert )
 {
@@ -2572,7 +2572,7 @@ void Edit::SetInsertMode( bool bInsert )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Edit::IsInsertMode() const
 {
@@ -2582,7 +2582,7 @@ bool Edit::IsInsertMode() const
         return mbInsertMode;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::SetMaxTextLen(sal_Int32 nMaxLen)
 {
@@ -2597,7 +2597,7 @@ void Edit::SetMaxTextLen(sal_Int32 nMaxLen)
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::SetSelection( const Selection& rSelection )
 {
@@ -2611,7 +2611,7 @@ void Edit::SetSelection( const Selection& rSelection )
     ImplSetSelection( rSelection );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::ImplSetSelection( const Selection& rSelection, bool bPaint )
 {
@@ -2675,7 +2675,7 @@ void Edit::ImplSetSelection( const Selection& rSelection, bool bPaint )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 const Selection& Edit::GetSelection() const
 {
@@ -2685,7 +2685,7 @@ const Selection& Edit::GetSelection() const
         return maSelection;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::ReplaceSelected( const OUString& rStr )
 {
@@ -2695,7 +2695,7 @@ void Edit::ReplaceSelected( const OUString& rStr )
         ImplInsertText( rStr );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::DeleteSelected()
 {
@@ -2708,7 +2708,7 @@ void Edit::DeleteSelected()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString Edit::GetSelected() const
 {
@@ -2722,7 +2722,7 @@ OUString Edit::GetSelected() const
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::Cut()
 {
@@ -2733,7 +2733,7 @@ void Edit::Cut()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::Copy()
 {
@@ -2744,7 +2744,7 @@ void Edit::Copy()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::Paste()
 {
@@ -2752,7 +2752,7 @@ void Edit::Paste()
     ImplPaste( aClipboard );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::Undo()
 {
@@ -2768,7 +2768,7 @@ void Edit::Undo()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::SetText( const OUString& rStr )
 {
@@ -2781,7 +2781,7 @@ void Edit::SetText( const OUString& rStr )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::SetText( const OUString& rStr, const Selection& rSelection )
 {
@@ -2791,7 +2791,7 @@ void Edit::SetText( const OUString& rStr, const Selection& rSelection )
         ImplSetText( rStr, &rSelection );
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString Edit::GetText() const
 {
@@ -2801,7 +2801,7 @@ OUString Edit::GetText() const
         return maText.toString();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::SetPlaceholderText( const OUString& rStr )
 {
@@ -2815,7 +2815,7 @@ void Edit::SetPlaceholderText( const OUString& rStr )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString Edit::GetPlaceholderText() const
 {
@@ -2825,7 +2825,7 @@ OUString Edit::GetPlaceholderText() const
     return maPlaceholderText;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::SetModifyFlag()
 {
@@ -2835,7 +2835,7 @@ void Edit::SetModifyFlag()
         mbModified = true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::ClearModifyFlag()
 {
@@ -2845,7 +2845,7 @@ void Edit::ClearModifyFlag()
         mbModified = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::SetSubEdit( Edit* pEdit )
 {
@@ -2927,14 +2927,14 @@ Size Edit::GetMinimumEditSize()
     return aSize;
 }
 
-// -----------------------------------------------------------------------
+
 
 Size Edit::GetOptimalSize() const
 {
     return CalcMinimumSize();
 }
 
-// -----------------------------------------------------------------------
+
 
 Size Edit::CalcSize(sal_Int32 nChars) const
 {
@@ -2947,7 +2947,7 @@ Size Edit::CalcSize(sal_Int32 nChars) const
     return aSz;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Int32 Edit::GetMaxVisChars() const
 {
@@ -2957,28 +2957,28 @@ sal_Int32 Edit::GetMaxVisChars() const
     return nCharWidth ? nOutWidth/nCharWidth : 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Int32 Edit::GetCharPos( const Point& rWindowPos ) const
 {
     return ImplGetCharPos( rWindowPos );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::SetGetSpecialCharsFunction( FncGetSpecialChars fn )
 {
     pImplFncGetSpecialChars = fn;
 }
 
-// -----------------------------------------------------------------------
+
 
 FncGetSpecialChars Edit::GetGetSpecialCharsFunction()
 {
     return pImplFncGetSpecialChars;
 }
 
-// -----------------------------------------------------------------------
+
 
 PopupMenu* Edit::CreatePopupMenu()
 {
@@ -3005,7 +3005,7 @@ PopupMenu* Edit::CreatePopupMenu()
     return pPopup;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Edit::DeletePopupMenu( PopupMenu* pMenu )
 {

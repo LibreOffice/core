@@ -29,7 +29,7 @@ static uno::Reference<uno::XInterface> SAL_CALL createLdapUserProfileBe(
                    const uno::Reference<uno::XComponentContext>& aContext) {
     return * new LdapUserProfileBe(aContext) ;
 }
-//------------------------------------------------------------------------------
+
 
 static const cppu::ImplementationEntry kImplementations_entries[] =
 {
@@ -43,7 +43,7 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
     },
     { NULL, NULL, NULL, NULL, NULL, 0 }
 } ;
-//------------------------------------------------------------------------------
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ldapbe2_component_getFactory(const sal_Char *aImplementationName,
                                       void *aServiceManager,
@@ -53,6 +53,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ldapbe2_component_getFactory(con
                                             aRegistryKey,
                                             kImplementations_entries) ;
 }
-//------------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

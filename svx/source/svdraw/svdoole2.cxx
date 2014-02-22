@@ -171,7 +171,7 @@ private:
     virtual uno::Reference< awt::XWindow > SAL_CALL getWindow() throw ( uno::RuntimeException );
 };
 
-//--------------------------------------------------------------------
+
 SdrLightEmbeddedClient_Impl::SdrLightEmbeddedClient_Impl( SdrOle2Obj* pObj )
 : mpObj( pObj )
 {
@@ -184,12 +184,12 @@ Rectangle SdrLightEmbeddedClient_Impl::impl_getScaledRect_nothrow() const
                                 Fraction( aLogicRect.GetHeight() ) * m_aScaleHeight ) );
     return aLogicRect;
 }
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::changingState( const ::com::sun::star::lang::EventObject& /*aEvent*/, ::sal_Int32 /*nOldState*/, ::sal_Int32 /*nNewState*/ ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException)
 {
 }
 
-//--------------------------------------------------------------------
+
 void SdrLightEmbeddedClient_Impl::Release()
 {
     {
@@ -200,7 +200,7 @@ void SdrLightEmbeddedClient_Impl::Release()
     release();
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::stateChanged( const ::com::sun::star::lang::EventObject& /*aEvent*/, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -216,7 +216,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::stateChanged( const ::com::sun::star:
     }
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::disposing( const ::com::sun::star::lang::EventObject& /*aEvent*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -224,7 +224,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::disposing( const ::com::sun::star::la
     GetSdrGlobalData().GetOLEObjCache().RemoveObj(mpObj);
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException )
 {
     // TODO/LATER: when writer uses this implementation the code could be shared with SfxInPlaceClient_Impl
@@ -290,7 +290,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
     }
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::saveObject()
     throw ( embed::ObjectSaveVetoException,
             uno::Exception,
@@ -317,7 +317,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::saveObject()
         xModifiable->setModified( sal_True );
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::visibilityChanged( sal_Bool /*bVisible*/ )
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -338,7 +338,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::visibilityChanged( sal_Bool /*bVisibl
     }
 }
 
-//--------------------------------------------------------------------
+
 uno::Reference< util::XCloseable > SAL_CALL SdrLightEmbeddedClient_Impl::getComponent()
     throw ( uno::RuntimeException )
 {
@@ -351,7 +351,7 @@ uno::Reference< util::XCloseable > SAL_CALL SdrLightEmbeddedClient_Impl::getComp
     return xResult;
 }
 // XInplaceClient
-//--------------------------------------------------------------------
+
 sal_Bool SAL_CALL SdrLightEmbeddedClient_Impl::canInplaceActivate()
     throw ( uno::RuntimeException )
 {
@@ -368,14 +368,14 @@ sal_Bool SAL_CALL SdrLightEmbeddedClient_Impl::canInplaceActivate()
     return bRet;
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::activatingInplace()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
 {
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::activatingUI()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -420,14 +420,14 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::activatingUI()
     } // for(sal_Int32 i = nCount-1 ; i >= 0;--i)
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::deactivatedInplace()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
 {
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::deactivatedUI()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -442,7 +442,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::deactivatedUI()
     }
 }
 
-//--------------------------------------------------------------------
+
 uno::Reference< ::com::sun::star::frame::XLayoutManager > SAL_CALL SdrLightEmbeddedClient_Impl::getLayoutManager()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -462,7 +462,7 @@ uno::Reference< ::com::sun::star::frame::XLayoutManager > SAL_CALL SdrLightEmbed
     return xMan;
 }
 
-//--------------------------------------------------------------------
+
 uno::Reference< frame::XDispatchProvider > SAL_CALL SdrLightEmbeddedClient_Impl::getInplaceDispatchProvider()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -471,7 +471,7 @@ uno::Reference< frame::XDispatchProvider > SAL_CALL SdrLightEmbeddedClient_Impl:
     return uno::Reference < frame::XDispatchProvider >( lcl_getFrame_throw(mpObj), uno::UNO_QUERY_THROW );
 }
 
-//--------------------------------------------------------------------
+
 awt::Rectangle SAL_CALL SdrLightEmbeddedClient_Impl::getPlacement()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -490,7 +490,7 @@ awt::Rectangle SAL_CALL SdrLightEmbeddedClient_Impl::getPlacement()
     return AWTRectangle( aLogicRect );
 }
 
-//--------------------------------------------------------------------
+
 awt::Rectangle SAL_CALL SdrLightEmbeddedClient_Impl::getClipRectangle()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -498,21 +498,21 @@ awt::Rectangle SAL_CALL SdrLightEmbeddedClient_Impl::getClipRectangle()
     return getPlacement();
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::translateAccelerators( const uno::Sequence< awt::KeyEvent >& /*aKeys*/ )
     throw ( embed::WrongStateException,
             uno::RuntimeException )
 {
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::scrollObject( const awt::Size& /*aOffset*/ )
     throw ( embed::WrongStateException,
             uno::RuntimeException )
 {
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangle& aPosRect )
     throw ( embed::WrongStateException,
             uno::Exception,
@@ -571,7 +571,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
     }
 }
 // XWindowSupplier
-//--------------------------------------------------------------------
+
 uno::Reference< awt::XWindow > SAL_CALL SdrLightEmbeddedClient_Impl::getWindow()
     throw ( uno::RuntimeException )
 {
@@ -608,7 +608,7 @@ public:
     bool                Connect() { return GetRealObject() != NULL; }
 };
 
-// -----------------------------------------------------------------------------
+
 
 SdrEmbedObjectLink::SdrEmbedObjectLink(SdrOle2Obj* pObject):
     ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, SOT_FORMATSTR_ID_SVXB ),
@@ -617,13 +617,13 @@ SdrEmbedObjectLink::SdrEmbedObjectLink(SdrOle2Obj* pObject):
     SetSynchron( sal_False );
 }
 
-// -----------------------------------------------------------------------------
+
 
 SdrEmbedObjectLink::~SdrEmbedObjectLink()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 ::sfx2::SvBaseLink::UpdateResult SdrEmbedObjectLink::DataChanged(
     const OUString& /*rMimeType*/, const ::com::sun::star::uno::Any & /*rValue*/ )
@@ -660,7 +660,7 @@ SdrEmbedObjectLink::~SdrEmbedObjectLink()
     return SUCCESS;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdrEmbedObjectLink::Closed()
 {
@@ -736,7 +736,7 @@ sdr::contact::ViewContact* SdrOle2Obj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfSdrOle2Obj(*this);
 }
 
-// -----------------------------------------------------------------------------
+
 
 TYPEINIT1(SdrOle2Obj,SdrRectObj);
 DBG_NAME(SdrOle2Obj)
@@ -750,7 +750,7 @@ SdrOle2Obj::SdrOle2Obj(bool bFrame_) : m_bTypeAsked(false)
     bFrame=bFrame_;
 }
 
-// -----------------------------------------------------------------------------
+
 
 SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const OUString& rNewObjName, const Rectangle& rNewRect, bool bFrame_)
     : SdrRectObj(rNewRect)
@@ -773,7 +773,7 @@ SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const OUStrin
     SetClosedObj(!ImplIsMathObj( xObjRef.GetObject() ));
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdrOle2Obj::Init()
 {
@@ -786,7 +786,7 @@ void SdrOle2Obj::Init()
     xObjRef.Lock( true );
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString SdrOle2Obj::GetStyleString()
 {
@@ -798,7 +798,7 @@ OUString SdrOle2Obj::GetStyleString()
     return strStyle;
 }
 
-// -----------------------------------------------------------------------------
+
 
 SdrOle2Obj::~SdrOle2Obj()
 {
@@ -829,25 +829,25 @@ SdrOle2Obj::~SdrOle2Obj()
     delete mpImpl;
 }
 
-// -----------------------------------------------------------------------------
+
 void SdrOle2Obj::SetAspect( sal_Int64 nAspect )
 {
     xObjRef.SetViewAspect( nAspect );
 }
 
-// -----------------------------------------------------------------------------
+
 bool SdrOle2Obj::isInplaceActive() const
 {
     return xObjRef.is() && embed::EmbedStates::INPLACE_ACTIVE == xObjRef->getCurrentState();
 }
 
-// -----------------------------------------------------------------------------
+
 bool SdrOle2Obj::isUiActive() const
 {
     return xObjRef.is() && embed::EmbedStates::UI_ACTIVE == xObjRef->getCurrentState();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdrOle2Obj::SetGraphic_Impl(const Graphic* pGrf)
 {
@@ -875,14 +875,14 @@ void SdrOle2Obj::SetGraphic(const Graphic* pGrf)
     SetGraphic_Impl( pGrf );
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool SdrOle2Obj::IsEmpty() const
 {
     return !(xObjRef.is());
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdrOle2Obj::Connect()
 {
@@ -901,7 +901,7 @@ void SdrOle2Obj::Connect()
     AddListeners_Impl();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SdrOle2Obj::UpdateLinkURL_Impl()
 {
@@ -961,7 +961,7 @@ sal_Bool SdrOle2Obj::UpdateLinkURL_Impl()
     return bResult;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdrOle2Obj::BreakFileLink_Impl()
 {
@@ -994,7 +994,7 @@ void SdrOle2Obj::BreakFileLink_Impl()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdrOle2Obj::DisconnectFileLink_Impl()
 {
@@ -1006,7 +1006,7 @@ void SdrOle2Obj::DisconnectFileLink_Impl()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdrOle2Obj::CheckFileLink_Impl()
 {
@@ -1044,7 +1044,7 @@ void SdrOle2Obj::CheckFileLink_Impl()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdrOle2Obj::Reconnect_Impl()
 {
@@ -1169,7 +1169,7 @@ void SdrOle2Obj::AddListeners_Impl()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdrOle2Obj::Disconnect()
 {
@@ -1298,7 +1298,7 @@ void SdrOle2Obj::Disconnect_Impl()
     mpImpl->mbConnected = false;
 }
 
-// -----------------------------------------------------------------------------
+
 
 SdrObject* SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText, bool /* bUseHCGraphic */) const
 {
@@ -1376,7 +1376,7 @@ SdrObject* SdrOle2Obj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
     return 0;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdrOle2Obj::SetModel(SdrModel* pNewModel)
 {
@@ -1452,7 +1452,7 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
     AddListeners_Impl();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdrOle2Obj::SetPage(SdrPage* pNewPage)
 {
@@ -1488,7 +1488,7 @@ void SdrOle2Obj::SetPage(SdrPage* pNewPage)
         Connect();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdrOle2Obj::SetObjRef( const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& rNewObjRef )
 {
@@ -1528,7 +1528,7 @@ void SdrOle2Obj::SetObjRef( const com::sun::star::uno::Reference < com::sun::sta
     BroadcastObjectChange();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdrOle2Obj::SetClosedObj( bool bIsClosed )
 {
@@ -1537,7 +1537,7 @@ void SdrOle2Obj::SetClosedObj( bool bIsClosed )
     bClosedObj = bIsClosed;
 }
 
-// -----------------------------------------------------------------------------
+
 
 SdrObject* SdrOle2Obj::getFullDragClone() const
 {
@@ -1545,7 +1545,7 @@ SdrObject* SdrOle2Obj::getFullDragClone() const
     return createSdrGrafObjReplacement(false, true);
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdrOle2Obj::SetPersistName( const OUString& rPersistName )
 {
@@ -1565,14 +1565,14 @@ void SdrOle2Obj::AbandonObject()
     SetObjRef(0);
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString SdrOle2Obj::GetPersistName() const
 {
     return mpImpl->aPersistName;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdrOle2Obj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
@@ -1594,14 +1594,14 @@ void SdrOle2Obj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bCanConvToContour = true;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_uInt16 SdrOle2Obj::GetObjIdentifier() const
 {
     return bFrame ? sal_uInt16(OBJ_FRAME) : sal_uInt16(OBJ_OLE2);
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString SdrOle2Obj::TakeObjNameSingul() const
 {
@@ -1619,14 +1619,14 @@ OUString SdrOle2Obj::TakeObjNameSingul() const
     return sName.makeStringAndClear();
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString SdrOle2Obj::TakeObjNamePlural() const
 {
     return ImpGetResStr(bFrame ? STR_ObjNamePluralFrame : STR_ObjNamePluralOLE2);
 }
 
-// -----------------------------------------------------------------------------
+
 
 SdrOle2Obj* SdrOle2Obj::Clone() const
 {
@@ -1693,7 +1693,7 @@ SdrOle2Obj& SdrOle2Obj::operator=(const SdrOle2Obj& rObj)
     return *this;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdrOle2Obj::ImpSetVisAreaSize()
 {
@@ -1828,7 +1828,7 @@ void SdrOle2Obj::ImpSetVisAreaSize()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdrOle2Obj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
@@ -1849,7 +1849,7 @@ void SdrOle2Obj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
         ImpSetVisAreaSize();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdrOle2Obj::SetGeoData(const SdrObjGeoData& rGeo)
 {
@@ -1859,7 +1859,7 @@ void SdrOle2Obj::SetGeoData(const SdrObjGeoData& rGeo)
         ImpSetVisAreaSize();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdrOle2Obj::NbcSetSnapRect(const Rectangle& rRect)
 {
@@ -1877,7 +1877,7 @@ void SdrOle2Obj::NbcSetSnapRect(const Rectangle& rRect)
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdrOle2Obj::NbcSetLogicRect(const Rectangle& rRect)
 {
@@ -1900,14 +1900,14 @@ void SdrOle2Obj::GetNewReplacement()
         xObjRef.UpdateReplacement();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Size SdrOle2Obj::GetOrigObjSize( MapMode* pTargetMapMode ) const
 {
     return xObjRef.GetSize( pTargetMapMode );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdrOle2Obj::NbcMove(const Size& rSize)
 {
@@ -1917,7 +1917,7 @@ void SdrOle2Obj::NbcMove(const Size& rSize)
         ImpSetVisAreaSize();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SdrOle2Obj::CanUnloadRunningObj( const uno::Reference< embed::XEmbeddedObject >& xObj, sal_Int64 nAspect )
 {
@@ -1951,7 +1951,7 @@ sal_Bool SdrOle2Obj::CanUnloadRunningObj( const uno::Reference< embed::XEmbedded
     return bResult;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SdrOle2Obj::Unload( const uno::Reference< embed::XEmbeddedObject >& xObj, sal_Int64 nAspect )
 {
@@ -1978,7 +1978,7 @@ sal_Bool SdrOle2Obj::Unload( const uno::Reference< embed::XEmbeddedObject >& xOb
     return bResult;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SdrOle2Obj::Unload()
 {
@@ -2006,7 +2006,7 @@ sal_Bool SdrOle2Obj::Unload()
     return bUnloaded;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdrOle2Obj::GetObjRef_Impl()
 {
@@ -2098,7 +2098,7 @@ uno::Reference < embed::XEmbeddedObject > SdrOle2Obj::GetObjRef_NoInit() const
     return xObjRef.GetObject();
 }
 
-// -----------------------------------------------------------------------------
+
 
 uno::Reference< frame::XModel > SdrOle2Obj::getXModel() const
 {
@@ -2109,7 +2109,7 @@ uno::Reference< frame::XModel > SdrOle2Obj::getXModel() const
         return uno::Reference< frame::XModel >();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SdrOle2Obj::IsChart() const
 {
@@ -2121,19 +2121,19 @@ sal_Bool SdrOle2Obj::IsChart() const
     return m_bChart;
 }
 
-// -----------------------------------------------------------------------------
+
 void SdrOle2Obj::SetGraphicToObj( const Graphic& aGraphic, const OUString& aMediaType )
 {
     xObjRef.SetGraphic( aGraphic, aMediaType );
 }
 
-// -----------------------------------------------------------------------------
+
 void SdrOle2Obj::SetGraphicToObj( const uno::Reference< io::XInputStream >& xGrStream, const OUString& aMediaType )
 {
     xObjRef.SetGraphicStream( xGrStream, aMediaType );
 }
 
-// -----------------------------------------------------------------------------
+
 sal_Bool SdrOle2Obj::IsCalc() const
 {
     if ( !xObjRef.is() )
@@ -2154,7 +2154,7 @@ sal_Bool SdrOle2Obj::IsCalc() const
     return sal_False;
 }
 
-// -----------------------------------------------------------------------------
+
 uno::Reference< frame::XModel > SdrOle2Obj::GetParentXModel() const
 {
     uno::Reference< frame::XModel > xDoc;
@@ -2163,7 +2163,7 @@ uno::Reference< frame::XModel > SdrOle2Obj::GetParentXModel() const
     return xDoc;
 }
 
-// -----------------------------------------------------------------------------
+
 sal_Bool SdrOle2Obj::CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHeight, Size& aObjAreaSize )
 {
     // TODO/LEAN: to avoid rounding errors scaling always uses the VisArea.
@@ -2185,7 +2185,7 @@ sal_Bool SdrOle2Obj::CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScal
     return sal_True;
 }
 
-// -----------------------------------------------------------------------------
+
 sal_Bool SdrOle2Obj::AddOwnLightClient()
 {
     // The Own Light Client must be registered in object only using this method!

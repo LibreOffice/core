@@ -122,7 +122,7 @@ std::vector<OUString> SfxContentHelper::GetResultSet( const OUString& rURL )
     return aList;
 }
 
-// -----------------------------------------------------------------------
+
 
 std::vector< OUString > SfxContentHelper::GetHelpTreeViewContents( const OUString& rURL )
 {
@@ -188,7 +188,7 @@ std::vector< OUString > SfxContentHelper::GetHelpTreeViewContents( const OUStrin
     return aProperties;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString SfxContentHelper::GetActiveHelpString( const OUString& rURL )
 {
@@ -220,7 +220,7 @@ OUString SfxContentHelper::GetActiveHelpString( const OUString& rURL )
     return aRet.makeStringAndClear();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxContentHelper::IsHelpErrorDocument( const OUString& rURL )
 {
@@ -242,7 +242,7 @@ bool SfxContentHelper::IsHelpErrorDocument( const OUString& rURL )
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Int64 SfxContentHelper::GetSize( const OUString& rContent )
 {

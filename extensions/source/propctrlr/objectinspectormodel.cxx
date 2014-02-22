@@ -98,27 +98,27 @@ namespace pcr
     {
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< Any > SAL_CALL ObjectInspectorModel::getHandlerFactories() throw (RuntimeException)
     {
         return m_aFactories;
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< PropertyCategoryDescriptor > SAL_CALL ObjectInspectorModel::describeCategories(  ) throw (RuntimeException)
     {
         // no category info provided by this default implementation
         return Sequence< PropertyCategoryDescriptor >( );
     }
 
-    //--------------------------------------------------------------------
+
     ::sal_Int32 SAL_CALL ObjectInspectorModel::getPropertyOrderIndex( const OUString& /*PropertyName*/ ) throw (RuntimeException)
     {
         // no ordering provided by this default implementation
         return 0;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ObjectInspectorModel::initialize( const Sequence< Any >& _arguments ) throw (Exception, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -153,52 +153,52 @@ namespace pcr
         impl_verifyArgument_throw( false, 2 );
     }
 
-    //--------------------------------------------------------------------
+
     OUString SAL_CALL ObjectInspectorModel::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_static();
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL ObjectInspectorModel::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
-    //--------------------------------------------------------------------
+
     OUString ObjectInspectorModel::getImplementationName_static(  ) throw(RuntimeException)
     {
         return OUString( "org.openoffice.comp.extensions.ObjectInspectorModel" );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > ObjectInspectorModel::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         OUString sService( "com.sun.star.inspection.ObjectInspectorModel" );
         return Sequence< OUString >( &sService, 1 );
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XInterface > SAL_CALL ObjectInspectorModel::Create(const Reference< XComponentContext >& /* _rxContext */ )
     {
         return *( new ObjectInspectorModel() );
     }
 
-    //--------------------------------------------------------------------
+
     void ObjectInspectorModel::createDefault()
     {
         m_aFactories.realloc( 1 );
         m_aFactories[0] <<= OUString( "com.sun.star.inspection.GenericPropertyHandler" );
     }
 
-    //--------------------------------------------------------------------
+
     void ObjectInspectorModel::createWithHandlerFactories( const Sequence< Any >& _rFactories )
     {
         impl_verifyArgument_throw( _rFactories.getLength() > 0, 1 );
         m_aFactories = _rFactories;
     }
 
-    //--------------------------------------------------------------------
+
     void ObjectInspectorModel::createWithHandlerFactoriesAndHelpSection( const Sequence< Any >& _rFactories, sal_Int32 _nMinHelpTextLines, sal_Int32 _nMaxHelpTextLines )
     {
         impl_verifyArgument_throw( _rFactories.getLength() > 0, 1 );
@@ -210,7 +210,7 @@ namespace pcr
         enableHelpSectionProperties( _nMinHelpTextLines, _nMaxHelpTextLines );
     }
 
-    //--------------------------------------------------------------------
+
     void ObjectInspectorModel::impl_verifyArgument_throw( bool _bCondition, sal_Int16 _nArgumentPosition )
     {
         if ( !_bCondition )
@@ -221,7 +221,7 @@ namespace pcr
 } // namespace pcr
 //........................................................................
 
-//------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_ObjectInspectorModel()
 {
     ::pcr::OAutoRegistration< ::pcr::ObjectInspectorModel > aObjectInspectorModelRegistration;

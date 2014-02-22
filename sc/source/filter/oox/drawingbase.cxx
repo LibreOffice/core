@@ -63,7 +63,7 @@ CellAnchorModel::CellAnchorModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 AnchorClientDataModel::AnchorClientDataModel() :
     mbLocksWithSheet( true ),

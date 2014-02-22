@@ -207,7 +207,7 @@ void GenericClipboard::removeClipboardListener( const Reference< datatransfer::c
     m_aListeners.remove( listener );
 }
 
-// ------------------------------------------------------------------------
+
 
 class ClipboardFactory : public ::cppu::WeakComponentImplHelper1<
     com::sun::star::lang::XSingleServiceFactory
@@ -225,7 +225,7 @@ public:
     virtual Reference< XInterface > SAL_CALL createInstanceWithArguments( const Sequence< Any >& rArgs ) throw();
 };
 
-// ------------------------------------------------------------------------
+
 
 ClipboardFactory::ClipboardFactory() :
         cppu::WeakComponentImplHelper1<
@@ -234,20 +234,20 @@ ClipboardFactory::ClipboardFactory() :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 ClipboardFactory::~ClipboardFactory()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 Reference< XInterface > ClipboardFactory::createInstance() throw()
 {
     return createInstanceWithArguments( Sequence< Any >() );
 }
 
-// ------------------------------------------------------------------------
+
 
 Reference< XInterface > ClipboardFactory::createInstanceWithArguments( const Sequence< Any >& arguments ) throw()
 {

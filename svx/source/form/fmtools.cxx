@@ -167,7 +167,7 @@ void displayException(const ::com::sun::star::sdb::SQLErrorEvent& _rEvent, Windo
     displayException(_rEvent.Reason, _pParent);
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int32 getElementPos(const Reference< ::com::sun::star::container::XIndexAccess>& xCont, const Reference< XInterface >& xElement)
 {
     sal_Int32 nIndex = -1;
@@ -201,7 +201,7 @@ sal_Int32 getElementPos(const Reference< ::com::sun::star::container::XIndexAcce
     return nIndex;
 }
 
-//------------------------------------------------------------------
+
 OUString getLabelName(const Reference< ::com::sun::star::beans::XPropertySet>& xControlModel)
 {
     if (!xControlModel.is())
@@ -224,19 +224,19 @@ OUString getLabelName(const Reference< ::com::sun::star::beans::XPropertySet>& x
 
 //========================================================================
 // = CursorWrapper
-//------------------------------------------------------------------------
+
 CursorWrapper::CursorWrapper(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxCursor, sal_Bool bUseCloned)
 {
     ImplConstruct(Reference< ::com::sun::star::sdbc::XResultSet>(_rxCursor, UNO_QUERY), bUseCloned);
 }
 
-//------------------------------------------------------------------------
+
 CursorWrapper::CursorWrapper(const Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, sal_Bool bUseCloned)
 {
     ImplConstruct(_rxCursor, bUseCloned);
 }
 
-//------------------------------------------------------------------------
+
 void CursorWrapper::ImplConstruct(const Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, sal_Bool bUseCloned)
 {
     if (bUseCloned)
@@ -267,7 +267,7 @@ void CursorWrapper::ImplConstruct(const Reference< ::com::sun::star::sdbc::XResu
         m_xGeneric = m_xMoveOperations.get();
 }
 
-//------------------------------------------------------------------------
+
 const CursorWrapper& CursorWrapper::operator=(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxCursor)
 {
     m_xMoveOperations = Reference< ::com::sun::star::sdbc::XResultSet>(_rxCursor, UNO_QUERY);
@@ -282,13 +282,13 @@ const CursorWrapper& CursorWrapper::operator=(const Reference< ::com::sun::star:
     return *this;
 }
 
-//------------------------------------------------------------------------------
+
 FmXDisposeListener::~FmXDisposeListener()
 {
     setAdapter(NULL);
 }
 
-//------------------------------------------------------------------------------
+
 void FmXDisposeListener::setAdapter(FmXDisposeMultiplexer* pAdapter)
 {
     if (m_pAdapter)
@@ -308,7 +308,7 @@ void FmXDisposeListener::setAdapter(FmXDisposeMultiplexer* pAdapter)
 
 //==============================================================================
 DBG_NAME(FmXDisposeMultiplexer);
-//------------------------------------------------------------------------------
+
 FmXDisposeMultiplexer::FmXDisposeMultiplexer(FmXDisposeListener* _pListener, const Reference< ::com::sun::star::lang::XComponent>& _rxObject, sal_Int16 _nId)
     :m_xObject(_rxObject)
     ,m_pListener(_pListener)
@@ -321,14 +321,14 @@ FmXDisposeMultiplexer::FmXDisposeMultiplexer(FmXDisposeListener* _pListener, con
         m_xObject->addEventListener(this);
 }
 
-//------------------------------------------------------------------------------
+
 FmXDisposeMultiplexer::~FmXDisposeMultiplexer()
 {
     DBG_DTOR(FmXDisposeMultiplexer, NULL);
 }
 
 // ::com::sun::star::lang::XEventListener
-//------------------------------------------------------------------
+
 void FmXDisposeMultiplexer::disposing(const ::com::sun::star::lang::EventObject& _Source) throw( RuntimeException )
 {
     Reference< ::com::sun::star::lang::XEventListener> xPreventDelete(this);
@@ -342,7 +342,7 @@ void FmXDisposeMultiplexer::disposing(const ::com::sun::star::lang::EventObject&
     m_xObject = NULL;
 }
 
-//------------------------------------------------------------------
+
 void FmXDisposeMultiplexer::dispose()
 {
     if (m_xObject.is())
@@ -358,7 +358,7 @@ void FmXDisposeMultiplexer::dispose()
 }
 
 //==============================================================================
-//------------------------------------------------------------------------------
+
 sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServiceInfo>& _rxObject)
 {
     // ask for the persistent service name
@@ -432,7 +432,7 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
     return OBJ_FM_CONTROL;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool isRowSetAlive(const Reference< XInterface >& _rxRowSet)
 {
     sal_Bool bIsAlive = sal_False;

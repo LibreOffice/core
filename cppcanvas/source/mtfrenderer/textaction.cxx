@@ -325,7 +325,7 @@ namespace cppcanvas
 
 
                 // adapt render state, to move text output to given offset
-                // -------------------------------------------------------
+
 
                 // TODO(F1): Strictly speaking, we also have to adapt
                 // the clip here, which normally should _not_ move
@@ -352,7 +352,7 @@ namespace cppcanvas
 
 
                 // reduce DX array to given substring
-                // ----------------------------------
+
 
                 const sal_Int32         nNewElements( rSubset.mnSubsetEnd - rSubset.mnSubsetBegin );
                 uno::Sequence< double > aAdaptedOffsets( nNewElements );
@@ -380,7 +380,7 @@ namespace cppcanvas
                                     const uno::Reference< rendering::XTextLayout >& rOrigTextLayout )
             {
                 // create temporary new text layout with subset string
-                // ---------------------------------------------------
+
 
                 const sal_Int32 nNewStartPos( rOrigContext.StartPosition + ::std::min(
                                                   rSubset.mnSubsetBegin, rOrigContext.Length-1 ) );
@@ -611,7 +611,7 @@ namespace cppcanvas
             }
 
 
-            // -------------------------------------------------------------------------
+
 
             class TextAction : public Action, private ::boost::noncopyable
             {
@@ -764,7 +764,7 @@ namespace cppcanvas
             }
 
 
-            // -------------------------------------------------------------------------
+
 
             class EffectTextAction :
                 public Action,
@@ -1005,7 +1005,7 @@ namespace cppcanvas
             }
 
 
-            // -------------------------------------------------------------------------
+
 
             class TextArrayAction : public Action, private ::boost::noncopyable
             {
@@ -1183,7 +1183,7 @@ namespace cppcanvas
             }
 
 
-            // -------------------------------------------------------------------------
+
 
             class EffectTextArrayAction :
                 public Action,
@@ -1521,7 +1521,7 @@ namespace cppcanvas
             }
 
 
-            // -------------------------------------------------------------------------
+
 
             class OutlineAction :
                 public Action,
@@ -2079,7 +2079,7 @@ namespace cppcanvas
         } // namespace
 
 
-        // ---------------------------------------------------------------------------------
+
 
         ActionSharedPtr TextActionFactory::createTextAction( const ::Point&                 rStartPoint,
                                                              const ::Size&                  rReliefOffset,

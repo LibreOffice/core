@@ -32,7 +32,7 @@
 
 #include <functional>
 
-//------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_EFormsPropertyHandler()
 {
     ::pcr::EFormsPropertyHandler::registerImplementation();
@@ -57,7 +57,7 @@ namespace pcr
     //= EFormsPropertyHandler
     //====================================================================
     DBG_NAME( EFormsPropertyHandler )
-    //--------------------------------------------------------------------
+
     EFormsPropertyHandler::EFormsPropertyHandler( const Reference< XComponentContext >& _rxContext )
         :EFormsPropertyHandler_Base( _rxContext )
         ,m_bSimulatingModelChange( false )
@@ -65,19 +65,19 @@ namespace pcr
         DBG_CTOR( EFormsPropertyHandler, NULL );
     }
 
-    //--------------------------------------------------------------------
+
     EFormsPropertyHandler::~EFormsPropertyHandler( )
     {
         DBG_DTOR( EFormsPropertyHandler, NULL );
     }
 
-    //--------------------------------------------------------------------
+
     OUString SAL_CALL EFormsPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
         return OUString( "com.sun.star.comp.extensions.EFormsPropertyHandler" );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL EFormsPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSupported( 1 );
@@ -85,7 +85,7 @@ namespace pcr
         return aSupported;
     }
 
-    //--------------------------------------------------------------------
+
     OUString EFormsPropertyHandler::getModelNamePropertyValue() const
     {
         OUString sModelName = m_pHelper->getCurrentFormModelName();
@@ -94,7 +94,7 @@ namespace pcr
         return sModelName;
     }
 
-    //--------------------------------------------------------------------
+
     Any SAL_CALL EFormsPropertyHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -157,7 +157,7 @@ namespace pcr
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL EFormsPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -271,7 +271,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     void EFormsPropertyHandler::onNewComponent()
     {
         EFormsPropertyHandler_Base::onNewComponent();
@@ -284,7 +284,7 @@ namespace pcr
             m_pHelper.reset();
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< Property > SAL_CALL EFormsPropertyHandler::doDescribeSupportedProperties() const
     {
         ::std::vector< Property > aProperties;
@@ -315,7 +315,7 @@ namespace pcr
         return Sequence< Property >( &(*aProperties.begin()), aProperties.size() );
     }
 
-    //--------------------------------------------------------------------
+
     Any SAL_CALL EFormsPropertyHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -348,7 +348,7 @@ namespace pcr
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+
     Any SAL_CALL EFormsPropertyHandler::convertToControlValue( const OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -381,7 +381,7 @@ namespace pcr
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL EFormsPropertyHandler::getActuatingProperties( ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -394,7 +394,7 @@ namespace pcr
         return Sequence< OUString >( &(*aInterestedInActuations.begin()), aInterestedInActuations.size() );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL EFormsPropertyHandler::getSupersededProperties( ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -406,7 +406,7 @@ namespace pcr
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+
     LineDescriptor SAL_CALL EFormsPropertyHandler::describePropertyLine( const OUString& _rPropertyName,
         const Reference< XPropertyControlFactory >& _rxControlFactory )
         throw (UnknownPropertyException, NullPointerException, RuntimeException)
@@ -473,7 +473,7 @@ namespace pcr
         return aDescriptor;
     }
 
-    //--------------------------------------------------------------------
+
     InteractiveSelectionResult SAL_CALL EFormsPropertyHandler::onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool /*_bPrimary*/, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )
@@ -532,7 +532,7 @@ namespace pcr
         return InteractiveSelectionResult_Cancelled;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL EFormsPropertyHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -541,7 +541,7 @@ namespace pcr
             m_pHelper->registerBindingListener( _rxListener );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL EFormsPropertyHandler::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -550,7 +550,7 @@ namespace pcr
         EFormsPropertyHandler_Base::removePropertyChangeListener( _rxListener );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL EFormsPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool ) throw (NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )

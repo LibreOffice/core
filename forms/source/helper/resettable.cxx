@@ -43,19 +43,19 @@ namespace frm
     //====================================================================
     //= ResetHelper
     //====================================================================
-    //--------------------------------------------------------------------
+
     void ResetHelper::addResetListener( const Reference< XResetListener >& _listener )
     {
         m_aResetListeners.addInterface( _listener );
     }
 
-    //--------------------------------------------------------------------
+
     void ResetHelper::removeResetListener( const Reference< XResetListener >& _listener )
     {
         m_aResetListeners.removeInterface( _listener );
     }
 
-    //--------------------------------------------------------------------
+
     bool ResetHelper::approveReset()
     {
         ::cppu::OInterfaceIteratorHelper aIter( m_aResetListeners );
@@ -68,14 +68,14 @@ namespace frm
         return bContinue;
     }
 
-    //--------------------------------------------------------------------
+
     void ResetHelper::notifyResetted()
     {
         EventObject aResetEvent( m_rParent );
         m_aResetListeners.notifyEach( &XResetListener::resetted, aResetEvent );
     }
 
-    //--------------------------------------------------------------------
+
     void ResetHelper::disposing()
     {
         EventObject aEvent( m_rParent );

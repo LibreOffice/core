@@ -202,7 +202,7 @@ void SvtMatchContext_Impl::execute( )
     aLink.Call( this );
 }
 
-//-------------------------------------------------------------------------
+
 // This method is called via AsynchronLink, so it has the SolarMutex and
 // calling solar code ( VCL ... ) is safe. It is called when the thread is
 // terminated ( finished work or stopped ). Cancelling the thread via
@@ -285,7 +285,7 @@ IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
     return 0;
 }
 
-//-------------------------------------------------------------------------
+
 void SvtMatchContext_Impl::Insert( const OUString& rCompletion,
                                    const OUString& rURL,
                                    sal_Bool bForce )
@@ -301,7 +301,7 @@ void SvtMatchContext_Impl::Insert( const OUString& rCompletion,
     aURLs.push_back(rURL);
 }
 
-//-------------------------------------------------------------------------
+
 void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
                                        const OUString& rMatch,
                                        sal_Bool bSmart )
@@ -468,7 +468,7 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
     }
 }
 
-//-------------------------------------------------------------------------
+
 OUString SvtURLBox::ParseSmart( OUString aText, OUString aBaseURL, const OUString& aWorkDir )
 {
     OUString aMatch;
@@ -552,7 +552,7 @@ OUString SvtURLBox::ParseSmart( OUString aText, OUString aBaseURL, const OUStrin
     return aMatch;
 }
 
-//-------------------------------------------------------------------------
+
 void SvtMatchContext_Impl::doExecute()
 {
     ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
@@ -831,7 +831,7 @@ void SvtURLBox::TryAutoComplete()
     }
 }
 
-//-------------------------------------------------------------------------
+
 SvtURLBox::SvtURLBox( Window* pParent, INetProtocol eSmart, bool bSetDefaultHelpID )
     :   ComboBox( pParent , WB_DROPDOWN | WB_AUTOSIZE | WB_AUTOHSCROLL ),
         eSmartProtocol( eSmart ),
@@ -850,7 +850,7 @@ SvtURLBox::SvtURLBox( Window* pParent, INetProtocol eSmart, bool bSetDefaultHelp
         SetSizePixel( Size( 225, 240 ) );
 }
 
-//-------------------------------------------------------------------------
+
 SvtURLBox::SvtURLBox( Window* pParent, WinBits _nStyle, INetProtocol eSmart,
     bool bSetDefaultHelpID )
     :   ComboBox( pParent, _nStyle ),
@@ -874,7 +874,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvtURLBox(Window *pParent, 
     return pListBox;
 }
 
-//-------------------------------------------------------------------------
+
 SvtURLBox::SvtURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart,
     bool bSetDefaultHelpID )
     :   ComboBox( pParent , _rResId ),
@@ -1006,7 +1006,7 @@ void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
     }
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SvtURLBox::ProcessKey( const KeyCode& rKey )
 {
     // every key input stops the current matching thread
@@ -1087,13 +1087,13 @@ sal_Bool SvtURLBox::ProcessKey( const KeyCode& rKey )
     }
 }
 
-//-------------------------------------------------------------------------
+
 void SvtURLBox::Modify()
 {
     ComboBox::Modify();
 }
 
-//-------------------------------------------------------------------------
+
 bool SvtURLBox::PreNotify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetWindow() == GetSubEdit() && rNEvt.GetType() == EVENT_KEYINPUT )
@@ -1126,7 +1126,7 @@ bool SvtURLBox::PreNotify( NotifyEvent& rNEvt )
     return ComboBox::PreNotify( rNEvt );
 }
 
-//-------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(SvtURLBox, AutoCompleteHdl_Impl)
 {
     if ( GetSubEdit()->GetAutocompleteAction() == AUTOCOMPLETE_KEYINPUT )
@@ -1138,7 +1138,7 @@ IMPL_LINK_NOARG(SvtURLBox, AutoCompleteHdl_Impl)
     return 0L;
 }
 
-//-------------------------------------------------------------------------
+
 bool SvtURLBox::Notify( NotifyEvent &rEvt )
 {
     if ( EVENT_GETFOCUS == rEvt.GetType() )
@@ -1163,14 +1163,14 @@ bool SvtURLBox::Notify( NotifyEvent &rEvt )
     return ComboBox::Notify( rEvt );
 }
 
-//-------------------------------------------------------------------------
+
 void SvtURLBox::Select()
 {
     ComboBox::Select();
     ClearModifyFlag();
 }
 
-//-------------------------------------------------------------------------
+
 void SvtURLBox::SetOnlyDirectories( sal_Bool bDir )
 {
     bOnlyDirectories = bDir;
@@ -1178,13 +1178,13 @@ void SvtURLBox::SetOnlyDirectories( sal_Bool bDir )
         Clear();
 }
 
-//-------------------------------------------------------------------------
+
 void SvtURLBox::SetNoURLSelection( sal_Bool bSet )
 {
     bNoSelection = bSet;
 }
 
-//-------------------------------------------------------------------------
+
 OUString SvtURLBox::GetURL()
 {
     // wait for end of autocompletion

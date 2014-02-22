@@ -163,7 +163,7 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const Sfx
     pPathBox->ShowTable();
 }
 
-// -----------------------------------------------------------------------
+
 
 DbRegistrationOptionsPage::~DbRegistrationOptionsPage()
 {
@@ -172,7 +172,7 @@ DbRegistrationOptionsPage::~DbRegistrationOptionsPage()
     delete pPathBox;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* DbRegistrationOptionsPage::Create( Window* pParent,
                                     const SfxItemSet& rAttrSet )
@@ -180,7 +180,7 @@ SfxTabPage* DbRegistrationOptionsPage::Create( Window* pParent,
     return ( new DbRegistrationOptionsPage( pParent, rAttrSet ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool DbRegistrationOptionsPage::FillItemSet( SfxItemSet& rCoreSet )
 {
@@ -208,7 +208,7 @@ sal_Bool DbRegistrationOptionsPage::FillItemSet( SfxItemSet& rCoreSet )
     return bModified;
 }
 
-// -----------------------------------------------------------------------
+
 
 void DbRegistrationOptionsPage::Reset( const SfxItemSet& rSet )
 {
@@ -256,7 +256,7 @@ void DbRegistrationOptionsPage::Reset( const SfxItemSet& rSet )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void DbRegistrationOptionsPage::FillUserData()
 {
@@ -268,7 +268,7 @@ void DbRegistrationOptionsPage::FillUserData()
     aUserData += (bUp ? OUString("1") : OUString("0"));
     SetUserData( aUserData );
 }
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(DbRegistrationOptionsPage, DeleteHdl)
 {
@@ -281,7 +281,7 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, DeleteHdl)
     }
     return 0;
 }
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(DbRegistrationOptionsPage, NewHdl)
 {
     OUString sNewName,sNewLocation;
@@ -289,7 +289,7 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, NewHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(DbRegistrationOptionsPage, EditHdl)
 {
@@ -309,7 +309,7 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, EditHdl)
     return 1L;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( DbRegistrationOptionsPage, HeaderSelect_Impl, HeaderBar*, pBar )
 {
@@ -340,7 +340,7 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderSelect_Impl, HeaderBar*, pBar )
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
 {
@@ -372,7 +372,7 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
     }
     return 1;
 }
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(DbRegistrationOptionsPage, PathSelect_Impl)
 {
@@ -389,7 +389,7 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, PathSelect_Impl)
     m_pDelete->Enable( !bReadOnly );
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 void DbRegistrationOptionsPage::insertNewEntry( const OUString& _sName,const OUString& _sLocation, const bool _bReadOnly )
 {
     OUString aStr( _sName );
@@ -410,7 +410,7 @@ void DbRegistrationOptionsPage::insertNewEntry( const OUString& _sName,const OUS
     pEntry->SetUserData( new DatabaseRegistration( _sLocation, _bReadOnly ) );
 }
 
-// -----------------------------------------------------------------------------
+
 void DbRegistrationOptionsPage::openLinkDialog(const OUString& _sOldName,const OUString& _sOldLocation,SvTreeListEntry* _pEntry)
 {
     ODocumentLinkDialog aDlg(this,_pEntry == NULL);
@@ -434,7 +434,7 @@ void DbRegistrationOptionsPage::openLinkDialog(const OUString& _sOldName,const O
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 IMPL_LINK( DbRegistrationOptionsPage, NameValidator, OUString*, _pName )
 {
     if ( _pName )

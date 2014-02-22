@@ -38,7 +38,7 @@ namespace svx
     //====================================================================
     //= OSingleFeatureDispatcher
     //====================================================================
-    //--------------------------------------------------------------------
+
     OSingleFeatureDispatcher::OSingleFeatureDispatcher( const URL& _rFeatureURL, const sal_Int16 _nFormFeature,
             const Reference< XFormOperations >& _rxFormOperations, ::osl::Mutex& _rMutex )
         :m_rMutex( _rMutex )
@@ -51,7 +51,7 @@ namespace svx
     {
     }
 
-    //--------------------------------------------------------------------
+
     void OSingleFeatureDispatcher::getUnoState( FeatureStateEvent& /* [out] */ _rState ) const
     {
         _rState.Source = *const_cast< OSingleFeatureDispatcher* >( this );
@@ -64,7 +64,7 @@ namespace svx
         _rState.State = aState.State;
     }
 
-    //--------------------------------------------------------------------
+
     void OSingleFeatureDispatcher::updateAllListeners()
     {
         ::osl::ClearableMutexGuard aGuard( m_rMutex );
@@ -81,7 +81,7 @@ namespace svx
         notifyStatus( NULL, aGuard );
     }
 
-    //--------------------------------------------------------------------
+
     void OSingleFeatureDispatcher::notifyStatus( const Reference< XStatusListener >& _rxListener, ::osl::ClearableMutexGuard& _rFreeForNotification )
     {
         FeatureStateEvent aUnoState;
@@ -123,7 +123,7 @@ namespace svx
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OSingleFeatureDispatcher::dispatch( const URL& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (RuntimeException)
     {
         ::osl::ClearableMutexGuard aGuard( m_rMutex );
@@ -162,7 +162,7 @@ namespace svx
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OSingleFeatureDispatcher::addStatusListener( const Reference< XStatusListener >& _rxControl, const URL& _rURL ) throw (RuntimeException)
     {
         (void)_rURL;
@@ -186,7 +186,7 @@ namespace svx
         notifyStatus( _rxControl, aGuard );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OSingleFeatureDispatcher::removeStatusListener( const Reference< XStatusListener >& _rxControl, const URL& _rURL ) throw (RuntimeException)
     {
         (void)_rURL;
@@ -201,7 +201,7 @@ namespace svx
         m_aStatusListeners.removeInterface( _rxControl );
     }
 
-    //--------------------------------------------------------------------
+
     void OSingleFeatureDispatcher::checkAlive() const SAL_THROW((DisposedException))
     {
         if ( m_bDisposed )

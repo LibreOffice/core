@@ -58,7 +58,7 @@ using namespace ::com::sun::star::util;
 DBG_NAME(SfxStateCache)
 DBG_NAME(SfxStateCacheSetState)
 
-//-----------------------------------------------------------------------------
+
 BindDispatch_Impl::BindDispatch_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > & rDisp, const ::com::sun::star::util::URL& rURL, SfxStateCache *pStateCache, const SfxSlot* pS )
     : xDisp( rDisp )
     , aURL( rURL )
@@ -184,7 +184,7 @@ void BindDispatch_Impl::Dispatch( uno::Sequence < beans::PropertyValue > aProps,
     }
 }
 
-//--------------------------------------------------------------------
+
 // This constructor for an invalid cache that is updated in the first request.
 
 SfxStateCache::SfxStateCache( sal_uInt16 nFuncId ):
@@ -202,7 +202,7 @@ SfxStateCache::SfxStateCache( sal_uInt16 nFuncId ):
     bItemDirty = sal_True;
 }
 
-//--------------------------------------------------------------------
+
 // The Destructor checks by assertion, even if controllers are registered.
 
 SfxStateCache::~SfxStateCache()
@@ -218,7 +218,7 @@ SfxStateCache::~SfxStateCache()
     }
 }
 
-//--------------------------------------------------------------------
+
 // invalidates the cache (next request will force update)
 void SfxStateCache::Invalidate( sal_Bool bWithMsg )
 {
@@ -235,7 +235,7 @@ void SfxStateCache::Invalidate( sal_Bool bWithMsg )
     }
 }
 
-//--------------------------------------------------------------------
+
 // gets the corresponding function from the dispatcher or the cache
 
 const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > & xProv )
@@ -329,7 +329,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
 }
 
 
-//--------------------------------------------------------------------
+
 
 // Set Status in all Controllers
 
@@ -351,7 +351,7 @@ void SfxStateCache::SetState
     SetState_Impl( eState, pState, bMaybeDirty );
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxStateCache::SetVisibleState( sal_Bool bShow )
 {
@@ -397,7 +397,7 @@ void SfxStateCache::SetVisibleState( sal_Bool bShow )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxStateCache::SetState_Impl
 (
@@ -462,7 +462,7 @@ void SfxStateCache::SetState_Impl
 }
 
 
-//--------------------------------------------------------------------
+
 // Set old status again in all the controllers
 
 void SfxStateCache::SetCachedState( sal_Bool bAlways )
@@ -496,7 +496,7 @@ void SfxStateCache::SetCachedState( sal_Bool bAlways )
 }
 
 
-//--------------------------------------------------------------------
+
 // Destroy FloatingWindows in all Controls with this Id
 
 void SfxStateCache::DeleteFloatingWindows()

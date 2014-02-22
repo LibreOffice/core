@@ -31,7 +31,7 @@ using namespace ::rtl;
 namespace jni_uno
 {
 
-//______________________________________________________________________________
+
 jobject Bridge::map_to_java(
     JNI_context const & jni,
     uno_Interface * pUnoI, JNI_interface_type_info const * info ) const
@@ -82,7 +82,7 @@ jobject Bridge::map_to_java(
 }
 
 
-//______________________________________________________________________________
+
 void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
 {
     if (typelib_TypeClass_EXCEPTION == uno_exc->pType->eTypeClass)
@@ -147,7 +147,7 @@ union largest
     uno_Any a;
 };
 
-//______________________________________________________________________________
+
 jobject Bridge::call_uno(
     JNI_context const & jni,
     uno_Interface * pUnoI, typelib_TypeDescription * member_td,
@@ -364,7 +364,7 @@ using namespace ::jni_uno;
 extern "C"
 {
 
-//------------------------------------------------------------------------------
+
 SAL_JNI_EXPORT jobject
 JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
     JNIEnv * jni_env, jobject jo_proxy, jlong bridge_handle, jstring jo_method,
@@ -613,7 +613,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
     }
 }
 
-//------------------------------------------------------------------------------
+
 SAL_JNI_EXPORT void
 JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_finalize__J(
     JNIEnv * jni_env, jobject jo_proxy, jlong bridge_handle )

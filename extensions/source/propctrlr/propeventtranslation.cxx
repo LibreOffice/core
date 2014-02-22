@@ -39,7 +39,7 @@ namespace pcr
     //====================================================================
     //= PropertyEventTranslation
     //====================================================================
-    //--------------------------------------------------------------------
+
     PropertyEventTranslation::PropertyEventTranslation( const Reference< XPropertyChangeListener >& _rxDelegator,
         const Reference< XInterface >& _rxTranslatedEventSource )
         :m_xDelegator( _rxDelegator )
@@ -49,7 +49,7 @@ namespace pcr
             throw NullPointerException();
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL PropertyEventTranslation::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException)
     {
         if ( !m_xDelegator.is() )
@@ -65,7 +65,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL PropertyEventTranslation::disposing( const EventObject& Source ) throw (RuntimeException)
     {
         if ( !m_xDelegator.is() )

@@ -28,7 +28,7 @@ using namespace ::com::sun::star;
 
 extern OUString  getFilterNameFromGUID_Impl( GUID* );
 
-//-------------------------------------------------------------------------------
+
 // IOleObject
 
 
@@ -338,7 +338,7 @@ STDMETHODIMP EmbedDocument_Impl::SetColorScheme( LOGPALETTE * /*pLogpal*/ )
     return E_NOTIMPL;
 }
 
-//-------------------------------------------------------------------------------
+
 // IDispatch
 
 STDMETHODIMP EmbedDocument_Impl::GetTypeInfoCount( unsigned int FAR*  pctinfo )
@@ -394,7 +394,7 @@ STDMETHODIMP EmbedDocument_Impl::Invoke( DISPID dispIdMember,
     return DISP_E_MEMBERNOTFOUND;
 }
 
-//-------------------------------------------------------------------------------
+
 // IExternalConnection
 
 DWORD STDMETHODCALLTYPE EmbedDocument_Impl::AddConnection( DWORD , DWORD )

@@ -21,7 +21,7 @@
 #include <svtools/localresaccess.hxx>
 #include <tools/debug.hxx>
 
-// -----------------------------------------------------------------------
+
 
 class SfxStyleFamilyItem_Impl
 {
@@ -29,7 +29,7 @@ class SfxStyleFamilyItem_Impl
     Image   aImage;
 };
 
-// -----------------------------------------------------------------------
+
 
 // Implementierung des Resource-Konstruktors
 
@@ -80,7 +80,7 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
         aImage = Image(aBitmap);
 }
 
-// -----------------------------------------------------------------------
+
 
 // Destructor; releases the internal data
 
@@ -91,7 +91,7 @@ SfxStyleFamilyItem::~SfxStyleFamilyItem()
     aFilterList.clear();
 }
 
-// -----------------------------------------------------------------------
+
 
 // Implementation of the resource constructor
 
@@ -112,7 +112,7 @@ SfxStyleFamilies::SfxStyleFamilies( const ResId& rResId ) :
     updateImages( rResId );
 }
 
-// -----------------------------------------------------------------------
+
 
 // Destructor; releases the internal data
 
@@ -124,7 +124,7 @@ SfxStyleFamilies::~SfxStyleFamilies()
 }
 
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SfxStyleFamilies::updateImages( const ResId& _rId )
 {

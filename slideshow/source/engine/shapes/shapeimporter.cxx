@@ -356,7 +356,7 @@ ShapeSharedPtr ShapeImporter::createShape(
 
 
         // now extract relevant shape attributes via API
-        // ---------------------------------------------
+
 
         drawing::ColorMode eColorMode( drawing::ColorMode_STANDARD );
         sal_Int16 nLuminance(0);
@@ -400,7 +400,7 @@ ShapeSharedPtr ShapeImporter::createShape(
 
         // fetch readily transformed and color-modified
         // graphic
-        // ---------------------------------------------
+
 
         Graphic aGraphic(
             aGraphicObject.GetTransformedGraphic(

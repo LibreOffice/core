@@ -50,9 +50,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 
-
-//----------------------------------------------------------------------------
-
 extern "C" {
     SAL_DLLPUBLIC_EXPORT rtl_uString* basicide_choose_macro( void* pOnlyInDocument_AsXModel, sal_Bool bChooseOnly, rtl_uString* pMacroDesc )
     {
@@ -71,8 +68,6 @@ extern "C" {
     }
 }
 
-//----------------------------------------------------------------------------
-
 void Organize( sal_Int16 tabId )
 {
     EnsureIde();
@@ -85,8 +80,6 @@ void Organize( sal_Int16 tabId )
     Window* pParent = Application::GetDefDialogParent();
     OrganizeDialog(pParent, tabId, aDesc).Execute();
 }
-
-//----------------------------------------------------------------------------
 
 bool IsValidSbxName( const OUString& rName )
 {
@@ -109,8 +102,6 @@ static bool StringCompareLessThan( const OUString& rStr1, const OUString& rStr2 
 {
     return rStr1.compareToIgnoreAsciiCase( rStr2 ) < 0;
 }
-
-//----------------------------------------------------------------------------
 
 Sequence< OUString > GetMergedLibraryNames( const Reference< script::XLibraryContainer >& xModLibContainer, const Reference< script::XLibraryContainer >& xDlgLibContainer )
 {
@@ -152,8 +143,6 @@ Sequence< OUString > GetMergedLibraryNames( const Reference< script::XLibraryCon
 
     return aSeqLibNames;
 }
-
-//----------------------------------------------------------------------------
 
 bool RenameModule (
     Window* pErrorParent,
@@ -212,9 +201,6 @@ bool RenameModule (
     return true;
 }
 
-
-//----------------------------------------------------------------------------
-
 namespace
 {
     struct MacroExecutionData
@@ -234,7 +220,6 @@ namespace
     public:
         DECL_STATIC_LINK( MacroExecution, ExecuteMacroEvent, MacroExecutionData* );
     };
-
 
     IMPL_STATIC_LINK( MacroExecution, ExecuteMacroEvent, MacroExecutionData*, i_pData )
     {
@@ -256,8 +241,6 @@ namespace
         return 1L;
     }
 }
-
-//----------------------------------------------------------------------------
 
 OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, bool bChooseOnly, const OUString& rMacroDesc )
 {
@@ -394,8 +377,6 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, 
     return aScriptURL;
 }
 
-//----------------------------------------------------------------------------
-
 Sequence< OUString > GetMethodNames( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName )
     throw(NoSuchElementException )
 {
@@ -443,8 +424,6 @@ Sequence< OUString > GetMethodNames( const ScriptDocument& rDocument, const OUSt
     return aSeqMethods;
 }
 
-//----------------------------------------------------------------------------
-
 bool HasMethod (
     ScriptDocument const& rDocument,
     OUString const& rLibName,
@@ -482,7 +461,6 @@ bool HasMethod (
     return bHasMethod;
 }
 
-//----------------------------------------------------------------------------
 } // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

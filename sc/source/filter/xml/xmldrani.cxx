@@ -59,7 +59,7 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-//------------------------------------------------------------------
+
 
 ScXMLDatabaseRangesContext::ScXMLDatabaseRangesContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,

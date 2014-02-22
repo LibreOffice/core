@@ -94,7 +94,7 @@ public:
 };
 
 
-//______________________________________________________________________________
+
 CommandEnvironmentImpl::CommandEnvironmentImpl(
     Reference<XComponentContext> const & xComponentContext,
     OUString const & log_file,
@@ -118,7 +118,7 @@ CommandEnvironmentImpl::CommandEnvironmentImpl(
     }
 }
 
-//______________________________________________________________________________
+
 CommandEnvironmentImpl::~CommandEnvironmentImpl()
 {
     try {
@@ -186,14 +186,14 @@ void CommandEnvironmentImpl::printLicense(
 }
 
 // XCommandEnvironment
-//______________________________________________________________________________
+
 Reference< task::XInteractionHandler >
 CommandEnvironmentImpl::getInteractionHandler() throw (RuntimeException)
 {
     return this;
 }
 
-//______________________________________________________________________________
+
 Reference< XProgressHandler > CommandEnvironmentImpl::getProgressHandler()
     throw (RuntimeException)
 {
@@ -201,7 +201,7 @@ Reference< XProgressHandler > CommandEnvironmentImpl::getProgressHandler()
 }
 
 // XInteractionHandler
-//______________________________________________________________________________
+
 void CommandEnvironmentImpl::handle(
     Reference<task::XInteractionRequest> const & xRequest )
     throw (RuntimeException)
@@ -321,7 +321,7 @@ void CommandEnvironmentImpl::handle(
 }
 
 // XProgressHandler
-//______________________________________________________________________________
+
 void CommandEnvironmentImpl::push( Any const & Status )
     throw (RuntimeException)
 {
@@ -332,7 +332,7 @@ void CommandEnvironmentImpl::push( Any const & Status )
         m_xLogFile->push( Status );
 }
 
-//______________________________________________________________________________
+
 void CommandEnvironmentImpl::update_( Any const & Status )
     throw (RuntimeException)
 {
@@ -374,7 +374,7 @@ void CommandEnvironmentImpl::update_( Any const & Status )
         dp_misc::writeConsole(msg + "\n");
 }
 
-//______________________________________________________________________________
+
 void CommandEnvironmentImpl::update( Any const & Status )
     throw (RuntimeException)
 {
@@ -383,7 +383,7 @@ void CommandEnvironmentImpl::update( Any const & Status )
         m_xLogFile->update( Status );
 }
 
-//______________________________________________________________________________
+
 void CommandEnvironmentImpl::pop() throw (RuntimeException)
 {
     OSL_ASSERT( m_logLevel > 0 );

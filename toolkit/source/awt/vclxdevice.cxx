@@ -235,9 +235,9 @@ VCLXVirtualDevice::~VCLXVirtualDevice()
 }
 
 
-// -----------------------------------------------------------------------------
+
 // Interface implementation of ::com::sun::star::awt::XUnitConversion
-// -----------------------------------------------------------------------------
+
 
 ::com::sun::star::awt::Point SAL_CALL VCLXDevice::convertPointToLogic( const ::com::sun::star::awt::Point& aPoint, ::sal_Int16 TargetUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {

@@ -67,22 +67,22 @@ sdbcx::ObjectType ODbaseIndexColumns::createObject(const OUString& _rName)
     return xRet;
 }
 
-// -------------------------------------------------------------------------
+
 void ODbaseIndexColumns::impl_refresh() throw(RuntimeException)
 {
     m_pIndex->refreshColumns();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > ODbaseIndexColumns::createDescriptor()
 {
     return new sdbcx::OIndexColumn(m_pIndex->getTable()->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers());
 }
-// -------------------------------------------------------------------------
+
 sdbcx::ObjectType ODbaseIndexColumns::appendObject( const OUString& /*_rForName*/, const Reference< XPropertySet >& descriptor )
 {
     return cloneDescriptor( descriptor );
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

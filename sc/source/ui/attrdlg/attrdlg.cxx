@@ -69,13 +69,13 @@ ScAttrDlg::ScAttrDlg(SfxViewFrame* pFrameP, Window* pParent, const SfxItemSet* p
     AddTabPage( "cellprotection" ,  ScTabPageProtection::Create,    0 );
 }
 
-// -----------------------------------------------------------------------
+
 
 ScAttrDlg::~ScAttrDlg()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 {
@@ -97,7 +97,7 @@ void ScAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScAttrDlg, OkHandler)
 {

@@ -30,7 +30,7 @@ namespace svt
     //=====================================================================
     //= OFileURLControl
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OFileURLControl::OFileURLControl(Window* _pParent, const ResId& _rId)
         : SvtURLBox(_pParent, _rId, INET_PROT_FILE)
     {
@@ -52,7 +52,7 @@ namespace svt
         return pListBox;
     }
 
-    //---------------------------------------------------------------------
+
     bool OFileURLControl::PreNotify( NotifyEvent& _rNEvt )
     {
         if (GetSubEdit() == _rNEvt.GetWindow())
@@ -64,7 +64,7 @@ namespace svt
         return SvtURLBox::PreNotify(_rNEvt);
     }
 
-    //---------------------------------------------------------------------
+
     bool OFileURLControl::Notify( NotifyEvent& _rNEvt )
     {
         if (GetSubEdit() == _rNEvt.GetWindow())

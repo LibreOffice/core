@@ -62,7 +62,7 @@ rtl::OUString CreateMD5FromString( const rtl::OUString& aMsg )
     return rtl::OUString();
 }
 
-// -----------------------------------------------------------------------------
+
 namespace rtl_digest
 {
 
@@ -151,7 +151,7 @@ public:
 
 
 
-// -----------------------------------------------------------------------------
+
 
 class createMD5 : public CppUnit::TestFixture
 {
@@ -180,7 +180,7 @@ public:
 }; // class create
 
 
-// -----------------------------------------------------------------------------
+
 
 class createMD2 : public CppUnit::TestFixture
 {
@@ -208,7 +208,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class create
 
-// -----------------------------------------------------------------------------
+
 
 class createSHA : public CppUnit::TestFixture
 {
@@ -235,7 +235,7 @@ public:
     CPPUNIT_TEST(createSHA_001);
     CPPUNIT_TEST_SUITE_END();
 }; // class create
-// -----------------------------------------------------------------------------
+
 
 class createSHA1 : public CppUnit::TestFixture
 {
@@ -262,7 +262,7 @@ public:
     CPPUNIT_TEST(createSHA1_001);
     CPPUNIT_TEST_SUITE_END();
 }; // class create
-// -----------------------------------------------------------------------------
+
 
 class createHMAC_MD5 : public CppUnit::TestFixture
 {
@@ -289,7 +289,7 @@ public:
     CPPUNIT_TEST(createHMAC_MD5_001);
     CPPUNIT_TEST_SUITE_END();
 }; // class create
-// -----------------------------------------------------------------------------
+
 
 class createHMAC_SHA1 : public CppUnit::TestFixture
 {
@@ -319,7 +319,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class create
 
-// -----------------------------------------------------------------------------
+
 
 class queryAlgorithm : public CppUnit::TestFixture
 {
@@ -413,7 +413,7 @@ public:
 }; // class create
 
 
-// -----------------------------------------------------------------------------
+
 class queryLength : public CppUnit::TestFixture
 {
 public:
@@ -513,7 +513,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class create
 
-// -----------------------------------------------------------------------------
+
 
 rtl::OString createHex(sal_uInt8 *_pMD5KeyBuffer, sal_uInt32 _nMD5KeyLen)
 {
@@ -531,7 +531,7 @@ rtl::OString createHex(sal_uInt8 *_pMD5KeyBuffer, sal_uInt32 _nMD5KeyLen)
 }
 
 
-// -----------------------------------------------------------------------------
+
 class init : public CppUnit::TestFixture
 {
 public:
@@ -564,7 +564,7 @@ public:
             rtl_digest_destroy( handle );
         }
 
-    // ------------------------------------
+
     void init_MD2()
         {
             rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmMD2 );
@@ -755,7 +755,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class init
 
-// ------------------------------------
+
 
 rtl::OString getMD5Sum(rtl::OString const& _aMsg )
 {
@@ -778,7 +778,7 @@ rtl::OString getMD5Sum(rtl::OString const& _aMsg )
     return aMD5Sum;
 }
 
-// -----------------------------------------------------------------------------
+
 
 class equalTests : public CppUnit::TestFixture
 {
@@ -792,7 +792,7 @@ public:
     {
     }
 
-    // ------------------------------------
+
     void equal_001()
         {
             rtl::OString aMsg1 = sSampleString;
@@ -804,7 +804,7 @@ public:
             CPPUNIT_ASSERT_MESSAGE("md5sum must have a length", aMsgMD5Sum1.getLength() == 32 && aMsgMD5Sum2.getLength() == 32 );
             CPPUNIT_ASSERT_MESSAGE("source is the same, dest must be also the same", aMsgMD5Sum1.equals(aMsgMD5Sum2) == sal_True);
         }
-    // ------------------------------------
+
     void equal_002()
         {
             rtl::OString aMsg1 = sSampleString;
@@ -828,7 +828,7 @@ public:
 }; // class create
 
 
-// -----------------------------------------------------------------------------
+
 class digest_MD2 : public CppUnit::TestFixture
 {
 public:
@@ -841,7 +841,7 @@ public:
     {
     }
 
-    // ------------------------------------
+
     void MD2_001()
         {
             rtl::OString  aMsg1 = sSampleString;
@@ -872,7 +872,7 @@ public:
     CPPUNIT_TEST( MD2_001 );
     CPPUNIT_TEST_SUITE_END();
 }; // class create
-// -----------------------------------------------------------------------------
+
 class digest_MD5 : public CppUnit::TestFixture
 {
 public:
@@ -884,7 +884,7 @@ public:
     void tearDown()
     {
     }
-    // ------------------------------------
+
     void MD5_001()
         {
             rtl::OString  aMsg1 = sSampleString;
@@ -916,7 +916,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class create
 
-// -----------------------------------------------------------------------------
+
 class digest_SHA : public CppUnit::TestFixture
 {
 public:
@@ -929,7 +929,7 @@ public:
     {
     }
 
-    // ------------------------------------
+
     void SHA_001()
         {
             rtl::OString  aMsg1 = sSampleString;
@@ -961,7 +961,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class create
 
-// -----------------------------------------------------------------------------
+
 class digest_SHA1 : public CppUnit::TestFixture
 {
 public:
@@ -974,7 +974,7 @@ public:
     {
     }
 
-    // ------------------------------------
+
     void SHA1_001()
         {
             rtl::OString  aMsg1 = sSampleString;
@@ -1004,7 +1004,7 @@ public:
     CPPUNIT_TEST( SHA1_001 );
     CPPUNIT_TEST_SUITE_END();
 }; // class create
-// -----------------------------------------------------------------------------
+
 class digest_HMAC_MD5 : public CppUnit::TestFixture
 {
 public:
@@ -1017,7 +1017,7 @@ public:
     {
     }
 
-    // ------------------------------------
+
     void HMAC_MD5_001()
         {
             rtl::OString  aMsg1 = sSampleString;
@@ -1051,7 +1051,7 @@ public:
     CPPUNIT_TEST( HMAC_MD5_001 );
     CPPUNIT_TEST_SUITE_END();
 }; // class create
-// -----------------------------------------------------------------------------
+
 class digest_HMAC_SHA1 : public CppUnit::TestFixture
 {
 public:
@@ -1064,7 +1064,7 @@ public:
     {
     }
 
-    // ------------------------------------
+
     void HMAC_SHA1_001()
         {
             rtl::OString  aMsg1 = sSampleString;
@@ -1099,7 +1099,7 @@ public:
     CPPUNIT_TEST( HMAC_SHA1_001 );
     CPPUNIT_TEST_SUITE_END();
 }; // class create
-// -----------------------------------------------------------------------------
+
 class digest_PBKDF2 : public CppUnit::TestFixture
 {
 public:
@@ -1112,7 +1112,7 @@ public:
     {
     }
 
-    // ------------------------------------
+
     rtl::OString /* key */ run_check_PBKDF2(rtl::OString const& _sPassword, bool _bClearSalt, sal_uInt32 _nCount)
         {
             sal_uInt32   nKeyLen = RTL_DIGEST_LENGTH_HMAC_SHA1;
@@ -1173,7 +1173,7 @@ public:
     CPPUNIT_TEST( PBKDF2_001 );
     CPPUNIT_TEST_SUITE_END();
 }; // class create
-// -----------------------------------------------------------------------------
+
 
 class update : public CppUnit::TestFixture
 {
@@ -1301,7 +1301,7 @@ public:
     CPPUNIT_TEST(updateHMAC_SHA1_000);
     CPPUNIT_TEST_SUITE_END();
 }; // class create
-// -----------------------------------------------------------------------------
+
 
 class get : public CppUnit::TestFixture
 {
@@ -1375,7 +1375,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class create
 
-// -----------------------------------------------------------------------------
+
 class destroy : public CppUnit::TestFixture
 {
 public:
@@ -1406,7 +1406,7 @@ public:
     CPPUNIT_TEST(destroy_001);
     CPPUNIT_TEST_SUITE_END();
 }; // class create
-// -----------------------------------------------------------------------------
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::create);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::createMD2);

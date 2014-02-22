@@ -65,7 +65,7 @@ sal_uInt64 EmbedDocument_Impl::getMetaFileHandle_Impl( sal_Bool isEnhMeta )
     return pResult;
 }
 
-//-------------------------------------------------------------------------------
+
 // IDataObject
 
 STDMETHODIMP EmbedDocument_Impl::GetData( FORMATETC * pFormatetc, STGMEDIUM * pMedium )

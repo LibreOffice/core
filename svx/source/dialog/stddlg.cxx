@@ -35,7 +35,7 @@ short SvxStandardDialog::Execute()
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxStandardDialog::SvxStandardDialog( Window *pParent, const ResId &rResId )
     : SfxModalDialog( pParent, rResId )
@@ -47,7 +47,7 @@ SvxStandardDialog::SvxStandardDialog(Window *pParent, const OString& rID, const 
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxStandardDialog::~SvxStandardDialog()
 {

@@ -19,7 +19,7 @@
 
 
 
-//___________________________________________________________________
+
 
 #include <stdio.h>
 #include <sot/storage.hxx>
@@ -57,7 +57,7 @@ static OString lcl_DateTimeToOString( const DateTime& rDateTime )
     return OString( sBuf );
 }
 
-//___________________________________________________________________
+
 // local functions
 
 static void lcl_WriteDateTime( XclExpStream& rStrm, const DateTime& rDateTime )
@@ -98,7 +98,7 @@ static inline void lcl_WriteGUID( XclExpStream& rStrm, const sal_uInt8* pGUID )
     rStrm.SetSliceSize( 0 );
 }
 
-//___________________________________________________________________
+
 
 XclExpUserBView::XclExpUserBView( const OUString& rUsername, const sal_uInt8* pGUID ) :
     sUsername( rUsername )
@@ -133,7 +133,7 @@ sal_Size XclExpUserBView::GetLen() const
     return 50 + ((sUsername.Len() > 0) ? sUsername.GetSize() : 0);
 }
 
-//___________________________________________________________________
+
 
 XclExpUserBViewList::XclExpUserBViewList( const ScChangeTrack& rChangeTrack )
 {
@@ -161,7 +161,7 @@ void XclExpUserBViewList::Save( XclExpStream& rStrm )
         (*iter)->Save( rStrm );
 }
 
-//___________________________________________________________________
+
 
 XclExpUsersViewBegin::XclExpUsersViewBegin( const sal_uInt8* pGUID, sal_uInt32 nTab ) :
     nCurrTab( nTab )
@@ -197,7 +197,7 @@ sal_Size XclExpUsersViewBegin::GetLen() const
     return 64;
 }
 
-//___________________________________________________________________
+
 
 void XclExpUsersViewEnd::SaveCont( XclExpStream& rStrm )
 {
@@ -214,7 +214,7 @@ sal_Size XclExpUsersViewEnd::GetLen() const
     return 2;
 }
 
-//___________________________________________________________________
+
 
 void XclExpChTr0x0191::SaveCont( XclExpStream& rStrm )
 {
@@ -231,7 +231,7 @@ sal_Size XclExpChTr0x0191::GetLen() const
     return 2;
 }
 
-//___________________________________________________________________
+
 
 void XclExpChTr0x0198::SaveCont( XclExpStream& rStrm )
 {
@@ -249,7 +249,7 @@ sal_Size XclExpChTr0x0198::GetLen() const
     return 4;
 }
 
-//___________________________________________________________________
+
 
 void XclExpChTr0x0192::SaveCont( XclExpStream& rStrm )
 {
@@ -267,7 +267,7 @@ sal_Size XclExpChTr0x0192::GetLen() const
     return 512;
 }
 
-//___________________________________________________________________
+
 
 void XclExpChTr0x0197::SaveCont( XclExpStream& rStrm )
 {
@@ -284,7 +284,7 @@ sal_Size XclExpChTr0x0197::GetLen() const
     return 2;
 }
 
-//___________________________________________________________________
+
 
 XclExpChTrEmpty::~XclExpChTrEmpty()
 {
@@ -300,7 +300,7 @@ sal_Size XclExpChTrEmpty::GetLen() const
     return 0;
 }
 
-//___________________________________________________________________
+
 
 XclExpChTr0x0195::~XclExpChTr0x0195()
 {
@@ -321,7 +321,7 @@ sal_Size XclExpChTr0x0195::GetLen() const
     return 162;
 }
 
-//___________________________________________________________________
+
 
 XclExpChTr0x0194::~XclExpChTr0x0194()
 {
@@ -345,7 +345,7 @@ sal_Size XclExpChTr0x0194::GetLen() const
     return 162;
 }
 
-//___________________________________________________________________
+
 
 XclExpChTrHeader::~XclExpChTrHeader()
 {
@@ -394,7 +394,7 @@ void XclExpChTrHeader::SaveXml( XclExpXmlStream& rRevisionHeadersStrm )
     pHeaders->write( ">" );
 }
 
-//___________________________________________________________________
+
 
 XclExpChTrInfo::~XclExpChTrInfo()
 {
@@ -451,7 +451,7 @@ void XclExpChTrInfo::SaveXml( XclExpXmlStream& rRevisionHeadersStrm )
     rRevisionHeadersStrm.PushStream( pRevisionLog );
 }
 
-//___________________________________________________________________
+
 
 XclExpChTrTabIdBuffer::XclExpChTrTabIdBuffer( sal_uInt16 nCount ) :
     nBufSize( nCount ),
@@ -523,7 +523,7 @@ void XclExpChTrTabIdBuffer::Remove()
     nLastId--;
 }
 
-//___________________________________________________________________
+
 
 XclExpChTrTabId::XclExpChTrTabId( const XclExpChTrTabIdBuffer& rBuffer, bool bInRevisionHeaders )
     : nTabCount( rBuffer.GetBufferCount() )
@@ -590,7 +590,7 @@ void XclExpChTrTabId::SaveXml( XclExpXmlStream& rRevisionLogStrm )
     rRevisionLogStrm.PushStream( pRevisionLog );
 }
 
-//___________________________________________________________________
+
 
 // ! does not copy additional actions
 XclExpChTrAction::XclExpChTrAction( const XclExpChTrAction& rCopy ) :
@@ -694,7 +694,7 @@ sal_Size XclExpChTrAction::GetLen() const
     return GetHeaderByteCount() + GetActionByteCount();
 }
 
-//___________________________________________________________________
+
 
 XclExpChTrData::XclExpChTrData() :
     pString( NULL ),
@@ -770,7 +770,7 @@ void XclExpChTrData::Write( XclExpStream& rStrm, const XclExpChTrTabIdBuffer& rT
     }
 }
 
-//___________________________________________________________________
+
 
 XclExpChTrCellContent::XclExpChTrCellContent(
         const ScChangeActionContent& rAction,
@@ -1034,7 +1034,7 @@ void XclExpChTrCellContent::SaveXml( XclExpXmlStream& rRevisionLogStrm )
     pStream->endElement( XML_rcc );
 }
 
-//___________________________________________________________________
+
 
 XclExpChTrInsert::XclExpChTrInsert(
         const ScChangeAction& rAction,
@@ -1142,7 +1142,7 @@ void XclExpChTrInsert::SaveXml( XclExpXmlStream& rRevisionLogStrm )
     pStream->endElement( XML_rrc );
 }
 
-//___________________________________________________________________
+
 
 XclExpChTrInsertTab::XclExpChTrInsertTab(
         const ScChangeAction& rAction,
@@ -1192,7 +1192,7 @@ void XclExpChTrInsertTab::SaveXml( XclExpXmlStream& rStrm )
             FSEND );
 }
 
-//___________________________________________________________________
+
 
 XclExpChTrMoveRange::XclExpChTrMoveRange(
         const ScChangeActionMove& rAction,
@@ -1271,7 +1271,7 @@ void XclExpChTrMoveRange::SaveXml( XclExpXmlStream& rRevisionLogStrm )
     pStream->endElement( XML_rm );
 }
 
-//___________________________________________________________________
+
 
 XclExpChTr0x014A::XclExpChTr0x014A( const XclExpChTrInsert& rAction ) :
     XclExpChTrInsert( rAction )
@@ -1319,7 +1319,7 @@ void XclExpChTr0x014A::SaveXml( XclExpXmlStream& rStrm )
     pStream->endElement( XML_rfmt );
 }
 
-//___________________________________________________________________
+
 
 class ExcXmlRecord : public ExcRecord
 {

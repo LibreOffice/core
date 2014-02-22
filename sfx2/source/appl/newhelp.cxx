@@ -291,7 +291,7 @@ ContentListBox_Impl::ContentListBox_Impl( Window* pParent, const ResId& rResId )
     InitRoot();
 }
 
-// -----------------------------------------------------------------------
+
 
 ContentListBox_Impl::~ContentListBox_Impl()
 {
@@ -305,7 +305,7 @@ ContentListBox_Impl::~ContentListBox_Impl()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ContentListBox_Impl::InitRoot()
 {
@@ -327,7 +327,7 @@ void ContentListBox_Impl::InitRoot()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ContentListBox_Impl::ClearChildren( SvTreeListEntry* pParent )
 {
@@ -340,7 +340,7 @@ void ContentListBox_Impl::ClearChildren( SvTreeListEntry* pParent )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
 {
@@ -386,7 +386,7 @@ void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ContentListBox_Impl::Notify( NotifyEvent& rNEvt )
 {
@@ -401,7 +401,7 @@ bool ContentListBox_Impl::Notify( NotifyEvent& rNEvt )
     return bHandled || SvTreeListBox::Notify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString ContentListBox_Impl::GetSelectEntry() const
 {
@@ -438,7 +438,7 @@ ContentTabPage_Impl::ContentTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Im
     aContentBox.Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ContentTabPage_Impl::Resize()
 {
@@ -448,7 +448,7 @@ void ContentTabPage_Impl::Resize()
     aContentBox.SetPosSizePixel( Point( 4, 4 ), aSize );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ContentTabPage_Impl::ActivatePage()
 {
@@ -456,7 +456,7 @@ void ContentTabPage_Impl::ActivatePage()
         SetFocusOnBox();
 }
 
-// -----------------------------------------------------------------------
+
 
 Control* ContentTabPage_Impl::GetLastFocusControl()
 {
@@ -474,7 +474,7 @@ IndexBox_Impl::IndexBox_Impl( Window* pParent, const ResId& rResId ) :
     EnableUserDraw( true );
 }
 
-// -----------------------------------------------------------------------
+
 
 void IndexBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 {
@@ -493,7 +493,7 @@ void IndexBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
         DrawEntry( rUDEvt, false, true, true );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool IndexBox_Impl::Notify( NotifyEvent& rNEvt )
 {
@@ -508,7 +508,7 @@ bool IndexBox_Impl::Notify( NotifyEvent& rNEvt )
     return bHandled || ComboBox::Notify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void IndexBox_Impl::SelectExecutableEntry()
 {
@@ -555,14 +555,14 @@ IndexTabPage_Impl::IndexTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* 
     nMinWidth = aOpenBtn.GetSizePixel().Width();
 }
 
-// -----------------------------------------------------------------------
+
 
 IndexTabPage_Impl::~IndexTabPage_Impl()
 {
     ClearIndex();
 }
 
-// -----------------------------------------------------------------------
+
 
 namespace sfx2 {
 
@@ -605,7 +605,7 @@ namespace sfx2 {
     else                                                                                            \
         aIndexCB.SetEntryData( nPos, NEW_ENTRY( aRefList[j], insert ) );
 
-// -----------------------------------------------------------------------
+
 
 void IndexTabPage_Impl::InitializeIndex()
 {
@@ -723,7 +723,7 @@ void IndexTabPage_Impl::InitializeIndex()
 #undef INSERT_DATA
 #undef UNIFY_AND_INSERT_TOKEN
 
-// -----------------------------------------------------------------------
+
 
 void IndexTabPage_Impl::ClearIndex()
 {
@@ -733,7 +733,7 @@ void IndexTabPage_Impl::ClearIndex()
     aIndexCB.Clear();
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(IndexTabPage_Impl, OpenHdl)
 {
@@ -741,7 +741,7 @@ IMPL_LINK_NOARG(IndexTabPage_Impl, OpenHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( IndexTabPage_Impl, TimeoutHdl, Timer*, pTimer )
 {
@@ -752,7 +752,7 @@ IMPL_LINK( IndexTabPage_Impl, TimeoutHdl, Timer*, pTimer )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void IndexTabPage_Impl::Resize()
 {
@@ -782,7 +782,7 @@ void IndexTabPage_Impl::Resize()
     aOpenBtn.SetPosPixel( aPnt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void IndexTabPage_Impl::ActivatePage()
 {
@@ -796,21 +796,21 @@ void IndexTabPage_Impl::ActivatePage()
         SetFocusOnBox();
 }
 
-// -----------------------------------------------------------------------
+
 
 Control* IndexTabPage_Impl::GetLastFocusControl()
 {
     return &aOpenBtn;
 }
 
-// -----------------------------------------------------------------------
+
 
 void IndexTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 {
     aIndexCB.SetDoubleClickHdl( rLink );
 }
 
-// -----------------------------------------------------------------------
+
 
 void IndexTabPage_Impl::SetFactory( const OUString& rFactory )
 {
@@ -833,7 +833,7 @@ void IndexTabPage_Impl::SetFactory( const OUString& rFactory )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString IndexTabPage_Impl::GetSelectEntry() const
 {
@@ -844,7 +844,7 @@ OUString IndexTabPage_Impl::GetSelectEntry() const
     return aRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void IndexTabPage_Impl::SetKeyword( const OUString& rKeyword )
 {
@@ -856,7 +856,7 @@ void IndexTabPage_Impl::SetKeyword( const OUString& rKeyword )
         aFactoryTimer.Start();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool IndexTabPage_Impl::HasKeyword() const
 {
@@ -870,7 +870,7 @@ sal_Bool IndexTabPage_Impl::HasKeyword() const
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool IndexTabPage_Impl::HasKeywordIgnoreCase()
 {
@@ -894,7 +894,7 @@ sal_Bool IndexTabPage_Impl::HasKeywordIgnoreCase()
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void IndexTabPage_Impl::OpenKeyword()
 {
@@ -922,7 +922,7 @@ bool SearchBox_Impl::PreNotify( NotifyEvent& rNEvt )
     return bHandled || ComboBox::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SearchBox_Impl::Select()
 {
@@ -995,7 +995,7 @@ SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl
     ModifyHdl( &aSearchED );
 }
 
-// -----------------------------------------------------------------------
+
 
 SearchTabPage_Impl::~SearchTabPage_Impl()
 {
@@ -1022,7 +1022,7 @@ SearchTabPage_Impl::~SearchTabPage_Impl()
     aViewOpt.SetUserItem( USERITEM_NAME, aUserItem );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SearchTabPage_Impl::ClearSearchResults()
 {
@@ -1033,7 +1033,7 @@ void SearchTabPage_Impl::ClearSearchResults()
     aResultsLB.Update();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SearchTabPage_Impl::RememberSearchText( const OUString& rSearchText )
 {
@@ -1049,7 +1049,7 @@ void SearchTabPage_Impl::RememberSearchText( const OUString& rSearchText )
     aSearchED.InsertEntry( rSearchText, 0 );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl)
 {
@@ -1091,7 +1091,7 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SearchTabPage_Impl, OpenHdl)
 {
@@ -1099,7 +1099,7 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, OpenHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SearchTabPage_Impl, ModifyHdl)
 {
@@ -1108,7 +1108,7 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, ModifyHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SearchTabPage_Impl::Resize()
 {
@@ -1151,7 +1151,7 @@ void SearchTabPage_Impl::Resize()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SearchTabPage_Impl::ActivatePage()
 {
@@ -1159,21 +1159,21 @@ void SearchTabPage_Impl::ActivatePage()
         aSearchED.GrabFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 Control* SearchTabPage_Impl::GetLastFocusControl()
 {
     return &aOpenBtn;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SearchTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 {
     aResultsLB.SetDoubleClickHdl( rLink );
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString SearchTabPage_Impl::GetSelectEntry() const
 {
@@ -1184,7 +1184,7 @@ OUString SearchTabPage_Impl::GetSelectEntry() const
     return aRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SearchTabPage_Impl::ClearPage()
 {
@@ -1192,7 +1192,7 @@ void SearchTabPage_Impl::ClearPage()
     aSearchED.SetText( OUString() );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SearchTabPage_Impl::OpenKeyword( const OUString& rKeyword )
 {
@@ -1229,7 +1229,7 @@ void GetBookmarkEntry_Impl
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 BookmarksBox_Impl::BookmarksBox_Impl( Window* pParent, const ResId& rResId ) :
 
@@ -1238,7 +1238,7 @@ BookmarksBox_Impl::BookmarksBox_Impl( Window* pParent, const ResId& rResId ) :
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 BookmarksBox_Impl::~BookmarksBox_Impl()
 {
@@ -1256,7 +1256,7 @@ BookmarksBox_Impl::~BookmarksBox_Impl()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
 {
@@ -1307,7 +1307,7 @@ void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool BookmarksBox_Impl::Notify( NotifyEvent& rNEvt )
 {
@@ -1375,7 +1375,7 @@ BookmarksTabPage_Impl::BookmarksTabPage_Impl( Window* pParent, SfxHelpIndexWindo
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(BookmarksTabPage_Impl, OpenHdl)
 {
@@ -1383,7 +1383,7 @@ IMPL_LINK_NOARG(BookmarksTabPage_Impl, OpenHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void BookmarksTabPage_Impl::Resize()
 {
@@ -1413,7 +1413,7 @@ void BookmarksTabPage_Impl::Resize()
     aBookmarksPB.SetPosPixel( aPnt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void BookmarksTabPage_Impl::ActivatePage()
 {
@@ -1421,21 +1421,21 @@ void BookmarksTabPage_Impl::ActivatePage()
         SetFocusOnBox();
 }
 
-// -----------------------------------------------------------------------
+
 
 Control* BookmarksTabPage_Impl::GetLastFocusControl()
 {
     return &aBookmarksPB;
 }
 
-// -----------------------------------------------------------------------
+
 
 void BookmarksTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 {
     aBookmarksBox.SetDoubleClickHdl( rLink );
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString BookmarksTabPage_Impl::GetSelectEntry() const
 {
@@ -1446,7 +1446,7 @@ OUString BookmarksTabPage_Impl::GetSelectEntry() const
     return aRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void BookmarksTabPage_Impl::AddBookmarks( const OUString& rTitle, const OUString& rURL )
 {
@@ -1560,7 +1560,7 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* _pParent )
     aTimer.Start();
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
 {
@@ -1578,7 +1578,7 @@ SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
     aViewOpt.SetPageID( (sal_Int32)aTabCtrl.GetCurPageId() );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpIndexWindow_Impl::Initialize()
 {
@@ -1602,7 +1602,7 @@ void SfxHelpIndexWindow_Impl::Initialize()
         SetActiveFactory();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpIndexWindow_Impl::SetActiveFactory()
 {
@@ -1629,7 +1629,7 @@ void SfxHelpIndexWindow_Impl::SetActiveFactory()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 HelpTabPage_Impl* SfxHelpIndexWindow_Impl::GetCurrentPage( sal_uInt16& rCurId )
 {
@@ -1667,7 +1667,7 @@ HelpTabPage_Impl* SfxHelpIndexWindow_Impl::GetCurrentPage( sal_uInt16& rCurId )
     return pPage;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SfxHelpIndexWindow_Impl, ActivatePageHdl, TabControl *, pTabCtrl )
 {
@@ -1677,7 +1677,7 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, ActivatePageHdl, TabControl *, pTabCtrl )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectHdl)
 {
@@ -1686,7 +1686,7 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, InitHdl)
 {
@@ -1700,7 +1700,7 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, InitHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectFactoryHdl)
 {
@@ -1714,7 +1714,7 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectFactoryHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, KeywordHdl)
 {
@@ -1740,7 +1740,7 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, KeywordHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpIndexWindow_Impl::Resize()
 {
@@ -1763,7 +1763,7 @@ void SfxHelpIndexWindow_Impl::Resize()
     aTabCtrl.SetSizePixel( aSize );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxHelpIndexWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
@@ -1813,7 +1813,7 @@ bool SfxHelpIndexWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     return nDone || Window::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpIndexWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -1827,7 +1827,7 @@ void SfxHelpIndexWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpIndexWindow_Impl::SetDoubleClickHdl( const Link& rLink )
 {
@@ -1842,7 +1842,7 @@ void SfxHelpIndexWindow_Impl::SetDoubleClickHdl( const Link& rLink )
         pBPage->SetDoubleClickHdl( aPageDoubleClickLink );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpIndexWindow_Impl::SetFactory( const OUString& rFactory, sal_Bool bActive )
 {
@@ -1857,7 +1857,7 @@ void SfxHelpIndexWindow_Impl::SetFactory( const OUString& rFactory, sal_Bool bAc
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString SfxHelpIndexWindow_Impl::GetSelectEntry() const
 {
@@ -1885,14 +1885,14 @@ OUString SfxHelpIndexWindow_Impl::GetSelectEntry() const
     return sRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpIndexWindow_Impl::AddBookmarks( const OUString& rTitle, const OUString& rURL )
 {
     GetBookmarksPage()->AddBookmarks( rTitle, rURL );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxHelpIndexWindow_Impl::IsValidFactory( const OUString& _rFactory )
 {
@@ -1909,7 +1909,7 @@ bool SfxHelpIndexWindow_Impl::IsValidFactory( const OUString& _rFactory )
     return bValid;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpIndexWindow_Impl::ClearSearchPage()
 {
@@ -1917,7 +1917,7 @@ void SfxHelpIndexWindow_Impl::ClearSearchPage()
         pSPage->ClearPage();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpIndexWindow_Impl::GrabFocusBack()
 {
@@ -1931,7 +1931,7 @@ void SfxHelpIndexWindow_Impl::GrabFocusBack()
         pBPage->SetFocusOnBox();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SfxHelpIndexWindow_Impl::HasFocusOnEdit() const
 {
@@ -1943,7 +1943,7 @@ sal_Bool SfxHelpIndexWindow_Impl::HasFocusOnEdit() const
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString SfxHelpIndexWindow_Impl::GetSearchText() const
 {
@@ -1953,7 +1953,7 @@ OUString SfxHelpIndexWindow_Impl::GetSearchText() const
     return sRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SfxHelpIndexWindow_Impl::IsFullWordSearch() const
 {
@@ -1963,7 +1963,7 @@ sal_Bool SfxHelpIndexWindow_Impl::IsFullWordSearch() const
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpIndexWindow_Impl::OpenKeyword( const OUString& rKeyword )
 {
@@ -1972,7 +1972,7 @@ void SfxHelpIndexWindow_Impl::OpenKeyword( const OUString& rKeyword )
     pIPage->SetKeyword( sKeyword );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpIndexWindow_Impl::SelectExecutableEntry()
 {
@@ -1998,7 +1998,7 @@ bool TextWin_Impl::Notify( NotifyEvent& rNEvt )
         return DockingWindow::Notify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 // remove docking area acceptor from layoutmanager, so it will not layout anything further .-)
 static void lcl_disableLayoutOfFrame(const Reference< XFrame2 >& xFrame)
 {
@@ -2072,7 +2072,7 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
         aOnStartupCB.SetHelpId( HID_HELP_ONSTARTUP_BOX );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxHelpTextWindow_Impl::~SfxHelpTextWindow_Impl()
 {
@@ -2083,7 +2083,7 @@ SfxHelpTextWindow_Impl::~SfxHelpTextWindow_Impl()
     delete pSrchDlg;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SfxHelpTextWindow_Impl::HasSelection() const
 {
@@ -2100,7 +2100,7 @@ sal_Bool SfxHelpTextWindow_Impl::HasSelection() const
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpTextWindow_Impl::InitToolBoxImages()
 {
@@ -2144,7 +2144,7 @@ void SfxHelpTextWindow_Impl::InitToolBoxImages()
         aToolBox.SetOutStyle( aMiscOptions.GetToolboxStyle() );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
 {
@@ -2238,7 +2238,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpTextWindow_Impl::SetOnStartupBoxPosition()
 {
@@ -2248,7 +2248,7 @@ void SfxHelpTextWindow_Impl::SetOnStartupBoxPosition()
     aOnStartupCB.SetPosPixel( aPos );
 }
 
-// -----------------------------------------------------------------------
+
 
 Reference< XBreakIterator > SfxHelpTextWindow_Impl::GetBreakIterator()
 {
@@ -2258,7 +2258,7 @@ Reference< XBreakIterator > SfxHelpTextWindow_Impl::GetBreakIterator()
     return xBreakIterator;
 }
 
-// -----------------------------------------------------------------------
+
 
 Reference< XTextRange > SfxHelpTextWindow_Impl::getCursor() const
 {
@@ -2290,7 +2290,7 @@ Reference< XTextRange > SfxHelpTextWindow_Impl::getCursor() const
     return xCursor;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxHelpTextWindow_Impl::isHandledKey( const KeyCode& _rKeyCode )
 {
@@ -2312,7 +2312,7 @@ bool SfxHelpTextWindow_Impl::isHandledKey( const KeyCode& _rKeyCode )
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SfxHelpTextWindow_Impl, SelectHdl)
 {
@@ -2357,7 +2357,7 @@ IMPL_LINK_NOARG(SfxHelpTextWindow_Impl, SelectHdl)
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SfxHelpTextWindow_Impl, NotifyHdl, SvtMiscOptions*, pOptions )
 {
@@ -2368,7 +2368,7 @@ IMPL_LINK( SfxHelpTextWindow_Impl, NotifyHdl, SvtMiscOptions*, pOptions )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog*, pDlg )
 {
@@ -2452,7 +2452,7 @@ IMPL_LINK( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog*, pDlg )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SfxHelpTextWindow_Impl, CloseHdl, sfx2::SearchDialog*, pDlg )
 {
@@ -2462,7 +2462,7 @@ IMPL_LINK( SfxHelpTextWindow_Impl, CloseHdl, sfx2::SearchDialog*, pDlg )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SfxHelpTextWindow_Impl, CheckHdl, CheckBox*, pBox )
 {
@@ -2486,7 +2486,7 @@ IMPL_LINK( SfxHelpTextWindow_Impl, CheckHdl, CheckBox*, pBox )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpTextWindow_Impl::Resize()
 {
@@ -2497,7 +2497,7 @@ void SfxHelpTextWindow_Impl::Resize()
     SetOnStartupBoxPosition();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
@@ -2623,7 +2623,7 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     return nDone || Window::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpTextWindow_Impl::GetFocus()
 {
@@ -2645,7 +2645,7 @@ void SfxHelpTextWindow_Impl::GetFocus()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpTextWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -2660,7 +2660,7 @@ void SfxHelpTextWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpTextWindow_Impl::ToggleIndex( sal_Bool bOn )
 {
@@ -2677,7 +2677,7 @@ void SfxHelpTextWindow_Impl::ToggleIndex( sal_Bool bOn )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpTextWindow_Impl::SelectSearchText( const OUString& rSearchText, sal_Bool _bIsFullWordSearch )
 {
@@ -2686,7 +2686,7 @@ void SfxHelpTextWindow_Impl::SelectSearchText( const OUString& rSearchText, sal_
     aSelectTimer.Start();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpTextWindow_Impl::SetPageStyleHeaderOff() const
 {
@@ -2748,7 +2748,7 @@ void SfxHelpTextWindow_Impl::SetPageStyleHeaderOff() const
 #endif
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpTextWindow_Impl::CloseFrame()
 {
@@ -2764,7 +2764,7 @@ void SfxHelpTextWindow_Impl::CloseFrame()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpTextWindow_Impl::DoSearch()
 {
@@ -2795,7 +2795,7 @@ void SfxHelpWindow_Impl::Resize()
     InitSizes();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpWindow_Impl::Split()
 {
@@ -2834,14 +2834,14 @@ void SfxHelpWindow_Impl::Split()
     InitSizes();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpWindow_Impl::GetFocus()
 {
     pTextWin->GrabFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpWindow_Impl::MakeLayout()
 {
@@ -2892,7 +2892,7 @@ void SfxHelpWindow_Impl::MakeLayout()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpWindow_Impl::InitSizes()
 {
@@ -2914,7 +2914,7 @@ void SfxHelpWindow_Impl::InitSizes()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpWindow_Impl::LoadConfig()
 {
@@ -2952,7 +2952,7 @@ void SfxHelpWindow_Impl::LoadConfig()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpWindow_Impl::SaveConfig()
 {
@@ -2985,7 +2985,7 @@ void SfxHelpWindow_Impl::SaveConfig()
     aViewOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aUserData ) ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpWindow_Impl::ShowStartPage()
 {
@@ -2996,7 +2996,7 @@ void SfxHelpWindow_Impl::ShowStartPage()
     loadHelpContent(sHelpURL);
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox )
 {
@@ -3009,7 +3009,7 @@ IMPL_LINK( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox )
     return 1;
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl)
 {
@@ -3051,7 +3051,7 @@ IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl)
     return 0;
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK( SfxHelpWindow_Impl, SelectFactoryHdl, SfxHelpIndexWindow_Impl* , pWin )
 {
@@ -3071,7 +3071,7 @@ IMPL_LINK( SfxHelpWindow_Impl, SelectFactoryHdl, SfxHelpIndexWindow_Impl* , pWin
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SfxHelpWindow_Impl, ChangeHdl, HelpListener_Impl*, pListener )
 {
@@ -3079,7 +3079,7 @@ IMPL_LINK( SfxHelpWindow_Impl, ChangeHdl, HelpListener_Impl*, pListener )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpWindow_Impl::openDone(const OUString& sURL    ,
                                         sal_Bool         bSuccess)
@@ -3133,7 +3133,7 @@ void SfxHelpWindow_Impl::openDone(const OUString& sURL    ,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >& rFrame,
@@ -3174,7 +3174,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     LoadConfig();
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxHelpWindow_Impl::~SfxHelpWindow_Impl()
 {
@@ -3187,7 +3187,7 @@ SfxHelpWindow_Impl::~SfxHelpWindow_Impl()
     delete pTextWin;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
@@ -3213,7 +3213,7 @@ bool SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     return bHandled || Window::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpWindow_Impl::setContainerWindow( Reference < ::com::sun::star::awt::XWindow > xWin )
 {
@@ -3221,14 +3221,14 @@ void SfxHelpWindow_Impl::setContainerWindow( Reference < ::com::sun::star::awt::
     MakeLayout();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpWindow_Impl::SetFactory( const OUString& rFactory )
 {
     pIndexWin->SetFactory( rFactory, sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpWindow_Impl::SetHelpURL( const OUString& rURL )
 {
@@ -3237,7 +3237,7 @@ void SfxHelpWindow_Impl::SetHelpURL( const OUString& rURL )
         SetFactory( aObj.GetHost() );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpWindow_Impl::DoAction( sal_uInt16 nActionId )
 {
@@ -3338,7 +3338,7 @@ void SfxHelpWindow_Impl::DoAction( sal_uInt16 nActionId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpWindow_Impl::CloseWindow()
 {
@@ -3365,7 +3365,7 @@ void SfxHelpWindow_Impl::CloseWindow()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxHelpWindow_Impl::UpdateToolbox()
 {
@@ -3373,14 +3373,14 @@ void SfxHelpWindow_Impl::UpdateToolbox()
     pTextWin->GetToolBox().EnableItem( TBI_FORWARD, pHelpInterceptor->HasHistorySucc() );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SfxHelpWindow_Impl::HasHistoryPredecessor() const
 {
     return pHelpInterceptor->HasHistoryPred();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SfxHelpWindow_Impl::HasHistorySuccessor() const
 {
@@ -3397,7 +3397,7 @@ SfxAddHelpBookmarkDialog_Impl::SfxAddHelpBookmarkDialog_Impl(Window* pParent, sa
         SetText(get<FixedText>("alttitle")->GetText());
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxAddHelpBookmarkDialog_Impl::SetTitle( const OUString& rTitle )
 {

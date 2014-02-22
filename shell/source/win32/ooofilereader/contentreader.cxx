@@ -167,9 +167,9 @@ LocaleSet_t const & CContentReader::getLocale( const StyleName_t Style )
 
 /***********************   event handler functions  ***********************/
 
-//------------------------------
+
 // start_element occurs when a tag is start
-//------------------------------
+
 
 void CContentReader::start_element(
     const std::wstring& /*raw_name*/,
@@ -184,9 +184,9 @@ void CContentReader::start_element(
 
 }
 
-//------------------------------
+
 // end_element occurs when a tag is closed
-//------------------------------
+
 
 void CContentReader::end_element(const std::wstring& /*raw_name*/, const std::wstring& local_name)
 {
@@ -213,9 +213,9 @@ void CContentReader::end_element(const std::wstring& /*raw_name*/, const std::ws
 
 }
 
-//------------------------------
+
 // characters occurs when receiving characters
-//------------------------------
+
 
 void CContentReader::characters( const std::wstring& character )
 {

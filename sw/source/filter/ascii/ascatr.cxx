@@ -169,9 +169,9 @@ bool SwASC_AttrIter::OutAttr( sal_Int32 nSwPos )
 }
 
 
-//------------------------
+
 // Output of the node
-//------------------------
+
 
 static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 {

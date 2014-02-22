@@ -18,7 +18,7 @@
  */
 
 
-//------------------------------------------------------
+
 // testcomponent - Loads a service and its testcomponent from dlls performs a test.
 // Expands the dll-names depending on the actual environment.
 // Example : testcomponent com.sun.star.io.Pipe stm

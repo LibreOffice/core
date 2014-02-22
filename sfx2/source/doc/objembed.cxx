@@ -39,7 +39,7 @@
 
 using namespace ::com::sun::star;
 
-// -----------------------------------------------------------------------
+
 // TODO/LATER: this workaround must be replaced by API in future if possible
 SfxObjectShell* SfxObjectShell::GetParentShellByModel_Impl()
 {
@@ -66,7 +66,7 @@ SfxObjectShell* SfxObjectShell::GetParentShellByModel_Impl()
     return pResult;
 }
 
-// -----------------------------------------------------------------------
+
 Printer* SfxObjectShell::GetDocumentPrinter()
 {
     SfxObjectShell* pParent = GetParentShellByModel_Impl();
@@ -75,7 +75,7 @@ Printer* SfxObjectShell::GetDocumentPrinter()
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 OutputDevice* SfxObjectShell::GetDocumentRefDev()
 {
     SfxObjectShell* pParent = GetParentShellByModel_Impl();
@@ -84,13 +84,13 @@ OutputDevice* SfxObjectShell::GetDocumentRefDev()
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 void SfxObjectShell::OnDocumentPrinterChanged( Printer* /*pNewPrinter*/ )
 {
     // virtual method
 }
 
-// -----------------------------------------------------------------------
+
 Rectangle SfxObjectShell::GetVisArea( sal_uInt16 nAspect ) const
 {
     if( nAspect == ASPECT_CONTENT )
@@ -105,14 +105,14 @@ Rectangle SfxObjectShell::GetVisArea( sal_uInt16 nAspect ) const
     return Rectangle();
 }
 
-// -----------------------------------------------------------------------
+
 const Rectangle& SfxObjectShell::GetVisArea() const
 {
     pImp->m_aVisArea = GetVisArea( ASPECT_CONTENT );
     return pImp->m_aVisArea;
 }
 
-// -----------------------------------------------------------------------
+
 void SfxObjectShell::SetVisArea( const Rectangle & rVisArea )
 {
     if( pImp->m_aVisArea != rVisArea )
@@ -128,31 +128,31 @@ void SfxObjectShell::SetVisArea( const Rectangle & rVisArea )
     }
 }
 
-// -----------------------------------------------------------------------
+
 void SfxObjectShell::SetVisAreaSize( const Size & rVisSize )
 {
     SetVisArea( Rectangle( GetVisArea().TopLeft(), rVisSize ) );
 }
 
-// -----------------------------------------------------------------------
+
 sal_uIntPtr SfxObjectShell::GetMiscStatus() const
 {
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 MapUnit SfxObjectShell::GetMapUnit() const
 {
     return pImp->m_nMapUnit;
 }
 
-// -----------------------------------------------------------------------
+
 void SfxObjectShell::SetMapUnit( MapUnit nMapUnit )
 {
     pImp->m_nMapUnit = nMapUnit;
 }
 
-// -----------------------------------------------------------------------
+
 void SfxObjectShell::FillTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc ) const
 {
     sal_uInt32 nClipFormat;
@@ -167,7 +167,7 @@ void SfxObjectShell::FillTransferableObjectDescriptor( TransferableObjectDescrip
     rDesc.mbCanLink = sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 void SfxObjectShell::DoDraw( OutputDevice* pDev,
                             const Point & rObjPos,
                             const Size & rSize,
@@ -187,7 +187,7 @@ void SfxObjectShell::DoDraw( OutputDevice* pDev,
     }
 }
 
-// -----------------------------------------------------------------------
+
 void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
                                const Point & rViewPos,
                                const Fraction & rScaleX,

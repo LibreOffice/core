@@ -161,7 +161,7 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
         rPropertyMap[ PROP_ParaAdjust ] <<= mrTextParagraphProperties.getParaAdjust().get();
 }
 
-// --------------------------------------------------------------------
+
 
 ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {

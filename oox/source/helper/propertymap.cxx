@@ -127,7 +127,7 @@ private:
     PropertyNameMap     maPropMap;
 };
 
-// ----------------------------------------------------------------------------
+
 
 GenericPropertySet::GenericPropertySet( const PropertyMap& rPropMap )
 {

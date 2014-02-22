@@ -99,7 +99,7 @@ namespace connectivity { namespace hsqldb
                         )   SAL_THROW( ( Exception ) );
     };
 
-    // -----------------------------------------------------------------------------
+
     bool FlushListeners::implTypedNotify( const Reference< XFlushListener >& _rxListener, const EventObject& _rEvent ) SAL_THROW( ( Exception ) )
     {
         _rxListener->flushed( _rEvent );
@@ -109,14 +109,14 @@ namespace connectivity { namespace hsqldb
     // =============================================================================
     // = OHsqlConnection
     // =============================================================================
-    // -----------------------------------------------------------------------------
+
     void SAL_CALL OHsqlConnection::disposing(void)
     {
         m_aFlushListeners.disposeAndClear( EventObject( *this ) );
         OHsqlConnection_BASE::disposing();
         OConnectionWrapper::disposing();
     }
-    // -----------------------------------------------------------------------------
+
     OHsqlConnection::OHsqlConnection( const Reference< XDriver > _rxDriver,
         const Reference< XConnection >& _xConnection ,const Reference< XComponentContext >& _rxContext )
         :OHsqlConnection_BASE( m_aMutex )
@@ -128,7 +128,7 @@ namespace connectivity { namespace hsqldb
     {
         setDelegation(_xConnection,_rxContext,m_refCount);
     }
-    // -----------------------------------------------------------------------------
+
     OHsqlConnection::~OHsqlConnection()
     {
         if ( !OHsqlConnection_BASE::rBHelper.bDisposed )
@@ -137,25 +137,25 @@ namespace connectivity { namespace hsqldb
             dispose();
         }
     }
-    // -----------------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XINTERFACE2(OHsqlConnection,OHsqlConnection_BASE,OConnectionWrapper)
     IMPLEMENT_SERVICE_INFO(OHsqlConnection, "com.sun.star.sdbc.drivers.hsqldb.OHsqlConnection", "com.sun.star.sdbc.Connection")
     IMPLEMENT_FORWARD_XTYPEPROVIDER2(OHsqlConnection,OHsqlConnection_BASE,OConnectionWrapper)
 
-    //--------------------------------------------------------------------
+
     ::osl::Mutex& OHsqlConnection::getMutex() const
     {
         return m_aMutex;
     }
 
-    //--------------------------------------------------------------------
+
     void OHsqlConnection::checkDisposed() const
     {
         ::connectivity::checkDisposed( rBHelper.bDisposed );
     }
 
     // XFlushable
-    //--------------------------------------------------------------------
+
     void SAL_CALL OHsqlConnection::flush(  ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -193,21 +193,21 @@ namespace connectivity { namespace hsqldb
         }
    }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OHsqlConnection::addFlushListener( const Reference< XFlushListener >& l ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         m_aFlushListeners.addInterface( l );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OHsqlConnection::removeFlushListener( const Reference< XFlushListener >& l ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         m_aFlushListeners.removeInterface( l );
     }
 
-    // -------------------------------------------------------------------
+
     Reference< XGraphic > SAL_CALL OHsqlConnection::getTableIcon( const OUString& _TableName, ::sal_Int32 /*_ColorMode*/ ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -219,7 +219,7 @@ namespace connectivity { namespace hsqldb
         return impl_getTextTableIcon_nothrow();
     }
 
-    // -------------------------------------------------------------------
+
     Reference< XInterface > SAL_CALL OHsqlConnection::getTableEditor( const Reference< XDatabaseDocumentUI >& _DocumentUI, const OUString& _TableName ) throw (IllegalArgumentException, WrappedTargetException, RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -246,7 +246,7 @@ namespace connectivity { namespace hsqldb
         // editor not yet implemented in this CWS
     }
 
-    // -------------------------------------------------------------------
+
     Reference< XNameAccess > OHsqlConnection::impl_getTableContainer_throw()
     {
         Reference< XNameAccess > xTables;
@@ -270,7 +270,7 @@ namespace connectivity { namespace hsqldb
     }
 
     //TODO: resource
-    // -------------------------------------------------------------------
+
     void OHsqlConnection::impl_checkExistingTable_throw( const OUString& _rTableName )
     {
         bool bDoesExist = false;
@@ -298,7 +298,7 @@ namespace connectivity { namespace hsqldb
         } // if ( !bDoesExist )
     }
 
-    // -------------------------------------------------------------------
+
     bool OHsqlConnection::impl_isTextTable_nothrow( const OUString& _rTableName )
     {
         bool bIsTextTable = false;
@@ -335,7 +335,7 @@ namespace connectivity { namespace hsqldb
         return bIsTextTable;
     }
 
-    // -------------------------------------------------------------------
+
     Reference< XGraphic > OHsqlConnection::impl_getTextTableIcon_nothrow()
     {
         Reference< XGraphic > xGraphic;

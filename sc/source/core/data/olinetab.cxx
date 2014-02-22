@@ -25,7 +25,7 @@
 #include "address.hxx"
 #include "table.hxx"
 
-//------------------------------------------------------------------------
+
 
 ScOutlineEntry::ScOutlineEntry( SCCOLROW nNewStart, SCCOLROW nNewSize, bool bNewHidden ) :
     nStart  ( nNewStart ),
@@ -104,7 +104,7 @@ void ScOutlineEntry::SetVisible( bool bNewVisible )
     bVisible = bNewVisible;
 }
 
-//------------------------------------------------------------------------
+
 
 ScOutlineCollection::ScOutlineCollection() {}
 
@@ -159,7 +159,7 @@ ScOutlineCollection::iterator ScOutlineCollection::FindStart(SCCOLROW nMinStart)
     return maEntries.lower_bound(nMinStart);
 }
 
-//------------------------------------------------------------------------
+
 
 ScOutlineArray::ScOutlineArray() :
     nDepth(0) {}
@@ -793,7 +793,7 @@ void ScOutlineArray::RemoveAll()
     nDepth = 0;
 }
 
-//------------------------------------------------------------------------
+
 
 ScOutlineTable::ScOutlineTable()
 {
@@ -835,7 +835,7 @@ bool ScOutlineTable::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     return aRowOutline.DeleteSpace( nStartRow, nSize );
 }
 
-//------------------------------------------------------------------------
+
 
 ScSubOutlineIterator::ScSubOutlineIterator( ScOutlineArray* pOutlineArray ) :
         pArray( pOutlineArray ),

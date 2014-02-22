@@ -61,13 +61,13 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form::binding;
 
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OEditControl_CreateInstance(const Reference< XMultiServiceFactory > & _rxFactory)
 {
     return *(new OEditControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> OEditControl::_getTypes()
 {
     static Sequence<Type> aTypes;
@@ -79,7 +79,7 @@ Sequence<Type> OEditControl::_getTypes()
     return aTypes;
 }
 
-//------------------------------------------------------------------------------
+
 Any SAL_CALL OEditControl::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn = OBoundControl::queryAggregation(_rType);
@@ -89,7 +89,7 @@ Any SAL_CALL OEditControl::queryAggregation(const Type& _rType) throw (RuntimeEx
     return aReturn;
 }
 
-//------------------------------------------------------------------------------
+
 OEditControl::OEditControl(const Reference<XComponentContext>& _rxFactory)
                :OBoundControl( _rxFactory, FRM_SUN_CONTROL_RICHTEXTCONTROL )
                ,m_aChangeListeners(m_aMutex)
@@ -108,7 +108,7 @@ OEditControl::OEditControl(const Reference<XComponentContext>& _rxFactory)
     decrement(m_refCount);
 }
 
-//------------------------------------------------------------------------------
+
 OEditControl::~OEditControl()
 {
     if( m_nKeyEvent )
@@ -123,20 +123,20 @@ OEditControl::~OEditControl()
 }
 
 // XChangeBroadcaster
-//------------------------------------------------------------------------------
+
 void OEditControl::addChangeListener(const Reference<XChangeListener>& l) throw ( ::com::sun::star::uno::RuntimeException)
 {
     m_aChangeListeners.addInterface( l );
 }
 
-//------------------------------------------------------------------------------
+
 void OEditControl::removeChangeListener(const Reference<XChangeListener>& l) throw ( ::com::sun::star::uno::RuntimeException)
 {
     m_aChangeListeners.removeInterface( l );
 }
 
 // OComponentHelper
-//------------------------------------------------------------------------------
+
 void OEditControl::disposing()
 {
     OBoundControl::disposing();
@@ -146,7 +146,7 @@ void OEditControl::disposing()
 }
 
 // XServiceInfo
-//------------------------------------------------------------------------------
+
 StringSequence  OEditControl::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
@@ -158,14 +158,14 @@ StringSequence  OEditControl::getSupportedServiceNames() throw()
 }
 
 // XEventListener
-//------------------------------------------------------------------------------
+
 void OEditControl::disposing(const EventObject& Source) throw( RuntimeException )
 {
     OBoundControl::disposing(Source);
 }
 
 // XFocusListener
-//------------------------------------------------------------------------------
+
 void OEditControl::focusGained( const FocusEvent& /*e*/ ) throw ( ::com::sun::star::uno::RuntimeException)
 {
     Reference<XPropertySet>  xSet(getModel(), UNO_QUERY);
@@ -173,7 +173,7 @@ void OEditControl::focusGained( const FocusEvent& /*e*/ ) throw ( ::com::sun::st
         xSet->getPropertyValue( PROPERTY_TEXT ) >>= m_aHtmlChangeValue;
 }
 
-//------------------------------------------------------------------------------
+
 void OEditControl::focusLost( const FocusEvent& /*e*/ ) throw ( ::com::sun::star::uno::RuntimeException)
 {
     Reference<XPropertySet>  xSet(getModel(), UNO_QUERY);
@@ -190,7 +190,7 @@ void OEditControl::focusLost( const FocusEvent& /*e*/ ) throw ( ::com::sun::star
 }
 
 // XKeyListener
-//------------------------------------------------------------------------------
+
 void OEditControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
 {
     if( e.KeyCode != KEY_RETURN || e.Modifiers != 0 )
@@ -247,12 +247,12 @@ void OEditControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) throw ( 
     m_nKeyEvent = Application::PostUserEvent( LINK(this, OEditControl,OnKeyPressed) );
 }
 
-//------------------------------------------------------------------------------
+
 void OEditControl::keyReleased(const ::com::sun::star::awt::KeyEvent& /*e*/) throw ( ::com::sun::star::uno::RuntimeException)
 {
 }
 
-//------------------------------------------------------------------------------
+
 IMPL_LINK(OEditControl, OnKeyPressed, void*, /*EMPTYARG*/)
 {
     m_nKeyEvent = 0;
@@ -265,27 +265,27 @@ IMPL_LINK(OEditControl, OnKeyPressed, void*, /*EMPTYARG*/)
     return 0L;
 }
 
-//------------------------------------------------------------------
+
 void SAL_CALL OEditControl::createPeer( const Reference< XToolkit>& _rxToolkit, const Reference< XWindowPeer>& _rxParent ) throw ( RuntimeException )
 {
     OBoundControl::createPeer(_rxToolkit, _rxParent);
 }
 
 /*************************************************************************/
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OEditModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OEditModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> OEditModel::_getTypes()
 {
     return OEditBaseModel::_getTypes();
 }
 
 
-//------------------------------------------------------------------
+
 OEditModel::OEditModel(const Reference<XComponentContext>& _rxFactory)
     :OEditBaseModel( _rxFactory, FRM_SUN_COMPONENT_RICHTEXTCONTROL, FRM_SUN_CONTROL_TEXTFIELD, sal_True, sal_True )
     ,m_bMaxTextLenModified(sal_False)
@@ -296,7 +296,7 @@ OEditModel::OEditModel(const Reference<XComponentContext>& _rxFactory)
     initValueProperty( PROPERTY_TEXT, PROPERTY_ID_TEXT );
 }
 
-//------------------------------------------------------------------
+
 OEditModel::OEditModel( const OEditModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OEditBaseModel( _pOriginal, _rxFactory )
     ,m_bMaxTextLenModified(sal_False)
@@ -310,7 +310,7 @@ OEditModel::OEditModel( const OEditModel* _pOriginal, const Reference<XComponent
     // they will be set to new values, anyway ....
 }
 
-//------------------------------------------------------------------
+
 OEditModel::~OEditModel()
 {
     if (!OComponentHelper::rBHelper.bDisposed)
@@ -321,10 +321,10 @@ OEditModel::~OEditModel()
 
 }
 
-//------------------------------------------------------------------------------
+
 IMPLEMENT_DEFAULT_CLONING( OEditModel )
 
-//------------------------------------------------------------------------------
+
 void OEditModel::disposing()
 {
     OEditBaseModel::disposing();
@@ -332,14 +332,14 @@ void OEditModel::disposing()
 }
 
 // XPersistObject
-//------------------------------------------------------------------------------
+
 OUString SAL_CALL OEditModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return OUString(FRM_COMPONENT_EDIT);  // old (non-sun) name for compatibility !
 }
 
 // XServiceInfo
-//------------------------------------------------------------------------------
+
 StringSequence SAL_CALL OEditModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
@@ -378,7 +378,7 @@ void SAL_CALL OEditModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) 
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OEditModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 5, OEditBaseModel )
@@ -390,7 +390,7 @@ void OEditModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     END_DESCRIBE_PROPERTIES();
 }
 
-//------------------------------------------------------------------------------
+
 void OEditModel::describeAggregateProperties( Sequence< Property >& _rAggregateProps ) const
 {
     OEditBaseModel::describeAggregateProperties( _rAggregateProps );
@@ -405,7 +405,7 @@ void OEditModel::describeAggregateProperties( Sequence< Property >& _rAggregateP
 
 }
 
-//------------------------------------------------------------------------------
+
 bool OEditModel::implActsAsRichText( ) const
 {
     sal_Bool bActAsRichText = sal_False;
@@ -416,7 +416,7 @@ bool OEditModel::implActsAsRichText( ) const
     return bActAsRichText;
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OEditModel::reset(  ) throw(RuntimeException)
 {
     // no reset if we currently act as rich text control
@@ -426,7 +426,7 @@ void SAL_CALL OEditModel::reset(  ) throw(RuntimeException)
     OEditBaseModel::reset();
 }
 
-//------------------------------------------------------------------------------
+
 namespace
 {
     void lcl_transferProperties( const Reference< XPropertySet >& _rxSource, const Reference< XPropertySet >& _rxDest )
@@ -496,7 +496,7 @@ namespace
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OEditModel::writeAggregate( const Reference< XObjectOutputStream >& _rxOutStream ) const
 {
     // we need to fake the writing of our aggregate. Since #i24387#, we have another aggregate,
@@ -518,7 +518,7 @@ void OEditModel::writeAggregate( const Reference< XObjectOutputStream >& _rxOutS
         xFakedPersist->write( _rxOutStream );
 }
 
-//------------------------------------------------------------------------------
+
 void OEditModel::readAggregate( const Reference< XObjectInputStream >& _rxInStream )
 {
     // we need to fake the reading of our aggregate. Since #i24387#, we have another aggregate,
@@ -537,7 +537,7 @@ void OEditModel::readAggregate( const Reference< XObjectInputStream >& _rxInStre
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OEditModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     Any aCurrentText;
@@ -567,7 +567,7 @@ void OEditModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OEditModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OEditBaseModel::read(_rxInStream);
@@ -589,7 +589,7 @@ void OEditModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( 
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_uInt16 OEditModel::getPersistenceFlags() const
 {
     sal_uInt16 nFlags = OEditBaseModel::getPersistenceFlags();
@@ -600,7 +600,7 @@ sal_uInt16 OEditModel::getPersistenceFlags() const
     return nFlags;
 }
 
-//------------------------------------------------------------------------------
+
 void OEditModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 {
     Reference< XPropertySet > xField = getField();
@@ -631,7 +631,7 @@ void OEditModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OEditModel::onDisconnectedDbColumn()
 {
     OEditBaseModel::onDisconnectedDbColumn();
@@ -647,7 +647,7 @@ void OEditModel::onDisconnectedDbColumn()
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OEditModel::approveDbColumnType( sal_Int32 _nColumnType )
 {
     // if we act as rich text currently, we do not allow binding to a database column
@@ -657,13 +657,13 @@ sal_Bool OEditModel::approveDbColumnType( sal_Int32 _nColumnType )
     return OEditBaseModel::approveDbColumnType( _nColumnType );
 }
 
-//------------------------------------------------------------------------------
+
 void OEditModel::resetNoBroadcast()
 {
     OEditBaseModel::resetNoBroadcast();
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OEditModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aNewValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
@@ -701,7 +701,7 @@ sal_Bool OEditModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     return sal_True;
 }
 
-//------------------------------------------------------------------------------
+
 Any OEditModel::translateDbColumnToControlValue()
 {
     OSL_PRECOND( m_pValueFormatter.get(), "OEditModel::translateDbColumnToControlValue: no value formatter!" );
@@ -732,7 +732,7 @@ Any OEditModel::translateDbColumnToControlValue()
     return aRet.hasValue() ? aRet : makeAny( OUString() );
 }
 
-//------------------------------------------------------------------------------
+
 Any OEditModel::getDefaultForReset() const
 {
     return makeAny( m_aDefaultText );

@@ -27,14 +27,14 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
-//---------------------------------------------------------------------------------------
+
 //.......................................................................................
 #define DECLARE_SERVICE_INFO(classImplName) \
     namespace frm { \
         extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> SAL_CALL classImplName##_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory) throw (::com::sun::star::uno::RuntimeException); \
     }
 
-//---------------------------------------------------------------------------------------
+
 DECLARE_SERVICE_INFO(OFixedTextModel)
 DECLARE_SERVICE_INFO(ORadioButtonModel)
 DECLARE_SERVICE_INFO(ORadioButtonControl)
@@ -89,7 +89,7 @@ namespace frm { \
 DECLARE_SERVICE_INFO(OFormsCollection)
 DECLARE_SERVICE_INFO(ImageProducer)
 
-//---------------------------------------------------------------------------------------
+
 
 static Sequence< OUString >                      s_aClassImplementationNames;
 static Sequence<Sequence< OUString > >   s_aClassServiceNames;
@@ -97,7 +97,7 @@ static Sequence<sal_Int64>                              s_aFactories;
     // need to use sal_Int64 instead of ComponentInstantiation, as ComponentInstantiation has no cppuType, so
     // it can't be used with sequences
 
-//---------------------------------------------------------------------------------------
+
 void registerClassInfo(
         OUString _rClassImplName,                                // the ImplName of the class
         const Sequence< OUString >& _rServiceNames,      // the services supported by this class
@@ -118,7 +118,7 @@ void registerClassInfo(
     s_aFactories.getArray()[nCurrentLength] = reinterpret_cast<sal_Int64>(_pCreateFunction);
 }
 
-//---------------------------------------------------------------------------------------
+
 //.......................................................................................
 #define REGISTER_CLASS_CORE(classImplName) \
     registerClassInfo( \
@@ -156,7 +156,7 @@ void registerClassInfo(
     aServices.getArray()[3] = service4; \
     REGISTER_CLASS_CORE(classImplName)
 
-//---------------------------------------------------------------------------------------
+
 void ensureClassInfos()
 {
     if (s_aClassImplementationNames.getLength())
@@ -166,7 +166,7 @@ void ensureClassInfos()
 
     // ========================================================================
     // = ControlModels
-    // ------------------------------------------------------------------------
+
     // - FixedText
     REGISTER_CLASS2(OFixedTextModel, FRM_COMPONENT_FIXEDTEXT, FRM_SUN_COMPONENT_FIXEDTEXT);
     // - Hidden
@@ -279,7 +279,7 @@ void ensureClassInfos()
 extern "C"
 {
 
-//---------------------------------------------------------------------------------------
+
 void SAL_CALL createRegistryInfo_ODatabaseForm();
 void SAL_CALL createRegistryInfo_OFilterControl();
 void SAL_CALL createRegistryInfo_OScrollBarModel();
@@ -291,7 +291,7 @@ void SAL_CALL createRegistryInfo_ORichTextControl();
 void SAL_CALL createRegistryInfo_CLibxml2XFormsExtension();
 void SAL_CALL createRegistryInfo_FormOperations();
 
-//---------------------------------------------------------------------------------------
+
 void SAL_CALL createRegistryInfo_FORMS()
 {
     static sal_Bool bInit = sal_False;
@@ -311,7 +311,7 @@ void SAL_CALL createRegistryInfo_FORMS()
     }
 }
 
-//---------------------------------------------------------------------------------------
+
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL frm_component_getFactory(const sal_Char* _pImplName, XMultiServiceFactory* _pServiceManager, void* /*_pRegistryKey*/)
 {
     if (!_pServiceManager || !_pImplName)

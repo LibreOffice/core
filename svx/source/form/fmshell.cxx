@@ -150,13 +150,13 @@ using namespace ::svxform;
 //========================================================================
 TYPEINIT1( FmDesignModeChangedHint, SfxHint );
 
-//------------------------------------------------------------------------
+
 FmDesignModeChangedHint::FmDesignModeChangedHint( sal_Bool bDesMode )
     :m_bDesignMode( bDesMode )
 {
 }
 
-//------------------------------------------------------------------------
+
 FmDesignModeChangedHint::~FmDesignModeChangedHint()
 {
 }
@@ -210,7 +210,7 @@ SFX_IMPL_INTERFACE(FmFormShell, SfxShell, SVX_RES(RID_STR_FORMSHELL))
 //========================================================================
 TYPEINIT1(FmFormShell,SfxShell)
 
-//------------------------------------------------------------------------
+
 FmFormShell::FmFormShell( SfxViewShell* _pParent, FmFormView* pView )
             :SfxShell(_pParent)
             ,m_pImpl(new FmXFormShell(*this, _pParent->GetViewFrame()))
@@ -228,7 +228,7 @@ FmFormShell::FmFormShell( SfxViewShell* _pParent, FmFormView* pView )
     SetView(m_pFormView);
 }
 
-//------------------------------------------------------------------------
+
 FmFormShell::~FmFormShell()
 {
     if ( m_pFormView )
@@ -239,14 +239,14 @@ FmFormShell::~FmFormShell()
     m_pImpl = NULL;
 }
 
-//------------------------------------------------------------------------
+
 void FmFormShell::NotifyMarkListChanged(FmFormView* pWhichView)
 {
     FmNavViewMarksChanged aChangeNotification(pWhichView);
     Broadcast(aChangeNotification);
 }
 
-//------------------------------------------------------------------------
+
 bool FmFormShell::PrepareClose(sal_Bool bUI)
 {
     if ( GetImpl()->didPrepareClose() )
@@ -299,7 +299,7 @@ bool FmFormShell::PrepareClose(sal_Bool bUI)
     return bResult;
 }
 
-//------------------------------------------------------------------------
+
 void FmFormShell::impl_setDesignMode(sal_Bool bDesign)
 {
     if (m_pFormView)
@@ -320,7 +320,7 @@ void FmFormShell::impl_setDesignMode(sal_Bool bDesign)
     GetViewShell()->GetViewFrame()->GetBindings().Invalidate(ControllerSlotMap);
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmFormShell::HasUIFeature( sal_uInt32 nFeature )
 {
     sal_Bool bResult = sal_False;
@@ -369,7 +369,7 @@ sal_Bool FmFormShell::HasUIFeature( sal_uInt32 nFeature )
     return bResult;
 }
 
-//------------------------------------------------------------------------
+
 void FmFormShell::Execute(SfxRequest &rReq)
 {
     sal_uInt16 nSlot = rReq.GetSlot();
@@ -830,7 +830,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmFormShell::GetState(SfxItemSet &rSet)
 {
     SfxWhichIter aIter( rSet );
@@ -1086,7 +1086,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
 {
     if  (   !GetImpl()->getNavController().is()
@@ -1186,7 +1186,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
     }
 }
 
-//------------------------------------------------------------------------
+
 FmFormPage* FmFormShell::GetCurPage() const
 {
     FmFormPage* pP = NULL;
@@ -1195,7 +1195,7 @@ FmFormPage* FmFormShell::GetCurPage() const
     return pP;
 }
 
-//------------------------------------------------------------------------
+
 void FmFormShell::SetView( FmFormView* _pView )
 {
     if ( m_pFormView )
@@ -1225,7 +1225,7 @@ void FmFormShell::SetView( FmFormView* _pView )
         GetImpl()->viewActivated( *m_pFormView );
 }
 
-//------------------------------------------------------------------------
+
 void FmFormShell::DetermineForms(sal_Bool bInvalidate)
 {
     // Existieren Formulare auf der aktuellen Page
@@ -1238,19 +1238,19 @@ void FmFormShell::DetermineForms(sal_Bool bInvalidate)
     }
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmFormShell::GetY2KState(sal_uInt16& nReturn)
 {
     return GetImpl()->GetY2KState(nReturn);
 }
 
-//------------------------------------------------------------------------
+
 void FmFormShell::SetY2KState(sal_uInt16 n)
 {
     GetImpl()->SetY2KState(n);
 }
 
-//------------------------------------------------------------------------
+
 void FmFormShell::Activate(sal_Bool bMDI)
 {
     SfxShell::Activate(bMDI);
@@ -1259,7 +1259,7 @@ void FmFormShell::Activate(sal_Bool bMDI)
         GetImpl()->viewActivated( *m_pFormView, sal_True );
 }
 
-//------------------------------------------------------------------------
+
 void FmFormShell::Deactivate(sal_Bool bMDI)
 {
     SfxShell::Deactivate(bMDI);
@@ -1268,37 +1268,37 @@ void FmFormShell::Deactivate(sal_Bool bMDI)
         GetImpl()->viewDeactivated( *m_pFormView, sal_False );
 }
 
-//------------------------------------------------------------------------
+
 void FmFormShell::ExecuteTextAttribute( SfxRequest& _rReq )
 {
     m_pImpl->ExecuteTextAttribute( _rReq );
 }
 
-//------------------------------------------------------------------------
+
 void FmFormShell::GetTextAttributeState( SfxItemSet& _rSet )
 {
     m_pImpl->GetTextAttributeState( _rSet );
 }
 
-//------------------------------------------------------------------------
+
 bool FmFormShell::IsActiveControl() const
 {
     return m_pImpl->IsActiveControl();
 }
 
-//------------------------------------------------------------------------
+
 void FmFormShell::ForgetActiveControl()
 {
     m_pImpl->ForgetActiveControl();
 }
 
-//------------------------------------------------------------------------
+
 void FmFormShell::SetControlActivationHandler( const Link& _rHdl )
 {
     m_pImpl->SetControlActivationHandler( _rHdl );
 }
 
-//------------------------------------------------------------------------
+
 namespace
 {
     SdrUnoObj* lcl_findUnoObject( const SdrObjList& _rObjList, const Reference< XControlModel >& _rxModel )
@@ -1322,7 +1322,7 @@ namespace
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmFormShell::ToggleControlFocus( const SdrUnoObj& i_rUnoObject, const SdrView& i_rView, OutputDevice& i_rDevice ) const
 {
     try
@@ -1354,7 +1354,7 @@ void FmFormShell::ToggleControlFocus( const SdrUnoObj& i_rUnoObject, const SdrVi
     }
 }
 
-//------------------------------------------------------------------------
+
 namespace
 {
     class FocusableControlsFilter : public ::svx::ISdrObjectFilter
@@ -1383,7 +1383,7 @@ namespace
     };
 }
 
-//------------------------------------------------------------------------
+
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr< ::svx::ISdrObjectFilter > FmFormShell::CreateFocusableControlFilter( const SdrView& i_rView, const OutputDevice& i_rDevice ) const
 {
@@ -1396,7 +1396,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-//------------------------------------------------------------------------
+
 SdrUnoObj* FmFormShell::GetFormControl( const Reference< XControlModel >& _rxModel, const SdrView& _rView, const OutputDevice& _rDevice, Reference< XControl >& _out_rxControl ) const
 {
     if ( !_rxModel.is() )
@@ -1439,7 +1439,7 @@ SdrUnoObj* FmFormShell::GetFormControl( const Reference< XControlModel >& _rxMod
     return NULL;
 }
 
-//------------------------------------------------------------------------
+
 Reference< runtime::XFormController > FmFormShell::GetFormController( const Reference< XForm >& _rxForm, const SdrView& _rView, const OutputDevice& _rDevice ) const
 {
     const FmFormView* pFormView = dynamic_cast< const FmFormView* >( &_rView );
@@ -1449,7 +1449,7 @@ Reference< runtime::XFormController > FmFormShell::GetFormController( const Refe
     return pFormView->GetFormController( _rxForm, _rDevice );
 }
 
-//------------------------------------------------------------------------
+
 void FmFormShell::SetDesignMode( bool _bDesignMode )
 {
     if ( _bDesignMode == m_bDesignMode )

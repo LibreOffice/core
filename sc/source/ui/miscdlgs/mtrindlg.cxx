@@ -22,7 +22,7 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #include "mtrindlg.hxx"
 #include "scresid.hxx"
@@ -66,7 +66,7 @@ ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
     m_pBtnDefVal->Check( nCurrentValue == nDefaultValue );
 }
 
-//------------------------------------------------------------------------
+
 
 long ScMetricInputDlg::GetInputValue( FieldUnit eUnit ) const
 {
@@ -92,7 +92,7 @@ long ScMetricInputDlg::GetInputValue( FieldUnit eUnit ) const
     return sal::static_int_cast<long>( m_pEdValue->Denormalize( m_pEdValue->GetValue( eUnit ) ) );
 }
 
-//------------------------------------------------------------------------
+
 // Handler:
 
 IMPL_LINK_NOARG(ScMetricInputDlg, SetDefValHdl)
@@ -107,7 +107,7 @@ IMPL_LINK_NOARG(ScMetricInputDlg, SetDefValHdl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(ScMetricInputDlg, ModifyHdl)
 {

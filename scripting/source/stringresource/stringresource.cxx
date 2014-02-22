@@ -767,15 +767,15 @@ StringResourcePersistenceImpl::StringResourcePersistenceImpl( const Reference< X
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 StringResourcePersistenceImpl::~StringResourcePersistenceImpl()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 // XServiceInfo
-// -----------------------------------------------------------------------------
+
 
 OUString StringResourcePersistenceImpl::getImplementationName(  )
     throw (RuntimeException)
@@ -783,7 +783,7 @@ OUString StringResourcePersistenceImpl::getImplementationName(  )
     return OUString( "com.sun.star.comp.scripting.StringResourceWithLocation");
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool StringResourcePersistenceImpl::supportsService( const OUString& rServiceName )
     throw (RuntimeException)
@@ -791,7 +791,7 @@ sal_Bool StringResourcePersistenceImpl::supportsService( const OUString& rServic
     return StringResourceImpl::supportsService( rServiceName );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > StringResourcePersistenceImpl::getSupportedServiceNames(  )
     throw (RuntimeException)
@@ -799,9 +799,9 @@ Sequence< OUString > StringResourcePersistenceImpl::getSupportedServiceNames(  )
     return StringResourceImpl::getSupportedServiceNames();
 }
 
-// -----------------------------------------------------------------------------
+
 // XInitialization base functionality for derived classes
-// -----------------------------------------------------------------------------
+
 
 static OUString aNameBaseDefaultStr("strings");
 
@@ -847,7 +847,7 @@ void StringResourcePersistenceImpl::implInitializeCommonParameters
     implSetCurrentLocale( aCurrentLocale, FindClosestMatch, bUseDefaultIfNoMatch );
 }
 
-// -----------------------------------------------------------------------------
+
 // Forwarding calls to base class
 
 // XModifyBroadcaster
@@ -963,7 +963,7 @@ sal_Int32 StringResourcePersistenceImpl::getUniqueNumericId(  )
     return StringResourceImpl::getUniqueNumericId();
 }
 
-// -----------------------------------------------------------------------------
+
 // XStringResourcePersistence
 
 void StringResourcePersistenceImpl::store()
@@ -1246,7 +1246,7 @@ void StringResourcePersistenceImpl::implStoreAtLocation
 }
 
 
-// -----------------------------------------------------------------------------
+
 // BinaryOutput, helper class for exportBinary
 
 class BinaryOutput
@@ -1462,7 +1462,7 @@ void StringResourcePersistenceImpl::implWriteLocaleBinary
     implWritePropertiesFile( pLocaleItem, xOutputStream, m_aComment );
 }
 
-// -----------------------------------------------------------------------------
+
 // BinaryOutput, helper class for exportBinary
 
 class BinaryInput
@@ -2287,7 +2287,7 @@ static Reference< XInterface > SAL_CALL create_StringResourceWithStorageImpl(
     return static_cast< ::cppu::OWeakObject * >( new StringResourceWithStorageImpl( xContext ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 StringResourceWithStorageImpl::StringResourceWithStorageImpl( const Reference< XComponentContext >& rxContext )
     : StringResourceWithStorageImpl_BASE( rxContext )
@@ -2295,15 +2295,15 @@ StringResourceWithStorageImpl::StringResourceWithStorageImpl( const Reference< X
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 StringResourceWithStorageImpl::~StringResourceWithStorageImpl()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 // XServiceInfo
-// -----------------------------------------------------------------------------
+
 
 OUString StringResourceWithStorageImpl::getImplementationName(  ) throw (RuntimeException)
 {
@@ -2320,9 +2320,9 @@ Sequence< OUString > StringResourceWithStorageImpl::getSupportedServiceNames(  )
     return getSupportedServiceNames_StringResourceWithStorageImpl();
 }
 
-// -----------------------------------------------------------------------------
+
 // XInitialization
-// -----------------------------------------------------------------------------
+
 
 void StringResourceWithStorageImpl::initialize( const Sequence< Any >& aArguments )
     throw (Exception, RuntimeException)
@@ -2349,7 +2349,7 @@ void StringResourceWithStorageImpl::initialize( const Sequence< Any >& aArgument
     implInitializeCommonParameters( aArguments );
 }
 
-// -----------------------------------------------------------------------------
+
 // Forwarding calls to base class
 
 // XModifyBroadcaster
@@ -2516,7 +2516,7 @@ void StringResourceWithStorageImpl::importBinary( const Sequence< ::sal_Int8 >& 
     StringResourcePersistenceImpl::importBinary( Data );
 }
 
-// -----------------------------------------------------------------------------
+
 // XStringResourceWithStorage
 
 void StringResourceWithStorageImpl::storeAsStorage( const Reference< XStorage >& Storage )
@@ -2614,7 +2614,7 @@ static Reference< XInterface > SAL_CALL create_StringResourceWithLocationImpl(
     return static_cast< ::cppu::OWeakObject * >( new StringResourceWithLocationImpl( xContext ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 StringResourceWithLocationImpl::StringResourceWithLocationImpl( const Reference< XComponentContext >& rxContext )
     : StringResourceWithLocationImpl_BASE( rxContext )
@@ -2622,15 +2622,15 @@ StringResourceWithLocationImpl::StringResourceWithLocationImpl( const Reference<
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 StringResourceWithLocationImpl::~StringResourceWithLocationImpl()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 // XServiceInfo
-// -----------------------------------------------------------------------------
+
 
 OUString StringResourceWithLocationImpl::getImplementationName(  ) throw (RuntimeException)
 {
@@ -2647,9 +2647,9 @@ Sequence< OUString > StringResourceWithLocationImpl::getSupportedServiceNames(  
     return getSupportedServiceNames_StringResourceWithLocationImpl();
 }
 
-// -----------------------------------------------------------------------------
+
 // XInitialization
-// -----------------------------------------------------------------------------
+
 
 void StringResourceWithLocationImpl::initialize( const Sequence< Any >& aArguments )
     throw (Exception, RuntimeException)
@@ -2692,7 +2692,7 @@ void StringResourceWithLocationImpl::initialize( const Sequence< Any >& aArgumen
     implInitializeCommonParameters( aArguments );
 }
 
-// -----------------------------------------------------------------------------
+
 // Forwarding calls to base class
 
 // XModifyBroadcaster
@@ -2861,7 +2861,7 @@ void StringResourceWithLocationImpl::importBinary( const Sequence< ::sal_Int8 >&
     StringResourcePersistenceImpl::importBinary( Data );
 }
 
-// -----------------------------------------------------------------------------
+
 // XStringResourceWithLocation
 
 // XStringResourceWithLocation

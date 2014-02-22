@@ -45,7 +45,7 @@ bool lclContains( const ScRangeList& rScOuter, const uno::Reference< excel::XRan
     return true;
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** Functor to decide whether the anchors of two Hyperlink objects are equal. */
 struct EqualAnchorFunctor
@@ -130,7 +130,7 @@ private:
     HyperlinkVector     maHlinks;
 };
 
-// ----------------------------------------------------------------------------
+
 
 ScVbaHlinkContainer::ScVbaHlinkContainer() throw (uno::RuntimeException)
 {

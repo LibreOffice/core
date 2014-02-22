@@ -35,7 +35,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
 DBG_NAME( file_OSQLAnalyzer )
-//------------------------------------------------------------------
+
 OSQLAnalyzer::OSQLAnalyzer(OConnection* _pConnection)
                :m_pConnection(_pConnection)
                ,m_bHasSelectionCode(sal_False)
@@ -46,18 +46,18 @@ OSQLAnalyzer::OSQLAnalyzer(OConnection* _pConnection)
     m_aInterpreter = new OPredicateInterpreter(m_aCompiler);
 }
 
-// -----------------------------------------------------------------------------
+
 OSQLAnalyzer::~OSQLAnalyzer()
 {
     DBG_DTOR( file_OSQLAnalyzer, NULL );
 }
 
-// -----------------------------------------------------------------------------
+
 void OSQLAnalyzer::setIndexes(const Reference< XNameAccess>& _xIndexes)
 {
     m_aCompiler->m_xIndexes = _xIndexes;
 }
-//------------------------------------------------------------------
+
 void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
 {
     if (SQL_ISRULE(pSQLParseNode,select_statement))
@@ -120,7 +120,7 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
     m_aCompiler->start(pSQLParseNode);
 }
 
-//------------------------------------------------------------------
+
 void OSQLAnalyzer::bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow,OEvaluateSetList& _rEvaluateSetList)
 {
     // count criteria
@@ -153,7 +153,7 @@ void OSQLAnalyzer::bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow,OEvalu
         }
     }
 }
-//------------------------------------------------------------------
+
 void OSQLAnalyzer::bindSelectRow(const OValueRefRow& _pRow)
 {
     // first the select part
@@ -164,7 +164,7 @@ void OSQLAnalyzer::bindSelectRow(const OValueRefRow& _pRow)
             bindRow( aIter->first->m_aCodeList,_pRow,aEvaluateSetList);
     }
 }
-//------------------------------------------------------------------
+
 ::std::vector<sal_Int32>* OSQLAnalyzer::bindEvaluationRow(OValueRefRow& _pRow)
 {
     OEvaluateSetList    aEvaluateSetList;
@@ -203,19 +203,19 @@ void OSQLAnalyzer::bindSelectRow(const OValueRefRow& _pRow)
     return pKeySet;
 }
 
-// -----------------------------------------------------------------------------
+
 OOperandAttr* OSQLAnalyzer::createOperandAttr(sal_Int32 _nPos,
                                               const Reference< XPropertySet>& _xCol,
                                               const Reference< XNameAccess>& /*_xIndexes*/)
 {
     return new OOperandAttr(static_cast<sal_uInt16>(_nPos),_xCol);
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OSQLAnalyzer::hasRestriction() const
 {
     return m_aCompiler->hasCode();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OSQLAnalyzer::hasFunctions() const
 {
     if ( m_bSelectionFirstTime )
@@ -229,7 +229,7 @@ sal_Bool OSQLAnalyzer::hasFunctions() const
     }
     return m_bHasSelectionCode;
 }
-// -----------------------------------------------------------------------------
+
 void OSQLAnalyzer::setSelectionEvaluationResult(OValueRefRow& _pRow,const ::std::vector<sal_Int32>& _rColumnMapping)
 {
     sal_Int32 nPos = 1;
@@ -246,7 +246,7 @@ void OSQLAnalyzer::setSelectionEvaluationResult(OValueRefRow& _pRow,const ::std:
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void OSQLAnalyzer::dispose()
 {
     m_aCompiler->dispose();
@@ -256,7 +256,7 @@ void OSQLAnalyzer::dispose()
             aIter->first->dispose();
     }
 }
-// -----------------------------------------------------------------------------
+
 void OSQLAnalyzer::setOrigColumns(const OFileColumns& rCols)
 {
     m_aCompiler->setOrigColumns(rCols);
@@ -266,6 +266,6 @@ void OSQLAnalyzer::setOrigColumns(const OFileColumns& rCols)
             aIter->first->setOrigColumns(rCols);
     }
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

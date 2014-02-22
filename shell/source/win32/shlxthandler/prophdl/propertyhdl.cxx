@@ -38,9 +38,9 @@
 
 #include "internal/stream_helper.hxx"
 
-//---------------------------
+
 // Module global
-//---------------------------
+
 long g_DllRefCnt = 0;
 HINSTANCE g_hModule = NULL;
 
@@ -63,7 +63,7 @@ PROPERTYMAP g_rgPROPERTYMAP[] =
 
 size_t gPropertyMapTableSize = sizeof(g_rgPROPERTYMAP)/sizeof(g_rgPROPERTYMAP[0]);
 
-//----------------------------
+
 
 CPropertyHdl::CPropertyHdl( long nRefCnt ) :
     m_RefCnt( nRefCnt ),
@@ -73,7 +73,7 @@ CPropertyHdl::CPropertyHdl( long nRefCnt ) :
     InterlockedIncrement( &g_DllRefCnt );
 }
 
-//----------------------------
+
 
 CPropertyHdl::~CPropertyHdl()
 {
@@ -85,9 +85,9 @@ CPropertyHdl::~CPropertyHdl()
     InterlockedDecrement( &g_DllRefCnt );
 }
 
-//-----------------------------
+
 // IUnknown methods
-//-----------------------------
+
 HRESULT STDMETHODCALLTYPE CPropertyHdl::QueryInterface(REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject)
 {
     *ppvObject = 0;
@@ -121,13 +121,13 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::QueryInterface(REFIID riid, void __RPC_F
     return E_NOINTERFACE;
 }
 
-//----------------------------
+
 ULONG STDMETHODCALLTYPE CPropertyHdl::AddRef( void )
 {
     return InterlockedIncrement( &m_RefCnt );
 }
 
-//----------------------------
+
 ULONG STDMETHODCALLTYPE CPropertyHdl::Release( void )
 {
     long refcnt = InterlockedDecrement( &m_RefCnt );
@@ -138,9 +138,9 @@ ULONG STDMETHODCALLTYPE CPropertyHdl::Release( void )
     return refcnt;
 }
 
-//-----------------------------
+
 // IPropertyStore
-//-----------------------------
+
 HRESULT STDMETHODCALLTYPE CPropertyHdl::GetCount( DWORD *pcProps )
 {
     HRESULT hr = E_UNEXPECTED;
@@ -152,7 +152,7 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::GetCount( DWORD *pcProps )
     return hr;
 }
 
-//-----------------------------
+
 HRESULT STDMETHODCALLTYPE CPropertyHdl::GetAt( DWORD iProp, PROPERTYKEY *pKey )
 {
     HRESULT hr = E_UNEXPECTED;
@@ -164,7 +164,7 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::GetAt( DWORD iProp, PROPERTYKEY *pKey )
     return hr;
 }
 
-//-----------------------------
+
 HRESULT STDMETHODCALLTYPE CPropertyHdl::GetValue( REFPROPERTYKEY key, PROPVARIANT *pPropVar )
 {
     HRESULT hr = E_UNEXPECTED;
@@ -176,7 +176,7 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::GetValue( REFPROPERTYKEY key, PROPVARIAN
     return hr;
 }
 
-//-----------------------------
+
 HRESULT STDMETHODCALLTYPE
 CPropertyHdl::SetValue(REFPROPERTYKEY /*key*/, REFPROPVARIANT /*propVar*/)
 {
@@ -188,15 +188,15 @@ CPropertyHdl::SetValue(REFPROPERTYKEY /*key*/, REFPROPVARIANT /*propVar*/)
     return hr;
 }
 
-//-----------------------------
+
 HRESULT STDMETHODCALLTYPE CPropertyHdl::Commit()
 {
     return S_OK;
 }
 
-//-----------------------------
+
 // IPropertyStore
-//-----------------------------
+
 HRESULT STDMETHODCALLTYPE
 CPropertyHdl::IsPropertyWritable(REFPROPERTYKEY /*key*/)
 {
@@ -204,9 +204,9 @@ CPropertyHdl::IsPropertyWritable(REFPROPERTYKEY /*key*/)
     return S_FALSE;
 }
 
-//-----------------------------
+
 // IInitializeWithStream
-//-----------------------------
+
 HRESULT STDMETHODCALLTYPE CPropertyHdl::Initialize( IStream *pStream, DWORD grfMode )
 {
     if ( grfMode & STGM_READWRITE )
@@ -241,7 +241,7 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::Initialize( IStream *pStream, DWORD grfM
     return S_OK;
 }
 
-//-----------------------------
+
 void CPropertyHdl::LoadProperties( CMetaInfoReader *pMetaInfoReader )
 {
     OutputDebugStringFormat( "CPropertyHdl: LoadProperties\n" );
@@ -264,7 +264,7 @@ void CPropertyHdl::LoadProperties( CMetaInfoReader *pMetaInfoReader )
     }
 }
 
-//-----------------------------
+
 HRESULT CPropertyHdl::GetItemData( CMetaInfoReader *pMetaInfoReader, UINT nIndex, PROPVARIANT *pVarData )
 {
     switch (nIndex) {
@@ -309,13 +309,13 @@ HRESULT CPropertyHdl::GetItemData( CMetaInfoReader *pMetaInfoReader, UINT nIndex
     return S_FALSE;
 }
 
-//-----------------------------------------------------------------------------
+
 //                              CClassFactory
-//-----------------------------------------------------------------------------
+
 
 long CClassFactory::s_ServerLocks = 0;
 
-//-----------------------------------------------------------------------------
+
 CClassFactory::CClassFactory( const CLSID& clsid ) :
     m_RefCnt(1),
     m_Clsid(clsid)
@@ -323,15 +323,15 @@ CClassFactory::CClassFactory( const CLSID& clsid ) :
     InterlockedIncrement( &g_DllRefCnt );
 }
 
-//-----------------------------------------------------------------------------
+
 CClassFactory::~CClassFactory()
 {
     InterlockedDecrement( &g_DllRefCnt );
 }
 
-//-----------------------------------------------------------------------------
+
 //                              IUnknown methods
-//-----------------------------------------------------------------------------
+
 HRESULT STDMETHODCALLTYPE CClassFactory::QueryInterface( REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject )
 {
     *ppvObject = 0;
@@ -347,13 +347,13 @@ HRESULT STDMETHODCALLTYPE CClassFactory::QueryInterface( REFIID riid, void __RPC
     return E_NOINTERFACE;
 }
 
-//-----------------------------------------------------------------------------
+
 ULONG STDMETHODCALLTYPE CClassFactory::AddRef( void )
 {
     return InterlockedIncrement( &m_RefCnt );
 }
 
-//-----------------------------------------------------------------------------
+
 ULONG STDMETHODCALLTYPE CClassFactory::Release( void )
 {
     long refcnt = InterlockedDecrement( &m_RefCnt );
@@ -364,9 +364,9 @@ ULONG STDMETHODCALLTYPE CClassFactory::Release( void )
     return refcnt;
 }
 
-//-----------------------------------------------------------------------------
+
 //                          IClassFactory methods
-//-----------------------------------------------------------------------------
+
 HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
             IUnknown __RPC_FAR *pUnkOuter,
             REFIID riid,
@@ -393,7 +393,7 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
     return hr;
 }
 
-//-----------------------------------------------------------------------------
+
 HRESULT STDMETHODCALLTYPE CClassFactory::LockServer( BOOL fLock )
 {
     if ( fLock )
@@ -404,13 +404,13 @@ HRESULT STDMETHODCALLTYPE CClassFactory::LockServer( BOOL fLock )
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
+
 bool CClassFactory::IsLocked()
 {
     return ( s_ServerLocks > 0 );
 }
 
-//-----------------------------------------------------------------------------
+
 extern "C" STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
 {
     OutputDebugStringFormat( "DllGetClassObject.\n" );
@@ -427,7 +427,7 @@ extern "C" STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
+
 extern "C" STDAPI DllCanUnloadNow( void )
 {
     OutputDebugStringFormat( "DllCanUnloadNow.\n" );
@@ -437,7 +437,7 @@ extern "C" STDAPI DllCanUnloadNow( void )
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
+
 BOOL WINAPI DllMain( HINSTANCE hInst, ULONG /*ul_reason_for_call*/, LPVOID /*lpReserved*/ )
 {
     OutputDebugStringFormat( "DllMain.\n" );

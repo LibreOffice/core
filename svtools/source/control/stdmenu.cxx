@@ -32,13 +32,13 @@ FontNameMenu::FontNameMenu()
     SetMenuFlags( GetMenuFlags() | MENU_FLAG_NOAUTOMNEMONICS );
 }
 
-// -----------------------------------------------------------------------
+
 
 FontNameMenu::~FontNameMenu()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void FontNameMenu::Select()
 {
@@ -46,7 +46,7 @@ void FontNameMenu::Select()
     maSelectHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void FontNameMenu::Highlight()
 {
@@ -56,7 +56,7 @@ void FontNameMenu::Highlight()
     maCurName = aTempName;
 }
 
-// -----------------------------------------------------------------------
+
 
 void FontNameMenu::Fill( const FontList* pList )
 {
@@ -87,7 +87,7 @@ void FontNameMenu::Fill( const FontList* pList )
     SetCurName( maCurName );
 }
 
-// -----------------------------------------------------------------------
+
 
 void FontNameMenu::SetCurName(const OUString& rName)
 {
@@ -124,7 +124,7 @@ FontSizeMenu::FontSizeMenu()
     SetMenuFlags( GetMenuFlags() | MENU_FLAG_NOAUTOMNEMONICS );
 }
 
-// -----------------------------------------------------------------------
+
 
 FontSizeMenu::~FontSizeMenu()
 {
@@ -132,7 +132,7 @@ FontSizeMenu::~FontSizeMenu()
         delete[] mpHeightAry;
 }
 
-// -----------------------------------------------------------------------
+
 
 void FontSizeMenu::Select()
 {
@@ -141,7 +141,7 @@ void FontSizeMenu::Select()
     maSelectHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void FontSizeMenu::Highlight()
 {
@@ -158,7 +158,7 @@ void FontSizeMenu::Highlight()
     mnCurHeight = nTempHeight;
 }
 
-// -----------------------------------------------------------------------
+
 
 void FontSizeMenu::Fill( const FontInfo& rInfo, const FontList* pList )
 {
@@ -226,7 +226,7 @@ void FontSizeMenu::Fill( const FontInfo& rInfo, const FontList* pList )
     SetCurHeight( mnCurHeight );
 }
 
-// -----------------------------------------------------------------------
+
 
 void FontSizeMenu::SetCurHeight( long nHeight )
 {

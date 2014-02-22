@@ -23,24 +23,24 @@
 #include "controlaccess.hxx"
 #include "../misc/WinImplHelper.hxx"
 
-//------------------------------------------------------------
+
 // we are using a table based algorithm to dispatch control
 // actions there is one table containing one action table for
 // each control class and one action table per control class
 // which contains function pointer to control action functions
-//------------------------------------------------------------
 
-//------------------------------------------------------------
+
+
 // namespace directives
-//------------------------------------------------------------
+
 
 
 namespace // private
 {
 
-    //------------------------------------------------------------
+
     // table setup
-    //------------------------------------------------------------
+
 
     CTRL_SETVALUE_FUNCTION_T CheckboxSetValueFunctionTable[] =
     {
@@ -107,9 +107,9 @@ namespace // private
         { NULL, 0 }
     };
 
-    //------------------------------------------------------------
+
     //
-    //------------------------------------------------------------
+
 
     CTRL_SETVALUE_FUNCTION_T SAL_CALL GetCtrlSetValueFunction(
         CTRL_SETVALUE_FUNCTION_T* aCtrlSetValueFunctionTable, size_t aTableSize, sal_Int16 aCtrlAction )
@@ -122,9 +122,9 @@ namespace // private
         return aCtrlSetValueFunctionTable[aCtrlAction];
     }
 
-    //------------------------------------------------------------
+
     //
-    //------------------------------------------------------------
+
 
     CTRL_GETVALUE_FUNCTION_T SAL_CALL GetCtrlGetValueFunction(
         CTRL_GETVALUE_FUNCTION_T* aCtrlGetValueFunctionTable, size_t aTableSize, sal_Int16 aCtrlAction )
@@ -137,9 +137,9 @@ namespace // private
         return aCtrlGetValueFunctionTable[aCtrlAction];
     }
 
-    //------------------------------------------------------------
+
     //
-    //------------------------------------------------------------
+
 
     inline
     _ENTRY SAL_CALL GetCtrlClassSetValueFunctionTable( CTRL_CLASS aCtrlClass )
@@ -147,9 +147,9 @@ namespace // private
         return CtrlClassSetValueFunctionTable[aCtrlClass];
     }
 
-    //------------------------------------------------------------
+
     //
-    //------------------------------------------------------------
+
 
     inline
     _ENTRY SAL_CALL GetCtrlClassGetValueFunctionTable( CTRL_CLASS aCtrlClass )
@@ -173,9 +173,9 @@ namespace // private
 
 }; // end namespace
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 CTRL_SETVALUE_FUNCTION_T SAL_CALL GetCtrlSetValueFunction( CTRL_CLASS aCtrlClass, sal_Int16 aCtrlAction )
 {
@@ -188,9 +188,9 @@ CTRL_SETVALUE_FUNCTION_T SAL_CALL GetCtrlSetValueFunction( CTRL_CLASS aCtrlClass
         aCtrlAction );
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 CTRL_GETVALUE_FUNCTION_T SAL_CALL GetCtrlGetValueFunction( CTRL_CLASS aCtrlClass, sal_Int16 aCtrlAction )
 {
@@ -203,9 +203,9 @@ CTRL_GETVALUE_FUNCTION_T SAL_CALL GetCtrlGetValueFunction( CTRL_CLASS aCtrlClass
         aCtrlAction );
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 CTRL_CLASS SAL_CALL GetCtrlClass( HWND hwndCtrl )
 {
@@ -234,9 +234,9 @@ CTRL_CLASS SAL_CALL GetCtrlClass( HWND hwndCtrl )
     return aCtrlClass;
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 int SAL_CALL CommonFilePickerCtrlIdToWinFileOpenCtrlId( sal_Int16 aControlId )
 {

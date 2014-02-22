@@ -34,11 +34,11 @@ OEvoabResultSetMetaData::OEvoabResultSetMetaData(const OUString& _aTableName)
 {
 
 }
-// -------------------------------------------------------------------------
+
 OEvoabResultSetMetaData::~OEvoabResultSetMetaData()
 {
 }
-// -------------------------------------------------------------------------
+
 void OEvoabResultSetMetaData::setEvoabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns) throw(SQLException)
 {
         OSQLColumns::Vector::const_iterator aIter;
@@ -63,45 +63,45 @@ void OEvoabResultSetMetaData::setEvoabFields(const ::rtl::Reference<connectivity
         }
 }
 
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OEvoabResultSetMetaData::getColumnDisplaySize( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return 50;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OEvoabResultSetMetaData::getColumnType( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
 {
         sal_uInt32 nField = m_aEvoabFields[nColumnNum - 1];
     return evoab::getFieldType (nField);
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OEvoabResultSetMetaData::getColumnCount(  ) throw(SQLException, RuntimeException)
 {
     return m_aEvoabFields.size();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEvoabResultSetMetaData::isCaseSensitive( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL OEvoabResultSetMetaData::getSchemaName( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return OUString();
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL OEvoabResultSetMetaData::getColumnName( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
 {
     sal_uInt32 nField = m_aEvoabFields[nColumnNum - 1];
     return evoab::getFieldName( nField );
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL OEvoabResultSetMetaData::getColumnTypeName( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
 {
     sal_uInt32 nField = m_aEvoabFields[nColumnNum - 1];
     return evoab::getFieldTypeName( nField );
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL OEvoabResultSetMetaData::getColumnLabel( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
 {
     sal_uInt32 nField = m_aEvoabFields[nColumnNum - 1];
@@ -114,72 +114,72 @@ OUString SAL_CALL OEvoabResultSetMetaData::getColumnLabel( sal_Int32 nColumnNum 
                                              RTL_TEXTENCODING_UTF8 );
     return aLabel;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL OEvoabResultSetMetaData::getColumnServiceName( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return OUString();
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL OEvoabResultSetMetaData::getTableName( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return m_aTableName;//OUString("TABLE");
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL OEvoabResultSetMetaData::getCatalogName( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return OUString();
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL OEvoabResultSetMetaData::isCurrency( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEvoabResultSetMetaData::isAutoIncrement( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEvoabResultSetMetaData::isSigned( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OEvoabResultSetMetaData::getPrecision( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OEvoabResultSetMetaData::getScale( sal_Int32 /*nColumnNum*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     return 0;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OEvoabResultSetMetaData::isNullable( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return 0;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEvoabResultSetMetaData::isSearchable( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEvoabResultSetMetaData::isReadOnly( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEvoabResultSetMetaData::isDefinitelyWritable( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEvoabResultSetMetaData::isWritable( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

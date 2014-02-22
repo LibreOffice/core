@@ -37,9 +37,9 @@
 #pragma warning(pop)
 #endif
 
-//------------------------------------------------------------------------
+
 // namespace directives
-//------------------------------------------------------------------------
+
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::RuntimeException;
@@ -57,9 +57,9 @@ using namespace cppu;
 
 #define SYSSHEXEC_IMPL_NAME  "com.sun.star.sys.shell.SystemShellExecute"
 
-//------------------------------------------------------------------------
+
 // helper functions
-//------------------------------------------------------------------------
+
 
 namespace // private
 {
@@ -170,7 +170,7 @@ namespace // private
 
     #define E_UNKNOWN_EXEC_ERROR -1
 
-    //-----------------------------------------
+
 
     bool is_system_path(const OUString& path_or_uri)
     {
@@ -179,9 +179,9 @@ namespace // private
         return (rc == osl::FileBase::E_None);
     }
 
-    //-----------------------------------------
+
     // trying to identify a jump mark
-    //-----------------------------------------
+
 
     const OUString    JUMP_MARK_HTM(".htm#");
     const OUString    JUMP_MARK_HTML(".html#");
@@ -199,7 +199,7 @@ namespace // private
         return (jmp_mark > -1);
     }
 
-    //-----------------------------------------
+
 
     bool is_existing_file(const OUString& file_name)
     {
@@ -219,9 +219,9 @@ namespace // private
         return exist;
     }
 
-    //-------------------------------------------------
+
     // Jump marks in file urls are illegal.
-    //-------------------------------------------------
+
 
     void remove_jump_mark(OUString* p_command)
     {
@@ -240,7 +240,7 @@ namespace // private
 
 } // end namespace
 
-//-----------------------------------------------------------------------------------------
+
 
 CSysShExec::CSysShExec( const Reference< css::uno::XComponentContext >& xContext ) :
     WeakComponentImplHelper2< XSystemShellExecute, XServiceInfo >( m_aMutex ),
@@ -257,7 +257,7 @@ CSysShExec::CSysShExec( const Reference< css::uno::XComponentContext >& xContext
     CoInitialize( NULL );
 }
 
-//-------------------------------------------------
+
 
 void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
         throw (IllegalArgumentException, SystemShellExecuteException, RuntimeException)

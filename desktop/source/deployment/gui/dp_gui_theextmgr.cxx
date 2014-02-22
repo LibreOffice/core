@@ -41,13 +41,13 @@ using namespace ::com::sun::star;
 
 namespace dp_gui {
 
-//------------------------------------------------------------------------------
+
 
 ::rtl::Reference< TheExtensionManager > TheExtensionManager::s_ExtMgr;
 
-//------------------------------------------------------------------------------
+
 //                             TheExtensionManager
-//------------------------------------------------------------------------------
+
 
 TheExtensionManager::TheExtensionManager( Window *pParent,
                                           const uno::Reference< uno::XComponentContext > &xContext ) :
@@ -95,7 +95,7 @@ TheExtensionManager::TheExtensionManager( Window *pParent,
     }
 }
 
-//------------------------------------------------------------------------------
+
 TheExtensionManager::~TheExtensionManager()
 {
     delete m_pUpdReqDialog;
@@ -103,7 +103,7 @@ TheExtensionManager::~TheExtensionManager()
     delete m_pExecuteCmdQueue;
 }
 
-//------------------------------------------------------------------------------
+
 void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
 {
     const SolarMutexGuard guard;
@@ -128,7 +128,7 @@ void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
     }
 }
 
-//------------------------------------------------------------------------------
+
 void TheExtensionManager::Show()
 {
     const SolarMutexGuard guard;
@@ -136,7 +136,7 @@ void TheExtensionManager::Show()
     getDialog()->Show();
 }
 
-//------------------------------------------------------------------------------
+
 void TheExtensionManager::SetText( const OUString &rTitle )
 {
     const SolarMutexGuard guard;
@@ -144,7 +144,7 @@ void TheExtensionManager::SetText( const OUString &rTitle )
     getDialog()->SetText( rTitle );
 }
 
-//------------------------------------------------------------------------------
+
 void TheExtensionManager::ToTop( sal_uInt16 nFlags )
 {
     const SolarMutexGuard guard;
@@ -152,7 +152,7 @@ void TheExtensionManager::ToTop( sal_uInt16 nFlags )
     getDialog()->ToTop( nFlags );
 }
 
-//------------------------------------------------------------------------------
+
 bool TheExtensionManager::Close()
 {
     if ( m_pExtMgrDialog )
@@ -163,7 +163,7 @@ bool TheExtensionManager::Close()
         return true;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int16 TheExtensionManager::execute()
 {
     sal_Int16 nRet = 0;
@@ -178,13 +178,13 @@ sal_Int16 TheExtensionManager::execute()
     return nRet;
 }
 
-//------------------------------------------------------------------------------
+
 bool TheExtensionManager::isVisible()
 {
     return getDialog()->IsVisible();
 }
 
-//------------------------------------------------------------------------------
+
 bool TheExtensionManager::checkUpdates( bool /* bShowUpdateOnly */, bool /*bParentVisible*/ )
 {
     std::vector< uno::Reference< deployment::XPackage >  > vEntries;
@@ -217,7 +217,7 @@ bool TheExtensionManager::checkUpdates( bool /* bShowUpdateOnly */, bool /*bPare
     return true;
 }
 
-//------------------------------------------------------------------------------
+
 bool TheExtensionManager::installPackage( const OUString &rPackageURL, bool bWarnUser )
 {
     if ( rPackageURL.isEmpty() )
@@ -243,7 +243,7 @@ bool TheExtensionManager::installPackage( const OUString &rPackageURL, bool bWar
     return true;
 }
 
-//------------------------------------------------------------------------------
+
 bool TheExtensionManager::queryTermination()
 {
     if ( dp_misc::office_is_running() )
@@ -253,7 +253,7 @@ bool TheExtensionManager::queryTermination()
     return true;
 }
 
-//------------------------------------------------------------------------------
+
 void TheExtensionManager::terminateDialog()
 {
     if ( ! dp_misc::office_is_running() )
@@ -267,7 +267,7 @@ void TheExtensionManager::terminateDialog()
     }
 }
 
-//------------------------------------------------------------------------------
+
 void TheExtensionManager::createPackageList()
 {
     uno::Sequence< uno::Sequence< uno::Reference< deployment::XPackage > > > xAllPackages;
@@ -317,7 +317,7 @@ void TheExtensionManager::createPackageList()
     }
 }
 
-//------------------------------------------------------------------------------
+
 PackageState TheExtensionManager::getPackageState( const uno::Reference< deployment::XPackage > &xPackage ) const
 {
     try {
@@ -345,7 +345,7 @@ PackageState TheExtensionManager::getPackageState( const uno::Reference< deploym
     }
 }
 
-//------------------------------------------------------------------------------
+
 bool TheExtensionManager::isReadOnly( const uno::Reference< deployment::XPackage > &xPackage ) const
 {
     if ( m_xExtensionManager.is() && xPackage.is() )
@@ -356,7 +356,7 @@ bool TheExtensionManager::isReadOnly( const uno::Reference< deployment::XPackage
         return true;
 }
 
-//------------------------------------------------------------------------------
+
 // The function investigates if the extension supports options.
 bool TheExtensionManager::supportsOptions( const uno::Reference< deployment::XPackage > &xPackage ) const
 {
@@ -408,7 +408,7 @@ bool TheExtensionManager::supportsOptions( const uno::Reference< deployment::XPa
     return bOptions;
 }
 
-//------------------------------------------------------------------------------
+
 // XEventListener
 void TheExtensionManager::disposing( lang::EventObject const & rEvt )
     throw ( uno::RuntimeException )
@@ -435,7 +435,7 @@ void TheExtensionManager::disposing( lang::EventObject const & rEvt )
     }
 }
 
-//------------------------------------------------------------------------------
+
 // XTerminateListener
 void TheExtensionManager::queryTermination( ::lang::EventObject const & )
     throw ( frame::TerminationVetoException, uno::RuntimeException )
@@ -458,14 +458,14 @@ void TheExtensionManager::queryTermination( ::lang::EventObject const & )
     }
 }
 
-//------------------------------------------------------------------------------
+
 void TheExtensionManager::notifyTermination( ::lang::EventObject const & rEvt )
     throw ( uno::RuntimeException )
 {
     disposing( rEvt );
 }
 
-//------------------------------------------------------------------------------
+
 // XModifyListener
 void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
     throw ( uno::RuntimeException )
@@ -475,7 +475,7 @@ void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
     getDialogHelper()->checkEntries();
 }
 
-//------------------------------------------------------------------------------
+
 ::rtl::Reference< TheExtensionManager > TheExtensionManager::get( const uno::Reference< uno::XComponentContext > &xContext,
                                                                   const uno::Reference< awt::XWindow > &xParent,
                                                                   const OUString & extensionURL )

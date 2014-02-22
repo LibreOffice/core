@@ -67,7 +67,7 @@ using namespace com::sun::star::plugin;
 
 typedef map< OString, OUString, less< OString > > PluginLocationMap;
 
-//__________________________________________________________________________________________________
+
 static void addPluginsFromPath( const TCHAR * pPluginsPath, PluginLocationMap & rPlugins )
 {
     // append dll name pattern we are looking for
@@ -118,7 +118,7 @@ static void addPluginsFromPath( const TCHAR * pPluginsPath, PluginLocationMap & 
     if (hFind != INVALID_HANDLE_VALUE)
         ::FindClose( hFind );
 }
-//__________________________________________________________________________________________________
+
 static void addPluginsFromPath( const OUString & rPath, PluginLocationMap & rPlugins )
 {
     TCHAR arPluginsPath[MAX_PATH];
@@ -132,7 +132,7 @@ static void addPluginsFromPath( const OUString & rPath, PluginLocationMap & rPlu
 }
 
 
-//__________________________________________________________________________________________________
+
 static void add_IE_Plugins( PluginLocationMap & rPlugins )
 {
     HKEY hKey;
@@ -155,7 +155,7 @@ static void add_IE_Plugins( PluginLocationMap & rPlugins )
     }
 }
 
-//--------------------------------------------------------------------------------------------------
+
 static void add_NS_keys( HKEY hKey, PluginLocationMap & rPlugins )
 {
     TCHAR value[MAX_PATH];
@@ -194,7 +194,7 @@ static void add_NS_keys( HKEY hKey, PluginLocationMap & rPlugins )
         addPluginsFromPath( value, rPlugins );
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 static void add_NS_lookupRecursive( HKEY hKey, PluginLocationMap & rPlugins )
 {
     add_NS_keys( hKey, rPlugins );
@@ -214,7 +214,7 @@ static void add_NS_lookupRecursive( HKEY hKey, PluginLocationMap & rPlugins )
         ++dwIndex;
     }
 }
-//__________________________________________________________________________________________________
+
 static void add_MozPlugin( HKEY hKey, PluginLocationMap & rPlugins )
 {
     TCHAR value[MAX_PATH];
@@ -257,7 +257,7 @@ static void add_MozillaPlugin( HKEY hKey, PluginLocationMap & rPlugins )
         ++dwIndex;
     }
 }
-//__________________________________________________________________________________________________
+
 static void add_NS_Plugins( PluginLocationMap & rPlugins )
 {
     HKEY hKey;
@@ -287,7 +287,7 @@ static void add_NS_Plugins( PluginLocationMap & rPlugins )
     }
 }
 
-//__________________________________________________________________________________________________
+
 static void add_SO_Plugins( PluginLocationMap & rPlugins )
 {
     const Sequence< OUString > & rPaths = PluginManager::getAdditionalSearchPaths();
@@ -299,7 +299,7 @@ static void add_SO_Plugins( PluginLocationMap & rPlugins )
     }
 }
 
-//__________________________________________________________________________________________________
+
 Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(void) throw()
 {
     Guard< Mutex > aGuard( Mutex::getGlobalMutex() );

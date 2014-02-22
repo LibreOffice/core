@@ -25,7 +25,7 @@
 
 using namespace connectivity;
 using namespace connectivity::file;
-//------------------------------------------------------------------
+
 ORowSetValue OOp_DayOfWeek::operate(const ORowSetValue& lhs) const
 {
     if ( lhs.isNull() )
@@ -63,7 +63,7 @@ ORowSetValue OOp_DayOfWeek::operate(const ORowSetValue& lhs) const
     }
     return nRet;
 }
-//------------------------------------------------------------------
+
 ORowSetValue OOp_DayOfMonth::operate(const ORowSetValue& lhs) const
 {
     if ( lhs.isNull() )
@@ -72,7 +72,7 @@ ORowSetValue OOp_DayOfMonth::operate(const ORowSetValue& lhs) const
     ::com::sun::star::util::Date aD = lhs;
     return static_cast<sal_Int16>(aD.Day);
 }
-//------------------------------------------------------------------
+
 ORowSetValue OOp_DayOfYear::operate(const ORowSetValue& lhs) const
 {
     if ( lhs.isNull() )
@@ -82,7 +82,7 @@ ORowSetValue OOp_DayOfYear::operate(const ORowSetValue& lhs) const
     Date aDate(aD.Day,aD.Month,aD.Year);
     return static_cast<sal_Int16>(aDate.GetDayOfYear());
 }
-//------------------------------------------------------------------
+
 ORowSetValue OOp_Month::operate(const ORowSetValue& lhs) const
 {
     if ( lhs.isNull() )
@@ -91,7 +91,7 @@ ORowSetValue OOp_Month::operate(const ORowSetValue& lhs) const
     ::com::sun::star::util::Date aD = lhs;
     return static_cast<sal_Int16>(aD.Month);
 }
-//------------------------------------------------------------------
+
 ORowSetValue OOp_DayName::operate(const ORowSetValue& lhs) const
 {
     if ( lhs.isNull() )
@@ -129,7 +129,7 @@ ORowSetValue OOp_DayName::operate(const ORowSetValue& lhs) const
     }
     return sRet;
 }
-//------------------------------------------------------------------
+
 ORowSetValue OOp_MonthName::operate(const ORowSetValue& lhs) const
 {
     if ( lhs.isNull() )
@@ -178,7 +178,7 @@ ORowSetValue OOp_MonthName::operate(const ORowSetValue& lhs) const
     }
     return sRet;
 }
-//------------------------------------------------------------------
+
 ORowSetValue OOp_Quarter::operate(const ORowSetValue& lhs) const
 {
     if ( lhs.isNull() )
@@ -194,7 +194,7 @@ ORowSetValue OOp_Quarter::operate(const ORowSetValue& lhs) const
         nRet = 4;
     return nRet;
 }
-//------------------------------------------------------------------
+
 ORowSetValue OOp_Week::operate(const ::std::vector<ORowSetValue>& lhs) const
 {
     if ( lhs.empty() || lhs.size() > 2 )
@@ -211,7 +211,7 @@ ORowSetValue OOp_Week::operate(const ::std::vector<ORowSetValue>& lhs) const
 
     return static_cast<sal_Int16>(aDate.GetWeekOfYear(static_cast<DayOfWeek>(nStartDay)));
 }
-// -----------------------------------------------------------------------------
+
 ORowSetValue OOp_Year::operate(const ORowSetValue& lhs) const
 {
     if ( lhs.isNull() )
@@ -220,7 +220,7 @@ ORowSetValue OOp_Year::operate(const ORowSetValue& lhs) const
     ::com::sun::star::util::Date aD = lhs;
     return static_cast<sal_Int16>(aD.Year);
 }
-//------------------------------------------------------------------
+
 ORowSetValue OOp_Hour::operate(const ORowSetValue& lhs) const
 {
     if ( lhs.isNull() )
@@ -229,7 +229,7 @@ ORowSetValue OOp_Hour::operate(const ORowSetValue& lhs) const
     ::com::sun::star::util::Time aT = lhs;
     return static_cast<sal_Int16>(aT.Hours);
 }
-//------------------------------------------------------------------
+
 ORowSetValue OOp_Minute::operate(const ORowSetValue& lhs) const
 {
     if ( lhs.isNull() )
@@ -238,7 +238,7 @@ ORowSetValue OOp_Minute::operate(const ORowSetValue& lhs) const
     ::com::sun::star::util::Time aT = lhs;
     return static_cast<sal_Int16>(aT.Minutes);
 }
-//------------------------------------------------------------------
+
 ORowSetValue OOp_Second::operate(const ORowSetValue& lhs) const
 {
     if ( lhs.isNull() )
@@ -247,7 +247,7 @@ ORowSetValue OOp_Second::operate(const ORowSetValue& lhs) const
     ::com::sun::star::util::Time aT = lhs;
     return static_cast<sal_Int16>(aT.Seconds);
 }
-//------------------------------------------------------------------
+
 ORowSetValue OOp_CurDate::operate(const ::std::vector<ORowSetValue>& lhs) const
 {
     if ( !lhs.empty() )
@@ -256,7 +256,7 @@ ORowSetValue OOp_CurDate::operate(const ::std::vector<ORowSetValue>& lhs) const
     Date aCurDate( Date::SYSTEM );
     return ::com::sun::star::util::Date(aCurDate.GetDay(),aCurDate.GetMonth(),aCurDate.GetYear());
 }
-//------------------------------------------------------------------
+
 ORowSetValue OOp_CurTime::operate(const ::std::vector<ORowSetValue>& lhs) const
 {
     if ( !lhs.empty() )
@@ -267,7 +267,7 @@ ORowSetValue OOp_CurTime::operate(const ::std::vector<ORowSetValue>& lhs) const
             aCurTime.GetSec(), aCurTime.GetMin(), aCurTime.GetHour(),
             false);
 }
-//------------------------------------------------------------------
+
 ORowSetValue OOp_Now::operate(const ::std::vector<ORowSetValue>& lhs) const
 {
     if ( !lhs.empty() )
@@ -279,6 +279,6 @@ ORowSetValue OOp_Now::operate(const ::std::vector<ORowSetValue>& lhs) const
             aCurTime.GetDay(), aCurTime.GetMonth(), aCurTime.GetYear(),
             false);
 }
-//------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

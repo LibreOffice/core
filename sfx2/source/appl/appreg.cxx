@@ -65,7 +65,7 @@ void SfxApplication::Registrations_Impl()
     SfxRecentFilesToolBoxControl::RegisterControl( SID_OPENDOC );
 };
 
-//--------------------------------------------------------------------
+
 
 void SfxApplication::RegisterToolBoxControl_Impl( SfxModule *pMod, SfxTbxCtrlFactory *pFact )
 {
@@ -90,7 +90,7 @@ void SfxApplication::RegisterToolBoxControl_Impl( SfxModule *pMod, SfxTbxCtrlFac
     pAppData_Impl->pTbxCtrlFac->push_back( pFact );
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxApplication::RegisterStatusBarControl_Impl( SfxModule *pMod, SfxStbCtrlFactory *pFact )
 {
@@ -115,7 +115,7 @@ void SfxApplication::RegisterStatusBarControl_Impl( SfxModule *pMod, SfxStbCtrlF
     pAppData_Impl->pStbCtrlFac->push_back( pFact );
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxApplication::RegisterMenuControl_Impl( SfxModule *pMod, SfxMenuCtrlFactory *pFact )
 {

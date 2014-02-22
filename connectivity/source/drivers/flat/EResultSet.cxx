@@ -36,19 +36,19 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 
-//------------------------------------------------------------------------------
+
 OFlatResultSet::OFlatResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator& _aSQLIterator)
                 : file::OResultSet(pStmt,_aSQLIterator)
                 ,m_bBookmarkable(sal_True)
 {
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),         PROPERTY_ID_ISBOOKMARKABLE,       PropertyAttribute::READONLY,&m_bBookmarkable,                ::getBooleanCppuType());
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL OFlatResultSet::getImplementationName(  ) throw ( RuntimeException)
 {
     return OUString("com.sun.star.sdbcx.flat.ResultSet");
 }
-// -------------------------------------------------------------------------
+
 Sequence< OUString > SAL_CALL OFlatResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
 {
      Sequence< OUString > aSupported(2);
@@ -61,7 +61,7 @@ sal_Bool SAL_CALL OFlatResultSet::supportsService( const OUString& _rServiceName
 {
     return cppu::supportsService(this, _rServiceName);
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OFlatResultSet::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     if(rType == ::getCppuType((const Reference<XDeleteRows>*)0) || rType == ::getCppuType((const Reference<XResultSetUpdate>*)0)
@@ -71,7 +71,7 @@ Any SAL_CALL OFlatResultSet::queryInterface( const Type & rType ) throw(RuntimeE
     const Any aRet = OResultSet::queryInterface(rType);
     return aRet.hasValue() ? aRet : OFlatResultSet_BASE::queryInterface(rType);
 }
-// -------------------------------------------------------------------------
+
 Sequence<  Type > SAL_CALL OFlatResultSet::getTypes(  ) throw( RuntimeException)
 {
     Sequence< Type > aTypes = OResultSet::getTypes();
@@ -93,7 +93,7 @@ Sequence<  Type > SAL_CALL OFlatResultSet::getTypes(  ) throw( RuntimeException)
     return ::comphelper::concatSequences(aRet,OFlatResultSet_BASE::getTypes());
 }
 
-// -------------------------------------------------------------------------
+
 // XRowLocate
 Any SAL_CALL OFlatResultSet::getBookmark(  ) throw( SQLException,  RuntimeException)
 {
@@ -102,7 +102,7 @@ Any SAL_CALL OFlatResultSet::getBookmark(  ) throw( SQLException,  RuntimeExcept
 
     return makeAny((sal_Int32)(m_aRow->get())[0]->getValue());
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OFlatResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -113,7 +113,7 @@ sal_Bool SAL_CALL OFlatResultSet::moveToBookmark( const  Any& bookmark ) throw( 
 
     return Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),sal_True);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OFlatResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows ) throw( SQLException,  RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -127,48 +127,48 @@ sal_Bool SAL_CALL OFlatResultSet::moveRelativeToBookmark( const  Any& bookmark, 
     return relative(rows);
 }
 
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OFlatResultSet::compareBookmarks( const Any& lhs, const  Any& rhs ) throw( SQLException,  RuntimeException)
 {
     return (lhs == rhs) ? 0 : 2;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OFlatResultSet::hasOrderedBookmarks(  ) throw( SQLException,  RuntimeException)
 {
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OFlatResultSet::hashBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException)
 {
     return comphelper::getINT32(bookmark);
 }
-// -------------------------------------------------------------------------
+
 IPropertyArrayHelper* OFlatResultSet::createArrayHelper( ) const
 {
     Sequence< Property > aProps;
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
-// -------------------------------------------------------------------------
+
 IPropertyArrayHelper & OFlatResultSet::getInfoHelper()
 {
     return *OFlatResultSet_BASE3::getArrayHelper();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OFlatResultSet::acquire() throw()
 {
     OFlatResultSet_BASE2::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OFlatResultSet::release() throw()
 {
     OFlatResultSet_BASE2::release();
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OFlatResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

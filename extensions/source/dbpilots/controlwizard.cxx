@@ -81,7 +81,7 @@ namespace dbp
     //=====================================================================
     //= OControlWizardPage
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OControlWizardPage::OControlWizardPage( OControlWizard* _pParent, const ResId& _rResId )
         :OControlWizardPage_Base( _pParent, _rResId )
         ,m_pFormSettingsSeparator(NULL)
@@ -94,7 +94,7 @@ namespace dbp
     {
     }
 
-    //---------------------------------------------------------------------
+
     OControlWizardPage::~OControlWizardPage()
     {
         delete m_pFormSettingsSeparator;
@@ -106,43 +106,43 @@ namespace dbp
         delete m_pFormTable;
     }
 
-    //---------------------------------------------------------------------
+
     OControlWizard* OControlWizardPage::getDialog()
     {
         return static_cast< OControlWizard* >(GetParent());
     }
 
-    //---------------------------------------------------------------------
+
     const OControlWizard* OControlWizardPage::getDialog() const
     {
         return static_cast< OControlWizard* >(GetParent());
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OControlWizardPage::updateContext()
     {
         return getDialog()->updateContext(OAccessRegulator());
     }
 
-    //---------------------------------------------------------------------
+
     Reference< XConnection > OControlWizardPage::getFormConnection() const
     {
         return getDialog()->getFormConnection(OAccessRegulator());
     }
 
-    //---------------------------------------------------------------------
+
     void OControlWizardPage::setFormConnection( const Reference< XConnection >& _rxConn, sal_Bool _bAutoDispose )
     {
         getDialog()->setFormConnection( OAccessRegulator(), _rxConn, _bAutoDispose );
     }
 
-    //---------------------------------------------------------------------
+
     const OControlWizardContext& OControlWizardPage::getContext()
     {
         return getDialog()->getContext();
     }
 
-    //---------------------------------------------------------------------
+
     void OControlWizardPage::fillListBox(ListBox& _rList, const Sequence< OUString >& _rItems, sal_Bool _bClear)
     {
         if (_bClear)
@@ -158,7 +158,7 @@ namespace dbp
         }
     }
 
-    //---------------------------------------------------------------------
+
     void OControlWizardPage::fillListBox(ComboBox& _rList, const Sequence< OUString >& _rItems, sal_Bool _bClear)
     {
         if (_bClear)
@@ -174,7 +174,7 @@ namespace dbp
         }
     }
 
-    //---------------------------------------------------------------------
+
     void OControlWizardPage::enableFormDatasourceDisplay()
     {
         if (m_pFormSettingsSeparator)
@@ -204,7 +204,7 @@ namespace dbp
         }
     }
 
-    //---------------------------------------------------------------------
+
     void OControlWizardPage::adjustControlForNoDSDisplay(Control* _pControl, sal_Bool _bConstLowerDistance)
     {
         ::Size aDistanceToMove = LogicToPixel( ::Size( 0, 37 ), MAP_APPFONT );
@@ -221,7 +221,7 @@ namespace dbp
         }
     }
 
-    //---------------------------------------------------------------------
+
     void OControlWizardPage::initializePage()
     {
         if (m_pFormDatasource && m_pFormContentTypeLabel && m_pFormTable)
@@ -271,7 +271,7 @@ namespace dbp
     //=====================================================================
     //= OControlWizard
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OControlWizard::OControlWizard( Window* _pParent, const ResId& _rId,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
         :OWizardMachine(_pParent, _rId, WZB_CANCEL | WZB_PREVIOUS | WZB_NEXT | WZB_FINISH)
@@ -286,12 +286,12 @@ namespace dbp
         enableButtons(WZB_FINISH, sal_False);
     }
 
-    //---------------------------------------------------------------------
+
     OControlWizard::~OControlWizard()
     {
     }
 
-    //---------------------------------------------------------------------
+
     short OControlWizard::Execute()
     {
         // get the class id of the control we're dealing with
@@ -315,13 +315,13 @@ namespace dbp
         return OControlWizard_Base::Execute();
     }
 
-    //---------------------------------------------------------------------
+
     void OControlWizard::ActivatePage()
     {
         OControlWizard_Base::ActivatePage();
     }
 
-    //---------------------------------------------------------------------
+
     void OControlWizard::implDetermineShape()
     {
         Reference< XIndexAccess > xPageObjects(m_aContext.xDrawPage, UNO_QUERY);
@@ -352,7 +352,7 @@ namespace dbp
         }
     }
 
-    //---------------------------------------------------------------------
+
     void OControlWizard::implDetermineForm()
     {
         Reference< XChild > xModelAsChild(m_aContext.xObjectModel, UNO_QUERY);
@@ -367,7 +367,7 @@ namespace dbp
 
     }
 
-    //---------------------------------------------------------------------
+
     void OControlWizard::implDeterminePage()
     {
         try
@@ -430,7 +430,7 @@ namespace dbp
         }
     }
 
-    //---------------------------------------------------------------------
+
     void OControlWizard::implGetDSContext()
     {
         try
@@ -445,12 +445,12 @@ namespace dbp
         }
     }
 
-    //---------------------------------------------------------------------
+
     Reference< XConnection > OControlWizard::getFormConnection(const OAccessRegulator&) const
     {
         return getFormConnection();
     }
-    //---------------------------------------------------------------------
+
     Reference< XConnection > OControlWizard::getFormConnection() const
     {
         Reference< XConnection > xConn;
@@ -466,7 +466,7 @@ namespace dbp
         return xConn;
     }
 
-    //---------------------------------------------------------------------
+
     void OControlWizard::setFormConnection( const OAccessRegulator& _rAccess, const Reference< XConnection >& _rxConn, sal_Bool _bAutoDispose )
     {
         try
@@ -496,12 +496,12 @@ namespace dbp
         }
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OControlWizard::updateContext(const OAccessRegulator&)
     {
         return initContext();
     }
-    //---------------------------------------------------------------------
+
     Reference< XInteractionHandler > OControlWizard::getInteractionHandler(Window* _pWindow) const
     {
         Reference< XInteractionHandler > xHandler;
@@ -517,7 +517,7 @@ namespace dbp
         }
         return xHandler;
     }
-    //---------------------------------------------------------------------
+
     sal_Bool OControlWizard::initContext()
     {
         DBG_ASSERT(m_aContext.xObjectModel.is(), "OGroupBoxWizard::initContext: have no control model to work with!");
@@ -673,7 +673,7 @@ namespace dbp
         return 0 != m_aContext.aFieldNames.getLength();
     }
 
-    //---------------------------------------------------------------------
+
     void OControlWizard::commitControlSettings(OControlWizardSettings* _pSettings)
     {
         DBG_ASSERT(m_aContext.xObjectModel.is(), "OControlWizard::commitControlSettings: have no control model to work with!");
@@ -700,7 +700,7 @@ namespace dbp
         }
     }
 
-    //---------------------------------------------------------------------
+
     void OControlWizard::initControlSettings(OControlWizardSettings* _pSettings)
     {
         DBG_ASSERT(m_aContext.xObjectModel.is(), "OControlWizard::initControlSettings: have no control model to work with!");
@@ -725,7 +725,7 @@ namespace dbp
         }
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OControlWizard::needDatasourceSelection()
     {
         // lemme see ...

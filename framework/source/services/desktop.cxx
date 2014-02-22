@@ -99,14 +99,14 @@ void Desktop::constructorInit()
     OFrames* pFramesHelper = new OFrames( this, &m_aChildTaskContainer );
     m_xFramesHelper = css::uno::Reference< css::frame::XFrames >( static_cast< ::cppu::OWeakObject* >(pFramesHelper), css::uno::UNO_QUERY );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     // Initialize a new dispatchhelper-object to handle dispatches.
     // We use these helper as slave for our interceptor helper ... not directly!
     // But he is event listener on THIS instance!
     DispatchProvider* pDispatchHelper = new DispatchProvider( m_xContext, this );
     css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( static_cast< ::cppu::OWeakObject* >(pDispatchHelper), css::uno::UNO_QUERY );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     // Initialize a new interception helper object to handle dispatches and implement an interceptor mechanism.
     // Set created dispatch provider as slowest slave of it.
     // Hold interception helper by reference only - not by pointer!
@@ -233,7 +233,7 @@ sal_Bool SAL_CALL Desktop::terminate()
 
     aReadLock.unlock(); // end synchronize
 
-    //-------------------------------------------------------------------------------------------------------------
+
     // Ask normal terminate listener. They could stop terminate without closing any open document.
     Desktop::TTerminateListenerList lCalledTerminationListener;
     ::sal_Bool                      bVeto = sal_False;
@@ -244,7 +244,7 @@ sal_Bool SAL_CALL Desktop::terminate()
         return sal_False;
     }
 
-    //-------------------------------------------------------------------------------------------------------------
+
     // try to close all open frames.
     // Allow using of any UI ... because Desktop.terminate() was designed as UI functionality in the past.
     ::sal_Bool bAllowUI      = sal_True;
@@ -255,7 +255,7 @@ sal_Bool SAL_CALL Desktop::terminate()
         return sal_False;
     }
 
-    //-------------------------------------------------------------------------------------------------------------
+
     // Normal listener had no problem ...
     // all frames was closed ...
     // now it's time to ask our specialized listener.
@@ -965,13 +965,13 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
 {
     css::uno::Reference< css::frame::XFrame > xTarget;
 
-    //-----------------------------------------------------------------------------------------------------
+
     // 0) Ignore wrong parameter!
     //    We don't support search for following special targets.
     //    If we reject this requests - we mustnt check for such names
     //    in following code again and again. If we do not so -wrong
     //    search results can occur!
-    //-----------------------------------------------------------------------------------------------------
+
     if (
         (sTargetFrameName==SPECIALTARGET_DEFAULT  )   ||    // valid for dispatches - not for findFrame()!
         (sTargetFrameName==SPECIALTARGET_MENUBAR  )   ||    // valid for dispatches - not for findFrame()!
@@ -983,35 +983,35 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
         return NULL;
     }
 
-    //-----------------------------------------------------------------------------------------------------
+
     // I) check for special defined targets first which must be handled exclusive.
     //    force using of "if() else if() ..."
-    //-----------------------------------------------------------------------------------------------------
 
-    //-----------------------------------------------------------------------------------------------------
+
+
     // I.I) "_blank"
     //  create a new task as child of this desktop instance
     //  Note: Used helper TaskCreator use us automaticly ...
-    //-----------------------------------------------------------------------------------------------------
+
     if ( sTargetFrameName==SPECIALTARGET_BLANK )
     {
         TaskCreator aCreator( m_xContext );
         xTarget = aCreator.createTask(sTargetFrameName,sal_False);
     }
 
-    //-----------------------------------------------------------------------------------------------------
+
     // I.II) "_top"
     //  We are top by definition
-    //-----------------------------------------------------------------------------------------------------
+
     else if ( sTargetFrameName==SPECIALTARGET_TOP )
     {
         xTarget = this;
     }
 
-    //-----------------------------------------------------------------------------------------------------
+
     // I.III) "_self", ""
     //  This mean this "frame" in every case.
-    //-----------------------------------------------------------------------------------------------------
+
     else if (
              ( sTargetFrameName==SPECIALTARGET_SELF ) ||
              ( sTargetFrameName.isEmpty()           )
@@ -1022,20 +1022,20 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
 
     else
     {
-        //-------------------------------------------------------------------------------------------------
+
         // II) otherwise use optional given search flags
         //  force using of combinations of such flags. means no "else" part of use if() statements.
         //  But we ust break further searches if target was already found.
         //  Order of using flags is fix: SELF - CHILDREN - SIBLINGS - PARENT
         //  TASK and CREATE are handled special.
         //  But note: Such flags are not valid for the desktop - especialy SIBLINGS or PARENT.
-        //-------------------------------------------------------------------------------------------------
 
-        //-------------------------------------------------------------------------------------------------
+
+
         // II.I) SELF
         //  Check for right name. If it's the searched one return ourself - otherwise
         //  ignore this flag.
-        //-------------------------------------------------------------------------------------------------
+
         if (
             (nSearchFlags &  css::frame::FrameSearchFlag::SELF)  &&
             (m_sName == sTargetFrameName)
@@ -1044,7 +1044,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
             xTarget = this;
         }
 
-        //-------------------------------------------------------------------------------------------------
+
         // II.II) TASKS
         //  This is a special flag. Normaly it regulate search inside tasks and forbid access to parent trees.
         //  But the desktop exists outside such task trees. They are our sub trees. So the desktop implement
@@ -1052,7 +1052,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
         //  search on ALL child frames. May that can be useful to get access on opened document tasks
         //  only without filter out all non really required sub frames ...
         //  Used helper method on our container doesn't create any frame - it's a search only.
-        //-------------------------------------------------------------------------------------------------
+
         if (
             ( ! xTarget.is()                                  ) &&
             (nSearchFlags & css::frame::FrameSearchFlag::TASKS)
@@ -1061,13 +1061,13 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
             xTarget = m_aChildTaskContainer.searchOnDirectChildrens(sTargetFrameName);
         }
 
-        //-------------------------------------------------------------------------------------------------
+
         // II.III) CHILDREN
         //  Search on all children for the given target name.
         //  An empty name value can't occur here - because it must be already handled as "_self"
         //  before. Used helper function of container doesn't create any frame.
         //  It makes a deep search only.
-        //-------------------------------------------------------------------------------------------------
+
         if (
             ( ! xTarget.is()                                     ) &&
             (nSearchFlags & css::frame::FrameSearchFlag::CHILDREN)
@@ -1076,11 +1076,11 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
             xTarget = m_aChildTaskContainer.searchOnAllChildrens(sTargetFrameName);
         }
 
-        //-------------------------------------------------------------------------------------------------
+
         // II.IV) CREATE
         //  If we haven't found any valid target frame by using normal flags - but user allowed us to create
         //  a new one ... we should do that. Used TaskCreator use us automaticly as parent!
-        //-------------------------------------------------------------------------------------------------
+
         if (
             ( ! xTarget.is()                                   )    &&
             (nSearchFlags & css::frame::FrameSearchFlag::CREATE)
@@ -1366,7 +1366,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
 }
 
-//-----------------------------------------------------------------------------
+
 ::sal_Int32 SAL_CALL Desktop::leaseNumber( const css::uno::Reference< css::uno::XInterface >& xComponent )
     throw (css::lang::IllegalArgumentException,
            css::uno::RuntimeException         )
@@ -1375,7 +1375,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     return m_xTitleNumberGenerator->leaseNumber (xComponent);
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL Desktop::releaseNumber( ::sal_Int32 nNumber )
     throw (css::lang::IllegalArgumentException,
            css::uno::RuntimeException         )
@@ -1384,7 +1384,7 @@ void SAL_CALL Desktop::releaseNumber( ::sal_Int32 nNumber )
     m_xTitleNumberGenerator->releaseNumber (nNumber);
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL Desktop::releaseNumberForComponent( const css::uno::Reference< css::uno::XInterface >& xComponent )
     throw (css::lang::IllegalArgumentException,
            css::uno::RuntimeException         )
@@ -1393,7 +1393,7 @@ void SAL_CALL Desktop::releaseNumberForComponent( const css::uno::Reference< css
     m_xTitleNumberGenerator->releaseNumberForComponent (xComponent);
 }
 
-//-----------------------------------------------------------------------------
+
 OUString SAL_CALL Desktop::getUntitledPrefix()
     throw (css::uno::RuntimeException)
 {

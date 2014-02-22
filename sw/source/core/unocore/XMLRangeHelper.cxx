@@ -53,7 +53,7 @@ private:
     OUStringBuffer & m_aResultBuffer;
 };
 
-// ----------------------------------------
+
 
 /** unary function that removes backslash escapes in a sal_Unicode array (which
     you can get from an OUString with getStr()) and puts the result into the
@@ -75,7 +75,7 @@ private:
     OUStringBuffer & m_aResultBuffer;
 };
 
-// ----------------------------------------
+
 
 void lcl_getXMLStringForCell( const /*::chart::*/XMLRangeHelper::Cell & rCell, OUStringBuffer * output )
 {

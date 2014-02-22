@@ -202,7 +202,7 @@ OUString createStandardColumnPart(const Reference< XPropertySet >& xColProp,cons
     return aSql.makeStringAndClear();
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString createStandardCreateStatement(const Reference< XPropertySet >& descriptor,const Reference< XConnection>& _xConnection,ISQLStatementHelper* _pHelper,const OUString& _sCreatePattern)
 {
@@ -266,7 +266,7 @@ namespace
         return sSql;
     }
 }
-// -----------------------------------------------------------------------------
+
 OUString createStandardKeyStatement(const Reference< XPropertySet >& descriptor,const Reference< XConnection>& _xConnection)
 {
     Reference<XDatabaseMetaData> xMetaData = _xConnection->getMetaData();
@@ -372,7 +372,7 @@ OUString createStandardKeyStatement(const Reference< XPropertySet >& descriptor,
     return aSql.makeStringAndClear();
 
 }
-// -----------------------------------------------------------------------------
+
 OUString createSqlCreateTableStatement(  const Reference< XPropertySet >& descriptor,
                                                 const Reference< XConnection>& _xConnection,
                                                 ISQLStatementHelper* _pHelper,
@@ -507,7 +507,7 @@ namespace
 
         return xProp;
     }
-    //------------------------------------------------------------------
+
     Reference< XModel> lcl_getXModel(const Reference< XInterface>& _xIface)
     {
         Reference< XInterface > xParent = _xIface;
@@ -521,7 +521,7 @@ namespace
         return xModel;
     }
 }
-// -----------------------------------------------------------------------------
+
 Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable,
                                           const Reference<XConnection>& _xConnection,
                                           const OUString& _rName,
@@ -573,7 +573,7 @@ Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable
     return xProp;
 }
 
-// -----------------------------------------------------------------------------
+
 bool getBooleanDataSourceSetting( const Reference< XConnection >& _rxConnection, const sal_Char* _pAsciiSettingName )
 {
     bool bValue( false );
@@ -596,7 +596,7 @@ bool getBooleanDataSourceSetting( const Reference< XConnection >& _rxConnection,
     }
     return bValue;
 }
-// -------------------------------------------------------------------------
+
 bool getDataSourceSetting( const Reference< XInterface >& _xChild, const OUString& _sAsciiSettingsName,
     Any& /* [out] */ _rSettingsValue )
 {
@@ -621,14 +621,14 @@ bool getDataSourceSetting( const Reference< XInterface >& _xChild, const OUStrin
     }
     return bIsPresent;
 }
-// -------------------------------------------------------------------------
+
 bool getDataSourceSetting( const Reference< XInterface >& _rxDataSource, const sal_Char* _pAsciiSettingsName,
     Any& /* [out] */ _rSettingsValue )
 {
     OUString sAsciiSettingsName = OUString::createFromAscii(_pAsciiSettingsName);
     return getDataSourceSetting( _rxDataSource, sAsciiSettingsName,_rSettingsValue );
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool isDataSourcePropertyEnabled(const Reference<XInterface>& _xProp,const OUString& _sProperty,sal_Bool _bDefault)
 {
     sal_Bool bEnabled = _bDefault;
@@ -652,7 +652,7 @@ sal_Bool isDataSourcePropertyEnabled(const Reference<XInterface>& _xProp,const O
     }
     return bEnabled;
 }
-// -----------------------------------------------------------------------------
+
 Reference< XTablesSupplier> getDataDefinitionByURLAndConnection(
             const OUString& _rsUrl,
             const Reference< XConnection>& _xConnection,
@@ -677,7 +677,7 @@ Reference< XTablesSupplier> getDataDefinitionByURLAndConnection(
     return xTablesSup;
 }
 
-// -----------------------------------------------------------------------------
+
 sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
                              const OUString& _sCatalog,
                              const OUString& _sSchema,
@@ -817,7 +817,7 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
     }
     return nPrivileges;
 }
-// -----------------------------------------------------------------------------
+
 // we need some more information about the column
 void collectColumnInformation(const Reference< XConnection>& _xConnection,
                               const OUString& _sComposedName,
@@ -851,7 +851,7 @@ void collectColumnInformation(const Reference< XConnection>& _xConnection,
     }
 }
 
-// -----------------------------------------------------------------------------
+
 bool isEmbeddedInDatabase( const Reference< XInterface >& _rxComponent, Reference< XConnection >& _rxActualConnection )
 {
     bool bIsEmbedded = false;
@@ -893,7 +893,7 @@ bool isEmbeddedInDatabase( const Reference< XInterface >& _rxComponent, Referenc
     }
     return bIsEmbedded;
 }
-// -----------------------------------------------------------------------------
+
 namespace
 {
     OUString lcl_getEncodingName( rtl_TextEncoding _eEncoding )
@@ -910,7 +910,7 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------------
+
 sal_Int32 DBTypeConversion::convertUnicodeString( const OUString& _rSource, OString& _rDest, rtl_TextEncoding _eEncoding ) SAL_THROW((com::sun::star::sdbc::SQLException))
 {
     if ( !rtl_convertUStringToString( &_rDest.pData, _rSource.getStr(), _rSource.getLength(),
@@ -939,7 +939,7 @@ sal_Int32 DBTypeConversion::convertUnicodeString( const OUString& _rSource, OStr
     return _rDest.getLength();
 }
 
-// -----------------------------------------------------------------------------
+
 sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const OUString& _rSource, OString&  _rDest,
    sal_Int32 _nMaxLen, rtl_TextEncoding _eEncoding ) SAL_THROW((SQLException))
 {
@@ -969,19 +969,19 @@ OUString lcl_getReportEngines()
     static OUString s_sNodeName("org.openoffice.Office.DataAccess/ReportEngines");
     return s_sNodeName;
 }
-// -----------------------------------------------------------------------------
+
 OUString lcl_getDefaultReportEngine()
 {
     static OUString s_sNodeName("DefaultReportEngine");
     return s_sNodeName;
 }
-// -----------------------------------------------------------------------------
+
 OUString lcl_getReportEngineNames()
 {
     static OUString s_sNodeName("ReportEngineNames");
     return s_sNodeName;
 }
-// -----------------------------------------------------------------------------
+
 OUString getDefaultReportEngineServiceName(const Reference< XComponentContext >& _rxORB)
 {
     ::utl::OConfigurationTreeRoot aReportEngines = ::utl::OConfigurationTreeRoot::createWithComponentContext(
@@ -1013,7 +1013,7 @@ OUString getDefaultReportEngineServiceName(const Reference< XComponentContext >&
         return OUString("org.libreoffice.report.pentaho.SOReportJobFactory");
     return OUString();
 }
-// -----------------------------------------------------------------------------
+
 //.........................................................................
 }   // namespace dbtools
 //.........................................................................

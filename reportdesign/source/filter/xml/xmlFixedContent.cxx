@@ -74,7 +74,7 @@ OXMLCharContent::OXMLCharContent(
     ,m_pFixedContent(_pFixedContent)
 {
 }
-// -----------------------------------------------------------------------------
+
 OXMLCharContent::OXMLCharContent(
         SvXMLImport& rImport,
         OXMLFixedContent* _pFixedContent,
@@ -86,7 +86,7 @@ OXMLCharContent::OXMLCharContent(
     ,m_pFixedContent(_pFixedContent)
 {
 }
-// -----------------------------------------------------------------------------
+
 void OXMLCharContent::InsertControlCharacter(sal_Int16   _nControl)
 {
     switch( _nControl )
@@ -99,12 +99,12 @@ void OXMLCharContent::InsertControlCharacter(sal_Int16   _nControl)
             break;
     }
 }
-// -----------------------------------------------------------------------------
+
 void OXMLCharContent::InsertString(const OUString& _sString)
 {
     m_pFixedContent->Characters(_sString);
 }
-// -----------------------------------------------------------------------------
+
 
 
 OXMLFixedContent::OXMLFixedContent( ORptFilter& rImport,
@@ -118,14 +118,14 @@ OXMLFixedContent::OXMLFixedContent( ORptFilter& rImport,
 ,m_bFormattedField(false)
 {
 }
-// -----------------------------------------------------------------------------
+
 
 OXMLFixedContent::~OXMLFixedContent()
 {
 
 }
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+
+
 SvXMLImportContext* OXMLFixedContent::_CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -176,7 +176,7 @@ SvXMLImportContext* OXMLFixedContent::_CreateChildContext(
     }
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 void OXMLFixedContent::EndElement()
 {
     if ( m_pInP )
@@ -206,7 +206,7 @@ void OXMLFixedContent::EndElement()
         OXMLReportElementBase::EndElement();
     }
 }
-// -----------------------------------------------------------------------------
+
 void OXMLFixedContent::Characters( const OUString& rChars )
 {
     m_sLabel += rChars;
@@ -223,8 +223,8 @@ void OXMLFixedContent::Characters( const OUString& rChars )
     }
 }
 
-//----------------------------------------------------------------------------
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

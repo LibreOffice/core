@@ -147,7 +147,7 @@ OTableHelper::OTableHelper( sdbcx::OCollection* _pTables,
     ,m_pImpl(new OTableHelperImpl(_xConnection))
 {
 }
-// -------------------------------------------------------------------------
+
 OTableHelper::OTableHelper( sdbcx::OCollection* _pTables,
                             const Reference< XConnection >& _xConnection,
                             sal_Bool _bCase,
@@ -166,11 +166,11 @@ OTableHelper::OTableHelper( sdbcx::OCollection* _pTables,
                         ,m_pImpl(new OTableHelperImpl(_xConnection))
 {
 }
-// -----------------------------------------------------------------------------
+
 OTableHelper::~OTableHelper()
 {
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OTableHelper::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -187,7 +187,7 @@ void SAL_CALL OTableHelper::disposing()
 
 }
 
-// -------------------------------------------------------------------------
+
 namespace
 {
     /** collects ColumnDesc's from a resultset produced by XDatabaseMetaData::getColumns
@@ -259,7 +259,7 @@ namespace
     }
 }
 
-// -------------------------------------------------------------------------
+
 void OTableHelper::refreshColumns()
 {
     TStringVector aVector;
@@ -305,7 +305,7 @@ void OTableHelper::refreshColumns()
     else
         m_pColumns  = createColumns(aVector);
 }
-// -----------------------------------------------------------------------------
+
 const ColumnDesc* OTableHelper::getColumnDescription(const OUString& _sName) const
 {
     const ColumnDesc* pRet = NULL;
@@ -320,7 +320,7 @@ const ColumnDesc* OTableHelper::getColumnDescription(const OUString& _sName) con
     } // for (::std::vector< ColumnDesc >::const_iterator aIter = m_pImpl->m_aColumnDesc.begin();aIter != aEnd;++aIter)
     return pRet;
 }
-// -------------------------------------------------------------------------
+
 void OTableHelper::refreshPrimaryKeys(TStringVector& _rNames)
 {
     Any aCatalog;
@@ -356,7 +356,7 @@ void OTableHelper::refreshPrimaryKeys(TStringVector& _rNames)
     } // if ( xResult.is() && xResult->next() )
     ::comphelper::disposeComponent(xResult);
 }
-// -------------------------------------------------------------------------
+
 void OTableHelper::refreshForeignKeys(TStringVector& _rNames)
 {
     Any aCatalog;
@@ -419,7 +419,7 @@ void OTableHelper::refreshForeignKeys(TStringVector& _rNames)
         ::comphelper::disposeComponent(xResult);
     }
 }
-// -------------------------------------------------------------------------
+
 void OTableHelper::refreshKeys()
 {
     m_pImpl->m_aKeys.clear();
@@ -439,7 +439,7 @@ void OTableHelper::refreshKeys()
     else*/
 
 }
-// -------------------------------------------------------------------------
+
 void OTableHelper::refreshIndexes()
 {
     TStringVector aVector;
@@ -480,7 +480,7 @@ void OTableHelper::refreshIndexes()
     else
         m_pIndexes  = createIndexes(aVector);
 }
-// -----------------------------------------------------------------------------
+
 OUString OTableHelper::getRenameStart() const
 {
     OUString sSql("RENAME ");
@@ -491,7 +491,7 @@ OUString OTableHelper::getRenameStart() const
 
     return sSql;
 }
-// -------------------------------------------------------------------------
+
 // XRename
 void SAL_CALL OTableHelper::rename( const OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
 {
@@ -537,12 +537,12 @@ void SAL_CALL OTableHelper::rename( const OUString& newName ) throw(SQLException
     else
         ::dbtools::qualifiedNameComponents(getMetaData(),newName,m_CatalogName,m_SchemaName,m_Name,::dbtools::eInTableDefinitions);
 }
-// -----------------------------------------------------------------------------
+
 Reference< XDatabaseMetaData> OTableHelper::getMetaData() const
 {
     return m_pImpl->m_xMetaData;
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -559,24 +559,24 @@ void SAL_CALL OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference
         alterColumnByName(getString(xOld->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),descriptor);
 }
 
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL OTableHelper::getName() throw(RuntimeException)
 {
     OUString sComposedName;
     sComposedName = ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,sal_False,::dbtools::eInDataManipulation);
     return sComposedName;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OTableHelper::acquire() throw()
 {
     OTable_TYPEDEF::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OTableHelper::release() throw()
 {
     OTable_TYPEDEF::release();
 }
-// -----------------------------------------------------------------------------
+
 sdbcx::TKeyProperties OTableHelper::getKeyProperties(const OUString& _sName) const
 {
     sdbcx::TKeyProperties pKeyProps;
@@ -593,41 +593,41 @@ sdbcx::TKeyProperties OTableHelper::getKeyProperties(const OUString& _sName) con
 
     return pKeyProps;
 }
-// -----------------------------------------------------------------------------
+
 void OTableHelper::addKey(const OUString& _sName,const sdbcx::TKeyProperties& _aKeyProperties)
 {
     m_pImpl->m_aKeys.insert(TKeyMap::value_type(_sName,_aKeyProperties));
 }
-// -----------------------------------------------------------------------------
+
 OUString OTableHelper::getTypeCreatePattern() const
 {
     return OUString();
 }
-// -----------------------------------------------------------------------------
+
 Reference< XConnection> OTableHelper::getConnection() const
 {
     return m_pImpl->m_xConnection;
 }
-// -----------------------------------------------------------------------------
+
 Reference< ::com::sun::star::sdb::tools::XTableRename>      OTableHelper::getRenameService() const
 {
     return m_pImpl->m_xRename;
 }
-// -----------------------------------------------------------------------------
+
 Reference< ::com::sun::star::sdb::tools::XTableAlteration>  OTableHelper::getAlterService() const
 {
     return m_pImpl->m_xAlter;
 }
-// -----------------------------------------------------------------------------
+
 Reference< ::com::sun::star::sdb::tools::XKeyAlteration>  OTableHelper::getKeyService() const
 {
     return m_pImpl->m_xKeyAlter;
 }
-// -----------------------------------------------------------------------------
+
 Reference< ::com::sun::star::sdb::tools::XIndexAlteration>  OTableHelper::getIndexService() const
 {
     return m_pImpl->m_xIndexAlter;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

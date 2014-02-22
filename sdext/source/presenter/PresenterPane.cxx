@@ -139,7 +139,7 @@ void SAL_CALL PresenterPane::windowPaint (const awt::PaintEvent& rEvent)
     PaintBorder(rEvent.UpdateRect);
 }
 
-//-----------------------------------------------------------------------------
+
 
 void PresenterPane::CreateCanvases (
     const Reference<awt::XWindow>& rxParentWindow,

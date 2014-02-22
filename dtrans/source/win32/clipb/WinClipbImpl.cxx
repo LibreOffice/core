@@ -37,9 +37,9 @@
 #pragma warning(pop)
 #endif
 
-//------------------------------------------------------------------------
+
 // namespace directives
-//------------------------------------------------------------------------
+
 
 using namespace osl;
 using namespace std;
@@ -55,9 +55,9 @@ using namespace com::sun::star::datatransfer::clipboard::RenderingCapabilities;
 CWinClipbImpl* CWinClipbImpl::s_pCWinClipbImpl = NULL;
 osl::Mutex     CWinClipbImpl::s_aMutex;
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 CWinClipbImpl::CWinClipbImpl( const OUString& aClipboardName, CWinClipboard* theWinClipboard ) :
     m_itsName( aClipboardName ),
@@ -72,9 +72,9 @@ CWinClipbImpl::CWinClipbImpl( const OUString& aClipboardName, CWinClipboard* the
     registerClipboardViewer( );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 CWinClipbImpl::~CWinClipbImpl( )
 {
@@ -85,9 +85,9 @@ CWinClipbImpl::~CWinClipbImpl( )
     unregisterClipboardViewer( );
 }
 
-//------------------------------------------------------------------------
+
 // getContent
-//------------------------------------------------------------------------
+
 
 Reference< XTransferable > SAL_CALL CWinClipbImpl::getContents( ) throw( RuntimeException )
 {
@@ -125,9 +125,9 @@ Reference< XTransferable > SAL_CALL CWinClipbImpl::getContents( ) throw( Runtime
     return rClipContent;
 }
 
-//------------------------------------------------------------------------
+
 // setContent
-//------------------------------------------------------------------------
+
 
 void SAL_CALL CWinClipbImpl::setContents(
     const Reference< XTransferable >& xTransferable,
@@ -155,27 +155,27 @@ void SAL_CALL CWinClipbImpl::setContents(
     m_MtaOleClipboard.setClipboard(pIDataObj.get());
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 OUString SAL_CALL CWinClipbImpl::getName(  ) throw( RuntimeException )
 {
     return m_itsName;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 sal_Int8 SAL_CALL CWinClipbImpl::getRenderingCapabilities(  ) throw( RuntimeException )
 {
     return ( Delayed | Persistant );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void SAL_CALL CWinClipbImpl::flushClipboard( ) throw( RuntimeException )
 {
@@ -193,36 +193,36 @@ void SAL_CALL CWinClipbImpl::flushClipboard( ) throw( RuntimeException )
         m_MtaOleClipboard.flushClipboard( );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void SAL_CALL CWinClipbImpl::registerClipboardViewer( )
 {
     m_MtaOleClipboard.registerClipViewer( CWinClipbImpl::onClipboardContentChanged );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void SAL_CALL CWinClipbImpl::unregisterClipboardViewer( )
 {
     m_MtaOleClipboard.registerClipViewer( NULL );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void SAL_CALL CWinClipbImpl::dispose() throw( RuntimeException )
 {
     OSL_ENSURE( !m_pCurrentClipContent, "Clipboard was not flushed before shutdown!" );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void WINAPI CWinClipbImpl::onClipboardContentChanged( void )
 {
@@ -233,9 +233,9 @@ void WINAPI CWinClipbImpl::onClipboardContentChanged( void )
         s_pCWinClipbImpl->m_pWinClipboard->notifyAllClipboardListener( );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void SAL_CALL CWinClipbImpl::onReleaseDataObject( CXNotifyingDataObject* theCaller )
 {

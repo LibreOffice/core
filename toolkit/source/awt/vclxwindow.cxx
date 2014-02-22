@@ -198,7 +198,7 @@ private:
     VCLXWindowImpl& operator=( const VCLXWindowImpl& ); // never implemented
 };
 
-//--------------------------------------------------------------------
+
 VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, bool _bWithDefaultProps )
     :mrAntiImpl( _rAntiImpl )
     ,mbDisposed( false )
@@ -234,7 +234,7 @@ VCLXWindowImpl::~VCLXWindowImpl()
     delete mpPropHelper;
 }
 
-//--------------------------------------------------------------------
+
 void VCLXWindowImpl::disposing()
 {
     SolarMutexGuard aGuard;
@@ -264,7 +264,7 @@ void VCLXWindowImpl::disposing()
     mxWindowStyleSettings.clear();
 }
 
-//--------------------------------------------------------------------
+
 void VCLXWindowImpl::callBackAsync( const VCLXWindow::Callback& i_callback )
 {
     DBG_TESTSOLARMUTEX();
@@ -277,7 +277,7 @@ void VCLXWindowImpl::callBackAsync( const VCLXWindow::Callback& i_callback )
     }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(VCLXWindowImpl, OnProcessCallbacks)
 {
     const Reference< uno::XInterface > xKeepAlive( mrAntiImpl );
@@ -313,19 +313,19 @@ IMPL_LINK_NOARG(VCLXWindowImpl, OnProcessCallbacks)
     return 0L;
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL VCLXWindowImpl::acquire()
 {
     mrAntiImpl.acquire();
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL VCLXWindowImpl::release()
 {
     mrAntiImpl.release();
 }
 
-//--------------------------------------------------------------------
+
 Reference< XStyleSettings > VCLXWindowImpl::getStyleSettings()
 {
     SolarMutexGuard aGuard;
@@ -383,13 +383,13 @@ VCLXWindow::~VCLXWindow()
     }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 void VCLXWindow::ImplExecuteAsyncWithoutSolarLock( const Callback& i_callback )
 {
     mpImpl->callBackAsync( i_callback );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 ::toolkit::IAccessibleFactory& VCLXWindow::getAccessibleFactory()
 {
     return mpImpl->getAccessibleFactory().getFactory();

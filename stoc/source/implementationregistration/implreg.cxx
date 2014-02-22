@@ -894,7 +894,7 @@ static void deleteAllServiceEntries(    const Reference < XSimpleRegistry >& xRe
     }
 }
 
-//--------------------------------------------------------------------------------------------------
+
 static bool is_supported_service(
     OUString const & service_name,
     Reference< reflection::XServiceTypeDescription > const & xService_td )
@@ -912,7 +912,7 @@ static bool is_supported_service(
     return false;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 static void insert_singletons(
     Reference< registry::XSimpleRegistry > const & xDest,
     Reference< registry::XRegistryKey > const & xImplKey,

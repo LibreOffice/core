@@ -31,7 +31,7 @@ using namespace ::com::sun::star::uno;
 
 rtl::Reference< AquaA11yFocusListener > AquaA11yFocusListener::theListener;
 
-//------------------------------------------------------------------------------
+
 
 rtl::Reference< AquaA11yFocusListener > AquaA11yFocusListener::get()
 {
@@ -41,13 +41,13 @@ rtl::Reference< AquaA11yFocusListener > AquaA11yFocusListener::get()
     return theListener;
 }
 
-//------------------------------------------------------------------------------
+
 
 AquaA11yFocusListener::AquaA11yFocusListener() : m_focusedObject(nil)
 {
 }
 
-//------------------------------------------------------------------------------
+
 
 id AquaA11yFocusListener::getFocusedUIElement()
 {
@@ -67,7 +67,7 @@ id AquaA11yFocusListener::getFocusedUIElement()
     return m_focusedObject;
 }
 
-//------------------------------------------------------------------------------
+
 
 void SAL_CALL
 AquaA11yFocusListener::focusedObjectChanged(const Reference< XAccessible >& xAccessible)
@@ -91,7 +91,7 @@ AquaA11yFocusListener::focusedObjectChanged(const Reference< XAccessible >& xAcc
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 oslInterlockedCount SAL_CALL
 AquaA11yFocusListener::acquire() SAL_THROW(())
@@ -99,7 +99,7 @@ AquaA11yFocusListener::acquire() SAL_THROW(())
     return ReferenceObject::acquire();
 }
 
-//------------------------------------------------------------------------------
+
 
 oslInterlockedCount SAL_CALL
 AquaA11yFocusListener::release() SAL_THROW(())

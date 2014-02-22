@@ -27,7 +27,7 @@
 DBG_NAME(SfxItemIter);
 
 
-// --------------------------------------------------------------------------
+
 
 
 SfxItemIter::SfxItemIter( const SfxItemSet& rItemSet )
@@ -58,7 +58,7 @@ SfxItemIter::SfxItemIter( const SfxItemSet& rItemSet )
     _nAkt = _nStt;
 }
 
-// --------------------------------------------------------------------------
+
 
 
 SfxItemIter::~SfxItemIter()
@@ -66,7 +66,7 @@ SfxItemIter::~SfxItemIter()
     DBG_DTOR(SfxItemIter, 0);
 }
 
-// --------------------------------------------------------------------------
+
 
 
 const SfxPoolItem* SfxItemIter::NextItem()

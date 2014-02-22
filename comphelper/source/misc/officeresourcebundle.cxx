@@ -98,7 +98,7 @@ namespace comphelper
                 impl_getStringResourceKey( sal_Int32 _resourceId );
     };
 
-    //--------------------------------------------------------------------
+
     OUString ResourceBundle_Impl::impl_getStringResourceKey( sal_Int32 _resourceId )
     {
         OUStringBuffer key;
@@ -107,7 +107,7 @@ namespace comphelper
         return key.makeStringAndClear();
     }
 
-    //--------------------------------------------------------------------
+
     OUString ResourceBundle_Impl::loadString( sal_Int32 _resourceId ) const
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -128,7 +128,7 @@ namespace comphelper
         return sString;
     }
 
-    //--------------------------------------------------------------------
+
     bool ResourceBundle_Impl::hasString( sal_Int32 _resourceId ) const
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -149,7 +149,7 @@ namespace comphelper
         return has;
     }
 
-    //--------------------------------------------------------------------
+
     bool ResourceBundle_Impl::impl_loadBundle_nothrow()
     {
         if ( m_bAttemptedCreate )
@@ -187,7 +187,7 @@ namespace comphelper
     //====================================================================
     //= OfficeResourceBundle
     //====================================================================
-    //--------------------------------------------------------------------
+
     OfficeResourceBundle::OfficeResourceBundle( const Reference< XComponentContext >& _context, const sal_Char* _bundleBaseAsciiName )
         :m_pImpl( new ResourceBundle_Impl( _context, OUString::createFromAscii( _bundleBaseAsciiName ) ) )
     {
@@ -195,18 +195,18 @@ namespace comphelper
             throw NullPointerException();
     }
 
-    //--------------------------------------------------------------------
+
     OfficeResourceBundle::~OfficeResourceBundle()
     {
     }
 
-    //--------------------------------------------------------------------
+
     OUString OfficeResourceBundle::loadString( sal_Int32 _resourceId ) const
     {
         return m_pImpl->loadString( _resourceId );
     }
 
-    //--------------------------------------------------------------------
+
     bool OfficeResourceBundle::hasString( sal_Int32 _resourceId ) const
     {
         return m_pImpl->hasString( _resourceId );

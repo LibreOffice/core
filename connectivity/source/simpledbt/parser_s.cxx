@@ -34,31 +34,31 @@ namespace connectivity
     //================================================================
     //= OSimpleSQLParser
     //================================================================
-    //----------------------------------------------------------------
+
     OSimpleSQLParser::OSimpleSQLParser(const Reference< XComponentContext >& rxContext, const IParseContext* _pContext)
         :m_aFullParser(rxContext, _pContext)
     {
     }
 
-    //----------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL OSimpleSQLParser::acquire()
     {
         return ORefBase::acquire();
     }
 
-    //----------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL OSimpleSQLParser::release()
     {
         return ORefBase::release();
     }
 
-    //----------------------------------------------------------------
+
     const IParseContext& OSimpleSQLParser::getContext() const
     {
         return m_aFullParser.getContext();
     }
 
-    //----------------------------------------------------------------
+
     ::rtl::Reference< simple::ISQLParseNode > OSimpleSQLParser::predicateTree(OUString& rErrorMessage, const OUString& rStatement,
         const Reference< XNumberFormatter >& _rxFormatter, const Reference< XPropertySet >& _rxField) const
     {

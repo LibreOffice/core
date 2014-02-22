@@ -47,7 +47,7 @@ void WorkWindow::ImplInitWorkWindowData()
     mbFullScreenMode        = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
 {
@@ -73,7 +73,7 @@ void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pS
     SetActivateMode( ACTIVATE_MODE_GRABFOCUS );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::uno::Any& aSystemWorkWindowToken )
 {
@@ -90,7 +90,7 @@ void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::st
         ImplInit( pParent, nStyle, NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 WorkWindow::WorkWindow( WindowType nType ) :
     SystemWindow( nType )
@@ -98,7 +98,7 @@ WorkWindow::WorkWindow( WindowType nType ) :
     ImplInitWorkWindowData();
 }
 
-// -----------------------------------------------------------------------
+
 
 WorkWindow::WorkWindow( Window* pParent, WinBits nStyle ) :
     SystemWindow( WINDOW_WORKWINDOW )
@@ -107,7 +107,7 @@ WorkWindow::WorkWindow( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle, NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 WorkWindow::WorkWindow( Window* pParent, const ::com::sun::star::uno::Any& aSystemWorkWindowToken, WinBits nStyle ) :
     SystemWindow( WINDOW_WORKWINDOW )
@@ -117,7 +117,7 @@ WorkWindow::WorkWindow( Window* pParent, const ::com::sun::star::uno::Any& aSyst
     ImplInit( pParent, nStyle, aSystemWorkWindowToken );
 }
 
-// -----------------------------------------------------------------------
+
 
 WorkWindow::WorkWindow( SystemParentData* pParent ) :
     SystemWindow( WINDOW_WORKWINDOW )
@@ -127,7 +127,7 @@ WorkWindow::WorkWindow( SystemParentData* pParent ) :
     ImplInit( NULL, 0, pParent );
 }
 
-// -----------------------------------------------------------------------
+
 
 WorkWindow::~WorkWindow()
 {
@@ -139,7 +139,7 @@ WorkWindow::~WorkWindow()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WorkWindow::ShowFullScreenMode( bool bFullScreenMode )
 {
@@ -171,7 +171,7 @@ void WorkWindow::ShowFullScreenMode( bool bFullScreenMode, sal_Int32 nDisplayScr
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WorkWindow::StartPresentationMode( bool bPresentation, sal_uInt16 nFlags )
 {
@@ -222,7 +222,7 @@ void WorkWindow::StartPresentationMode( bool bPresentation, sal_uInt16 nFlags, s
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool WorkWindow::IsMinimized() const
 {
@@ -232,7 +232,7 @@ bool WorkWindow::IsMinimized() const
     return (( aState.mnState & WINDOWSTATE_STATE_MINIMIZED ) != 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 bool WorkWindow::SetPluginParent( SystemParentData* pParent )
 {

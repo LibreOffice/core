@@ -18,11 +18,11 @@
  */
 
 
-//------------------------------------------------------------------------
+
 //
 // Global header
 //
-//------------------------------------------------------------------------
+
 #include <svl/itemset.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/outliner.hxx>
@@ -30,11 +30,11 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdpool.hxx>
 
-//------------------------------------------------------------------------
+
 //
 // Project-local header
 //
-//------------------------------------------------------------------------
+
 
 #include "AccessibleEmptyEditSource.hxx"
 #include <svx/unoshtxt.hxx>
@@ -173,9 +173,9 @@ namespace accessibility
 
     };
 
-    // -------------------------------------------------------------------------
+
     // Implementing AccessibleProxyEditSource_Impl
-    // -------------------------------------------------------------------------
+
 
     AccessibleProxyEditSource_Impl::AccessibleProxyEditSource_Impl( SdrObject&      rObj,
                                                                     SdrView&        rView,
@@ -219,9 +219,9 @@ namespace accessibility
     }
 
 
-    // -------------------------------------------------------------------------
+
     // Implementing AccessibleEmptyEditSource
-    // -------------------------------------------------------------------------
+
 
     AccessibleEmptyEditSource::AccessibleEmptyEditSource( SdrObject&    rObj,
                                                           SdrView&      rView,
@@ -345,6 +345,6 @@ namespace accessibility
 
 } // end of namespace accessibility
 
-//------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

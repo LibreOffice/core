@@ -53,7 +53,7 @@ JobData::JobData( const css::uno::Reference< css::uno::XComponentContext >& rxCo
     impl_reset();
 }
 
-//________________________________
+
 /**
     @short  copy ctor
     @descr  Sometimes such job data container must be moved from one using place
@@ -69,7 +69,7 @@ JobData::JobData( const JobData& rCopy )
     *this = rCopy;
 }
 
-//________________________________
+
 /**
     @short  operator for coping JobData instances
     @descr  Sometimes such job data container must be moved from one using place
@@ -96,7 +96,7 @@ void JobData::operator=( const JobData& rCopy )
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short  let this instance die
     @descr  There is no chance any longer to work. We have to
@@ -107,7 +107,7 @@ JobData::~JobData()
     impl_reset();
 }
 
-//________________________________
+
 /**
     @short      initalize this instance as a job with configuration
     @descr      They given alias can be used to address some configuration data.
@@ -178,7 +178,7 @@ void JobData::setAlias( const OUString& sAlias )
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short      initalize this instance as a job without configuration
     @descr      This job has no configuration data. We have to forget all old information
@@ -202,7 +202,7 @@ void JobData::setService( const OUString& sService )
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short      initialize this instance with new job values.
     @descr      It reads automaticly all properties of the specified
@@ -238,7 +238,7 @@ void JobData::setEvent( const OUString& sEvent ,
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short      set the new job specific arguments
     @descr      If a job finish his work, it can give us a new list of arguments (which
@@ -294,7 +294,7 @@ void JobData::setJobConfig( const css::uno::Sequence< css::beans::NamedValue >& 
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short      set a new excution result
     @descr      Every executed job can have returned a result.
@@ -323,7 +323,7 @@ void JobData::setResult( const JobResult& aResult )
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short  set a new environment descriptor for this job
     @descr  It must(!) be done everytime this container is initialized
@@ -339,7 +339,7 @@ void JobData::setEnvironment( EEnvironment eEnvironment )
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short      these functions provides access to our internal members
     @descr      These member represent any information about the job
@@ -353,7 +353,7 @@ JobData::EMode JobData::getMode() const
     /* } SAFE */
 }
 
-//________________________________
+
 
 JobData::EEnvironment JobData::getEnvironment() const
 {
@@ -363,7 +363,7 @@ JobData::EEnvironment JobData::getEnvironment() const
     /* } SAFE */
 }
 
-//________________________________
+
 
 OUString JobData::getEnvironmentDescriptor() const
 {
@@ -390,7 +390,7 @@ OUString JobData::getEnvironmentDescriptor() const
     return sDescriptor;
 }
 
-//________________________________
+
 
 OUString JobData::getService() const
 {
@@ -400,7 +400,7 @@ OUString JobData::getService() const
     /* } SAFE */
 }
 
-//________________________________
+
 
 OUString JobData::getEvent() const
 {
@@ -410,7 +410,7 @@ OUString JobData::getEvent() const
     /* } SAFE */
 }
 
-//________________________________
+
 
 css::uno::Sequence< css::beans::NamedValue > JobData::getJobConfig() const
 {
@@ -420,7 +420,7 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getJobConfig() const
     /* } SAFE */
 }
 
-//________________________________
+
 
 css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
 {
@@ -449,7 +449,7 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
     return lConfig;
 }
 
-//________________________________
+
 /**
     @short  return information, if this job is part of the global configuration package
             org.openoffice.Office.Jobs
@@ -469,7 +469,7 @@ sal_Bool JobData::hasConfig() const
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short      mark a job as non startable for further requests
     @descr      We don't remove the configuration entry! We set a timestamp value only.
@@ -517,7 +517,7 @@ void JobData::disableJob()
     /* } SAFE */
 }
 
-//________________________________
+
 /**
  */
 sal_Bool isEnabled( const OUString& sAdminTime ,
@@ -543,7 +543,7 @@ sal_Bool isEnabled( const OUString& sAdminTime ,
            );
 }
 
-//________________________________
+
 /**
  */
 void JobData::appendEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >&              rxContext,
@@ -561,7 +561,7 @@ void JobData::appendEnabledJobsForEvent( const css::uno::Reference< css::uno::XC
     }
 }
 
-//________________________________
+
 /**
  */
 sal_Bool JobData::hasCorrectContext(const OUString& rModuleIdent) const
@@ -585,7 +585,7 @@ sal_Bool JobData::hasCorrectContext(const OUString& rModuleIdent) const
     return sal_False;
 }
 
-//________________________________
+
 /**
  */
 css::uno::Sequence< OUString > JobData::getEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
@@ -656,7 +656,7 @@ css::uno::Sequence< OUString > JobData::getEnabledJobsForEvent( const css::uno::
     return lEnabledJobs;
 }
 
-//________________________________
+
 /**
     @short      reset all internal structures
     @descr      If someone recycles this instance, he can switch from one

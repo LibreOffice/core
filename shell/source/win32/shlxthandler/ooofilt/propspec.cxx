@@ -21,7 +21,7 @@
 //+-------------------------------------------------------------------------
 //  File:       propspec.cxx
 //  Contents:   C++ wrappers for FULLPROPSPEC
-//--------------------------------------------------------------------------
+
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
@@ -48,7 +48,7 @@
 //  Member:     CFullPropSpec::CFullPropSpec, public
 //  Synopsis:   Default constructor
 //  Effects:    Defines property with null guid and propid 0
-//--------------------------------------------------------------------------
+
 
 CFullPropSpec::CFullPropSpec()
 {
@@ -61,7 +61,7 @@ CFullPropSpec::CFullPropSpec()
 //  Synopsis:   Construct propid based propspec
 //  Arguments:  [guidPropSet]  -- Property set
 //              [pidProperty] -- Property
-//--------------------------------------------------------------------------
+
 CFullPropSpec::CFullPropSpec( GUID const & guidPropSet, PROPID pidProperty ) :
     _guidPropSet( guidPropSet )
 {
@@ -73,7 +73,7 @@ CFullPropSpec::CFullPropSpec( GUID const & guidPropSet, PROPID pidProperty ) :
 //  Synopsis:   Construct name based propspec
 //  Arguments:  [guidPropSet] -- Property set
 //              [wcsProperty] -- Property
-//--------------------------------------------------------------------------
+
 CFullPropSpec::CFullPropSpec( GUID const & guidPropSet,
                               WCHAR const * wcsProperty ) :
     _guidPropSet( guidPropSet )
@@ -85,7 +85,7 @@ CFullPropSpec::CFullPropSpec( GUID const & guidPropSet,
 //  Member:     CFullPropSpec::CFullPropSpec, public
 //  Synopsis:   Copy constructor
 //  Arguments:  [src] -- Source property spec
-//--------------------------------------------------------------------------
+
 CFullPropSpec::CFullPropSpec( CFullPropSpec const & src ) :
     _guidPropSet( src._guidPropSet )
 {
@@ -113,7 +113,7 @@ inline void * operator new( size_t /*size*/, void * p )
 //  Member:     CFullPropSpec::operator=, public
 //  Synopsis:   Assignment operator
 //  Arguments:  [Property] -- Source property
-//--------------------------------------------------------------------------
+
 CFullPropSpec & CFullPropSpec::operator=( CFullPropSpec const & Property )
 {
     // Clean up.

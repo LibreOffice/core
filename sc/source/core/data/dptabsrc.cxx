@@ -69,11 +69,11 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::sheet::DataPilotFieldAutoShowInfo;
 
-// -----------------------------------------------------------------------
+
 
 #define SC_MINCOUNT_LIMIT   1000000
 
-// -----------------------------------------------------------------------
+
 
 SC_SIMPLE_SERVICE_INFO( ScDPSource,      "ScDPSource",      "com.sun.star.sheet.DataPilotSource" )
 SC_SIMPLE_SERVICE_INFO( ScDPDimensions,  "ScDPDimensions",  "com.sun.star.sheet.DataPilotSourceDimensions" )
@@ -85,12 +85,12 @@ SC_SIMPLE_SERVICE_INFO( ScDPLevel,       "ScDPLevel",       "com.sun.star.sheet.
 SC_SIMPLE_SERVICE_INFO( ScDPMembers,     "ScDPMembers",     "com.sun.star.sheet.DataPilotSourceMembers" )
 SC_SIMPLE_SERVICE_INFO( ScDPMember,      "ScDPMember",      "com.sun.star.sheet.DataPilotSourceMember" )
 
-// -----------------------------------------------------------------------
+
 
 // property maps for PropertySetInfo
 //  DataDescription / NumberFormat are internal
 
-// -----------------------------------------------------------------------
+
 
 //! move to a header?
 static sal_Bool lcl_GetBoolFromAny( const uno::Any& aAny )
@@ -105,7 +105,7 @@ static void lcl_SetBoolInAny( uno::Any& rAny, sal_Bool bValue )
     rAny.setValue( &bValue, getBooleanCppuType() );
 }
 
-// -----------------------------------------------------------------------
+
 
 ScDPSource::ScDPSource( ScDPTableData* pD ) :
     pData( pD ),
@@ -970,7 +970,7 @@ void ScDPSource::CreateRes_Impl()
 
     pColResRoot->CheckShowEmpty();
     pRowResRoot->CheckShowEmpty();
-    // ----------------------------------------------------------------
+
     //  With all data processed, calculate the final results:
 
     //  UpdateDataResults calculates all original results from the collected values,
@@ -1223,7 +1223,7 @@ void ScDPSource::DumpResults() const
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDPSource )
 
-// -----------------------------------------------------------------------
+
 
 ScDPDimensions::ScDPDimensions( ScDPSource* pSrc ) :
     pSource( pSrc ),
@@ -1352,7 +1352,7 @@ ScDPDimension* ScDPDimensions::getByIndex(long nIndex) const
     return NULL;    //! exception?
 }
 
-// -----------------------------------------------------------------------
+
 
 ScDPDimension::ScDPDimension( ScDPSource* pSrc, long nD ) :
     pSource( pSrc ),
@@ -1727,7 +1727,7 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDPDimension )
 
-// -----------------------------------------------------------------------
+
 
 ScDPHierarchies::ScDPHierarchies( ScDPSource* pSrc, long nD ) :
     pSource( pSrc ),
@@ -1835,7 +1835,7 @@ ScDPHierarchy* ScDPHierarchies::getByIndex(long nIndex) const
     return NULL;    //! exception?
 }
 
-// -----------------------------------------------------------------------
+
 
 ScDPHierarchy::ScDPHierarchy( ScDPSource* pSrc, long nD, long nH ) :
     pSource( pSrc ),
@@ -1896,7 +1896,7 @@ void SAL_CALL ScDPHierarchy::setName( const OUString& /* rNewName */ ) throw(uno
     OSL_FAIL("not implemented");        //! exception?
 }
 
-// -----------------------------------------------------------------------
+
 
 ScDPLevels::ScDPLevels( ScDPSource* pSrc, long nD, long nH ) :
     pSource( pSrc ),
@@ -2015,7 +2015,7 @@ ScDPLevel* ScDPLevels::getByIndex(long nIndex) const
     return NULL;    //! exception?
 }
 
-// -----------------------------------------------------------------------
+
 
 class ScDPGlobalMembersOrder
 {
@@ -2046,7 +2046,7 @@ sal_Bool ScDPGlobalMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex
     return bAscending ? (nCompare < 0) : (nCompare > 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 ScDPLevel::ScDPLevel( ScDPSource* pSrc, long nD, long nH, long nL ) :
     pSource( pSrc ),
@@ -2320,7 +2320,7 @@ uno::Any SAL_CALL ScDPLevel::getPropertyValue( const OUString& aPropertyName )
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDPLevel )
 
-// -----------------------------------------------------------------------
+
 
 ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
     pSource( pSrc ),
@@ -2593,7 +2593,7 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
     return NULL;    //! exception?
 }
 
-// -----------------------------------------------------------------------
+
 
 ScDPMember::ScDPMember(
     ScDPSource* pSrc, long nD, long nH, long nL, SCROW nIndex) :

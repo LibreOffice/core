@@ -56,7 +56,7 @@ struct AreaLink_Impl
 
 TYPEINIT1(ScAreaLink,::sfx2::SvBaseLink);
 
-//------------------------------------------------------------------------
+
 
 ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const OUString& rFile,
                         const OUString& rFilter, const OUString& rOpt,

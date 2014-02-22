@@ -20,14 +20,14 @@
 #include "TPrivilegesResultSet.hxx"
 
 using namespace connectivity;
-//------------------------------------------------------------------------------
+
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-//------------------------------------------------------------------------------
+
 OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>& _rxMeta
                                            , const Any& catalog
                                            , const OUString& schemaPattern
@@ -81,7 +81,7 @@ OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>&
     }
     osl_atomic_decrement( &m_refCount );
 }
-//------------------------------------------------------------------------------
+
 const ORowSetValue& OResultSetPrivileges::getValue(sal_Int32 columnIndex)
 {
     switch(columnIndex)
@@ -106,14 +106,14 @@ const ORowSetValue& OResultSetPrivileges::getValue(sal_Int32 columnIndex)
     }
     return ODatabaseMetaDataResultSet::getValue(columnIndex);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OResultSetPrivileges::disposing(void)
 {
     ODatabaseMetaDataResultSet::disposing();
 m_xTables.clear();
 m_xRow.clear();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OResultSetPrivileges::next(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -138,6 +138,6 @@ sal_Bool SAL_CALL OResultSetPrivileges::next(  ) throw(SQLException, RuntimeExce
     }
     return bReturn;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

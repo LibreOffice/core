@@ -38,7 +38,7 @@
 static LanguageType nImplSystemLanguage = LANGUAGE_DONTKNOW;
 static LanguageType nImplSystemUILanguage = LANGUAGE_DONTKNOW;
 
-// -----------------------------------------------------------------------
+
 
 // Get locale of category LC_CTYPE of environment variables
 static const sal_Char* getLangFromEnvironment()
@@ -57,7 +57,7 @@ static const sal_Char* getLangFromEnvironment()
     return pLang;
 }
 
-// -----------------------------------------------------------------------
+
 
 // Get locale of category LC_MESSAGES of environment variables
 static const sal_Char* getUILangFromEnvironment()
@@ -78,7 +78,7 @@ static const sal_Char* getUILangFromEnvironment()
     return pLang;
 }
 
-// -----------------------------------------------------------------------
+
 
 typedef const sal_Char * (*getLangFromEnv)();
 
@@ -120,7 +120,7 @@ static void getPlatformSystemLanguageImpl( LanguageType& rSystemLanguage,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 LanguageType MsLangId::getPlatformSystemLanguage()
 {
@@ -128,7 +128,7 @@ LanguageType MsLangId::getPlatformSystemLanguage()
     return nImplSystemLanguage;
 }
 
-// -----------------------------------------------------------------------
+
 
 LanguageType MsLangId::getPlatformSystemUILanguage()
 {

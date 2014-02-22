@@ -22,7 +22,7 @@
 #include <svx/zoomslideritem.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-// -----------------------------------------------------------------------
+
 
 TYPEINIT1_FACTORY(SvxZoomSliderItem,SfxUInt16Item, new SvxZoomSliderItem);
 
@@ -32,14 +32,14 @@ TYPEINIT1_FACTORY(SvxZoomSliderItem,SfxUInt16Item, new SvxZoomSliderItem);
 #define ZOOMSLIDER_PARAM_MAXZOOM        "MaxValue"
 #define ZOOMSLIDER_PARAMS           4
 
-// -----------------------------------------------------------------------
+
 
 SvxZoomSliderItem::SvxZoomSliderItem( sal_uInt16 nCurrentZoom, sal_uInt16 nMinZoom, sal_uInt16 nMaxZoom, sal_uInt16 _nWhich )
 :   SfxUInt16Item( _nWhich, nCurrentZoom ), mnMinZoom( nMinZoom ), mnMaxZoom( nMaxZoom )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxZoomSliderItem::SvxZoomSliderItem( const SvxZoomSliderItem& rOrig )
 : SfxUInt16Item( rOrig.Which(), rOrig.GetValue() )
@@ -49,34 +49,34 @@ SvxZoomSliderItem::SvxZoomSliderItem( const SvxZoomSliderItem& rOrig )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxZoomSliderItem::~SvxZoomSliderItem()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxZoomSliderItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SvxZoomSliderItem( *this );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxZoomSliderItem::Create( SvStream& /*rStrm*/, sal_uInt16 /*nVersion*/ ) const
 {
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SvxZoomSliderItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     return rStrm;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxZoomSliderItem::operator==( const SfxPoolItem& rAttr ) const
 {

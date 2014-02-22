@@ -38,7 +38,7 @@
 #define KB 1024.0
 const std::wstring WSPACE = std::wstring(SPACE);
 
-//-----------------------------
+
 
 CInfoTip::CInfoTip(long RefCnt) :
     m_RefCnt(RefCnt)
@@ -47,16 +47,16 @@ CInfoTip::CInfoTip(long RefCnt) :
     InterlockedIncrement(&g_DllRefCnt);
 }
 
-//-----------------------------
+
 
 CInfoTip::~CInfoTip()
 {
     InterlockedDecrement(&g_DllRefCnt);
 }
 
-//-----------------------------
+
 // IUnknown methods
-//-----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CInfoTip::QueryInterface(REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject)
 {
@@ -82,14 +82,14 @@ HRESULT STDMETHODCALLTYPE CInfoTip::QueryInterface(REFIID riid, void __RPC_FAR *
     return E_NOINTERFACE;
 }
 
-//----------------------------
+
 
 ULONG STDMETHODCALLTYPE CInfoTip::AddRef(void)
 {
     return InterlockedIncrement(&m_RefCnt);
 }
 
-//----------------------------
+
 
 ULONG STDMETHODCALLTYPE CInfoTip::Release( void)
 {
@@ -191,9 +191,9 @@ std::wstring getFileSizeInfo(char* FileName)
     return EMPTY_STRING;
 }
 
-//----------------------------
+
 // IQueryInfo methods
-//----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppwszTip)
 {
@@ -300,16 +300,16 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
     return E_FAIL;
 }
 
-//----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoFlags(DWORD * /*pdwFlags*/ )
 {
     return E_NOTIMPL;
 }
 
-//----------------------------
+
 // IPersist methods
-//----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CInfoTip::GetClassID(CLSID* pClassID)
 {
@@ -317,9 +317,9 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetClassID(CLSID* pClassID)
     return S_OK;
 }
 
-//----------------------------
+
 // IPersistFile methods
-//----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CInfoTip::Load(LPCOLESTR pszFileName, DWORD /*dwMode*/)
 {
@@ -345,28 +345,28 @@ HRESULT STDMETHODCALLTYPE CInfoTip::Load(LPCOLESTR pszFileName, DWORD /*dwMode*/
     return S_OK;
 }
 
-//----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CInfoTip::IsDirty(void)
 {
     return E_NOTIMPL;
 }
 
-//----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CInfoTip::Save(LPCOLESTR /*pszFileName*/, BOOL /*fRemember*/)
 {
     return E_NOTIMPL;
 }
 
-//----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CInfoTip::SaveCompleted(LPCOLESTR /*pszFileName*/)
 {
     return E_NOTIMPL;
 }
 
-//----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CInfoTip::GetCurFile(LPOLESTR __RPC_FAR * /*ppszFileName*/)
 {

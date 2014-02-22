@@ -52,7 +52,7 @@ XclImpRootData::~XclImpRootData()
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
     XclRoot( rImpRootData ),

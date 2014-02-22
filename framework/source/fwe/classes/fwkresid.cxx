@@ -41,7 +41,7 @@ ResMgr* FwkResId::GetResManager()
     return pResMgr;
 }
 
-// -----------------------------------------------------------------------
+
 
 FwkResId::FwkResId( sal_uInt16 nId ) :
     ResId( nId, *FwkResId::GetResManager() )

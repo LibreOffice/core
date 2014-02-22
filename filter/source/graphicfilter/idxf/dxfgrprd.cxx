@@ -24,7 +24,7 @@
 #include <tools/stream.hxx>
 #include "dxfgrprd.hxx"
 
-// ----------------------------------------------------------------------------
+
 
 // we use an own ReadLine function, because Stream::ReadLine stops if
 // a 0-sign occurs; this functions converts 0-signs to blanks and reads
@@ -87,7 +87,7 @@ OString DXFReadLine(SvStream& rIStm)
     return aBuf.makeStringAndClear();
 }
 
-// ------------------
+
 
 DXFGroupReader::DXFGroupReader(SvStream & rIStream, sal_uInt16 nminpercent, sal_uInt16 nmaxpercent ) :
     rIS(rIStream)

@@ -76,7 +76,7 @@ AccessibleBrowseBoxHeaderCell::AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnR
 
     return pStateSetHelper;
 }
-// -----------------------------------------------------------------------------
+
 /** @return
         The count of visible children.
 */
@@ -85,7 +85,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleChildCount()
 {
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 
 /** @return
         The XAccessible interface of the specified child.
@@ -95,7 +95,7 @@ Reference<XAccessible > SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleChi
 {
     throw IndexOutOfBoundsException();
 }
-// -----------------------------------------------------------------------------
+
 
 /** Grabs the focus to the column header. */
 void SAL_CALL AccessibleBrowseBoxHeaderCell::grabFocus()
@@ -109,7 +109,7 @@ void SAL_CALL AccessibleBrowseBoxHeaderCell::grabFocus()
     else
         mpBrowseBox->SelectColumn(static_cast<sal_uInt16>(m_nColumnRowId)); //!!!
 }
-// -----------------------------------------------------------------------------
+
 /** @return
         The name of this class.
 */
@@ -118,7 +118,7 @@ OUString SAL_CALL AccessibleBrowseBoxHeaderCell::getImplementationName()
 {
     return OUString( "com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderCell" );
 }
-// -----------------------------------------------------------------------------
+
 namespace
 {
     Rectangle getRectangle(IAccessibleTableProvider* _pBrowseBox,sal_Int32 _nRowColIndex, sal_Bool _bOnScreen,sal_Bool _bRowBar)
@@ -140,13 +140,13 @@ Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBox()
 {
     return getRectangle(mpBrowseBox,m_nColumnRowId,sal_False,isRowBarCell());
 }
-// -----------------------------------------------------------------------------
+
 
 Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBoxOnScreen()
 {
     return getRectangle(mpBrowseBox,m_nColumnRowId,sal_True,isRowBarCell());
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleIndexInParent()
     throw ( RuntimeException )
 {
@@ -157,9 +157,9 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleIndexInParent()
         --nIndex;
     return nIndex;
 }
-// -----------------------------------------------------------------------------
+
 } // namespace accessibility
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

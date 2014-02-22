@@ -96,30 +96,30 @@ sdbcx::ObjectType OTables::createObject(const OUString& _rName)
 
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 void OTables::impl_refresh(  ) throw(RuntimeException)
 {
     static_cast<OMySQLCatalog&>(m_rParent).refreshTables();
 }
-// -------------------------------------------------------------------------
+
 void OTables::disposing(void)
 {
 m_xMetaData.clear();
     OCollection::disposing();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OTables::createDescriptor()
 {
     return new OMySQLTable(this,static_cast<OMySQLCatalog&>(m_rParent).getConnection());
 }
-// -------------------------------------------------------------------------
+
 // XAppend
 sdbcx::ObjectType OTables::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     createTable(descriptor);
     return createObject( _rForName );
 }
-// -------------------------------------------------------------------------
+
 // XDrop
 void OTables::dropObject(sal_Int32 _nPos,const OUString _sElementName)
 {
@@ -160,7 +160,7 @@ void OTables::dropObject(sal_Int32 _nPos,const OUString _sElementName)
         }
     }
 }
-// -------------------------------------------------------------------------
+
 OUString OTables::adjustSQL(const OUString& _sSql)
 {
     OUString sSQL = _sSql;
@@ -176,7 +176,7 @@ OUString OTables::adjustSQL(const OUString& _sSql)
     }
     return sSQL;
 }
-// -------------------------------------------------------------------------
+
 void OTables::createTable( const Reference< XPropertySet >& descriptor )
 {
     const Reference< XConnection > xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
@@ -189,7 +189,7 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
         ::comphelper::disposeComponent(xStmt);
     }
 }
-// -----------------------------------------------------------------------------
+
 void OTables::appendNew(const OUString& _rsNewTable)
 {
     insertElement(_rsNewTable,NULL);
@@ -200,13 +200,13 @@ void OTables::appendNew(const OUString& _rsNewTable)
     while (aListenerLoop.hasMoreElements())
         static_cast<XContainerListener*>(aListenerLoop.next())->elementInserted(aEvent);
 }
-// -----------------------------------------------------------------------------
+
 OUString OTables::getNameForObject(const sdbcx::ObjectType& _xObject)
 {
     OSL_ENSURE(_xObject.is(),"OTables::getNameForObject: Object is NULL!");
     return ::dbtools::composeTableName( m_xMetaData, _xObject, ::dbtools::eInDataManipulation, false, false, false );
 }
-// -----------------------------------------------------------------------------
+
 void OTables::addComment(const Reference< XPropertySet >& descriptor,OUStringBuffer& _rOut)
 {
     OUString sDesc;

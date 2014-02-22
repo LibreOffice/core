@@ -43,11 +43,11 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 
 
-// ---------------------------------------------------------------------------
+
 // This file contains all routines of the fldui directory, which must compile
 // with exceptions. So we can reduce the code of the other files, which don't
 // need any exception handling.
-// ---------------------------------------------------------------------------
+
 
 /*--------------------------------------------------------------------
      Description: Is the database field numeric?

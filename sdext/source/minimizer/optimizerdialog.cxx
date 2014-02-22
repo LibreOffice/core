@@ -30,9 +30,9 @@
 #include <sal/macros.h>
 #include <osl/time.h>
 
-// -------------------
+
 // - OPTIMIZERDIALOG -
-// -------------------
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star::io;
@@ -48,7 +48,7 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::container;
 
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizerDialog::InitDialog()
 {
@@ -79,7 +79,7 @@ void OptimizerDialog::InitDialog()
     mxDialogModelMultiPropertySet->setPropertyValues( aNames, aValues );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizerDialog::InitRoadmap()
 {
@@ -134,7 +134,7 @@ void OptimizerDialog::InitRoadmap()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizerDialog::InsertRoadmapItem( const sal_Int32 nIndex, const sal_Bool bEnabled, const OUString& rLabel, const sal_Int32 nItemID )
 {
@@ -155,7 +155,7 @@ void OptimizerDialog::InsertRoadmapItem( const sal_Int32 nIndex, const sal_Bool 
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizerDialog::UpdateConfiguration()
 {
@@ -204,7 +204,7 @@ void OptimizerDialog::UpdateConfiguration()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 OptimizerDialog::OptimizerDialog( const Reference< XComponentContext > &rxContext, Reference< XFrame >& rxFrame, Reference< XDispatch > rxStatusDispatcher ) :
     UnoDialog( rxContext, rxFrame ),
@@ -240,7 +240,7 @@ OptimizerDialog::OptimizerDialog( const Reference< XComponentContext > &rxContex
     UpdateStatus( aStatusSequence );
 }
 
-// -----------------------------------------------------------------------------
+
 
 OptimizerDialog::~OptimizerDialog()
 {
@@ -249,7 +249,7 @@ OptimizerDialog::~OptimizerDialog()
         SaveConfiguration();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool OptimizerDialog::execute()
 {
@@ -261,7 +261,7 @@ sal_Bool OptimizerDialog::execute()
     return mbStatus;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizerDialog::SwitchPage( sal_Int16 nNewStep )
 {
@@ -308,7 +308,7 @@ void OptimizerDialog::UpdateControlStates( sal_Int16 nPage )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString OptimizerDialog::GetSelectedString( OUString const & token )
 {
@@ -329,7 +329,7 @@ OUString OptimizerDialog::GetSelectedString( OUString const & token )
     return aSelectedItem;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizerDialog::UpdateStatus( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rStatus )
 {
@@ -361,7 +361,7 @@ void OptimizerDialog::UpdateStatus( const com::sun::star::uno::Sequence< com::su
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ItemListener::itemStateChanged( const ItemEvent& Event )
     throw ( RuntimeException )
@@ -496,7 +496,7 @@ void ItemListener::disposing( const ::com::sun::star::lang::EventObject& /* Sour
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ActionListener::actionPerformed( const ActionEvent& rEvent )
     throw ( com::sun::star::uno::RuntimeException )
@@ -646,7 +646,7 @@ void ActionListener::disposing( const ::com::sun::star::lang::EventObject& /* So
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ActionListenerListBox0Pg0::actionPerformed( const ActionEvent& rEvent )
     throw ( com::sun::star::uno::RuntimeException )
@@ -665,7 +665,7 @@ void ActionListenerListBox0Pg0::disposing( const ::com::sun::star::lang::EventOb
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TextListenerFormattedField0Pg1::textChanged( const TextEvent& /* rEvent */ )
     throw ( com::sun::star::uno::RuntimeException )
@@ -680,7 +680,7 @@ void TextListenerFormattedField0Pg1::disposing( const ::com::sun::star::lang::Ev
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TextListenerComboBox0Pg1::textChanged( const TextEvent& /* rEvent */ )
     throw ( com::sun::star::uno::RuntimeException )
@@ -709,7 +709,7 @@ void TextListenerComboBox0Pg1::disposing( const ::com::sun::star::lang::EventObj
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SpinListenerFormattedField0Pg1::up( const SpinEvent& /* rEvent */ )
     throw ( com::sun::star::uno::RuntimeException )
@@ -756,7 +756,7 @@ void SpinListenerFormattedField0Pg1::disposing( const ::com::sun::star::lang::Ev
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void HelpCloseListener::addCloseListener( const Reference < XCloseListener >& ) throw( RuntimeException )
 {

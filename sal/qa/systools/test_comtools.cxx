@@ -228,7 +228,7 @@ namespace test_comtools
         CPPUNIT_TEST_SUITE_END();
     };
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(test_comtools::test_COMReference, "test_comtools");
 
 } // namespace rtl_OUString

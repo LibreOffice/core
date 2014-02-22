@@ -131,7 +131,7 @@ SfxRequest::~SfxRequest()
         DeleteItemOnIdle(pImp->pRetVal);
     delete pImp;
 }
-//--------------------------------------------------------------------
+
 
 
 SfxRequest::SfxRequest
@@ -162,7 +162,7 @@ SfxRequest::SfxRequest
     else
         pImp->SetPool( rOrig.pImp->pPool );
 }
-//--------------------------------------------------------------------
+
 
 
 SfxRequest::SfxRequest
@@ -210,7 +210,7 @@ SfxRequest::SfxRequest
 #endif
 }
 
-//--------------------------------------------------------------------
+
 
 
 SfxRequest::SfxRequest
@@ -258,7 +258,7 @@ SfxRequest::SfxRequest
     TransformParameters( nSlot, rArgs, *pArgs, pSlot );
 }
 
-//-----------------------------------------------------------------------
+
 
 SfxRequest::SfxRequest
 (
@@ -282,21 +282,21 @@ SfxRequest::SfxRequest
     pImp->nCallMode = nMode;
     pImp->bUseTarget = sal_False;
 }
-//--------------------------------------------------------------------
+
 
 sal_uInt16 SfxRequest::GetCallMode() const
 {
     return pImp->nCallMode;
 }
 
-//--------------------------------------------------------------------
+
 
 sal_Bool SfxRequest::IsSynchronCall() const
 {
     return SFX_CALLMODE_SYNCHRON == ( SFX_CALLMODE_SYNCHRON & pImp->nCallMode );
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxRequest::SetSynchronCall( sal_Bool bSynchron )
 {
@@ -317,7 +317,7 @@ const SfxItemSet* SfxRequest::GetInternalArgs_Impl() const
     return pImp->pInternalArgs;
 }
 
-//--------------------------------------------------------------------
+
 
 
 void SfxRequest_Impl::Record
@@ -375,7 +375,7 @@ void SfxRequest_Impl::Record
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxRequest::Record_Impl
 (
@@ -400,7 +400,7 @@ void SfxRequest::Record_Impl
     pImp->pViewFrame = pViewFrame;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxRequest::SetArgs( const SfxAllItemSet& rArgs )
 {
@@ -409,7 +409,7 @@ void SfxRequest::SetArgs( const SfxAllItemSet& rArgs )
     pImp->SetPool( pArgs->GetPool() );
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxRequest::AppendItem(const SfxPoolItem &rItem)
 {
@@ -418,7 +418,7 @@ void SfxRequest::AppendItem(const SfxPoolItem &rItem)
     pArgs->Put(rItem, rItem.Which());
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxRequest::RemoveItem( sal_uInt16 nID )
 {
@@ -430,7 +430,7 @@ void SfxRequest::RemoveItem( sal_uInt16 nID )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 const SfxPoolItem* SfxRequest::GetArg
 (
@@ -443,7 +443,7 @@ const SfxPoolItem* SfxRequest::GetArg
 }
 
 
-//--------------------------------------------------------------------
+
 const SfxPoolItem* SfxRequest::GetItem
 (
     const SfxItemSet* pArgs,
@@ -509,7 +509,7 @@ const SfxPoolItem* SfxRequest::GetItem
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxRequest::SetReturnValue(const SfxPoolItem &rItem)
 {
@@ -519,14 +519,14 @@ void SfxRequest::SetReturnValue(const SfxPoolItem &rItem)
     pImp->pRetVal = rItem.Clone();
 }
 
-//--------------------------------------------------------------------
+
 
 const SfxPoolItem* SfxRequest::GetReturnValue() const
 {
     return pImp->pRetVal;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxRequest::Done
 (
@@ -587,7 +587,7 @@ void SfxRequest::Done
     }
 }
 
-//--------------------------------------------------------------------
+
 
 
 void SfxRequest::Done( sal_Bool bRelease )
@@ -598,7 +598,7 @@ void SfxRequest::Done( sal_Bool bRelease )
         DELETEZ( pArgs );
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxRequest::ForgetAllArgs()
 {
@@ -606,14 +606,14 @@ void SfxRequest::ForgetAllArgs()
     DELETEZ( pImp->pInternalArgs );
 }
 
-//--------------------------------------------------------------------
+
 
 sal_Bool SfxRequest::IsCancelled() const
 {
     return pImp->bCancelled;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxRequest::Cancel()
 
@@ -629,7 +629,7 @@ void SfxRequest::Cancel()
     DELETEZ( pArgs );
 }
 
-//--------------------------------------------------------------------
+
 
 
 void SfxRequest::Ignore()
@@ -651,7 +651,7 @@ void SfxRequest::Ignore()
     pImp->bIgnored = sal_True;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxRequest::Done_Impl
 (
@@ -766,7 +766,7 @@ void SfxRequest::Done_Impl
     }
 }
 
-//--------------------------------------------------------------------
+
 
 sal_Bool SfxRequest::IsDone() const
 
@@ -789,7 +789,7 @@ sal_Bool SfxRequest::IsDone() const
     return pImp->bDone;
 }
 
-//--------------------------------------------------------------------
+
 
 com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > SfxRequest::GetMacroRecorder( SfxViewFrame* pView )
 
@@ -827,7 +827,7 @@ sal_Bool SfxRequest::HasMacroRecorder( SfxViewFrame* pView )
 }
 
 
-//--------------------------------------------------------------------
+
 
 sal_Bool SfxRequest::IsAPI() const
 
@@ -841,19 +841,19 @@ sal_Bool SfxRequest::IsAPI() const
     return SFX_CALLMODE_API == ( SFX_CALLMODE_API & pImp->nCallMode );
 }
 
-//--------------------------------------------------------------------
+
 void SfxRequest::SetModifier( sal_uInt16 nModi )
 {
     pImp->nModifier = nModi;
 }
 
-//--------------------------------------------------------------------
+
 sal_uInt16 SfxRequest::GetModifier() const
 {
     return pImp->nModifier;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxRequest::AllowRecording( sal_Bool bSet )
 {

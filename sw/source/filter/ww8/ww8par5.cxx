@@ -91,9 +91,9 @@ using namespace sw::mark;
 using namespace std; // #i24377#
 using namespace nsSwDocInfoSubType;
 
-//----------------------------------------
+
 //              Bookmarks
-//----------------------------------------
+
 
 namespace
 {
@@ -218,9 +218,9 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
     return 0;
 }
 
-//----------------------------------------------------------------------
+
 //    general help methods to separate parameters
-//----------------------------------------------------------------------
+
 
 /// translate FieldParameter names into the system character set and
 /// at the same time, douple backslashes are converted into single ones
@@ -452,9 +452,9 @@ short SwWW8ImplReader::GetTimeDatePara(OUString& rStr, sal_uInt32& rFormat,
     return nNumFmtType;
 }
 
-//-----------------------------------------
+
 //              Felder
-//-----------------------------------------
+
 // Am Ende des Einlesens entsprechende Felder updaten ( z.Zt. die Referenzen )
 void SwWW8ImplReader::UpdateFields()
 {
@@ -956,9 +956,9 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     }
 }
 
-//-----------------------------------------
+
 //        Felder Taggen
-//-----------------------------------------
+
 
 // MakeTagString() gibt als Returnwert die Position des ersten
 // CR / Zeilenende / Seitenumbruch in pText und wandelt auch nur bis dort
@@ -1078,9 +1078,9 @@ long SwWW8ImplReader::Read_F_Tag( WW8FieldDesc* pF )
     return pF->nLen;
 }
 
-//-----------------------------------------
+
 //        normal fields
-//-----------------------------------------
+
 
 eF_ResT SwWW8ImplReader::Read_F_Input( WW8FieldDesc* pF, OUString& rStr )
 {
@@ -2650,9 +2650,9 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
     }
 }
 
-//-----------------------------------------
+
 //        "table of ..." fields
-//-----------------------------------------
+
 
 static void lcl_toxMatchACSwitch(  SwWW8ImplReader& /*rReader*/,
                             SwDoc& rDoc,

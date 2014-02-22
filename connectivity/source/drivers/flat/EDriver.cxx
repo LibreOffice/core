@@ -37,24 +37,24 @@ using namespace ::com::sun::star::lang;
 
 
 // static ServiceInfo
-//------------------------------------------------------------------------------
+
 OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.sdbc.flat.ODriver");
 }
 
-//------------------------------------------------------------------
+
 OUString SAL_CALL ODriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
 
-//------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL connectivity::flat::ODriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
 {
     return *(new ODriver( comphelper::getComponentContext(_rxFactory) ));
 }
-// --------------------------------------------------------------------------------
+
 Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -71,13 +71,13 @@ Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const S
 
     return xCon;
 }
-// --------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODriver::acceptsURL( const OUString& url )
                 throw(SQLException, RuntimeException)
 {
     return url.startsWith("sdbc:flat:");
 }
-// -----------------------------------------------------------------------------
+
 Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     if ( acceptsURL(url) )
@@ -131,7 +131,7 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
     ::dbtools::throwGenericSQLException(sMessage ,*this);
     return Sequence< DriverPropertyInfo >();
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

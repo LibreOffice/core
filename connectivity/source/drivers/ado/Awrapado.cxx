@@ -1659,7 +1659,7 @@ ADORecordset* WpADOConnection::getExportedKeys( const ::com::sun::star::uno::Any
     OpenSchema(adSchemaForeignKeys,vsa,vtEmpty,&pRecordset);
     return pRecordset;
 }
-// -----------------------------------------------------------------------------
+
 ADORecordset* WpADOConnection::getImportedKeys( const ::com::sun::star::uno::Any& catalog, const OUString& schema, const OUString& table )
 {
     // Create elements used in the array
@@ -1701,7 +1701,7 @@ ADORecordset* WpADOConnection::getImportedKeys( const ::com::sun::star::uno::Any
     return pRecordset;
 
 }
-// -----------------------------------------------------------------------------
+
 ADORecordset* WpADOConnection::getPrimaryKeys( const ::com::sun::star::uno::Any& catalog, const OUString& schema, const OUString& table )
 {
     // Create elements used in the array
@@ -1739,7 +1739,7 @@ ADORecordset* WpADOConnection::getPrimaryKeys( const ::com::sun::star::uno::Any&
 
     return pRecordset;
 }
-// -----------------------------------------------------------------------------
+
 ADORecordset* WpADOConnection::getIndexInfo(
     const ::com::sun::star::uno::Any& catalog, const OUString& schema, const OUString& table,
     sal_Bool /*unique*/, sal_Bool /*approximate*/ )
@@ -1782,7 +1782,7 @@ ADORecordset* WpADOConnection::getIndexInfo(
 
     return pRecordset;
 }
-// -----------------------------------------------------------------------------
+
 ADORecordset* WpADOConnection::getTablePrivileges( const ::com::sun::star::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& tableNamePattern )
@@ -1824,7 +1824,7 @@ ADORecordset* WpADOConnection::getTablePrivileges( const ::com::sun::star::uno::
 
     return pRecordset;
 }
-// -----------------------------------------------------------------------------
+
 ADORecordset* WpADOConnection::getCrossReference( const ::com::sun::star::uno::Any& primaryCatalog,
                                                   const OUString& primarySchema,
                                                   const OUString& primaryTable,
@@ -1877,7 +1877,7 @@ ADORecordset* WpADOConnection::getCrossReference( const ::com::sun::star::uno::A
 
     return pRecordset;
 }
-// -----------------------------------------------------------------------------
+
 ADORecordset* WpADOConnection::getProcedures( const ::com::sun::star::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& procedureNamePattern )
@@ -1916,7 +1916,7 @@ ADORecordset* WpADOConnection::getProcedures( const ::com::sun::star::uno::Any& 
 
     return pRecordset;
 }
-// -----------------------------------------------------------------------------
+
 ADORecordset* WpADOConnection::getProcedureColumns( const ::com::sun::star::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& procedureNamePattern,
@@ -1961,7 +1961,7 @@ ADORecordset* WpADOConnection::getProcedureColumns( const ::com::sun::star::uno:
 
     return pRecordset;
 }
-// -----------------------------------------------------------------------------
+
 ADORecordset* WpADOConnection::getTables( const ::com::sun::star::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& tableNamePattern,
@@ -2025,7 +2025,7 @@ ADORecordset* WpADOConnection::getTables( const ::com::sun::star::uno::Any& cata
 
     return pRecordset;
 }
-// -----------------------------------------------------------------------------
+
 ADORecordset* WpADOConnection::getColumns( const ::com::sun::star::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& tableNamePattern,
@@ -2069,7 +2069,7 @@ ADORecordset* WpADOConnection::getColumns( const ::com::sun::star::uno::Any& cat
 
     return pRecordset;
 }
-// -----------------------------------------------------------------------------
+
 ADORecordset* WpADOConnection::getColumnPrivileges( const ::com::sun::star::uno::Any& catalog,
                                                   const OUString& schema,
                                                   const OUString& table,
@@ -2112,7 +2112,7 @@ ADORecordset* WpADOConnection::getColumnPrivileges( const ::com::sun::star::uno:
 
     return pRecordset;
 }
-// -----------------------------------------------------------------------------
+
 ADORecordset* WpADOConnection::getTypeInfo(DataTypeEnum /*_eType*/)
 {
     // Create elements used in the array
@@ -2140,7 +2140,7 @@ ADORecordset* WpADOConnection::getTypeInfo(DataTypeEnum /*_eType*/)
 
     return pRec;
 }
-// -----------------------------------------------------------------------------
+
 void WpADOColumn::put_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObject)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
@@ -2148,7 +2148,7 @@ void WpADOColumn::put_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObject)
     OSL_ENSURE(bRet,"Could not set ParentCatalog!");
     OSL_UNUSED(bRet);
 }
-// -----------------------------------------------------------------------------
+
 void WpADOTable::putref_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObject)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
@@ -2156,12 +2156,12 @@ void WpADOTable::putref_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObjec
     OSL_ENSURE(bRet,"Could not set ParentCatalog!");
     OSL_UNUSED(bRet);
 }
-// -----------------------------------------------------------------------------
+
 void WpBase::setIDispatch(IDispatch* _pIUnknown)
 {
     pIUnknown = _pIUnknown;
 }
-// -----------------------------------------------------------------------------
+
 void OTools::putValue(const WpADOProperties& _rProps,const OLEVariant &_aPosition,const OLEVariant &_aValVar)
 {
     OSL_ENSURE(_rProps.IsValid(),"Properties are not valid!");
@@ -2173,7 +2173,7 @@ void OTools::putValue(const WpADOProperties& _rProps,const OLEVariant &_aPositio
         OSL_UNUSED(bRet);
     }
 }
-// -----------------------------------------------------------------------------
+
 OLEVariant OTools::getValue(const WpADOProperties& _rProps,const OLEVariant &_aPosition)
 {
     WpADOProperty aProp(_rProps.GetItem(_aPosition));

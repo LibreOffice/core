@@ -25,7 +25,7 @@
 
 namespace uno = com::sun::star::uno ;
 
-//------------------------------------------------------------------------------
+
 
 static uno::Reference<uno::XInterface> SAL_CALL createLocaleBackend(
     SAL_UNUSED_PARAMETER const uno::Reference<uno::XComponentContext>&){
@@ -33,7 +33,7 @@ static uno::Reference<uno::XInterface> SAL_CALL createLocaleBackend(
     return * LocaleBackend::createInstance();
 }
 
-//------------------------------------------------------------------------------
+
 
 static const cppu::ImplementationEntry kImplementations_entries[] =
 {
@@ -48,7 +48,7 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
     { NULL, NULL, NULL, NULL, NULL, 0 }
 } ;
 
-//------------------------------------------------------------------------------
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL localebe1_component_getFactory(
     const sal_Char *aImplementationName,
@@ -62,6 +62,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL localebe1_component_getFactory(
         kImplementations_entries) ;
 }
 
-//------------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

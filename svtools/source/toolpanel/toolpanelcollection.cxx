@@ -43,31 +43,31 @@ namespace svt
     //====================================================================
     //= ToolPanelCollection
     //====================================================================
-    //--------------------------------------------------------------------
+
     ToolPanelCollection::ToolPanelCollection()
         :m_pData( new ToolPanelCollection_Data )
     {
     }
 
-    //--------------------------------------------------------------------
+
     ToolPanelCollection::~ToolPanelCollection()
     {
         m_pData->aListeners.Dying();
     }
 
-    //--------------------------------------------------------------------
+
     size_t ToolPanelCollection::GetPanelCount() const
     {
         return m_pData->aPanels.size();
     }
 
-    //--------------------------------------------------------------------
+
     ::boost::optional< size_t > ToolPanelCollection::GetActivePanel() const
     {
         return m_pData->aActivePanel;
     }
 
-    //--------------------------------------------------------------------
+
     void ToolPanelCollection::ActivatePanel( const ::boost::optional< size_t >& i_rPanel )
     {
         if ( !!i_rPanel )
@@ -87,7 +87,7 @@ namespace svt
         m_pData->aListeners.ActivePanelChanged( aOldPanel, m_pData->aActivePanel );
     }
 
-    //--------------------------------------------------------------------
+
     PToolPanel ToolPanelCollection::GetPanel( const size_t i_nPos ) const
     {
         OSL_ENSURE( i_nPos < m_pData->aPanels.size(), "ToolPanelCollection::GetPanel: illegal position!" );
@@ -96,7 +96,7 @@ namespace svt
         return m_pData->aPanels[ i_nPos ];
     }
 
-    //--------------------------------------------------------------------
+
     size_t ToolPanelCollection::InsertPanel( const PToolPanel& i_pPanel, const size_t i_nPosition )
     {
         OSL_ENSURE( i_pPanel.get(), "ToolPanelCollection::InsertPanel: illegal panel!" );
@@ -120,7 +120,7 @@ namespace svt
         return position;
     }
 
-    //--------------------------------------------------------------------
+
     PToolPanel ToolPanelCollection::RemovePanel( const size_t i_nPosition )
     {
         OSL_ENSURE( i_nPosition < m_pData->aPanels.size(), "ToolPanelCollection::RemovePanel: illegal position!" );
@@ -168,13 +168,13 @@ namespace svt
         return pRemovedPanel;
     }
 
-    //--------------------------------------------------------------------
+
     void ToolPanelCollection::AddListener( IToolPanelDeckListener& i_rListener )
     {
         m_pData->aListeners.AddListener( i_rListener );
     }
 
-    //--------------------------------------------------------------------
+
     void ToolPanelCollection::RemoveListener( IToolPanelDeckListener& i_rListener )
     {
         m_pData->aListeners.RemoveListener( i_rListener );

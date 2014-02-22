@@ -26,9 +26,9 @@
 
 namespace extensions { namespace config { namespace ldap {
 
-//------------------------------------------------------------------------------
+
 typedef int LdapErrCode;
-//------------------------------------------------------------------------------
+
 struct LdapMessageHolder
 {
     LdapMessageHolder() : msg(0) {}
@@ -44,12 +44,12 @@ private:
     LdapMessageHolder(LdapMessageHolder const&);
     void operator=(LdapMessageHolder const&);
 };
-//------------------------------------------------------------------------------
+
 LdapConnection::~LdapConnection()
 {
     if (isValid()) disconnect();
 }
-//------------------------------------------------------------------------------
+
 
 void LdapConnection::disconnect()
 {
@@ -59,7 +59,7 @@ void LdapConnection::disconnect()
         mConnection = NULL;
     }
 }
-//------------------------------------------------------------------------------
+
 
 static void checkLdapReturnCode(const sal_Char *aOperation,
                                 LdapErrCode aRetCode,
@@ -95,7 +95,7 @@ static void checkLdapReturnCode(const sal_Char *aOperation,
     throw ldap::LdapGenericException(message.makeStringAndClear(),
                                      NULL, aRetCode) ;
 }
-//------------------------------------------------------------------------------
+
 void  LdapConnection::connectSimple(const LdapDefinition& aDefinition)
    throw (ldap::LdapConnectionException, ldap::LdapGenericException)
 {
@@ -105,7 +105,7 @@ void  LdapConnection::connectSimple(const LdapDefinition& aDefinition)
     mLdapDefinition = aDefinition;
     connectSimple();
 }
-//------------------------------------------------------------------------------
+
 void  LdapConnection::connectSimple()
    throw (ldap::LdapConnectionException, ldap::LdapGenericException)
 {
@@ -147,7 +147,7 @@ void  LdapConnection::connectSimple()
         checkLdapReturnCode("SimpleBind", retCode, mConnection) ;
     }
 }
-//------------------------------------------------------------------------------
+
 void LdapConnection::initConnection()
     throw (ldap::LdapConnectionException)
 {
@@ -180,7 +180,7 @@ void LdapConnection::initConnection()
                                             NULL) ;
     }
 }
-//------------------------------------------------------------------------------
+
  void LdapConnection::getUserProfile(
      const OUString& aUser, LdapData * data)
     throw (lang::IllegalArgumentException,
@@ -239,7 +239,7 @@ void LdapConnection::initConnection()
 #endif
     }
 }
-//------------------------------------------------------------------------------
+
  OUString LdapConnection::findUserDn(const OUString& aUser)
     throw (lang::IllegalArgumentException,
             ldap::LdapConnectionException, ldap::LdapGenericException)
@@ -300,7 +300,7 @@ void LdapConnection::initConnection()
     return userDn ;
 }
 
-//------------------------------------------------------------------------------
+
 
 } } } // extensions.config.ldap
 

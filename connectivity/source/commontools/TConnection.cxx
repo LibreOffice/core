@@ -31,13 +31,13 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::beans;
 using namespace ::osl;
 
-//------------------------------------------------------------------------------
+
 OMetaConnection::OMetaConnection()
     : OMetaConnection_BASE(m_aMutex)
     , m_nTextEncoding(RTL_TEXTENCODING_MS_1252)
 {
 }
-//------------------------------------------------------------------------------
+
 void OMetaConnection::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -62,7 +62,7 @@ sal_Int64 SAL_CALL OMetaConnection::getSomething( const ::com::sun::star::uno::S
         ? reinterpret_cast< sal_Int64 >( this )
         : (sal_Int64)0;
 }
-// -----------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OMetaConnection::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId * pId = 0;
@@ -77,13 +77,13 @@ Sequence< sal_Int8 > OMetaConnection::getUnoTunnelImplementationId()
     }
     return pId->getImplementationId();
 }
-// -----------------------------------------------------------------------------
+
 ::dbtools::OPropertyMap& OMetaConnection::getPropMap()
 {
     static ::dbtools::OPropertyMap s_aPropertyNameMap;
     return s_aPropertyNameMap;
 }
-// -----------------------------------------------------------------------------
+
 void OMetaConnection::throwGenericSQLException( sal_uInt16 _nErrorResourceId,const Reference< XInterface>& _xContext )
 {
     OUString sErrorMessage;

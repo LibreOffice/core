@@ -35,7 +35,7 @@
 
 #include <seterror.hxx>
 
-//----------------------------------------------------------
+
 BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
 {
     DWORD sz = 0;
@@ -54,7 +54,7 @@ BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
     return FALSE;
 }
 
-//----------------------------------------------------------
+
 #ifdef DEBUG
 inline void OutputDebugStringFormat( LPCTSTR pFormat, ... )
 {
@@ -71,7 +71,7 @@ static inline void OutputDebugStringFormat( LPCTSTR, ... )
 }
 #endif
 
-//----------------------------------------------------------
+
 extern "C" UINT __stdcall CheckVersions( MSIHANDLE hMSI )
 {
     // MessageBox(NULL, L"CheckVersions", L"Information", MB_OK | MB_ICONINFORMATION);

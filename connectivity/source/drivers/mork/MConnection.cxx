@@ -32,19 +32,19 @@
 
 using namespace dbtools;
 
-//------------------------------------------------------------------------------
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
-// --------------------------------------------------------------------------------
+
 
 namespace connectivity { namespace mork {
 
 static const int defaultScope = 0x80;
 
-// -----------------------------------------------------------------------------
+
 
 OConnection::OConnection(MorkDriver* _pDriver)
     :OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
@@ -56,7 +56,7 @@ OConnection::OConnection(MorkDriver* _pDriver)
     m_pBook = new MorkParser();
     m_pHistory = new MorkParser();
 }
-//-----------------------------------------------------------------------------
+
 OConnection::~OConnection()
 {
     acquire();
@@ -68,13 +68,13 @@ OConnection::~OConnection()
     delete m_pBook;
     delete m_pHistory;
 }
-//-----------------------------------------------------------------------------
+
 void SAL_CALL OConnection::release() throw()
 {
     relase_ChildImpl();
 }
-// -----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+
+
 void OConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     (void) info; // avoid warnings
@@ -173,10 +173,10 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
 }
 
 // XServiceInfo
-// --------------------------------------------------------------------------------
+
 IMPLEMENT_SERVICE_INFO(OConnection, "com.sun.star.sdbc.drivers.mork.OConnection", "com.sun.star.sdbc.Connection")
 
-// --------------------------------------------------------------------------------
+
 Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.mork", "=> OConnection::createStatement()" );
@@ -190,7 +190,7 @@ Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLExcep
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
     return xReturn;
 }
-// --------------------------------------------------------------------------------
+
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.mork", "=> OConnection::prepareStatement()" );
@@ -210,7 +210,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OU
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
     return xReturn;
 }
-// --------------------------------------------------------------------------------
+
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.mork", "=> OConnection::prepareCall()" );
@@ -220,7 +220,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const OUStrin
     SAL_INFO("connectivity.mork", "OConnection::prepareCall( " << _sSql << " )");
     return NULL;
 }
-// --------------------------------------------------------------------------------
+
 OUString SAL_CALL OConnection::nativeSQL( const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.mork", "=> OConnection::nativeSQL()" );
@@ -232,12 +232,12 @@ OUString SAL_CALL OConnection::nativeSQL( const OUString& _sSql ) throw(SQLExcep
 
     return _sSql;
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::setAutoCommit( sal_Bool /*autoCommit*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setAutoCommit", *this );
 }
-// --------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OConnection::getAutoCommit(  ) throw(SQLException, RuntimeException)
 {
     // you have to distinguish which if you are in autocommit mode or not
@@ -245,17 +245,17 @@ sal_Bool SAL_CALL OConnection::getAutoCommit(  ) throw(SQLException, RuntimeExce
 
     return sal_True;
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::commit(  ) throw(SQLException, RuntimeException)
 {
     // when you database does support transactions you should commit here
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::rollback(  ) throw(SQLException, RuntimeException)
 {
     // same as commit but for the other case
 }
-// --------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OConnection::isClosed(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -263,7 +263,7 @@ sal_Bool SAL_CALL OConnection::isClosed(  ) throw(SQLException, RuntimeException
     // just simple -> we are close when we are disposed that means someone called dispose(); (XComponent)
     return OConnection_BASE::rBHelper.bDisposed;
 }
-// --------------------------------------------------------------------------------
+
 Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.mork", "=> OConnection::getMetaData()" );
@@ -282,50 +282,50 @@ Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLEx
 
     return xMetaData;
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::setReadOnly( sal_Bool /*readOnly*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setReadOnly", *this );
 }
-// --------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeException)
 {
     // return if your connection to readonly
     return sal_False;
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::setCatalog( const OUString& /*catalog*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setCatalog", *this );
 }
-// --------------------------------------------------------------------------------
+
 OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeException)
 {
     return OUString();
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 /*level*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setTransactionIsolation", *this );
 }
-// --------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, RuntimeException)
 {
     // please have a look at @see com.sun.star.sdbc.TransactionIsolation
     return TransactionIsolation::NONE;
 }
-// --------------------------------------------------------------------------------
+
 Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getTypeMap(  ) throw(SQLException, RuntimeException)
 {
     // if your driver has special database types you can return it here
     return NULL;
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setTypeMap", *this );
 }
-// --------------------------------------------------------------------------------
+
 // XCloseable
 void SAL_CALL OConnection::close(  ) throw(SQLException, RuntimeException)
 {
@@ -337,26 +337,26 @@ void SAL_CALL OConnection::close(  ) throw(SQLException, RuntimeException)
     }
     dispose();
 }
-// --------------------------------------------------------------------------------
+
 // XWarningsSupplier
 Any SAL_CALL OConnection::getWarnings(  ) throw(SQLException, RuntimeException)
 {
     // when you collected some warnings -> return it
     return Any();
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
     // you should clear your collected warnings here
 }
-//------------------------------------------------------------------------------
+
 void OConnection::disposing()
 {
     // we noticed that we should be destroied in near future so we have to dispose our statements
     ::osl::MutexGuard aGuard(m_aMutex);
     dispose_ChildImpl();
 }
-// -----------------------------------------------------------------------------
+
 
 Reference< XTablesSupplier > SAL_CALL OConnection::createCatalog()
 {
@@ -372,9 +372,9 @@ Reference< XTablesSupplier > SAL_CALL OConnection::createCatalog()
     OSL_TRACE( "\tOUT OConnection::createCatalog()" );
     return xTab;
 }
-// -----------------------------------------------------------------------------
 
-// -----------------------------------------------------------------------------
+
+
 void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Reference< XInterface >& _rxContext )
 {
     if ( _rError.getResId() != 0 )
@@ -411,7 +411,7 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
     throwGenericSQLException( STR_UNSPECIFIED_ERROR, _rxContext );
 }
 
-// -----------------------------------------------------------------------------
+
 void OConnection::throwSQLException( const sal_uInt16 _nErrorResourceId, const Reference< XInterface >& _rxContext )
 {
     ErrorDescriptor aError;

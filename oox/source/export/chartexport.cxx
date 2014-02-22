@@ -842,7 +842,7 @@ void ChartExport::exportChart( Reference< ::com::sun::star::chart::XChartDocumen
     } // if( xDocPropSet.is())
 
     // chart element
-    // -------------
+
     FSHelperPtr pFS = GetFS();
     pFS->startElement( FSNS( XML_c, XML_chart ),
             FSEND );
@@ -1028,7 +1028,7 @@ void ChartExport::exportPlotArea( )
         return;
 
     // plot-area element
-    // -----------------
+
     FSHelperPtr pFS = GetFS();
     pFS->startElement( FSNS( XML_c, XML_plotArea ),
             FSEND );

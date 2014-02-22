@@ -36,7 +36,7 @@ TYPEINIT1(SfxVoidItem, SfxPoolItem);
 TYPEINIT1(SfxSetItem, SfxPoolItem);
 // @@@ TYPEINIT1(SfxItemChangedHint, SfxHint);
 
-// ------------------------------------------------------------------------
+
 #if OSL_DEBUG_LEVEL > 1
 static sal_uLong nItemCount = 0;
 
@@ -87,7 +87,7 @@ SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
 #endif
 }
 
-// -----------------------------------------------------------------------
+
 SfxPoolItem::SfxPoolItem( const SfxPoolItem& rCpy )
     : m_nRefCount(0) // don't copy that
     , m_nWhich(rCpy.Which()) // call function because of ChkThis() (WTF does that mean?)
@@ -124,7 +124,7 @@ SfxPoolItem::SfxPoolItem( const SfxPoolItem& rCpy )
 #endif
 }
 
-// ------------------------------------------------------------------------
+
 SfxPoolItem::~SfxPoolItem()
 {
     DBG_DTOR(SfxPoolItem, 0);
@@ -135,40 +135,40 @@ SfxPoolItem::~SfxPoolItem()
 #endif
 }
 
-// ------------------------------------------------------------------------
+
 int SfxPoolItem::Compare( const SfxPoolItem& ) const
 {
     return 0;
 }
 
-// ------------------------------------------------------------------------
+
 int SfxPoolItem::Compare( const SfxPoolItem& rWith, const IntlWrapper& ) const
 {
     return Compare( rWith );
 }
 
-// ------------------------------------------------------------------------
+
 bool SfxPoolItem::operator==( const SfxPoolItem& rCmp ) const
 {
     DBG_CHKTHIS(SfxPoolItem, 0);
     return rCmp.Type() == Type();
 }
 
-// -----------------------------------------------------------------------
+
 SfxPoolItem* SfxPoolItem::Create(SvStream &, sal_uInt16) const
 {
     DBG_CHKTHIS(SfxPoolItem, 0);
     return Clone(0);
 }
 
-// -----------------------------------------------------------------------
+
 sal_uInt16 SfxPoolItem::GetVersion( sal_uInt16 ) const
 {
     DBG_CHKTHIS(SfxPoolItem, 0);
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 SvStream& SfxPoolItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
     DBG_CHKTHIS(SfxPoolItem, 0);
@@ -200,7 +200,7 @@ void SfxPoolItem::writeUnicodeString(SvStream & rStream, const OUString& rString
     rStream.WriteUniOrByteString(rString, RTL_TEXTENCODING_UCS2);
 }
 
-// ------------------------------------------------------------------------
+
 SfxItemPresentation SfxPoolItem::GetPresentation
 (
     SfxItemPresentation /*ePresentation*/,       // IN:  wie formatiert werden soll
@@ -273,7 +273,7 @@ SfxVoidItem::SfxVoidItem( const SfxVoidItem& rCopy):
     DBG_CTOR(SfxVoidItem, 0);
 }
 
-// ------------------------------------------------------------------------
+
 bool SfxVoidItem::operator==( const SfxPoolItem&
 #ifdef DBG_UTIL
 rCmp
@@ -285,7 +285,7 @@ rCmp
     return true;
 }
 
-// ------------------------------------------------------------------------
+
 SfxItemPresentation SfxVoidItem::GetPresentation
 (
     SfxItemPresentation     /*ePresentation*/,
@@ -300,7 +300,7 @@ SfxItemPresentation SfxVoidItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
-// ------------------------------------------------------------------------
+
 SfxPoolItem* SfxVoidItem::Clone(SfxItemPool *) const
 {
     DBG_CHKTHIS(SfxVoidItem, 0);
@@ -317,7 +317,7 @@ SfxItemHandle::SfxItemHandle(SfxPoolItem &rItem):
     DBG_CTOR(SfxItemHandle, 0);
 }
 
-// ------------------------------------------------------------------------
+
 SfxItemHandle::SfxItemHandle(const SfxItemHandle &rCopy):
     pRef(rCopy.pRef),
     pItem(rCopy.pItem)
@@ -326,7 +326,7 @@ SfxItemHandle::SfxItemHandle(const SfxItemHandle &rCopy):
     ++(*pRef);
 }
 
-// ------------------------------------------------------------------------
+
 const SfxItemHandle &SfxItemHandle::operator=(const SfxItemHandle &rCopy)
 {
     DBG_CHKTHIS(SfxItemHandle, 0);
@@ -344,7 +344,7 @@ const SfxItemHandle &SfxItemHandle::operator=(const SfxItemHandle &rCopy)
     return *this;
 }
 
-// ------------------------------------------------------------------------
+
 SfxItemHandle::~SfxItemHandle()
 {
     DBG_DTOR(SfxItemHandle, 0);
@@ -355,19 +355,19 @@ SfxItemHandle::~SfxItemHandle()
     }
 }
 
-// ------------------------------------------------------------------------
+
 bool SfxPoolItem::ScaleMetrics( long /*lMult*/, long /*lDiv*/ )
 {
     return false;
 }
 
-// ------------------------------------------------------------------------
+
 bool SfxPoolItem::HasMetrics() const
 {
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxPoolItem::QueryValue( com::sun::star::uno::Any&, sal_uInt8 ) const
 {
@@ -375,7 +375,7 @@ bool SfxPoolItem::QueryValue( com::sun::star::uno::Any&, sal_uInt8 ) const
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxPoolItem::PutValue( const com::sun::star::uno::Any&, sal_uInt8 )
 {

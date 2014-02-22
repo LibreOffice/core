@@ -1651,7 +1651,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void WMFWriter::WriteHeader( const GDIMetaFile &, bool bPlaceable )
 {
@@ -1685,7 +1685,7 @@ void WMFWriter::WriteHeader( const GDIMetaFile &, bool bPlaceable )
          .WriteUInt16( (sal_uInt16)0x0000 );          // reserved
 }
 
-// ------------------------------------------------------------------------
+
 
 void WMFWriter::UpdateHeader()
 {
@@ -1707,7 +1707,7 @@ void WMFWriter::UpdateHeader()
     pWMF->Seek(nPos);
 }
 
-// ------------------------------------------------------------------------
+
 
 bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
                             FilterConfigItem* pFConfigItem, bool bPlaceable )
@@ -1833,7 +1833,7 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     return bStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_uInt16 WMFWriter::CalcSaveTargetMapMode(MapMode& rMapMode,
                                         const Size& rPrefSize)
@@ -1859,7 +1859,7 @@ sal_uInt16 WMFWriter::CalcSaveTargetMapMode(MapMode& rMapMode,
     return nDivisor;
 }
 
-// ------------------------------------------------------------------------
+
 
 void WMFWriter::WriteEmbeddedEMF( const GDIMetaFile& rMTF )
 {
@@ -1912,7 +1912,7 @@ void WMFWriter::WriteEmbeddedEMF( const GDIMetaFile& rMTF )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void WMFWriter::WriteEMFRecord( SvMemoryStream& rStream, sal_uInt32 nCurSize, sal_uInt32 nRemainingSize,
                 sal_uInt32 nTotalSize, sal_uInt32 nRecCounts, sal_uInt16 nCheckSum )

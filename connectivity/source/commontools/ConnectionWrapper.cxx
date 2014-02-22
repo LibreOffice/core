@@ -31,18 +31,18 @@
 #include <string.h>
 
 using namespace connectivity;
-//------------------------------------------------------------------------------
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace ::com::sun::star::reflection;
-// --------------------------------------------------------------------------------
+
 OConnectionWrapper::OConnectionWrapper()
 {
 
 }
-// -----------------------------------------------------------------------------
+
 void OConnectionWrapper::setDelegation(Reference< XAggregation >& _rxProxyConnection,oslInterlockedCount& _rRefCount)
 {
     OSL_ENSURE(_rxProxyConnection.is(),"OConnectionWrapper: Connection must be valid!");
@@ -64,7 +64,7 @@ void OConnectionWrapper::setDelegation(Reference< XAggregation >& _rxProxyConnec
     }
     osl_atomic_decrement( &_rRefCount );
 }
-// -----------------------------------------------------------------------------
+
 void OConnectionWrapper::setDelegation(const Reference< XConnection >& _xConnection
                                        ,const Reference< XComponentContext>& _rxContext
                                        ,oslInterlockedCount& _rRefCount)
@@ -91,12 +91,12 @@ void OConnectionWrapper::setDelegation(const Reference< XConnection >& _xConnect
     }
     osl_atomic_decrement( &_rRefCount );
 }
-// -----------------------------------------------------------------------------
+
 void OConnectionWrapper::disposing()
 {
 m_xConnection.clear();
 }
-//-----------------------------------------------------------------------------
+
 OConnectionWrapper::~OConnectionWrapper()
 {
     if (m_xProxyConnection.is())
@@ -104,13 +104,13 @@ OConnectionWrapper::~OConnectionWrapper()
 }
 
 // XServiceInfo
-// --------------------------------------------------------------------------------
+
 OUString SAL_CALL OConnectionWrapper::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     return OUString( "com.sun.star.sdbc.drivers.OConnectionWrapper" );
 }
 
-// --------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL OConnectionWrapper::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     // first collect the services which are supported by our aggregate
@@ -131,19 +131,19 @@ OUString SAL_CALL OConnectionWrapper::getImplementationName(  ) throw (::com::su
     return aSupported;
 }
 
-// --------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OConnectionWrapper::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-// --------------------------------------------------------------------------------
+
 Any SAL_CALL OConnectionWrapper::queryInterface( const Type& _rType ) throw (RuntimeException)
 {
     Any aReturn = OConnection_BASE::queryInterface(_rType);
     return aReturn.hasValue() ? aReturn : (m_xProxyConnection.is() ? m_xProxyConnection->queryAggregation(_rType) : aReturn);
 }
-// --------------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OConnectionWrapper::getTypes(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     return ::comphelper::concatSequences(
@@ -151,7 +151,7 @@ Sequence< Type > SAL_CALL OConnectionWrapper::getTypes(  ) throw (::com::sun::st
         m_xTypeProvider->getTypes()
     );
 }
-// -----------------------------------------------------------------------------
+
 // com::sun::star::lang::XUnoTunnel
 sal_Int64 SAL_CALL OConnectionWrapper::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
 {
@@ -163,7 +163,7 @@ sal_Int64 SAL_CALL OConnectionWrapper::getSomething( const Sequence< sal_Int8 >&
     return 0;
 }
 
-// -----------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OConnectionWrapper::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId * pId = 0;
@@ -178,7 +178,7 @@ Sequence< sal_Int8 > OConnectionWrapper::getUnoTunnelImplementationId()
     }
     return pId->getImplementationId();
 }
-// -----------------------------------------------------------------------------
+
 namespace
 {
     class TPropertyValueLessFunctor : public ::std::binary_function< ::com::sun::star::beans::PropertyValue,::com::sun::star::beans::PropertyValue,bool>
@@ -194,7 +194,7 @@ namespace
 
 }
 
-// -----------------------------------------------------------------------------
+
 // creates a unique id out of the url and sequence of properties
 void OConnectionWrapper::createUniqueId( const OUString& _rURL
                     ,Sequence< PropertyValue >& _rInfo
@@ -250,7 +250,7 @@ void OConnectionWrapper::createUniqueId( const OUString& _rURL
     // we have to destroy the digest
     rtl_digest_destroy(aDigest);
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

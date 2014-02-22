@@ -191,7 +191,7 @@ nsresult MNSMozabProxy::QueryHelperStub()
     }
     return rv;
 }
-//-------------------------------------------------------------------
+
 
 #define NS_LDAPCONNECTION_CONTRACTID     "@mozilla.org/network/ldap-connection;1"
 #define NS_LDAPOPERATION_CONTRACTID      "@mozilla.org/network/ldap-operation;1"
@@ -287,7 +287,7 @@ NS_IMETHODIMP MLDAPMessageListener::OnLDAPMessage( nsILDAPMessage* aMessage )
     return NS_OK;
 }
 
-//-------------------------------------------------------------------
+
 
 nsresult
 MNSMozabProxy::testLDAPConnection( )

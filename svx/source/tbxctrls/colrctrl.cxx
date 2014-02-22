@@ -36,9 +36,9 @@
 #include "svx/xexch.hxx"
 #include <vcl/svapp.hxx>
 
-// ------------------------
+
 // - SvxColorValueSetData -
-// ------------------------
+
 
 class SvxColorValueSetData : public TransferableHelper
 {
@@ -58,14 +58,14 @@ public:
                                 maData( rSetItem ) {}
 };
 
-// -----------------------------------------------------------------------------
+
 
 void SvxColorValueSetData::AddSupportedFormats()
 {
     AddFormat( SOT_FORMATSTR_ID_XFA );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SvxColorValueSetData::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
@@ -80,7 +80,7 @@ sal_Bool SvxColorValueSetData::GetData( const ::com::sun::star::datatransfer::Da
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SvxColorValueSetData::WriteObject( SotStorageStreamRef& rxOStm, void*, sal_uInt32 , const ::com::sun::star::datatransfer::DataFlavor&  )
 {

@@ -70,7 +70,7 @@ OHSQLTable::OHSQLTable( sdbcx::OCollection* _pTables,
                     Privilege::SELECT;
     construct();
 }
-// -------------------------------------------------------------------------
+
 OHSQLTable::OHSQLTable( sdbcx::OCollection* _pTables,
                            const Reference< XConnection >& _xConnection,
                     const OUString& _Name,
@@ -91,41 +91,41 @@ OHSQLTable::OHSQLTable( sdbcx::OCollection* _pTables,
 {
     construct();
 }
-// -------------------------------------------------------------------------
+
 void OHSQLTable::construct()
 {
     OTableHelper::construct();
     if ( !isNew() )
         registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRIVILEGES),  PROPERTY_ID_PRIVILEGES,PropertyAttribute::READONLY,&m_nPrivileges,  ::getCppuType(&m_nPrivileges));
 }
-// -----------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* OHSQLTable::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {
     return doCreateArrayHelper();
 }
-// -------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper & OHSQLTable::getInfoHelper()
 {
     return *static_cast<OHSQLTable_PROP*>(const_cast<OHSQLTable*>(this))->getArrayHelper(isNew() ? 1 : 0);
 }
-// -----------------------------------------------------------------------------
+
 sdbcx::OCollection* OHSQLTable::createColumns(const TStringVector& _rNames)
 {
     OHSQLColumns* pColumns = new OHSQLColumns(*this,sal_True,m_aMutex,_rNames);
     pColumns->setParent(this);
     return pColumns;
 }
-// -----------------------------------------------------------------------------
+
 sdbcx::OCollection* OHSQLTable::createKeys(const TStringVector& _rNames)
 {
     return new OKeysHelper(this,m_aMutex,_rNames);
 }
-// -----------------------------------------------------------------------------
+
 sdbcx::OCollection* OHSQLTable::createIndexes(const TStringVector& _rNames)
 {
     return new OIndexesHelper(this,m_aMutex,_rNames);
 }
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OHSQLTable::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId * pId = 0;
@@ -142,14 +142,14 @@ Sequence< sal_Int8 > OHSQLTable::getUnoTunnelImplementationId()
 }
 
 // com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
 sal_Int64 OHSQLTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OTable_TYPEDEF::getSomething(rId);
 }
-// -------------------------------------------------------------------------
+
 // XAlterTable
 void SAL_CALL OHSQLTable::alterColumnByName( const OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
@@ -257,7 +257,7 @@ void SAL_CALL OHSQLTable::alterColumnByName( const OUString& colName, const Refe
     }
 
 }
-// -----------------------------------------------------------------------------
+
 void OHSQLTable::alterColumnType(sal_Int32 nNewType,const OUString& _rColName, const Reference<XPropertySet>& _xDescriptor)
 {
     OUString sSql = getAlterTableColumnPart();
@@ -288,7 +288,7 @@ void OHSQLTable::alterColumnType(sal_Int32 nNewType,const OUString& _rColName, c
     sSql += ::dbtools::createStandardColumnPart(xProp,getConnection());
     executeStatement(sSql);
 }
-// -----------------------------------------------------------------------------
+
 void OHSQLTable::alterDefaultValue(const OUString& _sNewDefault,const OUString& _rColName)
 {
     const OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
@@ -299,7 +299,7 @@ void OHSQLTable::alterDefaultValue(const OUString& _sNewDefault,const OUString& 
 
     executeStatement(sSql);
 }
-// -----------------------------------------------------------------------------
+
 void OHSQLTable::dropDefaultValue(const OUString& _rColName)
 {
     const OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
@@ -310,7 +310,7 @@ void OHSQLTable::dropDefaultValue(const OUString& _rColName)
 
     executeStatement(sSql);
 }
-// -----------------------------------------------------------------------------
+
 OUString OHSQLTable::getAlterTableColumnPart()
 {
     OUString sSql(  "ALTER TABLE " );
@@ -320,7 +320,7 @@ OUString OHSQLTable::getAlterTableColumnPart()
 
     return sSql;
 }
-// -----------------------------------------------------------------------------
+
 void OHSQLTable::executeStatement(const OUString& _rStatement )
 {
     OUString sSQL = _rStatement;
@@ -339,7 +339,7 @@ void OHSQLTable::executeStatement(const OUString& _rStatement )
         ::comphelper::disposeComponent(xStmt);
     }
 }
-// -----------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OHSQLTable::getTypes(  ) throw(RuntimeException)
 {
     if ( m_Type.equalsAscii("VIEW") )
@@ -361,7 +361,7 @@ Sequence< Type > SAL_CALL OHSQLTable::getTypes(  ) throw(RuntimeException)
     }
     return OTableHelper::getTypes();
 }
-// -------------------------------------------------------------------------
+
 // XRename
 void SAL_CALL OHSQLTable::rename( const OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
 {
@@ -398,7 +398,7 @@ void SAL_CALL OHSQLTable::rename( const OUString& newName ) throw(SQLException, 
         ::dbtools::qualifiedNameComponents(getMetaData(),newName,m_CatalogName,m_SchemaName,m_Name,::dbtools::eInTableDefinitions);
 }
 
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OHSQLTable::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     if( m_Type.equalsAscii("VIEW") && rType == ::getCppuType((const Reference<XRename>*)0) )
@@ -406,6 +406,6 @@ Any SAL_CALL OHSQLTable::queryInterface( const Type & rType ) throw(RuntimeExcep
 
     return OTableHelper::queryInterface(rType);
 }
-// -------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -50,7 +50,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace connectivity;
 
-// -------------------------------------------------------------------------
+
 // Used to store an nsIAbDirectoryQuery member without the need to use Mozilla
 // types in the MQuery.hxx file.
 //
@@ -65,7 +65,7 @@ namespace connectivity {
     }
 }
 
-// -------------------------------------------------------------------------
+
 MQuery::MQuery( const OColumnAlias& _ca )
     :m_rColumnAlias( _ca )
 {
@@ -79,7 +79,7 @@ MQuery::MQuery( const OColumnAlias& _ca )
 
     OSL_TRACE( "\tOUT MQuery::MQuery( ca )" );
 }
-// -------------------------------------------------------------------------
+
 MQuery::~MQuery()
 {
     OSL_TRACE("IN MQuery::~MQuery()");
@@ -98,7 +98,7 @@ MQuery::~MQuery()
 
     OSL_TRACE("\tOUT MQuery::~MQuery()");
 }
-// -----------------------------------------------------------------------------
+
 void MQuery::construct()
 {
      // Set default values. (For now just as a reminder).
@@ -113,7 +113,7 @@ void MQuery::construct()
     m_aQueryHelper = new MQueryHelper();
     NS_IF_ADDREF( m_aQueryHelper);
 }
-// -------------------------------------------------------------------------
+
 void MQuery::setAddressbook(OUString &ab)
 {
     OSL_TRACE("IN MQuery::setAddressbook()");
@@ -123,7 +123,7 @@ void MQuery::setAddressbook(OUString &ab)
 
     OSL_TRACE("\tOUT MQuery::setAddressbook()");
 }
-// -------------------------------------------------------------------------
+
 void MQuery::setMaxNrOfReturns(const sal_Int32 mnr)
 {
     OSL_TRACE( "IN MQuery::setMaxNrOfReturns()" );
@@ -132,7 +132,7 @@ void MQuery::setMaxNrOfReturns(const sal_Int32 mnr)
     m_nMaxNrOfReturns = mnr;
     OSL_TRACE("\tOUT MQuery::setMaxNrOfReturns()" );
 }
-// -------------------------------------------------------------------------
+
 void MQuery::setExpression( MQueryExpression &_expr )
 {
     OSL_TRACE("IN MQuery::setExpression()");
@@ -142,7 +142,7 @@ void MQuery::setExpression( MQueryExpression &_expr )
 
     OSL_TRACE("\tOUT MQuery::setExpression()");
 }
-// -------------------------------------------------------------------------
+
 static sal_Int32 generateExpression( MQuery* _aQuery, MQueryExpression*  _aExpr,
                                      nsIAbBooleanExpression* queryExpression )
 {
@@ -312,7 +312,7 @@ sal_Bool isProfileLocked(OConnection* _pCon)
 }
 
 
-// -------------------------------------------------------------------------
+
 sal_Int32 getDirectoryType(const nsIAbDirectory*  directory)
 {
     nsresult retCode;
@@ -349,7 +349,7 @@ sal_Int32 getDirectoryType(const nsIAbDirectory*  directory)
     return SDBCAddress::Unknown;
 
 }
-// -------------------------------------------------------------------------
+
 sal_Bool isForceQueryProxyUsed(const nsIAbDirectory*  directory)
 {
     sal_Int32 nType = getDirectoryType(directory);
@@ -357,7 +357,7 @@ sal_Bool isForceQueryProxyUsed(const nsIAbDirectory*  directory)
         return sal_True;
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 MQuery::commitRow(const sal_Int32 rowIndex)
 {
     if (!m_aQueryHelper || !m_aQueryDirectory || !m_aQueryDirectory->directoryQuery)
@@ -374,7 +374,7 @@ sal_Int32 MQuery::commitRow(const sal_Int32 rowIndex)
     return rv;
 }
 
-// -------------------------------------------------------------------------
+
 sal_Int32 MQuery::deleteRow(const sal_Int32 rowIndex)
 {
     if (!m_aQueryHelper || !m_aQueryDirectory || !m_aQueryDirectory->directoryQuery)
@@ -392,7 +392,7 @@ sal_Int32 MQuery::deleteRow(const sal_Int32 rowIndex)
 
 }
 
-// -------------------------------------------------------------------------
+
 sal_Int32 MQuery::executeQuery(OConnection* _pCon)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -410,7 +410,7 @@ sal_Int32 MQuery::executeQuery(OConnection* _pCon)
     rv = xMProxy.StartProxy(&args,m_Product,m_Profile);
     return rv;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 MQuery::executeQueryProxied(OConnection* _pCon)
 {
 #if OSL_DEBUG_LEVEL > 0
@@ -563,7 +563,7 @@ sal_Int32 MQuery::executeQueryProxied(OConnection* _pCon)
     return(0);
 }
 
-// -------------------------------------------------------------------------
+
 //
 //
 //  If the query executed is being done asynchronously then this may return
@@ -575,7 +575,7 @@ MQuery::getRowCount()
     return( m_aQueryHelper->getResultCount() );
 }
 
-// -------------------------------------------------------------------------
+
 //
 //
 // As opposed to getRowCount() this returns the actual number of rows fetched
@@ -606,7 +606,7 @@ MQuery::waitForQueryComplete( void )
     return( sal_False );
 }
 
-// -------------------------------------------------------------------------
+
 
 sal_Bool
 MQuery::checkRowAvailable( sal_Int32 nDBRow )
@@ -619,7 +619,7 @@ MQuery::checkRowAvailable( sal_Int32 nDBRow )
 
     return( getRowCount() > nDBRow );
 }
-// -------------------------------------------------------------------------
+
 sal_Bool
 MQuery::setRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUString& aDBColumnName, sal_Int32 nType ) const
 {
@@ -644,7 +644,7 @@ MQuery::setRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUString& aDBC
     return sal_True;
 }
 
-// -------------------------------------------------------------------------
+
 sal_Bool
 MQuery::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUString& aDBColumnName, sal_Int32 nType ) const
 {
@@ -670,7 +670,7 @@ MQuery::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUString& aDBC
 
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32
 MQuery::getRowStates(sal_Int32 nDBRow)
 {
@@ -728,7 +728,7 @@ MQuery::createNewCard()
     NS_ENSURE_SUCCESS(rv,0);
     return nNumber;
 }
-// -------------------------------------------------------------------------
+
 
 MNameMapper*
 MQuery::CreateNameMapper()
@@ -736,13 +736,13 @@ MQuery::CreateNameMapper()
     return( new MNameMapper() );
 }
 
-// -------------------------------------------------------------------------
+
 void
 MQuery::FreeNameMapper( MNameMapper* _ptr )
 {
     delete _ptr;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool MQuery::isWritable(OConnection* _pCon)
 {
     if ( !m_aQueryDirectory )

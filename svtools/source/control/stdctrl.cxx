@@ -27,7 +27,7 @@ FixedInfo::FixedInfo( Window* pParent, WinBits nWinStyle ) :
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 FixedInfo::FixedInfo( Window* pParent, const ResId& rResId ) :
     FixedText( pParent, rResId )

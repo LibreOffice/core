@@ -1431,7 +1431,7 @@ OUString ImplIntrospectionAccess::getExactName( const OUString& rApproximateName
 }
 
 
-//-----------------------------------------------------------------------------
+
 
 struct hashIntrospectionKey_Impl
 {
@@ -1717,7 +1717,7 @@ void ImplIntrospection::dispose() throw(::com::sun::star::uno::RuntimeException)
 }
 
 
-//-----------------------------------------------------------------------------
+
 
 // XInterface
 Any ImplIntrospection::queryInterface( const Type & rType )
@@ -1836,7 +1836,7 @@ Reference<XIntrospectionAccess> ImplIntrospection::inspect(const Any& aToInspect
     return xAccess;
 }
 
-//-----------------------------------------------------------------------------
+
 
 // Hashtable fuer Pruefung auf mehrfache Beruecksichtigung von Interfaces
 struct hashInterface_Impl

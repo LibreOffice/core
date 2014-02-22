@@ -45,7 +45,7 @@ static bool s_inited = false;
 
 extern "C" { static void SAL_CALL thisModule() {} }
 
-//--------------------------------------------------------------------------------------------------
+
 static bool inited_juhx( JNIEnv * jni_env )
 {
     if (s_inited)

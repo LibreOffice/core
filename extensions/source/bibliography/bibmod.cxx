@@ -79,7 +79,7 @@ BibDataManager*  BibModul::createDataManager()
 {
     return new BibDataManager();
 }
-//-----------------------------------------------------------------------------
+
 BibConfig*  BibModul::GetConfig()
 {
     if(! pBibConfig)

@@ -61,11 +61,11 @@ namespace rptxml
 OPropertyHandlerFactory::OPropertyHandlerFactory()
 {
 }
-// -----------------------------------------------------------------------------
+
 OPropertyHandlerFactory::~OPropertyHandlerFactory()
 {
 }
-// -----------------------------------------------------------------------------
+
 const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 _nType) const
 {
     const XMLPropertyHandler* pHandler = NULL;
@@ -99,13 +99,13 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
         PutHdlCache(nType, pHandler);
     return pHandler;
 }
-// -----------------------------------------------------------------------------
+
 #define MAP_CONST_T_ASCII( name, prefix, token, type, context ) { name, sizeof(name)-1, XML_NAMESPACE_##prefix, XML_##token, type|XML_TYPE_PROP_TABLE,      context, SvtSaveOptions::ODFVER_010, false }
 #define MAP_CONST_P_ASCII( name, prefix, token, type, context ) { name, sizeof(name)-1, XML_NAMESPACE_##prefix, XML_##token, type|XML_TYPE_PROP_PARAGRAPH,  context, SvtSaveOptions::ODFVER_010, false }
 #define MAP_CONST_S( name, prefix, token, type, context )  { name, sizeof(name)-1,      XML_NAMESPACE_##prefix, XML_##token, type|XML_TYPE_PROP_SECTION,    context, SvtSaveOptions::ODFVER_010, false }
 #define MAP_CONST_C_ASCII( name, prefix, token, type, context ) { name, sizeof(name)-1, XML_NAMESPACE_##prefix, XML_##token, type|XML_TYPE_PROP_TABLE_CELL, context, SvtSaveOptions::ODFVER_010, false }
 #define MAP_END() { NULL, 0, 0, XML_TOKEN_INVALID, 0 ,0, SvtSaveOptions::ODFVER_010, false}
-// -----------------------------------------------------------------------------
+
 UniReference < XMLPropertySetMapper > OXMLHelper::GetCellStylePropertyMap(bool _bOldFormat, bool bForExport)
 {
     if ( _bOldFormat )
@@ -152,7 +152,7 @@ UniReference < XMLPropertySetMapper > OXMLHelper::GetCellStylePropertyMap(bool _
         return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aXMLCellStylesProperties,new OPropertyHandlerFactory(), bForExport);
     }
 }
-// -----------------------------------------------------------------------------
+
 const XMLPropertyMapEntry* OXMLHelper::GetTableStyleProps()
 {
     static const XMLPropertyMapEntry aXMLTableStylesProperties[] =
@@ -163,7 +163,7 @@ const XMLPropertyMapEntry* OXMLHelper::GetTableStyleProps()
     };
     return aXMLTableStylesProperties;
 }
-// -----------------------------------------------------------------------------
+
 const XMLPropertyMapEntry* OXMLHelper::GetRowStyleProps()
 {
     static const XMLPropertyMapEntry aXMLStylesProperties[] =
@@ -173,7 +173,7 @@ const XMLPropertyMapEntry* OXMLHelper::GetRowStyleProps()
     };
     return aXMLStylesProperties;
 }
-// -----------------------------------------------------------------------------
+
 const XMLPropertyMapEntry* OXMLHelper::GetColumnStyleProps()
 {
     static const XMLPropertyMapEntry aXMLColumnStylesProperties[] =
@@ -183,7 +183,7 @@ const XMLPropertyMapEntry* OXMLHelper::GetColumnStyleProps()
     };
     return aXMLColumnStylesProperties;
 }
-// -----------------------------------------------------------------------------
+
 const SvXMLEnumMapEntry* OXMLHelper::GetReportPrintOptions()
 {
     static const SvXMLEnumMapEntry s_aXML_EnumMap[] =
@@ -195,7 +195,7 @@ const SvXMLEnumMapEntry* OXMLHelper::GetReportPrintOptions()
     };
     return s_aXML_EnumMap;
 }
-// -----------------------------------------------------------------------------
+
 const SvXMLEnumMapEntry* OXMLHelper::GetForceNewPageOptions()
 {
     static const SvXMLEnumMapEntry s_aXML_EnumMap[] =
@@ -207,7 +207,7 @@ const SvXMLEnumMapEntry* OXMLHelper::GetForceNewPageOptions()
     };
     return s_aXML_EnumMap;
 }
-// -----------------------------------------------------------------------------
+
 const SvXMLEnumMapEntry* OXMLHelper::GetKeepTogetherOptions()
 {
     static const SvXMLEnumMapEntry s_aXML_EnumMap[] =
@@ -218,7 +218,7 @@ const SvXMLEnumMapEntry* OXMLHelper::GetKeepTogetherOptions()
     };
     return s_aXML_EnumMap;
 }
-// -----------------------------------------------------------------------------
+
 const SvXMLEnumMapEntry* OXMLHelper::GetCommandTypeOptions()
 {
     static const SvXMLEnumMapEntry s_aXML_EnumMap[] =
@@ -229,7 +229,7 @@ const SvXMLEnumMapEntry* OXMLHelper::GetCommandTypeOptions()
     };
     return s_aXML_EnumMap;
 }
-// -----------------------------------------------------------------------------
+
 #define PROPERTY_ID_FONTNAME         1
 #define PROPERTY_ID_FONTHEIGHT       2
 #define PROPERTY_ID_FONTWIDTH        3
@@ -314,7 +314,7 @@ void OXMLHelper::copyStyleElements(const bool _bOld,const OUString& _sStyleName,
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference<beans::XPropertySet> OXMLHelper::createBorderPropertySet()
 {
     static comphelper::PropertyMapEntry const pMap[] =
@@ -327,7 +327,7 @@ uno::Reference<beans::XPropertySet> OXMLHelper::createBorderPropertySet()
     };
     return comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));
 }
-// -----------------------------------------------------------------------------
+
 SvXMLTokenMap* OXMLHelper::GetReportElemTokenMap()
 {
     static const SvXMLTokenMapEntry aElemTokenMap[]=
@@ -354,7 +354,7 @@ SvXMLTokenMap* OXMLHelper::GetReportElemTokenMap()
     };
     return new SvXMLTokenMap( aElemTokenMap );
 }
-// -----------------------------------------------------------------------------
+
 SvXMLTokenMap* OXMLHelper::GetSubDocumentElemTokenMap()
 {
     static const SvXMLTokenMapEntry aElemTokenMap[]=
@@ -366,7 +366,7 @@ SvXMLTokenMap* OXMLHelper::GetSubDocumentElemTokenMap()
     };
     return new SvXMLTokenMap( aElemTokenMap );
 }
-// -----------------------------------------------------------------------------
+
 const SvXMLEnumMapEntry* OXMLHelper::GetImageScaleOptions()
 {
        static const SvXMLEnumMapEntry s_aXML_EnumMap[] =
@@ -377,9 +377,9 @@ const SvXMLEnumMapEntry* OXMLHelper::GetImageScaleOptions()
        };
        return s_aXML_EnumMap;
 }
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+
+
 } // rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,13 +31,13 @@ namespace comphelper
     //=========================================================================
     //= OInteractionPassword
     //=========================================================================
-    //--------------------------------------------------------------------
+
     void SAL_CALL OInteractionPassword::setPassword( const OUString& _Password ) throw (RuntimeException)
     {
         m_sPassword = _Password;
     }
 
-    //--------------------------------------------------------------------
+
     OUString SAL_CALL OInteractionPassword::getPassword(  ) throw (RuntimeException)
     {
         return m_sPassword;
@@ -46,13 +46,13 @@ namespace comphelper
     //=========================================================================
     //= OInteractionRequest
     //=========================================================================
-    //-------------------------------------------------------------------------
+
     OInteractionRequest::OInteractionRequest(const Any& _rRequestDescription)
         :m_aRequest(_rRequestDescription)
     {
     }
 
-    //-------------------------------------------------------------------------
+
     void OInteractionRequest::addContinuation(const Reference< XInteractionContinuation >& _rxContinuation)
     {
         OSL_ENSURE(_rxContinuation.is(), "OInteractionRequest::addContinuation: invalid argument!");
@@ -64,13 +64,13 @@ namespace comphelper
         }
     }
 
-    //-------------------------------------------------------------------------
+
     Any SAL_CALL OInteractionRequest::getRequest(  ) throw(RuntimeException)
     {
         return m_aRequest;
     }
 
-    //-------------------------------------------------------------------------
+
     Sequence< Reference< XInteractionContinuation > > SAL_CALL OInteractionRequest::getContinuations(  ) throw(RuntimeException)
     {
         return m_aContinuations;

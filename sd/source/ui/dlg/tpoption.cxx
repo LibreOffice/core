@@ -52,13 +52,13 @@ SdTpOptionsSnap::SdTpOptionsSnap( Window* pParent, const SfxItemSet& rInAttrs  )
     pSnapFrames->Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 SdTpOptionsSnap::~SdTpOptionsSnap()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
 {
@@ -83,7 +83,7 @@ sal_Bool SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
     return( sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdTpOptionsSnap::Reset( const SfxItemSet& rAttrs )
 {
@@ -106,7 +106,7 @@ void SdTpOptionsSnap::Reset( const SfxItemSet& rAttrs )
     pCbxRotate->GetClickHdl().Call(0);
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SdTpOptionsSnap::Create( Window* pWindow,
                 const SfxItemSet& rAttrs )
@@ -129,13 +129,13 @@ SdTpOptionsContents::SdTpOptionsContents( Window* pParent, const SfxItemSet& rIn
     get( m_pCbxMoveOutline, "moveoutline");
 }
 
-// -----------------------------------------------------------------------
+
 
 SdTpOptionsContents::~SdTpOptionsContents()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
 {
@@ -159,7 +159,7 @@ sal_Bool SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
     return( bModified );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdTpOptionsContents::Reset( const SfxItemSet& rAttrs )
 {
@@ -180,7 +180,7 @@ void SdTpOptionsContents::Reset( const SfxItemSet& rAttrs )
     m_pCbxHandlesBezier->SaveValue();
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SdTpOptionsContents::Create( Window* pWindow,
                 const SfxItemSet& rAttrs )
@@ -289,12 +289,12 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
         m_pCbScale->InsertEntry( GetScale(  aTable[i], 1 ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 SdTpOptionsMisc::~SdTpOptionsMisc()
 {
 }
-// -----------------------------------------------------------------------
+
 void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
 {
     // We have to call SaveValue again since it can happen that the value
@@ -339,7 +339,7 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 int SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
 {
@@ -363,7 +363,7 @@ int SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
     return( LEAVE_PAGE );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
 {
@@ -432,7 +432,7 @@ sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
     return( bModified );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
 {
@@ -512,14 +512,14 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
     UpdateCompatibilityControls ();
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SdTpOptionsMisc::Create( Window* pWindow,
                 const SfxItemSet& rAttrs )
 {
     return( new SdTpOptionsMisc( pWindow, rAttrs ) );
 }
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl)
 {
@@ -569,14 +569,14 @@ void    SdTpOptionsMisc::SetDrawMode()
     m_pCbxUsePrinterMetrics->SetPosPixel (m_pCbxCompatibility->GetPosPixel());
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString SdTpOptionsMisc::GetScale( sal_Int32 nX, sal_Int32 nY )
 {
     return OUString::number(nX) + OUString(TOKEN) + OUString::number(nY);
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SdTpOptionsMisc::SetScale( const OUString& aScale, sal_Int32& rX, sal_Int32& rY )
 {

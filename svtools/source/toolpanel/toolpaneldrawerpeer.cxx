@@ -71,7 +71,7 @@ namespace svt
         }
     };
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void ToolPanelDrawerContext::ProcessWindowEvent( const VclWindowEvent& i_rVclWindowEvent )
     {
         VCLXAccessibleComponent::ProcessWindowEvent( i_rVclWindowEvent );
@@ -87,7 +87,7 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void ToolPanelDrawerContext::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& i_rStateSet )
     {
         VCLXAccessibleComponent::FillAccessibleStateSet( i_rStateSet );
@@ -109,18 +109,18 @@ namespace svt
     //==================================================================================================================
     //= ToolPanelDrawerPeer
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     ToolPanelDrawerPeer::ToolPanelDrawerPeer()
         :VCLXWindow()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     ToolPanelDrawerPeer::~ToolPanelDrawerPeer()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XAccessibleContext > ToolPanelDrawerPeer::CreateAccessibleContext()
     {
         SolarMutexGuard aSolarGuard;

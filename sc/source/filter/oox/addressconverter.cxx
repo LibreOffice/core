@@ -163,7 +163,7 @@ AddressConverter::AddressConverter( const WorkbookHelper& rHelper ) :
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool AddressConverter::parseOoxAddress2d(
         sal_Int32& ornColumn, sal_Int32& ornRow,
@@ -309,7 +309,7 @@ bool AddressConverter::parseOoxRange2d(
     return false;
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool AddressConverter::checkCol( sal_Int32 nCol, bool bTrackOverflow )
 {
@@ -335,7 +335,7 @@ bool AddressConverter::checkTab( sal_Int16 nSheet, bool bTrackOverflow )
     return bValid;
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool AddressConverter::checkCellAddress( const CellAddress& rAddress, bool bTrackOverflow )
 {
@@ -418,7 +418,7 @@ CellAddress AddressConverter::createValidCellAddress(
     return aAddress;
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool AddressConverter::checkCellRange( const CellRangeAddress& rRange, bool bAllowOverflow, bool bTrackOverflow )
 {
@@ -477,7 +477,7 @@ bool AddressConverter::convertToCellRange( CellRangeAddress& orRange,
     return validateCellRange( orRange, bAllowOverflow, bTrackOverflow );
 }
 
-// ----------------------------------------------------------------------------
+
 
 void AddressConverter::validateCellRangeList( ApiCellRangeList& orRanges, bool bTrackOverflow )
 {

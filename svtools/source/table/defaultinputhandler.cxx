@@ -43,7 +43,7 @@ namespace svt { namespace table
     //==================================================================================================================
     //= DefaultInputHandler
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     DefaultInputHandler::DefaultInputHandler()
         :m_pImpl( new DefaultInputHandler_Impl )
     {
@@ -52,12 +52,12 @@ namespace svt { namespace table
         m_pImpl->aMouseFunctions.push_back( new ColumnSortHandler );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     DefaultInputHandler::~DefaultInputHandler()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     namespace
     {
         bool lcl_delegateMouseEvent( DefaultInputHandler_Impl& i_impl, ITableControl& i_control, const MouseEvent& i_event,
@@ -115,25 +115,25 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool DefaultInputHandler::MouseMove( ITableControl& i_tableControl, const MouseEvent& i_event )
     {
         return lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &IMouseFunction::handleMouseMove );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool DefaultInputHandler::MouseButtonDown( ITableControl& i_tableControl, const MouseEvent& i_event )
     {
         return lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &IMouseFunction::handleMouseDown );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool DefaultInputHandler::MouseButtonUp( ITableControl& i_tableControl, const MouseEvent& i_event )
     {
         return lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &IMouseFunction::handleMouseUp );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool DefaultInputHandler::KeyInput( ITableControl& _rControl, const KeyEvent& rKEvt )
     {
         bool bHandled = false;
@@ -182,21 +182,21 @@ namespace svt { namespace table
         return bHandled;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool DefaultInputHandler::GetFocus( ITableControl& _rControl )
     {
         _rControl.showCursor();
         return false;   // continue processing
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool DefaultInputHandler::LoseFocus( ITableControl& _rControl )
     {
         _rControl.hideCursor();
         return false;   // continue processing
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool DefaultInputHandler::RequestHelp( ITableControl& _rControl, const HelpEvent& _rHEvt )
     {
         (void)_rControl;
@@ -205,7 +205,7 @@ namespace svt { namespace table
         return false;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool DefaultInputHandler::Command( ITableControl& _rControl, const CommandEvent& _rCEvt )
     {
         (void)_rControl;
@@ -214,7 +214,7 @@ namespace svt { namespace table
         return false;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool DefaultInputHandler::PreNotify( ITableControl& _rControl, NotifyEvent& _rNEvt )
     {
         (void)_rControl;
@@ -223,7 +223,7 @@ namespace svt { namespace table
         return false;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool DefaultInputHandler::Notify( ITableControl& _rControl, NotifyEvent& _rNEvt )
     {
         (void)_rControl;

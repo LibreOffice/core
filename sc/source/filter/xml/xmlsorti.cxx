@@ -35,7 +35,7 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-//------------------------------------------------------------------
+
 
 ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,

@@ -34,18 +34,18 @@ DBG_NAME(SfxPointItem)
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 
-// -----------------------------------------------------------------------
+
 
 TYPEINIT1_AUTOFACTORY(SfxPointItem, SfxPoolItem);
 
-// -----------------------------------------------------------------------
+
 
 SfxPointItem::SfxPointItem()
 {
     DBG_CTOR(SfxPointItem, 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPointItem::SfxPointItem( sal_uInt16 nW, const Point& rVal ) :
     SfxPoolItem( nW ),
@@ -54,7 +54,7 @@ SfxPointItem::SfxPointItem( sal_uInt16 nW, const Point& rVal ) :
     DBG_CTOR(SfxPointItem, 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPointItem::SfxPointItem( const SfxPointItem& rItem ) :
     SfxPoolItem( rItem ),
@@ -63,7 +63,7 @@ SfxPointItem::SfxPointItem( const SfxPointItem& rItem ) :
     DBG_CTOR(SfxPointItem, 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxItemPresentation SfxPointItem::GetPresentation
 (
@@ -79,7 +79,7 @@ SfxItemPresentation SfxPointItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxPointItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -88,7 +88,7 @@ bool SfxPointItem::operator==( const SfxPoolItem& rItem ) const
     return ((SfxPointItem&)rItem).aVal == aVal;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SfxPointItem::Clone(SfxItemPool *) const
 {
@@ -96,7 +96,7 @@ SfxPoolItem* SfxPointItem::Clone(SfxItemPool *) const
     return new SfxPointItem( *this );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SfxPointItem::Create(SvStream &rStream, sal_uInt16 ) const
 {
@@ -106,7 +106,7 @@ SfxPoolItem* SfxPointItem::Create(SvStream &rStream, sal_uInt16 ) const
     return new SfxPointItem(Which(), aStr);
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SfxPointItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
@@ -115,7 +115,7 @@ SvStream& SfxPointItem::Store(SvStream &rStream, sal_uInt16 ) const
     return rStream;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxPointItem::QueryValue( uno::Any& rVal,
                                sal_uInt8 nMemberId ) const
@@ -139,7 +139,7 @@ bool SfxPointItem::QueryValue( uno::Any& rVal,
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxPointItem::PutValue( const uno::Any& rVal,
                              sal_uInt8 nMemberId )

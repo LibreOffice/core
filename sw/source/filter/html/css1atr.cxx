@@ -110,7 +110,7 @@ using ::editeng::SvxBorderLine;
 #define CSS1_FRMSIZE_ANYHEIGHT  0x0e
 #define CSS1_FRMSIZE_PIXEL      0x10
 
-//-----------------------------------------------------------------------
+
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_rule_end, " }" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_span_tag_end, "\">" );
@@ -643,7 +643,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
     nDfltBottomMargin = 0;
 }
 
-//-----------------------------------------------------------------------
+
 
 // wenn pPseudo gesetzt ist werden Styles-Sheets ausgegeben,
 // sonst wird nur nach Token und Class fuer ein Format gesucht
@@ -1994,7 +1994,7 @@ Writer& OutCSS1_NumBulListStyleOpt( Writer& rWrt, const SwNumRule& rNumRule,
     return rWrt;
 }
 
-//-----------------------------------------------------------------------
+
 
 void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
                                           sal_uInt32 nFrmOpts,
@@ -2354,7 +2354,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
     }
 }
 
-//-----------------------------------------------------------------------
+
 
 static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
                     const SvxUnderlineItem *pUItem,

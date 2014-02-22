@@ -24,7 +24,7 @@ namespace logging
 {
 //........................................................................
 
-    //--------------------------------------------------------------------
+
     extern void createRegistryInfo_LoggerPool();
     extern void createRegistryInfo_FileHandler();
     extern void createRegistryInfo_ConsoleHandler();

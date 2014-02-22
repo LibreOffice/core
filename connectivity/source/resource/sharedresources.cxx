@@ -68,11 +68,11 @@ namespace connectivity
         }
     };
 
-    //--------------------------------------------------------------------
+
     SharedResources_Impl*   SharedResources_Impl::s_pInstance( NULL );
     oslInterlockedCount     SharedResources_Impl::s_nClients( 0 );
 
-    //--------------------------------------------------------------------
+
     SharedResources_Impl::SharedResources_Impl()
     {
         try
@@ -87,7 +87,7 @@ namespace connectivity
         }
     }
 
-    //--------------------------------------------------------------------
+
     OUString SharedResources_Impl::getResourceString( ResourceId _nId )
     {
         if ( m_pResourceBundle.get() == NULL )
@@ -98,13 +98,13 @@ namespace connectivity
         return m_pResourceBundle->loadString( _nId );
     }
 
-    //--------------------------------------------------------------------
+
     void SharedResources_Impl::registerClient()
     {
         osl_atomic_increment( &s_nClients );
     }
 
-    //--------------------------------------------------------------------
+
     void SharedResources_Impl::revokeClient()
     {
         ::osl::MutexGuard aGuard( getMutex() );
@@ -115,7 +115,7 @@ namespace connectivity
         }
     }
 
-    //--------------------------------------------------------------------
+
     SharedResources_Impl& SharedResources_Impl::getInstance()
     {
         ::osl::MutexGuard aGuard( getMutex() );
@@ -152,25 +152,25 @@ namespace connectivity
     //====================================================================
     //= SharedResources
     //====================================================================
-    //--------------------------------------------------------------------
+
     SharedResources::SharedResources()
     {
         SharedResources_Impl::registerClient();
     }
 
-    //--------------------------------------------------------------------
+
     SharedResources::~SharedResources()
     {
         SharedResources_Impl::revokeClient();
     }
 
-    //--------------------------------------------------------------------
+
     OUString SharedResources::getResourceString( ResourceId _nResId ) const
     {
         return SharedResources_Impl::getInstance().getResourceString( _nResId );
     }
 
-    //--------------------------------------------------------------------
+
     OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
                 const sal_Char* _pAsciiPatternToReplace, const OUString& _rStringToSubstitute ) const
     {
@@ -179,7 +179,7 @@ namespace connectivity
         return sString;
     }
 
-    //--------------------------------------------------------------------
+
     OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
                 const sal_Char* _pAsciiPatternToReplace1, const OUString& _rStringToSubstitute1,
                 const sal_Char* _pAsciiPatternToReplace2, const OUString& _rStringToSubstitute2 ) const
@@ -190,7 +190,7 @@ namespace connectivity
         return sString;
     }
 
-    //--------------------------------------------------------------------
+
     OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
                 const sal_Char* _pAsciiPatternToReplace1, const OUString& _rStringToSubstitute1,
                 const sal_Char* _pAsciiPatternToReplace2, const OUString& _rStringToSubstitute2,
@@ -202,7 +202,7 @@ namespace connectivity
         OSL_VERIFY( lcl_substitute( sString, _pAsciiPatternToReplace3, _rStringToSubstitute3 ) );
         return sString;
     }
-    //--------------------------------------------------------------------
+
     OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
                     const ::std::list< ::std::pair<const sal_Char* , OUString > > _aStringToSubstitutes) const
     {

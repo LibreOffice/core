@@ -64,7 +64,7 @@ Reference< XInterface > ExcelFilter_create(
     return static_cast< ::cppu::OWeakObject* >( new ExcelFilter( rxContext ) );
 }
 
-// ----------------------------------------------------------------------------
+
 
 ExcelFilter::ExcelFilter( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     XmlFilterBase( rxContext ),

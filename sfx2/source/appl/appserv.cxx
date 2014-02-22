@@ -698,7 +698,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         rReq.Done();
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 {

@@ -31,7 +31,7 @@
 #pragma GCC diagnostic warning "-Wmissing-braces"
 #endif
 
-//----------------------------
+
 
 namespace /* private */
 {
@@ -48,7 +48,7 @@ namespace /* private */
     size_t ColumnInfoTableSize = sizeof(ColumnInfoTable)/sizeof(ColumnInfoTable[0]);
 }
 
-//----------------------------
+
 
 CColumnInfo::CColumnInfo(long RefCnt) :
     m_RefCnt(RefCnt)
@@ -56,16 +56,16 @@ CColumnInfo::CColumnInfo(long RefCnt) :
     InterlockedIncrement(&g_DllRefCnt);
 }
 
-//----------------------------
+
 
 CColumnInfo::~CColumnInfo()
 {
     InterlockedDecrement(&g_DllRefCnt);
 }
 
-//-----------------------------
+
 // IUnknown methods
-//-----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CColumnInfo::QueryInterface(REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject)
 {
@@ -82,14 +82,14 @@ HRESULT STDMETHODCALLTYPE CColumnInfo::QueryInterface(REFIID riid, void __RPC_FA
     return E_NOINTERFACE;
 }
 
-//----------------------------
+
 
 ULONG STDMETHODCALLTYPE CColumnInfo::AddRef(void)
 {
     return InterlockedIncrement(&m_RefCnt);
 }
 
-//----------------------------
+
 
 ULONG STDMETHODCALLTYPE CColumnInfo::Release( void)
 {
@@ -101,18 +101,18 @@ ULONG STDMETHODCALLTYPE CColumnInfo::Release( void)
     return refcnt;
 }
 
-//-----------------------------
+
 // IColumnProvider
-//-----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CColumnInfo::Initialize(LPCSHCOLUMNINIT /*psci*/)
 {
     return S_OK;
 }
 
-//-----------------------------
+
 // Register all columns we support
-//-----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CColumnInfo::GetColumnInfo(DWORD dwIndex, SHCOLUMNINFO *psci)
 {
@@ -132,7 +132,7 @@ HRESULT STDMETHODCALLTYPE CColumnInfo::GetColumnInfo(DWORD dwIndex, SHCOLUMNINFO
     return S_OK;
 }
 
-//-----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CColumnInfo::GetItemData(LPCSHCOLUMNID pscid, LPCSHCOLUMNDATA pscd, VARIANT *pvarData)
 {
@@ -198,7 +198,7 @@ HRESULT STDMETHODCALLTYPE CColumnInfo::GetItemData(LPCSHCOLUMNID pscid, LPCSHCOL
     return S_FALSE;
 }
 
-//-----------------------------
+
 
 bool CColumnInfo::IsOOFileExtension(wchar_t* Extension) const
 {

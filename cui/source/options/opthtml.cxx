@@ -40,7 +40,7 @@ const sal_uInt16 aExportToPosArr[] =
     2,  //StarWriter
     1   //Netscape Navigator 4.0
 };
-// -----------------------------------------------------------------------
+
 
 OfaHtmlTabPage::OfaHtmlTabPage(Window* pParent, const SfxItemSet& rSet) :
 SfxTabPage( pParent, "OptHtmlPage" , "cui/ui/opthtmlpage.ui", rSet )

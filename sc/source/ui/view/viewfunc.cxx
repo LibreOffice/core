@@ -102,7 +102,7 @@ ScViewFunc::~ScViewFunc()
 {
 }
 
-//------------------------------------------------------------------------------------
+
 
 void ScViewFunc::StartFormatArea()
 {
@@ -226,7 +226,7 @@ void ScViewFunc::DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
         aFormatSource.Set( nCol, nRow, nTab );      // then set a new source
 }
 
-//------------------------------------------------------------------------------------
+
 
 //      additional routines
 
@@ -1325,7 +1325,7 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, bool bRecord
     }
 
     if ( !pStyleSheet) return;
-    // -------------------------------------------------------------------
+
 
     ScViewData* pViewData   = GetViewData();
     ScDocShell* pDocSh      = pViewData->GetDocShell();
@@ -1417,7 +1417,7 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, bool bRecord
 void ScViewFunc::RemoveStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
 {
     if ( !pStyleSheet) return;
-    // -------------------------------------------------------------------
+
 
     ScViewData* pViewData   = GetViewData();
     ScDocument* pDoc        = pViewData->GetDocument();
@@ -1444,7 +1444,7 @@ void ScViewFunc::RemoveStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
 void ScViewFunc::UpdateStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
 {
     if ( !pStyleSheet) return;
-    // -------------------------------------------------------------------
+
 
     ScViewData* pViewData   = GetViewData();
     ScDocument* pDoc        = pViewData->GetDocument();
