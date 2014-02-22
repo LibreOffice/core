@@ -540,7 +540,7 @@ void SalDisplay::Init()
     int nDisplayScreens = ScreenCount( pDisp_ );
     m_aScreens = std::vector<ScreenData>(nDisplayScreens);
 
-    mbExactResolution = false;
+    bool bExactResolution = false;
     /*  #i15507#
      *  Xft resolution should take precedence since
      *  it is what modern desktops use.
@@ -554,27 +554,12 @@ void SalDisplay::Init()
         if( (nDPI >= 50) && (nDPI <= 500) )
         {
             aResolution_ = Pair( nDPI, nDPI );
-            mbExactResolution = true;
+            bExactResolution = true;
         }
     }
-    if( mbExactResolution == false )
+    if( bExactResolution == false )
     {
-        int nDisplayWidth = DisplayWidthMM ( pDisp_, m_nXDefaultScreen.getXScreen() );
-        int nDisplayHeight = DisplayHeightMM( pDisp_, m_nXDefaultScreen.getXScreen() );
-
-        if (nDisplayHeight == 0 || nDisplayWidth == 0)
-        {
-            aResolution_ = Pair( 96, 96 );
-            SAL_WARN("vcl", "screen width/height reported as 0!, using fallback 96dpi");
-        }
-        else
-        {
-            aResolution_     =
-                Pair( DPI( WidthOfScreen( DefaultScreenOfDisplay( pDisp_ ) ),
-                           nDisplayWidth ),
-                      DPI( HeightOfScreen( DefaultScreenOfDisplay( pDisp_ ) ),
-                           nDisplayHeight ) );
-        }
+        aResolution_ = Pair( 96, 96 );
     }
 
     nMaxRequestSize_    = XExtendedMaxRequestSize( pDisp_ ) * 4;
