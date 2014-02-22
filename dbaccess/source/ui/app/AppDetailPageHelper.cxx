@@ -67,6 +67,8 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::dbaui;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;
@@ -242,9 +244,7 @@ OAppDetailPageHelper::~OAppDetailPageHelper()
         {
             m_pLists[i]->clearCurrentSelection();
             m_pLists[i]->Hide();
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr<DBTreeListBox> aTemp(m_pLists[i]);
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            boost::scoped_ptr<DBTreeListBox> aTemp(m_pLists[i]);
             m_pLists[i]->clearCurrentSelection();   // why a second time?
             m_pLists[i] = NULL;
         }
@@ -1140,12 +1140,10 @@ void OAppDetailPageHelper::showPreview( const OUString& _sDataSourceName,
         }
 
         Reference< XDatabaseDocumentUI > xApplication( getBorderWin().getView()->getAppController().getXController(), UNO_QUERY );
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr< DatabaseObjectView > pDispatcher( new ResultSetBrowser(
+        boost::scoped_ptr< DatabaseObjectView > pDispatcher( new ResultSetBrowser(
             getBorderWin().getView()->getORB(),
             xApplication, NULL, _bTable
         ) );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
         pDispatcher->setTargetFrame( Reference<XFrame>(m_xFrame,UNO_QUERY_THROW) );
 
         ::comphelper::NamedValueCollection aArgs;
@@ -1188,9 +1186,7 @@ IMPL_LINK(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, /*pToolBox*/)
     m_aTBPreview.Update();
 
     // execute the menu
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<PopupMenu> aMenu(new PopupMenu( ModuleRes( RID_MENU_APP_PREVIEW ) ));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    boost::scoped_ptr<PopupMenu> aMenu(new PopupMenu( ModuleRes( RID_MENU_APP_PREVIEW ) ));
 
     sal_uInt16 pActions[] = { SID_DB_APP_DISABLE_PREVIEW
                             , SID_DB_APP_VIEW_DOC_PREVIEW

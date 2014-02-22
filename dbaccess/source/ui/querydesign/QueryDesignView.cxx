@@ -53,6 +53,7 @@
 #include "querycontainerwindow.hxx"
 #include "sqlmessage.hxx"
 #include <unotools/syslocale.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::dbaui;
 using namespace ::utl;
@@ -790,9 +791,7 @@ namespace
                             OUString aTmp = aCriteria;
                             OUString aErrorMsg;
                             Reference<XPropertySet> xColumn;
-                            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                            ::std::auto_ptr< ::connectivity::OSQLParseNode> pParseNode(_pView->getPredicateTreeFromEntry(pEntryField,aTmp,aErrorMsg,xColumn));
-                            SAL_WNODEPRECATED_DECLARATIONS_POP
+                            boost::scoped_ptr< ::connectivity::OSQLParseNode> pParseNode(_pView->getPredicateTreeFromEntry(pEntryField,aTmp,aErrorMsg,xColumn));
                             if (pParseNode.get())
                             {
                                 if (bMulti && !(pEntryField->isOtherFunction() || (aFieldName.toChar() == '*')))
@@ -823,9 +822,7 @@ namespace
                             OUString aTmp = aCriteria;
                             OUString aErrorMsg;
                             Reference<XPropertySet> xColumn;
-                            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                            ::std::auto_ptr< ::connectivity::OSQLParseNode> pParseNode( _pView->getPredicateTreeFromEntry(pEntryField,aTmp,aErrorMsg,xColumn));
-                            SAL_WNODEPRECATED_DECLARATIONS_POP
+                            boost::scoped_ptr< ::connectivity::OSQLParseNode> pParseNode( _pView->getPredicateTreeFromEntry(pEntryField,aTmp,aErrorMsg,xColumn));
                             if (pParseNode.get())
                             {
                                 if (bMulti && !(pEntryField->isOtherFunction() || (aFieldName.toChar() == '*')))
@@ -1168,9 +1165,7 @@ namespace
                         OUString aTmp = pEntryField->GetField();
                         OUString aErrorMsg;
                         Reference<XPropertySet> xColumn;
-                        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                        ::std::auto_ptr< ::connectivity::OSQLParseNode> pParseNode(_pView->getPredicateTreeFromEntry(pEntryField,aTmp,aErrorMsg,xColumn));
-                        SAL_WNODEPRECATED_DECLARATIONS_POP
+                        boost::scoped_ptr< ::connectivity::OSQLParseNode> pParseNode(_pView->getPredicateTreeFromEntry(pEntryField,aTmp,aErrorMsg,xColumn));
                         if (pParseNode.get())
                         {
                             OUString sGroupBy;
@@ -2521,9 +2516,7 @@ OQueryDesignView::~OQueryDesignView()
 {
     if ( m_pTableView )
         ::dbaui::notifySystemWindow(this,m_pTableView,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<Window> aTemp(m_pSelectionBox);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    boost::scoped_ptr<Window> aTemp(m_pSelectionBox);
     m_pSelectionBox = NULL;
 
 }
@@ -2929,9 +2922,7 @@ OUString OQueryDesignView::getStatement()
     {
         ::connectivity::OSQLParser& rParser( rController.getParser() );
         OUString sErrorMessage;
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<OSQLParseNode> pParseNode( rParser.parseTree( sErrorMessage, sSQL, sal_True ) );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr<OSQLParseNode> pParseNode( rParser.parseTree( sErrorMessage, sSQL, sal_True ) );
         if ( pParseNode.get() )
         {
             OSQLParseNode* pNode = pParseNode->getChild(3)->getChild(1);
@@ -3043,9 +3034,7 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
             sSql += " FROM x WHERE ";
             sSql += pEntry->GetField();
             sSql += _sCriteria;
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr<OSQLParseNode> pParseNode( rParser.parseTree( _rsErrorMessage, sSql, sal_True ) );
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            boost::scoped_ptr<OSQLParseNode> pParseNode( rParser.parseTree( _rsErrorMessage, sSql, sal_True ) );
             nType = DataType::DOUBLE;
             if ( pParseNode.get() )
             {

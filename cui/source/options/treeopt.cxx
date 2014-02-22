@@ -104,6 +104,8 @@
 #include <sys/stat.h>
 #endif
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -2251,7 +2253,7 @@ void  OfaTreeOptionsDialog::InsertNodes( const VectorOfNodes& rNodeList )
 
 short OfaTreeOptionsDialog::Execute()
 {
-    ::std::auto_ptr< SvxDicListChgClamp > pClamp;
+    boost::scoped_ptr< SvxDicListChgClamp > pClamp;
     if ( !bIsFromExtensionManager )
     {
         // collect all DictionaryList Events while the dialog is executed

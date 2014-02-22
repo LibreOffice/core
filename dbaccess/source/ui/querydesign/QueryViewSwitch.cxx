@@ -26,6 +26,7 @@
 #include "adtabdlg.hxx"
 #include "querycontroller.hxx"
 #include "sqledit.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -42,15 +43,11 @@ OQueryViewSwitch::OQueryViewSwitch(OQueryContainerWindow* _pParent, OQueryContro
 OQueryViewSwitch::~OQueryViewSwitch()
 {
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<Window> aTemp(m_pTextView);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr<Window> aTemp(m_pTextView);
         m_pTextView = NULL;
     }
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<Window> aTemp(m_pDesignView);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr<Window> aTemp(m_pDesignView);
         m_pDesignView = NULL;
     }
 }

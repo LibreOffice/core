@@ -31,6 +31,7 @@
 #include <vcl/svapp.hxx>
 #include <comphelper/types.hxx>
 #include "QueryDesignView.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -51,7 +52,7 @@ OQueryTextView::OQueryTextView(OQueryContainerWindow* _pParent)
 
 OQueryTextView::~OQueryTextView()
 {
-    ::std::auto_ptr<Window> aTemp(m_pEdit);
+    boost::scoped_ptr<Window> aTemp(m_pEdit);
     m_pEdit = NULL;
 }
 

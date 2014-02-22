@@ -61,13 +61,9 @@ OJoinDesignView::OJoinDesignView(Window* _pParent, OJoinController& _rController
 
 OJoinDesignView::~OJoinDesignView()
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<Window> aT3(m_pScrollWindow);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    boost::scoped_ptr<Window> aT3(m_pScrollWindow);
     m_pScrollWindow = NULL;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<Window> aT2(m_pTableView);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    boost::scoped_ptr<Window> aT2(m_pTableView);
     m_pTableView = NULL;
 }
 

@@ -19,10 +19,10 @@
 
 #include "AppTitleWindow.hxx"
 #include "moduledbu.hxx"
-#include "memory"
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <tools/debug.hxx>
+#include <boost/scoped_ptr.hpp>
 
 namespace dbaui
 {
@@ -50,7 +50,7 @@ OTitleWindow::~OTitleWindow()
     if ( m_pChild )
     {
         m_pChild->Hide();
-        ::std::auto_ptr<Window> aTemp(m_pChild);
+        boost::scoped_ptr<Window> aTemp(m_pChild);
         m_pChild = NULL;
     }
 

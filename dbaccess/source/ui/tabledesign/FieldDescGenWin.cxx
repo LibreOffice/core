@@ -24,6 +24,7 @@
 #include "TableFieldControl.hxx"
 #include "TableDesignView.hxx"
 #include "TEditControl.hxx"
+#include <boost/scoped_ptr.hpp>
 using namespace dbaui;
 
 // class OFieldDescGenWin
@@ -38,7 +39,7 @@ OFieldDescGenWin::OFieldDescGenWin( Window* pParent, OTableDesignHelpBar* pHelp 
 
 OFieldDescGenWin::~OFieldDescGenWin()
 {
-    ::std::auto_ptr<Window> aTemp(m_pFieldControl);
+    boost::scoped_ptr<Window> aTemp(m_pFieldControl);
     m_pFieldControl = NULL;
 }
 

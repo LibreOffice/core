@@ -22,6 +22,7 @@
 #include "dbtreelistbox.hxx"
 #include "dbtreemodel.hxx"
 #include "dbaccess_helpid.hrc"
+#include <boost/scoped_ptr.hpp>
 
 namespace dbaui
 {
@@ -52,7 +53,7 @@ DBTreeView::~DBTreeView()
             m_pTreeListBox->GetModel()->RemoveView(m_pTreeListBox);
             m_pTreeListBox->DisconnectFromModel();
         }
-        ::std::auto_ptr<Window> aTemp(m_pTreeListBox);
+        boost::scoped_ptr<Window> aTemp(m_pTreeListBox);
         m_pTreeListBox = NULL;
     }
 }

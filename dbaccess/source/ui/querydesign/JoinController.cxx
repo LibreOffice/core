@@ -58,6 +58,7 @@
 #include <osl/diagnose.h>
 
 #include <boost/optional.hpp>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
@@ -171,7 +172,7 @@ OJoinDesignView* OJoinController::getJoinView()
 void OJoinController::disposing()
 {
     {
-        ::std::auto_ptr< Window > pEnsureDelete( m_pAddTableDialog );
+        boost::scoped_ptr< Window > pEnsureDelete( m_pAddTableDialog );
         m_pAddTableDialog   = NULL;
     }
 

@@ -55,6 +55,7 @@
 #include <rtl/ustring.hxx>
 #include <algorithm>
 #include <o3tl/compat_functional.hxx>
+#include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <limits>
@@ -317,7 +318,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
     catch(Exception&)
     {
         // no one clears my view if I won't
-        ::std::auto_ptr<Window> aTemp(m_pView);
+        boost::scoped_ptr<Window> aTemp(m_pView);
         m_pView = NULL;
         throw;
     }

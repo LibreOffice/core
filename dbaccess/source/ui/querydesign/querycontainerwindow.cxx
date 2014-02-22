@@ -31,6 +31,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
+#include <boost/scoped_ptr.hpp>
 
 namespace dbaui
 {
@@ -56,7 +57,7 @@ namespace dbaui
     OQueryContainerWindow::~OQueryContainerWindow()
     {
         {
-            ::std::auto_ptr<OQueryViewSwitch> aTemp(m_pViewSwitch);
+            boost::scoped_ptr<OQueryViewSwitch> aTemp(m_pViewSwitch);
             m_pViewSwitch = NULL;
         }
         if ( m_pBeamer )
@@ -70,7 +71,7 @@ namespace dbaui
                 xCloseable->close(sal_False); // false - holds the owner ship of this frame
         }
 
-        ::std::auto_ptr<Window> aTemp(m_pSplitter);
+        boost::scoped_ptr<Window> aTemp(m_pSplitter);
         m_pSplitter = NULL;
 
     }

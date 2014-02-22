@@ -30,6 +30,7 @@
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include "UITools.hxx"
 #include <osl/diagnose.h>
+#include <boost/scoped_ptr.hpp>
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -117,7 +118,7 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
 UnoDataBrowserView::~UnoDataBrowserView()
 {
     {
-        ::std::auto_ptr<Splitter> aTemp(m_pSplitter);
+        boost::scoped_ptr<Splitter> aTemp(m_pSplitter);
         m_pSplitter = NULL;
     }
     setTreeView(NULL);
@@ -160,7 +161,7 @@ void UnoDataBrowserView::setTreeView(DBTreeView* _pTreeView)
     {
         if (m_pTreeView)
         {
-            ::std::auto_ptr<Window> aTemp(m_pTreeView);
+            boost::scoped_ptr<Window> aTemp(m_pTreeView);
             m_pTreeView = NULL;
         }
         m_pTreeView = _pTreeView;

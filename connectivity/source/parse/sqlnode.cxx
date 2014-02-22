@@ -54,6 +54,7 @@
 #include <tools/diagnose_ex.h>
 #include <string.h>
 #include <boost/bind.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <boost/static_assert.hpp>
 #include <algorithm>
 #include <functional>
@@ -687,7 +688,7 @@ bool OSQLParseNode::impl_parseTableNameNodeToString_throw( OUStringBuffer& rStri
         if ( bEscapeProcessing && rParam.pParser )
         {
             OUString sError;
-            ::std::auto_ptr< OSQLParseNode > pSubQueryNode( rParam.pParser->parseTree( sError, sCommand, sal_False ) );
+            boost::scoped_ptr< OSQLParseNode > pSubQueryNode( rParam.pParser->parseTree( sError, sCommand, sal_False ) );
             if ( pSubQueryNode.get() )
             {
                 // parse the sub-select to SDBC level, too

@@ -45,6 +45,8 @@
 #include <connectivity/dbtools.hxx>
 #include "svtools/treelistentry.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace dbaui;
 using namespace ::utl;
 using namespace ::com::sun::star;
@@ -99,7 +101,7 @@ OTableWindow::~OTableWindow()
     if (m_pListBox)
     {
         OSL_ENSURE(m_pListBox->GetEntryCount()==0,"Forgot to call EmptyListbox()!");
-        ::std::auto_ptr<Window> aTemp(m_pListBox);
+        boost::scoped_ptr<Window> aTemp(m_pListBox);
         m_pListBox = NULL;
     }
     if ( m_pContainerListener.is() )

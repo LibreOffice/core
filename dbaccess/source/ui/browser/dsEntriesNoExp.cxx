@@ -27,6 +27,7 @@
 #include "dbu_brw.hrc"
 #include "dbtreemodel.hxx"
 #include "svtools/treelistentry.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::frame;
 using namespace ::dbtools;
@@ -202,7 +203,7 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
             }
 
             // the connection to which this entry belongs, if any
-            ::std::auto_ptr< ImageProvider > pImageProvider( getImageProviderFor( pEntryLoop ) );
+            boost::scoped_ptr< ImageProvider > pImageProvider( getImageProviderFor( pEntryLoop ) );
 
             // the images for this entry
             Image aImage;

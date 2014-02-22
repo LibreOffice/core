@@ -52,6 +52,7 @@
 #include <connectivity/dbtools.hxx>
 
 #include <boost/optional.hpp>
+#include <boost/scoped_ptr.hpp>
 
 namespace dbaxml
 {
@@ -837,9 +838,7 @@ void ODBExport::exportCollection(const Reference< XNameAccess >& _xCollection
 {
     if ( _xCollection.is() )
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<SvXMLElementExport> pComponents;
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr<SvXMLElementExport> pComponents;
         if ( _bExportContext )
             pComponents.reset( new SvXMLElementExport(*this,XML_NAMESPACE_DB, _eComponents, sal_True, sal_True));
         Sequence< OUString> aSeq = _xCollection->getElementNames();
@@ -1119,9 +1118,7 @@ void ODBExport::exportQueries(sal_Bool _bExportContext)
             Reference< XNameAccess > xCollection = xSup->getQueryDefinitions();
             if ( xCollection.is() && xCollection->hasElements() )
             {
-                SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                ::std::auto_ptr< ::comphelper::mem_fun1_t<ODBExport,XPropertySet* > > pMemFunc;
-                SAL_WNODEPRECATED_DECLARATIONS_POP
+                boost::scoped_ptr< ::comphelper::mem_fun1_t<ODBExport,XPropertySet* > > pMemFunc;
                 if ( _bExportContext )
                     pMemFunc.reset( new ::comphelper::mem_fun1_t<ODBExport,XPropertySet* >(&ODBExport::exportQuery) );
                 else
@@ -1141,9 +1138,7 @@ void ODBExport::exportTables(sal_Bool _bExportContext)
         Reference< XNameAccess > xCollection = xSup->getTables();
         if ( xCollection.is() && xCollection->hasElements() )
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr< ::comphelper::mem_fun1_t<ODBExport,XPropertySet* > > pMemFunc;
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            boost::scoped_ptr< ::comphelper::mem_fun1_t<ODBExport,XPropertySet* > > pMemFunc;
             if ( _bExportContext )
                 pMemFunc.reset( new ::comphelper::mem_fun1_t<ODBExport,XPropertySet* >(&ODBExport::exportTable) );
             else

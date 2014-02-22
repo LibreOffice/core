@@ -57,6 +57,8 @@
 
 #include <o3tl/compat_functional.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 //........................................................................
 namespace connectivity
 {
@@ -266,7 +268,7 @@ namespace connectivity
                         Reference<XStream > xStream = xStorage->openStreamElement(sProperties,ElementModes::READ);
                         if ( xStream.is() )
                         {
-                            ::std::auto_ptr<SvStream> pStream( ::utl::UcbStreamHelper::CreateStream(xStream) );
+                            boost::scoped_ptr<SvStream> pStream( ::utl::UcbStreamHelper::CreateStream(xStream) );
                             if ( pStream.get() )
                             {
                                 OString sLine;

@@ -44,6 +44,7 @@
 #include "browserids.hxx"
 #include <unotools/pathoptions.hxx>
 #include "IApplicationController.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
@@ -89,17 +90,13 @@ OAppBorderWindow::~OAppBorderWindow()
     if ( m_pPanel )
     {
         m_pPanel->Hide();
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<Window> aTemp(m_pPanel);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr<Window> aTemp(m_pPanel);
         m_pPanel = NULL;
     }
     if ( m_pDetailView )
     {
         m_pDetailView->Hide();
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<Window> aTemp(m_pDetailView);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr<Window> aTemp(m_pDetailView);
         m_pDetailView = NULL;
     }
 
@@ -219,9 +216,7 @@ OApplicationView::~OApplicationView()
     {
         stopComponentListening(m_xObject);
         m_pWin->Hide();
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<Window> aTemp(m_pWin);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr<Window> aTemp(m_pWin);
         m_pWin = NULL;
     }
 }

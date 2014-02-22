@@ -45,6 +45,7 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
 #include <boost/bind.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <algorithm>
 #include <functional>
 
@@ -88,9 +89,7 @@ OScrollWindowHelper::OScrollWindowHelper( Window* pParent) : Window( pParent)
 
 OScrollWindowHelper::~OScrollWindowHelper()
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<Window> aTemp(m_pCornerWindow);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    boost::scoped_ptr<Window> aTemp(m_pCornerWindow);
     m_pCornerWindow = NULL;
     m_pTableView = NULL;
 }
@@ -1522,9 +1521,7 @@ void OJoinTableView::clearLayoutInformation()
     {
         if ( aIter->second )
             aIter->second->clearListBox();
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<Window> aTemp(aIter->second);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr<Window> aTemp(aIter->second);
         aIter->second = NULL;
     }
 

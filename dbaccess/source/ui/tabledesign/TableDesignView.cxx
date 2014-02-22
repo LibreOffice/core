@@ -31,6 +31,7 @@
 #include <unotools/syslocale.hxx>
 #include <vcl/settings.hxx>
 #include "UITools.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::dbaui;
 using namespace ::utl;
@@ -67,15 +68,11 @@ OTableBorderWindow::~OTableBorderWindow()
     m_pFieldDescWin->Hide();
 
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<Window> aTemp(m_pEditorCtrl);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr<Window> aTemp(m_pEditorCtrl);
         m_pEditorCtrl = NULL;
     }
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<Window> aTemp(m_pFieldDescWin);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr<Window> aTemp(m_pFieldDescWin);
         m_pFieldDescWin = NULL;
     }
 
@@ -196,9 +193,7 @@ OTableDesignView::~OTableDesignView()
     m_pWin->Hide();
 
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<Window> aTemp(m_pWin);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr<Window> aTemp(m_pWin);
         m_pWin = NULL;
     }
 }
