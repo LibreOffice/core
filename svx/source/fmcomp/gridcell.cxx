@@ -2162,13 +2162,13 @@ namespace
 //------------------------------------------------------------------------------
 OUString DbCurrencyField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter, Color** /*ppColor*/)
 {
-    return lcl_setFormattedCurrency_nothrow( *dynamic_cast< LongCurrencyField* >( m_pPainter ), *this, _rxField, _rxFormatter );
+    return lcl_setFormattedCurrency_nothrow( dynamic_cast< LongCurrencyField& >( *m_pPainter ), *this, _rxField, _rxFormatter );
 }
 
 //------------------------------------------------------------------------------
 void DbCurrencyField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter)
 {
-    lcl_setFormattedCurrency_nothrow( *dynamic_cast< LongCurrencyField* >( m_pWindow ), *this, _rxField, _rxFormatter );
+    lcl_setFormattedCurrency_nothrow( dynamic_cast< LongCurrencyField& >( *m_pWindow ), *this, _rxField, _rxFormatter );
 }
 
 //------------------------------------------------------------------------------
