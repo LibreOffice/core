@@ -54,9 +54,9 @@ class SOT_DLLPUBLIC SotStorageStream : virtual public SotObject, public SvStream
 friend class SotStorage;
     BaseStorageStream * pOwnStm;// Zeiger auf den eigenen Stream
 protected:
-    virtual sal_uLong       GetData( void* pData, sal_uLong nSize );
-    virtual sal_uLong       PutData( const void* pData, sal_uLong nSize );
-    virtual sal_uLong       SeekPos( sal_uLong nPos );
+    virtual size_t       GetData( void* pData, size_t nSize );
+    virtual size_t       PutData( const void* pData, size_t nSize );
+    virtual size_t       SeekPos( size_t nPos );
     virtual void        FlushData();
                         ~SotStorageStream();
 public:
@@ -69,7 +69,7 @@ public:
 
     virtual void        ResetError();
 
-    virtual void        SetSize( sal_uLong nNewSize );
+    virtual void        SetSize( size_t nNewSize );
     sal_uInt32              GetSize() const;
     bool                CopyTo( SotStorageStream * pDestStm );
     virtual bool        Commit();

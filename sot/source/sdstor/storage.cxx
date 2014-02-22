@@ -131,9 +131,9 @@ void SotStorageStream::ResetError()
          pOwnStm->ResetError();
 }
 
-sal_uLong SotStorageStream::GetData( void* pData, sal_uLong nSize )
+size_t SotStorageStream::GetData( void* pData, size_t nSize )
 {
-    sal_uLong nRet = 0;
+    size_t nRet = 0;
 
     if( pOwnStm )
     {
@@ -146,9 +146,9 @@ sal_uLong SotStorageStream::GetData( void* pData, sal_uLong nSize )
     return nRet;
 }
 
-sal_uLong SotStorageStream::PutData( const void* pData, sal_uLong nSize )
+size_t SotStorageStream::PutData( const void* pData, size_t nSize )
 {
-    sal_uLong nRet = 0;
+    size_t nRet = 0;
 
     if( pOwnStm )
     {
@@ -160,9 +160,9 @@ sal_uLong SotStorageStream::PutData( const void* pData, sal_uLong nSize )
     return nRet;
 }
 
-sal_uLong SotStorageStream::SeekPos( sal_uLong nPos )
+size_t SotStorageStream::SeekPos( size_t nPos )
 {
-    sal_uLong nRet = 0;
+    size_t nRet = 0;
 
     if( pOwnStm )
     {
@@ -186,9 +186,9 @@ void SotStorageStream::FlushData()
         SvStream::FlushData();
 }
 
-void SotStorageStream::SetSize( sal_uLong nNewSize )
+void SotStorageStream::SetSize( size_t nNewSize )
 {
-    sal_uLong   nPos = Tell();
+    size_t   nPos = Tell();
     if( pOwnStm )
     {
         pOwnStm->SetSize( nNewSize );
@@ -204,9 +204,9 @@ void SotStorageStream::SetSize( sal_uLong nNewSize )
 
 sal_uInt32 SotStorageStream::GetSize() const
 {
-    sal_uLong nPos = Tell();
+    size_t nPos = Tell();
     ((SotStorageStream *)this)->Seek( STREAM_SEEK_TO_END );
-    sal_uLong nSize = Tell();
+    size_t nSize = Tell();
     ((SotStorageStream *)this)->Seek( nPos );
     return nSize;
 }
@@ -226,12 +226,12 @@ bool SotStorageStream::CopyTo( SotStorageStream * pDestStm )
     if( !pOwnStm || !pDestStm->pOwnStm )
     {
         // Wenn Ole2 oder nicht nur eigene StorageStreams
-        sal_uLong nPos = Tell();    // Position merken
+        size_t nPos = Tell();    // Position merken
         Seek( 0L );
         pDestStm->SetSize( 0 ); // Ziel-Stream leeren
 
         void * pMem = new sal_uInt8[ 8192 ];
-        sal_uLong  nRead;
+        size_t  nRead;
         while( 0 != (nRead = Read( pMem, 8192 )) )
         {
             if( nRead != pDestStm->Write( pMem, nRead ) )
@@ -479,7 +479,7 @@ SotStorage::SotStorage( BaseStorage * pStor )
     }
 
     m_pOwnStg = pStor;
-    sal_uLong nErr = m_pOwnStg ? m_pOwnStg->GetError() : SVSTREAM_CANNOT_MAKE;
+    size_t nErr = m_pOwnStg ? m_pOwnStg->GetError() : SVSTREAM_CANNOT_MAKE;
     SetError( nErr );
     if ( IsOLEStorage() )
         m_nVersion = SOFFICE_FILEFORMAT_50;

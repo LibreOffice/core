@@ -1076,14 +1076,14 @@ void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer ) throw()
     if( m_nMode == -1 || !m_pPlugin->getPluginComm() )
         return;
 
-    sal_uInt32 nPos = m_aFileStream.Tell();
+    size_t nPos = m_aFileStream.Tell();
     sal_uInt32 nBytes = 0;
     while( m_nMode != NP_ASFILEONLY &&
            m_nWritePos < nPos &&
            (nBytes = m_pPlugin->getPluginComm()-> NPP_WriteReady(
                m_pPlugin->getNPPInstance(), &m_aNPStream )) > 0 )
     {
-        nBytes = (nBytes > nPos - m_nWritePos) ? nPos - m_nWritePos : nBytes;
+        nBytes = ((size_t)nBytes + m_nWritePos > nPos) ? nPos - m_nWritePos : nBytes;
 
         char* pBuffer = new char[ nBytes ];
         m_aFileStream.Seek( m_nWritePos );
