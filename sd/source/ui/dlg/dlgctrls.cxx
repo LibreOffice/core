@@ -67,7 +67,7 @@ void FadeEffectLB::Fill()
 }
 
 
-// -----------------------------------------------------------------------------
+
 
 void FadeEffectLB::applySelected( SdPage* pSlide ) const
 {

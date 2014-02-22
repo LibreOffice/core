@@ -160,7 +160,7 @@ Any Index::queryInterface( const Type & reqType ) throw (RuntimeException)
 }
 
 
-//___________________________________________________________________________________
+
 IndexDescriptor::IndexDescriptor(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
     const Reference< com::sun::star::sdbc::XConnection > & connection,

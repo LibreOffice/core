@@ -24,9 +24,9 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
 
-// ----------------
+
 // - ImpPDFDialog -
-// ----------------
+
 
 ImpSWFDialog::ImpSWFDialog( Window* pParent, Sequence< PropertyValue >& rFilterData ) :
     ModalDialog( pParent, "ImpSWFDialog", "filter/ui/impswfdialog.ui" ),
@@ -60,13 +60,13 @@ ImpSWFDialog::ImpSWFDialog( Window* pParent, Sequence< PropertyValue >& rFilterD
 #endif
 }
 
-// -----------------------------------------------------------------------------
+
 
 ImpSWFDialog::~ImpSWFDialog()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< PropertyValue > ImpSWFDialog::GetFilterData()
 {

@@ -30,13 +30,13 @@ TitleImage::TitleImage( Window* pParent, const ResId& rResId ) :
     SetFont( aFont );
 }
 
-// -----------------------------------------------------------------------
+
 
 TitleImage::~TitleImage()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void TitleImage::arrange()
 {
@@ -51,7 +51,7 @@ void TitleImage::arrange()
     m_aTextPos.Y() = ( aCtrlSize.Height() - aTextSize.Height() ) / 2;
 }
 
-// -----------------------------------------------------------------------
+
 
 void TitleImage::Paint( const Rectangle& )
 {
@@ -65,7 +65,7 @@ void TitleImage::Paint( const Rectangle& )
     DrawText( m_aTextPos, m_aText );
 }
 
-// -----------------------------------------------------------------------
+
 
 void TitleImage::SetText( const OUString& rText )
 {
@@ -74,7 +74,7 @@ void TitleImage::SetText( const OUString& rText )
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void TitleImage::SetImage( const Image& rImage )
 {
@@ -83,7 +83,7 @@ void TitleImage::SetImage( const Image& rImage )
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void TitleImage::SetBackgroundColor( const Color& rColor )
 {

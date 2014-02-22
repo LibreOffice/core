@@ -98,7 +98,7 @@ const sal_Int16 API_SPLITPANE_TOPRIGHT              = 1;        /// Top-right pa
 const sal_Int16 API_SPLITPANE_BOTTOMLEFT            = 2;        /// Bottom-left, bottom, left, or single pane.
 const sal_Int16 API_SPLITPANE_BOTTOMRIGHT           = 3;        /// Bottom-right, or right pane.
 
-// ----------------------------------------------------------------------------
+
 
 /** Returns the OOXML pane identifier from the passed BIFF pane id. */
 sal_Int32 lclGetOoxPaneId( sal_Int32 nBiffPaneId, sal_Int32 nDefaultPaneId )
@@ -116,7 +116,7 @@ PaneSelectionModel::PaneSelectionModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 SheetViewModel::SheetViewModel() :
     mnWorkbookViewId( 0 ),
@@ -184,7 +184,7 @@ PaneSelectionModel& SheetViewModel::createPaneSelection( sal_Int32 nPaneId )
     return *rxPaneSel;
 }
 
-// ----------------------------------------------------------------------------
+
 
 SheetViewSettings::SheetViewSettings( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper )
@@ -478,7 +478,7 @@ WorkbookViewModel::WorkbookViewModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ViewSettings::ViewSettings( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),

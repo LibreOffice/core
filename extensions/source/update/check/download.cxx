@@ -55,7 +55,7 @@ struct OutData
     OutData(osl::Condition& rCondition) : FileHandle(NULL), Offset(0), StopCondition(rCondition), curl(NULL) {};
 };
 
-//------------------------------------------------------------------------------
+
 
 static void openFile( OutData& out )
 {
@@ -99,7 +99,7 @@ static void openFile( OutData& out )
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 static inline OString
 getStringValue(const uno::Reference< container::XNameAccess >& xNameAccess, const OUString& aName)
@@ -110,7 +110,7 @@ getStringValue(const uno::Reference< container::XNameAccess >& xNameAccess, cons
     return OUStringToOString(aValue.get<OUString>(), RTL_TEXTENCODING_UTF8);
 }
 
-//------------------------------------------------------------------------------
+
 
 static inline sal_Int32
 getInt32Value(const uno::Reference< container::XNameAccess >& xNameAccess,
@@ -124,7 +124,7 @@ getInt32Value(const uno::Reference< container::XNameAccess >& xNameAccess,
     return n;
 }
 
-//------------------------------------------------------------------------------
+
 
 static size_t
 write_function( void *ptr, size_t size, size_t nmemb, void *stream )
@@ -142,7 +142,7 @@ write_function( void *ptr, size_t size, size_t nmemb, void *stream )
     return (size_t) nBytesWritten;
 }
 
-//------------------------------------------------------------------------------
+
 
 static int
 progress_callback( void *clientp, double dltotal, double dlnow, double ultotal, double ulnow )
@@ -175,7 +175,7 @@ progress_callback( void *clientp, double dltotal, double dlnow, double ultotal, 
     return -1;
 }
 
-//------------------------------------------------------------------------------
+
 
 void
 Download::getProxyForURL(const OUString& rURL, OString& rHost, sal_Int32& rPort) const
@@ -219,7 +219,7 @@ Download::getProxyForURL(const OUString& rURL, OString& rHost, sal_Int32& rPort)
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 bool curl_run(const OUString& rURL, OutData& out, const OString& aProxyHost, sal_Int32 nProxyPort)
 {
@@ -337,7 +337,7 @@ bool curl_run(const OUString& rURL, OutData& out, const OString& aProxyHost, sal
     return ret;
 }
 
-//------------------------------------------------------------------------------
+
 
 bool
 Download::start(const OUString& rURL, const OUString& rFile, const OUString& rDestinationDir)
@@ -425,7 +425,7 @@ Download::start(const OUString& rURL, const OUString& rFile, const OUString& rDe
     return ret;
 }
 
-//------------------------------------------------------------------------------
+
 
 void
 Download::stop()

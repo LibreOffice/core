@@ -299,7 +299,7 @@ SFX_IMPL_INTERFACE(SfxViewShell,SfxShell,SfxResId(0))
 
 TYPEINIT2(SfxViewShell,SfxShell,SfxListener);
 
-//--------------------------------------------------------------------
+
 /** search for a filter name dependent on type and module
  */
 
@@ -341,7 +341,7 @@ static OUString impl_retrieveFilterNameFromTypeAndModule(
     return aFoundFilterName;
 }
 
-//--------------------------------------------------------------------
+
 /** search for an internal typename, which map to the current app module
     and map also to a "family" of file formats as e.g. PDF/MS Doc/OOo Doc.
  */
@@ -410,7 +410,7 @@ OUString impl_searchFormatTypeForApp(const css::uno::Reference< css::frame::XFra
     return OUString();
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::IPClientGone_Impl( SfxInPlaceClient *pIPClient )
 {
@@ -428,7 +428,7 @@ void SfxViewShell::IPClientGone_Impl( SfxInPlaceClient *pIPClient )
 
 
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 {
@@ -778,7 +778,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
 {
@@ -843,7 +843,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::SetZoomFactor( const Fraction &rZoomX,
     const Fraction &rZoomY )
@@ -855,7 +855,7 @@ void SfxViewShell::SetZoomFactor( const Fraction &rZoomX,
     GetWindow()->SetMapMode( aMap );
 }
 
-//--------------------------------------------------------------------
+
 ErrCode SfxViewShell::DoVerb(long /*nVerb*/)
 
 /*  [Description]
@@ -869,7 +869,7 @@ ErrCode SfxViewShell::DoVerb(long /*nVerb*/)
     return ERRCODE_SO_NOVERBS;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::OutplaceActivated( sal_Bool bActive, SfxInPlaceClient* /*pClient*/ )
 {
@@ -877,7 +877,7 @@ void SfxViewShell::OutplaceActivated( sal_Bool bActive, SfxInPlaceClient* /*pCli
         GetFrame()->GetFrame().Appear();
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::InplaceActivating( SfxInPlaceClient* /*pClient*/ )
 {
@@ -885,14 +885,14 @@ void SfxViewShell::InplaceActivating( SfxInPlaceClient* /*pClient*/ )
     // but may be the bug will not affect the real office vcl windows, then it is not required
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::InplaceDeactivated( SfxInPlaceClient* /*pClient*/ )
 {
     // TODO/LATER: paint the replacement image in normal way if the painting was stopped
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::UIActivating( SfxInPlaceClient* /*pClient*/ )
 {
@@ -905,7 +905,7 @@ void SfxViewShell::UIActivating( SfxInPlaceClient* /*pClient*/ )
     pFrame->GetDispatcher()->Update_Impl( sal_True );
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::UIDeactivated( SfxInPlaceClient* /*pClient*/ )
 {
@@ -916,7 +916,7 @@ void SfxViewShell::UIDeactivated( SfxInPlaceClient* /*pClient*/ )
     pFrame->GetBindings().InvalidateAll(sal_True);
 }
 
-//--------------------------------------------------------------------
+
 
 SfxInPlaceClient* SfxViewShell::FindIPClient
 (
@@ -940,14 +940,14 @@ SfxInPlaceClient* SfxViewShell::FindIPClient
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxInPlaceClient* SfxViewShell::GetIPClient() const
 {
     return GetUIActiveClient();
 }
 
-//--------------------------------------------------------------------
+
 
 SfxInPlaceClient* SfxViewShell::GetUIActiveIPClient_Impl() const
 {
@@ -982,7 +982,7 @@ SfxInPlaceClient* SfxViewShell::GetUIActiveClient() const
     return NULL;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::Activate( sal_Bool bMDI )
 {
@@ -997,14 +997,14 @@ void SfxViewShell::Activate( sal_Bool bMDI )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::Deactivate(sal_Bool /*bMDI*/)
 {
     DBG_CHKTHIS(SfxViewShell, 0);
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::AdjustPosSizePixel
 (
@@ -1016,7 +1016,7 @@ void SfxViewShell::AdjustPosSizePixel
     DBG_CHKTHIS(SfxViewShell, 0);
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::Move()
 
@@ -1038,7 +1038,7 @@ void SfxViewShell::Move()
 {
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::OuterResizePixel
 (
@@ -1089,7 +1089,7 @@ void SfxViewShell::OuterResizePixel
     SetBorderPixel( SvBorder() );
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::InnerResizePixel
 (
@@ -1140,7 +1140,7 @@ void SfxViewShell::InnerResizePixel
     SetBorderPixel( SvBorder() );
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::InvalidateBorder()
 {
@@ -1154,7 +1154,7 @@ void SfxViewShell::InvalidateBorder()
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::SetBorderPixel( const SvBorder &rBorder )
 {
@@ -1170,7 +1170,7 @@ void SfxViewShell::SetBorderPixel( const SvBorder &rBorder )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 const SvBorder& SfxViewShell::GetBorderPixel() const
 {
@@ -1180,7 +1180,7 @@ const SvBorder& SfxViewShell::GetBorderPixel() const
     return GetViewFrame()->GetBorderPixelImpl( this );
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::SetWindow
 (
@@ -1222,7 +1222,7 @@ void SfxViewShell::SetWindow
     //SFX_APP()->GrabFocus( pWindow );
 }
 
-//--------------------------------------------------------------------
+
 
 SfxViewShell::SfxViewShell
 (
@@ -1256,7 +1256,7 @@ SfxViewShell::SfxViewShell
     rViewArr.push_back(this);
 }
 
-//--------------------------------------------------------------------
+
 
 SfxViewShell::~SfxViewShell()
 {
@@ -1284,7 +1284,7 @@ SfxViewShell::~SfxViewShell()
     DELETEZ( pIPClientList );
 }
 
-//--------------------------------------------------------------------
+
 
 bool SfxViewShell::PrepareClose
 (
@@ -1312,7 +1312,7 @@ bool SfxViewShell::PrepareClose
     return true;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxViewShell* SfxViewShell::Current()
 {
@@ -1320,7 +1320,7 @@ SfxViewShell* SfxViewShell::Current()
     return pCurrent ? pCurrent->GetViewShell() : NULL;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxViewShell* SfxViewShell::Get( const Reference< XController>& i_rController )
 {
@@ -1338,7 +1338,7 @@ SfxViewShell* SfxViewShell::Get( const Reference< XController>& i_rController )
     return NULL;
 }
 
-//--------------------------------------------------------------------
+
 
 SdrView* SfxViewShell::GetDrawView() const
 
@@ -1354,7 +1354,7 @@ SdrView* SfxViewShell::GetDrawView() const
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 
 OUString SfxViewShell::GetSelectionText
 (
@@ -1384,7 +1384,7 @@ OUString SfxViewShell::GetSelectionText
     return OUString();
 }
 
-//--------------------------------------------------------------------
+
 
 sal_Bool SfxViewShell::HasSelection( sal_Bool ) const
 
@@ -1465,13 +1465,13 @@ void SfxViewShell::PushSubShells_Impl( sal_Bool bPush )
     pDisp->Flush();
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::WriteUserData( OUString&, bool )
 {
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::ReadUserData(const OUString&, bool )
 {
@@ -1486,7 +1486,7 @@ void SfxViewShell::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue 
 }
 
 
-//--------------------------------------------------------------------
+
 // returns the first shell of spec. type viewing the specified doc.
 
 SfxViewShell* SfxViewShell::GetFirst
@@ -1523,7 +1523,7 @@ SfxViewShell* SfxViewShell::GetFirst
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 // returns the next shell of spec. type viewing the specified doc.
 
 SfxViewShell* SfxViewShell::GetNext
@@ -1565,7 +1565,7 @@ SfxViewShell* SfxViewShell::GetNext
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::Notify( SfxBroadcaster& rBC,
                             const SfxHint& rHint )
@@ -1604,7 +1604,7 @@ void SfxViewShell::Notify( SfxBroadcaster& rBC,
     }
 }
 
-//--------------------------------------------------------------------
+
 
 sal_Bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
 {
@@ -1619,7 +1619,7 @@ sal_Bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
     return pImp->m_pAccExec->execute(aKey.GetKeyCode());
 }
 
-//--------------------------------------------------------------------
+
 
 bool SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
 
@@ -1652,7 +1652,7 @@ bool SfxViewShell::GlobalKeyInput_Impl( const KeyEvent &rKeyEvent )
     return ExecKey_Impl(rKeyEvent);
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::ShowCursor( bool /*bOn*/ )
 
@@ -1666,7 +1666,7 @@ void SfxViewShell::ShowCursor( bool /*bOn*/ )
 {
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::GotFocus() const
 
@@ -1685,7 +1685,7 @@ void SfxViewShell::GotFocus() const
 {
 }
 
-//--------------------------------------------------------------------
+
 void SfxViewShell::ResetAllClients_Impl( SfxInPlaceClient *pIP )
 {
 
@@ -1701,7 +1701,7 @@ void SfxViewShell::ResetAllClients_Impl( SfxInPlaceClient *pIP )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::DisconnectAllClients()
 {
@@ -1714,13 +1714,13 @@ void SfxViewShell::DisconnectAllClients()
         delete pClients->at( n );
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::QueryObjAreaPixel( Rectangle& ) const
 {
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::VisAreaChanged(const Rectangle& /*rVisArea*/)
 {
@@ -1737,7 +1737,7 @@ void SfxViewShell::VisAreaChanged(const Rectangle& /*rVisArea*/)
     }
 }
 
-//--------------------------------------------------------------------
+
 void SfxViewShell::CheckIPClient_Impl( SfxInPlaceClient *pIPClient, const Rectangle& rVisArea )
 {
     if ( GetObjectShell()->IsInClose() )
@@ -1775,7 +1775,7 @@ void SfxViewShell::CheckIPClient_Impl( SfxInPlaceClient *pIPClient, const Rectan
     }
 }
 
-//--------------------------------------------------------------------
+
 void SfxViewShell::DiscardClients_Impl()
 
 /*  [Description]
@@ -1793,14 +1793,14 @@ void SfxViewShell::DiscardClients_Impl()
         delete pClients->at( n );
 }
 
-//--------------------------------------------------------------------
+
 
 SfxObjectShell* SfxViewShell::GetObjectShell()
 {
     return pFrame ? pFrame->GetObjectShell() : NULL;
 }
 
-//--------------------------------------------------------------------
+
 
 Reference< XModel > SfxViewShell::GetCurrentDocument() const
 {
@@ -1813,7 +1813,7 @@ Reference< XModel > SfxViewShell::GetCurrentDocument() const
     return xDocument;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::SetCurrentDocument() const
 {
@@ -1822,14 +1822,14 @@ void SfxViewShell::SetCurrentDocument() const
         SfxObjectShell::SetCurrentComponent( xDocument );
 }
 
-//--------------------------------------------------------------------
+
 
 const Size& SfxViewShell::GetMargin() const
 {
     return pImp->aMargin;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::SetMargin( const Size& rSize )
 {
@@ -1847,27 +1847,27 @@ void SfxViewShell::SetMargin( const Size& rSize )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxViewShell::MarginChanged()
 {
 }
 
-//--------------------------------------------------------------------
+
 
 sal_Bool SfxViewShell::IsShowView_Impl() const
 {
     return pImp->m_bIsShowView;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxFrame* SfxViewShell::GetSmartSelf( SfxFrame* pSelf, SfxMedium& /*rMedium*/ )
 {
     return pSelf;
 }
 
-//------------------------------------------------------------------------
+
 
 void SfxViewShell::JumpToMark( const OUString& rMark )
 {
@@ -1878,7 +1878,7 @@ void SfxViewShell::JumpToMark( const OUString& rMark )
         &aMarkItem, 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxInPlaceClientList* SfxViewShell::GetIPClientList_Impl( sal_Bool bCreate ) const
 {

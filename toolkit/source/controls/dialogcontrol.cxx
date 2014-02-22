@@ -945,7 +945,7 @@ void UnoMultiPageModel::insertByName( const OUString& aName, const Any& aElement
     return ControlModelContainerBase::insertByName( aName, aElement );
 }
 
-// ----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL UnoMultiPageModel::getGroupControl(  ) throw (RuntimeException)
 {
     return sal_True;
@@ -1050,7 +1050,7 @@ uno::Reference< beans::XPropertySetInfo > UnoPageModel::getPropertySetInfo(  ) t
     return xInfo;
 }
 
-// ----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL UnoPageModel::getGroupControl(  ) throw (RuntimeException)
 {
     return sal_False;

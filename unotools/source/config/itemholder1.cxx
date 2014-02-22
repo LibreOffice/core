@@ -49,7 +49,7 @@
 #include <unotools/options.hxx>
 #include <unotools/syslocaleoptions.hxx>
 
-//-----------------------------------------------
+
 ItemHolder1::ItemHolder1()
     : ItemHolderMutexBase()
 {
@@ -80,20 +80,20 @@ ItemHolder1::ItemHolder1()
 #endif
 }
 
-//-----------------------------------------------
+
 ItemHolder1::~ItemHolder1()
 {
     impl_releaseAllItems();
 }
 
-//-----------------------------------------------
+
 void ItemHolder1::holdConfigItem(EItem eItem)
 {
     static ItemHolder1* pHolder = new ItemHolder1();
     pHolder->impl_addItem(eItem);
 }
 
-//-----------------------------------------------
+
 void SAL_CALL ItemHolder1::disposing(const css::lang::EventObject&)
     throw(css::uno::RuntimeException)
 {
@@ -101,7 +101,7 @@ void SAL_CALL ItemHolder1::disposing(const css::lang::EventObject&)
     impl_releaseAllItems();
 }
 
-//-----------------------------------------------
+
 void ItemHolder1::impl_addItem(EItem eItem)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -123,7 +123,7 @@ void ItemHolder1::impl_addItem(EItem eItem)
         m_lItems.push_back(aNewItem);
 }
 
-//-----------------------------------------------
+
 void ItemHolder1::impl_releaseAllItems()
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -139,7 +139,7 @@ void ItemHolder1::impl_releaseAllItems()
     m_lItems.clear();
 }
 
-//-----------------------------------------------
+
 void ItemHolder1::impl_newItem(TItemInfo& rItem)
 {
     switch(rItem.eItem)
@@ -250,7 +250,7 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
     }
 }
 
-//-----------------------------------------------
+
 void ItemHolder1::impl_deleteItem(TItemInfo& rItem)
 {
     if (rItem.pItem)

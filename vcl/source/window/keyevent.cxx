@@ -65,7 +65,7 @@ KeyEvent KeyEvent::LogicalTextDirectionality (TextDirectionality eMode) const
 }
 
 
-// -------------------------------------------------------
+
 
 const Point&   HelpEvent::GetMousePosPixel() const
 {

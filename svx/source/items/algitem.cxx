@@ -66,7 +66,7 @@ SvxOrientationItem::SvxOrientationItem( sal_Int32 nRotation, sal_Bool bStacked, 
     SetFromRotation( nRotation, bStacked );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxOrientationItem::GetPresentation
 (
@@ -89,7 +89,7 @@ SfxItemPresentation SvxOrientationItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//------------------------------------------------------------------------
+
 
 bool SvxOrientationItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
@@ -128,7 +128,7 @@ bool SvxOrientationItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
     return true;
 }
 
-//------------------------------------------------------------------------
+
 
 OUString SvxOrientationItem::GetValueText( sal_uInt16 nVal ) const
 {
@@ -136,14 +136,14 @@ OUString SvxOrientationItem::GetValueText( sal_uInt16 nVal ) const
     return SVX_RESSTR(RID_SVXITEMS_ORI_STANDARD + nVal);
 }
 
-//------------------------------------------------------------------------
+
 
 SfxPoolItem* SvxOrientationItem::Clone( SfxItemPool* ) const
 {
     return new SvxOrientationItem( *this );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxPoolItem* SvxOrientationItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
@@ -152,14 +152,14 @@ SfxPoolItem* SvxOrientationItem::Create( SvStream& rStream, sal_uInt16 ) const
     return new SvxOrientationItem( (SvxCellOrientation)nVal, Which() );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SvxOrientationItem::GetValueCount() const
 {
     return SVX_ORIENTATION_STACKED + 1; // letzter Enum-Wert + 1
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SvxOrientationItem::IsStacked() const
 {
@@ -205,7 +205,7 @@ SvxMarginItem::SvxMarginItem( const sal_uInt16 nId ) :
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SvxMarginItem::SvxMarginItem( sal_Int16 nLeft,
                               sal_Int16 nTop,
@@ -222,7 +222,7 @@ SvxMarginItem::SvxMarginItem( sal_Int16 nLeft,
 }
 
 
-//------------------------------------------------------------------------
+
 
 SvxMarginItem::SvxMarginItem( const SvxMarginItem& rItem ) :
 
@@ -234,7 +234,7 @@ SvxMarginItem::SvxMarginItem( const SvxMarginItem& rItem ) :
     nBottomMargin = rItem.nBottomMargin;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxMarginItem::GetPresentation
 (
@@ -286,7 +286,7 @@ SfxItemPresentation SvxMarginItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//------------------------------------------------------------------------
+
 
 bool SvxMarginItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -298,14 +298,14 @@ bool SvxMarginItem::operator==( const SfxPoolItem& rItem ) const
              ( nBottomMargin == ( (SvxMarginItem&)rItem ).nBottomMargin ) );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxPoolItem* SvxMarginItem::Clone( SfxItemPool* ) const
 {
     return new SvxMarginItem(*this);
 }
 
-//------------------------------------------------------------------------
+
 
 SfxPoolItem* SvxMarginItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
@@ -320,7 +320,7 @@ SfxPoolItem* SvxMarginItem::Create( SvStream& rStream, sal_uInt16 ) const
     return new SvxMarginItem( nLeft, nTop, nRight, nBottom, Which() );
 }
 
-//------------------------------------------------------------------------
+
 
 SvStream& SvxMarginItem::Store( SvStream &rStream, sal_uInt16 /*nItemVersion*/) const
 {
@@ -332,7 +332,7 @@ SvStream& SvxMarginItem::Store( SvStream &rStream, sal_uInt16 /*nItemVersion*/) 
 }
 
 
-//------------------------------------------------------------------------
+
 
 bool SvxMarginItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
@@ -360,7 +360,7 @@ bool SvxMarginItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-//------------------------------------------------------------------------
+
 
 bool SvxMarginItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
@@ -391,7 +391,7 @@ bool SvxMarginItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SvxMarginItem::SetLeftMargin( sal_Int16 nLeft )
 {
@@ -399,7 +399,7 @@ sal_Bool SvxMarginItem::SetLeftMargin( sal_Int16 nLeft )
     return sal_True;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SvxMarginItem::SetTopMargin( sal_Int16 nTop )
 {
@@ -407,7 +407,7 @@ sal_Bool SvxMarginItem::SetTopMargin( sal_Int16 nTop )
     return sal_True;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SvxMarginItem::SetRightMargin( sal_Int16 nRight )
 {
@@ -415,7 +415,7 @@ sal_Bool SvxMarginItem::SetRightMargin( sal_Int16 nRight )
     return sal_True;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SvxMarginItem::SetBottomMargin( sal_Int16 nBottom )
 {

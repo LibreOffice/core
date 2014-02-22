@@ -181,7 +181,7 @@ public:
     virtual void SAL_CALL pop() throw ( uno::RuntimeException );
 };
 
-//------------------------------------------------------------------------------
+
 struct ExtensionCmd
 {
     enum E_CMD_TYPE { ADD, ENABLE, DISABLE, REMOVE, CHECK_FOR_UPDATES, ACCEPT_LICENSE };
@@ -215,7 +215,7 @@ struct ExtensionCmd
 
 typedef ::boost::shared_ptr< ExtensionCmd > TExtensionCmd;
 
-//------------------------------------------------------------------------------
+
 class ExtensionCmdQueue::Thread: public salhelper::Thread
 {
 public:
@@ -276,7 +276,7 @@ private:
     bool             m_bWorking;
 };
 
-//------------------------------------------------------------------------------
+
 void ProgressCmdEnv::startProgress()
 {
     m_nCurrentProgress = 0;
@@ -285,14 +285,14 @@ void ProgressCmdEnv::startProgress()
         m_pDialogHelper->showProgress( true );
 }
 
-//------------------------------------------------------------------------------
+
 void ProgressCmdEnv::stopProgress()
 {
     if ( m_pDialogHelper )
         m_pDialogHelper->showProgress( false );
 }
 
-//------------------------------------------------------------------------------
+
 void ProgressCmdEnv::progressSection( const OUString &rText,
                                       const uno::Reference< task::XAbortChannel > &xAbortChannel )
 {
@@ -308,7 +308,7 @@ void ProgressCmdEnv::progressSection( const OUString &rText,
     }
 }
 
-//------------------------------------------------------------------------------
+
 void ProgressCmdEnv::updateProgress()
 {
     if ( ! m_bAborted )
@@ -319,32 +319,32 @@ void ProgressCmdEnv::updateProgress()
     }
 }
 
-//------------------------------------------------------------------------------
+
 ProgressCmdEnv::~ProgressCmdEnv()
 {
     // TODO: stop all threads and wait
 }
 
 
-//------------------------------------------------------------------------------
+
 // XCommandEnvironment
-//------------------------------------------------------------------------------
+
 uno::Reference< task::XInteractionHandler > ProgressCmdEnv::getInteractionHandler()
     throw ( uno::RuntimeException )
 {
     return this;
 }
 
-//------------------------------------------------------------------------------
+
 uno::Reference< ucb::XProgressHandler > ProgressCmdEnv::getProgressHandler()
     throw ( uno::RuntimeException )
 {
     return this;
 }
 
-//------------------------------------------------------------------------------
+
 // XInteractionHandler
-//------------------------------------------------------------------------------
+
 void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const & xRequest )
     throw ( uno::RuntimeException )
 {
@@ -549,16 +549,16 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
     }
 }
 
-//------------------------------------------------------------------------------
+
 // XProgressHandler
-//------------------------------------------------------------------------------
+
 void ProgressCmdEnv::push( uno::Any const & rStatus )
     throw( uno::RuntimeException )
 {
     update_( rStatus );
 }
 
-//------------------------------------------------------------------------------
+
 void ProgressCmdEnv::update_( uno::Any const & rStatus )
     throw( uno::RuntimeException )
 {
@@ -578,21 +578,21 @@ void ProgressCmdEnv::update_( uno::Any const & rStatus )
     updateProgress();
 }
 
-//------------------------------------------------------------------------------
+
 void ProgressCmdEnv::update( uno::Any const & rStatus )
     throw( uno::RuntimeException )
 {
     update_( rStatus );
 }
 
-//------------------------------------------------------------------------------
+
 void ProgressCmdEnv::pop()
     throw( uno::RuntimeException )
 {
     update_( uno::Any() ); // no message
 }
 
-//------------------------------------------------------------------------------
+
 ExtensionCmdQueue::Thread::Thread( DialogHelper *pDialogHelper,
                                    TheExtensionManager *pManager,
                                    const uno::Reference< uno::XComponentContext > & rContext ) :
@@ -613,7 +613,7 @@ ExtensionCmdQueue::Thread::Thread( DialogHelper *pDialogHelper,
     OSL_ASSERT( pDialogHelper );
 }
 
-//------------------------------------------------------------------------------
+
 void ExtensionCmdQueue::Thread::addExtension( const OUString &rExtensionURL,
                                               const OUString &rRepository,
                                               const bool bWarnUser )
@@ -625,7 +625,7 @@ void ExtensionCmdQueue::Thread::addExtension( const OUString &rExtensionURL,
     }
 }
 
-//------------------------------------------------------------------------------
+
 void ExtensionCmdQueue::Thread::removeExtension( const uno::Reference< deployment::XPackage > &rPackage )
 {
     if ( rPackage.is() )
@@ -635,7 +635,7 @@ void ExtensionCmdQueue::Thread::removeExtension( const uno::Reference< deploymen
     }
 }
 
-//------------------------------------------------------------------------------
+
 void ExtensionCmdQueue::Thread::acceptLicense( const uno::Reference< deployment::XPackage > &rPackage )
 {
     if ( rPackage.is() )
@@ -645,7 +645,7 @@ void ExtensionCmdQueue::Thread::acceptLicense( const uno::Reference< deployment:
     }
 }
 
-//------------------------------------------------------------------------------
+
 void ExtensionCmdQueue::Thread::enableExtension( const uno::Reference< deployment::XPackage > &rPackage,
                                                  const bool bEnable )
 {
@@ -658,7 +658,7 @@ void ExtensionCmdQueue::Thread::enableExtension( const uno::Reference< deploymen
     }
 }
 
-//------------------------------------------------------------------------------
+
 void ExtensionCmdQueue::Thread::checkForUpdates(
     const std::vector<uno::Reference<deployment::XPackage > > &vExtensionList )
 {
@@ -666,7 +666,7 @@ void ExtensionCmdQueue::Thread::checkForUpdates(
     _insert( pEntry );
 }
 
-//------------------------------------------------------------------------------
+
 //Stopping this thread will not abort the installation of extensions.
 void ExtensionCmdQueue::Thread::stop()
 {
@@ -676,17 +676,17 @@ void ExtensionCmdQueue::Thread::stop()
     m_wakeup.set();
 }
 
-//------------------------------------------------------------------------------
+
 bool ExtensionCmdQueue::Thread::isBusy()
 {
     osl::MutexGuard aGuard( m_mutex );
     return m_bWorking;
 }
 
-//------------------------------------------------------------------------------
+
 ExtensionCmdQueue::Thread::~Thread() {}
 
-//------------------------------------------------------------------------------
+
 void ExtensionCmdQueue::Thread::execute()
 {
 #ifdef WNT
@@ -841,7 +841,7 @@ void ExtensionCmdQueue::Thread::execute()
 #endif
 }
 
-//------------------------------------------------------------------------------
+
 void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
                                                const OUString &rPackageURL,
                                                const OUString &rRepository,
@@ -891,7 +891,7 @@ void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv 
     rCmdEnv->setWarnUser( false );
 }
 
-//------------------------------------------------------------------------------
+
 void ExtensionCmdQueue::Thread::_removeExtension( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
                                                   const uno::Reference< deployment::XPackage > &xPackage )
 {
@@ -919,7 +919,7 @@ void ExtensionCmdQueue::Thread::_removeExtension( ::rtl::Reference< ProgressCmdE
     UpdateDialog::createNotifyJob( false, aItemList );
 }
 
-//------------------------------------------------------------------------------
+
 void ExtensionCmdQueue::Thread::_checkForUpdates(
     const std::vector<uno::Reference<deployment::XPackage > > &vExtensionList )
 {
@@ -973,7 +973,7 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
     delete pUpdateDialog;
 }
 
-//------------------------------------------------------------------------------
+
 void ExtensionCmdQueue::Thread::_enableExtension( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
                                                   const uno::Reference< deployment::XPackage > &xPackage )
 {
@@ -997,7 +997,7 @@ void ExtensionCmdQueue::Thread::_enableExtension( ::rtl::Reference< ProgressCmdE
     {}
 }
 
-//------------------------------------------------------------------------------
+
 void ExtensionCmdQueue::Thread::_disableExtension( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
                                                    const uno::Reference< deployment::XPackage > &xPackage )
 {
@@ -1021,7 +1021,7 @@ void ExtensionCmdQueue::Thread::_disableExtension( ::rtl::Reference< ProgressCmd
     {}
 }
 
-//------------------------------------------------------------------------------
+
 void ExtensionCmdQueue::Thread::_acceptLicense( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
                                                 const uno::Reference< deployment::XPackage > &xPackage )
 {
@@ -1058,7 +1058,7 @@ void ExtensionCmdQueue::Thread::_insert(const TExtensionCmd& rExtCmd)
     m_wakeup.set();
 }
 
-//------------------------------------------------------------------------------
+
 ExtensionCmdQueue::ExtensionCmdQueue( DialogHelper * pDialogHelper,
                                       TheExtensionManager *pManager,
                                       const uno::Reference< uno::XComponentContext > &rContext )

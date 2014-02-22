@@ -34,13 +34,13 @@
 #include <bmpmask.hrc>
 #include <svx/svxids.hrc>
 
-//-------------------------------------------------------------------------
+
 
 #define BMP_RESID(nId)  ResId(nId, DIALOG_MGR())
 #define TRANSP_COL      (Color( 252, 252, 252 ))
 #define OWN_CALLMODE    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD
 
-//-------------------------------------------------------------------------
+
 
 #define TEST_COLS()                                                 \
 {                                                                   \
@@ -56,11 +56,11 @@
     }                                                               \
 }
 
-// -------------------------------------------------------------------------
+
 
 SFX_IMPL_DOCKINGWINDOW_WITHID( SvxBmpMaskChildWindow, SID_BMPMASK )
 
-// -------------------------------------------------------------------------
+
 
 class ColorWindow : public Control
 {
@@ -86,7 +86,7 @@ public:
     virtual void Paint( const Rectangle& rRect );
 };
 
-//-------------------------------------------------------------------------
+
 
 class MaskSet : public ValueSet
 {
@@ -103,7 +103,7 @@ public:
     void onEditColor();
 };
 
-//-------------------------------------------------------------------------
+
 
 MaskSet::MaskSet( SvxBmpMask* pParent, const ResId& rId ) :
             ValueSet        ( pParent, rId ),
@@ -111,7 +111,7 @@ MaskSet::MaskSet( SvxBmpMask* pParent, const ResId& rId ) :
 {
 }
 
-//-------------------------------------------------------------------------
+
 
 void MaskSet::Select()
 {
@@ -163,7 +163,7 @@ void MaskSet::onEditColor()
     delete pColorDlg;
 }
 
-//-------------------------------------------------------------------------
+
 
 class MaskData
 {
@@ -186,7 +186,7 @@ public:
                 DECL_LINK(ExecHdl, void *);
 };
 
-//-------------------------------------------------------------------------
+
 
 MaskData::MaskData( SvxBmpMask* pBmpMask, SfxBindings& rBind ) :
 
@@ -198,7 +198,7 @@ MaskData::MaskData( SvxBmpMask* pBmpMask, SfxBindings& rBind ) :
 {
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK( MaskData, PipetteHdl, ToolBox*, pTbx )
 {
@@ -210,7 +210,7 @@ IMPL_LINK( MaskData, PipetteHdl, ToolBox*, pTbx )
     return 0;
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK( MaskData, CbxHdl, CheckBox*, pCbx )
 {
@@ -246,7 +246,7 @@ IMPL_LINK( MaskData, CbxHdl, CheckBox*, pCbx )
     return 0;
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK( MaskData, CbxTransHdl, CheckBox*, pCbx )
 {
@@ -309,7 +309,7 @@ IMPL_LINK( MaskData, CbxTransHdl, CheckBox*, pCbx )
     return 0L;
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK( MaskData, FocusLbHdl, ColorLB*, pLb )
 {
@@ -322,7 +322,7 @@ IMPL_LINK( MaskData, FocusLbHdl, ColorLB*, pLb )
     return 0;
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(MaskData, ExecHdl)
 {
@@ -332,7 +332,7 @@ IMPL_LINK_NOARG(MaskData, ExecHdl)
     return 0L;
 }
 
-//-------------------------------------------------------------------------
+
 
 void ColorWindow::Paint( const Rectangle &/*Rect*/ )
 {
@@ -348,7 +348,7 @@ void ColorWindow::Paint( const Rectangle &/*Rect*/ )
     SetFillColor( rOldFillColor );
 }
 
-//-------------------------------------------------------------------------
+
 
 SvxBmpMaskSelectItem::SvxBmpMaskSelectItem( sal_uInt16 nId_, SvxBmpMask& rMask,
                                             SfxBindings& rBindings ) :
@@ -357,7 +357,7 @@ SvxBmpMaskSelectItem::SvxBmpMaskSelectItem( sal_uInt16 nId_, SvxBmpMask& rMask,
 {
 }
 
-//-------------------------------------------------------------------------
+
 
 void SvxBmpMaskSelectItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
                                          const SfxPoolItem* pItem )
@@ -372,7 +372,7 @@ void SvxBmpMaskSelectItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 SvxBmpMaskChildWindow::SvxBmpMaskChildWindow( Window* pParent_, sal_uInt16 nId,
                                               SfxBindings* pBindings,
@@ -388,7 +388,7 @@ SvxBmpMaskChildWindow::SvxBmpMaskChildWindow( Window* pParent_, sal_uInt16 nId,
     pDlg->Initialize( pInfo );
 }
 
-//-------------------------------------------------------------------------
+
 
 SvxBmpMask::SvxBmpMask( SfxBindings *pBindinx,
                         SfxChildWindow *pCW,
@@ -534,7 +534,7 @@ SvxBmpMask::SvxBmpMask( SfxBindings *pBindinx,
     aCbxTrans.SetAccessibleRelationMemberOf( &aGrpQ );
 }
 
-//-------------------------------------------------------------------------
+
 
 SvxBmpMask::~SvxBmpMask()
 {
@@ -546,7 +546,7 @@ SvxBmpMask::~SvxBmpMask()
     delete pData;
 }
 
-//-------------------------------------------------------------------------
+
 
 /** is called by a MaskSet when it is selected */
 void SvxBmpMask::onSelect( MaskSet* pSet )
@@ -565,7 +565,7 @@ void SvxBmpMask::onSelect( MaskSet* pSet )
         pQSet4->SelectItem( 0 );
 }
 
-//-------------------------------------------------------------------------
+
 
 bool SvxBmpMask::Close()
 {
@@ -575,14 +575,14 @@ bool SvxBmpMask::Close()
     return SfxDockingWindow::Close();
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SvxBmpMask::NeedsColorList() const
 {
     return ( aLbColor1.GetEntryCount() == 0 );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SvxBmpMask::SetColorList( const XColorListRef &pList )
 {
@@ -613,7 +613,7 @@ void SvxBmpMask::SetColorList( const XColorListRef &pList )
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 void SvxBmpMask::SetColor( const Color& rColor )
 {
@@ -621,7 +621,7 @@ void SvxBmpMask::SetColor( const Color& rColor )
     pCtlPipette->SetColor( aPipetteColor );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SvxBmpMask::PipetteClicked()
 {
@@ -654,7 +654,7 @@ void SvxBmpMask::PipetteClicked()
     pData->PipetteHdl( &aTbxPipette );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SvxBmpMask::SetExecState( sal_Bool bEnable )
 {
@@ -666,7 +666,7 @@ void SvxBmpMask::SetExecState( sal_Bool bEnable )
         aBtnExec.Disable();
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_uInt16 SvxBmpMask::InitColorArrays( Color* pSrcCols, Color* pDstCols, sal_uIntPtr* pTols )
 {
@@ -703,7 +703,7 @@ sal_uInt16 SvxBmpMask::InitColorArrays( Color* pSrcCols, Color* pDstCols, sal_uI
     return nCount;
 }
 
-//-------------------------------------------------------------------------
+
 
 Bitmap SvxBmpMask::ImpMask( const Bitmap& rBitmap )
 {
@@ -720,7 +720,7 @@ Bitmap SvxBmpMask::ImpMask( const Bitmap& rBitmap )
     return aBitmap;
 }
 
-//-------------------------------------------------------------------------
+
 
 BitmapEx SvxBmpMask::ImpMaskTransparent( const BitmapEx& rBitmapEx, const Color& rColor, const long nTol )
 {
@@ -738,7 +738,7 @@ BitmapEx SvxBmpMask::ImpMaskTransparent( const BitmapEx& rBitmapEx, const Color&
     return aBmpEx;
 }
 
-//-------------------------------------------------------------------------
+
 
 Animation SvxBmpMask::ImpMask( const Animation& rAnimation )
 {
@@ -759,7 +759,7 @@ Animation SvxBmpMask::ImpMask( const Animation& rAnimation )
     return aAnimation;
 }
 
-//-------------------------------------------------------------------------
+
 
 GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
 {
@@ -1026,7 +1026,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
     return aMtf;
 }
 
-//-------------------------------------------------------------------------
+
 
 BitmapEx SvxBmpMask::ImpReplaceTransparency( const BitmapEx& rBmpEx, const Color& rColor )
 {
@@ -1040,7 +1040,7 @@ BitmapEx SvxBmpMask::ImpReplaceTransparency( const BitmapEx& rBmpEx, const Color
         return rBmpEx;
 }
 
-//-------------------------------------------------------------------------
+
 
 Animation SvxBmpMask::ImpReplaceTransparency( const Animation& rAnim, const Color& rColor )
 {
@@ -1057,7 +1057,7 @@ Animation SvxBmpMask::ImpReplaceTransparency( const Animation& rAnim, const Colo
     return aAnimation;
 }
 
-//-------------------------------------------------------------------------
+
 
 GDIMetaFile SvxBmpMask::ImpReplaceTransparency( const GDIMetaFile& rMtf, const Color& rColor )
 {
@@ -1091,7 +1091,7 @@ GDIMetaFile SvxBmpMask::ImpReplaceTransparency( const GDIMetaFile& rMtf, const C
     return aMtf;
 }
 
-//-------------------------------------------------------------------------
+
 
 Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
 {
@@ -1197,7 +1197,7 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
     return aGraphic;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SvxBmpMask::IsEyedropping() const
 {

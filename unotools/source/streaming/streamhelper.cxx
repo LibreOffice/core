@@ -22,19 +22,19 @@
 namespace utl
 {
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OInputStreamHelper::acquire() throw ()
 {
     InputStreamHelper_Base::acquire();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OInputStreamHelper::release() throw ()
 {
     InputStreamHelper_Base::release();
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OInputStreamHelper::readBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
     throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException)
 {
@@ -86,7 +86,7 @@ sal_Int64 SAL_CALL OInputStreamHelper::getLength(  ) throw(::com::sun::star::io:
     return aStat.nSize;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OInputStreamHelper::readSomeBytes(staruno::Sequence< sal_Int8 >& aData,
                                                      sal_Int32 nMaxBytesToRead)
     throw (stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException)
@@ -95,7 +95,7 @@ sal_Int32 SAL_CALL OInputStreamHelper::readSomeBytes(staruno::Sequence< sal_Int8
     return readBytes(aData, nMaxBytesToRead);
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OInputStreamHelper::skipBytes(sal_Int32 nBytesToSkip)
     throw (stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException)
 {
@@ -109,7 +109,7 @@ void SAL_CALL OInputStreamHelper::skipBytes(sal_Int32 nBytesToSkip)
     m_nActPos += nBytesToSkip;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OInputStreamHelper::available()
     throw (stario::NotConnectedException, stario::IOException, staruno::RuntimeException)
 {
@@ -120,7 +120,7 @@ sal_Int32 SAL_CALL OInputStreamHelper::available()
     return m_nAvailable;
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OInputStreamHelper::closeInput()
     throw (stario::NotConnectedException, stario::IOException, staruno::RuntimeException)
 {

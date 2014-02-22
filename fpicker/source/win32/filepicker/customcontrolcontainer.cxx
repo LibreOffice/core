@@ -22,9 +22,9 @@
 #include <algorithm>
 #include <functional>
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 namespace /* private */
 {
@@ -56,18 +56,18 @@ namespace /* private */
     };
 }
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 CCustomControlContainer::~CCustomControlContainer()
 {
     RemoveAllControls();
 }
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 void SAL_CALL CCustomControlContainer::Align()
 {
@@ -77,9 +77,9 @@ void SAL_CALL CCustomControlContainer::Align()
         AlignCustomControl);
 }
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 void SAL_CALL CCustomControlContainer::SetFont(HFONT hFont)
 {
@@ -91,18 +91,18 @@ void SAL_CALL CCustomControlContainer::SetFont(HFONT hFont)
         aSetFontHelper);
 }
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 void SAL_CALL CCustomControlContainer::AddControl(CCustomControl* aCustomControl)
 {
     m_ControlContainer.push_back(aCustomControl);
 }
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 void SAL_CALL CCustomControlContainer::RemoveControl(CCustomControl* aCustomControl)
 {
@@ -118,9 +118,9 @@ void SAL_CALL CCustomControlContainer::RemoveControl(CCustomControl* aCustomCont
     }
 }
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 void SAL_CALL CCustomControlContainer::RemoveAllControls()
 {

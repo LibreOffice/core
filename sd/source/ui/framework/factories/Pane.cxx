@@ -221,7 +221,7 @@ sal_Int64 SAL_CALL Pane::getSomething (const Sequence<sal_Int8>& rId)
 
 
 
-//-----------------------------------------------------------------------------
+
 
 Reference<rendering::XCanvas> Pane::CreateCanvas (void)
     throw (RuntimeException)

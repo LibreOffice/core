@@ -30,21 +30,21 @@ namespace rptui
 {
 using namespace ::com::sun::star;
 
-//----------------------------------------------------------------------------
+
 
 DlgEdFactory::DlgEdFactory()
 {
     SdrObjFactory::InsertMakeObjectHdl( LINK(this, DlgEdFactory, MakeObject) );
 }
 
-//----------------------------------------------------------------------------
+
 
 DlgEdFactory::~DlgEdFactory()
 {
     SdrObjFactory::RemoveMakeObjectHdl( LINK(this, DlgEdFactory, MakeObject) );
 }
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
 {
@@ -98,7 +98,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
 
     return 0;
 }
-//----------------------------------------------------------------------------
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

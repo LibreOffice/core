@@ -394,7 +394,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class getBytes
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_random::createPool);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_random::destroyPool);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_random::addBytes);

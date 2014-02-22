@@ -142,9 +142,9 @@ static const char* pStringIds[] = {
     "Regular",          "Roman",            "Semibold"
 };
 
-// --------------------------------------------------------------------
 
-// --------------------------------------------------------------------
+
+
 
 // TOP DICT keywords (also covers PRIV DICT keywords)
 static const char* pDictOps[] = {
@@ -158,7 +158,7 @@ static const char* pDictOps[] = {
     "shortint",         "longint",              "BCD",              NULL
 };
 
-// --------------------------------------------------------------------
+
 
 // TOP DICT escapes (also covers PRIV DICT escapes)
 static const char* pDictEscs[] = {
@@ -174,7 +174,7 @@ static const char* pDictEscs[] = {
     "nFDArray",             "nFDSelect",        "sFontName"
 };
 
-// --------------------------------------------------------------------
+
 
 static const char* pType1Ops[] = {
     NULL,               "2hstem",           NULL,               "2vstem",
@@ -187,7 +187,7 @@ static const char* pType1Ops[] = {
     NULL,               NULL,               "4vhcurveto",       "4hvcurveto"
 };
 
-// --------------------------------------------------------------------
+
 
 static const char* pT1EscOps[] = {
     "0dotsection",      "6vstem3",          "6hstem3",          NULL,
@@ -201,7 +201,7 @@ static const char* pT1EscOps[] = {
     NULL,               "2setcurrentpoint"
 };
 
-// --------------------------------------------------------------------
+
 
 struct TYPE1OP
 {
@@ -222,7 +222,7 @@ struct TYPE1OP
     };
 };
 
-// --------------------------------------------------------------------
+
 
 static const char* pType2Ops[] = {
     NULL,           "hhstem",       NULL,           "vvstem",
@@ -235,7 +235,7 @@ static const char* pType2Ops[] = {
     ".shortint",    "Gcallgsubr",   ".vhcurveto",   ".hvcurveto"
 };
 
-// --------------------------------------------------------------------
+
 
 static const char* pT2EscOps[] = {
     NULL,       NULL,       NULL,       "2and",
@@ -250,7 +250,7 @@ static const char* pT2EscOps[] = {
     "9hflex1",  "fflex1"
 };
 
-// --------------------------------------------------------------------
+
 
 struct TYPE2OP
 {
@@ -350,7 +350,7 @@ public:
                 GlyphWidth* pGlyphWidths, int nGlyphCount, FontSubsetInfo& ) = 0;
 };
 
-// --------------------------------------------------------------------
+
 
 SubsetterContext::~SubsetterContext( void)
 {}
@@ -463,7 +463,7 @@ private:
     ValType maCharWidth;
 };
 
-// --------------------------------------------------------------------
+
 
 CffSubsetterContext::CffSubsetterContext( const U8* pBasePtr, int nBaseLen)
 :   mpBasePtr( pBasePtr)
@@ -478,14 +478,14 @@ CffSubsetterContext::CffSubsetterContext( const U8* pBasePtr, int nBaseLen)
     mpCffLocal = &maCffLocal[0];
 }
 
-// --------------------------------------------------------------------
+
 
 CffSubsetterContext::~CffSubsetterContext( void)
 {
     // TODO: delete[] maCffLocal;
 }
 
-// --------------------------------------------------------------------
+
 
 inline int CffSubsetterContext::popInt( void)
 {
@@ -495,7 +495,7 @@ inline int CffSubsetterContext::popInt( void)
     return nInt;
 }
 
-// --------------------------------------------------------------------
+
 
 inline int CffSubsetterContext::peekInt( void) const
 {
@@ -505,7 +505,7 @@ inline int CffSubsetterContext::peekInt( void) const
     return nInt;
 }
 
-// --------------------------------------------------------------------
+
 
 inline int CffSubsetterContext::getInt( int nIndex) const
 {
@@ -515,7 +515,7 @@ inline int CffSubsetterContext::getInt( int nIndex) const
     return nInt;
 }
 
-// --------------------------------------------------------------------
+
 
 inline void CffSubsetterContext::updateWidth( bool bUseFirstVal)
 {
@@ -535,7 +535,7 @@ inline void CffSubsetterContext::updateWidth( bool bUseFirstVal)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void CffSubsetterContext::addHints( bool bVerticalHints)
 {
@@ -568,7 +568,7 @@ void CffSubsetterContext::addHints( bool bVerticalHints)
     mnStackIdx = 0;
 }
 
-// --------------------------------------------------------------------
+
 
 void CffSubsetterContext::setCharStringType( int nVal)
 {
@@ -579,7 +579,7 @@ void CffSubsetterContext::setCharStringType( int nVal)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void CffSubsetterContext::readDictOp( void)
 {
@@ -718,7 +718,7 @@ void CffSubsetterContext::readDictOp( void)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void CffSubsetterContext::read2push()
 {
@@ -752,7 +752,7 @@ void CffSubsetterContext::read2push()
     push( aVal);
 }
 
-// --------------------------------------------------------------------
+
 
 void CffSubsetterContext::writeType1Val( ValType aVal)
 {
@@ -789,7 +789,7 @@ void CffSubsetterContext::writeType1Val( ValType aVal)
     mpWritePtr = pOut;
 }
 
-// --------------------------------------------------------------------
+
 
 inline void CffSubsetterContext::pop2write( void)
 {
@@ -797,14 +797,14 @@ inline void CffSubsetterContext::pop2write( void)
     writeType1Val( aVal);
 }
 
-// --------------------------------------------------------------------
+
 
 inline void CffSubsetterContext::writeTypeOp( int nTypeOp)
 {
     *(mpWritePtr++) = static_cast<U8>(nTypeOp);
 }
 
-// --------------------------------------------------------------------
+
 
 inline void CffSubsetterContext::writeTypeEsc( int nTypeEsc)
 {
@@ -812,7 +812,7 @@ inline void CffSubsetterContext::writeTypeEsc( int nTypeEsc)
     *(mpWritePtr++) = static_cast<U8>(nTypeEsc);
 }
 
-// --------------------------------------------------------------------
+
 
 void CffSubsetterContext::pop2MultiWrite( int nArgsPerTypo, int nTypeOp, int nTypeXor)
 {
@@ -828,7 +828,7 @@ void CffSubsetterContext::pop2MultiWrite( int nArgsPerTypo, int nTypeOp, int nTy
     clear();
 }
 
-// --------------------------------------------------------------------
+
 
 void CffSubsetterContext::popAll2Write( int nTypeOp)
 {
@@ -841,7 +841,7 @@ void CffSubsetterContext::popAll2Write( int nTypeOp)
     writeTypeOp( nTypeOp);
 }
 
-// --------------------------------------------------------------------
+
 
 void CffSubsetterContext::writeCurveTo( int nStackPos,
     int nIX1, int nIY1, int nIX2, int nIY2, int nIX3, int nIY3)
@@ -866,7 +866,7 @@ void CffSubsetterContext::writeCurveTo( int nStackPos,
     writeTypeOp( TYPE1OP::RCURVETO );
 }
 
-// --------------------------------------------------------------------
+
 
 void CffSubsetterContext::convertOneTypeOp( void)
 {
@@ -1093,7 +1093,7 @@ void CffSubsetterContext::convertOneTypeOp( void)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void CffSubsetterContext::convertOneTypeEsc( void)
 {
@@ -1276,7 +1276,7 @@ void CffSubsetterContext::convertOneTypeEsc( void)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void CffSubsetterContext::callType2Subr( bool bGlobal, int nSubrNumber)
 {
@@ -1298,7 +1298,7 @@ void CffSubsetterContext::callType2Subr( bool bGlobal, int nSubrNumber)
     mpReadEnd = pOldReadEnd;
 }
 
-// --------------------------------------------------------------------
+
 
 static const int MAX_T1OPS_SIZE = 81920; // TODO: use dynamic value
 
@@ -1375,7 +1375,7 @@ if( mbSawError) {
     return nType1Len;
 }
 
-// --------------------------------------------------------------------
+
 
 RealType CffSubsetterContext::readRealVal()
 {
@@ -1447,7 +1447,7 @@ RealType CffSubsetterContext::readRealVal()
     return fReal;
 }
 
-// --------------------------------------------------------------------
+
 
 // prepare to access an element inside a CFF/CID index table
 int CffSubsetterContext::seekIndexData( int nIndexBase, int nDataIndex)
@@ -1488,7 +1488,7 @@ int CffSubsetterContext::seekIndexData( int nIndexBase, int nDataIndex)
     return (nOfs2 - nOfs1);
 }
 
-// --------------------------------------------------------------------
+
 
 // skip over a CFF/CID index table
 void CffSubsetterContext::seekIndexEnd( int nIndexBase)
@@ -1543,7 +1543,7 @@ CffLocal::CffLocal( void)
     maFamilyOtherBlues.clear();
 }
 
-// --------------------------------------------------------------------
+
 
 CffGlobal::CffGlobal( void)
 :   mnNameIdxBase( 0)
@@ -1569,7 +1569,7 @@ CffGlobal::CffGlobal( void)
     // TODO; maFontMatrix.clear();
 }
 
-// --------------------------------------------------------------------
+
 
 void CffSubsetterContext::initialCffRead( void)
 {
@@ -1672,7 +1672,7 @@ void CffSubsetterContext::initialCffRead( void)
     // ignore the Notices info
 }
 
-// --------------------------------------------------------------------
+
 
 // get a cstring from a StringID
 const char* CffSubsetterContext::getString( int nStringID)
@@ -1706,7 +1706,7 @@ const char* CffSubsetterContext::getString( int nStringID)
     return aNameBuf;
 }
 
-// --------------------------------------------------------------------
+
 
 // access a CID's FDSelect table
 int CffSubsetterContext::getFDSelect( int nGlyphIndex) const
@@ -1752,7 +1752,7 @@ int CffSubsetterContext::getFDSelect( int nGlyphIndex) const
     return -1;
 }
 
-// --------------------------------------------------------------------
+
 
 int CffSubsetterContext::getGlyphSID( int nGlyphIndex) const
 {
@@ -1801,7 +1801,7 @@ int CffSubsetterContext::getGlyphSID( int nGlyphIndex) const
     return nSID;
 }
 
-// --------------------------------------------------------------------
+
 
 // NOTE: the result becomes invalid with the next call to this method
 const char* CffSubsetterContext::getGlyphName( int nGlyphIndex)
@@ -1839,7 +1839,7 @@ const char* CffSubsetterContext::getGlyphName( int nGlyphIndex)
      return pGlyphName;
 }
 
-// --------------------------------------------------------------------
+
 
 class Type1Emitter
 {
@@ -1868,7 +1868,7 @@ public:
     int         mnHexLineCol;
 };
 
-// --------------------------------------------------------------------
+
 
 Type1Emitter::Type1Emitter( FILE* pOutFile, bool bPfbSubset)
 :   mpFileOut( pOutFile)
@@ -1881,7 +1881,7 @@ Type1Emitter::Type1Emitter( FILE* pOutFile, bool bPfbSubset)
     maSubsetName[0] = '\0';
 }
 
-// --------------------------------------------------------------------
+
 
 Type1Emitter::~Type1Emitter( void)
 {
@@ -1892,7 +1892,7 @@ Type1Emitter::~Type1Emitter( void)
     mpFileOut = NULL;
 }
 
-// --------------------------------------------------------------------
+
 
 void Type1Emitter::setSubsetName( const char* pSubsetName)
 {
@@ -1902,7 +1902,7 @@ void Type1Emitter::setSubsetName( const char* pSubsetName)
     maSubsetName[sizeof(maSubsetName)-1] = '\0';
 }
 
-// --------------------------------------------------------------------
+
 
 int Type1Emitter::tellPos( void) const
 {
@@ -1910,7 +1910,7 @@ int Type1Emitter::tellPos( void) const
     return nTellPos;
 }
 
-// --------------------------------------------------------------------
+
 
 size_t Type1Emitter::updateLen( int nTellPos, size_t nLength)
 {
@@ -1928,14 +1928,14 @@ size_t Type1Emitter::updateLen( int nTellPos, size_t nLength)
     return nWrote;
 }
 
-// --------------------------------------------------------------------
+
 
 inline size_t Type1Emitter::emitRawData(const char* pData, size_t nLength) const
 {
     return fwrite( pData, 1, nLength, mpFileOut);
 }
 
-// --------------------------------------------------------------------
+
 
 inline void Type1Emitter::emitAllRaw( void)
 {
@@ -1946,7 +1946,7 @@ inline void Type1Emitter::emitAllRaw( void)
     mpPtr = maBuffer;
 }
 
-// --------------------------------------------------------------------
+
 
 inline void Type1Emitter::emitAllHex( void)
 {
@@ -1974,7 +1974,7 @@ inline void Type1Emitter::emitAllHex( void)
     mpPtr = maBuffer;
 }
 
-// --------------------------------------------------------------------
+
 
 void Type1Emitter::emitAllCrypted( void)
 {
@@ -1991,7 +1991,7 @@ void Type1Emitter::emitAllCrypted( void)
         emitAllHex();
 }
 
-// --------------------------------------------------------------------
+
 
 // #i110387# quick-and-dirty double->ascii conversion
 // needed because sprintf/ecvt/etc. alone are too localized (LC_NUMERIC)
@@ -2002,7 +2002,7 @@ inline int dbl2str( char* pOut, double fVal, int nPrecision=6)
     return nLen;
 }
 
-// --------------------------------------------------------------------
+
 
 void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
     const ValVector& rVector)
@@ -2028,7 +2028,7 @@ void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
     mpPtr += sprintf( mpPtr, "%s", pLineTail);
 }
 
-// --------------------------------------------------------------------
+
 
 bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     const sal_GlyphId* pReqGlyphIds, const U8* pReqEncoding,

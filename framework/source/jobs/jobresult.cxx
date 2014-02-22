@@ -44,7 +44,7 @@ JobResult::JobResult()
     m_eParts = E_NOPART;
 }
 
-//________________________________
+
 /**
     @short      special ctor
     @descr      It initialize this new instance with a pure job execution result
@@ -129,7 +129,7 @@ JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
     }
 }
 
-//________________________________
+
 /**
     @short      copy dtor
     @descr      -
@@ -144,7 +144,7 @@ JobResult::JobResult( const JobResult& rCopy )
     m_aDispatchResult = rCopy.m_aDispatchResult ;
 }
 
-//________________________________
+
 /**
     @short      standard dtor
     @descr      Free all internally used resources at the end of living.
@@ -154,7 +154,7 @@ JobResult::~JobResult()
     // Nothing really to do here.
 }
 
-//________________________________
+
 /**
     @short      =operator
     @descr      Must be implemented to overwrite this instance with another one.
@@ -175,7 +175,7 @@ void JobResult::operator=( const JobResult& rCopy )
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short      checks for existing parts of the analyzed result
     @descr      The internal flag mask was set after analyzing of the pure result.
@@ -196,7 +196,7 @@ sal_Bool JobResult::existPart( sal_uInt32 eParts ) const
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short      provides access to our internal members
     @descr      The return value will be valid only in case a call of
@@ -213,7 +213,7 @@ css::uno::Sequence< css::beans::NamedValue > JobResult::getArguments() const
     /* } SAFE */
 }
 
-//________________________________
+
 
 css::frame::DispatchResultEvent JobResult::getDispatchResult() const
 {

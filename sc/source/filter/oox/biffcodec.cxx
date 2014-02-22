@@ -148,7 +148,7 @@ sal_Int32 lclGetRcfOffset( sal_Int64 nStreamPos )
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 BiffDecoder_RCF::BiffDecoder_RCF( const BiffDecoder_RCF& rDecoder ) :
     BiffDecoderBase(),  // must be called to prevent compiler warning
@@ -231,7 +231,7 @@ void BiffDecoder_RCF::implDecode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcD
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 BiffCodecHelper::BiffCodecHelper( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )

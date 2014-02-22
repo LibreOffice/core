@@ -32,14 +32,14 @@ using namespace connectivity::file;
 
 typedef connectivity::file::OConnection  OConnection_B;
 
-//------------------------------------------------------------------------------
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 
-// --------------------------------------------------------------------------------
+
 OFlatConnection::OFlatConnection(ODriver*   _pDriver) : OConnection(_pDriver)
     ,m_nMaxRowsToScan(50)
     ,m_bHeaderLine(sal_True)
@@ -49,16 +49,16 @@ OFlatConnection::OFlatConnection(ODriver*   _pDriver) : OConnection(_pDriver)
     ,m_cThousandDelimiter('.')
 {
 }
-//-----------------------------------------------------------------------------
+
 OFlatConnection::~OFlatConnection()
 {
 }
 
 // XServiceInfo
-// --------------------------------------------------------------------------------
+
 IMPLEMENT_SERVICE_INFO(OFlatConnection, "com.sun.star.sdbc.drivers.flat.Connection", "com.sun.star.sdbc.Connection")
 
-//-----------------------------------------------------------------------------
+
 void OFlatConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     osl_atomic_increment( &m_refCount );
@@ -103,7 +103,7 @@ void OFlatConnection::construct(const OUString& url,const Sequence< PropertyValu
     OConnection::construct(url,info);
     m_bShowDeleted = sal_True; // we do not supported rows for this type
 }
-// --------------------------------------------------------------------------------
+
 Reference< XDatabaseMetaData > SAL_CALL OFlatConnection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -119,7 +119,7 @@ Reference< XDatabaseMetaData > SAL_CALL OFlatConnection::getMetaData(  ) throw(S
 
     return xMetaData;
 }
-//------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< XTablesSupplier > OFlatConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -132,7 +132,7 @@ Reference< XDatabaseMetaData > SAL_CALL OFlatConnection::getMetaData(  ) throw(S
     }
     return xTab;
 }
-// --------------------------------------------------------------------------------
+
 Reference< XStatement > SAL_CALL OFlatConnection::createStatement(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -144,7 +144,7 @@ Reference< XStatement > SAL_CALL OFlatConnection::createStatement(  ) throw(SQLE
     m_aStatements.push_back(WeakReferenceHelper(*pStmt));
     return xStmt;
 }
-// --------------------------------------------------------------------------------
+
 Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareStatement( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -158,7 +158,7 @@ Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareStatement( cons
     m_aStatements.push_back(WeakReferenceHelper(*pStmt));
     return xStmt;
 }
-// --------------------------------------------------------------------------------
+
 Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareCall( const OUString& /*sql*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );

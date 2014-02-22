@@ -73,7 +73,7 @@ public:
 
 }; // class UnoViewContainerTest
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(UnoViewContainerTest, "UnoViewContainerTest");
 } // namespace
 

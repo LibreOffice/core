@@ -27,7 +27,7 @@
 
 #include "dialog.hrc"
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_INLINE_START( SfxPasswordDialog, EditModifyHdl, Edit *, pEdit )
 {
@@ -61,7 +61,7 @@ IMPL_LINK_INLINE_START( SfxPasswordDialog, EditModifyHdl, Edit *, pEdit )
 }
 IMPL_LINK_INLINE_END(SfxPasswordDialog, EditModifyHdl, Edit *, pEdit)
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl)
 {
@@ -124,7 +124,7 @@ SfxPasswordDialog::SfxPasswordDialog(Window* pParent, const OUString* pGroupText
     SetPasswdText();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxPasswordDialog::SetPasswdText( )
 {
@@ -139,7 +139,7 @@ void SfxPasswordDialog::SetPasswdText( )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxPasswordDialog::SetMinLen( sal_uInt16 nLen )
 {
@@ -153,7 +153,7 @@ void SfxPasswordDialog::ShowMinLengthText(bool bShow)
     mpMinLengthFT->Show(bShow);
 }
 
-// -----------------------------------------------------------------------
+
 
 short SfxPasswordDialog::Execute()
 {

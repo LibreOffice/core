@@ -48,14 +48,14 @@
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 
-// --
+
 #include <comphelper/processfactory.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svx/xoutbmp.hxx>
 
-// --
+
 
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
@@ -89,7 +89,7 @@ using namespace com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 
 
-// -----------------------------------------------------------------------------
+
 
 class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper1< com::sun::star::task::XInteractionHandler >
 {
@@ -129,22 +129,22 @@ void SdGRFFilter_ImplInteractionHdl::handle( const com::sun::star::uno::Referenc
 }
 
 
-// ---------------
+
 // - SdPPTFilter -
-// ---------------
+
 
 SdGRFFilter::SdGRFFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell ) :
     SdFilter( rMedium, rDocShell, sal_True )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 SdGRFFilter::~SdGRFFilter()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdGRFFilter::HandleGraphicFilterError( sal_uInt16 nFilterError, sal_uLong nStreamError )
 {
@@ -188,7 +188,7 @@ void SdGRFFilter::HandleGraphicFilterError( sal_uInt16 nFilterError, sal_uLong n
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SdGRFFilter::Import()
 {
@@ -247,7 +247,7 @@ sal_Bool SdGRFFilter::Import()
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SdGRFFilter::Export()
 {

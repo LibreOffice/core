@@ -1715,9 +1715,9 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     return bReturn;
 }
 
-// -----------------------------------------------------------------------
+
 // KDESalFrame implementation
-// -----------------------------------------------------------------------
+
 
 KDESalFrame::KDESalFrame( SalFrame* pParent, sal_uLong nStyle ) :
     X11SalFrame( pParent, nStyle )
@@ -2089,9 +2089,9 @@ KDESalFrame::GraphicsHolder::~GraphicsHolder()
     delete pGraphics;
 }
 
-// -----------------------------------------------------------------------
+
 // KDESalInstance implementation
-// -----------------------------------------------------------------------
+
 
 SalFrame *
 KDESalInstance::CreateFrame( SalFrame *pParent, sal_uLong nStyle )
@@ -2106,9 +2106,9 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDESalInstance::createFilePicker(
                 new UnxFilePicker( xMSF ) );
 }
 
-// -----------------------------------------------------------------------
+
 // KDESalData pieces
-// -----------------------------------------------------------------------
+
 
 // Create the widget painter so we have some control over
 // the destruction sequence, so Qt doesn't die in action.

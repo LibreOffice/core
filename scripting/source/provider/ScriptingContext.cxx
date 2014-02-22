@@ -63,18 +63,18 @@ ScriptingContext::~ScriptingContext()
 {
     OSL_TRACE( "< ScriptingContext dtor called >" );
 }
-// -----------------------------------------------------------------------------
+
 // OPropertySetHelper
-// -----------------------------------------------------------------------------
+
 
 ::cppu::IPropertyArrayHelper& ScriptingContext::getInfoHelper(  )
 {
     return *getArrayHelper();
 }
 
-// -----------------------------------------------------------------------------
+
 // OPropertyArrayUsageHelper
-// -----------------------------------------------------------------------------
+
 
 ::cppu::IPropertyArrayHelper* ScriptingContext::createArrayHelper(  ) const
 {
@@ -82,9 +82,9 @@ ScriptingContext::~ScriptingContext()
     describeProperties( aProps );
     return new ::cppu::OPropertyArrayHelper( aProps );
 }
-// -----------------------------------------------------------------------------
+
 // XPropertySet
-// -----------------------------------------------------------------------------
+
 
 Reference< beans::XPropertySetInfo > ScriptingContext::getPropertySetInfo(  ) throw (RuntimeException)
 {
@@ -92,7 +92,7 @@ Reference< beans::XPropertySetInfo > ScriptingContext::getPropertySetInfo(  ) th
     return xInfo;
 }
 // -----------------------------------------------------------------------------// XTypeProvider
-// -----------------------------------------------------------------------------
+
 IMPLEMENT_GET_IMPLEMENTATION_ID( ScriptingContext )
 
 css::uno::Sequence< css::uno::Type > SAL_CALL ScriptingContext::getTypes(  ) throw (css::uno::RuntimeException)

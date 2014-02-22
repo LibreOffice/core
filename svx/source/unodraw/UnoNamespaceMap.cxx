@@ -115,7 +115,7 @@ namespace svx
 
 using namespace ::svx;
 
-// -------------
+
 
 NamespaceIteratorImpl::NamespaceIteratorImpl( sal_uInt16* pWhichIds, SfxItemPool* pPool )
 {
@@ -182,7 +182,7 @@ sal_Bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
     return false;
 }
 
-// -------------
+
 
 NamespaceMap::NamespaceMap( sal_uInt16* pWhichIds, SfxItemPool* pPool )
 : mpWhichIds( pWhichIds ), mpPool( pPool )

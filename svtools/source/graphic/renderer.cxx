@@ -47,14 +47,14 @@ GraphicRendererVCL::GraphicRendererVCL() :
 {
 }
 
-// ------------------------------------------------------------------------------
+
 
 GraphicRendererVCL::~GraphicRendererVCL()
     throw()
 {
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Any SAL_CALL GraphicRendererVCL::queryAggregation( const uno::Type & rType )
     throw( uno::RuntimeException )
@@ -79,7 +79,7 @@ uno::Any SAL_CALL GraphicRendererVCL::queryAggregation( const uno::Type & rType 
     return aAny;
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Any SAL_CALL GraphicRendererVCL::queryInterface( const uno::Type & rType )
     throw( uno::RuntimeException )
@@ -87,7 +87,7 @@ uno::Any SAL_CALL GraphicRendererVCL::queryInterface( const uno::Type & rType )
     return OWeakAggObject::queryInterface( rType );
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL GraphicRendererVCL::acquire()
     throw()
@@ -95,7 +95,7 @@ void SAL_CALL GraphicRendererVCL::acquire()
     OWeakAggObject::acquire();
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL GraphicRendererVCL::release()
     throw()
@@ -103,7 +103,7 @@ void SAL_CALL GraphicRendererVCL::release()
     OWeakAggObject::release();
 }
 
-// ------------------------------------------------------------------------------
+
 
 OUString SAL_CALL GraphicRendererVCL::getImplementationName()
     throw( uno::RuntimeException )
@@ -117,7 +117,7 @@ sal_Bool SAL_CALL GraphicRendererVCL::supportsService( const OUString& ServiceNa
     return cppu::supportsService(this, ServiceName);
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Sequence< OUString > SAL_CALL GraphicRendererVCL::getSupportedServiceNames()
     throw( uno::RuntimeException )
@@ -127,7 +127,7 @@ uno::Sequence< OUString > SAL_CALL GraphicRendererVCL::getSupportedServiceNames(
     return aSeq;
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Sequence< uno::Type > SAL_CALL GraphicRendererVCL::getTypes()
     throw( uno::RuntimeException )
@@ -157,7 +157,7 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicRendererVCL::getImplementationId()
     return theGraphicRendererVCLUnoTunnelId::get().getSeq();
 }
 
-// ------------------------------------------------------------------------------
+
 
 ::comphelper::PropertySetInfo* GraphicRendererVCL::createPropertySetInfo()
 {
@@ -178,7 +178,7 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicRendererVCL::getImplementationId()
     return pRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 void GraphicRendererVCL::_setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const uno::Any* pValues )
     throw( beans::UnknownPropertyException,
@@ -233,7 +233,7 @@ void GraphicRendererVCL::_setPropertyValues( const comphelper::PropertyMapEntry*
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 void GraphicRendererVCL::_getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, uno::Any* pValues )
     throw( beans::UnknownPropertyException, lang::WrappedTargetException )
@@ -272,7 +272,7 @@ void GraphicRendererVCL::_getPropertyValues( const comphelper::PropertyMapEntry*
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL GraphicRendererVCL::render( const uno::Reference< graphic::XGraphic >& rxGraphic )
     throw (uno::RuntimeException)

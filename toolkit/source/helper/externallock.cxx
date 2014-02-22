@@ -21,14 +21,14 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-// -----------------------------------------------------------------------------
+
 //  class VCLExternalSolarLock
-// -----------------------------------------------------------------------------
+
 void VCLExternalSolarLock::acquire()
 {
     Application::GetSolarMutex().acquire();
 }
-// -----------------------------------------------------------------------------
+
 void VCLExternalSolarLock::release()
 {
     Application::GetSolarMutex().release();

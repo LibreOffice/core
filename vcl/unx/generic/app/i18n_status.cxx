@@ -75,7 +75,7 @@ void StatusWindow::setPosition( SalFrame* )
 {
 }
 
-// --------------------------------------------------------------------------
+
 
 namespace vcl {
 
@@ -301,7 +301,7 @@ OUString XIMStatusWindow::getText() const
     return m_aStatusText.GetText();
 }
 
-// --------------------------------------------------------------------------
+
 
 namespace vcl {
 
@@ -470,7 +470,7 @@ void IIIMPStatusWindow::GetFocus()
     }
 }
 
-// --------------------------------------------------------------------------
+
 
 IMPL_LINK( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn )
 {
@@ -516,14 +516,14 @@ I18NStatus& I18NStatus::get()
     return *pInstance;
 }
 
-// --------------------------------------------------------------------------
+
 
 bool I18NStatus::exists()
 {
     return pInstance != NULL;
 }
 
-// --------------------------------------------------------------------------
+
 
 void I18NStatus::free()
 {
@@ -531,7 +531,7 @@ void I18NStatus::free()
         delete pInstance, pInstance = NULL;
 }
 
-// --------------------------------------------------------------------------
+
 
 I18NStatus::I18NStatus() :
         m_pParent( NULL ),
@@ -539,7 +539,7 @@ I18NStatus::I18NStatus() :
 {
 }
 
-// --------------------------------------------------------------------------
+
 
 I18NStatus::~I18NStatus()
 {
@@ -549,7 +549,7 @@ I18NStatus::~I18NStatus()
         pInstance = NULL;
 }
 
-// --------------------------------------------------------------------------
+
 
 void I18NStatus::setParent( SalFrame* pParent )
 {
@@ -567,7 +567,7 @@ void I18NStatus::setParent( SalFrame* pParent )
     m_pStatusWindow->setPosition( m_pParent );
 }
 
-// --------------------------------------------------------------------------
+
 
 void I18NStatus::show( bool bShow, ShowReason eReason )
 {
@@ -578,7 +578,7 @@ void I18NStatus::show( bool bShow, ShowReason eReason )
     }
 }
 
-// --------------------------------------------------------------------------
+
 
 void I18NStatus::setStatusText( const OUString& rText )
 {
@@ -615,14 +615,14 @@ void I18NStatus::setStatusText( const OUString& rText )
     }
 }
 
-// --------------------------------------------------------------------------
+
 
 void I18NStatus::changeIM( const OUString& rIM )
 {
     m_aCurrentIM = rIM;
 }
 
-// --------------------------------------------------------------------------
+
 
 SalFrame* I18NStatus::getStatusFrame() const
 {

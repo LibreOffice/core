@@ -26,7 +26,7 @@
 #include <comphelper/types.hxx>
 
 
-// -------------------------------------------------------------------------
+
 using namespace connectivity;
 using namespace connectivity::mysql;
 using namespace connectivity::sdbcx;
@@ -36,12 +36,12 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-// -------------------------------------------------------------------------
+
 OMySQLCatalog::OMySQLCatalog(const Reference< XConnection >& _xConnection) : OCatalog(_xConnection)
                 ,m_xConnection(_xConnection)
 {
 }
-// -----------------------------------------------------------------------------
+
 void OMySQLCatalog::refreshObjects(const Sequence< OUString >& _sKindOfObject,TStringVector& _rNames)
 {
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
@@ -50,7 +50,7 @@ void OMySQLCatalog::refreshObjects(const Sequence< OUString >& _sKindOfObject,TS
                                                             _sKindOfObject);
     fillNames(xResult,_rNames);
 }
-// -------------------------------------------------------------------------
+
 void OMySQLCatalog::refreshTables()
 {
     TStringVector aVector;
@@ -70,7 +70,7 @@ void OMySQLCatalog::refreshTables()
     else
         m_pTables = new OTables(m_xMetaData,*this,m_aMutex,aVector);
 }
-// -------------------------------------------------------------------------
+
 void OMySQLCatalog::refreshViews()
 {
     Sequence< OUString > aTypes(1);
@@ -91,11 +91,11 @@ void OMySQLCatalog::refreshViews()
     else
         m_pViews = new OViews(m_xMetaData,*this,m_aMutex,aVector);
 }
-// -------------------------------------------------------------------------
+
 void OMySQLCatalog::refreshGroups()
 {
 }
-// -------------------------------------------------------------------------
+
 void OMySQLCatalog::refreshUsers()
 {
     TStringVector aVector;
@@ -116,7 +116,7 @@ void OMySQLCatalog::refreshUsers()
     else
         m_pUsers = new OUsers(*this,m_aMutex,aVector,m_xConnection,this);
 }
-// -----------------------------------------------------------------------------
+
 Any SAL_CALL OMySQLCatalog::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     if ( rType == ::getCppuType((const Reference<XGroupsSupplier>*)0) )
@@ -125,7 +125,7 @@ Any SAL_CALL OMySQLCatalog::queryInterface( const Type & rType ) throw(RuntimeEx
 
     return OCatalog::queryInterface(rType);
 }
-// -----------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OMySQLCatalog::getTypes(  ) throw(RuntimeException)
 {
     Sequence< Type > aTypes = OCatalog::getTypes();
@@ -143,7 +143,7 @@ Sequence< Type > SAL_CALL OMySQLCatalog::getTypes(  ) throw(RuntimeException)
     const Type* pTypes = aOwnTypes.empty() ? 0 : &aOwnTypes[0];
     return Sequence< Type >(pTypes, aOwnTypes.size());
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

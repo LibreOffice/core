@@ -30,11 +30,11 @@
 using namespace ::com::sun::star;
 
 
-//------------------------------------------------------------------------
+
 //
 // AccessibleHyperlink implementation
 //
-//------------------------------------------------------------------------
+
 
 namespace accessibility
 {
@@ -130,6 +130,6 @@ namespace accessibility
 
 }  // end of namespace accessibility
 
-//------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

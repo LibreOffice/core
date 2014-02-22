@@ -560,7 +560,7 @@ Sequence< Sequence<Reference<XEventListener > > > SAL_CALL OComponent::methodXEv
     return aSeq;
 }
 
-//---------------------------------------------------------------------------------------------
+
 
 Sequence< sal_Int8 > SAL_CALL OComponent::getAttrByte(void) throw( RuntimeException)
 {
@@ -711,7 +711,7 @@ void SAL_CALL OComponent::setAttrXInterface( const Sequence< Reference< XInterfa
     m_seqxInterface= _attrxinterface;
 }
 
-// ----------------------------------------------------------------------------
+
 
 ::sal_Int8 SAL_CALL OComponent::getAByte() throw (RuntimeException)
 {
@@ -852,7 +852,7 @@ void SAL_CALL OComponent::setAXInvocation( const Reference< XInvocation >& _axin
 {
     m_attr_xinvocation = _axinvocation;
 }
-//-----------------------------------------------------------------------------------
+
 void SAL_CALL OComponent::testout_methodByte(sal_Int8& rOut) throw( RuntimeException )
 {
     rOut= m_int8;

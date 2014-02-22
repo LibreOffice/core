@@ -73,7 +73,7 @@ OLEString& ADOS::GetKeyStr()
     return sKeyStr;
 }
 
-// -------------------------------------------------------------------------
+
 sal_Int32 ADOS::MapADOType2Jdbc(DataTypeEnum eType)
 {
     sal_Int32 nType = DataType::VARCHAR;
@@ -126,7 +126,7 @@ sal_Int32 ADOS::MapADOType2Jdbc(DataTypeEnum eType)
     }
     return nType;
 }
-// -------------------------------------------------------------------------
+
 DataTypeEnum ADOS::MapJdbc2ADOType(sal_Int32 _nType,sal_Int32 _nJetEngine)
 {
     switch (_nType)
@@ -159,7 +159,7 @@ DataTypeEnum ADOS::MapJdbc2ADOType(sal_Int32 _nType,sal_Int32 _nJetEngine)
     }
     return adEmpty;
 }
-// -----------------------------------------------------------------------------
+
 const int JET_ENGINETYPE_UNKNOWN    = 0;
 const int JET_ENGINETYPE_JET10      = 1;
 const int JET_ENGINETYPE_JET11      = 2;
@@ -219,7 +219,7 @@ sal_Bool ADOS::isJetEngine(sal_Int32 _nEngineType)
     }
     return bRet;
 }
-// -----------------------------------------------------------------------------
+
 ObjectTypeEnum ADOS::mapObjectType2Ado(sal_Int32 objType)
 {
     ObjectTypeEnum eType = adPermObjTable;
@@ -237,7 +237,7 @@ ObjectTypeEnum ADOS::mapObjectType2Ado(sal_Int32 objType)
     }
     return eType;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 ADOS::mapAdoType2Object(ObjectTypeEnum objType)
 {
     sal_Int32 nType = PrivilegeObject::TABLE;
@@ -261,7 +261,7 @@ sal_Int32 ADOS::mapAdoType2Object(ObjectTypeEnum objType)
 #ifdef DELETE
 #undef DELETE
 #endif
-// -----------------------------------------------------------------------------
+
 sal_Int32 ADOS::mapAdoRights2Sdbc(RightsEnum eRights)
 {
     sal_Int32 nRights = 0;
@@ -282,7 +282,7 @@ sal_Int32 ADOS::mapAdoRights2Sdbc(RightsEnum eRights)
 
     return nRights;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 ADOS::mapRights2Ado(sal_Int32 nRights)
 {
     sal_Int32 eRights = adRightNone;
@@ -304,7 +304,7 @@ sal_Int32 ADOS::mapRights2Ado(sal_Int32 nRights)
 
     return eRights;
 }
-// -----------------------------------------------------------------------------
+
 WpADOField ADOS::getField(ADORecordset* _pRecordSet,sal_Int32 _nColumnIndex) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     if ( !_pRecordSet )
@@ -320,7 +320,7 @@ WpADOField ADOS::getField(ADORecordset* _pRecordSet,sal_Int32 _nColumnIndex) thr
         ::dbtools::throwInvalidIndexException(NULL);
     return aField;
 }
-// -----------------------------------------------------------------------------
+
 
 
 

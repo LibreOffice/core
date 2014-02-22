@@ -42,7 +42,7 @@ using namespace com::sun::star;
 //  put functions here that need exceptions!
 //
 
-// -----------------------------------------------------------------------
+
 
 const uno::Reference< i18n::XBreakIterator >& ScDocument::GetBreakIterator()
 {

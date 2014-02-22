@@ -124,13 +124,13 @@ static void CreateFilterArr()
     theSfxFilterListener::get();
 }
 
-//----------------------------------------------------------------
+
 inline OUString ToUpper_Impl( const OUString &rStr )
 {
     return SvtSysLocale().GetCharClass().uppercase( rStr );
 }
 
-//----------------------------------------------------------------
+
 class SfxFilterContainer_Impl
 {
 public:
@@ -161,21 +161,21 @@ const SfxFilter* SfxFilterContainer::GetAnyFilter( SfxFilterFlags nMust, SfxFilt
     return aMatch.GetAnyFilter( nMust, nDont );
 }
 
-//----------------------------------------------------------------
+
 
 SfxFilterContainer::SfxFilterContainer( const OUString& rName )
 {
     pImpl = new SfxFilterContainer_Impl( rName );
 }
 
-//----------------------------------------------------------------
+
 
 SfxFilterContainer::~SfxFilterContainer()
 {
     delete pImpl;
 }
 
-//----------------------------------------------------------------
+
 
 const OUString SfxFilterContainer::GetName() const
 {
@@ -236,7 +236,7 @@ const SfxFilter* SfxFilterContainer::GetDefaultFilter_Impl( const OUString& rNam
 }
 
 
-//----------------------------------------------------------------
+
 
 // Impl-Data is shared between all FilterMatchers of the same factory
 class SfxFilterMatcher_Impl
@@ -375,7 +375,7 @@ const SfxFilter* SfxFilterMatcher::GetAnyFilter( SfxFilterFlags nMust, SfxFilter
     return NULL;
 }
 
-//----------------------------------------------------------------
+
 
 sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
     SfxMedium& rMedium,
@@ -406,14 +406,14 @@ sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
     return *ppFilter ? ERRCODE_NONE : ERRCODE_ABORT;
 }
 
-//----------------------------------------------------------------
+
 
 sal_uInt32  SfxFilterMatcher::GuessFilter( SfxMedium& rMedium, const SfxFilter**ppFilter, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
     return GuessFilterControlDefaultUI( rMedium, ppFilter, nMust, nDont, sal_True );
 }
 
-//----------------------------------------------------------------
+
 
 sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, const SfxFilter** ppFilter, SfxFilterFlags nMust, SfxFilterFlags nDont, sal_Bool /*bDefUI*/ ) const
 {
@@ -508,7 +508,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
     return ERRCODE_ABORT;
 }
 
-//----------------------------------------------------------------
+
 sal_Bool SfxFilterMatcher::IsFilterInstalled_Impl( const SfxFilter* pFilter )
 {
     if ( pFilter->GetFilterFlags() & SFX_FILTER_MUSTINSTALL )
@@ -857,7 +857,7 @@ IMPL_STATIC_LINK( SfxFilterMatcher, MaybeFileHdl_Impl, OUString*, pString )
     return sal_False;
 }
 
-//----------------------------------------------------------------
+
 
 SfxFilterMatcherIter::SfxFilterMatcherIter(
     const SfxFilterMatcher& rMatcher,
@@ -870,7 +870,7 @@ SfxFilterMatcherIter::SfxFilterMatcherIter(
     m_rMatch.InitForIterating();
 }
 
-//----------------------------------------------------------------
+
 
 const SfxFilter* SfxFilterMatcherIter::Find_Impl()
 {
@@ -893,7 +893,7 @@ const SfxFilter* SfxFilterMatcherIter::First()
     return Find_Impl();
 }
 
-//----------------------------------------------------------------
+
 
 const SfxFilter* SfxFilterMatcherIter::Next()
 {

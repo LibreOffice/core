@@ -599,7 +599,7 @@ void SAL_CALL SlideSorterService::setIsUIReadOnly (sal_Bool bIsUIReadOnly)
 
 
 
-//-----------------------------------------------------------------------------
+
 
 void SlideSorterService::Resize (void)
 {

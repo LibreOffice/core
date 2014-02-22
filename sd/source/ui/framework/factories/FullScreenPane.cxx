@@ -201,7 +201,7 @@ void SAL_CALL FullScreenPane::setAccessible (
 
 
 
-//-----------------------------------------------------------------------------
+
 
 IMPL_LINK(FullScreenPane, WindowEventHandler, VclWindowEvent*, pEvent)
 {

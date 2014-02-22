@@ -26,29 +26,29 @@
 
 namespace sdr { namespace contact {
 
-// ----------------------------
+
 // - ViewContactOfSdrMediaObj -
-// ----------------------------
+
 
 ViewContactOfSdrMediaObj::ViewContactOfSdrMediaObj( SdrMediaObj& rMediaObj ) :
     ViewContactOfSdrObj( rMediaObj )
 {
 }
 
-// ------------------------------------------------------------------------------
+
 
 ViewContactOfSdrMediaObj::~ViewContactOfSdrMediaObj()
 {
 }
 
-// ------------------------------------------------------------------------------
+
 
 ViewObjectContact& ViewContactOfSdrMediaObj::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
 {
     return *( new ViewObjectContactOfSdrMediaObj( rObjectContact, *this, static_cast< SdrMediaObj& >( GetSdrObject() ).getMediaProperties() ) );
 }
 
-// ------------------------------------------------------------------------------
+
 
 Size ViewContactOfSdrMediaObj::getPreferredSize() const
 {
@@ -70,7 +70,7 @@ Size ViewContactOfSdrMediaObj::getPreferredSize() const
     return Size();
 }
 
-// ------------------------------------------------------------------------------
+
 
 void ViewContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rItem ) const
 {
@@ -88,7 +88,7 @@ void ViewContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rItem ) co
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 void ViewContactOfSdrMediaObj::executeMediaItem( const ::avmedia::MediaItem& rItem )
 {
@@ -105,7 +105,7 @@ void ViewContactOfSdrMediaObj::executeMediaItem( const ::avmedia::MediaItem& rIt
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 void ViewContactOfSdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState )
 {

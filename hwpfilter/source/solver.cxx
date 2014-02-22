@@ -20,7 +20,7 @@
 #include <math.h>
 #include "solver.h"
 
-//---------------------------------------------------------------------------
+
 double** mgcLinearSystemD::NewMatrix (int N)
 {
   double** A = new double*[N];
@@ -42,14 +42,14 @@ double** mgcLinearSystemD::NewMatrix (int N)
   }
   return A;
 }
-//---------------------------------------------------------------------------
+
 void mgcLinearSystemD::DeleteMatrix (int N, double** A)
 {
   for (int row = 0; row < N; row++)
     delete[] A[row];
   delete[] A;
 }
-//---------------------------------------------------------------------------
+
 double* mgcLinearSystemD::NewVector (int N)
 {
   double* B = new double[N];
@@ -60,7 +60,7 @@ double* mgcLinearSystemD::NewVector (int N)
     B[row] = 0;
   return B;
 }
-//---------------------------------------------------------------------------
+
 int mgcLinearSystemD::Solve (int n, double** a, double* b)
 {
   int* indxc = new int[n];

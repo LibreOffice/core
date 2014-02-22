@@ -67,12 +67,12 @@ sdbcx::ObjectType KabTables::createObject(const OUString& _rName)
 
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 void KabTables::impl_refresh(  ) throw(RuntimeException)
 {
     static_cast<KabCatalog&>(m_rParent).refreshTables();
 }
-// -------------------------------------------------------------------------
+
 void KabTables::disposing(void)
 {
 m_xMetaData.clear();

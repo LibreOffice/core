@@ -51,7 +51,7 @@ private:
     ApiParserWrapper    maApiParser;
 };
 
-// ----------------------------------------------------------------------------
+
 
 OOXMLFormulaParserImpl::OOXMLFormulaParserImpl( const Reference< XMultiServiceFactory >& rxModelFactory ) :
     FormulaFinalizer( OpCodeProvider( rxModelFactory, FILTER_OOXML, BIFF_UNKNOWN, true ) ),

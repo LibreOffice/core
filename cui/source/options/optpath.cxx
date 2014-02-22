@@ -244,7 +244,7 @@ SvxPathTabPage::SvxPathTabPage(Window* pParent, const SfxItemSet& rSet)
     xDialogListener->SetDialogClosedLink( LINK( this, SvxPathTabPage, DialogClosedHdl ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxPathTabPage::~SvxPathTabPage()
 {
@@ -254,7 +254,7 @@ SvxPathTabPage::~SvxPathTabPage()
     delete pImpl;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SvxPathTabPage::Create( Window* pParent,
                                     const SfxItemSet& rAttrSet )
@@ -262,7 +262,7 @@ SfxTabPage* SvxPathTabPage::Create( Window* pParent,
     return ( new SvxPathTabPage( pParent, rAttrSet ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxPathTabPage::FillItemSet( SfxItemSet& )
 {
@@ -276,7 +276,7 @@ sal_Bool SvxPathTabPage::FillItemSet( SfxItemSet& )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPathTabPage::Reset( const SfxItemSet& )
 {
@@ -370,7 +370,7 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
     PathSelect_Impl( NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPathTabPage::FillUserData()
 {
@@ -383,7 +383,7 @@ void SvxPathTabPage::FillUserData()
     SetUserData( aUserData );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxPathTabPage, PathSelect_Impl)
 {
@@ -406,7 +406,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathSelect_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl)
 {
@@ -462,7 +462,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
 {
@@ -527,7 +527,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
 {
@@ -634,7 +634,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxPathTabPage, HeaderSelect_Impl, HeaderBar*, pBar )
 {
@@ -663,7 +663,7 @@ IMPL_LINK( SvxPathTabPage, HeaderSelect_Impl, HeaderBar*, pBar )
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxPathTabPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
 {
@@ -694,7 +694,7 @@ IMPL_LINK( SvxPathTabPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxPathTabPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
 {
@@ -708,7 +708,7 @@ IMPL_LINK( SvxPathTabPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
     return 0L;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPathTabPage::GetPathList(
     sal_uInt16 _nPathHandle, OUString& _rInternalPath,
@@ -778,7 +778,7 @@ void SvxPathTabPage::GetPathList(
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPathTabPage::SetPathList(
     sal_uInt16 _nPathHandle, const OUString& _rUserPath, const OUString& _rWritablePath )

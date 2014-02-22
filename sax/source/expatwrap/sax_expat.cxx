@@ -349,9 +349,9 @@ extern "C"
 }
 
 
-//---------------------------------------------
+
 // LocatorImpl
-//---------------------------------------------
+
 class LocatorImpl :
     public WeakImplHelper2< XLocator, com::sun::star::io::XSeekable >
     // should use a different interface for stream positions!
@@ -758,11 +758,11 @@ void SaxExpatParser_Impl::parse( )
     } // while
 }
 
-//------------------------------------------
+
 //
 // The C-Callbacks
 //
-//-----------------------------------------
+
 void SaxExpatParser_Impl::callbackStartElement( void *pvThis ,
                                                 const XML_Char *pwName ,
                                                 const XML_Char **awAttributes )

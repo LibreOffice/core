@@ -58,7 +58,7 @@ namespace comphelper
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
-//------------------------------------------------------------------
+
 void copyProperties(const Reference<XPropertySet>& _rxSource,
                     const Reference<XPropertySet>& _rxDest)
 {
@@ -129,7 +129,7 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
     }
 }
 
-//------------------------------------------------------------------
+
 bool hasProperty(const OUString& _rName, const Reference<XPropertySet>& _rxSet)
 {
     if (_rxSet.is())
@@ -140,7 +140,7 @@ bool hasProperty(const OUString& _rName, const Reference<XPropertySet>& _rxSet)
     return false;
 }
 
-//------------------------------------------------------------------
+
 void RemoveProperty(Sequence<Property>& _rProps, const OUString& _rPropName)
 {
     sal_Int32 nLen = _rProps.getLength();
@@ -158,7 +158,7 @@ void RemoveProperty(Sequence<Property>& _rProps, const OUString& _rPropName)
     }
 }
 
-//------------------------------------------------------------------
+
 void ModifyPropertyAttributes(Sequence<Property>& seqProps, const OUString& sPropName, sal_Int16 nAddAttrib, sal_Int16 nRemoveAttrib)
 {
     sal_Int32 nLen = seqProps.getLength();
@@ -176,7 +176,7 @@ void ModifyPropertyAttributes(Sequence<Property>& seqProps, const OUString& sPro
     }
 }
 
-//------------------------------------------------------------------
+
 bool tryPropertyValue(Any& _rConvertedValue, Any& _rOldValue, const Any& _rValueToSet, const Any& _rCurrentValue, const Type& _rExpectedType)
 {
     bool bModified(false);

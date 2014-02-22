@@ -40,38 +40,38 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-// -------------------------------------------------------------------------
+
 java_sql_Driver::java_sql_Driver(const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
     :m_aContext( _rxContext )
     ,m_aLogger( _rxContext, "sdbcl", "org.openoffice.sdbc.jdbcBridge" )
 {
 }
-// --------------------------------------------------------------------------------
+
 java_sql_Driver::~java_sql_Driver()
 {
 }
 
 // static ServiceInfo
-//------------------------------------------------------------------------------
+
 OUString java_sql_Driver::getImplementationName_Static(  ) throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.sdbc.JDBCDriver");
         // this name is referenced in the configuration and in the jdbc.xml
         // Please take care when changing it.
 }
-//------------------------------------------------------------------------------
+
 Sequence< OUString > java_sql_Driver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     Sequence< OUString > aSNS( 1 );
     aSNS[0] = "com.sun.star.sdbc.Driver";
     return aSNS;
 }
-//------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL connectivity::java_sql_Driver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
 {
     return *(new java_sql_Driver( comphelper::getComponentContext(_rxFactory)));
 }
-// --------------------------------------------------------------------------------
+
 OUString SAL_CALL java_sql_Driver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
@@ -82,12 +82,12 @@ sal_Bool SAL_CALL java_sql_Driver::supportsService( const OUString& _rServiceNam
     return cppu::supportsService(this, _rServiceName);
 }
 
-// --------------------------------------------------------------------------------
+
 Sequence< OUString > SAL_CALL java_sql_Driver::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
-// -------------------------------------------------------------------------
+
 Reference< XConnection > SAL_CALL java_sql_Driver::connect( const OUString& url, const
                                                          Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
@@ -105,7 +105,7 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const OUString& url,
     }
     return xOut;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const OUString& url ) throw(SQLException, RuntimeException)
 {
     // don't ask the real driver for the url
@@ -127,7 +127,7 @@ sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const OUString& url ) throw(SQLEx
     }
     return bEnabled && url.startsWith("jdbc:");
 }
-// -------------------------------------------------------------------------
+
 Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const OUString& url,
                                                                          const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
@@ -237,17 +237,17 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
     ::dbtools::throwGenericSQLException(sMessage ,*this);
     return Sequence< DriverPropertyInfo >();
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL java_sql_Driver::getMajorVersion(  ) throw(RuntimeException)
 {
     return 1;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL java_sql_Driver::getMinorVersion(  ) throw(RuntimeException)
 {
     return 0;
 }
-// -------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

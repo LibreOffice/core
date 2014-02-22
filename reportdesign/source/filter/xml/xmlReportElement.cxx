@@ -76,13 +76,13 @@ OXMLReportElement::OXMLReportElement( ORptFilter& rImport,
         OSL_FAIL("Exception catched while filling the report definition props");
     }
 }
-// -----------------------------------------------------------------------------
+
 
 OXMLReportElement::~OXMLReportElement()
 {
 
 }
-// -----------------------------------------------------------------------------
+
 
 SvXMLImportContext* OXMLReportElement::CreateChildContext(
         sal_uInt16 _nPrefix,
@@ -121,13 +121,13 @@ SvXMLImportContext* OXMLReportElement::CreateChildContext(
 
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 ORptFilter& OXMLReportElement::GetOwnImport()
 {
     return static_cast<ORptFilter&>(GetImport());
 }
-//----------------------------------------------------------------------------
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

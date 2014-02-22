@@ -93,7 +93,7 @@ void SfxFloatingWindow_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxModalDialog::SetDialogData_Impl()
 {
@@ -105,7 +105,7 @@ void SfxModalDialog::SetDialogData_Impl()
         aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( aExtraData ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxModalDialog::GetDialogData_Impl()
 
@@ -128,14 +128,14 @@ void SfxModalDialog::GetDialogData_Impl()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxModalDialog::init()
 {
     GetDialogData_Impl();
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxModalDialog::SfxModalDialog(Window* pParent, const ResId &rResId )
 
@@ -162,7 +162,7 @@ SfxModalDialog::SfxModalDialog(Window *pParent, const OString& rID, const OUStri
     init();
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxModalDialog::~SfxModalDialog()
 
@@ -183,7 +183,7 @@ void SfxModalDialog::CreateOutputItemSet( SfxItemPool& rPool )
         pOutputSet = new SfxAllItemSet( rPool );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxModalDialog::CreateOutputItemSet( const SfxItemSet& rSet )
 {
@@ -195,7 +195,7 @@ void SfxModalDialog::CreateOutputItemSet( const SfxItemSet& rSet )
     }
 }
 
-//-------------------------------------------------------------------------
+
 void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == STATE_CHANGE_INITSHOW )
@@ -332,7 +332,7 @@ void SfxModelessDialog::Init(SfxBindings *pBindinx, SfxChildWindow *pCW)
     pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxModelessDialog,TimerHdl));
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxModelessDialog::Notify( NotifyEvent& rEvt )
 
@@ -365,7 +365,7 @@ bool SfxModelessDialog::Notify( NotifyEvent& rEvt )
     return ModelessDialog::Notify( rEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxModelessDialog::~SfxModelessDialog()
 
@@ -380,7 +380,7 @@ SfxModelessDialog::~SfxModelessDialog()
     delete pImp;
 }
 
-//-------------------------------------------------------------------------
+
 
 bool SfxModelessDialog::Close()
 
@@ -401,7 +401,7 @@ bool SfxModelessDialog::Close()
     return true;
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxModelessDialog::FillInfo(SfxChildWinInfo& rInfo) const
 
@@ -420,7 +420,7 @@ void SfxModelessDialog::FillInfo(SfxChildWinInfo& rInfo) const
         rInfo.nFlags |= SFX_CHILDWIN_ZOOMIN;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxFloatingWindow::Notify( NotifyEvent& rEvt )
 
@@ -456,7 +456,7 @@ bool SfxFloatingWindow::Notify( NotifyEvent& rEvt )
     return FloatingWindow::Notify( rEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
                         SfxChildWindow *pCW,
@@ -475,7 +475,7 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
     pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxFloatingWindow,TimerHdl));
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
                         SfxChildWindow *pCW,
@@ -495,7 +495,7 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
     pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxFloatingWindow,TimerHdl));
 }
 
-//-------------------------------------------------------------------------
+
 
 bool SfxFloatingWindow::Close()
 
@@ -516,7 +516,7 @@ bool SfxFloatingWindow::Close()
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxFloatingWindow::~SfxFloatingWindow()
 
@@ -531,7 +531,7 @@ SfxFloatingWindow::~SfxFloatingWindow()
     delete pImp;
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxFloatingWindow::Resize()
 
@@ -581,7 +581,7 @@ IMPL_LINK_NOARG(SfxFloatingWindow, TimerHdl)
     return 0;
 }
 
-//-------------------------------------------------------------------------
+
 void SfxFloatingWindow::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == STATE_CHANGE_INITSHOW )
@@ -609,7 +609,7 @@ void SfxFloatingWindow::Initialize(SfxChildWinInfo *pInfo)
     pImp->aWinState = pInfo->aWinState;
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxFloatingWindow::FillInfo(SfxChildWinInfo& rInfo) const
 
@@ -676,7 +676,7 @@ IMPL_LINK_NOARG(SfxSingleTabDialog, OKHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxSingleTabDialog::SfxSingleTabDialog(Window *pParent, const SfxItemSet& rSet,
     const OString& rID, const OUString& rUIXMLDescription)
@@ -702,7 +702,7 @@ SfxSingleTabDialog::SfxSingleTabDialog(Window* pParent, const SfxItemSet* pInSet
     SetInputSet( pInSet );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxSingleTabDialog::~SfxSingleTabDialog()
 {

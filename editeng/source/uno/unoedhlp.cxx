@@ -22,7 +22,7 @@
 #include <editeng/editeng.hxx>
 #include <svl/itemset.hxx>
 
-//------------------------------------------------------------------------
+
 
 TYPEINIT1( SvxEditSourceHint, TextHint );
 
@@ -55,7 +55,7 @@ sal_Int32 SvxEditSourceHint::GetEndValue() const
     return mnEnd;
 }
 TYPEINIT1( SvxEditSourceHintEndPara , SvxEditSourceHint );
-//------------------------------------------------------------------------
+
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr<SfxHint> SvxEditSourceHelper::EENotification2Hint( EENotify* aNotify )

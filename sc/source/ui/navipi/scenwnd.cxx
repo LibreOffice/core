@@ -228,7 +228,7 @@ ScScenarioWindow::ScScenarioWindow( Window* pParent, const OUString& aQH_List,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 ScScenarioWindow::~ScScenarioWindow()
 {
@@ -244,7 +244,7 @@ void ScScenarioWindow::Paint( const Rectangle& rRect )
     Window::Paint( rRect );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScScenarioWindow::NotifyState( const SfxPoolItem* pState )
 {
@@ -273,7 +273,7 @@ void ScScenarioWindow::NotifyState( const SfxPoolItem* pState )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScScenarioWindow::SetSizePixel( const Size& rNewSize )
 {

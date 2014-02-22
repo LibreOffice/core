@@ -207,7 +207,7 @@ void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::Even
 
 TYPEINIT1(SfxObjectShell, SfxShell);
 
-//--------------------------------------------------------------------
+
 SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     :mpObjectContainer(0)
     ,pBasicManager( new SfxBasicManagerHolder )
@@ -277,14 +277,14 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     bInList = sal_True;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxObjectShell_Impl::~SfxObjectShell_Impl()
 {
     delete pBasicManager;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxObjectShell::SfxObjectShell( const sal_uInt64 i_nCreationFlags )
     :   pImp( new SfxObjectShell_Impl( *this ) )
@@ -305,7 +305,7 @@ SfxObjectShell::SfxObjectShell( const sal_uInt64 i_nCreationFlags )
         pImp->m_bDocRecoverySupport = sal_False;
 }
 
-//--------------------------------------------------------------------
+
 
 // initializes a document from a file-description
 
@@ -345,7 +345,7 @@ SfxObjectShell::SfxObjectShell
     DBG_CTOR(SfxObjectShell, 0);
 }
 
-//--------------------------------------------------------------------
+
 
 // virtual destructor of typical base-class SfxObjectShell
 
@@ -410,21 +410,21 @@ SfxObjectShell::~SfxObjectShell()
     delete pImp;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxObjectShell::Stamp_SetPrintCancelState(sal_Bool bState)
 {
     pImp->bIsPrintJobCancelable = bState;
 }
 
-//--------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::Stamp_GetPrintCancelState() const
 {
     return pImp->bIsPrintJobCancelable;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxObjectShell::ViewAssigned()
 
@@ -436,7 +436,7 @@ void SfxObjectShell::ViewAssigned()
 {
 }
 
-//--------------------------------------------------------------------
+
 // closes the Object and all its views
 
 bool SfxObjectShell::Close()
@@ -479,7 +479,7 @@ bool SfxObjectShell::Close()
     return true;
 }
 
-//--------------------------------------------------------------------
+
 
 // returns a pointer the first SfxDocument of specified type
 
@@ -505,7 +505,7 @@ SfxObjectShell* SfxObjectShell::GetFirst
 
     return 0;
 }
-//--------------------------------------------------------------------
+
 
 // returns a pointer to the next SfxDocument of specified type behind *pDoc
 
@@ -538,7 +538,7 @@ SfxObjectShell* SfxObjectShell::GetNext
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxObjectShell* SfxObjectShell::Current()
 {
@@ -546,14 +546,14 @@ SfxObjectShell* SfxObjectShell::Current()
     return pFrame ? pFrame->GetObjectShell() : 0;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::IsInPrepareClose() const
 {
     return pImp->bInPrepareClose;
 }
 
-//------------------------------------------------------------------------
+
 
 struct BoolEnv_Impl
 {
@@ -655,7 +655,7 @@ bool SfxObjectShell::PrepareClose
     return true;
 }
 
-//--------------------------------------------------------------------
+
 #ifndef DISABLE_SCRIPTING
 namespace
 {
@@ -692,7 +692,7 @@ namespace
 }
 #endif
 
-//--------------------------------------------------------------------
+
 
 BasicManager* SfxObjectShell::GetBasicManager() const
 {
@@ -706,14 +706,14 @@ BasicManager* SfxObjectShell::GetBasicManager() const
 #endif
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxObjectShell::SetHasNoBasic()
 {
     pImp->m_bNoBasicCapabilities = sal_True;
 }
 
-//--------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::HasBasic() const
 {
@@ -730,7 +730,7 @@ sal_Bool SfxObjectShell::HasBasic() const
 #endif
 }
 
-//--------------------------------------------------------------------
+
 #ifndef DISABLE_SCRIPTING
 namespace
 {
@@ -761,7 +761,7 @@ namespace
     }
 }
 #endif
-//--------------------------------------------------------------------
+
 
 Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
 {
@@ -778,7 +778,7 @@ Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
     return SFX_APP()->GetDialogContainer();
 }
 
-//--------------------------------------------------------------------
+
 
 Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
 {
@@ -795,7 +795,7 @@ Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
     return SFX_APP()->GetBasicContainer();
 }
 
-//--------------------------------------------------------------------
+
 
 StarBASIC* SfxObjectShell::GetBasic() const
 {
@@ -806,7 +806,7 @@ StarBASIC* SfxObjectShell::GetBasic() const
 #endif
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxObjectShell::InitBasicManager_Impl()
 /*  [Description]
@@ -853,21 +853,21 @@ void SfxObjectShell::InitBasicManager_Impl()
 #endif
 }
 
-//--------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::DoClose()
 {
     return Close();
 }
 
-//--------------------------------------------------------------------
+
 
 SfxObjectShell* SfxObjectShell::GetObjectShell()
 {
     return this;
 }
 
-//--------------------------------------------------------------------
+
 
 uno::Sequence< OUString > SfxObjectShell::GetEventNames()
 {
@@ -886,7 +886,7 @@ uno::Sequence< OUString > SfxObjectShell::GetEventNames()
     return *pEventNameContainer;
 }
 
-//--------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > SfxObjectShell::GetModel() const
 {
@@ -903,7 +903,7 @@ void SfxObjectShell::SetBaseModel( SfxBaseModel* pModel )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > SfxObjectShell::GetBaseModel() const
 {

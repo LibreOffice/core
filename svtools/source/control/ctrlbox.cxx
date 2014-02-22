@@ -66,9 +66,9 @@ using namespace ::com::sun::star;
 // ColorListBox
 // ========================================================================
 
-// --------------------
+
 // - ImplColorListData -
-// --------------------
+
 
 class ImplColorListData
 {
@@ -80,7 +80,7 @@ public:
                 ImplColorListData( const Color& rColor ) : aColor( rColor ) { bColor = sal_True; }
 };
 
-// -----------------------------------------------------------------------
+
 
 void ColorListBox::ImplInit()
 {
@@ -92,7 +92,7 @@ void ColorListBox::ImplInit()
     SetUserItemSize( aImageSize );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ColorListBox::ImplDestroyColorEntries()
 {
@@ -101,7 +101,7 @@ void ColorListBox::ImplDestroyColorEntries()
     pColorList->clear();
 }
 
-// -----------------------------------------------------------------------
+
 
 ColorListBox::ColorListBox( Window* pParent, WinBits nWinStyle ) :
     ListBox( pParent, nWinStyle )
@@ -110,7 +110,7 @@ ColorListBox::ColorListBox( Window* pParent, WinBits nWinStyle ) :
     SetEdgeBlending(true);
 }
 
-// -----------------------------------------------------------------------
+
 
 ColorListBox::ColorListBox( Window* pParent, const ResId& rResId ) :
     ListBox( pParent, rResId )
@@ -131,7 +131,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeColorListBox(Window *pParen
     return pListBox;
 }
 
-// -----------------------------------------------------------------------
+
 
 ColorListBox::~ColorListBox()
 {
@@ -139,7 +139,7 @@ ColorListBox::~ColorListBox()
     delete pColorList;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ColorListBox::InsertEntry( const OUString& rStr, sal_uInt16 nPos )
 {
@@ -162,7 +162,7 @@ sal_uInt16 ColorListBox::InsertEntry( const OUString& rStr, sal_uInt16 nPos )
     return nPos;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ColorListBox::InsertEntry( const Color& rColor, const OUString& rStr,
                                 sal_uInt16 nPos )
@@ -186,7 +186,7 @@ sal_uInt16 ColorListBox::InsertEntry( const Color& rColor, const OUString& rStr,
     return nPos;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ColorListBox::InsertAutomaticEntryColor(const Color &rColor)
 {
@@ -194,7 +194,7 @@ void ColorListBox::InsertAutomaticEntryColor(const Color &rColor)
     InsertEntry( rColor, SVT_RESSTR(STR_SVT_AUTOMATIC_COLOR), 0 );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ColorListBox::RemoveEntry( sal_uInt16 nPos )
 {
@@ -208,7 +208,7 @@ void ColorListBox::RemoveEntry( sal_uInt16 nPos )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ColorListBox::Clear()
 {
@@ -216,7 +216,7 @@ void ColorListBox::Clear()
     ListBox::Clear();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ColorListBox::CopyEntries( const ColorListBox& rBox )
 {
@@ -245,7 +245,7 @@ void ColorListBox::CopyEntries( const ColorListBox& rBox )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ColorListBox::GetEntryPos( const Color& rColor ) const
 {
@@ -258,7 +258,7 @@ sal_uInt16 ColorListBox::GetEntryPos( const Color& rColor ) const
     return LISTBOX_ENTRY_NOTFOUND;
 }
 
-// -----------------------------------------------------------------------
+
 
 Color ColorListBox::GetEntryColor( sal_uInt16 nPos ) const
 {
@@ -269,7 +269,7 @@ Color ColorListBox::GetEntryColor( sal_uInt16 nPos ) const
     return aColor;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ColorListBox::UserDraw( const UserDrawEvent& rUDEvt )
 {
@@ -547,7 +547,7 @@ sal_uInt16 ImpLineListData::GetStyle( )
     return m_nStyle;
 }
 
-// -----------------------------------------------------------------------
+
 
 void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPolygon, long nWidth, sal_uInt16 nDashing )
 {
@@ -735,7 +735,7 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineListBox::ImplInit()
 {
@@ -751,7 +751,7 @@ void LineListBox::ImplInit()
     UpdatePaintLineColor();
 }
 
-// -----------------------------------------------------------------------
+
 
 LineListBox::LineListBox( Window* pParent, WinBits nWinStyle ) :
     ListBox( pParent, nWinStyle ),
@@ -775,7 +775,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeLineListBox(Window *pParent
     return pListBox;
 }
 
-// -----------------------------------------------------------------------
+
 
 LineListBox::~LineListBox()
 {
@@ -820,7 +820,7 @@ void LineListBox::SelectEntry( sal_uInt16 nStyle, sal_Bool bSelect )
         ListBox::SelectEntryPos( nPos, bSelect );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 LineListBox::InsertEntry( const OUString& rStr, sal_uInt16 nPos )
 {
@@ -837,7 +837,7 @@ sal_uInt16 LineListBox::InsertEntry( const OUString& rStr, sal_uInt16 nPos )
     return nPos;
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineListBox::InsertEntry(
     BorderWidthImpl aWidthImpl, sal_uInt16 nStyle, long nMinWidth,
@@ -848,7 +848,7 @@ void LineListBox::InsertEntry(
     pLineList->push_back( pData );
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineListBox::RemoveEntry( sal_uInt16 nPos )
 {
@@ -862,7 +862,7 @@ void LineListBox::RemoveEntry( sal_uInt16 nPos )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineListBox::Clear()
 {
@@ -876,7 +876,7 @@ void LineListBox::Clear()
     ListBox::Clear();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 LineListBox::GetEntryPos( sal_uInt16 nStyle ) const
 {
@@ -896,7 +896,7 @@ sal_uInt16 LineListBox::GetEntryPos( sal_uInt16 nStyle ) const
     return LISTBOX_ENTRY_NOTFOUND;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 LineListBox::GetEntryStyle( sal_uInt16 nPos ) const
 {
@@ -904,7 +904,7 @@ sal_uInt16 LineListBox::GetEntryStyle( sal_uInt16 nPos ) const
     return ( pData ) ? pData->GetStyle() : table::BorderLineStyle::NONE;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool LineListBox::UpdatePaintLineColor( void )
 {
@@ -964,7 +964,7 @@ void LineListBox::UpdateEntries( long nOldWidth )
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 Color LineListBox::GetColorLine1( sal_uInt16 nPos )
 {
@@ -1002,7 +1002,7 @@ Color LineListBox::GetColorDist( sal_uInt16 nPos )
     return rResult;
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineListBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -1025,7 +1025,7 @@ FontNameBox::FontNameBox( Window* pParent, WinBits nWinStyle ) :
     InitFontMRUEntriesFile();
 }
 
-// -------------------------------------------------------------------
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontNameBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
@@ -1039,7 +1039,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontNameBox(Window *pParent
     return pListBox;
 }
 
-// -------------------------------------------------------------------
+
 
 FontNameBox::~FontNameBox()
 {
@@ -1047,7 +1047,7 @@ FontNameBox::~FontNameBox()
     ImplDestroyFontList();
 }
 
-// -------------------------------------------------------------------
+
 
 void FontNameBox::SaveMRUEntries( const OUString& aFontMRUEntriesFile, sal_Unicode cSep ) const
 {
@@ -1072,7 +1072,7 @@ void FontNameBox::SaveMRUEntries( const OUString& aFontMRUEntriesFile, sal_Unico
     aStream.WriteLine( OString() );
 }
 
-// -------------------------------------------------------------------
+
 
 void FontNameBox::LoadMRUEntries( const OUString& aFontMRUEntriesFile, sal_Unicode cSep )
 {
@@ -1095,7 +1095,7 @@ void FontNameBox::LoadMRUEntries( const OUString& aFontMRUEntriesFile, sal_Unico
     SetMRUEntries( aEntries, cSep );
 }
 
-// ------------------------------------------------------------------
+
 
 void FontNameBox::InitFontMRUEntriesFile()
 {
@@ -1109,14 +1109,14 @@ void FontNameBox::InitFontMRUEntriesFile()
     }
 }
 
-// -------------------------------------------------------------------
+
 
 void FontNameBox::ImplDestroyFontList()
 {
     delete mpFontList;
 }
 
-// -------------------------------------------------------------------
+
 
 void FontNameBox::Fill( const FontList* pList )
 {
@@ -1159,7 +1159,7 @@ void FontNameBox::Fill( const FontList* pList )
         SetText( aOldText );
 }
 
-// -------------------------------------------------------------------
+
 
 void FontNameBox::EnableWYSIWYG( sal_Bool bEnable )
 {
@@ -1171,7 +1171,7 @@ void FontNameBox::EnableWYSIWYG( sal_Bool bEnable )
     }
 }
 
-// -------------------------------------------------------------------
+
 
 void FontNameBox::ImplCalcUserItemSize()
 {
@@ -1213,7 +1213,7 @@ namespace
     }
 }
 
-// -------------------------------------------------------------------
+
 
 void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
 {
@@ -1451,7 +1451,7 @@ FontStyleBox::~FontStyleBox()
 {
 }
 
-// -------------------------------------------------------------------
+
 
 void FontStyleBox::Select()
 {
@@ -1460,7 +1460,7 @@ void FontStyleBox::Select()
     ComboBox::Select();
 }
 
-// -------------------------------------------------------------------
+
 
 void FontStyleBox::LoseFocus()
 {
@@ -1469,7 +1469,7 @@ void FontStyleBox::LoseFocus()
     ComboBox::LoseFocus();
 }
 
-// -------------------------------------------------------------------
+
 
 void FontStyleBox::Modify()
 {
@@ -1496,7 +1496,7 @@ void FontStyleBox::Modify()
     ComboBox::Modify();
 }
 
-// -------------------------------------------------------------------
+
 
 void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
 {
@@ -1659,13 +1659,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontSizeBox(Window *pParent
     return pListBox;
 }
 
-// -----------------------------------------------------------------------
+
 
 FontSizeBox::~FontSizeBox()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void FontSizeBox::ImplInit()
 {
@@ -1684,7 +1684,7 @@ void FontSizeBox::ImplInit()
     SetProminentEntryType( PROMINENT_MIDDLE );
 }
 
-// -----------------------------------------------------------------------
+
 
 void FontSizeBox::Reformat()
 {
@@ -1702,7 +1702,7 @@ void FontSizeBox::Reformat()
     MetricBox::Reformat();
 }
 
-// -----------------------------------------------------------------------
+
 
 void FontSizeBox::Modify()
 {
@@ -1756,7 +1756,7 @@ void FontSizeBox::Modify()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void FontSizeBox::Fill( const FontInfo* pInfo, const FontList* pList )
 {
@@ -1846,7 +1846,7 @@ void FontSizeBox::Fill( const FontInfo* pInfo, const FontList* pList )
     SetSelection( aSelection );
 }
 
-// -----------------------------------------------------------------------
+
 
 void FontSizeBox::EnableRelativeMode( sal_uInt16 nMin, sal_uInt16 nMax, sal_uInt16 nStep )
 {
@@ -1857,7 +1857,7 @@ void FontSizeBox::EnableRelativeMode( sal_uInt16 nMin, sal_uInt16 nMax, sal_uInt
     SetUnit( FUNIT_POINT );
 }
 
-// -----------------------------------------------------------------------
+
 
 void FontSizeBox::EnablePtRelativeMode( short nMin, short nMax, short nStep )
 {
@@ -1868,7 +1868,7 @@ void FontSizeBox::EnablePtRelativeMode( short nMin, short nMax, short nStep )
     SetUnit( FUNIT_POINT );
 }
 
-// -----------------------------------------------------------------------
+
 
 void FontSizeBox::SetRelative( sal_Bool bNewRelative )
 {
@@ -1931,7 +1931,7 @@ void FontSizeBox::SetRelative( sal_Bool bNewRelative )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString FontSizeBox::CreateFieldText( sal_Int64 nValue ) const
 {
@@ -1941,7 +1941,7 @@ OUString FontSizeBox::CreateFieldText( sal_Int64 nValue ) const
     return sRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void FontSizeBox::SetValue( sal_Int64 nNewValue, FieldUnit eInUnit )
 {
@@ -1965,14 +1965,14 @@ void FontSizeBox::SetValue( sal_Int64 nNewValue, FieldUnit eInUnit )
     MetricBox::SetValue( nNewValue, eInUnit );
 }
 
-// -----------------------------------------------------------------------
+
 
 void FontSizeBox::SetValue( sal_Int64 nNewValue )
 {
     SetValue( nNewValue, FUNIT_NONE );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Int64 FontSizeBox::GetValue( sal_uInt16 nPos, FieldUnit eOutUnit ) const
 {
@@ -1991,7 +1991,7 @@ sal_Int64 FontSizeBox::GetValue( sal_uInt16 nPos, FieldUnit eOutUnit ) const
     return nRetValue;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Int64 FontSizeBox::GetValue( FieldUnit eOutUnit ) const
 {
@@ -2006,7 +2006,7 @@ sal_Int64 FontSizeBox::GetValue( FieldUnit eOutUnit ) const
     return MetricBox::GetValue( eOutUnit );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Int64 FontSizeBox::GetValue() const
 {

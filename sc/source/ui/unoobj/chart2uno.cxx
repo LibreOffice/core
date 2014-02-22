@@ -433,7 +433,7 @@ vector<ScTokenRef>* Chart2PositionMap::getDataRowRanges(SCROW nRow) const
     return maData.getRowRanges( nRow);
 }
 
-// ----------------------------------------------------------------------------
+
 
 /**
  * Designed to be a drop-in replacement for ScChartPositioner, in order to
@@ -1092,7 +1092,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_createLabeledDataSequenceFro
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-//----------------------------------------------------
+
 /**
  * Check the current list of reference tokens, and add the upper left
  * corner of the minimum range that encloses all ranges if certain
@@ -2970,7 +2970,7 @@ IMPL_LINK( ScChart2DataSequence, ValueListenerHdl, SfxHint*, pHint )
     return 0;
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScChart2DataSequence::ExternalRefListener::ExternalRefListener(
     ScChart2DataSequence& rParent, ScDocument* pDoc) :
@@ -3022,7 +3022,7 @@ const boost::unordered_set<sal_uInt16>& ScChart2DataSequence::ExternalRefListene
     return maFileIds;
 }
 
-// ----------------------------------------------------------------------------
+
 
 uno::Sequence< uno::Any> SAL_CALL ScChart2DataSequence::getData()
     throw (uno::RuntimeException, std::exception)

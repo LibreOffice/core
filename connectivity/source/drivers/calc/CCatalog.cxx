@@ -29,14 +29,14 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
-// -------------------------------------------------------------------------
+
 using namespace connectivity::calc;
-// -------------------------------------------------------------------------
+
 OCalcCatalog::OCalcCatalog(OCalcConnection* _pCon) : file::OFileCatalog(_pCon)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcCatalog::OCalcCatalog" );
 }
-// -------------------------------------------------------------------------
+
 void OCalcCatalog::refreshTables()
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcCatalog::refreshTables" );
@@ -61,7 +61,7 @@ void OCalcCatalog::refreshTables()
     //if ( m_pTables && m_pTables->hasElements() )
     //    m_pTables->getByIndex(0);
 }
-// -----------------------------------------------------------------------------
+
 
 
 

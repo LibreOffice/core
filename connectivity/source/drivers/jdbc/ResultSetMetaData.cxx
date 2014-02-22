@@ -55,7 +55,7 @@ jclass java_sql_ResultSetMetaData::getMyClass() const
         theClass = findMyClass("java/sql/ResultSetMetaData");
     return theClass;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnDisplaySize( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
@@ -63,7 +63,7 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnDisplaySize( sal_Int32 c
     static jmethodID mID(NULL);
     return callIntMethodWithIntArg("getColumnDisplaySize",mID,column);
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnType( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
@@ -71,7 +71,7 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnType( sal_Int32 column )
     static jmethodID mID(NULL);
     return callIntMethodWithIntArg("getColumnType",mID,column);
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnCount(  ) throw(SQLException, RuntimeException)
 {
@@ -84,7 +84,7 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnCount(  ) throw(SQLExcep
     return m_nColumnCount;
 
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
@@ -92,14 +92,14 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column 
     static jmethodID mID(NULL);
     return callBooleanMethodWithIntArg( "isCaseSensitive", mID,column );
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL java_sql_ResultSetMetaData::getSchemaName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "jdbc Ocke.Janssen@sun.com java_sql_ResultSetMetaData::getSchemaName" );
     static jmethodID mID(NULL);
     return callStringMethodWithIntArg("getSchemaName",mID,column);
 }
-// -------------------------------------------------------------------------
+
 
 OUString SAL_CALL java_sql_ResultSetMetaData::getColumnName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
@@ -107,42 +107,42 @@ OUString SAL_CALL java_sql_ResultSetMetaData::getColumnName( sal_Int32 column ) 
     static jmethodID mID(NULL);
     return callStringMethodWithIntArg("getColumnName",mID,column);
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL java_sql_ResultSetMetaData::getTableName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "jdbc Ocke.Janssen@sun.com java_sql_ResultSetMetaData::getTableName" );
     static jmethodID mID(NULL);
     return callStringMethodWithIntArg("getTableName",mID,column);
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL java_sql_ResultSetMetaData::getCatalogName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "jdbc Ocke.Janssen@sun.com java_sql_ResultSetMetaData::getCatalogName" );
     static jmethodID mID(NULL);
     return callStringMethodWithIntArg("getCatalogName",mID,column);
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL java_sql_ResultSetMetaData::getColumnTypeName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "jdbc Ocke.Janssen@sun.com java_sql_ResultSetMetaData::getColumnTypeName" );
     static jmethodID mID(NULL);
     return callStringMethodWithIntArg("getColumnTypeName",mID,column);
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL java_sql_ResultSetMetaData::getColumnLabel( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "jdbc Ocke.Janssen@sun.com java_sql_ResultSetMetaData::getColumnLabel" );
     static jmethodID mID(NULL);
     return callStringMethodWithIntArg("getColumnLabel",mID,column);
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL java_sql_ResultSetMetaData::getColumnServiceName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "jdbc Ocke.Janssen@sun.com java_sql_ResultSetMetaData::getColumnServiceName" );
     static jmethodID mID(NULL);
     return callStringMethodWithIntArg("getColumnClassName",mID,column);
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCurrency( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
@@ -152,7 +152,7 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCurrency( sal_Int32 column ) thr
     static jmethodID mID(NULL);
     return callBooleanMethodWithIntArg( "isCurrency", mID,column );
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL java_sql_ResultSetMetaData::isAutoIncrement( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
@@ -160,7 +160,7 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isAutoIncrement( sal_Int32 column 
     static jmethodID mID(NULL);
     return callBooleanMethodWithIntArg( "isAutoIncrement", mID,column );
 }
-// -------------------------------------------------------------------------
+
 
 
 sal_Bool SAL_CALL java_sql_ResultSetMetaData::isSigned( sal_Int32 column ) throw(SQLException, RuntimeException)
@@ -169,28 +169,28 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isSigned( sal_Int32 column ) throw
     static jmethodID mID(NULL);
     return callBooleanMethodWithIntArg( "isSigned", mID,column );
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getPrecision( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "jdbc Ocke.Janssen@sun.com java_sql_ResultSetMetaData::getPrecision" );
     static jmethodID mID(NULL);
     return callIntMethodWithIntArg("getPrecision",mID,column);
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getScale( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "jdbc Ocke.Janssen@sun.com java_sql_ResultSetMetaData::getScale" );
     static jmethodID mID(NULL);
     return callIntMethodWithIntArg("getScale",mID,column);
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL java_sql_ResultSetMetaData::isNullable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "jdbc Ocke.Janssen@sun.com java_sql_ResultSetMetaData::isNullable" );
     static jmethodID mID(NULL);
     return callIntMethodWithIntArg("isNullable",mID,column);
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL java_sql_ResultSetMetaData::isSearchable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
@@ -198,7 +198,7 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isSearchable( sal_Int32 column ) t
     static jmethodID mID(NULL);
     return callBooleanMethodWithIntArg( "isSearchable", mID,column );
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL java_sql_ResultSetMetaData::isReadOnly( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
@@ -206,7 +206,7 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isReadOnly( sal_Int32 column ) thr
     static jmethodID mID(NULL);
     return callBooleanMethodWithIntArg( "isReadOnly", mID,column );
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL java_sql_ResultSetMetaData::isDefinitelyWritable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
@@ -214,13 +214,13 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isDefinitelyWritable( sal_Int32 co
     static jmethodID mID(NULL);
     return callBooleanMethodWithIntArg( "isDefinitelyWritable", mID,column );
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL java_sql_ResultSetMetaData::isWritable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "jdbc Ocke.Janssen@sun.com java_sql_ResultSetMetaData::isWritable" );
     static jmethodID mID(NULL);
     return callBooleanMethodWithIntArg( "isWritable", mID,column );
 }
-// -------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

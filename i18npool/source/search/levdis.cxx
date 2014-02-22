@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*************************************************************************
+/*
 
     Weighted Levenshtein Distance
     including wildcards
@@ -53,9 +53,7 @@
 
     See also: German computer magazine
     c't 07/89 pages 192-208 and c't 03/94 pages 230-239
-
-*************************************************************************/
-
+*/
 
 #include <string.h>
 
@@ -69,7 +67,7 @@
 #undef min
 #endif
 
-#define LEVDISBIG   (nLimit + 1)    // Returnwert wenn Distanz > nLimit
+#define LEVDISBIG   (nLimit + 1)    // Return value if distance > nLimit
 #define LEVDISDOUBLEBUF 2048        // dadrueber wird nicht mehr gedoppelt
 
 // Balance, aus Geschwindigkeitsgruenden ist dieses keine Funktion
@@ -109,11 +107,11 @@ static sal_Int32 Impl_WLD_StringLen( const sal_Unicode* pStr )
     return (sal_Int32)(pTempStr-pStr);
 }
 
-// Distanz von String zu Pattern
+// Distance from string to pattern
 int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
 {
-    int nSPMin = 0;     // StrafPunkteMinimum
-    int nRepS = 0;      // fuer SplitCount
+    int nSPMin = 0;     // penalty point Minimum
+    int nRepS = 0;      // for SplitCount
 
     // Laengendifferenz von Pattern und String
     int nLenDiff = nPatternLen - nStars - nStringLen;
@@ -163,7 +161,7 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
         npDistance[0] = nInsQ0;     // mit einfachem Einfuegen geht's los
         npDistance[1] = nInsQ0;
         npDistance[2] = nInsQ0;
-        int nReplacePos = -1;       // tristate Flag
+        int nReplacePos = -1;       // tristate flag
         int nDelCnt = 0;
         for ( sal_Int32 i=1; i <= nStringLen; i++, nDelCnt += nDelR0 )
         {
@@ -232,7 +230,7 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
                 nPij = 0;           // p(i,j)
                 if ( nReplacePos < 0 )
                 {
-                    int nBalance = 0;   // gleiche Anzahl c
+                    int nBalance = 0;   // same quantity c
                     LEVDISBALANCE( j, i-1 );
                     if ( !nBalance )
                         nReplacePos = 0;    // keine Ersetzung mehr
@@ -249,7 +247,7 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
             if ( bSplitCount )
             {
                 if ( nReplacePos < 0 && nPij && npDistance[i] == d1 + nPij )
-                {   // diese Stelle wird ersetzt
+                {   // this poition will be replaced
                     nRepS++;
                     nReplacePos = i;
                 }
@@ -261,7 +259,7 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
                     // Replace keins. Buchstabendreher werden hier erfasst
                     // und der ReplaceS zurueckgenommen, wodurch das doppelte
                     // Limit zum Tragen kommt.
-                    int nBalance = 0;   // gleiche Anzahl c
+                    int nBalance = 0;   // same quantity c
                     LEVDISBALANCE( j, i-1 );
                     if ( !nBalance )
                     {   // einer wurde ersetzt, der ein Insert war
@@ -279,7 +277,7 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
         if ( bSplitCount )
         {
             if ( nRepS && nLenDiff > 0 )
-                nRepS -= nLenDiff;      // Inserts wurden mitgezaehlt
+                nRepS -= nLenDiff;      // Inserts were counted
             if ( (nSPMin <= 2 * nLimit)
                     && (npDistance[nStringLen] <= 2 * nLimit)
                     && (nRepS * nRepP0 <= nLimit) )
@@ -290,25 +288,23 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
     }
 }
 
-
-
-// Berechnung von nLimit,   nReplP0,    nInsQ0,     nDelR0,     bSplitCount
-// aus Userwerten           nOtherX,    nShorterY,  nLongerZ,   bRelaxed
+// Calculating nLimit,   nReplP0,    nInsQ0,     nDelR0,     bSplitCount
+// from user values           nOtherX,    nShorterY,  nLongerZ,   bRelaxed
 int WLevDistance::CalcLPQR( int nX, int nY, int nZ, bool bRelaxed )
 {
-    if ( nX < 0 ) nX = 0;       // nur positive Werte
+    if ( nX < 0 ) nX = 0;       // only positive values
     if ( nY < 0 ) nY = 0;
     if ( nZ < 0 ) nZ = 0;
-    if (0 == Min3( nX, nY, nZ ))     // mindestens einer 0
+    if (0 == Min3( nX, nY, nZ ))     // at least one 0
     {
         int nMid, nMax;
-        nMax = Max3( nX, nY, nZ );      // entweder 0 bei drei 0 oder Max
-        if ( 0 == (nMid = Mid3( nX, nY, nZ )) )     // sogar zwei 0
-            nLimit = nMax;  // entweder 0 oder einziger >0
-        else        // einer 0
+        nMax = Max3( nX, nY, nZ );      // either 0 for three 0s or Max
+        if ( 0 == (nMid = Mid3( nX, nY, nZ )) )     // even two 0
+            nLimit = nMax;  // either 0 or the only one >0
+        else        // one is 0
             nLimit = KGV( nMid, nMax );
     }
-    else        // alle drei nicht 0
+    else        // all three of them are not 0
         nLimit = KGV( KGV( nX, nY ), nZ );
     nRepP0 = ( nX ? nLimit / nX : nLimit + 1 );
     nInsQ0 = ( nY ? nLimit / nY : nLimit + 1 );
@@ -316,8 +312,6 @@ int WLevDistance::CalcLPQR( int nX, int nY, int nZ, bool bRelaxed )
     bSplitCount = bRelaxed;
     return( nLimit );
 }
-
-
 
 // Groesster Gemeinsamer Teiler nach Euklid (Kettendivision)
 // Sonderfall: 0 und irgendwas geben 1
@@ -337,8 +331,6 @@ int WLevDistance::GGT( int a, int b )
     return( a ? a : b);
 }
 
-
-
 // Kleinstes Gemeinsames Vielfaches: a * b / GGT(a,b)
 int WLevDistance::KGV( int a, int b )
 {
@@ -348,8 +340,7 @@ int WLevDistance::KGV( int a, int b )
         return( (b / GGT(a,b)) * a );
 }
 
-
-// Minimum von drei Werten
+// Minimum of three values
 inline int WLevDistance::Min3( int x, int y, int z )
 {
     if ( x < y )
@@ -358,9 +349,7 @@ inline int WLevDistance::Min3( int x, int y, int z )
         return( y < z ? y : z );
 }
 
-
-
-// mittlerer von drei Werten
+// The value in the middle
 int WLevDistance::Mid3( int x, int y, int z )
 {
     int min = Min3(x,y,z);
@@ -372,9 +361,7 @@ int WLevDistance::Mid3( int x, int y, int z )
         return( x < y ? x : y);
 }
 
-
-
-// Maximum von drei Werten
+// Maximum of three values
 int WLevDistance::Max3( int x, int y, int z )
 {
     if ( x > y )
@@ -382,8 +369,6 @@ int WLevDistance::Max3( int x, int y, int z )
     else
         return( y > z ? y : z );
 }
-
-
 
 // Daten aus CTor initialisieren
 void WLevDistance::InitData( const sal_Unicode* cPattern )
@@ -395,12 +380,12 @@ void WLevDistance::InitData( const sal_Unicode* cPattern )
     const sal_Unicode* cp1 = cPattern;
     sal_Unicode* cp2 = cpPattern;
     bool* bp = bpPatIsWild;
-    // Pattern kopieren, Sternchen zaehlen, escaped Jokers
+    // copy pattern, count asterisks, escaped Jokers
     while ( *cp1 )
     {
         if ( *cp1 == '\\' )     // maybe escaped
         {
-            if ( *(cp1+1) == '*' || *(cp1+1) == '?' )   // naechstes Joker?
+            if ( *(cp1+1) == '*' || *(cp1+1) == '?' )   // next Joker?
             {
                 cp1++;          // skip '\\'
                 nPatternLen--;
@@ -420,7 +405,6 @@ void WLevDistance::InitData( const sal_Unicode* cPattern )
     *cp2 = '\0';
 }
 
-
 WLevDistance::WLevDistance( const sal_Unicode* cPattern,
                             int nOtherX, int nShorterY, int nLongerZ,
                             bool bRelaxed ) :
@@ -432,7 +416,6 @@ WLevDistance::WLevDistance( const sal_Unicode* cPattern,
     InitData( cPattern );
     CalcLPQR( nOtherX, nShorterY, nLongerZ, bRelaxed );
 }
-
 
 // CopyCTor
 WLevDistance::WLevDistance( const WLevDistance& rWLD ) :
@@ -458,7 +441,6 @@ WLevDistance::WLevDistance( const WLevDistance& rWLD ) :
     }
     cpPattern[i] = '\0';
 }
-
 
 // DTor
 WLevDistance::~WLevDistance()

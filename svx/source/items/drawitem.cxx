@@ -121,7 +121,7 @@ SvxGradientListItem::SvxGradientListItem( const SvxGradientListItem& rItem ) :
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxGradientListItem::GetPresentation
 (
@@ -175,7 +175,7 @@ SvxHatchListItem::SvxHatchListItem( const SvxHatchListItem& rItem ) :
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxHatchListItem::GetPresentation
 (

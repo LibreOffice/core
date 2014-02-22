@@ -33,9 +33,9 @@
 namespace avmedia
 {
 
-// ---------------
+
 // - MediaPlayer -
-// ---------------
+
 
 MediaPlayer::MediaPlayer( Window* _pParent, sal_uInt16 nId, SfxBindings* _pBindings, SfxChildWinInfo* pInfo ) :
     SfxChildWindow( _pParent, nId )
@@ -45,19 +45,19 @@ MediaPlayer::MediaPlayer( Window* _pParent, sal_uInt16 nId, SfxBindings* _pBindi
     static_cast< MediaFloater* >( pWindow )->Initialize( pInfo );
 };
 
-// -----------------------------------------------------------------------------
+
 
 MediaPlayer::~MediaPlayer()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 SFX_IMPL_DOCKINGWINDOW_WITHID( MediaPlayer, SID_AVMEDIA_PLAYER )
 
-// ----------------
+
 // - MediaFloater -
-// ----------------
+
 
 MediaFloater::MediaFloater( SfxBindings* _pBindings, SfxChildWindow* pCW, Window* pParent ) :
     SfxDockingWindow( _pBindings, pCW, pParent, WB_CLOSEABLE | WB_MOVEABLE | WB_SIZEABLE | WB_DOCKABLE ),
@@ -71,7 +71,7 @@ MediaFloater::MediaFloater( SfxBindings* _pBindings, SfxChildWindow* pCW, Window
     mpMediaWindow->show();
 }
 
-// -----------------------------------------------------------------------------
+
 
 MediaFloater::~MediaFloater()
 {
@@ -79,7 +79,7 @@ MediaFloater::~MediaFloater()
     mpMediaWindow = NULL;
 }
 
-// -------------------------------------------------------------------------
+
 
 void MediaFloater::Resize()
 {
@@ -89,7 +89,7 @@ void MediaFloater::Resize()
         mpMediaWindow->setPosSize( Rectangle( Point(), GetOutputSizePixel() ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void MediaFloater::ToggleFloatingMode()
 {
@@ -114,7 +114,7 @@ void MediaFloater::ToggleFloatingMode()
     mpMediaWindow->show();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void MediaFloater::setURL( const OUString& rURL, const OUString& rReferer, bool bPlayImmediately )
 {
@@ -127,7 +127,7 @@ void MediaFloater::setURL( const OUString& rURL, const OUString& rReferer, bool 
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void MediaFloater::dispatchCurrentURL()
 {

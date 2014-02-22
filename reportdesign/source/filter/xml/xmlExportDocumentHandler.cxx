@@ -81,7 +81,7 @@ ExportDocumentHandler::ExportDocumentHandler(uno::Reference< uno::XComponentCont
     ,m_bCountColumnHeader(false)
 {
 }
-// -----------------------------------------------------------------------------
+
 ExportDocumentHandler::~ExportDocumentHandler()
 {
     if ( m_xProxy.is() )
@@ -92,7 +92,7 @@ ExportDocumentHandler::~ExportDocumentHandler()
 }
 IMPLEMENT_GET_IMPLEMENTATION_ID(ExportDocumentHandler)
 IMPLEMENT_FORWARD_REFCOUNT( ExportDocumentHandler, ExportDocumentHandler_BASE )
-//------------------------------------------------------------------------
+
 OUString SAL_CALL ExportDocumentHandler::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
@@ -116,7 +116,7 @@ OUString ExportDocumentHandler::getImplementationName_Static(  ) throw(uno::Runt
     return OUString("com.sun.star.comp.report.ExportDocumentHandler");
 }
 
-//------------------------------------------------------------------------
+
 uno::Sequence< OUString > ExportDocumentHandler::getSupportedServiceNames_static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSupported(1);
@@ -124,7 +124,7 @@ uno::Sequence< OUString > ExportDocumentHandler::getSupportedServiceNames_static
     return aSupported;
 }
 
-//------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL ExportDocumentHandler::create( const uno::Reference< uno::XComponentContext >& _rxContext )
 {
     return *(new ExportDocumentHandler( _rxContext ));
@@ -237,7 +237,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const
     if ( bExport )
         m_xDelegatee->startElement(_sName,xAttribs);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL ExportDocumentHandler::endElement(const OUString & _sName) throw (uno::RuntimeException, xml::sax::SAXException)
 {
     bool bExport = true;
@@ -343,13 +343,13 @@ void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >
         }
     }
 }
-// --------------------------------------------------------------------------------
+
 uno::Any SAL_CALL ExportDocumentHandler::queryInterface( const uno::Type& _rType ) throw (uno::RuntimeException)
 {
     uno::Any aReturn = ExportDocumentHandler_BASE::queryInterface(_rType);
     return aReturn.hasValue() ? aReturn : (m_xProxy.is() ? m_xProxy->queryAggregation(_rType) : aReturn);
 }
-// --------------------------------------------------------------------------------
+
 uno::Sequence< uno::Type > SAL_CALL ExportDocumentHandler::getTypes(  ) throw (uno::RuntimeException)
 {
     if ( m_xTypeProvider.is() )
@@ -359,7 +359,7 @@ uno::Sequence< uno::Type > SAL_CALL ExportDocumentHandler::getTypes(  ) throw (u
         );
     return ExportDocumentHandler_BASE::getTypes();
 }
-// -----------------------------------------------------------------------------
+
 void ExportDocumentHandler::exportTableRows()
 {
     const OUString sRow( lcl_createAttribute(XML_NP_TABLE, XML_TABLE_ROW) );
@@ -432,8 +432,8 @@ void ExportDocumentHandler::exportTableRows()
 
     m_xDelegatee->endElement(sRow);
 }
-// -----------------------------------------------------------------------------
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

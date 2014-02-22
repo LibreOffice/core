@@ -59,7 +59,7 @@ const sal_uInt8 BIFF_FILTER_DATATYPE_BOOLEAN        = 8;
 const sal_uInt8 BIFF_FILTER_DATATYPE_EMPTY          = 12;
 const sal_uInt8 BIFF_FILTER_DATATYPE_NOTEMPTY       = 14;
 
-// ----------------------------------------------------------------------------
+
 
 bool lclGetApiOperatorFromToken( sal_Int32& rnApiOperator, sal_Int32 nToken )
 {
@@ -381,7 +381,7 @@ void FilterCriterionModel::readBiffData( SequenceInputStream& rStrm )
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 CustomFilter::CustomFilter( const WorkbookHelper& rHelper ) :
     FilterSettingsBase( rHelper ),

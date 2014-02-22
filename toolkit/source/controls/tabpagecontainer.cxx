@@ -168,7 +168,7 @@ void SAL_CALL UnoControlTabPageContainerModel::insertByIndex( ::sal_Int32 nIndex
         throw IllegalArgumentException( OUString( WRONG_TYPE_EXCEPTION ),
             (OWeakObject *)this, 2 );
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL UnoControlTabPageContainerModel::removeByIndex( ::sal_Int32 /*Index*/ ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
@@ -176,14 +176,14 @@ void SAL_CALL UnoControlTabPageContainerModel::removeByIndex( ::sal_Int32 /*Inde
 void SAL_CALL UnoControlTabPageContainerModel::replaceByIndex( ::sal_Int32 /*Index*/, const uno::Any& /*Element*/ ) throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
-// -----------------------------------------------------------------------------
+
 // XIndexAccess
 ::sal_Int32 SAL_CALL UnoControlTabPageContainerModel::getCount(  ) throw (uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     return sal_Int32( m_aTabPageVector.size());
 }
-// -----------------------------------------------------------------------------
+
 uno::Any SAL_CALL UnoControlTabPageContainerModel::getByIndex( ::sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -191,13 +191,13 @@ uno::Any SAL_CALL UnoControlTabPageContainerModel::getByIndex( ::sal_Int32 nInde
         throw lang::IndexOutOfBoundsException();
     return uno::makeAny(m_aTabPageVector[nIndex]);
 }
-// -----------------------------------------------------------------------------
+
 // XElementAccess
 uno::Type SAL_CALL UnoControlTabPageContainerModel::getElementType(  ) throw (uno::RuntimeException)
 {
     return ::getCppuType(static_cast<  Reference< com::sun::star::awt::XControlModel>* >(NULL));
 }
-// -----------------------------------------------------------------------------
+
 ::sal_Bool SAL_CALL UnoControlTabPageContainerModel::hasElements(  ) throw (uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -245,7 +245,7 @@ void UnoControlTabPageContainer::createPeer( const uno::Reference< awt::XToolkit
         xTPContainer->addTabPageContainerListener(&m_aTabPageListeners);
 }
 
-// -------------------------------------------------------------------
+
 // XTabPageContainer
 
 ::sal_Int16 SAL_CALL UnoControlTabPageContainer::getActiveTabPageID() throw (RuntimeException)

@@ -48,7 +48,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-//------------------------------------------------------------------------
+
 using ::editeng::SvxBorderLine;
 
 ScAttrArray::ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc ) :
@@ -63,7 +63,7 @@ ScAttrArray::ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc ) :
     pData[0].pPattern = pDocument->GetDefPattern(); // no put
 }
 
-//------------------------------------------------------------------------
+
 
 ScAttrArray::~ScAttrArray()
 {
@@ -78,7 +78,7 @@ ScAttrArray::~ScAttrArray()
     delete[] pData;
 }
 
-//------------------------------------------------------------------------
+
 #if OSL_DEBUG_LEVEL > 1
 void ScAttrArray::TestData() const
 {
@@ -107,7 +107,7 @@ void ScAttrArray::TestData() const
 }
 #endif
 
-//------------------------------------------------------------------------
+
 
 void ScAttrArray::Reset( const ScPatternAttr* pPattern )
 {
@@ -179,7 +179,7 @@ bool ScAttrArray::Concat(SCSIZE nPos)
     return bRet;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScAttrArray::Search( SCROW nRow, SCSIZE& nIndex ) const
 {
@@ -342,7 +342,7 @@ void ScAttrArray::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 n
 
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAttrArray::SetPattern( SCROW nRow, const ScPatternAttr* pPattern, bool bPutToPool )
 {

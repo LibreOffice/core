@@ -25,7 +25,7 @@
 #include "drwlayer.hxx"
 #include "document.hxx"
 
-// -----------------------------------------------------------------------
+
 
 using namespace com::sun::star;
 

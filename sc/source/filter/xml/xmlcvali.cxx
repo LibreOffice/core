@@ -168,7 +168,7 @@ public:
     virtual void EndElement();
 };
 
-//------------------------------------------------------------------
+
 
 ScXMLContentValidationsContext::ScXMLContentValidationsContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,

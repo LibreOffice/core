@@ -65,7 +65,7 @@ bool ScCsvSplits::HasSplit( sal_Int32 nPos ) const
 }
 
 
-// ----------------------------------------------------------------------------
+
 
 sal_uInt32 ScCsvSplits::GetIndex( sal_Int32 nPos ) const
 {
@@ -94,7 +94,7 @@ sal_Int32 ScCsvSplits::GetPos( sal_uInt32 nIndex ) const
 }
 
 
-// ----------------------------------------------------------------------------
+
 
 sal_uInt32 ScCsvSplits::GetIterIndex( const_iterator aIter ) const
 {

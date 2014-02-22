@@ -352,7 +352,7 @@ public:
     bootstrap();
 };
 
-//______________________________________________________________________________
+
 ::unoidl::com::sun::star::uno::XComponentContext ^
 Bootstrap::defaultBootstrap_InitialComponentContext(
     ::System::String ^ ini_file,
@@ -390,7 +390,7 @@ Bootstrap::defaultBootstrap_InitialComponentContext(
         to_cli( xContext ) );
 }
 
-//______________________________________________________________________________
+
 ::unoidl::com::sun::star::uno::XComponentContext ^
 Bootstrap::defaultBootstrap_InitialComponentContext()
 {

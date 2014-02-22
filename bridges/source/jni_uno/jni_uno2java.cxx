@@ -37,19 +37,19 @@ namespace
 extern "C"
 {
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
     SAL_THROW_EXTERN_C();
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL UNO_proxy_acquire( uno_Interface * pUnoI )
     SAL_THROW_EXTERN_C();
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL UNO_proxy_release( uno_Interface * pUnoI )
     SAL_THROW_EXTERN_C();
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL UNO_proxy_dispatch(
     uno_Interface * pUnoI, typelib_TypeDescription const * member_td,
     void * uno_ret, void * uno_args[], uno_Any ** uno_exc )
@@ -60,7 +60,7 @@ void SAL_CALL UNO_proxy_dispatch(
 namespace jni_uno
 {
 
-//______________________________________________________________________________
+
 void Bridge::handle_java_exc(
     JNI_context const & jni,
     JLocalAutoRef const & jo_exc, uno_Any * uno_exc ) const
@@ -119,7 +119,7 @@ void Bridge::handle_java_exc(
             ->Message));
 }
 
-//______________________________________________________________________________
+
 void Bridge::call_java(
     jobject javaI, typelib_InterfaceTypeDescription * iface_td,
     sal_Int32 local_member_index, sal_Int32 function_pos_offset,
@@ -419,7 +419,7 @@ struct UNO_proxy : public uno_Interface
         JNI_interface_type_info const * info );
 };
 
-//______________________________________________________________________________
+
 inline UNO_proxy::UNO_proxy(
     JNI_context const & jni, Bridge const * bridge,
     jobject javaI, jstring jo_oid, OUString const & oid,
@@ -452,7 +452,7 @@ inline UNO_proxy::UNO_proxy(
     uno_Interface::pDispatcher = UNO_proxy_dispatch;
 }
 
-//______________________________________________________________________________
+
 inline void UNO_proxy::acquire() const
 {
     if (1 == osl_atomic_increment( &m_ref ))
@@ -468,7 +468,7 @@ inline void UNO_proxy::acquire() const
     }
 }
 
-//______________________________________________________________________________
+
 inline void UNO_proxy::release() const
 {
     if (0 == osl_atomic_decrement( &m_ref ))
@@ -480,7 +480,7 @@ inline void UNO_proxy::release() const
 }
 
 
-//______________________________________________________________________________
+
 uno_Interface * Bridge::map_to_uno(
     JNI_context const & jni,
     jobject javaI, JNI_interface_type_info const * info ) const
@@ -517,7 +517,7 @@ namespace
 extern "C"
 {
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
     SAL_THROW_EXTERN_C()
 {
@@ -555,7 +555,7 @@ void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
     delete that;
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL UNO_proxy_acquire( uno_Interface * pUnoI )
     SAL_THROW_EXTERN_C()
 {
@@ -563,7 +563,7 @@ void SAL_CALL UNO_proxy_acquire( uno_Interface * pUnoI )
     that->acquire();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL UNO_proxy_release( uno_Interface * pUnoI )
     SAL_THROW_EXTERN_C()
 {
@@ -571,7 +571,7 @@ void SAL_CALL UNO_proxy_release( uno_Interface * pUnoI )
     that->release();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL UNO_proxy_dispatch(
     uno_Interface * pUnoI, typelib_TypeDescription const * member_td,
     void * uno_ret, void * uno_args [], uno_Any ** uno_exc )

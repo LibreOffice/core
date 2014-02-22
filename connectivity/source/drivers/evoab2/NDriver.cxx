@@ -41,16 +41,16 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 
-// --------------------------------------------------------------------------------
+
 OEvoabDriver::OEvoabDriver(const Reference< XMultiServiceFactory >& _rxFactory) :
         ODriver_BASE( m_aMutex ), m_xFactory( _rxFactory )
 {
 }
-// -----------------------------------------------------------------------------
+
 OEvoabDriver::~OEvoabDriver()
 {
 }
-// -----------------------------------------------------------------------------
+
 void OEvoabDriver::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -78,7 +78,7 @@ void OEvoabDriver::disposing()
 }
 
 // static ServiceInfo
-//------------------------------------------------------------------------------
+
 OUString OEvoabDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
     return OUString(EVOAB_DRIVER_IMPL_NAME);
@@ -86,7 +86,7 @@ OUString OEvoabDriver::getImplementationName_Static(  ) throw(RuntimeException)
     // Please take care when changing it.
 }
 
-//------------------------------------------------------------------
+
 Sequence< OUString > OEvoabDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     // which service is supported
@@ -95,7 +95,7 @@ Sequence< OUString > OEvoabDriver::getSupportedServiceNames_Static(  ) throw (Ru
     aSNS[0] = "com.sun.star.sdbc.Driver";
     return aSNS;
 }
-//------------------------------------------------------------------
+
 OUString SAL_CALL OEvoabDriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
@@ -105,18 +105,18 @@ sal_Bool SAL_CALL OEvoabDriver::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
-//------------------------------------------------------------------
+
 Sequence< OUString > SAL_CALL OEvoabDriver::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 
-//------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL connectivity::evoab::OEvoabDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
 {
     return *(new OEvoabDriver(_rxFactory));
 }
-// --------------------------------------------------------------------------------
+
 Reference< XConnection > SAL_CALL OEvoabDriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -133,14 +133,14 @@ Reference< XConnection > SAL_CALL OEvoabDriver::connect( const OUString& url, co
 
     return xCon;
 }
-// --------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEvoabDriver::acceptsURL( const OUString& url )
     throw(SQLException, RuntimeException)
 {
     return acceptsURL_Stat(url);
 }
 
-// --------------------------------------------------------------------------------
+
 Sequence< DriverPropertyInfo > SAL_CALL OEvoabDriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
     if ( ! acceptsURL(url) )
@@ -154,21 +154,21 @@ Sequence< DriverPropertyInfo > SAL_CALL OEvoabDriver::getPropertyInfo( const OUS
     return Sequence< DriverPropertyInfo >();
 }
 
-// --------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OEvoabDriver::getMajorVersion(  ) throw(RuntimeException)
 {
     return 1;
 }
-// --------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OEvoabDriver::getMinorVersion(  ) throw(RuntimeException)
 {
     return 0;
 }
-// --------------------------------------------------------------------------------
+
 sal_Bool OEvoabDriver::acceptsURL_Stat( const OUString& url )
 {
     return ( url == "sdbc:address:evolution:local" || url == "sdbc:address:evolution:groupwise" || url == "sdbc:address:evolution:ldap" ) && EApiInit();
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

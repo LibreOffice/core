@@ -32,7 +32,7 @@ SequenceAsHashMap::SequenceAsHashMap(const css::uno::Any& aSource)
     (*this) << aSource;
 }
 
-//-----------------------------------------------
+
 SequenceAsHashMap::SequenceAsHashMap(const css::uno::Sequence< css::uno::Any >& lSource)
 {
     (*this) << lSource;
@@ -80,7 +80,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Any& aSource)
             css::uno::Reference< css::uno::XInterface >());
 }
 
-//-----------------------------------------------
+
 void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::uno::Any >& lSource)
 {
     sal_Int32 c = lSource.getLength();

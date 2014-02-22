@@ -303,7 +303,7 @@ void SpinField::ImplInitSpinFieldData()
     mbInDropDown    = false;
 }
 
-// --------------------------------------------------------------------
+
 
 void SpinField::ImplInit( Window* pParent, WinBits nWinStyle )
 {
@@ -339,7 +339,7 @@ void SpinField::ImplInit( Window* pParent, WinBits nWinStyle )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 SpinField::SpinField( WindowType nTyp ) :
     Edit( nTyp )
@@ -347,7 +347,7 @@ SpinField::SpinField( WindowType nTyp ) :
     ImplInitSpinFieldData();
 }
 
-// --------------------------------------------------------------------
+
 
 SpinField::SpinField( Window* pParent, WinBits nWinStyle ) :
     Edit( WINDOW_SPINFIELD )
@@ -369,42 +369,42 @@ SpinField::SpinField( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-// --------------------------------------------------------------------
+
 
 SpinField::~SpinField()
 {
     delete mpEdit;
 }
 
-// --------------------------------------------------------------------
+
 
 void SpinField::Up()
 {
     ImplCallEventListenersAndHandler( VCLEVENT_SPINFIELD_UP, maUpHdlLink, this );
 }
 
-// --------------------------------------------------------------------
+
 
 void SpinField::Down()
 {
     ImplCallEventListenersAndHandler( VCLEVENT_SPINFIELD_DOWN, maDownHdlLink, this );
 }
 
-// --------------------------------------------------------------------
+
 
 void SpinField::First()
 {
     ImplCallEventListenersAndHandler( VCLEVENT_SPINFIELD_FIRST, maFirstHdlLink, this );
 }
 
-// --------------------------------------------------------------------
+
 
 void SpinField::Last()
 {
     ImplCallEventListenersAndHandler( VCLEVENT_SPINFIELD_LAST, maLastHdlLink, this );
 }
 
-// --------------------------------------------------------------------
+
 
 void SpinField::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -448,7 +448,7 @@ void SpinField::MouseButtonDown( const MouseEvent& rMEvt )
     Edit::MouseButtonDown( rMEvt );
 }
 
-// --------------------------------------------------------------------
+
 
 void SpinField::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -475,7 +475,7 @@ void SpinField::MouseButtonUp( const MouseEvent& rMEvt )
     Edit::MouseButtonUp( rMEvt );
 }
 
-// --------------------------------------------------------------------
+
 
 void SpinField::MouseMove( const MouseEvent& rMEvt )
 {
@@ -522,7 +522,7 @@ void SpinField::MouseMove( const MouseEvent& rMEvt )
     Edit::MouseMove( rMEvt );
 }
 
-// --------------------------------------------------------------------
+
 
 bool SpinField::Notify( NotifyEvent& rNEvt )
 {
@@ -610,14 +610,14 @@ bool SpinField::Notify( NotifyEvent& rNEvt )
     return nDone || Edit::Notify( rNEvt );
 }
 
-// --------------------------------------------------------------------
+
 
 void SpinField::Command( const CommandEvent& rCEvt )
 {
     Edit::Command( rCEvt );
 }
 
-// --------------------------------------------------------------------
+
 
 void SpinField::FillLayoutData() const
 {
@@ -631,7 +631,7 @@ void SpinField::FillLayoutData() const
         Edit::FillLayoutData();
 }
 
-// --------------------------------------------------------------------
+
 
 void SpinField::Paint( const Rectangle& rRect )
 {
@@ -662,7 +662,7 @@ void SpinField::Paint( const Rectangle& rRect )
     Edit::Paint( rRect );
 }
 
-// --------------------------------------------------------------------
+
 
 void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rectangle& rDDArea, Rectangle& rSpinUpArea, Rectangle& rSpinDownArea )
 {
@@ -747,7 +747,7 @@ void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rec
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SpinField::Resize()
 {
@@ -808,7 +808,7 @@ void SpinField::Resize()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinField::StateChanged( StateChangedType nType )
 {
@@ -872,7 +872,7 @@ void SpinField::StateChanged( StateChangedType nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinField::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -886,7 +886,7 @@ void SpinField::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle* SpinField::ImplFindPartRect( const Point& rPt )
 {
@@ -947,7 +947,7 @@ bool SpinField::PreNotify( NotifyEvent& rNEvt )
     return Edit::PreNotify(rNEvt);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinField::EndDropDown()
 {
@@ -955,7 +955,7 @@ void SpinField::EndDropDown()
     Paint( Rectangle( Point(), GetOutputSizePixel() ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SpinField::ShowDropDown( sal_Bool )
 {
@@ -996,14 +996,14 @@ Size SpinField::CalcMinimumSize() const
     return CalcMinimumSizeForText(GetText());
 }
 
-// -----------------------------------------------------------------------
+
 
 Size SpinField::GetOptimalSize() const
 {
     return CalcMinimumSize();
 }
 
-// -----------------------------------------------------------------------
+
 
 Size SpinField::CalcSize(sal_Int32 nChars) const
 {
@@ -1017,7 +1017,7 @@ Size SpinField::CalcSize(sal_Int32 nChars) const
     return aSz;
 }
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK( SpinField, ImplTimeout, Timer*, pTimer )
 {
@@ -1036,7 +1036,7 @@ IMPL_LINK( SpinField, ImplTimeout, Timer*, pTimer )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinField::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {

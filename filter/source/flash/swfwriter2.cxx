@@ -28,7 +28,7 @@ using namespace ::std;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
-// -----------------------------------------------------------------------------
+
 
 sal_uInt16 getMaxBitsUnsigned( sal_uInt32 nValue )
 {
@@ -43,7 +43,7 @@ sal_uInt16 getMaxBitsUnsigned( sal_uInt32 nValue )
     return nBits;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_uInt16 getMaxBitsSigned( sal_Int32 nValue )
 {
@@ -53,7 +53,7 @@ sal_uInt16 getMaxBitsSigned( sal_Int32 nValue )
     return getMaxBitsUnsigned( static_cast< sal_uInt32 >(nValue) ) + 1;
 }
 
-// -----------------------------------------------------------------------------
+
 
 BitStream::BitStream()
 {
@@ -61,7 +61,7 @@ BitStream::BitStream()
     mnCurrentByte = 0;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void BitStream::writeUB( sal_uInt32 nValue, sal_uInt16 nBits )
 {
@@ -85,21 +85,21 @@ void BitStream::writeUB( sal_uInt32 nValue, sal_uInt16 nBits )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void BitStream::writeSB( sal_Int32 nValue, sal_uInt16 nBits )
 {
     writeUB( static_cast< sal_uInt32 >(nValue), nBits );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void BitStream::writeFB( sal_uInt32 nValue, sal_uInt16 nBits )
 {
     writeUB( nValue, nBits );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void BitStream::pad()
 {
@@ -111,7 +111,7 @@ void BitStream::pad()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void BitStream::writeTo( SvStream& out )
 {
@@ -125,7 +125,7 @@ void BitStream::writeTo( SvStream& out )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_uInt32 BitStream::getOffset() const
 {
@@ -139,7 +139,7 @@ Tag::Tag( sal_uInt8 nTagId )
     mnTagId = nTagId;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Tag::write( SvStream &out )
 {
@@ -173,28 +173,28 @@ void Tag::write( SvStream &out )
     out.Write( GetData(), nSz );
 }
 #if 0
-// -----------------------------------------------------------------------------
+
 
 void Tag::addI32( sal_Int32 nValue )
 {
     addUI32( static_cast<sal_uInt32>( nValue ) );
 }
 #endif
-// -----------------------------------------------------------------------------
+
 
 void Tag::addUI32( sal_uInt32 nValue )
 {
     WriteUInt32( nValue );
 }
 #if 0
-// -----------------------------------------------------------------------------
+
 
 void Tag::addI16( sal_Int16 nValue )
 {
     addUI16( static_cast<sal_uInt16>( nValue ) );
 }
 #endif
-// -----------------------------------------------------------------------------
+
 
 void Tag::addUI16( sal_uInt16 nValue )
 {
@@ -202,21 +202,21 @@ void Tag::addUI16( sal_uInt16 nValue )
     WriteUChar( (sal_uInt8)(nValue >> 8) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Tag::addUI8( sal_uInt8 nValue )
 {
     WriteUChar( (sal_uInt8)nValue );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Tag::addBits( BitStream& rIn )
 {
     rIn.writeTo( *this );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Tag::addRGBA( const Color& rColor )
 {
@@ -226,7 +226,7 @@ void Tag::addRGBA( const Color& rColor )
     addUI8( 0xff - rColor.GetTransparency() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Tag::addRGB( const Color& rColor )
 {
@@ -235,14 +235,14 @@ void Tag::addRGB( const Color& rColor )
     addUI8( rColor.GetBlue() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Tag::addRect( const Rectangle& rRect )
 {
     writeRect( *this, rRect );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Tag::writeRect( SvStream& rOut, const Rectangle& rRect )
 {
@@ -292,14 +292,14 @@ void Tag::writeRect( SvStream& rOut, const Rectangle& rRect )
     aBits.writeTo( rOut );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Tag::addMatrix( const ::basegfx::B2DHomMatrix& rMatrix ) // #i73264#
 {
     writeMatrix( *this, rMatrix );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Tag::writeMatrix( SvStream& rOut, const ::basegfx::B2DHomMatrix& rMatrix ) // #i73264#
 {
@@ -341,7 +341,7 @@ void Tag::writeMatrix( SvStream& rOut, const ::basegfx::B2DHomMatrix& rMatrix ) 
     aBits.writeTo( rOut );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Tag::addString( const char* pString )
 {
@@ -354,7 +354,7 @@ void Tag::addString( const char* pString )
     addUI8( 0 );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Tag::addStream( SvStream& rIn )
 {
@@ -368,7 +368,7 @@ Sprite::Sprite( sal_uInt16 nId )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sprite::~Sprite()
 {
@@ -376,7 +376,7 @@ Sprite::~Sprite()
         delete *i;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Sprite::write( SvStream& out )
 {
@@ -396,7 +396,7 @@ void Sprite::write( SvStream& out )
     aTag.write( out );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Sprite::addTag( Tag* pNewTag )
 {
@@ -430,13 +430,13 @@ FlashFont::FlashFont( const Font& rFont, sal_uInt16 nId )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 FlashFont::~FlashFont()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** gets the glyph id for the given character. The glyphs are created on demand */
 sal_uInt16 FlashFont::getGlyph( sal_uInt16 nChar, VirtualDevice* pVDev )
@@ -496,7 +496,7 @@ sal_uInt16 FlashFont::getGlyph( sal_uInt16 nChar, VirtualDevice* pVDev )
     return mnNextIndex++;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void FlashFont::write( SvStream& out )
 {
@@ -525,7 +525,7 @@ FillStyle::FillStyle( const Color& rSolidColor )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** this c'tor creates a tiled or clipped bitmap fill style */
 FillStyle::FillStyle( sal_uInt16 nBitmapId, bool bClipped, const ::basegfx::B2DHomMatrix& rMatrix ) // #i73264#
@@ -535,7 +535,7 @@ FillStyle::FillStyle( sal_uInt16 nBitmapId, bool bClipped, const ::basegfx::B2DH
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 FillStyle::FillStyleType Impl_getFillStyleType( const Gradient& rGradient )
 {
@@ -553,7 +553,7 @@ FillStyle::FillStyleType Impl_getFillStyleType( const Gradient& rGradient )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** this c'tor creates a linear or radial gradient fill style */
 FillStyle::FillStyle( const Rectangle& rBoundRect, const Gradient& rGradient )
@@ -564,7 +564,7 @@ FillStyle::FillStyle( const Rectangle& rBoundRect, const Gradient& rGradient )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void FillStyle::addTo( Tag* pTag ) const
 {
@@ -586,7 +586,7 @@ void FillStyle::addTo( Tag* pTag ) const
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 struct GradRecord
 {

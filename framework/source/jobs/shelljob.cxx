@@ -18,7 +18,7 @@
  */
 
 
-//_______________________________________________
+
 // include own header
 
 #include <jobs/shelljob.hxx>
@@ -26,7 +26,7 @@
 #include <threadhelp/readguard.hxx>
 #include <services.h>
 
-//_______________________________________________
+
 // include others
 
 #include <osl/file.hxx>
@@ -36,7 +36,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
-//_______________________________________________
+
 // include interfaces
 
 #include <com/sun/star/util/PathSubstitution.hpp>
@@ -61,7 +61,7 @@ static const OUString PROP_DEACTIVATEJOBIFDONE("DeactivateJobIfDone");
 /** address job configuration property "CheckExitCode". */
 static const OUString PROP_CHECKEXITCODE("CheckExitCode");
 
-//-----------------------------------------------
+
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2(ShellJob                   ,
                                    ::cppu::OWeakObject        ,
@@ -78,19 +78,19 @@ DEFINE_INIT_SERVICE(ShellJob,
                     }
                    )
 
-//-----------------------------------------------
+
 ShellJob::ShellJob(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase(     )
     , m_xContext    (xContext)
 {
 }
 
-//-----------------------------------------------
+
 ShellJob::~ShellJob()
 {
 }
 
-//-----------------------------------------------
+
 css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::NamedValue >& lJobArguments)
     throw(css::lang::IllegalArgumentException,
           css::uno::Exception                ,
@@ -128,7 +128,7 @@ css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::N
     return css::uno::Any();
 }
 
-//-----------------------------------------------
+
 css::uno::Any ShellJob::impl_generateAnswer4Deactivation()
 {
     css::uno::Sequence< css::beans::NamedValue > aAnswer(1);
@@ -138,7 +138,7 @@ css::uno::Any ShellJob::impl_generateAnswer4Deactivation()
     return css::uno::makeAny(aAnswer);
 }
 
-//-----------------------------------------------
+
 OUString ShellJob::impl_substituteCommandVariables(const OUString& sCommand)
 {
     // SYNCHRONIZED ->
@@ -161,7 +161,7 @@ OUString ShellJob::impl_substituteCommandVariables(const OUString& sCommand)
     return OUString();
 }
 
-//-----------------------------------------------
+
 ::sal_Bool ShellJob::impl_execute(const OUString&                       sCommand      ,
                                   const css::uno::Sequence< OUString >& lArguments    ,
                                         ::sal_Bool                             bCheckExitCode)

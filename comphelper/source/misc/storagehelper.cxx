@@ -50,7 +50,7 @@ using namespace ::com::sun::star;
 
 namespace comphelper {
 
-// ----------------------------------------------------------------------
+
 uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetStorageFactory(
                             const uno::Reference< uno::XComponentContext >& rxContext )
         throw ( uno::Exception )
@@ -60,7 +60,7 @@ uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetStorageFactory(
     return embed::StorageFactory::create( xContext );
 }
 
-// ----------------------------------------------------------------------
+
 uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetFileSystemStorageFactory(
                             const uno::Reference< uno::XComponentContext >& rxContext )
         throw ( uno::Exception )
@@ -70,7 +70,7 @@ uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetFileSystemStora
     return embed::FileSystemStorageFactory::create(rxContext);
 }
 
-// ----------------------------------------------------------------------
+
 uno::Reference< embed::XStorage > OStorageHelper::GetTemporaryStorage(
             const uno::Reference< uno::XComponentContext >& rxContext )
     throw ( uno::Exception )
@@ -83,7 +83,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetTemporaryStorage(
     return xTempStorage;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL(
             const OUString& aURL,
             sal_Int32 nStorageMode,
@@ -102,7 +102,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL(
     return xTempStorage;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL2(
             const OUString& aURL,
             sal_Int32 nStorageMode,
@@ -135,7 +135,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL2(
     return xTempStorage;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromInputStream(
             const uno::Reference < io::XInputStream >& xStream,
             const uno::Reference< uno::XComponentContext >& rxContext )
@@ -153,7 +153,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromInputStream(
     return xTempStorage;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromStream(
             const uno::Reference < io::XStream >& xStream,
             sal_Int32 nStorageMode,
@@ -172,7 +172,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromStream(
     return xTempStorage;
 }
 
-// ----------------------------------------------------------------------
+
 void OStorageHelper::CopyInputToOutput(
             const uno::Reference< io::XInputStream >& xInput,
             const uno::Reference< io::XOutputStream >& xOutput )
@@ -197,7 +197,7 @@ void OStorageHelper::CopyInputToOutput(
     while ( nRead == nConstBufferSize );
 }
 
-// ----------------------------------------------------------------------
+
 uno::Reference< io::XInputStream > OStorageHelper::GetInputStreamFromURL(
             const OUString& aURL,
             const uno::Reference< uno::XComponentContext >& context )
@@ -210,7 +210,7 @@ uno::Reference< io::XInputStream > OStorageHelper::GetInputStreamFromURL(
     return xInputStream;
 }
 
-// ----------------------------------------------------------------------
+
 void OStorageHelper::SetCommonStorageEncryptionData(
             const uno::Reference< embed::XStorage >& xStorage,
             const uno::Sequence< beans::NamedValue >& aEncryptionData )
@@ -223,7 +223,7 @@ void OStorageHelper::SetCommonStorageEncryptionData(
     xEncrSet->setEncryptionData( aEncryptionData );
 }
 
-// ----------------------------------------------------------------------
+
 sal_Int32 OStorageHelper::GetXStorageFormat(
             const uno::Reference< embed::XStorage >& xStorage )
         throw ( uno::Exception )
@@ -280,7 +280,7 @@ sal_Int32 OStorageHelper::GetXStorageFormat(
     return nResult;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromURL(
             const OUString& aFormat,
             const OUString& aURL,
@@ -312,7 +312,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromURL(
     return xTempStorage;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromInputStream(
             const OUString& aFormat,
             const uno::Reference < io::XInputStream >& xStream,
@@ -343,7 +343,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromInputStr
     return xTempStorage;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
             const OUString& aFormat,
             const uno::Reference < io::XStream >& xStream,
@@ -375,7 +375,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
     return xTempStorage;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( const OUString& aPassword )
 {
     // TODO/LATER: Should not the method be part of DocPasswordHelper?
@@ -436,13 +436,13 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
     return aEncryptionData;
 }
 
-// ----------------------------------------------------------------------
+
 bool OStorageHelper::IsValidZipEntryFileName( const OUString& aName, bool bSlashAllowed )
 {
     return IsValidZipEntryFileName( aName.getStr(), aName.getLength(), bSlashAllowed );
 }
 
-// ----------------------------------------------------------------------
+
 bool OStorageHelper::IsValidZipEntryFileName(
     const sal_Unicode *pChar, sal_Int32 nLength, bool bSlashAllowed )
 {
@@ -470,7 +470,7 @@ bool OStorageHelper::IsValidZipEntryFileName(
     return true;
 }
 
-// ----------------------------------------------------------------------
+
 bool OStorageHelper::PathHasSegment( const OUString& aPath, const OUString& aSegment )
 {
     bool bResult = false;

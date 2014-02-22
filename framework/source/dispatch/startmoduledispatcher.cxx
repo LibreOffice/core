@@ -53,7 +53,7 @@ namespace framework{
 namespace fpf = ::framework::pattern::frame;
 
 
-//-----------------------------------------------
+
 StartModuleDispatcher::StartModuleDispatcher(const css::uno::Reference< css::uno::XComponentContext >&     rxContext,
                                              const css::uno::Reference< css::frame::XFrame >&              xFrame ,
                                              const OUString&                                        sTarget)
@@ -65,12 +65,12 @@ StartModuleDispatcher::StartModuleDispatcher(const css::uno::Reference< css::uno
 {
 }
 
-//-----------------------------------------------
+
 StartModuleDispatcher::~StartModuleDispatcher()
 {
 }
 
-//-----------------------------------------------
+
 void SAL_CALL StartModuleDispatcher::dispatch(const css::util::URL&                                  aURL      ,
                                               const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
     throw(css::uno::RuntimeException)
@@ -78,7 +78,7 @@ void SAL_CALL StartModuleDispatcher::dispatch(const css::util::URL&             
     dispatchWithNotification(aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
 }
 
-//-----------------------------------------------
+
 void SAL_CALL StartModuleDispatcher::dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                               const css::uno::Sequence< css::beans::PropertyValue >&            /*lArguments*/,
                                                               const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
@@ -98,35 +98,35 @@ void SAL_CALL StartModuleDispatcher::dispatchWithNotification(const css::util::U
     implts_notifyResultListener(xListener, nResult, css::uno::Any());
 }
 
-//-----------------------------------------------
+
 css::uno::Sequence< ::sal_Int16 > SAL_CALL StartModuleDispatcher::getSupportedCommandGroups()
     throw(css::uno::RuntimeException)
 {
     return css::uno::Sequence< ::sal_Int16 >();
 }
 
-//-----------------------------------------------
+
 css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL StartModuleDispatcher::getConfigurableDispatchInformation(::sal_Int16 /*nCommandGroup*/)
     throw(css::uno::RuntimeException)
 {
     return css::uno::Sequence< css::frame::DispatchInformation >();
 }
 
-//-----------------------------------------------
+
 void SAL_CALL StartModuleDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
                                                        const css::util::URL&                                     /*aURL*/     )
     throw(css::uno::RuntimeException)
 {
 }
 
-//-----------------------------------------------
+
 void SAL_CALL StartModuleDispatcher::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
                                                           const css::util::URL&                                     /*aURL*/     )
     throw(css::uno::RuntimeException)
 {
 }
 
-//-----------------------------------------------
+
 ::sal_Bool StartModuleDispatcher::implts_isBackingModePossible ()
 {
     if ( ! SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE))
@@ -160,7 +160,7 @@ void SAL_CALL StartModuleDispatcher::removeStatusListener(const css::uno::Refere
     return bIsPossible;
 }
 
-//-----------------------------------------------
+
 ::sal_Bool StartModuleDispatcher::implts_establishBackingMode()
 {
     // SAFE -> ----------------------------------
@@ -182,7 +182,7 @@ void SAL_CALL StartModuleDispatcher::removeStatusListener(const css::uno::Refere
     return sal_True;
 }
 
-//-----------------------------------------------
+
 void StartModuleDispatcher::implts_notifyResultListener(const css::uno::Reference< css::frame::XDispatchResultListener >& xListener,
                                                               ::sal_Int16                                                 nState   ,
                                                         const css::uno::Any&                                              aResult  )

@@ -596,7 +596,7 @@ struct ScDPSaveGroupSourceNameFunc
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 ScDPDimensionSaveData::ScDPDimensionSaveData()
 {

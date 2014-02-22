@@ -35,7 +35,7 @@ using namespace osl;
 
 namespace cppu_threadpool {
 
-// ----------------------------------------------------------------------------------
+
     ThreadAdmin::ThreadAdmin(): m_disposed(false) {}
 
     ThreadAdmin::~ThreadAdmin()
@@ -99,7 +99,7 @@ namespace cppu_threadpool {
         }
     }
 
-// ----------------------------------------------------------------------------------
+
     ORequestThread::ORequestThread( ThreadPoolHolder const &aThreadPool,
                                     JobQueue *pQueue,
                                     const ByteSequence &aThreadId,

@@ -116,7 +116,7 @@ const sal_uInt16 HI_ACTION = 4;
 
 static const char DOCUMENT_SIGNATURE_MENU_CMD[] = "Signature";
 
-//------------------------------------------------------------------------
+
 namespace {
 
 OUString CreateSizeText( sal_Int64 nSize )
@@ -193,7 +193,7 @@ OUString ConvertDateTime_Impl( const OUString& rName,
 }
 
 }
-//------------------------------------------------------------------------
+
 
 SfxDocumentInfoItem::SfxDocumentInfoItem()
     : SfxStringItem()
@@ -220,7 +220,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
@@ -280,7 +280,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
     catch ( Exception& ) {}
 }
 
-//------------------------------------------------------------------------
+
 
 SfxDocumentInfoItem::SfxDocumentInfoItem( const SfxDocumentInfoItem& rItem )
     : SfxStringItem( rItem )
@@ -315,19 +315,19 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const SfxDocumentInfoItem& rItem )
     m_aCmisProperties = rItem.m_aCmisProperties;
 }
 
-//------------------------------------------------------------------------
+
 SfxDocumentInfoItem::~SfxDocumentInfoItem()
 {
     ClearCustomProperties();
 }
 
-//------------------------------------------------------------------------
+
 SfxPoolItem* SfxDocumentInfoItem::Clone( SfxItemPool * ) const
 {
     return new SfxDocumentInfoItem( *this );
 }
 
-//------------------------------------------------------------------------
+
 bool SfxDocumentInfoItem::operator==( const SfxPoolItem& rItem) const
 {
     if (!(rItem.Type() == Type() && SfxStringItem::operator==(rItem)))
@@ -357,7 +357,7 @@ bool SfxDocumentInfoItem::operator==( const SfxPoolItem& rItem) const
          m_aCmisProperties.getLength() == rInfoItem.m_aCmisProperties.getLength();
 }
 
-//------------------------------------------------------------------------
+
 void SfxDocumentInfoItem::resetUserData(const OUString & i_rAuthor)
 {
     setAuthor(i_rAuthor);
@@ -373,7 +373,7 @@ void SfxDocumentInfoItem::resetUserData(const OUString & i_rAuthor)
     setEditingCycles(1);
 }
 
-//------------------------------------------------------------------------
+
 void SfxDocumentInfoItem::UpdateDocumentInfo(
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
         bool i_bDoNotUpdateUserDefined) const
@@ -445,7 +445,7 @@ void SfxDocumentInfoItem::UpdateDocumentInfo(
     }
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool SfxDocumentInfoItem::IsDeleteUserData() const
 {
     return m_bDeleteUserData;
@@ -631,7 +631,7 @@ bool SfxDocumentInfoItem::PutValue( const Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-//------------------------------------------------------------------------
+
 SfxDocumentDescPage::SfxDocumentDescPage( Window * pParent, const SfxItemSet& rItemSet )
     : SfxTabPage(pParent, "DescriptionInfoPage", "sfx/ui/descriptioninfopage.ui", rItemSet)
     , m_pInfoItem   ( NULL )
@@ -643,13 +643,13 @@ SfxDocumentDescPage::SfxDocumentDescPage( Window * pParent, const SfxItemSet& rI
     get(m_pCommentEd, "comments");
 }
 
-//------------------------------------------------------------------------
+
 SfxTabPage *SfxDocumentDescPage::Create(Window *pParent, const SfxItemSet &rItemSet)
 {
      return new SfxDocumentDescPage(pParent, rItemSet);
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
 {
     // Test whether a change is present
@@ -707,7 +707,7 @@ sal_Bool SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
     return sal_True;
 }
 
-//------------------------------------------------------------------------
+
 void SfxDocumentDescPage::Reset(const SfxItemSet &rSet)
 {
     m_pInfoItem = &(SfxDocumentInfoItem &)rSet.Get(SID_DOCINFO);
@@ -727,7 +727,7 @@ void SfxDocumentDescPage::Reset(const SfxItemSet &rSet)
     }
 }
 
-//------------------------------------------------------------------------
+
 namespace
 {
     OUString GetDateTimeString( sal_Int32 _nDate, sal_Int32 _nTime )
@@ -809,7 +809,7 @@ SfxDocumentPage::SfxDocumentPage(Window* pParent, const SfxItemSet& rItemSet)
         m_pSignatureBtn->Disable();
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl)
 {
@@ -923,14 +923,14 @@ void SfxDocumentPage::ImplCheckPasswordState()
     m_pChangePassBtn->Disable();
 }
 
-//------------------------------------------------------------------------
+
 
 SfxTabPage* SfxDocumentPage::Create( Window* pParent, const SfxItemSet& rItemSet )
 {
      return new SfxDocumentPage( pParent, rItemSet );
 }
 
-//------------------------------------------------------------------------
+
 
 void SfxDocumentPage::EnableUseUserData()
 {
@@ -939,7 +939,7 @@ void SfxDocumentPage::EnableUseUserData()
     m_pDeleteBtn->Show();
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
 {
@@ -998,7 +998,7 @@ sal_Bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
     return bRet;
 }
 
-//------------------------------------------------------------------------
+
 
 void SfxDocumentPage::Reset( const SfxItemSet& rSet )
 {
@@ -1127,7 +1127,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     m_pDeleteBtn->Enable( bEnableUseUserData );
 }
 
-//------------------------------------------------------------------------
+
 SfxDocumentInfoDialog::SfxDocumentInfoDialog( Window* pParent,
                                               const SfxItemSet& rItemSet )
     : SfxTabDialog(0, pParent, "DocumentPropertiesDialog",
@@ -1181,7 +1181,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( Window* pParent,
     AddTabPage("security", SfxSecurityPage::Create, 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxDocumentInfoDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
@@ -1323,7 +1323,7 @@ IMPL_LINK_NOARG(CustomPropertiesEditButton, ClickHdl)
     delete pDurationDlg;
     return 1;
 }
-//--------------------------------------------------------------------------
+
 void CustomPropertiesYesNoButton::Resize()
 {
     const long nWidth = GetSizePixel().Width();

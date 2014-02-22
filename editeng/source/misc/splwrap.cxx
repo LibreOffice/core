@@ -168,7 +168,7 @@ SvxSpellWrapper::SvxSpellWrapper( Window* pWn,
     bEndDone   = bReverse && bStart && !bOther;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxSpellWrapper::SvxSpellWrapper( Window* pWn,
         Reference< XHyphenator >  &xHyphenator,
@@ -189,7 +189,7 @@ SvxSpellWrapper::SvxSpellWrapper( Window* pWn,
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Int16 SvxSpellWrapper::CheckSpellLang(
         Reference< XSpellChecker1 > xSpell, sal_Int16 nLang)
@@ -241,14 +241,14 @@ sal_Int16 SvxSpellWrapper::CheckHyphLang(
     return (sal_Int16) nVal;
 }
 
-// -----------------------------------------------------------------------
+
 
 
 void SvxSpellWrapper::SpellStart( SvxSpellArea /*eSpell*/ )
 { // Here, the necessary preparations be made for SpellContinue in the
 } // given area.
 
-// -----------------------------------------------------------------------
+
 
 
 sal_Bool SvxSpellWrapper::HasOtherCnt()
@@ -256,7 +256,7 @@ sal_Bool SvxSpellWrapper::HasOtherCnt()
     return sal_False; // Is there a special area?
 }
 
-// -----------------------------------------------------------------------
+
 
 
 sal_Bool SvxSpellWrapper::SpellMore()
@@ -264,7 +264,7 @@ sal_Bool SvxSpellWrapper::SpellMore()
     return sal_False; // Should additional documents be examined?
 }
 
-// -----------------------------------------------------------------------
+
 
 
 void SvxSpellWrapper::SpellEnd()
@@ -274,7 +274,7 @@ void SvxSpellWrapper::SpellEnd()
     ShowLanguageErrors();
 }
 
-// -----------------------------------------------------------------------
+
 
 
 sal_Bool SvxSpellWrapper::SpellContinue()
@@ -282,27 +282,27 @@ sal_Bool SvxSpellWrapper::SpellContinue()
     return sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxSpellWrapper::AutoCorrect( const OUString&, const OUString& )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 
 void SvxSpellWrapper::ScrollArea()
 {   // Set Scroll area
 }
 
-// -----------------------------------------------------------------------
+
 
 
 void SvxSpellWrapper::ChangeWord( const OUString&, const sal_uInt16 )
 {   // Insert Word
 }
 
-// -----------------------------------------------------------------------
+
 
 
 void SvxSpellWrapper::ChangeThesWord( const OUString& )
@@ -310,7 +310,7 @@ void SvxSpellWrapper::ChangeThesWord( const OUString& )
     // replace word due to Thesaurus.
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxSpellWrapper::StartThesaurus( const OUString &rWord, sal_uInt16 nLanguage )
 {
@@ -332,27 +332,27 @@ void SvxSpellWrapper::StartThesaurus( const OUString &rWord, sal_uInt16 nLanguag
     delete pDlg;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxSpellWrapper::ReplaceAll( const OUString &, sal_Int16 )
 {   // Replace Word from the Replace list
 }
 
-// -----------------------------------------------------------------------
+
 
 
 void SvxSpellWrapper::SetLanguage( const sal_uInt16 )
 {   // Set Language
 }
 
-// -----------------------------------------------------------------------
+
 
 
 void SvxSpellWrapper::InsertHyphen( const sal_uInt16 )
 {   // inserting and deleting Hyphae
 }
 
-// -----------------------------------------------------------------------
+
 // Testing of the document areas in the order specified by the flags
 
 
@@ -392,7 +392,7 @@ void SvxSpellWrapper::SpellDocument( )
     };
 }
 
-// -----------------------------------------------------------------------
+
 // Select the next area
 
 
@@ -484,7 +484,7 @@ sal_Bool SvxSpellWrapper::SpellNext( )
     return bGoOn;
 }
 
-// -----------------------------------------------------------------------
+
 
 Reference< XDictionary >  SvxSpellWrapper::GetAllRightDic() const
 {
@@ -528,7 +528,7 @@ Reference< XDictionary >  SvxSpellWrapper::GetAllRightDic() const
     return xDic;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxSpellWrapper::FindSpellError()
 {

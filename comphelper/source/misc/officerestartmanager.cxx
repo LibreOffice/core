@@ -32,7 +32,7 @@ using namespace ::com::sun::star;
 namespace comphelper
 {
 
-// ----------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL OOfficeRestartManager::getSupportedServiceNames_static()
 {
     uno::Sequence< OUString > aResult( 1 );
@@ -40,32 +40,32 @@ uno::Sequence< OUString > SAL_CALL OOfficeRestartManager::getSupportedServiceNam
     return aResult;
 }
 
-// ----------------------------------------------------------
+
 OUString SAL_CALL OOfficeRestartManager::getImplementationName_static()
 {
     return OUString( "com.sun.star.comp.task.OfficeRestartManager" );
 }
 
-// ----------------------------------------------------------
+
 OUString SAL_CALL OOfficeRestartManager::getSingletonName_static()
 {
     return OUString( "com.sun.star.task.OfficeRestartManager" );
 }
 
-// ----------------------------------------------------------
+
 OUString SAL_CALL OOfficeRestartManager::getServiceName_static()
 {
     return OUString( "com.sun.star.comp.task.OfficeRestartManager" );
 }
 
-// ----------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL OOfficeRestartManager::Create( const uno::Reference< uno::XComponentContext >& rxContext )
 {
     return static_cast< cppu::OWeakObject* >( new OOfficeRestartManager( rxContext ) );
 }
 
 // XRestartManager
-// ----------------------------------------------------------
+
 void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task::XInteractionHandler >& /* xInteractionHandler */ )
     throw (uno::Exception, uno::RuntimeException)
 {
@@ -107,7 +107,7 @@ void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task:
     }
 }
 
-// ----------------------------------------------------------
+
 ::sal_Bool SAL_CALL OOfficeRestartManager::isRestartRequested( ::sal_Bool bOfficeInitialized )
     throw (uno::Exception, uno::RuntimeException)
 {
@@ -120,7 +120,7 @@ void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task:
 }
 
 // XCallback
-// ----------------------------------------------------------
+
 void SAL_CALL OOfficeRestartManager::notify( const uno::Any& /* aData */ )
     throw ( uno::RuntimeException )
 {
@@ -163,7 +163,7 @@ void SAL_CALL OOfficeRestartManager::notify( const uno::Any& /* aData */ )
 }
 
 // XServiceInfo
-// ----------------------------------------------------------
+
 OUString SAL_CALL OOfficeRestartManager::getImplementationName() throw (uno::RuntimeException)
 {
     return getImplementationName_static();

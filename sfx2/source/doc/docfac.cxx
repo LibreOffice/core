@@ -93,7 +93,7 @@ SfxFilterContainer* SfxObjectFactory::GetFilterContainer( sal_Bool /*bForceLoad*
     return pImpl->pFilterContainer;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxObjectFactory::SfxObjectFactory
 (
@@ -126,7 +126,7 @@ SfxObjectFactory::SfxObjectFactory
         pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_MESSAGE );
 }
 
-//--------------------------------------------------------------------
+
 
 SfxObjectFactory::~SfxObjectFactory()
 {
@@ -137,7 +137,7 @@ SfxObjectFactory::~SfxObjectFactory()
     delete pImpl;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxObjectFactory::RegisterViewFactory
 (
@@ -167,21 +167,21 @@ void SfxObjectFactory::RegisterViewFactory
     pImpl->aViewFactoryArr.insert(it, &rFactory);
 }
 
-//--------------------------------------------------------------------
+
 
 sal_uInt16 SfxObjectFactory::GetViewFactoryCount() const
 {
     return pImpl->aViewFactoryArr.size();
 }
 
-//--------------------------------------------------------------------
+
 
 SfxViewFactory& SfxObjectFactory::GetViewFactory(sal_uInt16 i) const
 {
     return *pImpl->aViewFactoryArr[i];
 }
 
-//--------------------------------------------------------------------
+
 
 SfxModule* SfxObjectFactory::GetModule() const
 {

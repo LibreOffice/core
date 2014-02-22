@@ -33,7 +33,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-// -------------------------------------------------------------------------
+
 KabTable::KabTable( sdbcx::OCollection* _pTables,
                 KabConnection* _pConnection,
                 const OUString& _Name,
@@ -51,7 +51,7 @@ KabTable::KabTable( sdbcx::OCollection* _pTables,
 {
     construct();
 }
-// -------------------------------------------------------------------------
+
 void KabTable::refreshColumns()
 {
     TStringVector aVector;

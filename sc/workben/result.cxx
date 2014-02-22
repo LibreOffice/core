@@ -27,11 +27,11 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 SV_IMPL_PTRARR( XResultListenerArr_Impl, XResultListenerPtr );
 
-//------------------------------------------------------------------------
+
 
 ScAddInResult::ScAddInResult(const String& rStr) :
     aArg( rStr ),
@@ -111,7 +111,7 @@ void SAL_CALL ScAddInResult::removeResultListener( const ::com::sun::star::uno::
     release();
 }
 
-//------------------------------------------------------------------------
+
 
 
 

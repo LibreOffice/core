@@ -466,7 +466,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
     } // while ( nWitch )
 }
 
-//------------------------------------------------------------------
+
 void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName)
 {
     ScDocument*             pDoc    = GetViewData()->GetDocument();
@@ -553,7 +553,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     }
 }
 
-//------------------------------------------------------------------
+
 
 bool ScTabViewShell::IsRefInputMode() const
 {
@@ -600,7 +600,7 @@ bool ScTabViewShell::IsRefInputMode() const
     return false;
 }
 
-//------------------------------------------------------------------
+
 
 void ScTabViewShell::ExecuteInputDirect()
 {
@@ -614,7 +614,7 @@ void ScTabViewShell::ExecuteInputDirect()
     }
 }
 
-//------------------------------------------------------------------
+
 
 void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bStopEditing /* = sal_True */ )
 {
@@ -714,7 +714,7 @@ void ScTabViewShell::UpdateInputHandlerCellAdjust( SvxCellHorJustify eJust )
         pHdl->UpdateCellAdjust( eJust );
 }
 
-//------------------------------------------------------------------
+
 
 void ScTabViewShell::ExecuteSave( SfxRequest& rReq )
 {

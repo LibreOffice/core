@@ -112,7 +112,7 @@ void SAL_CALL GalleryThemeProvider::initialize( const uno::Sequence< uno::Any >&
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Type SAL_CALL GalleryThemeProvider::getElementType()
     throw (uno::RuntimeException)
@@ -120,7 +120,7 @@ uno::Type SAL_CALL GalleryThemeProvider::getElementType()
     return ::getCppuType( (const uno::Reference< gallery::XGalleryTheme >*) 0);
 }
 
-// ------------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL GalleryThemeProvider::hasElements()
     throw (uno::RuntimeException)
@@ -130,7 +130,7 @@ sal_Bool SAL_CALL GalleryThemeProvider::hasElements()
     return( ( mpGallery != NULL ) && ( mpGallery->GetThemeCount() > 0 ) );
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Any SAL_CALL GalleryThemeProvider::getByName( const OUString& rName )
     throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
@@ -150,7 +150,7 @@ uno::Any SAL_CALL GalleryThemeProvider::getByName( const OUString& rName )
     return aRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Sequence< OUString > SAL_CALL GalleryThemeProvider::getElementNames()
     throw (uno::RuntimeException)
@@ -172,7 +172,7 @@ uno::Sequence< OUString > SAL_CALL GalleryThemeProvider::getElementNames()
     return aSeq;
 }
 
-// ------------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL GalleryThemeProvider::hasByName( const OUString& rName )
     throw (uno::RuntimeException)
@@ -187,7 +187,7 @@ sal_Bool SAL_CALL GalleryThemeProvider::hasByName( const OUString& rName )
     return( bRet );
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Reference< gallery::XGalleryTheme > SAL_CALL GalleryThemeProvider::insertNewByName( const OUString& rThemeName )
     throw (container::ElementExistException, uno::RuntimeException)
@@ -210,7 +210,7 @@ uno::Reference< gallery::XGalleryTheme > SAL_CALL GalleryThemeProvider::insertNe
     return xRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL GalleryThemeProvider::removeByName( const OUString& rName )
     throw (container::NoSuchElementException, uno::RuntimeException)

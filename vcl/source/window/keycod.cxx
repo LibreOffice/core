@@ -52,7 +52,7 @@ static const sal_uInt16 aImplKeyFuncTab[(KEYFUNC_FRONT+1)*4] =
     0, 0, 0, 0                                                     // KEYFUNC_FRONT
 };
 
-// -----------------------------------------------------------------------
+
 
 void ImplGetKeyCode( KeyFuncType eFunc, sal_uInt16& rCode1, sal_uInt16& rCode2, sal_uInt16& rCode3, sal_uInt16& rCode4 )
 {
@@ -73,7 +73,7 @@ KeyCode::KeyCode( KeyFuncType eFunction )
     eFunc = eFunction;
 }
 
-// -----------------------------------------------------------------------
+
 
 KeyCode::KeyCode( const ResId& rResId )
 {
@@ -99,7 +99,7 @@ KeyCode::KeyCode( const ResId& rResId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString KeyCode::GetName( Window* pWindow ) const
 {
@@ -108,7 +108,7 @@ OUString KeyCode::GetName( Window* pWindow ) const
     return pWindow ? pWindow->ImplGetFrame()->GetKeyName( GetFullCode() ) : "";
 }
 
-// -----------------------------------------------------------------------
+
 
 KeyFuncType KeyCode::GetFunction() const
 {

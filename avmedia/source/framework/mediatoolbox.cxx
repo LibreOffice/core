@@ -31,9 +31,9 @@ using namespace ::com::sun::star;
 namespace avmedia
 {
 
-// -----------------------
+
 // - MediaToolboxControl -
-// -----------------------
+
 
 class MediaToolBoxControl_Impl : public MediaControl
 {
@@ -50,7 +50,7 @@ private:
     MediaToolBoxControl*    mpToolBoxControl;
 };
 
-// ---------------------------------------------------------------------
+
 
 MediaToolBoxControl_Impl::MediaToolBoxControl_Impl( Window& rParent, MediaToolBoxControl& rControl ) :
     MediaControl( &rParent, MEDIACONTROLSTYLE_SINGLELINE ),
@@ -59,33 +59,33 @@ MediaToolBoxControl_Impl::MediaToolBoxControl_Impl( Window& rParent, MediaToolBo
     SetSizePixel( getMinSizePixel() );
 }
 
-// ---------------------------------------------------------------------
+
 
 MediaToolBoxControl_Impl::~MediaToolBoxControl_Impl()
 {
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaToolBoxControl_Impl::update()
 {
     mpToolBoxControl->implUpdateMediaControl();
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaToolBoxControl_Impl::execute( const MediaItem& rItem )
 {
     mpToolBoxControl->implExecuteMediaControl( rItem );
 }
 
-// -----------------------
+
 // - MediaToolBoxControl -
-// -----------------------
+
 
 SFX_IMPL_TOOLBOX_CONTROL( ::avmedia::MediaToolBoxControl, ::avmedia::MediaItem );
 
-// -----------------------------------------------------------------------------
+
 
 MediaToolBoxControl::MediaToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
@@ -93,13 +93,13 @@ MediaToolBoxControl::MediaToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, To
         rTbx.Invalidate();
 }
 
-// -----------------------------------------------------------------------------
+
 
 MediaToolBoxControl::~MediaToolBoxControl()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void MediaToolBoxControl::StateChanged( sal_uInt16 /* nSID */, SfxItemState eState, const SfxPoolItem* pState )
 
@@ -127,21 +127,21 @@ void MediaToolBoxControl::StateChanged( sal_uInt16 /* nSID */, SfxItemState eSta
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 Window* MediaToolBoxControl::CreateItemWindow( Window *pParent )
 {
     return( pParent ? new MediaToolBoxControl_Impl( *pParent, *this ) : NULL );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void MediaToolBoxControl::implUpdateMediaControl()
 {
     updateStatus( ".uno:AVMediaToolBox" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void MediaToolBoxControl::implExecuteMediaControl( const MediaItem& rItem )
 {

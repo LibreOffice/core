@@ -24,7 +24,7 @@
 
 using namespace connectivity;
 
-//-----------------------------------------------------------------------------
+
 OSQLInternalNode::OSQLInternalNode(const sal_Char* pNewValue,
                                    SQLNodeType eNodeType,
                                    sal_uInt32 nNodeID)
@@ -34,7 +34,7 @@ OSQLInternalNode::OSQLInternalNode(const sal_Char* pNewValue,
     (*OSQLParser::s_pGarbageCollector)->push_back(this);
 }
 
-//-----------------------------------------------------------------------------
+
 OSQLInternalNode::OSQLInternalNode(const OString &_NewValue,
                                  SQLNodeType eNodeType,
                                  sal_uInt32 nNodeID)
@@ -44,7 +44,7 @@ OSQLInternalNode::OSQLInternalNode(const OString &_NewValue,
     (*OSQLParser::s_pGarbageCollector)->push_back(this);
 }
 
-//-----------------------------------------------------------------------------
+
 OSQLInternalNode::OSQLInternalNode(const OUString &_NewValue,
                                  SQLNodeType eNodeType,
                                  sal_uInt32 nNodeID)
@@ -55,7 +55,7 @@ OSQLInternalNode::OSQLInternalNode(const OUString &_NewValue,
 }
 
 
-//-----------------------------------------------------------------------------
+
 OSQLInternalNode::~OSQLInternalNode()
 {
     // remove the node from the garbage list

@@ -640,7 +640,7 @@ void RefSheetsModel::readBiff12Data( SequenceInputStream& rStrm )
     rStrm >> mnExtRefId >> mnTabId1 >> mnTabId2;
 }
 
-// ----------------------------------------------------------------------------
+
 
 ExternalLinkBuffer::ExternalLinkBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),

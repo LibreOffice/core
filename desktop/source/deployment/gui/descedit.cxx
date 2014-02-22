@@ -40,7 +40,7 @@ DescriptionEdit::DescriptionEdit( Window* pParent, const ResId& rResId ) :
     Init();
 }
 
-// -----------------------------------------------------------------------
+
 
 void DescriptionEdit::Init()
 {
@@ -53,7 +53,7 @@ void DescriptionEdit::Init()
     EnableCursor( false );
 }
 
-// -----------------------------------------------------------------------
+
 
 void DescriptionEdit::Clear()
 {

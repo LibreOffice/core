@@ -19,7 +19,7 @@
 
 #include "sheetevents.hxx"
 #include <com/sun/star/script/vba/VBAEventId.hpp>
-// -----------------------------------------------------------------------
+
 
 OUString ScSheetEvents::GetEventName(sal_Int32 nEvent)
 {
@@ -71,7 +71,7 @@ sal_Int32 ScSheetEvents::GetVbaDocumentEventId(sal_Int32 nEvent)
     return (nSheetEventId != NO_EVENT) ? (nSheetEventId + USERDEFINED_START) : NO_EVENT;
 }
 
-// -----------------------------------------------------------------------
+
 
 ScSheetEvents::ScSheetEvents() :
     mpScriptNames(NULL)

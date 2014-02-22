@@ -145,9 +145,9 @@ void SAL_CALL SwOLEListener_Impl::disposing( const lang::EventObject& ) throw (u
         pOLELRU_Cache->RemoveObj( *mpObj );
 }
 
-// --------------------
+
 // SwEmbedObjectLink
-// --------------------
+
 // TODO/LATER: actually SwEmbedObjectLink should be used here, but because different objects are used to control
 //             embedded object different link objects with the same functionality had to be implemented
 
@@ -166,7 +166,7 @@ public:
     bool            Connect() { return GetRealObject() != NULL; }
 };
 
-// -----------------------------------------------------------------------------
+
 
 SwEmbedObjectLink::SwEmbedObjectLink(SwOLENode* pNode):
     ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, SOT_FORMATSTR_ID_SVXB ),
@@ -175,13 +175,13 @@ SwEmbedObjectLink::SwEmbedObjectLink(SwOLENode* pNode):
     SetSynchron( sal_False );
 }
 
-// -----------------------------------------------------------------------------
+
 
 SwEmbedObjectLink::~SwEmbedObjectLink()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 ::sfx2::SvBaseLink::UpdateResult SwEmbedObjectLink::DataChanged(
     const OUString&, const uno::Any& )
@@ -216,7 +216,7 @@ SwEmbedObjectLink::~SwEmbedObjectLink()
     return SUCCESS;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SwEmbedObjectLink::Closed()
 {
@@ -225,9 +225,9 @@ void SwEmbedObjectLink::Closed()
 }
 
 
-// --------------------
+
 // SwOLENode
-// --------------------
+
 
 SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
                     const svt::EmbeddedObjectRef& xObj,

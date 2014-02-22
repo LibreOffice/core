@@ -68,7 +68,7 @@
 
 using namespace ::com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 static const SfxItemPropertySet* lcl_GetCellStyleSet()
 {
@@ -368,7 +368,7 @@ static const SfxItemPropertyMap* lcl_GetFooterStyleMap()
 }
 
 
-//------------------------------------------------------------------------
+
 
 //  Index-Access auf die Style-Typen: 0 = Cell, 1 = Page
 
@@ -379,12 +379,12 @@ static const SfxItemPropertyMap* lcl_GetFooterStyleMap()
 
 static const sal_uInt16 aStyleFamilyTypes[SC_STYLE_FAMILY_COUNT] = { SFX_STYLE_FAMILY_PARA, SFX_STYLE_FAMILY_PAGE };
 
-//------------------------------------------------------------------------
+
 
 using sc::HMMToTwips;
 using sc::TwipsToHMM;
 
-//------------------------------------------------------------------------
+
 
 #define SCSTYLE_SERVICE         "com.sun.star.style.Style"
 #define SCCELLSTYLE_SERVICE     "com.sun.star.style.CellStyle"
@@ -393,11 +393,11 @@ using sc::TwipsToHMM;
 SC_SIMPLE_SERVICE_INFO( ScStyleFamiliesObj, "ScStyleFamiliesObj", "com.sun.star.style.StyleFamilies" )
 SC_SIMPLE_SERVICE_INFO( ScStyleFamilyObj, "ScStyleFamilyObj", "com.sun.star.style.StyleFamily" )
 
-//------------------------------------------------------------------------
+
 
 #define SC_PAPERBIN_DEFAULTNAME     "[From printer settings]"
 
-//------------------------------------------------------------------------
+
 
 static bool lcl_AnyTabProtected( ScDocument& rDoc )
 {
@@ -408,7 +408,7 @@ static bool lcl_AnyTabProtected( ScDocument& rDoc )
     return false;
 }
 
-//------------------------------------------------------------------------
+
 
 ScStyleFamiliesObj::ScStyleFamiliesObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
@@ -598,7 +598,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScStyleFamiliesObj::getStyleLoaderO
     return aSequence;
 }
 
-//------------------------------------------------------------------------
+
 
 ScStyleFamilyObj::ScStyleFamilyObj(ScDocShell* pDocSh, SfxStyleFamily eFam) :
     pDocShell( pDocSh ),
@@ -939,7 +939,7 @@ void SAL_CALL ScStyleFamilyObj::removeVetoableChangeListener( const OUString&, c
     OSL_FAIL( "###unexpected!" );
 }
 
-//------------------------------------------------------------------------
+
 
 //  Default-ctor wird fuer die Reflection gebraucht
 
@@ -2012,7 +2012,7 @@ uno::Sequence<OUString> SAL_CALL ScStyleObj::getSupportedServiceNames()
     return aRet;
 }
 
-//------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

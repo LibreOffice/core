@@ -253,7 +253,7 @@ _SvxMacroTabPage::~_SvxMacroTabPage()
 {
     DELETEZ( mpImpl );
 }
-// -----------------------------------------------------------------------------
+
 void _SvxMacroTabPage::InitResources()
 {
     // Note: the order here controls the order in which the events are displayed in the UI!
@@ -907,7 +907,7 @@ AssignComponentDialog::~AssignComponentDialog()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxMacroAssignSingleTabDialog, OKHdl_Impl, Button *, pButton )
 {
@@ -917,7 +917,7 @@ IMPL_LINK( SvxMacroAssignSingleTabDialog, OKHdl_Impl, Button *, pButton )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxMacroAssignSingleTabDialog::SvxMacroAssignSingleTabDialog(Window *pParent,
     const SfxItemSet& rSet)

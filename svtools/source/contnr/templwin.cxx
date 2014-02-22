@@ -572,7 +572,7 @@ SvtDocInfoTable_Impl::SvtDocInfoTable_Impl() :
 
 {
 }
-// -----------------------------------------------------------------------
+
 
 OUString SvtDocInfoTable_Impl::GetString( long nId ) const
 {
@@ -837,7 +837,7 @@ SvtTemplateWindow::SvtTemplateWindow( Window* pParent ) :
     Application::PostUserEvent( LINK( this, SvtTemplateWindow, ResizeHdl_Impl ) );
 }
 
-// ------------------------------------------------------------------------
+
 
 SvtTemplateWindow::~SvtTemplateWindow()
 {
@@ -855,7 +855,7 @@ SvtTemplateWindow::~SvtTemplateWindow()
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvtTemplateWindow , IconClickHdl_Impl)
 {
@@ -871,7 +871,7 @@ IMPL_LINK_NOARG(SvtTemplateWindow , IconClickHdl_Impl)
     return 0;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvtTemplateWindow , FileSelectHdl_Impl)
 {
@@ -879,7 +879,7 @@ IMPL_LINK_NOARG(SvtTemplateWindow , FileSelectHdl_Impl)
     return 0;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvtTemplateWindow , FileDblClickHdl_Impl)
 {
@@ -898,7 +898,7 @@ IMPL_LINK_NOARG(SvtTemplateWindow , FileDblClickHdl_Impl)
     return 0;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvtTemplateWindow , NewFolderHdl_Impl)
 {
@@ -913,7 +913,7 @@ IMPL_LINK_NOARG(SvtTemplateWindow , NewFolderHdl_Impl)
     return 0;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvtTemplateWindow , TimeoutHdl_Impl)
 {
@@ -935,7 +935,7 @@ IMPL_LINK_NOARG(SvtTemplateWindow , TimeoutHdl_Impl)
     return 0;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK ( SvtTemplateWindow , ClickHdl_Impl, ToolBox *, pToolBox )
 {
@@ -943,7 +943,7 @@ IMPL_LINK ( SvtTemplateWindow , ClickHdl_Impl, ToolBox *, pToolBox )
     return 0;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvtTemplateWindow , ResizeHdl_Impl)
 {
@@ -951,7 +951,7 @@ IMPL_LINK_NOARG(SvtTemplateWindow , ResizeHdl_Impl)
     return 0;
 }
 
-// ------------------------------------------------------------------------
+
 
 void SvtTemplateWindow::PrintFile( const OUString& rURL )
 {
@@ -974,7 +974,7 @@ void SvtTemplateWindow::PrintFile( const OUString& rURL )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void SvtTemplateWindow::AppendHistoryURL( const OUString& rURL, sal_uLong nGroup )
 {
@@ -995,7 +995,7 @@ void SvtTemplateWindow::AppendHistoryURL( const OUString& rURL, sal_uLong nGroup
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void SvtTemplateWindow::OpenHistory()
 {
@@ -1009,7 +1009,7 @@ void SvtTemplateWindow::OpenHistory()
     delete pEntry;
 }
 
-// ------------------------------------------------------------------------
+
 
 void SvtTemplateWindow::DoAction( sal_uInt16 nAction )
 {
@@ -1047,7 +1047,7 @@ void SvtTemplateWindow::DoAction( sal_uInt16 nAction )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void SvtTemplateWindow::InitToolBoxes()
 {
@@ -1076,7 +1076,7 @@ void SvtTemplateWindow::InitToolBoxes()
     aFrameWinTB.SetClickHdl( aLink );
 }
 
-// ------------------------------------------------------------------------
+
 
 void SvtTemplateWindow::InitToolBoxImages()
 {
@@ -1101,14 +1101,14 @@ void SvtTemplateWindow::InitToolBoxImages()
                : IMG_SVT_DOCTEMPLATE_PREVIEW_SMALL ) ) );
 }
 
-// ------------------------------------------------------------------------
+
 
 void SvtTemplateWindow::UpdateIcons()
 {
     pIconWin->UpdateIcons();
 }
 
-// ------------------------------------------------------------------------
+
 
 bool SvtTemplateWindow::PreNotify( NotifyEvent& rNEvt )
 {
@@ -1134,7 +1134,7 @@ bool SvtTemplateWindow::PreNotify( NotifyEvent& rNEvt )
     return nRet || Window::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SvtTemplateWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -1152,7 +1152,7 @@ void SvtTemplateWindow::DataChanged( const DataChangedEvent& rDCEvt )
         InitToolBoxImages();
     }
 }
-// ------------------------------------------------------------------------
+
 
 void SvtTemplateWindow::Resize()
 {
@@ -1184,14 +1184,14 @@ void SvtTemplateWindow::Resize()
     aSplitWin.SetPosSizePixel( Point( 0, nToolBoxHeight  ), aSize );
 }
 
-// ------------------------------------------------------------------------
+
 
 OUString SvtTemplateWindow::GetSelectedFile() const
 {
     return pFileWin->GetSelectedFile();
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool SvtTemplateWindow::IsFileSelected() const
 {
@@ -1200,7 +1200,7 @@ sal_Bool SvtTemplateWindow::IsFileSelected() const
     return bRet;
 }
 
-// ------------------------------------------------------------------------
+
 
 void SvtTemplateWindow::OpenFile( sal_Bool bNotAsTemplate )
 {
@@ -1209,7 +1209,7 @@ void SvtTemplateWindow::OpenFile( sal_Bool bNotAsTemplate )
         pFrameWin->OpenFile( aURL, sal_False, pFileWin->IsTemplateFolder(), !bNotAsTemplate );
 }
 
-// ------------------------------------------------------------------------
+
 
 OUString SvtTemplateWindow::GetFolderTitle() const
 {
@@ -1222,7 +1222,7 @@ OUString SvtTemplateWindow::GetFolderTitle() const
     return sTitle;
 }
 
-// ------------------------------------------------------------------------
+
 
 OUString SvtTemplateWindow::GetFolderURL() const
 {
@@ -1230,7 +1230,7 @@ OUString SvtTemplateWindow::GetFolderURL() const
 }
 
 
-// ------------------------------------------------------------------------
+
 
 void SvtTemplateWindow::SetFocus( sal_Bool bIconWin )
 {
@@ -1240,14 +1240,14 @@ void SvtTemplateWindow::SetFocus( sal_Bool bIconWin )
         pFileWin->SetFocus();
 }
 
-// ------------------------------------------------------------------------
+
 
 void SvtTemplateWindow::OpenTemplateRoot()
 {
     pFileWin->OpenFolder( pIconWin->GetTemplateRootURL() );
 }
 
-// ------------------------------------------------------------------------
+
 
 void SvtTemplateWindow::SetPrevLevelButtonState( const OUString& rURL )
 {
@@ -1261,7 +1261,7 @@ void SvtTemplateWindow::SetPrevLevelButtonState( const OUString& rURL )
     aFileViewTB.EnableItem( TI_DOCTEMPLATE_PREV, bEnable );
 }
 
-// ------------------------------------------------------------------------
+
 
 void SvtTemplateWindow::ClearHistory()
 {
@@ -1273,7 +1273,7 @@ void SvtTemplateWindow::ClearHistory()
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 long SvtTemplateWindow::CalcHeight() const
 {
@@ -1286,7 +1286,7 @@ long SvtTemplateWindow::CalcHeight() const
     return nHeight;
 }
 
-// ------------------------------------------------------------------------
+
 
 void SvtTemplateWindow::ReadViewSettings()
 {
@@ -1339,7 +1339,7 @@ void SvtTemplateWindow::ReadViewSettings()
         IconClickHdl_Impl( NULL );
 }
 
-// ------------------------------------------------------------------------
+
 
 void SvtTemplateWindow::WriteViewSettings()
 {
@@ -1408,7 +1408,7 @@ SvtDocumentTemplateDialog::SvtDocumentTemplateDialog( Window* pParent ) :
     InitImpl( );
 }
 
-// ------------------------------------------------------------------------
+
 
 void SvtDocumentTemplateDialog::InitImpl( )
 {
@@ -1501,14 +1501,14 @@ void SvtDocumentTemplateDialog::InitImpl( )
     UpdateHdl_Impl( NULL );
 }
 
-// ------------------------------------------------------------------------
+
 
 SvtDocumentTemplateDialog::~SvtDocumentTemplateDialog()
 {
     delete pImpl;
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool SvtDocumentTemplateDialog::CanEnableEditBtn() const
 {
@@ -1524,7 +1524,7 @@ sal_Bool SvtDocumentTemplateDialog::CanEnableEditBtn() const
     return bEnable;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvtDocumentTemplateDialog , SelectHdl_Impl)
 {
@@ -1533,7 +1533,7 @@ IMPL_LINK_NOARG(SvtDocumentTemplateDialog , SelectHdl_Impl)
     return 0;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvtDocumentTemplateDialog , DoubleClickHdl_Impl)
 {
@@ -1544,7 +1544,7 @@ IMPL_LINK_NOARG(SvtDocumentTemplateDialog , DoubleClickHdl_Impl)
     return 0;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvtDocumentTemplateDialog , NewFolderHdl_Impl)
 {
@@ -1557,7 +1557,7 @@ IMPL_LINK_NOARG(SvtDocumentTemplateDialog , NewFolderHdl_Impl)
     return 0;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvtDocumentTemplateDialog , SendFocusHdl_Impl)
 {
@@ -1576,7 +1576,7 @@ IMPL_LINK_NOARG(SvtDocumentTemplateDialog , SendFocusHdl_Impl)
     return 0;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK ( SvtDocumentTemplateDialog , OKHdl_Impl, PushButton *, pBtn )
 {
@@ -1590,7 +1590,7 @@ IMPL_LINK ( SvtDocumentTemplateDialog , OKHdl_Impl, PushButton *, pBtn )
     return 0;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvtDocumentTemplateDialog , OrganizerHdl_Impl)
 {
@@ -1645,7 +1645,7 @@ IMPL_LINK_NOARG(SvtDocumentTemplateDialog, PackageHdl_Impl)
     return 0;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK ( SvtDocumentTemplateDialog, UpdateHdl_Impl, Timer*, _pEventSource )
 {
@@ -1680,7 +1680,7 @@ IMPL_LINK ( SvtDocumentTemplateDialog, UpdateHdl_Impl, Timer*, _pEventSource )
     return 0;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvtDocumentTemplateDialog, OpenLinkHdl_Impl)
 {

@@ -50,12 +50,12 @@ sal_Unicode FunctionManager::getSingleToken(const formula::IFunctionManager::ETo
     }
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 sal_uInt32 FunctionManager::getCount() const
 {
     return m_xMgr->getCount();
 }
-// -----------------------------------------------------------------------------
+
 const formula::IFunctionCategory* FunctionManager::getCategory(sal_uInt32 _nPos) const
 {
     if ( _nPos >= m_aCategoryIndex.size() )
@@ -66,7 +66,7 @@ const formula::IFunctionCategory* FunctionManager::getCategory(sal_uInt32 _nPos)
     }
     return m_aCategoryIndex[_nPos]->second.get();
 }
-// -----------------------------------------------------------------------------
+
 const formula::IFunctionDescription* FunctionManager::getFunctionByName(const OUString& _sFunctionName) const
 {
     const formula::IFunctionDescription* pDesc = NULL;
@@ -79,11 +79,11 @@ const formula::IFunctionDescription* FunctionManager::getFunctionByName(const OU
     }
     return pDesc;
 }
-// -----------------------------------------------------------------------------
+
 void FunctionManager::fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& /*_rLastRUFunctions*/) const
 {
 }
-// -----------------------------------------------------------------------------
+
 ::boost::shared_ptr< FunctionDescription > FunctionManager::get(const uno::Reference< report::meta::XFunctionDescription>& _xFunctionDescription) const
 {
     ::boost::shared_ptr< FunctionDescription > pDesc;
@@ -107,7 +107,7 @@ void FunctionManager::fillLastRecentlyUsedFunctions(::std::vector< const formula
     }
     return pDesc;
 }
-// -----------------------------------------------------------------------------
+
 FunctionCategory::FunctionCategory(const FunctionManager* _pFMgr,sal_uInt32 _nPos,const uno::Reference< report::meta::XFunctionCategory>& _xCategory)
 : m_xCategory(_xCategory)
 ,m_nFunctionCount(_xCategory->getCount())
@@ -115,12 +115,12 @@ FunctionCategory::FunctionCategory(const FunctionManager* _pFMgr,sal_uInt32 _nPo
 ,m_pFunctionManager(_pFMgr)
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_uInt32 FunctionCategory::getCount() const
 {
     return m_nFunctionCount;
 }
-// -----------------------------------------------------------------------------
+
 const formula::IFunctionDescription* FunctionCategory::getFunction(sal_uInt32 _nPos) const
 {
     if ( _nPos >= m_aFunctions.size() && _nPos < m_nFunctionCount )
@@ -131,22 +131,22 @@ const formula::IFunctionDescription* FunctionCategory::getFunction(sal_uInt32 _n
     }
     return m_aFunctions[_nPos].get();
 }
-// -----------------------------------------------------------------------------
+
 sal_uInt32 FunctionCategory::getNumber() const
 {
     return m_nNumber;
 }
-// -----------------------------------------------------------------------------
+
 const formula::IFunctionManager* FunctionCategory::getFunctionManager() const
 {
     return m_pFunctionManager;
 }
-// -----------------------------------------------------------------------------
+
 OUString FunctionCategory::getName() const
 {
     return m_xCategory->getName();
 }
-// -----------------------------------------------------------------------------
+
 FunctionDescription::FunctionDescription(const formula::IFunctionCategory* _pFunctionCategory,const uno::Reference< report::meta::XFunctionDescription>& _xFunctionDescription)
 : m_xFunctionDescription(_xFunctionDescription)
 , m_pFunctionCategory(_pFunctionCategory)
@@ -157,22 +157,22 @@ OUString FunctionDescription::getFunctionName() const
 {
     return m_xFunctionDescription->getName();
 }
-// -----------------------------------------------------------------------------
+
 const formula::IFunctionCategory* FunctionDescription::getCategory() const
 {
     return m_pFunctionCategory;
 }
-// -----------------------------------------------------------------------------
+
 OUString FunctionDescription::getDescription() const
 {
     return m_xFunctionDescription->getDescription();
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 FunctionDescription::getSuppressedArgumentCount() const
 {
     return m_aParameter.getLength();
 }
-// -----------------------------------------------------------------------------
+
 OUString FunctionDescription::getFormula(const ::std::vector< OUString >& _aArguments) const
 {
     OUString sFormula;
@@ -187,7 +187,7 @@ OUString FunctionDescription::getFormula(const ::std::vector< OUString >& _aArgu
     }
     return sFormula;
 }
-// -----------------------------------------------------------------------------
+
 void FunctionDescription::fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const
 {
     const sal_Int32 nCount = m_aParameter.getLength();
@@ -196,47 +196,47 @@ void FunctionDescription::fillVisibleArgumentMapping(::std::vector<sal_uInt16>& 
         _rArguments.push_back(i);
     }
 }
-// -----------------------------------------------------------------------------
+
 void FunctionDescription::initArgumentInfo()  const
 {
 }
-// -----------------------------------------------------------------------------
+
 OUString FunctionDescription::getSignature() const
 {
     return m_xFunctionDescription->getSignature();
 }
-// -----------------------------------------------------------------------------
+
 OString FunctionDescription::getHelpId() const
 {
     return OString();
 }
-// -----------------------------------------------------------------------------
+
 sal_uInt32 FunctionDescription::getParameterCount() const
 {
     return m_aParameter.getLength();
 }
-// -----------------------------------------------------------------------------
+
 OUString FunctionDescription::getParameterName(sal_uInt32 _nPos) const
 {
     if ( _nPos < static_cast<sal_uInt32>(m_aParameter.getLength()) )
         return m_aParameter[_nPos].Name;
     return OUString();
 }
-// -----------------------------------------------------------------------------
+
 OUString FunctionDescription::getParameterDescription(sal_uInt32 _nPos) const
 {
     if ( _nPos < static_cast<sal_uInt32>(m_aParameter.getLength()) )
         return m_aParameter[_nPos].Description;
     return OUString();
 }
-// -----------------------------------------------------------------------------
+
 bool FunctionDescription::isParameterOptional(sal_uInt32 _nPos) const
 {
     if ( _nPos < static_cast<sal_uInt32>(m_aParameter.getLength()) )
         return m_aParameter[_nPos].IsOptional;
     return false;
 }
-// -----------------------------------------------------------------------------
+
 // =============================================================================
 } // rptui
 // =============================================================================

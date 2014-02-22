@@ -28,7 +28,7 @@
 // STATIC DATA -----------------------------------------------------------
 
 
-//------------------------------------------------------------------------
+
 
 ScNavigatorControllerItem::ScNavigatorControllerItem( sal_uInt16          nIdP,
                                                       ScNavigatorDlg& rDlg,
@@ -38,7 +38,7 @@ ScNavigatorControllerItem::ScNavigatorControllerItem( sal_uInt16          nIdP,
 {
 }
 
-//------------------------------------------------------------------------
+
 
 void ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemState /* eState */,
                                                           const SfxPoolItem* pItem )

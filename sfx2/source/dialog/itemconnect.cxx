@@ -40,7 +40,7 @@ TriState lclConvertToTriState( bool bKnown, bool bIsKnownFlag, bool bIsUnknownFl
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 sal_uInt16 ItemWrapperHelper::GetWhichId( const SfxItemSet& rItemSet, sal_uInt16 nSlot )
 {
@@ -105,7 +105,7 @@ void DummyWindowWrapper::SetControlValue( void* )
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 CheckBoxWrapper::CheckBoxWrapper( CheckBox& rCheckBox ) :
         SingleControlWrapperType( rCheckBox )
@@ -133,7 +133,7 @@ void CheckBoxWrapper::SetControlValue( sal_Bool bValue )
     GetControl().Check( bValue );
 }
 
-// ----------------------------------------------------------------------------
+
 
 ColorListBoxWrapper::ColorListBoxWrapper(ColorListBox & rListBox):
     SingleControlWrapper< ColorListBox, Color >(rListBox)
@@ -327,7 +327,7 @@ bool ItemConnectionArrayImpl::FillItemSet( SfxItemSet& rDestSet, const SfxItemSe
     return bChanged;
 }
 
-// ----------------------------------------------------------------------------
+
 
 ItemConnectionArray::ItemConnectionArray() :
     mxImpl( new ItemConnectionArrayImpl )

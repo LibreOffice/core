@@ -58,7 +58,7 @@ using com::sun::star::document::XFilter;
 using com::sun::star::frame::XModel;
 using com::sun::star::lang::XServiceInfo;
 
-// -----------------------------------------------------------------------------
+
 
 PageInfo::PageInfo()
         : meFadeEffect( FadeEffect_NONE )
@@ -73,7 +73,7 @@ PageInfo::PageInfo()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 PageInfo::~PageInfo()
 {
@@ -86,7 +86,7 @@ PageInfo::~PageInfo()
 }
 
 #ifdef THEFUTURE
-// -----------------------------------------------------------------------------
+
 
 void PageInfo::addShape( ShapeInfo* pShapeInfo )
 {
@@ -94,7 +94,7 @@ void PageInfo::addShape( ShapeInfo* pShapeInfo )
 }
 #endif
 
-// -----------------------------------------------------------------------------
+
 
 FlashExporter::FlashExporter(const Reference< XComponentContext > &rxContext, sal_Int32 nJPEGCompressMode, sal_Bool bExportOLEAsJPEG)
     : mxContext(rxContext)
@@ -108,7 +108,7 @@ FlashExporter::FlashExporter(const Reference< XComponentContext > &rxContext, sa
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 FlashExporter::~FlashExporter()
 {
@@ -123,7 +123,7 @@ void FlashExporter::Flush()
     maPagesMap.clear();
 }
 
-// -----------------------------------------------------------------------------
+
 
 const sal_uInt16 cBackgroundDepth = 2;
 const sal_uInt16 cBackgroundObjectsDepth = 3;
@@ -381,7 +381,7 @@ sal_Bool FlashExporter::exportSound( Reference< XOutputStream > &xOutputStream, 
 }
 #endif // defined AUGUSTUS
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 nPlaceDepth;
 // AS: A Slide can have a private background or use its masterpage's background.
@@ -485,7 +485,7 @@ sal_uInt16 FlashExporter::exportMasterPageObjects(sal_uInt16 nPage, Reference< X
     return nPage;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** export's the definition of the shapes inside this drawing page and adds the
     shape infos to the current PageInfo */
@@ -495,7 +495,7 @@ void FlashExporter::exportDrawPageContents( Reference< XDrawPage >& xPage, bool 
     exportShapes(xShapes, bStream, bMaster);
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** export's the definition of the shapes inside this XShapes container and adds the
     shape infos to the current PageInfo */
@@ -528,7 +528,7 @@ void FlashExporter::exportShapes( Reference< XShapes >& xShapes, bool bStream, b
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** export this shape definition and adds it's info to the current PageInfo */
 void FlashExporter::exportShape( Reference< XShape >& xShape, bool bMaster )
@@ -641,7 +641,7 @@ void FlashExporter::exportShape( Reference< XShape >& xShape, bool bMaster )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile& rMtf, bool bOnlyBackground /* = false */, bool bExportAsJPEG /* = false */)
 {

@@ -1040,7 +1040,7 @@ sal_Bool UnoControlModel::supportsService( const OUString& rServiceName ) throw(
     return Sequence< OUString >( &sName, 1 );
 }
 
-// ------------------------------------------------------------------
+
 template <class TYPE>
 sal_Bool convertType(Any& _rConvertedValue, const Any& _rNewValueTest, const TYPE* /* _pTypeDisambiguation */)
 {

@@ -42,13 +42,13 @@ using namespace ::com::sun::star::form::binding;
 // ONumericControl
 //==================================================================
 
-//------------------------------------------------------------------
+
 ONumericControl::ONumericControl(const Reference<XComponentContext>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_NUMERICFIELD)
 {
 }
 
-//------------------------------------------------------------------------------
+
 StringSequence ONumericControl::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
@@ -60,13 +60,13 @@ StringSequence ONumericControl::getSupportedServiceNames() throw()
 }
 
 
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL ONumericControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new ONumericControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> ONumericControl::_getTypes()
 {
     return OBoundControl::_getTypes();
@@ -75,20 +75,20 @@ Sequence<Type> ONumericControl::_getTypes()
 //==================================================================
 // ONumericModel
 //==================================================================
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL ONumericModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new ONumericModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> ONumericModel::_getTypes()
 {
     return OEditBaseModel::_getTypes();
 }
 
-//------------------------------------------------------------------
-//------------------------------------------------------------------
+
+
 ONumericModel::ONumericModel(const Reference<XComponentContext>& _rxFactory)
                 :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_NUMERICFIELD, FRM_SUN_CONTROL_NUMERICFIELD, sal_True, sal_True )
                                     // use the old control name for compytibility reasons
@@ -98,23 +98,23 @@ ONumericModel::ONumericModel(const Reference<XComponentContext>& _rxFactory)
     initValueProperty( PROPERTY_VALUE, PROPERTY_ID_VALUE );
 }
 
-//------------------------------------------------------------------
+
 ONumericModel::ONumericModel( const ONumericModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OEditBaseModel( _pOriginal, _rxFactory )
 {
 }
 
-//------------------------------------------------------------------
+
 ONumericModel::~ONumericModel()
 {
 }
 
 // XCloneable
-//------------------------------------------------------------------------------
+
 IMPLEMENT_DEFAULT_CLONING( ONumericModel )
 
 // XServiceInfo
-//------------------------------------------------------------------------------
+
 StringSequence ONumericModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
@@ -137,7 +137,7 @@ StringSequence ONumericModel::getSupportedServiceNames() throw()
     return aSupported;
 }
 
-//------------------------------------------------------------------------------
+
 void ONumericModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 2, OEditBaseModel )
@@ -146,13 +146,13 @@ void ONumericModel::describeFixedProperties( Sequence< Property >& _rProps ) con
     END_DESCRIBE_PROPERTIES();
 }
 
-//------------------------------------------------------------------------------
+
 OUString SAL_CALL ONumericModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return OUString(FRM_COMPONENT_NUMERICFIELD);  // old (non-sun) name for compatibility !
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool ONumericModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
@@ -176,7 +176,7 @@ sal_Bool ONumericModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     return sal_True;
 }
 
-//------------------------------------------------------------------------------
+
 Any ONumericModel::translateDbColumnToControlValue()
 {
     m_aSaveValue <<= (double)m_xColumn->getDouble();
@@ -186,7 +186,7 @@ Any ONumericModel::translateDbColumnToControlValue()
     return m_aSaveValue;
 }
 
-//------------------------------------------------------------------------------
+
 Any ONumericModel::getDefaultForReset() const
 {
     Any aValue;
@@ -196,7 +196,7 @@ Any ONumericModel::getDefaultForReset() const
     return aValue;
 }
 
-//------------------------------------------------------------------------------
+
 void ONumericModel::resetNoBroadcast()
 {
     OEditBaseModel::resetNoBroadcast();

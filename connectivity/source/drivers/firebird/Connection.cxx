@@ -548,7 +548,7 @@ sal_Bool SAL_CALL Connection::isClosed(  ) throw(SQLException, RuntimeException)
     // just simple -> we are close when we are disposed taht means someone called dispose(); (XComponent)
     return Connection_BASE::rBHelper.bDisposed;
 }
-// --------------------------------------------------------------------------------
+
 Reference< XDatabaseMetaData > SAL_CALL Connection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
@@ -640,19 +640,19 @@ void SAL_CALL Connection::close(  ) throw(SQLException, RuntimeException)
     }
     dispose();
 }
-// --------------------------------------------------------------------------------
+
 // XWarningsSupplier
 Any SAL_CALL Connection::getWarnings(  ) throw(SQLException, RuntimeException)
 {
     // when you collected some warnings -> return it
     return Any();
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL Connection::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
     // you should clear your collected warnings here
 }
-// --------------------------------------------------------------------------------
+
 // XDocumentEventListener
 void SAL_CALL Connection::documentEventOccured( const DocumentEvent& _Event )
                                                         throw(RuntimeException)
@@ -690,7 +690,7 @@ void SAL_CALL Connection::disposing(const EventObject& /*rSource*/)
     throw (RuntimeException)
 {
 }
-//--------------------------------------------------------------------
+
 void Connection::buildTypeInfo() throw( SQLException)
 {
     SAL_INFO("connectivity.firebird", "buildTypeInfo().");

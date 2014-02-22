@@ -184,9 +184,9 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
     } while( true );
 }
 
-// --------------------
+
 // SwTxtNode
-// --------------------
+
 
 SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere,
                       SwTxtFmtColl *pTxtColl,

@@ -67,7 +67,7 @@ sal_Unicode lclGetXChar( const sal_Unicode*& rpcStr, const sal_Unicode* pcEnd )
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 sal_Int32 AttributeConversion::decodeToken( const OUString& rValue )
 {

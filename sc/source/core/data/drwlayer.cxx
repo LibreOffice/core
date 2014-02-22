@@ -95,7 +95,7 @@ SfxObjectShell* ScDrawLayer::pGlobalDrawPersist = NULL;
 
 sal_Bool bDrawIsInUndo = false;         //! Member
 
-// -----------------------------------------------------------------------
+
 
 ScUndoObjData::ScUndoObjData( SdrObject* pObjP, const ScAddress& rOS, const ScAddress& rOE,
                                                const ScAddress& rNS, const ScAddress& rNE ) :
@@ -133,7 +133,7 @@ void ScUndoObjData::Redo()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 ScTabDeletedHint::ScTabDeletedHint( SCTAB nTabNo ) :
     nTab( nTabNo )
@@ -153,7 +153,7 @@ ScTabSizeChangedHint::~ScTabSizeChangedHint()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 #define MAXMM   10000000
 
@@ -187,7 +187,7 @@ static void lcl_ReverseTwipsToMM( Rectangle& rRect )
     ReverseTwipsToMM( rRect.Bottom() );
 }
 
-// -----------------------------------------------------------------------
+
 
 
 ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :

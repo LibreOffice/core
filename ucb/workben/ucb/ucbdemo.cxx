@@ -93,7 +93,7 @@ public:
     void Append( const String &rLine );
 };
 
-//-------------------------------------------------------------------------
+
 void MyOutWindow::Append( const String &rLine )
 {
     OUString aLine( rLine );
@@ -138,13 +138,13 @@ public:
     void print( const OUString& rText );
 };
 
-//-------------------------------------------------------------------------
+
 void MessagePrinter::print( const sal_Char* pText )
 {
     print( OUString::createFromAscii(pText) );
 }
 
-//-------------------------------------------------------------------------
+
 void MessagePrinter::print( const OUString& rText )
 {
     SolarMutexGuard aGuard;
@@ -376,7 +376,7 @@ public:
 // static
 OUString Ucb::m_aProtocol;
 
-//-------------------------------------------------------------------------
+
 // static
 OUString Ucb::getUnoURL()
 {
@@ -390,7 +390,7 @@ OUString Ucb::getUnoURL()
     return aUnoURL;
 }
 
-//-------------------------------------------------------------------------
+
 Ucb::Ucb( uno::Reference< lang::XMultiServiceFactory >& rxFactory,
           OUString const & rConfigurationKey1,
           OUString const & rConfigurationKey2 )
@@ -401,12 +401,12 @@ Ucb::Ucb( uno::Reference< lang::XMultiServiceFactory >& rxFactory,
 {
 }
 
-//-------------------------------------------------------------------------
+
 Ucb::~Ucb()
 {
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool Ucb::init()
 {
     if ( m_bInited )
@@ -451,7 +451,7 @@ sal_Bool Ucb::init()
     return m_bInited;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< ucb::XContentIdentifierFactory >
 Ucb::getContentIdentifierFactory()
 {
@@ -465,7 +465,7 @@ Ucb::getContentIdentifierFactory()
     return m_xIdFac;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< ucb::XContentProvider > Ucb::getContentProvider()
 {
     if ( !m_xProv.is() )
@@ -517,7 +517,7 @@ public:
     { return m_xProgressHandler; }
  };
 
-//-------------------------------------------------------------------------
+
 UcbTaskEnvironment::UcbTaskEnvironment(
                     const uno::Reference< task::XInteractionHandler >&
                      rxInteractionHandler,
@@ -528,17 +528,17 @@ UcbTaskEnvironment::UcbTaskEnvironment(
 {
 }
 
-//-------------------------------------------------------------------------
+
 // virtual
 UcbTaskEnvironment::~UcbTaskEnvironment()
 {
 }
 
-//----------------------------------------------------------------------------
+
 //
 // XInterface methods
 //
-//----------------------------------------------------------------------------
+
 
 // virtual
 uno::Any SAL_CALL
@@ -550,7 +550,7 @@ UcbTaskEnvironment::queryInterface( const uno::Type & rType )
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
-//----------------------------------------------------------------------------
+
 // virtual
 void SAL_CALL UcbTaskEnvironment::acquire()
     throw()
@@ -558,7 +558,7 @@ void SAL_CALL UcbTaskEnvironment::acquire()
     OWeakObject::acquire();
 }
 
-//----------------------------------------------------------------------------
+
 // virtual
 void SAL_CALL UcbTaskEnvironment::release()
     throw()
@@ -594,7 +594,7 @@ public:
                              bool bPrint = true );
 };
 
-//-------------------------------------------------------------------------
+
 UcbCommandProcessor::UcbCommandProcessor( Ucb& rUCB,
                                           const uno::Reference<
                                             ucb::XCommandProcessor >&
@@ -614,13 +614,13 @@ UcbCommandProcessor::UcbCommandProcessor( Ucb& rUCB,
     }
 }
 
-//----------------------------------------------------------------------------
+
 // virtual
 UcbCommandProcessor::~UcbCommandProcessor()
 {
 }
 
-//----------------------------------------------------------------------------
+
 uno::Any UcbCommandProcessor::executeCommand( const OUString& rName,
                                               const uno::Any& rArgument,
                                               bool bPrint )
@@ -783,7 +783,7 @@ public:
         throw( uno::RuntimeException );
 };
 
-//-------------------------------------------------------------------------
+
 UcbContent::UcbContent( Ucb& rUCB,
                         uno::Reference< ucb::XContent >& rxContent,
                         MyOutWindow* pOutEdit)
@@ -795,13 +795,13 @@ UcbContent::UcbContent( Ucb& rUCB,
 {
 }
 
-//----------------------------------------------------------------------------
+
 // virtual
 UcbContent::~UcbContent()
 {
 }
 
-//-------------------------------------------------------------------------
+
 // static
 UcbContent* UcbContent::create(
         Ucb& rUCB, const OUString& rURL, MyOutWindow* pOutEdit )
@@ -861,7 +861,7 @@ UcbContent* UcbContent::create(
     return pNew;
 }
 
-//-------------------------------------------------------------------------
+
 const OUString UcbContent::getURL() const
 {
     uno::Reference< ucb::XContentIdentifier > xId(
@@ -872,14 +872,14 @@ const OUString UcbContent::getURL() const
     return OUString();
 }
 
-//-------------------------------------------------------------------------
+
 const OUString UcbContent::getType() const
 {
     const OUString aType( m_xContent->getContentType() );
     return aType;
 }
 
-//-------------------------------------------------------------------------
+
 void UcbContent::dispose()
 {
     uno::Reference< lang::XComponent > xComponent( m_xContent, uno::UNO_QUERY );
@@ -887,7 +887,7 @@ void UcbContent::dispose()
         xComponent->dispose();
 }
 
-//----------------------------------------------------------------------------
+
 void UcbContent::open( const OUString & rName, const OUString& rInput,
                        bool bPrint, bool bTiming, bool bSort,
                        OpenStack * pStack, sal_uInt32 nLevel,
@@ -1144,7 +1144,7 @@ void UcbContent::open( const OUString & rName, const OUString& rInput,
     }
 }
 
-//----------------------------------------------------------------------------
+
 void UcbContent::openAll( Ucb& rUCB, bool bPrint, bool bTiming, bool bSort,
                           sal_Int32 nFetchSize )
 {
@@ -1219,7 +1219,7 @@ void UcbContent::openAll( Ucb& rUCB, bool bPrint, bool bTiming, bool bSort,
     }
 }
 
-//----------------------------------------------------------------------------
+
 void UcbContent::transfer( const OUString& rSourceURL, sal_Bool bMove  )
 {
     if ( bMove )
@@ -1282,7 +1282,7 @@ void UcbContent::transfer( const OUString& rSourceURL, sal_Bool bMove  )
 #endif
 }
 
-//----------------------------------------------------------------------------
+
 void UcbContent::destroy()
 {
     print( "Deleting content..." );
@@ -1294,7 +1294,7 @@ void UcbContent::destroy()
 //  executeCommand( OUString("flush"), Any() );
 }
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< ucb::CommandInfo > UcbContent::getCommands()
 {
     uno::Any aResult = executeCommand(
@@ -1322,7 +1322,7 @@ uno::Sequence< ucb::CommandInfo > UcbContent::getCommands()
     return uno::Sequence< ucb::CommandInfo >();
 }
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< beans::Property > UcbContent::getProperties()
 {
     uno::Any aResult = executeCommand(
@@ -1349,7 +1349,7 @@ uno::Sequence< beans::Property > UcbContent::getProperties()
     return uno::Sequence< beans::Property >();
 }
 
-//----------------------------------------------------------------------------
+
 uno::Any UcbContent::getPropertyValue( const OUString& rName )
 {
     uno::Sequence< beans::Property > aProps( 1 );
@@ -1375,7 +1375,7 @@ uno::Any UcbContent::getPropertyValue( const OUString& rName )
     return uno::Any();
 }
 
-//----------------------------------------------------------------------------
+
 OUString UcbContent::getStringPropertyValue( const OUString& rName )
 {
     uno::Any aAny = getPropertyValue( rName );
@@ -1394,7 +1394,7 @@ OUString UcbContent::getStringPropertyValue( const OUString& rName )
     return OUString();
 }
 
-//----------------------------------------------------------------------------
+
 void UcbContent::setPropertyValue( const OUString& rName,
                                    const uno::Any& rValue )
 {
@@ -1415,7 +1415,7 @@ void UcbContent::setPropertyValue( const OUString& rName,
 //  executeCommand( OUString("flush"), Any() );
 }
 
-//----------------------------------------------------------------------------
+
 void UcbContent::setStringPropertyValue( const OUString& rName,
                                          const OUString& rValue )
 {
@@ -1427,7 +1427,7 @@ void UcbContent::setStringPropertyValue( const OUString& rName,
     print( aText );
 }
 
-//----------------------------------------------------------------------------
+
 void UcbContent::addProperty( const OUString& rName,
                               const uno::Any& rValue )
 {
@@ -1465,7 +1465,7 @@ void UcbContent::addProperty( const OUString& rName,
     print( "Adding property failed. No XPropertyContainer!" );
 }
 
-//----------------------------------------------------------------------------
+
 void UcbContent::addStringProperty(
                     const OUString& rName, const OUString& rValue )
 {
@@ -1474,7 +1474,7 @@ void UcbContent::addStringProperty(
     addProperty( rName, aValue );
 }
 
-//----------------------------------------------------------------------------
+
 void UcbContent::removeProperty( const OUString& rName )
 {
     uno::Reference< beans::XPropertyContainer > xContainer( m_xContent,
@@ -1501,11 +1501,11 @@ void UcbContent::removeProperty( const OUString& rName )
     print( "Removing property failed. No XPropertyContainer!" );
 }
 
-//----------------------------------------------------------------------------
+
 //
 // XInterface methods
 //
-//----------------------------------------------------------------------------
+
 
 // virtual
 uno::Any SAL_CALL UcbContent::queryInterface( const uno::Type & rType )
@@ -1520,7 +1520,7 @@ uno::Any SAL_CALL UcbContent::queryInterface( const uno::Type & rType )
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
-//----------------------------------------------------------------------------
+
 // virtual
 void SAL_CALL UcbContent::acquire()
     throw()
@@ -1528,7 +1528,7 @@ void SAL_CALL UcbContent::acquire()
     OWeakObject::acquire();
 }
 
-//----------------------------------------------------------------------------
+
 // virtual
 void SAL_CALL UcbContent::release()
     throw()
@@ -1536,11 +1536,11 @@ void SAL_CALL UcbContent::release()
     OWeakObject::release();
 }
 
-//----------------------------------------------------------------------------
+
 //
 // XEventListener methods.
 //
-//----------------------------------------------------------------------------
+
 
 // virtual
 void SAL_CALL UcbContent::disposing( const lang::EventObject& /*Source*/ )
@@ -1549,11 +1549,11 @@ void SAL_CALL UcbContent::disposing( const lang::EventObject& /*Source*/ )
     print ( "Content: disposing..." );
 }
 
-//----------------------------------------------------------------------------
+
 //
 // XContentEventListener methods,
 //
-//----------------------------------------------------------------------------
+
 
 // virtual
 void SAL_CALL UcbContent::contentEvent( const ucb::ContentEvent& evt )
@@ -1611,11 +1611,11 @@ void SAL_CALL UcbContent::contentEvent( const ucb::ContentEvent& evt )
     }
 }
 
-//----------------------------------------------------------------------------
+
 //
 // XPropertiesChangeListener methods.
 //
-//----------------------------------------------------------------------------
+
 
 // virtual
 void SAL_CALL UcbContent::propertiesChange(
@@ -1668,7 +1668,7 @@ void SAL_CALL UcbContent::propertiesChange(
 #define MYWIN_ITEMID_ONLINE         24
 #define MYWIN_ITEMID_REORGANIZE     25
 
-//-------------------------------------------------------------------------
+
 class MyWin : public WorkWindow
 {
 private:
@@ -1697,7 +1697,7 @@ public:
     void print( const sal_Char* pText );
 };
 
-//-------------------------------------------------------------------------
+
 MyWin::MyWin( Window *pParent, WinBits nWinStyle,
               uno::Reference< lang::XMultiServiceFactory >& rxFactory,
               OUString const & rConfigurationKey1,
@@ -1873,7 +1873,7 @@ MyWin::MyWin( Window *pParent, WinBits nWinStyle,
     m_aUCB.setOutEdit( m_pOutEdit );
 }
 
-//-------------------------------------------------------------------------
+
 // virtual
 MyWin::~MyWin()
 {
@@ -1888,7 +1888,7 @@ MyWin::~MyWin()
     delete m_pOutEdit;
 }
 
-//-------------------------------------------------------------------------
+
 void MyWin::Resize()
 {
     Size aWinSize = GetOutputSizePixel();
@@ -1904,13 +1904,13 @@ void MyWin::Resize()
         Point( 0, nBoxH + nBoxH ), Size ( nWinW, nWinH - ( nBoxH + nBoxH ) ) );
 }
 
-//-------------------------------------------------------------------------
+
 void MyWin::print( const sal_Char* pText )
 {
     print( OUString.createFromAscii( pText ) );
 }
 
-//-------------------------------------------------------------------------
+
 void MyWin::print( const OUString& rText )
 {
     SolarMutexGuard aGuard;
@@ -1922,7 +1922,7 @@ void MyWin::print( const OUString& rText )
     }
 }
 
-//-------------------------------------------------------------------------
+
 IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
 {
     USHORT nItemId   = pToolBox->GetCurItemId();
@@ -2240,7 +2240,7 @@ public:
 
 MyApp aMyApp;
 
-//-------------------------------------------------------------------------
+
 // virtual
 void MyApp::Main()
 {

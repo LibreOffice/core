@@ -190,7 +190,7 @@ void SfxEmptySplitWin_Impl::FadeIn()
         pOwner->SaveConfig_Impl();
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxSplitWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -203,7 +203,7 @@ void SfxEmptySplitWin_Impl::MouseMove( const MouseEvent& rMEvt )
     SplitWindow::MouseMove( rMEvt );
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxSplitWindow::SfxSplitWindow( Window* pParent, SfxChildAlignment eAl,
         SfxWorkWindow *pW, sal_Bool bWithButtons, WinBits nBits )
@@ -317,7 +317,7 @@ SfxSplitWindow::SfxSplitWindow( Window* pParent, SfxChildAlignment eAl,
     pEmptyWin->SetAutoHideState( !bPinned );
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxSplitWindow::~SfxSplitWindow()
 {
@@ -373,7 +373,7 @@ void SfxSplitWindow::SaveConfig_Impl()
     aWinOpt.SetUserItem( USERITEM_NAME, makeAny( aWinData.makeStringAndClear() ) );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxSplitWindow::StartSplit()
 {
@@ -402,7 +402,7 @@ void SfxSplitWindow::StartSplit()
     SetMaxSizePixel( nSize );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxSplitWindow::SplitResize()
 {
@@ -415,7 +415,7 @@ void SfxSplitWindow::SplitResize()
         pWorkWin->ArrangeAutoHideWindows( this );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxSplitWindow::Split()
 {
@@ -467,7 +467,7 @@ void SfxSplitWindow::Split()
     SaveConfig_Impl();
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize)
 
@@ -559,7 +559,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
         SaveConfig_Impl();
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxSplitWindow::ReleaseWindow_Impl(SfxDockingWindow *pDockWin, sal_Bool bSave)
 {
@@ -589,7 +589,7 @@ void SfxSplitWindow::ReleaseWindow_Impl(SfxDockingWindow *pDockWin, sal_Bool bSa
         SaveConfig_Impl();
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxSplitWindow::MoveWindow( SfxDockingWindow* pDockWin, const Size& rSize,
                         sal_uInt16 nLine, sal_uInt16 nPos, sal_Bool bNewLine)
@@ -613,7 +613,7 @@ void SfxSplitWindow::MoveWindow( SfxDockingWindow* pDockWin, const Size& rSize,
     InsertWindow( pDockWin, rSize, nLine, nPos, bNewLine );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize,
                         sal_uInt16 nLine, sal_uInt16 nPos, sal_Bool bNewLine)
@@ -683,7 +683,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
     SaveConfig_Impl();
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
                         const Size& rSize,
@@ -815,7 +815,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxSplitWindow::RemoveWindow( SfxDockingWindow* pDockWin, sal_Bool bHide )
 
@@ -879,7 +879,7 @@ void SfxSplitWindow::RemoveWindow( SfxDockingWindow* pDockWin, sal_Bool bHide )
     bLocked = sal_False;
 };
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxSplitWindow::GetWindowPos( const SfxDockingWindow* pWindow,
                                         sal_uInt16& rLine, sal_uInt16& rPos ) const
@@ -899,7 +899,7 @@ sal_Bool SfxSplitWindow::GetWindowPos( const SfxDockingWindow* pWindow,
     return sal_True;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxSplitWindow::GetWindowPos( const Point& rTestPos,
                                       sal_uInt16& rLine, sal_uInt16& rPos ) const
@@ -920,7 +920,7 @@ sal_Bool SfxSplitWindow::GetWindowPos( const Point& rTestPos,
     return sal_True;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_uInt16 SfxSplitWindow::GetLineCount() const
 
@@ -932,7 +932,7 @@ sal_uInt16 SfxSplitWindow::GetLineCount() const
     return GetItemCount( 0 );
 }
 
-//-------------------------------------------------------------------------
+
 
 long SfxSplitWindow::GetLineSize( sal_uInt16 nLine ) const
 
@@ -945,7 +945,7 @@ long SfxSplitWindow::GetLineSize( sal_uInt16 nLine ) const
     return GetItemSize( nId );
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_uInt16 SfxSplitWindow::GetWindowCount( sal_uInt16 nLine ) const
 
@@ -958,7 +958,7 @@ sal_uInt16 SfxSplitWindow::GetWindowCount( sal_uInt16 nLine ) const
     return GetItemCount( nId );
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_uInt16 SfxSplitWindow::GetWindowCount() const
 
@@ -970,14 +970,14 @@ sal_uInt16 SfxSplitWindow::GetWindowCount() const
     return GetItemCount( 0 );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxSplitWindow::Command( const CommandEvent& rCEvt )
 {
     SplitWindow::Command( rCEvt );
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK( SfxSplitWindow, TimerHdl, Timer*, pTimer)
 {
@@ -1050,7 +1050,7 @@ IMPL_LINK( SfxSplitWindow, TimerHdl, Timer*, pTimer)
     return 0L;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxSplitWindow::CursorIsOverRect( sal_Bool bForceAdding ) const
 {
@@ -1091,7 +1091,7 @@ sal_Bool SfxSplitWindow::CursorIsOverRect( sal_Bool bForceAdding ) const
     return sal_False;
 }
 
-//-------------------------------------------------------------------------
+
 
 SplitWindow* SfxSplitWindow::GetSplitWindow()
 {
@@ -1100,7 +1100,7 @@ SplitWindow* SfxSplitWindow::GetSplitWindow()
     return this;
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SfxSplitWindow::IsFadeIn() const
 {
     return pEmptyWin->bFadeIn;
@@ -1111,7 +1111,7 @@ sal_Bool SfxSplitWindow::IsAutoHide( sal_Bool bSelf ) const
     return bSelf ? pEmptyWin->bAutoHide && !pEmptyWin->bEndAutoHide : pEmptyWin->bAutoHide;
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxSplitWindow::SetPinned_Impl( sal_Bool bOn )
 {
@@ -1166,7 +1166,7 @@ void SfxSplitWindow::SetPinned_Impl( sal_Bool bOn )
     pEmptyWin->SetAutoHideState( !bPinned );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxSplitWindow::SetFadeIn_Impl( sal_Bool bOn )
 {

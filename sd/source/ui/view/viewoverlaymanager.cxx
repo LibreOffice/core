@@ -63,12 +63,12 @@ namespace sd {
 
 class ImageButtonHdl;
 
-// --------------------------------------------------------------------
+
 
 static const sal_uInt16 gButtonSlots[] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
 static const sal_uInt16 gButtonToolTips[] = { STR_INSERT_TABLE, STR_INSERT_CHART, STR_INSERT_PICTURE, STR_INSERT_MOVIE };
 
-// --------------------------------------------------------------------
+
 
 static BitmapEx loadImageResource( sal_uInt16 nId )
 {
@@ -78,7 +78,7 @@ static BitmapEx loadImageResource( sal_uInt16 nId )
     return BitmapEx( aResId );
 }
 
-// --------------------------------------------------------------------
+
 
 static BitmapEx* getButtonImage( int index, bool large )
 {
@@ -104,7 +104,7 @@ static BitmapEx* getButtonImage( int index, bool large )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 const sal_uInt32 SMART_TAG_HDL_NUM = SAL_MAX_UINT32;
 
@@ -158,7 +158,7 @@ private:
     sal_uLong mnTip;
 };
 
-// --------------------------------------------------------------------
+
 
 ImageButtonHdl::ImageButtonHdl( const SmartTagReference& xTag /*, sal_uInt16 nSID, const Image& rImage, const Image& rImageMO*/, const Point& rPnt )
 : SmartHdl( xTag, rPnt )
@@ -169,14 +169,14 @@ ImageButtonHdl::ImageButtonHdl( const SmartTagReference& xTag /*, sal_uInt16 nSI
 {
 }
 
-// --------------------------------------------------------------------
+
 
 ImageButtonHdl::~ImageButtonHdl()
 {
     HideTip();
 }
 
-// --------------------------------------------------------------------
+
 
 void ImageButtonHdl::HideTip()
 {
@@ -187,7 +187,7 @@ void ImageButtonHdl::HideTip()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 extern OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const OUString& aCmdURL );
 
@@ -227,7 +227,7 @@ void ImageButtonHdl::onMouseEnter(const MouseEvent& rMEvt)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void ImageButtonHdl::onMouseLeave()
 {
@@ -236,7 +236,7 @@ void ImageButtonHdl::onMouseLeave()
     Touch();
 }
 
-// --------------------------------------------------------------------
+
 
 void ImageButtonHdl::CreateB2dIAObject()
 {
@@ -281,21 +281,21 @@ void ImageButtonHdl::CreateB2dIAObject()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool ImageButtonHdl::IsFocusHdl() const
 {
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 bool ImageButtonHdl::isMarkable() const
 {
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 Pointer ImageButtonHdl::GetPointer() const
 {
@@ -310,13 +310,13 @@ ChangePlaceholderTag::ChangePlaceholderTag( ::sd::View& rView, SdrObject& rPlace
 {
 }
 
-// --------------------------------------------------------------------
+
 
 ChangePlaceholderTag::~ChangePlaceholderTag()
 {
 }
 
-// --------------------------------------------------------------------
+
 
 /** returns true if the ChangePlaceholderTag handled the event. */
 bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& /*rMEvt*/, SmartHdl& rHdl )
@@ -342,7 +342,7 @@ bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& /*rMEvt*/, SmartHd
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 /** returns true if the SmartTag consumes this event. */
 bool ChangePlaceholderTag::KeyInput( const KeyEvent& rKEvt )
@@ -363,7 +363,7 @@ bool ChangePlaceholderTag::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 BitmapEx ChangePlaceholderTag::createOverlayImage( int nHighlight )
 {
@@ -442,28 +442,28 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void ChangePlaceholderTag::disposing()
 {
     SmartTag::disposing();
 }
 
-// --------------------------------------------------------------------
+
 
 void ChangePlaceholderTag::select()
 {
     SmartTag::select();
 }
 
-// --------------------------------------------------------------------
+
 
 void ChangePlaceholderTag::deselect()
 {
     SmartTag::deselect();
 }
 
-// --------------------------------------------------------------------
+
 
 ViewOverlayManager::ViewOverlayManager( ViewShellBase& rViewShellBase )
 : mrBase( rViewShellBase )
@@ -479,7 +479,7 @@ ViewOverlayManager::ViewOverlayManager( ViewShellBase& rViewShellBase )
     StartListening( *mrBase.GetDocShell() );
 }
 
-// --------------------------------------------------------------------
+
 
 ViewOverlayManager::~ViewOverlayManager()
 {
@@ -495,7 +495,7 @@ ViewOverlayManager::~ViewOverlayManager()
     DisposeTags();
 }
 
-// --------------------------------------------------------------------
+
 
 void ViewOverlayManager::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
@@ -562,7 +562,7 @@ bool ViewOverlayManager::CreateTags()
     return bChanges;
 }
 
-// --------------------------------------------------------------------
+
 
 bool ViewOverlayManager::DisposeTags()
 {
@@ -583,7 +583,7 @@ bool ViewOverlayManager::DisposeTags()
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK(ViewOverlayManager,EventMultiplexerListener,
     tools::EventMultiplexerEvent*,pEvent)

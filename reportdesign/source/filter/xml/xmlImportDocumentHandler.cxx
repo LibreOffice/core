@@ -53,7 +53,7 @@ ImportDocumentHandler::ImportDocumentHandler(uno::Reference< uno::XComponentCont
     ,m_xContext(context)
 {
 }
-// -----------------------------------------------------------------------------
+
 ImportDocumentHandler::~ImportDocumentHandler()
 {
     if ( m_xProxy.is() )
@@ -64,7 +64,7 @@ ImportDocumentHandler::~ImportDocumentHandler()
 }
 IMPLEMENT_GET_IMPLEMENTATION_ID(ImportDocumentHandler)
 IMPLEMENT_FORWARD_REFCOUNT( ImportDocumentHandler, ImportDocumentHandler_BASE )
-//------------------------------------------------------------------------
+
 OUString SAL_CALL ImportDocumentHandler::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
@@ -95,7 +95,7 @@ uno::Sequence< OUString > ImportDocumentHandler::getSupportedServiceNames_static
     return aSupported;
 }
 
-//------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL ImportDocumentHandler::create( const uno::Reference< uno::XComponentContext >& _rxContext )
 {
     return *(new ImportDocumentHandler( _rxContext ));
@@ -385,13 +385,13 @@ void SAL_CALL ImportDocumentHandler::initialize( const uno::Sequence< uno::Any >
 
     m_pReportElemTokenMap.reset(OXMLHelper::GetReportElemTokenMap());
 }
-// --------------------------------------------------------------------------------
+
 uno::Any SAL_CALL ImportDocumentHandler::queryInterface( const uno::Type& _rType ) throw (uno::RuntimeException)
 {
     uno::Any aReturn = ImportDocumentHandler_BASE::queryInterface(_rType);
     return aReturn.hasValue() ? aReturn : (m_xProxy.is() ? m_xProxy->queryAggregation(_rType) : aReturn);
 }
-// --------------------------------------------------------------------------------
+
 uno::Sequence< uno::Type > SAL_CALL ImportDocumentHandler::getTypes(  ) throw (uno::RuntimeException)
 {
     if ( m_xTypeProvider.is() )
@@ -402,8 +402,8 @@ uno::Sequence< uno::Type > SAL_CALL ImportDocumentHandler::getTypes(  ) throw (u
     return ImportDocumentHandler_BASE::getTypes();
 }
 
-// -----------------------------------------------------------------------------
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

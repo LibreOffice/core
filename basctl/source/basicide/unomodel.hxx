@@ -26,7 +26,6 @@
 namespace basctl
 {
 
-//-----------------------------------------------------------------------------
 class SIDEModel : public SfxBaseModel,
                 public com::sun::star::lang::XServiceInfo
 {

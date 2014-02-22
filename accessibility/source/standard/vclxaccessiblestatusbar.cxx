@@ -44,13 +44,13 @@ VCLXAccessibleStatusBar::VCLXAccessibleStatusBar( VCLXWindow* pVCLXWindow )
         m_aAccessibleChildren.assign( m_pStatusBar->GetItemCount(), Reference< XAccessible >() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleStatusBar::~VCLXAccessibleStatusBar()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleStatusBar::UpdateShowing( sal_Int32 i, sal_Bool bShowing )
 {
@@ -66,7 +66,7 @@ void VCLXAccessibleStatusBar::UpdateShowing( sal_Int32 i, sal_Bool bShowing )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleStatusBar::UpdateItemName( sal_Int32 i )
 {
@@ -85,7 +85,7 @@ void VCLXAccessibleStatusBar::UpdateItemName( sal_Int32 i )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleStatusBar::UpdateItemText( sal_Int32 i )
 {
@@ -104,7 +104,7 @@ void VCLXAccessibleStatusBar::UpdateItemText( sal_Int32 i )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleStatusBar::InsertChild( sal_Int32 i )
 {
@@ -124,7 +124,7 @@ void VCLXAccessibleStatusBar::InsertChild( sal_Int32 i )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleStatusBar::RemoveChild( sal_Int32 i )
 {
@@ -150,7 +150,7 @@ void VCLXAccessibleStatusBar::RemoveChild( sal_Int32 i )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
@@ -255,9 +255,9 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
    }
 }
 
-// -----------------------------------------------------------------------------
+
 // XComponent
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleStatusBar::disposing()
 {
@@ -278,16 +278,16 @@ void VCLXAccessibleStatusBar::disposing()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 // XServiceInfo
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleStatusBar::getImplementationName() throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleStatusBar" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > VCLXAccessibleStatusBar::getSupportedServiceNames() throw (RuntimeException)
 {
@@ -296,9 +296,9 @@ Sequence< OUString > VCLXAccessibleStatusBar::getSupportedServiceNames() throw (
     return aNames;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleContext
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleStatusBar::getAccessibleChildCount() throw (RuntimeException)
 {
@@ -307,7 +307,7 @@ sal_Int32 VCLXAccessibleStatusBar::getAccessibleChildCount() throw (RuntimeExcep
     return m_aAccessibleChildren.size();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -333,9 +333,9 @@ Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleChild( sal_Int32 
     return xChild;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleComponent
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleAtPoint( const awt::Point& rPoint ) throw (RuntimeException)
 {
@@ -353,6 +353,6 @@ Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleAtPoint( const aw
     return xChild;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

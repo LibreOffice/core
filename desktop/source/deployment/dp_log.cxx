@@ -62,12 +62,12 @@ public:
     virtual void SAL_CALL pop() throw (RuntimeException);
 };
 
-//______________________________________________________________________________
+
 ProgressLogImpl::~ProgressLogImpl()
 {
 }
 
-//______________________________________________________________________________
+
 void ProgressLogImpl::disposing()
 {
     try {
@@ -83,7 +83,7 @@ void ProgressLogImpl::disposing()
     }
 }
 
-//______________________________________________________________________________
+
 ProgressLogImpl::ProgressLogImpl(
     Sequence<Any> const & args,
     Reference<XComponentContext> const & xContext )
@@ -125,7 +125,7 @@ ProgressLogImpl::ProgressLogImpl(
     log_write( buf.makeStringAndClear() );
 }
 
-//______________________________________________________________________________
+
 void ProgressLogImpl::log_write( OString const & text )
 {
     try {
@@ -144,7 +144,7 @@ void ProgressLogImpl::log_write( OString const & text )
 }
 
 // XProgressHandler
-//______________________________________________________________________________
+
 void ProgressLogImpl::push( Any const & Status )
     throw (RuntimeException)
 {
@@ -153,7 +153,7 @@ void ProgressLogImpl::push( Any const & Status )
     ++m_log_level;
 }
 
-//______________________________________________________________________________
+
 void ProgressLogImpl::update( Any const & Status )
     throw (RuntimeException)
 {
@@ -178,7 +178,7 @@ void ProgressLogImpl::update( Any const & Status )
                    buf.makeStringAndClear(), osl_getThreadTextEncoding() ) );
 }
 
-//______________________________________________________________________________
+
 void ProgressLogImpl::pop() throw (RuntimeException)
 {
     OSL_ASSERT( m_log_level > 0 );

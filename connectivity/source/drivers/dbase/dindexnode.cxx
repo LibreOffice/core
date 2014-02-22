@@ -32,19 +32,19 @@ using namespace connectivity;
 using namespace connectivity::dbase;
 using namespace connectivity::file;
 using namespace com::sun::star::sdbc;
-// -----------------------------------------------------------------------------
+
 ONDXKey::ONDXKey(sal_uInt32 nRec)
     :nRecord(nRec)
 {
 }
-// -----------------------------------------------------------------------------
+
 ONDXKey::ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, sal_uInt32 nRec)
     : ONDXKey_BASE(eType)
     , nRecord(nRec)
     , xValue(rVal)
 {
 }
-// -----------------------------------------------------------------------------
+
 ONDXKey::ONDXKey(const OUString& aStr, sal_uInt32 nRec)
     : ONDXKey_BASE(::com::sun::star::sdbc::DataType::VARCHAR)
      ,nRecord(nRec)
@@ -55,7 +55,7 @@ ONDXKey::ONDXKey(const OUString& aStr, sal_uInt32 nRec)
         xValue.setBound(true);
     }
 }
-// -----------------------------------------------------------------------------
+
 
 ONDXKey::ONDXKey(double aVal, sal_uInt32 nRec)
     : ONDXKey_BASE(::com::sun::star::sdbc::DataType::DOUBLE)
@@ -63,7 +63,7 @@ ONDXKey::ONDXKey(double aVal, sal_uInt32 nRec)
      ,xValue(aVal)
 {
 }
-// -----------------------------------------------------------------------------
+
 
 //==================================================================
 // index page
@@ -80,12 +80,12 @@ ONDXPage::ONDXPage(ODbaseIndex& rInd, sal_uInt32 nPos, ONDXPage* pParent)
     ppNodes = new ONDXNode[nT];
 }
 
-//------------------------------------------------------------------
+
 ONDXPage::~ONDXPage()
 {
     delete[] ppNodes;
 }
-//------------------------------------------------------------------
+
 void ONDXPage::QueryDelete()
 {
     // Store in GarbageCollector
@@ -114,7 +114,7 @@ void ONDXPage::QueryDelete()
     else
         SvRefBase::QueryDelete();
 }
-//------------------------------------------------------------------
+
 ONDXPagePtr& ONDXPage::GetChild(ODbaseIndex* pIndex)
 {
     if (!aChild.Is() && pIndex)
@@ -124,7 +124,7 @@ ONDXPagePtr& ONDXPage::GetChild(ODbaseIndex* pIndex)
     return aChild;
 }
 
-//------------------------------------------------------------------
+
 sal_uInt16 ONDXPage::FindPos(const ONDXKey& rKey) const
 {
     // searches the position for the given key in a page
@@ -135,7 +135,7 @@ sal_uInt16 ONDXPage::FindPos(const ONDXKey& rKey) const
     return i;
 }
 
-//------------------------------------------------------------------
+
 sal_Bool ONDXPage::Find(const ONDXKey& rKey)
 {
     // searches the given key
@@ -169,7 +169,7 @@ sal_Bool ONDXPage::Find(const ONDXKey& rKey)
     return bResult;
 }
 
-//------------------------------------------------------------------
+
 sal_Bool ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
 {
     // When creating an index there can be multiple nodes added,
@@ -289,7 +289,7 @@ sal_Bool ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
     }
 }
 
-//------------------------------------------------------------------
+
 sal_Bool ONDXPage::Insert(sal_uInt16 nPos, ONDXNode& rNode)
 {
     sal_uInt16 nMaxCount = rIndex.getHeader().db_maxkeys;
@@ -321,13 +321,13 @@ sal_Bool ONDXPage::Insert(sal_uInt16 nPos, ONDXNode& rNode)
     return sal_True;
 }
 
-//------------------------------------------------------------------
+
 sal_Bool ONDXPage::Append(ONDXNode& rNode)
 {
     DBG_ASSERT(!IsFull(), "kein Append moeglich");
     return Insert(nCount, rNode);
 }
-//------------------------------------------------------------------
+
 void ONDXPage::Release(sal_Bool bSave)
 {
     // free pages
@@ -346,7 +346,7 @@ void ONDXPage::Release(sal_Bool bSave)
     }
     aParent = NULL;
 }
-//------------------------------------------------------------------
+
 void ONDXPage::ReleaseFull(sal_Bool bSave)
 {
     ONDXPagePtr aTempParent = aParent;
@@ -363,7 +363,7 @@ void ONDXPage::ReleaseFull(sal_Bool bSave)
             aTempParent->GetChild().Clear();
     }
 }
-//------------------------------------------------------------------
+
 sal_Bool ONDXPage::Delete(sal_uInt16 nNodePos)
 {
     if (IsLeaf())
@@ -414,7 +414,7 @@ sal_Bool ONDXPage::Delete(sal_uInt16 nNodePos)
 }
 
 
-//------------------------------------------------------------------
+
 ONDXNode ONDXPage::Split(ONDXPage& rPage)
 {
     DBG_ASSERT(IsFull(), "Falsches Splitting");
@@ -464,7 +464,7 @@ ONDXNode ONDXPage::Split(ONDXPage& rPage)
     return aResultNode;
 }
 
-//------------------------------------------------------------------
+
 void ONDXPage::Merge(sal_uInt16 nParentNodePos, ONDXPagePtr xPage)
 {
     DBG_ASSERT(HasParent(), "kein Vater vorhanden");
@@ -651,7 +651,7 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, ONDXPagePtr xPage)
 // ONDXNode
 //==================================================================
 
-//------------------------------------------------------------------
+
 void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
 {
     rStream.ReadUInt32( aKey.nRecord ); // key
@@ -675,7 +675,7 @@ void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
     rStream >> aChild;
 }
 
-//------------------------------------------------------------------
+
 void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
 {
     const ODbaseIndex& rIndex = rPage.GetIndex();
@@ -717,7 +717,7 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
 }
 
 
-//------------------------------------------------------------------
+
 ONDXPagePtr& ONDXNode::GetChild(ODbaseIndex* pIndex, ONDXPage* pParent)
 {
     if (!aChild.Is() && pIndex)
@@ -730,13 +730,13 @@ ONDXPagePtr& ONDXNode::GetChild(ODbaseIndex* pIndex, ONDXPage* pParent)
 //==================================================================
 // ONDXKey
 //==================================================================
-//------------------------------------------------------------------
+
 sal_Bool ONDXKey::IsText(sal_Int32 eType)
 {
     return eType == DataType::VARCHAR || eType == DataType::CHAR;
 }
 
-//------------------------------------------------------------------
+
 int ONDXKey::Compare(const ONDXKey& rKey) const
 {
     sal_Int32 nRes;
@@ -774,40 +774,40 @@ int ONDXKey::Compare(const ONDXKey& rKey) const
     }
     return nRes;
 }
-// -----------------------------------------------------------------------------
+
 void ONDXKey::setValue(const ORowSetValue& _rVal)
 {
     xValue = _rVal;
 }
-// -----------------------------------------------------------------------------
+
 const ORowSetValue& ONDXKey::getValue() const
 {
     return xValue;
 }
-// -----------------------------------------------------------------------------
+
 SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPagePtr& rPage)
 {
     rStream.ReadUInt32( rPage.nPagePos );
     return rStream;
 }
-// -----------------------------------------------------------------------------
+
 SvStream& connectivity::dbase::WriteONDXPagePtr(SvStream &rStream, const ONDXPagePtr& rPage)
 {
     rStream.WriteUInt32( rPage.nPagePos );
     return rStream;
 }
-// -----------------------------------------------------------------------------
+
 //==================================================================
 // ONDXPagePtr
 //==================================================================
-//------------------------------------------------------------------
+
 ONDXPagePtr::ONDXPagePtr(const ONDXPagePtr& rRef)
               :ONDXPageRef(rRef)
               ,nPagePos(rRef.nPagePos)
 {
 }
 
-//------------------------------------------------------------------
+
 ONDXPagePtr::ONDXPagePtr(ONDXPage* pRefPage)
               :ONDXPageRef(pRefPage)
               ,nPagePos(0)
@@ -815,7 +815,7 @@ ONDXPagePtr::ONDXPagePtr(ONDXPage* pRefPage)
     if (pRefPage)
         nPagePos = pRefPage->GetPagePos();
 }
-//------------------------------------------------------------------
+
 ONDXPagePtr& ONDXPagePtr::operator=(const ONDXPagePtr& rRef)
 {
     ONDXPageRef::operator=(rRef);
@@ -823,16 +823,16 @@ ONDXPagePtr& ONDXPagePtr::operator=(const ONDXPagePtr& rRef)
     return *this;
 }
 
-//------------------------------------------------------------------
+
 ONDXPagePtr& ONDXPagePtr::operator= (ONDXPage* pRef)
 {
     ONDXPageRef::operator=(pRef);
     nPagePos = (pRef) ? pRef->GetPagePos() : 0;
     return *this;
 }
-// -----------------------------------------------------------------------------
+
 static sal_uInt32 nValue;
-//------------------------------------------------------------------
+
 SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
 {
     rStream.Seek(rPage.GetPagePos() * DINDEX_PAGE_SIZE);
@@ -844,7 +844,7 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
     return rStream;
 }
 
-//------------------------------------------------------------------
+
 SvStream& connectivity::dbase::WriteONDXPage(SvStream &rStream, const ONDXPage& rPage)
 {
     // Page doesn't exist yet
@@ -887,9 +887,9 @@ SvStream& connectivity::dbase::WriteONDXPage(SvStream &rStream, const ONDXPage& 
     }
     return rStream;
 }
-// -----------------------------------------------------------------------------
+
 #if OSL_DEBUG_LEVEL > 1
-//------------------------------------------------------------------
+
 void ONDXPage::PrintPage()
 {
     OSL_TRACE("\nSDB: -----------Page: %d  Parent: %d  Count: %d  Child: %d-----",
@@ -930,13 +930,13 @@ void ONDXPage::PrintPage()
     OSL_TRACE("SDB: ===============================================");
 }
 #endif
-// -----------------------------------------------------------------------------
+
 sal_Bool ONDXPage::IsFull() const
 {
     return Count() == rIndex.getHeader().db_maxkeys;
 }
-// -----------------------------------------------------------------------------
-//------------------------------------------------------------------
+
+
 sal_uInt16 ONDXPage::Search(const ONDXKey& rSearch)
 {
     // binary search later
@@ -948,7 +948,7 @@ sal_uInt16 ONDXPage::Search(const ONDXKey& rSearch)
     return (i < Count()) ? i : NODE_NOTFOUND;
 }
 
-//------------------------------------------------------------------
+
 sal_uInt16 ONDXPage::Search(const ONDXPage* pPage)
 {
     sal_uInt16 i = NODE_NOTFOUND;
@@ -959,7 +959,7 @@ sal_uInt16 ONDXPage::Search(const ONDXPage* pPage)
     // if not found, then we assume, that the page itself points to the page
     return (i < Count()) ? i : NODE_NOTFOUND;
 }
-// -----------------------------------------------------------------------------
+
 // runs recursively
 void ONDXPage::SearchAndReplace(const ONDXKey& rSearch,
                                   ONDXKey& rReplace)
@@ -980,20 +980,20 @@ void ONDXPage::SearchAndReplace(const ONDXKey& rSearch,
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 ONDXNode& ONDXPage::operator[] (sal_uInt16 nPos)
 {
     DBG_ASSERT(nCount > nPos, "falscher Indexzugriff");
     return ppNodes[nPos];
 }
 
-//------------------------------------------------------------------
+
 const ONDXNode& ONDXPage::operator[] (sal_uInt16 nPos) const
 {
     DBG_ASSERT(nCount > nPos, "falscher Indexzugriff");
     return ppNodes[nPos];
 }
-// -----------------------------------------------------------------------------
+
 void ONDXPage::Remove(sal_uInt16 nPos)
 {
     DBG_ASSERT(nCount > nPos, "falscher Indexzugriff");
@@ -1004,6 +1004,6 @@ void ONDXPage::Remove(sal_uInt16 nPos)
     nCount--;
     bModified = sal_True;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

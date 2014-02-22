@@ -68,20 +68,20 @@ void OXMLAutoStylePoolP::exportStyleAttributes(
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 OXMLAutoStylePoolP::OXMLAutoStylePoolP(ORptExport& rTempORptExport):
     SvXMLAutoStylePoolP(rTempORptExport),
     rORptExport(rTempORptExport)
 {
 }
-// -----------------------------------------------------------------------------
+
 OXMLAutoStylePoolP::~OXMLAutoStylePoolP()
 {
 }
-// -----------------------------------------------------------------------------
 
-//----------------------------------------------------------------------------
+
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

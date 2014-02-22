@@ -35,20 +35,20 @@ ScDDComboBoxButton::ScDDComboBoxButton( OutputDevice* pOutputDevice )
     SetOptSizePixel();
 }
 
-// -------------------------------------------------------------------------
+
 
 ScDDComboBoxButton::~ScDDComboBoxButton()
 {
 }
 
-// -------------------------------------------------------------------------
+
 
 void ScDDComboBoxButton::SetOutputDevice( OutputDevice* pOutputDevice )
 {
     pOut = pOutputDevice;
 }
 
-// -------------------------------------------------------------------------
+
 
 void ScDDComboBoxButton::SetOptSizePixel()
 {
@@ -57,7 +57,7 @@ void ScDDComboBoxButton::SetOptSizePixel()
     aBtnSize.Width() = pOut->GetSettings().GetStyleSettings().GetScrollBarSize();
 }
 
-// -------------------------------------------------------------------------
+
 
 void ScDDComboBoxButton::Draw( const Point& rAt,
                                const Size&  rSize,
@@ -116,7 +116,7 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
         pOut->SetFillColor();
 }
 
-//------------------------------------------------------------------------
+
 
 void ScDDComboBoxButton::ImpDrawArrow( const Rectangle& rRect,
                                        bool             bState )

@@ -398,6 +398,6 @@ WinSalMenuItem::~WinSalMenuItem()
         ImplRemoveItemById( mpSalMenu, mnId );
 }
 
-// -------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1419,7 +1419,7 @@ bool Region::IsInside( const Rectangle& rRect ) const
     return aRegion.IsEmpty();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Region::IsOver( const Rectangle& rRect ) const
 {

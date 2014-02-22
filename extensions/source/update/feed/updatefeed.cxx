@@ -66,7 +66,7 @@ namespace xml = com::sun::star::xml ;
 namespace sdbc = com::sun::star::sdbc ;
 
 
-//------------------------------------------------------------------------------
+
 
 namespace
 {
@@ -113,7 +113,7 @@ public:
 #define INPUT_STREAM(i) i
 #endif
 
-//------------------------------------------------------------------------------
+
 
 class ActiveDataSink : public ::cppu::WeakImplHelper1< io::XActiveDataSink >
 {
@@ -128,7 +128,7 @@ public:
         throw (uno::RuntimeException) { m_xStream = rStream; };
 };
 
-//------------------------------------------------------------------------------
+
 
 class UpdateInformationProvider :
     public ::cppu::WeakImplHelper3< deployment::XUpdateInformationProvider,
@@ -219,7 +219,7 @@ private:
     sal_Int32 m_nCommandId;
 };
 
-//------------------------------------------------------------------------------
+
 
 class UpdateInformationEnumeration : public ::cppu::WeakImplHelper1< container::XEnumeration >
 {
@@ -286,7 +286,7 @@ private:
     sal_Int32 m_nCount;
 };
 
-//------------------------------------------------------------------------------
+
 
 class SingleUpdateInformationEnumeration : public ::cppu::WeakImplHelper1< container::XEnumeration >
 {
@@ -312,7 +312,7 @@ private:
 };
 
 
-//------------------------------------------------------------------------------
+
 
 UpdateInformationProvider::UpdateInformationProvider(
     const uno::Reference<uno::XComponentContext>& xContext,
@@ -366,7 +366,7 @@ UpdateInformationProvider::UpdateInformationProvider(
     }
 }
 
-//------------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface >
 UpdateInformationProvider::createInstance(const uno::Reference<uno::XComponentContext>& xContext)
 {
@@ -383,13 +383,13 @@ UpdateInformationProvider::createInstance(const uno::Reference<uno::XComponentCo
     return *new UpdateInformationProvider(xContext, xUniversalContentBroker, xDocumentBuilder, xXPath);
 }
 
-//------------------------------------------------------------------------------
+
 
 UpdateInformationProvider::~UpdateInformationProvider()
 {
 }
 
-//------------------------------------------------------------------------------
+
 
 OUString
 UpdateInformationProvider::getConfigurationItem(uno::Reference<lang::XMultiServiceFactory> const & configurationProvider, OUString const & node, OUString const & item)
@@ -412,7 +412,7 @@ UpdateInformationProvider::getConfigurationItem(uno::Reference<lang::XMultiServi
     return sRet;
 }
 
-//------------------------------------------------------------------------------
+
 
 void
 UpdateInformationProvider::storeCommandInfo(
@@ -425,7 +425,7 @@ UpdateInformationProvider::storeCommandInfo(
     m_xCommandProcessor = rxCommandProcessor;
 }
 
-//------------------------------------------------------------------------------
+
 
 uno::Reference< io::XInputStream >
 UpdateInformationProvider::load(const OUString& rURL)
@@ -482,7 +482,7 @@ UpdateInformationProvider::load(const OUString& rURL)
     return INPUT_STREAM(aSink->getInputStream());
 }
 
-//------------------------------------------------------------------------------
+
 
 // TODO: docu content node
 
@@ -529,7 +529,7 @@ UpdateInformationProvider::getDocumentRoot(const uno::Reference< xml::dom::XNode
     return uno::Reference< xml::dom::XElement > ();
 }
 
-//------------------------------------------------------------------------------
+
 
 uno::Reference< xml::dom::XNode >
 UpdateInformationProvider::getChildNode(const uno::Reference< xml::dom::XNode >& rxNode,
@@ -544,7 +544,7 @@ UpdateInformationProvider::getChildNode(const uno::Reference< xml::dom::XNode >&
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 uno::Reference< container::XEnumeration > SAL_CALL
 UpdateInformationProvider::getUpdateInformationEnumeration(
@@ -615,7 +615,7 @@ UpdateInformationProvider::getUpdateInformationEnumeration(
     return uno::Reference< container::XEnumeration >();
 }
 
-//------------------------------------------------------------------------------
+
 
 uno::Sequence< uno::Reference< xml::dom::XElement > > SAL_CALL
 UpdateInformationProvider::getUpdateInformation(
@@ -660,7 +660,7 @@ UpdateInformationProvider::getUpdateInformation(
     return aRet;
 }
 
-//------------------------------------------------------------------------------
+
 
 void SAL_CALL
 UpdateInformationProvider::cancel() throw (uno::RuntimeException)
@@ -672,7 +672,7 @@ UpdateInformationProvider::cancel() throw (uno::RuntimeException)
         m_xCommandProcessor->abort(m_nCommandId);
 }
 
-//------------------------------------------------------------------------------
+
 
 void SAL_CALL
 UpdateInformationProvider::setInteractionHandler(
@@ -683,7 +683,7 @@ UpdateInformationProvider::setInteractionHandler(
     m_xInteractionHandler = handler;
 }
 
-//------------------------------------------------------------------------------
+
 
 uno::Reference< task::XInteractionHandler > SAL_CALL
 UpdateInformationProvider::getInteractionHandler()
@@ -715,7 +715,7 @@ UpdateInformationProvider::getInteractionHandler()
         return m_xPwContainerInteractionHandler;
     }
 }
-//------------------------------------------------------------------------------
+
 
 uno::Sequence< OUString >
 UpdateInformationProvider::getServiceNames()
@@ -725,7 +725,7 @@ UpdateInformationProvider::getServiceNames()
     return aServiceList;
 };
 
-//------------------------------------------------------------------------------
+
 
 OUString
 UpdateInformationProvider::getImplName()
@@ -733,7 +733,7 @@ UpdateInformationProvider::getImplName()
     return OUString("vnd.sun.UpdateInformationProvider");
 }
 
-//------------------------------------------------------------------------------
+
 
 OUString SAL_CALL
 UpdateInformationProvider::getImplementationName() throw (uno::RuntimeException)
@@ -741,7 +741,7 @@ UpdateInformationProvider::getImplementationName() throw (uno::RuntimeException)
     return getImplName();
 }
 
-//------------------------------------------------------------------------------
+
 
 uno::Sequence< OUString > SAL_CALL
 UpdateInformationProvider::getSupportedServiceNames() throw (uno::RuntimeException)
@@ -757,7 +757,7 @@ UpdateInformationProvider::supportsService( OUString const & serviceName ) throw
 
 } // anonymous namespace
 
-//------------------------------------------------------------------------------
+
 
 static uno::Reference<uno::XInterface> SAL_CALL
 createInstance(uno::Reference<uno::XComponentContext> const & xContext)
@@ -765,7 +765,7 @@ createInstance(uno::Reference<uno::XComponentContext> const & xContext)
     return UpdateInformationProvider::createInstance(xContext);
 }
 
-//------------------------------------------------------------------------------
+
 
 static const cppu::ImplementationEntry kImplementations_entries[] =
 {
@@ -780,7 +780,7 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
     { NULL, NULL, NULL, NULL, NULL, 0 }
 } ;
 
-//------------------------------------------------------------------------------
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL updatefeed_component_getFactory(const sal_Char *pszImplementationName, void *pServiceManager, void *pRegistryKey)
 {

@@ -66,14 +66,14 @@
 
 using namespace com::sun::star;
 
-// -----------------------------------------------------------------------
+
 
 #define SCTRANS_TYPE_IMPEX          1
 #define SCTRANS_TYPE_EDIT_RTF       2
 #define SCTRANS_TYPE_EDIT_BIN       3
 #define SCTRANS_TYPE_EMBOBJ         4
 
-// -----------------------------------------------------------------------
+
 
 void ScTransferObj::GetAreaSize( ScDocument* pDoc, SCTAB nTab1, SCTAB nTab2, SCROW& nRow, SCCOL& nCol )
 {
@@ -115,7 +115,7 @@ void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPr
     ScPrintFunc::DrawToDev( pDoc, pDev, nPrintFactor, aBound, &aViewData, bMetaFile );
 }
 
-// -----------------------------------------------------------------------
+
 
 ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDescriptor& rDesc ) :
     pDoc( pClipDoc ),

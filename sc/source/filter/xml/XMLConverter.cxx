@@ -34,7 +34,7 @@ using namespace ::com::sun::star;
 using namespace xmloff::token;
 
 
-//___________________________________________________________________
+
 
 ScDocument* ScXMLConverter::GetScDocument( uno::Reference< frame::XModel > xModel )
 {
@@ -47,7 +47,7 @@ ScDocument* ScXMLConverter::GetScDocument( uno::Reference< frame::XModel > xMode
 }
 
 
-//___________________________________________________________________
+
 sheet::GeneralFunction ScXMLConverter::GetFunctionFromString( const OUString& sFunction )
 {
     if( IsXMLToken(sFunction, XML_SUM ) )
@@ -105,7 +105,7 @@ ScSubTotalFunc ScXMLConverter::GetSubTotalFuncFromString( const OUString& sFunct
 }
 
 
-//___________________________________________________________________
+
 
 void ScXMLConverter::GetStringFromFunction(
         OUString& rString,
@@ -164,7 +164,7 @@ void ScXMLConverter::GetStringFromFunction(
 }
 
 
-//___________________________________________________________________
+
 
 sheet::DataPilotFieldOrientation ScXMLConverter::GetOrientationFromString(
     const OUString& rString )
@@ -181,7 +181,7 @@ sheet::DataPilotFieldOrientation ScXMLConverter::GetOrientationFromString(
 }
 
 
-//___________________________________________________________________
+
 
 void ScXMLConverter::GetStringFromOrientation(
     OUString& rString,
@@ -215,7 +215,7 @@ void ScXMLConverter::GetStringFromOrientation(
 }
 
 
-//___________________________________________________________________
+
 
 ScDetectiveObjType ScXMLConverter::GetDetObjTypeFromString( const OUString& rString )
 {
@@ -246,7 +246,7 @@ bool ScXMLConverter::GetDetOpTypeFromString( ScDetOpType& rDetOpType, const OUSt
 }
 
 
-//___________________________________________________________________
+
 
 void ScXMLConverter::GetStringFromDetObjType(
         OUString& rString,
@@ -301,7 +301,7 @@ void ScXMLConverter::GetStringFromDetOpType(
 }
 
 
-//___________________________________________________________________
+
 
 void ScXMLConverter::ParseFormula(OUString& sFormula, const bool bIsFormula)
 {
@@ -335,7 +335,7 @@ void ScXMLConverter::ParseFormula(OUString& sFormula, const bool bIsFormula)
 }
 
 
-//_____________________________________________________________________
+
 
 void ScXMLConverter::ConvertDateTimeToString(const DateTime& aDateTime, OUStringBuffer& sDate)
 {
@@ -560,7 +560,7 @@ bool lclSkipEmptyParentheses( const sal_Unicode*& rpcString, const sal_Unicode* 
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 void ScXMLConditionHelper::parseCondition(
         ScXMLConditionParseResult& rParseResult, const OUString& rAttribute, sal_Int32 nStartIndex )

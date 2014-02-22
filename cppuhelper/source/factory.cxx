@@ -140,7 +140,7 @@ OSingleFactoryHelper::~OSingleFactoryHelper()
 }
 
 
-//-----------------------------------------------------------------------------
+
 Any OSingleFactoryHelper::queryInterface( const Type & rType )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -195,14 +195,14 @@ Reference<XInterface > OSingleFactoryHelper::createInstanceWithArguments(
 }
 
 // XSingleComponentFactory
-//__________________________________________________________________________________________________
+
 Reference< XInterface > OSingleFactoryHelper::createInstanceWithContext(
     Reference< XComponentContext > const & xContext )
     throw (Exception, RuntimeException)
 {
     return createInstanceEveryTime( xContext );
 }
-//__________________________________________________________________________________________________
+
 Reference< XInterface > OSingleFactoryHelper::createInstanceWithArgumentsAndContext(
     Sequence< Any > const & rArguments,
     Reference< XComponentContext > const & xContext )
@@ -413,7 +413,7 @@ Reference<XInterface > OFactoryComponentHelper::createInstanceWithArguments(
 }
 
 // XSingleComponentFactory
-//__________________________________________________________________________________________________
+
 Reference< XInterface > OFactoryComponentHelper::createInstanceWithContext(
     Reference< XComponentContext > const & xContext )
     throw (Exception, RuntimeException)
@@ -431,7 +431,7 @@ Reference< XInterface > OFactoryComponentHelper::createInstanceWithContext(
     }
     return OSingleFactoryHelper::createInstanceWithContext( xContext );
 }
-//__________________________________________________________________________________________________
+
 Reference< XInterface > OFactoryComponentHelper::createInstanceWithArgumentsAndContext(
     Sequence< Any > const & rArguments,
     Reference< XComponentContext > const & xContext )
@@ -564,7 +564,7 @@ protected:
 };
 
 // XInterface
-//______________________________________________________________________________
+
 Any SAL_CALL ORegistryFactoryHelper::queryInterface(
     Type const & type ) throw (RuntimeException)
 {
@@ -575,20 +575,20 @@ Any SAL_CALL ORegistryFactoryHelper::queryInterface(
         return OPropertySetHelper::queryInterface( type );
 }
 
-//______________________________________________________________________________
+
 void ORegistryFactoryHelper::acquire() throw ()
 {
     OFactoryComponentHelper::acquire();
 }
 
-//______________________________________________________________________________
+
 void ORegistryFactoryHelper::release() throw ()
 {
     OFactoryComponentHelper::release();
 }
 
 // XTypeProvider
-//______________________________________________________________________________
+
 Sequence< Type > ORegistryFactoryHelper::getTypes() throw (RuntimeException)
 {
     Sequence< Type > types( OFactoryComponentHelper::getTypes() );
@@ -605,7 +605,7 @@ Sequence< Type > ORegistryFactoryHelper::getTypes() throw (RuntimeException)
 }
 
 // XPropertySet
-//______________________________________________________________________________
+
 Reference< beans::XPropertySetInfo >
 ORegistryFactoryHelper::getPropertySetInfo() throw (RuntimeException)
 {
@@ -616,7 +616,7 @@ ORegistryFactoryHelper::getPropertySetInfo() throw (RuntimeException)
 }
 
 // OPropertySetHelper
-//______________________________________________________________________________
+
 IPropertyArrayHelper & ORegistryFactoryHelper::getInfoHelper()
 {
     ::osl::MutexGuard guard( aMutex );
@@ -634,7 +634,7 @@ IPropertyArrayHelper & ORegistryFactoryHelper::getInfoHelper()
     return *m_property_array_helper.get();
 }
 
-//______________________________________________________________________________
+
 sal_Bool ORegistryFactoryHelper::convertFastPropertyValue(
     Any &, Any &, sal_Int32, Any const & )
     throw (lang::IllegalArgumentException)
@@ -643,7 +643,7 @@ sal_Bool ORegistryFactoryHelper::convertFastPropertyValue(
     return false;
 }
 
-//______________________________________________________________________________
+
 void ORegistryFactoryHelper::setFastPropertyValue_NoBroadcast(
     sal_Int32, Any const & )
     throw (Exception)
@@ -653,7 +653,7 @@ void ORegistryFactoryHelper::setFastPropertyValue_NoBroadcast(
         static_cast< OWeakObject * >(this) );
 }
 
-//______________________________________________________________________________
+
 void ORegistryFactoryHelper::getFastPropertyValue(
     Any & rValue, sal_Int32 nHandle ) const
 {

@@ -173,7 +173,7 @@ struct AdapterImpl
         FactoryImpl * pFactory )
         SAL_THROW( (RuntimeException) );
 };
-//______________________________________________________________________________
+
 inline AdapterImpl::~AdapterImpl()
     SAL_THROW(())
 {
@@ -187,13 +187,13 @@ inline AdapterImpl::~AdapterImpl()
     (*m_pReceiver->release)( m_pReceiver );
     m_pFactory->release();
 }
-//______________________________________________________________________________
+
 inline void AdapterImpl::acquire()
     SAL_THROW(())
 {
     osl_atomic_increment( &m_nRef );
 }
-//______________________________________________________________________________
+
 inline void AdapterImpl::release()
     SAL_THROW(())
 {
@@ -220,7 +220,7 @@ inline void AdapterImpl::release()
         delete this;
 }
 
-//------------------------------------------------------------------------------
+
 static inline void constructRuntimeException(
     uno_Any * pExc, const OUString & rMsg )
 {
@@ -230,7 +230,7 @@ static inline void constructRuntimeException(
         pExc, &exc, ::getCppuType( &exc ).getTypeLibType(), 0 );
 }
 
-//------------------------------------------------------------------------------
+
 static inline bool type_equals(
     typelib_TypeDescriptionReference * pType1,
     typelib_TypeDescriptionReference * pType2 )
@@ -242,7 +242,7 @@ static inline bool type_equals(
                  pType1->pTypeName->buffer, pType2->pTypeName->buffer )));
 }
 
-//______________________________________________________________________________
+
 bool AdapterImpl::coerce_assign(
     void * pDest, typelib_TypeDescriptionReference * pType, uno_Any * pSource,
     uno_Any * pOutExc )
@@ -316,7 +316,7 @@ bool AdapterImpl::coerce_assign(
         }
     }
 }
-//______________________________________________________________________________
+
 inline bool AdapterImpl::coerce_construct(
     void * pDest, typelib_TypeDescriptionReference * pType, uno_Any * pSource,
     uno_Any * pExc )
@@ -335,7 +335,7 @@ inline bool AdapterImpl::coerce_construct(
     return coerce_assign( pDest, pType, pSource, pExc );
 }
 
-//------------------------------------------------------------------------------
+
 static void handleInvokExc( uno_Any * pDest, uno_Any * pSource )
 {
     OUString const & name =
@@ -364,7 +364,7 @@ static void handleInvokExc( uno_Any * pDest, uno_Any * pSource )
         }
     }
 }
-//______________________________________________________________________________
+
 void AdapterImpl::getValue(
     const typelib_TypeDescription * pMemberType,
     void * pReturn, uno_Any ** ppException )
@@ -399,7 +399,7 @@ void AdapterImpl::getValue(
         ::uno_any_destruct( &aInvokRet, 0 );
     }
 }
-//______________________________________________________________________________
+
 void AdapterImpl::setValue(
     const typelib_TypeDescription * pMemberType,
     void * pArgs[], uno_Any ** ppException )
@@ -433,7 +433,7 @@ void AdapterImpl::setValue(
 
     ::uno_any_destruct( &aInvokVal, 0 ); // cleanup
 }
-//______________________________________________________________________________
+
 void AdapterImpl::invoke(
     const typelib_TypeDescription * pMemberType,
     void * pReturn, void * pArgs[], uno_Any ** ppException )
@@ -567,17 +567,17 @@ void AdapterImpl::invoke(
 
 extern "C"
 {
-//______________________________________________________________________________
+
 static void SAL_CALL adapter_acquire( uno_Interface * pUnoI )
 {
     static_cast< InterfaceAdapterImpl * >( pUnoI )->m_pAdapter->acquire();
 }
-//______________________________________________________________________________
+
 static void SAL_CALL adapter_release( uno_Interface * pUnoI )
 {
     static_cast< InterfaceAdapterImpl * >( pUnoI )->m_pAdapter->release();
 }
-//______________________________________________________________________________
+
 static void SAL_CALL adapter_dispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberType,
     void * pReturn, void * pArgs[], uno_Any ** ppException )
@@ -642,7 +642,7 @@ static void SAL_CALL adapter_dispatch(
     }
 }
 }
-//______________________________________________________________________________
+
 AdapterImpl::AdapterImpl(
     void * key, Reference< script::XInvocation > const & xReceiver,
     const Sequence< Type > & rTypes,
@@ -695,7 +695,7 @@ AdapterImpl::AdapterImpl(
     m_pFactory->acquire();
 }
 
-//______________________________________________________________________________
+
 FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
     SAL_THROW( (RuntimeException) )
     : m_pInvokMethodTD( 0 ),
@@ -763,7 +763,7 @@ FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
             "missing type descriptions!", Reference< XInterface >() );
     }
 }
-//______________________________________________________________________________
+
 FactoryImpl::~FactoryImpl() SAL_THROW(())
 {
     ::typelib_typedescription_release( m_pInvokMethodTD );
@@ -780,7 +780,7 @@ FactoryImpl::~FactoryImpl() SAL_THROW(())
 #endif
 }
 
-//------------------------------------------------------------------------------
+
 static inline AdapterImpl * lookup_adapter(
     t_ptr_set ** pp_adapter_set,
     t_ptr_map & map, void * key, Sequence< Type > const & rTypes )
@@ -827,7 +827,7 @@ static inline AdapterImpl * lookup_adapter(
 }
 
 // XInvocationAdapterFactory2 impl
-//______________________________________________________________________________
+
 Reference< XInterface > FactoryImpl::createAdapter(
     const Reference< script::XInvocation > & xReceiver,
     const Sequence< Type > & rTypes )
@@ -889,7 +889,7 @@ Reference< XInterface > FactoryImpl::createAdapter(
     return xRet;
 }
 // XInvocationAdapterFactory impl
-//______________________________________________________________________________
+
 Reference< XInterface > FactoryImpl::createAdapter(
     const Reference< script::XInvocation > & xReceiver, const Type & rType )
     throw (RuntimeException)
@@ -898,19 +898,19 @@ Reference< XInterface > FactoryImpl::createAdapter(
 }
 
 // XServiceInfo
-//______________________________________________________________________________
+
 OUString FactoryImpl::getImplementationName()
     throw (RuntimeException)
 {
     return invadp_getImplementationName();
 }
-//______________________________________________________________________________
+
 sal_Bool FactoryImpl::supportsService( const OUString & rServiceName )
     throw (RuntimeException)
 {
     return cppu::supportsService(this, rServiceName);
 }
-//______________________________________________________________________________
+
 Sequence< OUString > FactoryImpl::getSupportedServiceNames()
     throw (RuntimeException)
 {

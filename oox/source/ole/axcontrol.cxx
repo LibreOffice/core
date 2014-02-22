@@ -90,7 +90,7 @@ const sal_uInt32 COMCTL_SCROLLBAR_HOR       = 0x00000010;
 const sal_uInt32 COMCTL_ID_PROGRESSBAR_50   = 0xE6E17E84;
 const sal_uInt32 COMCTL_ID_PROGRESSBAR_60   = 0x97AB8A01;
 
-// ----------------------------------------------------------------------------
+
 
 const sal_uInt32 AX_CMDBUTTON_DEFFLAGS      = 0x0000001B;
 const sal_uInt32 AX_LABEL_DEFFLAGS          = 0x0080001B;
@@ -150,7 +150,7 @@ const sal_Int32 AX_CONTAINER_CYCLEALL       = 0;
 
 const sal_Int32 AX_CONTAINER_SCR_NONE       = 0x00;
 
-// ----------------------------------------------------------------------------
+
 
 const sal_Int16 API_BORDER_NONE             = 0;
 const sal_Int16 API_BORDER_SUNKEN           = 1;
@@ -160,7 +160,7 @@ const sal_Int16 API_STATE_UNCHECKED         = 0;
 const sal_Int16 API_STATE_CHECKED           = 1;
 const sal_Int16 API_STATE_DONTKNOW          = 2;
 
-// ----------------------------------------------------------------------------
+
 
 /** Tries to extract a range address from a defined name. */
 bool lclExtractRangeFromName( CellRangeAddress& orRangeAddr, const Reference< XModel >& rxDocModel, const OUString& rAddressString )

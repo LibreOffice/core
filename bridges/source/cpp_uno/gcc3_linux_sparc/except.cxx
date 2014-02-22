@@ -104,18 +104,18 @@ public:
 
     type_info * getRTTI( typelib_CompoundTypeDescription * ) SAL_THROW(());
 };
-//__________________________________________________________________________________________________
+
 RTTI::RTTI() SAL_THROW(())
     : m_hApp( dlopen( 0, RTLD_LAZY ) )
 {
 }
-//__________________________________________________________________________________________________
+
 RTTI::~RTTI() SAL_THROW(())
 {
     dlclose( m_hApp );
 }
 
-//__________________________________________________________________________________________________
+
 type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW(())
 {
     type_info * rtti;
@@ -194,7 +194,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
     return rtti;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 static void deleteException( void * pExc )
 {
     __cxa_exception const * header = ((__cxa_exception const *)pExc - 1);

@@ -44,25 +44,25 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 
-//------------------------------------------------------------------
+
 ODateControl::ODateControl(const Reference<XComponentContext>& _rxFactory)
                :OBoundControl(_rxFactory, VCL_CONTROL_DATEFIELD)
 {
 }
 
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL ODateControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new ODateControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> ODateControl::_getTypes()
 {
     return OBoundControl::_getTypes();
 }
 
-//------------------------------------------------------------------------------
+
 StringSequence SAL_CALL ODateControl::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
@@ -74,19 +74,19 @@ StringSequence SAL_CALL ODateControl::getSupportedServiceNames() throw()
 }
 
 /*************************************************************************/
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL ODateModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new ODateModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> ODateModel::_getTypes()
 {
     return OEditBaseModel::_getTypes();
 }
 
-//------------------------------------------------------------------
+
 ODateModel::ODateModel(const Reference<XComponentContext>& _rxFactory)
     : OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_DATEFIELD,
         FRM_SUN_CONTROL_DATEFIELD, sal_True, sal_True)
@@ -112,7 +112,7 @@ ODateModel::ODateModel(const Reference<XComponentContext>& _rxFactory)
     osl_atomic_decrement( &m_refCount );
 }
 
-//------------------------------------------------------------------------------
+
 ODateModel::ODateModel( const ODateModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     : OEditBaseModel(_pOriginal, _rxFactory)
     , OLimitedFormats(_rxFactory, FormComponentType::DATEFIELD)
@@ -121,18 +121,18 @@ ODateModel::ODateModel( const ODateModel* _pOriginal, const Reference<XComponent
     setAggregateSet( m_xAggregateFastSet, getOriginalHandle( PROPERTY_ID_DATEFORMAT ) );
 }
 
-//------------------------------------------------------------------------------
+
 ODateModel::~ODateModel( )
 {
     setAggregateSet(Reference< XFastPropertySet >(), -1);
 }
 
 // XCloneable
-//------------------------------------------------------------------------------
+
 IMPLEMENT_DEFAULT_CLONING( ODateModel )
 
 // XServiceInfo
-//------------------------------------------------------------------------------
+
 StringSequence SAL_CALL ODateModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
@@ -155,14 +155,14 @@ StringSequence SAL_CALL ODateModel::getSupportedServiceNames() throw()
     return aSupported;
 }
 
-//------------------------------------------------------------------------------
+
 OUString SAL_CALL ODateModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return OUString(FRM_COMPONENT_DATEFIELD); // old (non-sun) name for compatibility !
 }
 
 // XPropertySet
-//------------------------------------------------------------------------------
+
 void ODateModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 4, OEditBaseModel )
@@ -173,7 +173,7 @@ void ODateModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     END_DESCRIBE_PROPERTIES();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL ODateModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle ) const
 {
     switch (_nHandle)
@@ -190,7 +190,7 @@ void SAL_CALL ODateModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle 
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODateModel::convertFastPropertyValue(Any& _rConvertedValue, Any& _rOldValue,
         sal_Int32 _nHandle, const Any& _rValue ) throw(IllegalArgumentException)
 {
@@ -200,7 +200,7 @@ sal_Bool SAL_CALL ODateModel::convertFastPropertyValue(Any& _rConvertedValue, An
         return OEditBaseModel::convertFastPropertyValue(_rConvertedValue, _rOldValue, _nHandle, _rValue );
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL ODateModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw ( ::com::sun::star::uno::Exception)
 {
     if (PROPERTY_ID_FORMATKEY == _nHandle)
@@ -210,7 +210,7 @@ void SAL_CALL ODateModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, c
 }
 
 // XLoadListener
-//------------------------------------------------------------------------------
+
 void ODateModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 {
     OBoundControlModel::onConnectedDbColumn( _rxForm );
@@ -230,7 +230,7 @@ void ODateModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool ODateModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
@@ -271,25 +271,25 @@ sal_Bool ODateModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     return sal_True;
 }
 
-//------------------------------------------------------------------------------
+
 Any ODateModel::translateControlValueToExternalValue( ) const
 {
     return getControlValue();
 }
 
-//------------------------------------------------------------------------------
+
 Any ODateModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
 {
     return _rExternalValue;
 }
 
-//------------------------------------------------------------------------------
+
 Any ODateModel::translateControlValueToValidatableValue( ) const
 {
     return getControlValue();
 }
 
-//------------------------------------------------------------------------------
+
 Any ODateModel::translateDbColumnToControlValue()
 {
     util::Date aDate = m_xColumn->getDate();
@@ -301,20 +301,20 @@ Any ODateModel::translateDbColumnToControlValue()
     return m_aSaveValue;
 }
 
-//------------------------------------------------------------------------------
+
 Any ODateModel::getDefaultForReset() const
 {
     return m_aDefault;
 }
 
-//------------------------------------------------------------------------------
+
 void ODateModel::resetNoBroadcast()
 {
     OEditBaseModel::resetNoBroadcast();
     m_aSaveValue.clear();
 }
 
-//------------------------------------------------------------------------------
+
 Sequence< Type > ODateModel::getSupportedBindingTypes()
 {
     return Sequence< Type >( &::getCppuType( static_cast< util::Date* >( NULL ) ), 1 );

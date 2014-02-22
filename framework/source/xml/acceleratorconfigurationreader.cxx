@@ -33,7 +33,7 @@
 
 namespace framework{
 
-//-----------------------------------------------
+
 /* Throws a SaxException in case a wrong formated XML
    structure was detected.
 
@@ -56,7 +56,7 @@ namespace framework{
                 css::uno::Any());                                       \
     }
 
-//-----------------------------------------------
+
 AcceleratorConfigurationReader::AcceleratorConfigurationReader(AcceleratorCache& rContainer)
     : ThreadHelpBase          (&Application::GetSolarMutex())
     , m_rContainer            (rContainer                   )
@@ -65,19 +65,19 @@ AcceleratorConfigurationReader::AcceleratorConfigurationReader(AcceleratorCache&
 {
 }
 
-//-----------------------------------------------
+
 AcceleratorConfigurationReader::~AcceleratorConfigurationReader()
 {
 }
 
-//-----------------------------------------------
+
 void SAL_CALL AcceleratorConfigurationReader::startDocument()
     throw(css::xml::sax::SAXException,
           css::uno::RuntimeException )
 {
 }
 
-//-----------------------------------------------
+
 void SAL_CALL AcceleratorConfigurationReader::endDocument()
     throw(css::xml::sax::SAXException,
           css::uno::RuntimeException )
@@ -94,7 +94,7 @@ void SAL_CALL AcceleratorConfigurationReader::endDocument()
     }
 }
 
-//-----------------------------------------------
+
 void SAL_CALL AcceleratorConfigurationReader::startElement(const OUString&                                      sElement      ,
                                                            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttributeList)
     throw(css::xml::sax::SAXException,
@@ -186,7 +186,7 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const OUString&      
     }
 }
 
-//-----------------------------------------------
+
 void SAL_CALL AcceleratorConfigurationReader::endElement(const OUString& sElement)
     throw(css::xml::sax::SAXException,
           css::uno::RuntimeException )
@@ -210,21 +210,21 @@ void SAL_CALL AcceleratorConfigurationReader::endElement(const OUString& sElemen
     }
 }
 
-//-----------------------------------------------
+
 void SAL_CALL AcceleratorConfigurationReader::characters(const OUString&)
     throw(css::xml::sax::SAXException,
           css::uno::RuntimeException )
 {
 }
 
-//-----------------------------------------------
+
 void SAL_CALL AcceleratorConfigurationReader::ignorableWhitespace(const OUString&)
     throw(css::xml::sax::SAXException,
           css::uno::RuntimeException )
 {
 }
 
-//-----------------------------------------------
+
 void SAL_CALL AcceleratorConfigurationReader::processingInstruction(const OUString& /*sTarget*/,
                                                                     const OUString& /*sData*/  )
     throw(css::xml::sax::SAXException,
@@ -232,7 +232,7 @@ void SAL_CALL AcceleratorConfigurationReader::processingInstruction(const OUStri
 {
 }
 
-//-----------------------------------------------
+
 void SAL_CALL AcceleratorConfigurationReader::setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator >& xLocator)
     throw(css::xml::sax::SAXException,
           css::uno::RuntimeException )
@@ -240,7 +240,7 @@ void SAL_CALL AcceleratorConfigurationReader::setDocumentLocator(const css::uno:
     m_xLocator = xLocator;
 }
 
-//-----------------------------------------------
+
 AcceleratorConfigurationReader::EXMLElement AcceleratorConfigurationReader::implst_classifyElement(const OUString& sElement)
 {
     AcceleratorConfigurationReader::EXMLElement eElement;
@@ -257,7 +257,7 @@ AcceleratorConfigurationReader::EXMLElement AcceleratorConfigurationReader::impl
     return eElement;
 }
 
-//-----------------------------------------------
+
 AcceleratorConfigurationReader::EXMLAttribute AcceleratorConfigurationReader::implst_classifyAttribute(const OUString& sAttribute)
 {
     AcceleratorConfigurationReader::EXMLAttribute eAttribute;
@@ -282,7 +282,7 @@ AcceleratorConfigurationReader::EXMLAttribute AcceleratorConfigurationReader::im
     return eAttribute;
 }
 
-//-----------------------------------------------
+
 OUString AcceleratorConfigurationReader::implts_getErrorLineString()
 {
     if (!m_xLocator.is())

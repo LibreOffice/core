@@ -24,15 +24,15 @@
 #define MAXCOLLECTIONSIZE       16384
 #define MAXDELTA                1024
 
-// -----------------------------------------------------------------------
+
 
 ScDataObject::~ScDataObject()
 {
 }
 
-//------------------------------------------------------------------------
+
 // Collection
-//------------------------------------------------------------------------
+
 
 static void lcl_DeleteScDataObjects( ScDataObject** p, sal_uInt16 nCount )
 {
@@ -71,17 +71,17 @@ ScCollection::ScCollection(const ScCollection& rCollection)
     *this = rCollection;
 }
 
-//------------------------------------------------------------------------
+
 
 ScCollection::~ScCollection()
 {
     lcl_DeleteScDataObjects( pItems, nCount );
 }
 
-//------------------------------------------------------------------------
+
 sal_uInt16 ScCollection::GetCount() const { return nCount; }
 
-//------------------------------------------------------------------------
+
 
 bool ScCollection::AtInsert(sal_uInt16 nIndex, ScDataObject* pScDataObject)
 {
@@ -106,14 +106,14 @@ bool ScCollection::AtInsert(sal_uInt16 nIndex, ScDataObject* pScDataObject)
     return false;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScCollection::Insert(ScDataObject* pScDataObject)
 {
     return AtInsert(nCount, pScDataObject);
 }
 
-//------------------------------------------------------------------------
+
 
 ScDataObject* ScCollection::At(sal_uInt16 nIndex) const
 {
@@ -123,7 +123,7 @@ ScDataObject* ScCollection::At(sal_uInt16 nIndex) const
         return NULL;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 ScCollection::IndexOf(ScDataObject* pScDataObject) const
 {
@@ -135,7 +135,7 @@ sal_uInt16 ScCollection::IndexOf(ScDataObject* pScDataObject) const
     return nIndex;
 }
 
-//------------------------------------------------------------------------
+
 
 ScCollection& ScCollection::operator=( const ScCollection& r )
 {
@@ -155,7 +155,7 @@ ScCollection& ScCollection::operator=( const ScCollection& r )
     return *this;
 }
 
-//------------------------------------------------------------------------
+
 
 ScDataObject*   ScCollection::Clone() const
 {

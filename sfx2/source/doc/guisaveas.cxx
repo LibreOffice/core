@@ -121,7 +121,7 @@ using namespace ::com::sun::star;
 using namespace css::system;
 
 namespace {
-//-------------------------------------------------------------------------
+
 static sal_uInt16 getSlotIDFromMode( sal_Int8 nStoreMode )
 {
     // This is a temporary hardcoded solution must be removed when
@@ -143,7 +143,7 @@ static sal_uInt16 getSlotIDFromMode( sal_Int8 nStoreMode )
     return nResult;
 }
 
-//-------------------------------------------------------------------------
+
 static sal_uInt8 getStoreModeFromSlotName( const OUString& aSlotName )
 {
     sal_uInt8 nResult = 0;
@@ -166,14 +166,14 @@ static sal_uInt8 getStoreModeFromSlotName( const OUString& aSlotName )
     return nResult;
 }
 
-//-------------------------------------------------------------------------
+
 static sal_Int32 getMustFlags( sal_Int8 nStoreMode )
 {
     return ( SFX_FILTER_EXPORT
             | ( ( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) ) ? 0 : SFX_FILTER_IMPORT ) );
 }
 
-//-------------------------------------------------------------------------
+
 static sal_Int32 getDontFlags( sal_Int8 nStoreMode )
 {
     return ( SFX_FILTER_INTERNAL
@@ -323,7 +323,7 @@ public:
 
 };
 
-//-------------------------------------------------------------------------
+
 ModelData_Impl::ModelData_Impl( SfxStoringHelper& aOwner,
                                 const uno::Reference< frame::XModel >& xModel,
                                 const uno::Sequence< beans::PropertyValue >& aMediaDescr )
@@ -360,7 +360,7 @@ ModelData_Impl::ModelData_Impl( SfxStoringHelper& aOwner,
     }
 }
 
-//-------------------------------------------------------------------------
+
 ModelData_Impl::~ModelData_Impl()
 {
     FreeDocumentProps();
@@ -371,7 +371,7 @@ ModelData_Impl::~ModelData_Impl()
         delete m_pModulePropsHM;
 }
 
-//-------------------------------------------------------------------------
+
 void ModelData_Impl::FreeDocumentProps()
 {
     if ( m_pDocumentPropsHM )
@@ -381,7 +381,7 @@ void ModelData_Impl::FreeDocumentProps()
     }
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< frame::XModel > ModelData_Impl::GetModel()
 {
     if ( !m_xModel.is() )
@@ -390,7 +390,7 @@ uno::Reference< frame::XModel > ModelData_Impl::GetModel()
     return m_xModel;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< frame::XStorable > ModelData_Impl::GetStorable()
 {
     if ( !m_xStorable.is() )
@@ -403,7 +403,7 @@ uno::Reference< frame::XStorable > ModelData_Impl::GetStorable()
     return m_xStorable;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< frame::XStorable2 > ModelData_Impl::GetStorable2()
 {
     if ( !m_xStorable2.is() )
@@ -416,7 +416,7 @@ uno::Reference< frame::XStorable2 > ModelData_Impl::GetStorable2()
     return m_xStorable2;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< util::XModifiable > ModelData_Impl::GetModifiable()
 {
     if ( !m_xModifiable.is() )
@@ -429,7 +429,7 @@ uno::Reference< util::XModifiable > ModelData_Impl::GetModifiable()
     return m_xModifiable;
 }
 
-//-------------------------------------------------------------------------
+
 const ::comphelper::SequenceAsHashMap& ModelData_Impl::GetDocProps()
 {
     if ( !m_pDocumentPropsHM )
@@ -438,7 +438,7 @@ const ::comphelper::SequenceAsHashMap& ModelData_Impl::GetDocProps()
     return *m_pDocumentPropsHM;
 }
 
-//-------------------------------------------------------------------------
+
 OUString ModelData_Impl::GetModuleName()
 {
     if ( m_aModuleName.isEmpty() )
@@ -451,7 +451,7 @@ OUString ModelData_Impl::GetModuleName()
     return m_aModuleName;
 }
 
-//-------------------------------------------------------------------------
+
 const ::comphelper::SequenceAsHashMap& ModelData_Impl::GetModuleProps()
 {
     if ( !m_pModulePropsHM )
@@ -466,13 +466,13 @@ const ::comphelper::SequenceAsHashMap& ModelData_Impl::GetModuleProps()
     return *m_pModulePropsHM;
 }
 
-//-------------------------------------------------------------------------
+
 OUString ModelData_Impl::GetDocServiceName()
 {
     return GetModuleProps().getUnpackedValueOrDefault("ooSetupFactoryDocumentService", OUString());
 }
 
-//-------------------------------------------------------------------------
+
 void ModelData_Impl::CheckInteractionHandler()
 {
     ::comphelper::SequenceAsHashMap::const_iterator aInteractIter =
@@ -495,7 +495,7 @@ void ModelData_Impl::CheckInteractionHandler()
     }
 }
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter()
 {
     uno::Sequence< beans::PropertyValue > aProps;
@@ -509,7 +509,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter
     return aProps;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilterCheckFlags( sal_Int32 nMust,
                                                                                                 sal_Int32 nDont )
 {
@@ -528,7 +528,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter
 }
 
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceAnyFilter( sal_Int32 nMust, sal_Int32 nDont )
 {
     uno::Sequence< beans::NamedValue > aSearchRequest( 1 );
@@ -538,7 +538,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceAnyFilter( sa
     return ::comphelper::MimeConfigurationHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
 }
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< beans::PropertyValue > ModelData_Impl::GetPreselectedFilter_Impl( sal_Int8 nStoreMode )
 {
     uno::Sequence< beans::PropertyValue > aFilterProps;
@@ -571,7 +571,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetPreselectedFilter_Impl(
     return aFilterProps;
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName )
 {
     sal_Bool bDialogUsed = sal_False;
@@ -650,7 +650,7 @@ sal_Bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName )
     return bDialogUsed;
 }
 
-//-------------------------------------------------------------------------
+
 sal_Int8 ModelData_Impl::CheckSaveAcceptable( sal_Int8 nCurStatus )
 {
     sal_Int8 nResult = nCurStatus;
@@ -677,7 +677,7 @@ sal_Int8 ModelData_Impl::CheckSaveAcceptable( sal_Int8 nCurStatus )
     return nResult;
 }
 
-//-------------------------------------------------------------------------
+
 sal_Int8 ModelData_Impl::CheckStateForSave()
 {
     // if the document is readonly or a new one a SaveAs operation must be used
@@ -835,7 +835,7 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
     return STATUS_SAVE;
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool ModelData_Impl::CheckFilterOptionsDialogExistence()
 {
     uno::Sequence< beans::NamedValue > aSearchRequest( 1 );
@@ -862,7 +862,7 @@ sal_Bool ModelData_Impl::CheckFilterOptionsDialogExistence()
     return sal_False;
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
                                             const ::comphelper::SequenceAsHashMap& aPreselectedFilterPropsHM,
                                             sal_Bool bSetStandardName,
@@ -1173,7 +1173,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     return bUseFilterOptions;
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
 {
     sal_Bool bDialogUsed = sal_False;
@@ -1211,7 +1211,7 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
     return bDialogUsed;
 }
 
-//-------------------------------------------------------------------------
+
 OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
 {
     OUString aRecommendedDir;
@@ -1249,7 +1249,7 @@ OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
     return aRecommendedDir;
 }
 
-//-------------------------------------------------------------------------
+
 OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, const OUString& aTypeName )
 {
     // the last used name might be provided by aSuggestedName from the old selection, or from the MediaDescriptor
@@ -1301,12 +1301,12 @@ OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, con
 //=========================================================================
 // class SfxStoringHelper
 //=========================================================================
-//-------------------------------------------------------------------------
+
 SfxStoringHelper::SfxStoringHelper()
 {
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< container::XNameAccess > SfxStoringHelper::GetFilterConfiguration()
 {
     if ( !m_xFilterCFG.is() )
@@ -1322,7 +1322,7 @@ uno::Reference< container::XNameAccess > SfxStoringHelper::GetFilterConfiguratio
     return m_xFilterCFG;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< container::XContainerQuery > SfxStoringHelper::GetFilterQuery()
 {
     if ( !m_xFilterQuery.is() )
@@ -1335,7 +1335,7 @@ uno::Reference< container::XContainerQuery > SfxStoringHelper::GetFilterQuery()
     return m_xFilterQuery;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< ::com::sun::star::frame::XModuleManager2 > SfxStoringHelper::GetModuleManager()
 {
     if ( !m_xModuleManager.is() )
@@ -1347,7 +1347,7 @@ uno::Reference< ::com::sun::star::frame::XModuleManager2 > SfxStoringHelper::Get
     return m_xModuleManager;
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel,
                                             const OUString& aSlotName,
                                             uno::Sequence< beans::PropertyValue >& aArgsSequence,
@@ -1724,7 +1724,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel
     return bDialogUsed;
 }
 
-//-------------------------------------------------------------------------
+
 // static
 sal_Bool SfxStoringHelper::CheckFilterOptionsAppearence(
                                                     const uno::Reference< container::XNameAccess >& xFilterCFG,
@@ -1756,7 +1756,7 @@ sal_Bool SfxStoringHelper::CheckFilterOptionsAppearence(
     return bUseFilterOptions;
 }
 
-//-------------------------------------------------------------------------
+
 // static
 void SfxStoringHelper::SetDocInfoState(
         const uno::Reference< frame::XModel >& xModel,
@@ -1836,7 +1836,7 @@ void SfxStoringHelper::SetDocInfoState(
         xModifiable->setModified( bIsModified );
 }
 
-//-------------------------------------------------------------------------
+
 // static
 sal_Bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XModel >& xModel,
                                                     OUString aOldUIName,

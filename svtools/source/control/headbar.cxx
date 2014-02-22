@@ -101,7 +101,7 @@ void HeaderBar::ImplInit( WinBits nWinStyle )
     ImplInitSettings( sal_True, sal_True, sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 
 HeaderBar::HeaderBar( Window* pParent, WinBits nWinStyle ) :
     Window( pParent, nWinStyle & WB_3DLOOK )
@@ -110,7 +110,7 @@ HeaderBar::HeaderBar( Window* pParent, WinBits nWinStyle ) :
     SetSizePixel( CalcWindowSizePixel() );
 }
 
-// -----------------------------------------------------------------------
+
 
 HeaderBar::~HeaderBar()
 {
@@ -122,7 +122,7 @@ HeaderBar::~HeaderBar()
     delete mpItemList;
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::ImplInitSettings( sal_Bool bFont,
                                   sal_Bool bForeground, sal_Bool bBackground )
@@ -160,7 +160,7 @@ void HeaderBar::ImplInitSettings( sal_Bool bFont,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 long HeaderBar::ImplGetItemPos( sal_uInt16 nPos ) const
 {
@@ -170,7 +170,7 @@ long HeaderBar::ImplGetItemPos( sal_uInt16 nPos ) const
     return nX;
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle HeaderBar::ImplGetItemRect( sal_uInt16 nPos ) const
 {
@@ -182,7 +182,7 @@ Rectangle HeaderBar::ImplGetItemRect( sal_uInt16 nPos ) const
     return aRect;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 HeaderBar::ImplHitTest( const Point& rPos,
                                long& nMouseOff, sal_uInt16& nPos ) const
@@ -247,7 +247,7 @@ sal_uInt16 HeaderBar::ImplHitTest( const Point& rPos,
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos )
 {
@@ -295,7 +295,7 @@ void HeaderBar::ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos )
     SetRasterOp( ROP_OVERPAINT );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::ImplDrawItem( OutputDevice* pDev,
                               sal_uInt16 nPos, sal_Bool bHigh, sal_Bool bDrag,
@@ -656,7 +656,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::ImplDrawItem( sal_uInt16 nPos, sal_Bool bHigh, sal_Bool bDrag,
                               const Rectangle* pRect )
@@ -665,7 +665,7 @@ void HeaderBar::ImplDrawItem( sal_uInt16 nPos, sal_Bool bHigh, sal_Bool bDrag,
     ImplDrawItem( this, nPos, bHigh, bDrag, aRect, pRect, 0 );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::ImplUpdate( sal_uInt16 nPos, sal_Bool bEnd, sal_Bool bDirect )
 {
@@ -709,7 +709,7 @@ void HeaderBar::ImplUpdate( sal_uInt16 nPos, sal_Bool bEnd, sal_Bool bDirect )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::ImplStartDrag( const Point& rMousePos, sal_Bool bCommand )
 {
@@ -772,7 +772,7 @@ void HeaderBar::ImplStartDrag( const Point& rMousePos, sal_Bool bCommand )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::ImplDrag( const Point& rMousePos )
 {
@@ -879,7 +879,7 @@ void HeaderBar::ImplDrag( const Point& rMousePos )
     Drag();
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::ImplEndDrag( sal_Bool bCancel )
 {
@@ -940,7 +940,7 @@ void HeaderBar::ImplEndDrag( sal_Bool bCancel )
     mbItemDrag      = sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -969,7 +969,7 @@ void HeaderBar::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::MouseMove( const MouseEvent& rMEvt )
 {
@@ -984,7 +984,7 @@ void HeaderBar::MouseMove( const MouseEvent& rMEvt )
     SetPointer( aPtr );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::Tracking( const TrackingEvent& rTEvt )
 {
@@ -996,7 +996,7 @@ void HeaderBar::Tracking( const TrackingEvent& rTEvt )
         ImplDrag( aMousePos );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::Paint( const Rectangle& rRect )
 {
@@ -1025,7 +1025,7 @@ void HeaderBar::Paint( const Rectangle& rRect )
         ImplDrawItem( i, (i == nCurItemPos) ? sal_True : sal_False, sal_False, &rRect );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
                       sal_uLong nFlags )
@@ -1081,7 +1081,7 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->Pop();
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::Resize()
 {
@@ -1092,7 +1092,7 @@ void HeaderBar::Resize()
     mnDY = aSize.Height();
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::Command( const CommandEvent& rCEvt )
 {
@@ -1105,7 +1105,7 @@ void HeaderBar::Command( const CommandEvent& rCEvt )
     Window::Command( rCEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::RequestHelp( const HelpEvent& rHEvt )
 {
@@ -1160,7 +1160,7 @@ void HeaderBar::RequestHelp( const HelpEvent& rHEvt )
     Window::RequestHelp( rHEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::StateChanged( StateChangedType nType )
 {
@@ -1186,7 +1186,7 @@ void HeaderBar::StateChanged( StateChangedType nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -1202,48 +1202,48 @@ void HeaderBar::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::UserDraw( const UserDrawEvent& )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::StartDrag()
 {
     maStartDragHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::Drag()
 {
     maDragHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::EndDrag()
 {
     maEndDragHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::Select()
 {
     maSelectHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::DoubleClick()
 {
     maDoubleClickHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::InsertItem( sal_uInt16 nItemId, const OUString& rText,
                             long nSize, HeaderBarItemBits nBits, sal_uInt16 nPos )
@@ -1270,7 +1270,7 @@ void HeaderBar::InsertItem( sal_uInt16 nItemId, const OUString& rText,
     ImplUpdate( nPos, sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::RemoveItem( sal_uInt16 nItemId )
 {
@@ -1286,7 +1286,7 @@ void HeaderBar::RemoveItem( sal_uInt16 nItemId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::MoveItem( sal_uInt16 nItemId, sal_uInt16 nNewPos )
 {
@@ -1308,7 +1308,7 @@ void HeaderBar::MoveItem( sal_uInt16 nItemId, sal_uInt16 nNewPos )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::Clear()
 {
@@ -1321,7 +1321,7 @@ void HeaderBar::Clear()
     ImplUpdate( 0, sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::SetOffset( long nNewOffset )
 {
@@ -1332,14 +1332,14 @@ void HeaderBar::SetOffset( long nNewOffset )
     Scroll( nDelta, 0, aRect );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 HeaderBar::GetItemCount() const
 {
     return (sal_uInt16)mpItemList->size();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 HeaderBar::GetItemPos( sal_uInt16 nItemId ) const
 {
@@ -1351,7 +1351,7 @@ sal_uInt16 HeaderBar::GetItemPos( sal_uInt16 nItemId ) const
     return HEADERBAR_ITEM_NOTFOUND;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 HeaderBar::GetItemId( sal_uInt16 nPos ) const
 {
@@ -1362,7 +1362,7 @@ sal_uInt16 HeaderBar::GetItemId( sal_uInt16 nPos ) const
         return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 HeaderBar::GetItemId( const Point& rPos ) const
 {
@@ -1374,7 +1374,7 @@ sal_uInt16 HeaderBar::GetItemId( const Point& rPos ) const
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle HeaderBar::GetItemRect( sal_uInt16 nItemId ) const
 {
@@ -1385,7 +1385,7 @@ Rectangle HeaderBar::GetItemRect( sal_uInt16 nItemId ) const
     return aRect;
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::SetItemSize( sal_uInt16 nItemId, long nNewSize )
 {
@@ -1401,7 +1401,7 @@ void HeaderBar::SetItemSize( sal_uInt16 nItemId, long nNewSize )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 long HeaderBar::GetItemSize( sal_uInt16 nItemId ) const
 {
@@ -1412,7 +1412,7 @@ long HeaderBar::GetItemSize( sal_uInt16 nItemId ) const
         return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::SetItemBits( sal_uInt16 nItemId, HeaderBarItemBits nNewBits )
 {
@@ -1428,7 +1428,7 @@ void HeaderBar::SetItemBits( sal_uInt16 nItemId, HeaderBarItemBits nNewBits )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 HeaderBarItemBits HeaderBar::GetItemBits( sal_uInt16 nItemId ) const
 {
@@ -1439,7 +1439,7 @@ HeaderBarItemBits HeaderBar::GetItemBits( sal_uInt16 nItemId ) const
         return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::SetItemText( sal_uInt16 nItemId, const OUString& rText )
 {
@@ -1451,7 +1451,7 @@ void HeaderBar::SetItemText( sal_uInt16 nItemId, const OUString& rText )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString HeaderBar::GetItemText( sal_uInt16 nItemId ) const
 {
@@ -1461,7 +1461,7 @@ OUString HeaderBar::GetItemText( sal_uInt16 nItemId ) const
     return OUString();
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString HeaderBar::GetHelpText( sal_uInt16 nItemId ) const
 {
@@ -1482,7 +1482,7 @@ OUString HeaderBar::GetHelpText( sal_uInt16 nItemId ) const
     return OUString();
 }
 
-// -----------------------------------------------------------------------
+
 
 OString HeaderBar::GetHelpId( sal_uInt16 nItemId ) const
 {
@@ -1493,7 +1493,7 @@ OString HeaderBar::GetHelpId( sal_uInt16 nItemId ) const
     return aRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 Size HeaderBar::CalcWindowSizePixel() const
 {

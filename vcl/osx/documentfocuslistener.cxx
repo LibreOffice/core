@@ -30,14 +30,14 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
 
-//------------------------------------------------------------------------------
+
 
 DocumentFocusListener::DocumentFocusListener(AquaA11yFocusTracker& rTracker) :
     m_aFocusTracker(rTracker)
 {
 }
 
-//------------------------------------------------------------------------------
+
 
 void SAL_CALL
 DocumentFocusListener::disposing( const EventObject& aEvent )
@@ -49,7 +49,7 @@ DocumentFocusListener::disposing( const EventObject& aEvent )
         m_aRefList.erase(aEvent.Source);
 }
 
-//------------------------------------------------------------------------------
+
 
 void SAL_CALL
 DocumentFocusListener::notifyEvent( const AccessibleEventObject& aEvent )
@@ -97,7 +97,7 @@ DocumentFocusListener::notifyEvent( const AccessibleEventObject& aEvent )
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 Reference< XAccessible > DocumentFocusListener::getAccessible(const EventObject& aEvent )
     throw (IndexOutOfBoundsException, RuntimeException)
@@ -125,7 +125,7 @@ Reference< XAccessible > DocumentFocusListener::getAccessible(const EventObject&
     return Reference< XAccessible >();
 }
 
-//------------------------------------------------------------------------------
+
 
 void DocumentFocusListener::attachRecursive(const Reference< XAccessible >& xAccessible)
     throw (IndexOutOfBoundsException, RuntimeException)
@@ -136,7 +136,7 @@ void DocumentFocusListener::attachRecursive(const Reference< XAccessible >& xAcc
         attachRecursive(xAccessible, xContext);
 }
 
-//------------------------------------------------------------------------------
+
 
 void DocumentFocusListener::attachRecursive(
     const Reference< XAccessible >& xAccessible,
@@ -152,7 +152,7 @@ void DocumentFocusListener::attachRecursive(
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 void DocumentFocusListener::attachRecursive(
     const Reference< XAccessible >& xAccessible,
@@ -185,7 +185,7 @@ void DocumentFocusListener::attachRecursive(
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 void DocumentFocusListener::detachRecursive(const Reference< XAccessible >& xAccessible)
     throw (IndexOutOfBoundsException, RuntimeException)
@@ -196,7 +196,7 @@ void DocumentFocusListener::detachRecursive(const Reference< XAccessible >& xAcc
         detachRecursive(xAccessible, xContext);
 }
 
-//------------------------------------------------------------------------------
+
 
 void DocumentFocusListener::detachRecursive(
     const Reference< XAccessible >& xAccessible,
@@ -209,7 +209,7 @@ void DocumentFocusListener::detachRecursive(
         detachRecursive(xAccessible, xContext, xStateSet);
 }
 
-//------------------------------------------------------------------------------
+
 
 void DocumentFocusListener::detachRecursive(
     const Reference< XAccessible >&,

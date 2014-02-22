@@ -22,7 +22,7 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #include <vcl/msgbox.hxx>
 
@@ -48,14 +48,14 @@ ScSelEntryDlg::ScSelEntryDlg(Window*  pParent, const std::vector<OUString> &rEnt
         m_pLb->SelectEntryPos( 0 );
 }
 
-//------------------------------------------------------------------------
+
 
 OUString ScSelEntryDlg::GetSelectEntry() const
 {
     return m_pLb->GetSelectEntry();
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(ScSelEntryDlg, DblClkHdl)
 {

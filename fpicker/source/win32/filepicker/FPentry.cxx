@@ -34,9 +34,9 @@
 #include "../folderpicker/FOPServiceInfo.hxx"
 #include "../folderpicker/WinFOPImpl.hxx"
 
-//-----------------------------------------------
+
 // namespace directives
-//-----------------------------------------------
+
 
 using namespace ::rtl                       ;
 using namespace ::com::sun::star::uno       ;
@@ -47,9 +47,9 @@ using namespace ::cppu                      ;
 using ::com::sun::star::ui::dialogs::XFilePicker;
 using ::com::sun::star::ui::dialogs::XFilePicker2;
 
-//------------------------------------------------
+
 //
-//------------------------------------------------
+
 
 static Reference< XInterface > SAL_CALL createInstance(
     const Reference< XMultiServiceFactory >& rServiceManager )

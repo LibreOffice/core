@@ -38,7 +38,7 @@ IndexAccessIterator::IndexAccessIterator(::com::sun::star::uno::Reference< ::com
 
 IndexAccessIterator::~IndexAccessIterator() {}
 
-//------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> IndexAccessIterator::Next()
 {
     bool bCheckingStartingPoint = !m_xCurrentObject.is();

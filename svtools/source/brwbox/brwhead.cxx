@@ -35,7 +35,7 @@ BrowserHeader::BrowserHeader( BrowseBox* pParent, WinBits nWinBits )
     Show();
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserHeader::Command( const CommandEvent& rCEvt )
 {
@@ -50,14 +50,14 @@ void BrowserHeader::Command( const CommandEvent& rCEvt )
     }
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserHeader::Select()
 {
     HeaderBar::Select();
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserHeader::EndDrag()
 {
@@ -99,7 +99,7 @@ void BrowserHeader::EndDrag()
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 
 
 

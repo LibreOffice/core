@@ -206,7 +206,7 @@ const sal_uInt8 BIFF_FONTUNDERL_DOUBLE      = 2;
 const sal_uInt8 BIFF_FONTUNDERL_SINGLE_ACC  = 33;
 const sal_uInt8 BIFF_FONTUNDERL_DOUBLE_ACC  = 34;
 
-// ----------------------------------------------------------------------------
+
 
 sal_Int32 lclReadRgbColor( BinaryInputStream& rStrm )
 {
@@ -397,7 +397,7 @@ static const sal_Int32 spnDefColors8[] =
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 ColorPalette::ColorPalette( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -491,7 +491,7 @@ void lclSetFontName( ApiScriptFontName& rFontName, const FontDescriptor& rFontDe
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 FontModel::FontModel() :
     mnScheme( XML_none ),
@@ -543,7 +543,7 @@ void FontModel::setBiffEscapement( sal_uInt16 nEscapement )
     mnEscapement = STATIC_ARRAY_SELECT( spnEscapes, nEscapement, XML_baseline );
 }
 
-// ----------------------------------------------------------------------------
+
 
 ApiFontUsedFlags::ApiFontUsedFlags( bool bAllUsed ) :
     mbNameUsed( bAllUsed ),
@@ -560,7 +560,7 @@ ApiFontUsedFlags::ApiFontUsedFlags( bool bAllUsed ) :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ApiScriptFontName::ApiScriptFontName() :
     mnFamily( ::com::sun::star::awt::FontFamily::DONTKNOW ),
@@ -568,7 +568,7 @@ ApiScriptFontName::ApiScriptFontName() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ApiFontData::ApiFontData() :
     maDesc(
@@ -1146,7 +1146,7 @@ void AlignmentModel::setBiffVerAlign( sal_uInt8 nVerAlign )
     mnVerAlign = STATIC_ARRAY_SELECT( spnVerAligns, nVerAlign, XML_bottom );
 }
 
-// ----------------------------------------------------------------------------
+
 
 ApiAlignmentData::ApiAlignmentData() :
     meHorJustify( ::com::sun::star::table::CellHoriJustify_STANDARD ),
@@ -1399,7 +1399,7 @@ ProtectionModel::ProtectionModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ApiProtectionData::ApiProtectionData() :
     maCellProt( sal_True, sal_False, sal_False, sal_False )
@@ -1478,7 +1478,7 @@ void BorderLineModel::setBiffStyle( sal_Int32 nLineStyle )
     mnStyle = STATIC_ARRAY_SELECT( spnStyleIds, nLineStyle, XML_none );
 }
 
-// ----------------------------------------------------------------------------
+
 
 BorderModel::BorderModel( bool bDxf ) :
     maLeft( bDxf ),
@@ -1491,7 +1491,7 @@ BorderModel::BorderModel( bool bDxf ) :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ApiBorderData::ApiBorderData() :
     mbBorderUsed( false ),
@@ -1548,7 +1548,7 @@ inline void lclSetBorderLineWidth( BorderLine& rBorderLine,
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 Border::Border( const WorkbookHelper& rHelper, bool bDxf ) :
     WorkbookHelper( rHelper ),
@@ -1780,7 +1780,7 @@ void PatternFillModel::setBiffPattern( sal_Int32 nPattern )
     mnPattern = STATIC_ARRAY_SELECT( spnPatternIds, nPattern, XML_none );
 }
 
-// ----------------------------------------------------------------------------
+
 
 GradientFillModel::GradientFillModel() :
     mnType( XML_linear ),
@@ -1817,7 +1817,7 @@ void GradientFillModel::readGradientStop( SequenceInputStream& rStrm, bool bDxf 
         maColors[ fPosition ] = aColor;
 }
 
-// ----------------------------------------------------------------------------
+
 
 ApiSolidFillData::ApiSolidFillData() :
     mnColor( API_RGB_TRANSPARENT ),
@@ -1853,7 +1853,7 @@ sal_Int32 lclGetMixedColor( sal_Int32 nPattColor, sal_Int32 nFillColor, sal_Int3
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 Fill::Fill( const WorkbookHelper& rHelper, bool bDxf ) :
     WorkbookHelper( rHelper ),
@@ -2578,7 +2578,7 @@ OUString lclCreateStyleName( const CellStyleModel& rModel )
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 CellStyleModel::CellStyleModel() :
     mnXfId( -1 ),

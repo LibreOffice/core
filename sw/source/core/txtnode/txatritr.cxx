@@ -94,7 +94,7 @@ bool SwScriptIterator::Next()
     return bRet;
 }
 
-// --------------------------------------------------------------------
+
 
 SwTxtAttrIterator::SwTxtAttrIterator( const SwTxtNode& rTNd, sal_uInt16 nWhchId,
                                         sal_Int32 nStt,

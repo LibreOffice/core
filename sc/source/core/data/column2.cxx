@@ -67,12 +67,12 @@
 
 #include <boost/scoped_ptr.hpp>
 
-// -----------------------------------------------------------------------
+
 
 // factor from font size to optimal cell height (text width)
 #define SC_ROT_BREAK_FACTOR     6
 
-// -----------------------------------------------------------------------
+
 
 inline bool IsAmbiguousScript( sal_uInt8 nScript )
 {
@@ -82,13 +82,13 @@ inline bool IsAmbiguousScript( sal_uInt8 nScript )
              nScript != SCRIPTTYPE_COMPLEX );
 }
 
-// -----------------------------------------------------------------------------------------
+
 
 //
 //  Data operations
 //
 
-// -----------------------------------------------------------------------------------------
+
 
 
 long ScColumn::GetNeededSize(

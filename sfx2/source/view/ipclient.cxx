@@ -89,7 +89,7 @@ public:
 //====================================================================
 // SfxInPlaceClient_Impl
 
-//--------------------------------------------------------------------
+
 class SfxInPlaceClient_Impl : public ::cppu::WeakImplHelper5< embed::XEmbeddedClient,
                                                               embed::XInplaceClient,
                                                               document::XEventListener,
@@ -206,7 +206,7 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 // XEmbeddedClient
-//--------------------------------------------------------------------
+
 uno::Reference < frame::XFrame > SfxInPlaceClient_Impl::GetFrame() const
 {
     if ( !m_pClient )
@@ -309,7 +309,7 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
     // m_pClient->Invalidate();
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SfxInPlaceClient_Impl::visibilityChanged( sal_Bool bVisible )
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -325,7 +325,7 @@ void SAL_CALL SfxInPlaceClient_Impl::visibilityChanged( sal_Bool bVisible )
 
 
 // XInplaceClient
-//--------------------------------------------------------------------
+
 sal_Bool SAL_CALL SfxInPlaceClient_Impl::canInplaceActivate()
     throw ( uno::RuntimeException )
 {
@@ -339,7 +339,7 @@ sal_Bool SAL_CALL SfxInPlaceClient_Impl::canInplaceActivate()
     return sal_True;
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SfxInPlaceClient_Impl::activatingInplace()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -350,7 +350,7 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingInplace()
     m_pClient->GetViewShell()->InplaceActivating( m_pClient );
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SfxInPlaceClient_Impl::activatingUI()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -363,7 +363,7 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingUI()
     m_pClient->GetViewShell()->UIActivating( m_pClient );
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SfxInPlaceClient_Impl::deactivatedInplace()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -374,7 +374,7 @@ void SAL_CALL SfxInPlaceClient_Impl::deactivatedInplace()
     m_pClient->GetViewShell()->InplaceDeactivated( m_pClient );
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SfxInPlaceClient_Impl::deactivatedUI()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -386,7 +386,7 @@ void SAL_CALL SfxInPlaceClient_Impl::deactivatedUI()
     m_bUIActive = sal_False;
 }
 
-//--------------------------------------------------------------------
+
 uno::Reference< ::com::sun::star::frame::XLayoutManager > SAL_CALL SfxInPlaceClient_Impl::getLayoutManager()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -409,7 +409,7 @@ uno::Reference< ::com::sun::star::frame::XLayoutManager > SAL_CALL SfxInPlaceCli
     return xMan;
 }
 
-//--------------------------------------------------------------------
+
 uno::Reference< frame::XDispatchProvider > SAL_CALL SfxInPlaceClient_Impl::getInplaceDispatchProvider()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -417,7 +417,7 @@ uno::Reference< frame::XDispatchProvider > SAL_CALL SfxInPlaceClient_Impl::getIn
     return uno::Reference < frame::XDispatchProvider >( GetFrame(), uno::UNO_QUERY_THROW );
 }
 
-//--------------------------------------------------------------------
+
 awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getPlacement()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -434,7 +434,7 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getPlacement()
     return AWTRectangle( aRealObjArea );
 }
 
-//--------------------------------------------------------------------
+
 awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getClipRectangle()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -451,7 +451,7 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getClipRectangle()
     return AWTRectangle( aRealObjArea );
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SfxInPlaceClient_Impl::translateAccelerators( const uno::Sequence< awt::KeyEvent >& /*aKeys*/ )
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -462,7 +462,7 @@ void SAL_CALL SfxInPlaceClient_Impl::translateAccelerators( const uno::Sequence<
     // TODO/MBA: keyboard accelerators
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SfxInPlaceClient_Impl::scrollObject( const awt::Size& /*aOffset*/ )
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -471,7 +471,7 @@ void SAL_CALL SfxInPlaceClient_Impl::scrollObject( const awt::Size& /*aOffset*/ 
         throw uno::RuntimeException();
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SfxInPlaceClient_Impl::changedPlacement( const awt::Rectangle& aPosRect )
     throw ( embed::WrongStateException,
             uno::Exception,
@@ -523,7 +523,7 @@ void SAL_CALL SfxInPlaceClient_Impl::changedPlacement( const awt::Rectangle& aPo
 }
 
 // XComponentSupplier
-//--------------------------------------------------------------------
+
 uno::Reference< util::XCloseable > SAL_CALL SfxInPlaceClient_Impl::getComponent()
     throw ( uno::RuntimeException )
 {
@@ -544,7 +544,7 @@ uno::Reference< util::XCloseable > SAL_CALL SfxInPlaceClient_Impl::getComponent(
 
 
 // XWindowSupplier
-//--------------------------------------------------------------------
+
 uno::Reference< awt::XWindow > SAL_CALL SfxInPlaceClient_Impl::getWindow()
     throw ( uno::RuntimeException )
 {
@@ -555,7 +555,7 @@ uno::Reference< awt::XWindow > SAL_CALL SfxInPlaceClient_Impl::getWindow()
     return xWin;
 }
 
-//--------------------------------------------------------------------
+
 // notification to the client implementation that either the object area or the scaling has been changed
 // as a result the logical size of the window has changed also
 void SfxInPlaceClient_Impl::SizeHasChanged()
@@ -594,7 +594,7 @@ void SfxInPlaceClient_Impl::SizeHasChanged()
     }
 }
 
-//--------------------------------------------------------------------
+
 IMPL_LINK_NOARG(SfxInPlaceClient_Impl, TimerHdl)
 {
     if ( m_pClient && m_xObject.is() )
@@ -606,7 +606,7 @@ IMPL_LINK_NOARG(SfxInPlaceClient_Impl, TimerHdl)
 //====================================================================
 // SfxInPlaceClient
 
-//--------------------------------------------------------------------
+
 SfxInPlaceClient::SfxInPlaceClient( SfxViewShell* pViewShell, Window *pDraw, sal_Int64 nAspect ) :
     m_pImp( new SfxInPlaceClient_Impl ),
     m_pViewSh( pViewShell ),
@@ -622,7 +622,7 @@ SfxInPlaceClient::SfxInPlaceClient( SfxViewShell* pViewShell, Window *pDraw, sal
     m_pImp->m_aTimer.SetTimeoutHdl( LINK( m_pImp, SfxInPlaceClient_Impl, TimerHdl ) );
 }
 
-//--------------------------------------------------------------------
+
 
 SfxInPlaceClient::~SfxInPlaceClient()
 {
@@ -644,7 +644,7 @@ SfxInPlaceClient::~SfxInPlaceClient()
     // must be guarded with mutex
 }
 
-//--------------------------------------------------------------------
+
 void SfxInPlaceClient::SetObjectState( sal_Int32 nState )
 {
     if ( GetObject().is() )
@@ -665,7 +665,7 @@ void SfxInPlaceClient::SetObjectState( sal_Int32 nState )
     }
 }
 
-//--------------------------------------------------------------------
+
 sal_Int64 SfxInPlaceClient::GetObjectMiscStatus() const
 {
     if ( GetObject().is() )
@@ -673,13 +673,13 @@ sal_Int64 SfxInPlaceClient::GetObjectMiscStatus() const
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 uno::Reference < embed::XEmbeddedObject > SfxInPlaceClient::GetObject() const
 {
     return m_pImp->m_xObject;
 }
 
-//--------------------------------------------------------------------
+
 void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject >& rObject )
 {
     if ( m_pImp->m_xObject.is() && rObject != m_pImp->m_xObject )
@@ -730,7 +730,7 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
         m_pImp->m_aTimer.Stop();
 }
 
-//--------------------------------------------------------------------
+
 sal_Bool SfxInPlaceClient::SetObjArea( const Rectangle& rArea )
 {
     if( rArea != m_pImp->m_aObjArea )
@@ -745,7 +745,7 @@ sal_Bool SfxInPlaceClient::SetObjArea( const Rectangle& rArea )
     return sal_False;
 }
 
-//--------------------------------------------------------------------
+
 Rectangle SfxInPlaceClient::GetObjArea() const
 {
     return m_pImp->m_aObjArea;
@@ -759,7 +759,7 @@ Rectangle SfxInPlaceClient::GetScaledObjArea() const
     return aRealObjArea;
 }
 
-//--------------------------------------------------------------------
+
 void SfxInPlaceClient::SetSizeScale( const Fraction & rScaleWidth, const Fraction & rScaleHeight )
 {
     if ( m_pImp->m_aScaleWidth != rScaleWidth || m_pImp->m_aScaleHeight != rScaleHeight )
@@ -775,7 +775,7 @@ void SfxInPlaceClient::SetSizeScale( const Fraction & rScaleWidth, const Fractio
     }
 }
 
-//--------------------------------------------------------------------
+
 sal_Bool SfxInPlaceClient::SetObjAreaAndScale( const Rectangle& rArea, const Fraction& rScaleWidth, const Fraction& rScaleHeight )
 {
     if( rArea != m_pImp->m_aObjArea || m_pImp->m_aScaleWidth != rScaleWidth || m_pImp->m_aScaleHeight != rScaleHeight )
@@ -793,19 +793,19 @@ sal_Bool SfxInPlaceClient::SetObjAreaAndScale( const Rectangle& rArea, const Fra
     return sal_False;
 }
 
-//--------------------------------------------------------------------
+
 const Fraction& SfxInPlaceClient::GetScaleWidth() const
 {
     return m_pImp->m_aScaleWidth;
 }
 
-//--------------------------------------------------------------------
+
 const Fraction& SfxInPlaceClient::GetScaleHeight() const
 {
     return m_pImp->m_aScaleHeight;
 }
 
-//--------------------------------------------------------------------
+
 void SfxInPlaceClient::Invalidate()
 {
     // TODO/LATER: do we need both?
@@ -819,7 +819,7 @@ void SfxInPlaceClient::Invalidate()
     ViewChanged();
 }
 
-//--------------------------------------------------------------------
+
 sal_Bool SfxInPlaceClient::IsObjectUIActive() const
 {
     try {
@@ -831,7 +831,7 @@ sal_Bool SfxInPlaceClient::IsObjectUIActive() const
     return sal_False;
 }
 
-//--------------------------------------------------------------------
+
 sal_Bool SfxInPlaceClient::IsObjectInPlaceActive() const
 {
     try {
@@ -852,7 +852,7 @@ sal_Bool SfxInPlaceClient::IsObjectInPlaceActive() const
     return sal_False;
 }
 
-//--------------------------------------------------------------------
+
 SfxInPlaceClient* SfxInPlaceClient::GetClient( SfxObjectShell* pDoc, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObject )
 {
     for ( SfxViewFrame* pFrame = SfxViewFrame::GetFirst(pDoc); pFrame; pFrame=SfxViewFrame::GetNext(*pFrame,pDoc) )

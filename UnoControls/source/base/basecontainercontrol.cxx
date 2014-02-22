@@ -21,9 +21,9 @@
 
 #include <cppuhelper/typeprovider.hxx>
 
-//____________________________________________________________________________________________________________
+
 //  namespaces
-//____________________________________________________________________________________________________________
+
 
 using namespace ::cppu                      ;
 using namespace ::osl                       ;
@@ -35,9 +35,9 @@ using namespace ::com::sun::star::container ;
 
 namespace unocontrols{
 
-//____________________________________________________________________________________________________________
+
 //  construct/destruct
-//____________________________________________________________________________________________________________
+
 
 BaseContainerControl::BaseContainerControl( const Reference< XComponentContext >& rxContext )
     : BaseControl   ( rxContext  )
@@ -50,9 +50,9 @@ BaseContainerControl::~BaseContainerControl()
     impl_cleanMemory();
 }
 
-//____________________________________________________________________________________________________________
+
 //  XInterface
-//____________________________________________________________________________________________________________
+
 
 Any SAL_CALL BaseContainerControl::queryInterface( const Type& rType ) throw( RuntimeException )
 {
@@ -75,9 +75,9 @@ Any SAL_CALL BaseContainerControl::queryInterface( const Type& rType ) throw( Ru
     return aReturn ;
 }
 
-//____________________________________________________________________________________________________________
+
 //  XTypeProvider
-//____________________________________________________________________________________________________________
+
 
 Sequence< Type > SAL_CALL BaseContainerControl::getTypes() throw( RuntimeException )
 {
@@ -107,9 +107,9 @@ Sequence< Type > SAL_CALL BaseContainerControl::getTypes() throw( RuntimeExcepti
     return pTypeCollection->getTypes();
 }
 
-//____________________________________________________________________________________________________________
+
 //  XAggregation
-//____________________________________________________________________________________________________________
+
 
 Any SAL_CALL BaseContainerControl::queryAggregation( const Type& aType ) throw( RuntimeException )
 {
@@ -134,9 +134,9 @@ Any SAL_CALL BaseContainerControl::queryAggregation( const Type& aType ) throw( 
     }
 }
 
-//____________________________________________________________________________________________________________
+
 //  XControl
-//____________________________________________________________________________________________________________
+
 
 void SAL_CALL BaseContainerControl::createPeer( const   Reference< XToolkit >&      xToolkit    ,
                                                 const   Reference< XWindowPeer >&   xParent     ) throw( RuntimeException )
@@ -161,9 +161,9 @@ void SAL_CALL BaseContainerControl::createPeer( const   Reference< XToolkit >&  
     }
 }
 
-//____________________________________________________________________________________________________________
+
 //  XControl
-//____________________________________________________________________________________________________________
+
 
 sal_Bool SAL_CALL BaseContainerControl::setModel( const Reference< XControlModel >& ) throw( RuntimeException )
 {
@@ -171,9 +171,9 @@ sal_Bool SAL_CALL BaseContainerControl::setModel( const Reference< XControlModel
     return sal_False ;
 }
 
-//____________________________________________________________________________________________________________
+
 //  XControl
-//____________________________________________________________________________________________________________
+
 
 Reference< XControlModel > SAL_CALL BaseContainerControl::getModel() throw( RuntimeException )
 {
@@ -182,9 +182,9 @@ Reference< XControlModel > SAL_CALL BaseContainerControl::getModel() throw( Runt
     return Reference< XControlModel >();
 }
 
-//____________________________________________________________________________________________________________
+
 //  XComponent
-//____________________________________________________________________________________________________________
+
 
 void SAL_CALL BaseContainerControl::dispose() throw( RuntimeException )
 {
@@ -223,9 +223,9 @@ void SAL_CALL BaseContainerControl::dispose() throw( RuntimeException )
     BaseControl::dispose();
 }
 
-//____________________________________________________________________________________________________________
+
 //  XEventListener
-//____________________________________________________________________________________________________________
+
 
 void SAL_CALL BaseContainerControl::disposing( const EventObject& rEvent ) throw( RuntimeException )
 {
@@ -235,9 +235,9 @@ void SAL_CALL BaseContainerControl::disposing( const EventObject& rEvent ) throw
     removeControl( xControl );
 }
 
-//____________________________________________________________________________________________________________
+
 //  XControlContainer
-//____________________________________________________________________________________________________________
+
 
 void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Reference< XControl > & rControl ) throw( RuntimeException )
 {
@@ -294,9 +294,9 @@ void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Re
     }
 }
 
-//____________________________________________________________________________________________________________
+
 //  XControlContainer
-//____________________________________________________________________________________________________________
+
 
 void SAL_CALL BaseContainerControl::addContainerListener ( const Reference< XContainerListener > & rListener ) throw( RuntimeException )
 {
@@ -306,9 +306,9 @@ void SAL_CALL BaseContainerControl::addContainerListener ( const Reference< XCon
     m_aListeners.addInterface ( ::getCppuType((const Reference< XContainerListener >*)0), rListener ) ;
 }
 
-//____________________________________________________________________________________________________________
+
 //  XControlContainer
-//____________________________________________________________________________________________________________
+
 
 void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > & rControl ) throw( RuntimeException )
 {
@@ -359,9 +359,9 @@ void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > 
     }
 }
 
-//____________________________________________________________________________________________________________
+
 //  XControlContainer
-//____________________________________________________________________________________________________________
+
 
 void SAL_CALL BaseContainerControl::removeContainerListener ( const Reference< XContainerListener > & rListener ) throw( RuntimeException )
 {
@@ -371,9 +371,9 @@ void SAL_CALL BaseContainerControl::removeContainerListener ( const Reference< X
     m_aListeners.removeInterface ( ::getCppuType((const Reference< XContainerListener >*)0), rListener ) ;
 }
 
-//____________________________________________________________________________________________________________
+
 //  XControlContainer
-//____________________________________________________________________________________________________________
+
 
 void SAL_CALL BaseContainerControl::setStatusText ( const OUString& rStatusText ) throw( RuntimeException )
 {
@@ -386,9 +386,9 @@ void SAL_CALL BaseContainerControl::setStatusText ( const OUString& rStatusText 
     }
 }
 
-//____________________________________________________________________________________________________________
+
 //  XControlContainer
-//____________________________________________________________________________________________________________
+
 
 Reference< XControl > SAL_CALL BaseContainerControl::getControl ( const OUString& rName ) throw( RuntimeException )
 {
@@ -414,9 +414,9 @@ Reference< XControl > SAL_CALL BaseContainerControl::getControl ( const OUString
     return Reference< XControl >  () ;
 }
 
-//____________________________________________________________________________________________________________
+
 //  XControlContainer
-//____________________________________________________________________________________________________________
+
 
 Sequence< Reference< XControl > > SAL_CALL BaseContainerControl::getControls () throw( RuntimeException )
 {
@@ -439,9 +439,9 @@ Sequence< Reference< XControl > > SAL_CALL BaseContainerControl::getControls () 
     return aDescriptor ;
 }
 
-//____________________________________________________________________________________________________________
+
 //  XUnoControlContainer
-//____________________________________________________________________________________________________________
+
 
 void SAL_CALL BaseContainerControl::addTabController ( const Reference< XTabController > & rTabController ) throw( RuntimeException )
 {
@@ -465,9 +465,9 @@ void SAL_CALL BaseContainerControl::addTabController ( const Reference< XTabCont
     m_xTabControllerList = aNewList ;
 }
 
-//____________________________________________________________________________________________________________
+
 //  XUnoControlContainer
-//____________________________________________________________________________________________________________
+
 
 void SAL_CALL BaseContainerControl::removeTabController ( const Reference< XTabController > & rTabController ) throw( RuntimeException )
 {
@@ -489,9 +489,9 @@ void SAL_CALL BaseContainerControl::removeTabController ( const Reference< XTabC
     }
 }
 
-//____________________________________________________________________________________________________________
+
 //  XUnoControlContainer
-//____________________________________________________________________________________________________________
+
 
 void SAL_CALL BaseContainerControl::setTabControllers ( const Sequence< Reference< XTabController >  >& rTabControllers ) throw( RuntimeException )
 {
@@ -509,9 +509,9 @@ Sequence<Reference< XTabController > > SAL_CALL BaseContainerControl::getTabCont
     return m_xTabControllerList ;
 }
 
-//____________________________________________________________________________________________________________
+
 //  XWindow
-//____________________________________________________________________________________________________________
+
 
 void SAL_CALL BaseContainerControl::setVisible ( sal_Bool bVisible ) throw( RuntimeException )
 {
@@ -526,9 +526,9 @@ void SAL_CALL BaseContainerControl::setVisible ( sal_Bool bVisible ) throw( Runt
     }
 }
 
-//____________________________________________________________________________________________________________
+
 //  protected method
-//____________________________________________________________________________________________________________
+
 
 WindowDescriptor* BaseContainerControl::impl_getWindowDescriptor ( const Reference< XWindowPeer > & rParentPeer )
 {
@@ -548,17 +548,17 @@ WindowDescriptor* BaseContainerControl::impl_getWindowDescriptor ( const Referen
     return aDescriptor ;
 }
 
-//____________________________________________________________________________________________________________
+
 //  protected method
-//____________________________________________________________________________________________________________
+
 
 void BaseContainerControl::impl_paint ( sal_Int32 /*nX*/, sal_Int32 /*nY*/, const Reference< XGraphics > & /*rGraphics*/ )
 {
 }
 
-//____________________________________________________________________________________________________________
+
 //  private method
-//____________________________________________________________________________________________________________
+
 
 void BaseContainerControl::impl_activateTabControllers ()
 {
@@ -575,9 +575,9 @@ void BaseContainerControl::impl_activateTabControllers ()
     }
 }
 
-//____________________________________________________________________________________________________________
+
 //  private method
-//____________________________________________________________________________________________________________
+
 
 void BaseContainerControl::impl_cleanMemory ()
 {

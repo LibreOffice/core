@@ -56,19 +56,19 @@ namespace sd {
 
 
 
-// -----------------------
+
 // - GraphicObjectBar -
-// -----------------------
+
 
 SFX_IMPL_INTERFACE( GraphicObjectBar, SfxShell, SdResId( STR_GRAFOBJECTBARSHELL ) )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 TYPEINIT1( GraphicObjectBar, SfxShell );
 
-// -----------------------------------------------------------------------------
+
 
 GraphicObjectBar::GraphicObjectBar (
     ViewShell* pSdViewShell,
@@ -87,14 +87,14 @@ GraphicObjectBar::GraphicObjectBar (
     SetName( OUString( "Graphic objectbar" ));
 }
 
-// -----------------------------------------------------------------------------
+
 
 GraphicObjectBar::~GraphicObjectBar()
 {
     SetRepeatTarget( NULL );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void GraphicObjectBar::GetAttrState( SfxItemSet& rSet )
 {
@@ -102,7 +102,7 @@ void GraphicObjectBar::GetAttrState( SfxItemSet& rSet )
         SvxGrafAttrHelper::GetGrafAttrState( rSet, *mpView );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void GraphicObjectBar::Execute( SfxRequest& rReq )
 {
@@ -113,7 +113,7 @@ void GraphicObjectBar::Execute( SfxRequest& rReq )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void GraphicObjectBar::GetFilterState( SfxItemSet& rSet )
 {
@@ -132,7 +132,7 @@ void GraphicObjectBar::GetFilterState( SfxItemSet& rSet )
         SvxGraphicFilter::DisableGraphicFilterSlots( rSet );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void GraphicObjectBar::ExecuteFilter( SfxRequest& rReq )
 {

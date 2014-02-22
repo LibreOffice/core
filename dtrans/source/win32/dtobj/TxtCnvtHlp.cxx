@@ -25,9 +25,9 @@
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::uno;
 
-//------------------------------------------------------------------
+
 // assuming a '\0' terminated string if no length specified
-//------------------------------------------------------------------
+
 
 int CalcBuffSizeForTextConversion( UINT code_page, LPCSTR lpMultiByteString, int nLen = -1 )
 {
@@ -39,9 +39,9 @@ int CalcBuffSizeForTextConversion( UINT code_page, LPCSTR lpMultiByteString, int
                                 0 ) * sizeof( sal_Unicode ) );
 }
 
-//------------------------------------------------------------------
+
 // assuming a '\0' terminated string if no length specified
-//------------------------------------------------------------------
+
 
 int CalcBuffSizeForTextConversion( UINT code_page, LPCWSTR lpWideCharString, int nLen = -1 )
 {
@@ -55,11 +55,11 @@ int CalcBuffSizeForTextConversion( UINT code_page, LPCWSTR lpWideCharString, int
                                 NULL );
 }
 
-//------------------------------------------------------------------
+
 // converts text in one code page into unicode text
 // automatically calculates the necessary buffer size and allocates
 // the buffer
-//------------------------------------------------------------------
+
 
 int MultiByteToWideCharEx( UINT cp_src,
                            LPCSTR lpMultiByteString,
@@ -91,11 +91,11 @@ int MultiByteToWideCharEx( UINT cp_src,
                                 ptrHGlob.MemSize( ) );
 }
 
-//------------------------------------------------------------------
+
 // converts unicode text into text of the specified code page
 // automatically calculates the necessary buffer size and allocates
 // the buffer
-//------------------------------------------------------------------
+
 
 int WideCharToMultiByteEx( UINT cp_dest,
                            LPCWSTR lpWideCharString,

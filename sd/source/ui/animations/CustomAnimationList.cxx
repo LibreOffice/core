@@ -217,7 +217,7 @@ private:
     CustomAnimationEffectPtr mpEffect;
 };
 
-// --------------------------------------------------------------------
+
 
 CustomAnimationListEntryItem::CustomAnimationListEntryItem( SvTreeListEntry* pEntry, sal_uInt16 nFlags, OUString aDescription, CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent  )
 : SvLBoxString( pEntry, nFlags, aDescription )
@@ -227,13 +227,13 @@ CustomAnimationListEntryItem::CustomAnimationListEntryItem( SvTreeListEntry* pEn
 {
 }
 
-// --------------------------------------------------------------------
+
 
 CustomAnimationListEntryItem::~CustomAnimationListEntryItem()
 {
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationListEntryItem::InitViewData( SvTreeListBox* pView, SvTreeListEntry* pEntry, SvViewDataItem* pViewData )
 {
@@ -246,7 +246,7 @@ void CustomAnimationListEntryItem::InitViewData( SvTreeListBox* pView, SvTreeLis
     pViewData->maSize = aSize;
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationListEntryItem::Paint(
     const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
@@ -303,14 +303,14 @@ void CustomAnimationListEntryItem::Paint(
     rDev.DrawText( aPos, rDev.GetEllipsisString( maDescription, rDev.GetOutputSizePixel().Width() - aPos.X() ) );
 }
 
-// --------------------------------------------------------------------
+
 
 SvLBoxItem* CustomAnimationListEntryItem::Create() const
 {
     return NULL;
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationListEntryItem::Clone( SvLBoxItem* )
 {
@@ -331,20 +331,20 @@ private:
     CustomAnimationEffectPtr mpEffect;
 };
 
-// --------------------------------------------------------------------
+
 
 CustomAnimationListEntry::CustomAnimationListEntry()
 {
 }
 
-// --------------------------------------------------------------------
+
 
 CustomAnimationListEntry::CustomAnimationListEntry( CustomAnimationEffectPtr pEffect )
 : mpEffect( pEffect )
 {
 }
 
-// --------------------------------------------------------------------
+
 
 CustomAnimationListEntry::~CustomAnimationListEntry()
 {
@@ -368,27 +368,27 @@ private:
     OUString        maDescription;
 };
 
-// --------------------------------------------------------------------
+
 
 CustomAnimationTriggerEntryItem::CustomAnimationTriggerEntryItem( SvTreeListEntry* pEntry, sal_uInt16 nFlags, OUString aDescription )
 : SvLBoxString( pEntry, nFlags, aDescription ), maDescription( aDescription )
 {
 }
 
-// --------------------------------------------------------------------
+
 
 CustomAnimationTriggerEntryItem::~CustomAnimationTriggerEntryItem()
 {
 }
 
-// --------------------------------------------------------------------
+
 
 sal_uInt16 CustomAnimationTriggerEntryItem::IsA()
 {
     return (sal_uInt16)-1;
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationTriggerEntryItem::InitViewData( SvTreeListBox* pView, SvTreeListEntry* pEntry, SvViewDataItem* pViewData )
 {
@@ -401,7 +401,7 @@ void CustomAnimationTriggerEntryItem::InitViewData( SvTreeListBox* pView, SvTree
     pViewData->maSize = aSize;
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationTriggerEntryItem::Paint(
     const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
@@ -441,14 +441,14 @@ void CustomAnimationTriggerEntryItem::Paint(
     rDev.Pop();
 }
 
-// --------------------------------------------------------------------
+
 
 SvLBoxItem* CustomAnimationTriggerEntryItem::Create() const
 {
     return NULL;
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationTriggerEntryItem::Clone( SvLBoxItem* )
 {
@@ -475,7 +475,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCustomAnimationList( ::Wind
     return new CustomAnimationList( pParent );
 }
 
-// --------------------------------------------------------------------
+
 
 const Image&  CustomAnimationList::getImage( sal_uInt16 nId )
 {
@@ -490,7 +490,7 @@ const Image&  CustomAnimationList::getImage( sal_uInt16 nId )
     return rImage;
 }
 
-// --------------------------------------------------------------------
+
 
 CustomAnimationList::~CustomAnimationList()
 {
@@ -500,7 +500,7 @@ CustomAnimationList::~CustomAnimationList()
     clear();
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationList::KeyInput( const KeyEvent& rKEvt )
 {
@@ -522,7 +522,7 @@ void CustomAnimationList::KeyInput( const KeyEvent& rKEvt )
     ::SvTreeListBox::KeyInput( rKEvt );
 }
 
-// --------------------------------------------------------------------
+
 
 /** selects or deselects the given effect.
     Selections of other effects are not changed */
@@ -547,7 +547,7 @@ void CustomAnimationList::select( CustomAnimationEffectPtr pEffect, bool bSelect
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationList::clear()
 {
@@ -557,7 +557,7 @@ void CustomAnimationList::clear()
     mxLastTargetShape = 0;
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationList::update( MainSequencePtr pMainSequence )
 {
@@ -571,7 +571,7 @@ void CustomAnimationList::update( MainSequencePtr pMainSequence )
         mpMainSequence->addListener( this );
 }
 
-// --------------------------------------------------------------------
+
 
 struct stl_append_effect_func : public std::unary_function<CustomAnimationEffectPtr, void>
 {
@@ -584,7 +584,7 @@ void stl_append_effect_func::operator()(CustomAnimationEffectPtr pEffect)
 {
     mrList.append( pEffect );
 }
-// --------------------------------------------------------------------
+
 
 void CustomAnimationList::update()
 {
@@ -756,7 +756,7 @@ void CustomAnimationList::update()
     Invalidate();
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
 {
@@ -806,7 +806,7 @@ void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void selectShape( SvTreeListBox* pTreeList, Reference< XShape > xShape )
 {
@@ -824,7 +824,7 @@ void selectShape( SvTreeListBox* pTreeList, Reference< XShape > xShape )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationList::onSelectionChanged( Any aSelection )
 {
@@ -862,7 +862,7 @@ void CustomAnimationList::onSelectionChanged( Any aSelection )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationList::SelectHdl()
 {
@@ -872,7 +872,7 @@ void CustomAnimationList::SelectHdl()
     mpController->onSelect();
 }
 
-// --------------------------------------------------------------------
+
 
 bool CustomAnimationList::isExpanded( const CustomAnimationEffectPtr& pEffect ) const
 {
@@ -892,7 +892,7 @@ bool CustomAnimationList::isExpanded( const CustomAnimationEffectPtr& pEffect ) 
     return (pEntry == 0) || IsExpanded( pEntry );
 }
 
-// --------------------------------------------------------------------
+
 EffectSequence CustomAnimationList::getSelection() const
 {
     EffectSequence aSelection;
@@ -928,7 +928,7 @@ EffectSequence CustomAnimationList::getSelection() const
     return aSelection;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool CustomAnimationList::DoubleClickHdl()
 {
@@ -936,7 +936,7 @@ sal_Bool CustomAnimationList::DoubleClickHdl()
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 PopupMenu* CustomAnimationList::CreateContextMenu()
 {
@@ -978,21 +978,21 @@ PopupMenu* CustomAnimationList::CreateContextMenu()
     return pMenu;
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationList::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
 {
     mpController->onContextMenu( nSelectedPopupEntry );
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationList::SetTabs()
 {
     SvTreeListBox::SetTabs();
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationList::notify_change()
 {

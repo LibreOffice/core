@@ -1294,9 +1294,9 @@ static SotDestinationEntry_Impl const aDestinationArray[] =     \
 
 
 
-// ---------------------------------
+
 // - new style GetExchange methods -
-// ---------------------------------
+
 
 bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector, sal_uLong nId )
 {
@@ -1316,7 +1316,7 @@ bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector, sal_uLong
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 static bool CheckTransferableContext_Impl( const Reference< XTransferable >* pxTransferable, const SotAction_Impl& rEntry )
 {
@@ -1378,7 +1378,7 @@ static bool CheckTransferableContext_Impl( const Reference< XTransferable >* pxT
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 static sal_uInt16 GetTransferableAction_Impl(
                             const DataFlavorExVector& rDataFlavorExVector,
@@ -1465,7 +1465,7 @@ static sal_uInt16 GetTransferableAction_Impl(
     return EXCHG_INOUT_ACTION_NONE;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_uInt16 SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavorExVector,
                                        sal_uInt16 nDestination,
@@ -1579,7 +1579,7 @@ sal_uInt16 SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavor
     return nUserAction;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_uInt16 SotExchange::IsChart(  const SvGlobalName& rName )
 {

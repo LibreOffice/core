@@ -92,7 +92,7 @@ CommentModel::CommentModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 Comment::Comment( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper )

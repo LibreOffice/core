@@ -26,11 +26,11 @@ using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
-//------------------------------------------------------------------------
+
 
 SC_SIMPLE_SERVICE_INFO( ScNameToIndexAccess, "ScNameToIndexAccess", "stardiv.unknown" )
 
-//------------------------------------------------------------------------
+
 
 uno::Reference<uno::XInterface> ScUnoHelpFunctions::AnyToInterface( const uno::Any& rAny )
 {
@@ -185,7 +185,7 @@ void ScUnoHelpFunctions::SetOptionalPropertyValue(
     }
 }
 
-//------------------------------------------------------------------------
+
 
 ScIndexEnumeration::ScIndexEnumeration(const uno::Reference<container::XIndexAccess>& rInd,
                                        const OUString& rServiceName) :
@@ -245,9 +245,9 @@ sal_Bool SAL_CALL ScIndexEnumeration::supportsService( const OUString& ServiceNa
     return aRet;
 }
 
-//------------------------------------------------------------------------
 
-//------------------------------------------------------------------------
+
+
 
 ScNameToIndexAccess::ScNameToIndexAccess( const com::sun::star::uno::Reference<
                                             com::sun::star::container::XNameAccess>& rNameObj ) :
@@ -297,7 +297,7 @@ sal_Bool SAL_CALL ScNameToIndexAccess::hasElements(  ) throw(::com::sun::star::u
     return getCount() > 0;
 }
 
-//------------------------------------------------------------------------
+
 
 
 

@@ -646,7 +646,7 @@ sal_Int32 XMLTableStyleContext::GetNumberFormat()
     return nNumberFormat;
 }
 
-// ----------------------------------------------------------------------------
+
 
 SvXMLStyleContext *XMLTableStylesContext::CreateStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -929,7 +929,7 @@ sal_Int32 XMLTableStylesContext::GetIndex(const sal_Int16 nContextID)
         return -1;
 }
 
-// ---------------------------------------------------------------------------
+
 TYPEINIT1( ScXMLMasterStylesContext, SvXMLStylesContext );
 
 bool ScXMLMasterStylesContext::InsertStyleFamily( sal_uInt16 ) const
@@ -1057,7 +1057,7 @@ void ScMasterPageContext::Finish( bool bOverwrite )
         ClearContent(OUString(SC_UNO_PAGE_RIGHTHDRCON));
 }
 
-// ---------------------------------------------------------------------------
+
 
 ScCellTextStyleContext::ScCellTextStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName, const uno::Reference<xml::sax::XAttributeList> & xAttrList,

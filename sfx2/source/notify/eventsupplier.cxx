@@ -47,16 +47,16 @@
 #include <sfx2/frame.hxx>
 #include <macroloader.hxx>
 
-//--------------------------------------------------------------------------------------------------------
+
 
 #define MACRO_PRFIX         "macro://"
 #define MACRO_POSTFIX       "()"
 
 using namespace css;
 
-//--------------------------------------------------------------------------------------------------------
+
     //  --- XNameReplace ---
-//--------------------------------------------------------------------------------------------------------
+
 void SAL_CALL SfxEvents_Impl::replaceByName( const OUString & aName, const uno::Any & rElement )
                                 throw( lang::IllegalArgumentException, container::NoSuchElementException,
                                        lang::WrappedTargetException, uno::RuntimeException )
@@ -112,9 +112,9 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUString & aName, const uno::
     throw container::NoSuchElementException();
 }
 
-//--------------------------------------------------------------------------------------------------------
+
 //  --- XNameAccess ---
-//--------------------------------------------------------------------------------------------------------
+
 uno::Any SAL_CALL SfxEvents_Impl::getByName( const OUString& aName )
                                 throw( container::NoSuchElementException, lang::WrappedTargetException,
                                        uno::RuntimeException )
@@ -134,13 +134,13 @@ uno::Any SAL_CALL SfxEvents_Impl::getByName( const OUString& aName )
     throw container::NoSuchElementException();
 }
 
-//--------------------------------------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL SfxEvents_Impl::getElementNames() throw ( uno::RuntimeException )
 {
     return maEventNames;
 }
 
-//--------------------------------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SfxEvents_Impl::hasByName( const OUString& aName ) throw ( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -158,16 +158,16 @@ sal_Bool SAL_CALL SfxEvents_Impl::hasByName( const OUString& aName ) throw ( uno
     return sal_False;
 }
 
-//--------------------------------------------------------------------------------------------------------
+
 //  --- XElementAccess ( parent of XNameAccess ) ---
-//--------------------------------------------------------------------------------------------------------
+
 uno::Type SAL_CALL SfxEvents_Impl::getElementType() throw ( uno::RuntimeException )
 {
     uno::Type aElementType = ::getCppuType( (const uno::Sequence < beans::PropertyValue > *)0 );
     return aElementType;
 }
 
-//--------------------------------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SfxEvents_Impl::hasElements() throw ( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -271,9 +271,9 @@ void SfxEvents_Impl::Execute( uno::Any& aEventData, const document::DocumentEven
     }
 }
 
-//--------------------------------------------------------------------------------------------------------
+
 // --- ::document::XEventListener ---
-//--------------------------------------------------------------------------------------------------------
+
 void SAL_CALL SfxEvents_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException )
 {
     ::osl::ClearableMutexGuard aGuard( maMutex );
@@ -301,9 +301,9 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const document::EventObject& aEvent )
     Execute( aEventData, document::DocumentEvent(aEvent.Source, aEvent.EventName, NULL, uno::Any()), mpObjShell );
 }
 
-//--------------------------------------------------------------------------------------------------------
+
 // --- ::lang::XEventListener ---
-//--------------------------------------------------------------------------------------------------------
+
 void SAL_CALL SfxEvents_Impl::disposing( const lang::EventObject& /*Source*/ ) throw( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -315,8 +315,8 @@ void SAL_CALL SfxEvents_Impl::disposing( const lang::EventObject& /*Source*/ ) t
     }
 }
 
-//--------------------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+
+
 SfxEvents_Impl::SfxEvents_Impl( SfxObjectShell* pShell,
                                 uno::Reference< document::XEventBroadcaster > xBroadcaster )
 {
@@ -335,12 +335,12 @@ SfxEvents_Impl::SfxEvents_Impl( SfxObjectShell* pShell,
         mxBroadcaster->addEventListener( this );
 }
 
-//--------------------------------------------------------------------------------------------------------
+
 SfxEvents_Impl::~SfxEvents_Impl()
 {
 }
 
-//--------------------------------------------------------------------------------------------------------
+
 SvxMacro* SfxEvents_Impl::ConvertToMacro( const uno::Any& rElement, SfxObjectShell* pObjShell, sal_Bool bNormalizeMacro )
 {
     SvxMacro* pMacro = NULL;

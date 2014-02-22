@@ -339,7 +339,7 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const LanguageTag& rLan
     return OUString(FALLBACKFONT_UI_SANS);
 }
 
-// ------------------------------------------------------------------------------------
+
 
 /*
  *  FontSubstConfigItem::get
@@ -456,7 +456,7 @@ static const char* const aImplKillLeadingList[] =
     NULL
 };
 
-// -----------------------------------------------------------------------
+
 
 static const char* const aImplKillTrailingList[] =
 {
@@ -508,7 +508,7 @@ static const char* const aImplKillTrailingList[] =
     NULL
 };
 
-// -----------------------------------------------------------------------
+
 
 static const char* const aImplKillTrailingWithExceptionsList[] =
 {
@@ -517,7 +517,7 @@ static const char* const aImplKillTrailingWithExceptionsList[] =
     NULL
 };
 
-// -----------------------------------------------------------------------
+
 
 struct ImplFontAttrWeightSearchData
 {
@@ -545,7 +545,7 @@ static ImplFontAttrWeightSearchData const aImplWeightAttrSearchList[] =
 {   NULL,                   WEIGHT_DONTKNOW },
 };
 
-// -----------------------------------------------------------------------
+
 
 struct ImplFontAttrWidthSearchData
 {
@@ -638,7 +638,7 @@ static ImplFontAttrTypeSearchData const aImplTypeAttrSearchList[] =
 {   NULL,                   0 },
 };
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplKillLeading( OUString& rName, const char* const* ppStr )
 {
@@ -672,7 +672,7 @@ static bool ImplKillLeading( OUString& rName, const char* const* ppStr )
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 static sal_Int32 ImplIsTrailing( const OUString& rName, const char* pStr )
 {
@@ -689,7 +689,7 @@ static sal_Int32 ImplIsTrailing( const OUString& rName, const char* pStr )
     return nStrLen;
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplKillTrailing( OUString& rName, const char* const* ppStr )
 {
@@ -706,7 +706,7 @@ static bool ImplKillTrailing( OUString& rName, const char* const* ppStr )
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplKillTrailingWithExceptions( OUString& rName, const char* const* ppStr )
 {
@@ -733,7 +733,7 @@ static bool ImplKillTrailingWithExceptions( OUString& rName, const char* const* 
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplFindAndErase( OUString& rName, const char* pStr )
 {

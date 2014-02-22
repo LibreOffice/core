@@ -41,7 +41,7 @@
 
 #include "globstr.hrc"
 #include "sc.hrc"
-//------------------------------------------------------------------------
+
 
 TYPEINIT1(ScStyleSheet, SfxStyleSheet);
 
@@ -60,7 +60,7 @@ ScStyleSheet::ScStyleSheet( const OUString&     rName,
 {
 }
 
-//------------------------------------------------------------------------
+
 
 ScStyleSheet::ScStyleSheet( const ScStyleSheet& rStyle )
     : SfxStyleSheet ( rStyle )
@@ -68,20 +68,20 @@ ScStyleSheet::ScStyleSheet( const ScStyleSheet& rStyle )
 {
 }
 
-//------------------------------------------------------------------------
+
 
 ScStyleSheet::~ScStyleSheet()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScStyleSheet::HasFollowSupport() const
 {
     return false;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScStyleSheet::HasParentSupport () const
 {
@@ -100,7 +100,7 @@ bool ScStyleSheet::HasParentSupport () const
     return bHasParentSupport;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScStyleSheet::SetParent( const OUString& rParentName )
 {
@@ -135,7 +135,7 @@ bool ScStyleSheet::SetParent( const OUString& rParentName )
     return bResult;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemSet& ScStyleSheet::GetItemSet()
 {
@@ -252,7 +252,7 @@ SfxItemSet& ScStyleSheet::GetItemSet()
     return *pSet;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScStyleSheet::IsUsed() const
 {
@@ -271,7 +271,7 @@ bool ScStyleSheet::IsUsed() const
         return true;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
@@ -280,7 +280,7 @@ void ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
             GetItemSet().SetParent( NULL );
 }
 
-//------------------------------------------------------------------------
+
 
 //  schmutzige Tricks, um die Standard-Vorlage immer als "Standard" zu speichern,
 //  obwohl der fuer den Benutzer sichtbare Name uebersetzt ist:

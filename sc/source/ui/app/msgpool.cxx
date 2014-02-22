@@ -24,7 +24,7 @@
 #include "docpool.hxx"
 #include "msgpool.hxx"
 
-//------------------------------------------------------------------------
+
 
 static SfxItemInfo const aMsgItemInfos[] =
 {
@@ -40,7 +40,7 @@ static SfxItemInfo const aMsgItemInfos[] =
     { SID_PRINTER_NOTFOUND_WARN, SFX_ITEM_POOLABLE }    // SCITEM_PRINTWARN
 };
 
-//------------------------------------------------------------------------
+
 
 ScMessagePool::ScMessagePool()
     :   SfxItemPool         ( OUString("ScMessagePool"),

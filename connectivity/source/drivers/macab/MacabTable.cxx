@@ -33,14 +33,14 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-// -------------------------------------------------------------------------
+
 MacabTable::MacabTable( sdbcx::OCollection* _pTables, MacabConnection* _pConnection)
     : MacabTable_TYPEDEF(_pTables, sal_True),
     m_pConnection(_pConnection)
 {
     construct();
 }
-// -------------------------------------------------------------------------
+
 MacabTable::MacabTable( sdbcx::OCollection* _pTables,
                 MacabConnection* _pConnection,
                 const OUString& _Name,
@@ -58,7 +58,7 @@ MacabTable::MacabTable( sdbcx::OCollection* _pTables,
 {
     construct();
 }
-// -------------------------------------------------------------------------
+
 void MacabTable::refreshColumns()
 {
     TStringVector aVector;

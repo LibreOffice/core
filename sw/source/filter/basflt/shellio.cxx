@@ -672,7 +672,7 @@ size_t Reader::GetSectionList( SfxMedium&, std::vector<OUString*>& ) const
     return 0;
 }
 
-// ------------------------------------------------
+
 sal_Bool SwReader::HasGlossaries( const Reader& rOptions )
 {
     // Variable uebertragen
@@ -714,7 +714,7 @@ sal_Bool Reader::ReadGlossaries( SwTextBlocks&, sal_Bool ) const
     return sal_False;
 }
 
-// ------------------------------------------------
+
 
 int StgReader::GetReaderType()
 {
@@ -946,7 +946,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
 
 
 
-// ----------------------------------------------------------------------
+
 
 
 sal_Bool SetHTMLTemplate( SwDoc & rDoc )

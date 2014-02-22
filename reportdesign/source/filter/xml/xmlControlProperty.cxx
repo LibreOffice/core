@@ -110,12 +110,12 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
     }
 
 }
-// -----------------------------------------------------------------------------
+
 
 OXMLControlProperty::~OXMLControlProperty()
 {
 }
-// -----------------------------------------------------------------------------
+
 SvXMLImportContext* OXMLControlProperty::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -144,7 +144,7 @@ SvXMLImportContext* OXMLControlProperty::CreateChildContext(
 
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 void OXMLControlProperty::EndElement()
 {
     if ( !m_aSetting.Name.isEmpty() && m_xControl.is() )
@@ -161,13 +161,13 @@ void OXMLControlProperty::EndElement()
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void OXMLControlProperty::Characters( const OUString& rChars )
 {
     if ( m_pContainer )
         m_pContainer->addValue(rChars);
 }
-// -----------------------------------------------------------------------------
+
 void OXMLControlProperty::addValue(const OUString& _sValue)
 {
     Any aValue;
@@ -183,12 +183,12 @@ void OXMLControlProperty::addValue(const OUString& _sValue)
         m_aSequence[nPos] = aValue;
     }
 }
-// -----------------------------------------------------------------------------
+
 ORptFilter& OXMLControlProperty::GetOwnImport()
 {
     return static_cast<ORptFilter&>(GetImport());
 }
-// -----------------------------------------------------------------------------
+
 Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpectedType, const OUString& _rReadCharacters)
 {
     Any aReturn;
@@ -321,7 +321,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
 
     return aReturn;
 }
-//---------------------------------------------------------------------
+
 ::com::sun::star::util::Time OXMLControlProperty::implGetTime(double _nValue)
 {
     ::com::sun::star::util::Time aTime;
@@ -338,7 +338,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
     return aTime;
 }
 
-//---------------------------------------------------------------------
+
 ::com::sun::star::util::Date OXMLControlProperty::implGetDate(double _nValue)
 {
     Date aToolsDate((sal_uInt32)_nValue);
@@ -346,8 +346,8 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
     ::utl::typeConvert(aToolsDate, aDate);
     return aDate;
 }
-//----------------------------------------------------------------------------
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

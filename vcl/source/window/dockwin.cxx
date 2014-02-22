@@ -41,7 +41,7 @@
 
 // =======================================================================
 
-// -----------------------------------------------------------------------
+
 
 class DockingWindow::ImplData
 {
@@ -63,7 +63,7 @@ DockingWindow::ImplData::~ImplData()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 class ImplDockFloatWin : public FloatingWindow
 {
@@ -121,7 +121,7 @@ ImplDockFloatWin::ImplDockFloatWin( Window* pParent, WinBits nWinBits,
     maDockTimer.SetTimeout( 50 );
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplDockFloatWin::~ImplDockFloatWin()
 {
@@ -129,7 +129,7 @@ ImplDockFloatWin::~ImplDockFloatWin()
         Application::RemoveUserEvent( mnLastUserEvent );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ImplDockFloatWin, DockTimerHdl)
 {
@@ -196,7 +196,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin, DockingHdl)
     mbInMove = false;
     return 0;
 }
-// -----------------------------------------------------------------------
+
 
 void ImplDockFloatWin::Move()
 {
@@ -220,7 +220,7 @@ void ImplDockFloatWin::Move()
         mnLastUserEvent = Application::PostUserEvent( LINK( this, ImplDockFloatWin, DockingHdl ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockFloatWin::Resize()
 {
@@ -229,7 +229,7 @@ void ImplDockFloatWin::Resize()
     mpDockWin->ImplPosSizeWindow( 0, 0, aSize.Width(), aSize.Height(), WINDOW_POSSIZE_POSSIZE );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockFloatWin::TitleButtonClick( sal_uInt16 nButton )
 {
@@ -237,7 +237,7 @@ void ImplDockFloatWin::TitleButtonClick( sal_uInt16 nButton )
     mpDockWin->TitleButtonClick( nButton );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockFloatWin::Pin()
 {
@@ -245,7 +245,7 @@ void ImplDockFloatWin::Pin()
     mpDockWin->Pin();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockFloatWin::Roll()
 {
@@ -253,7 +253,7 @@ void ImplDockFloatWin::Roll()
     mpDockWin->Roll();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockFloatWin::PopupModeEnd()
 {
@@ -261,7 +261,7 @@ void ImplDockFloatWin::PopupModeEnd()
     mpDockWin->PopupModeEnd();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockFloatWin::Resizing( Size& rSize )
 {
@@ -269,7 +269,7 @@ void ImplDockFloatWin::Resizing( Size& rSize )
     mpDockWin->Resizing( rSize );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplDockFloatWin::Close()
 {
@@ -349,7 +349,7 @@ void DockingWindow::ImplInitDockingWindowData()
     mbHideBtn               = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingWindow::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -368,7 +368,7 @@ void DockingWindow::ImplInit( Window* pParent, WinBits nStyle )
     ImplInitSettings();
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingWindow::ImplInitSettings()
 {
@@ -389,7 +389,7 @@ void DockingWindow::ImplInitSettings()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingWindow::ImplLoadRes( const ResId& rResId )
 {
@@ -429,7 +429,7 @@ void DockingWindow::ImplLoadRes( const ResId& rResId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 DockingWindow::DockingWindow( WindowType nType ) :
     Window( nType )
@@ -437,7 +437,7 @@ DockingWindow::DockingWindow( WindowType nType ) :
     ImplInitDockingWindowData();
 }
 
-// -----------------------------------------------------------------------
+
 
 DockingWindow::DockingWindow( Window* pParent, WinBits nStyle ) :
     Window( WINDOW_DOCKINGWINDOW )
@@ -446,7 +446,7 @@ DockingWindow::DockingWindow( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-// -----------------------------------------------------------------------
+
 
 DockingWindow::DockingWindow( Window* pParent, const ResId& rResId ) :
     Window( WINDOW_DOCKINGWINDOW )
@@ -461,7 +461,7 @@ DockingWindow::DockingWindow( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 DockingWindow::~DockingWindow()
 {
@@ -473,7 +473,7 @@ DockingWindow::~DockingWindow()
     delete mpImplData;
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingWindow::Tracking( const TrackingEvent& rTEvt )
 {
@@ -595,7 +595,7 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool DockingWindow::Notify( NotifyEvent& rNEvt )
 {
@@ -649,21 +649,21 @@ bool DockingWindow::Notify( NotifyEvent& rNEvt )
     return Window::Notify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingWindow::StartDocking()
 {
     mbDocking = true;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool DockingWindow::Docking( const Point&, Rectangle& )
 {
     return IsFloatingMode();
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingWindow::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode )
 {
@@ -691,14 +691,14 @@ void DockingWindow::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode )
     mbDocking = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool DockingWindow::PrepareToggleFloatingMode()
 {
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool DockingWindow::Close()
 {
@@ -716,43 +716,43 @@ bool DockingWindow::Close()
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingWindow::ToggleFloatingMode()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingWindow::TitleButtonClick( sal_uInt16 )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingWindow::Pin()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingWindow::Roll()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingWindow::PopupModeEnd()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingWindow::Resizing( Size& )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingWindow::StateChanged( StateChangedType nType )
 {
@@ -774,7 +774,7 @@ void DockingWindow::StateChanged( StateChangedType nType )
     Window::StateChanged( nType );
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -788,7 +788,7 @@ void DockingWindow::DataChanged( const DataChangedEvent& rDCEvt )
         Window::DataChanged( rDCEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingWindow::SetFloatingMode( bool bFloatMode )
 {
@@ -896,7 +896,7 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingWindow::SetFloatStyle( WinBits nStyle )
 {
@@ -910,7 +910,7 @@ void DockingWindow::SetFloatStyle( WinBits nStyle )
     mnFloatBits = nStyle;
 }
 
-// -----------------------------------------------------------------------
+
 
 WinBits DockingWindow::GetFloatStyle() const
 {
@@ -923,7 +923,7 @@ WinBits DockingWindow::GetFloatStyle() const
     return mnFloatBits;
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingWindow::setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
@@ -945,7 +945,7 @@ void DockingWindow::setPosSizePixel( long nX, long nY,
         Window::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 }
 
-// -----------------------------------------------------------------------
+
 
 Point DockingWindow::GetPosPixel() const
 {
@@ -964,7 +964,7 @@ Point DockingWindow::GetPosPixel() const
         return Window::GetPosPixel();
 }
 
-// -----------------------------------------------------------------------
+
 
 Size DockingWindow::GetSizePixel() const
 {
@@ -983,7 +983,7 @@ Size DockingWindow::GetSizePixel() const
         return Window::GetSizePixel();
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingWindow::SetOutputSizePixel( const Size& rNewSize )
 {
@@ -1003,7 +1003,7 @@ void DockingWindow::SetOutputSizePixel( const Size& rNewSize )
         Window::SetOutputSizePixel( rNewSize );
 }
 
-// -----------------------------------------------------------------------
+
 
 Size DockingWindow::GetOutputSizePixel() const
 {

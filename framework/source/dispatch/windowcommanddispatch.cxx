@@ -38,7 +38,7 @@
 
 namespace framework{
 
-//-----------------------------------------------
+
 WindowCommandDispatch::WindowCommandDispatch(const css::uno::Reference< css::uno::XComponentContext >& xContext ,
                          const css::uno::Reference< css::frame::XFrame >&              xFrame)
     : ThreadHelpBase(                            )
@@ -49,14 +49,14 @@ WindowCommandDispatch::WindowCommandDispatch(const css::uno::Reference< css::uno
     impl_startListening();
 }
 
-//-----------------------------------------------
+
 WindowCommandDispatch::~WindowCommandDispatch()
 {
     impl_stopListening();
     m_xContext.clear();
 }
 
-//-----------------------------------------------
+
 void WindowCommandDispatch::impl_startListening()
 {
     ReadGuard aReadLock(m_aLock);
@@ -100,7 +100,7 @@ void WindowCommandDispatch::impl_stopListening()
 }
 
 
-//-----------------------------------------------
+
 IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, void*, pParam)
 {
     if ( ! pParam)
@@ -145,7 +145,7 @@ IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, void*, pParam)
     return 0L;
 }
 
-//-----------------------------------------------
+
 void WindowCommandDispatch::impl_dispatchCommand(const OUString& sCommand)
 {
     // ignore all errors here. It's clicking a menu entry only ...

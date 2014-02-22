@@ -171,7 +171,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(cow_wrapper_test);
 
 CPPUNIT_PLUGIN_IMPLEMENT();

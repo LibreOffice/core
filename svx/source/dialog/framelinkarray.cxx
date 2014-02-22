@@ -85,7 +85,7 @@ void Cell::MirrorSelfX( bool bMirrorStyles, bool bSwapDiag )
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 
 void lclRecalcCoordVec( LongVec& rCoords, const LongVec& rSizes )
@@ -112,7 +112,7 @@ void lclSetMergedRange( CellVec& rCells, size_t nWidth, size_t nFirstCol, size_t
     rCells[ nFirstRow * nWidth + nFirstCol ].mbMergeOrig = true;
 }
 
-// ----------------------------------------------------------------------------
+
 
 static const Style OBJ_STYLE_NONE;
 static const Cell OBJ_CELL_NONE;
@@ -356,7 +356,7 @@ private:
     size_t              mnRow;
 };
 
-// ----------------------------------------------------------------------------
+
 
 MergedCellIterator::MergedCellIterator( const Array& rArray, size_t nCol, size_t nRow )
 {
@@ -386,13 +386,13 @@ MergedCellIterator& MergedCellIterator::operator++()
 #define DBG_FRAME_CHECK_COL_1( col, funcname )          DBG_FRAME_CHECK( (col) <= GetColCount(), funcname, "invalid column index" )
 #define DBG_FRAME_CHECK_ROW_1( row, funcname )          DBG_FRAME_CHECK( (row) <= GetRowCount(), funcname, "invalid row index" )
 
-// ----------------------------------------------------------------------------
+
 
 #define CELL( col, row )        mxImpl->GetCell( col, row )
 #define CELLACC( col, row )     mxImpl->GetCellAcc( col, row )
 #define ORIGCELL( col, row )    mxImpl->GetMergedOriginCell( col, row )
 
-// ----------------------------------------------------------------------------
+
 
 Array::Array()
 {
@@ -1336,13 +1336,13 @@ void Array::DrawArray( OutputDevice& rDev, const Color* pForceColor ) const
         DrawRange( rDev, 0, 0, mxImpl->mnWidth - 1, mxImpl->mnHeight - 1, pForceColor );
 }
 
-// ----------------------------------------------------------------------------
+
 
 #undef ORIGCELL
 #undef CELLACC
 #undef CELL
 
-// ----------------------------------------------------------------------------
+
 
 #undef DBG_FRAME_CHECK_ROW_1
 #undef DBG_FRAME_CHECK_COL_1

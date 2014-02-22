@@ -20,7 +20,7 @@
 
 #include "decode.hxx"
 
-// ------------------------------------------------------------------------
+
 
 struct GIFLZWTableEntry
 {
@@ -29,7 +29,7 @@ struct GIFLZWTableEntry
     sal_uInt8               nData;
 };
 
-// ------------------------------------------------------------------------
+
 
 GIFLZWDecompressor::GIFLZWDecompressor( sal_uInt8 cDataSize ) :
             nInputBitsBuf       ( 0 ),
@@ -57,7 +57,7 @@ GIFLZWDecompressor::GIFLZWDecompressor( sal_uInt8 cDataSize ) :
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 GIFLZWDecompressor::~GIFLZWDecompressor()
 {
@@ -65,7 +65,7 @@ GIFLZWDecompressor::~GIFLZWDecompressor()
     delete[] pTable;
 }
 
-// ------------------------------------------------------------------------
+
 
 HPBYTE GIFLZWDecompressor::DecompressBlock( HPBYTE pSrc, sal_uInt8 cBufSize,
                                             sal_uLong& rCount, bool& rEOI )
@@ -111,7 +111,7 @@ HPBYTE GIFLZWDecompressor::DecompressBlock( HPBYTE pSrc, sal_uInt8 cBufSize,
     return pTarget;
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFLZWDecompressor::AddToTable( sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData )
 {
@@ -130,7 +130,7 @@ void GIFLZWDecompressor::AddToTable( sal_uInt16 nPrevCode, sal_uInt16 nCodeFirst
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 bool GIFLZWDecompressor::ProcessOneCode()
 {

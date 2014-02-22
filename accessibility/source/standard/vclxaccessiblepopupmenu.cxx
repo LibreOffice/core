@@ -28,38 +28,38 @@ using namespace ::com::sun::star::uno;
 using namespace ::comphelper;
 
 
-// -----------------------------------------------------------------------------
+
 // class VCLXAccessiblePopupMenu
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessiblePopupMenu::VCLXAccessiblePopupMenu( Menu* pMenu )
     :OAccessibleMenuComponent( pMenu )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessiblePopupMenu::~VCLXAccessiblePopupMenu()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessiblePopupMenu::IsFocused()
 {
     return !IsChildHighlighted();
 }
 
-// -----------------------------------------------------------------------------
+
 // XServiceInfo
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessiblePopupMenu::getImplementationName() throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessiblePopupMenu" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > VCLXAccessiblePopupMenu::getSupportedServiceNames() throw (RuntimeException)
 {
@@ -68,9 +68,9 @@ Sequence< OUString > VCLXAccessiblePopupMenu::getSupportedServiceNames() throw (
     return aNames;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleContext
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessiblePopupMenu::getAccessibleIndexInParent(  ) throw (RuntimeException)
 {
@@ -79,7 +79,7 @@ sal_Int32 VCLXAccessiblePopupMenu::getAccessibleIndexInParent(  ) throw (Runtime
     return 0;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int16 VCLXAccessiblePopupMenu::getAccessibleRole(  ) throw (RuntimeException)
 {
@@ -88,9 +88,9 @@ sal_Int16 VCLXAccessiblePopupMenu::getAccessibleRole(  ) throw (RuntimeException
     return AccessibleRole::POPUP_MENU;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleExtendedComponent
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessiblePopupMenu::getBackground(  ) throw (RuntimeException)
 {
@@ -99,6 +99,6 @@ sal_Int32 VCLXAccessiblePopupMenu::getBackground(  ) throw (RuntimeException)
     return Application::GetSettings().GetStyleSettings().GetMenuColor().GetColor();
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

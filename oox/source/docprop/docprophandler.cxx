@@ -36,7 +36,7 @@ using namespace ::com::sun::star;
 namespace oox {
 namespace docprop {
 
-// ------------------------------------------------
+
 OOXMLDocPropHandler::OOXMLDocPropHandler( const uno::Reference< uno::XComponentContext >& xContext,
                                           const uno::Reference< document::XDocumentProperties > xDocProp )
     : m_xContext( xContext )
@@ -50,12 +50,12 @@ OOXMLDocPropHandler::OOXMLDocPropHandler( const uno::Reference< uno::XComponentC
         throw uno::RuntimeException();
 }
 
-// ------------------------------------------------
+
 OOXMLDocPropHandler::~OOXMLDocPropHandler()
 {
 }
 
-// ------------------------------------------------
+
 void OOXMLDocPropHandler::InitNew()
 {
     m_nState = 0;
@@ -65,7 +65,7 @@ void OOXMLDocPropHandler::InitNew()
     m_nInBlock = 0;
 }
 
-// ------------------------------------------------
+
 void OOXMLDocPropHandler::AddCustomProperty( const uno::Any& aAny )
 {
     if ( !m_aCustomPropertyName.isEmpty() )
@@ -91,7 +91,7 @@ void OOXMLDocPropHandler::AddCustomProperty( const uno::Any& aAny )
     }
 }
 
-// ------------------------------------------------
+
 util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChars )
 {
     oslDateTime aOslDTime = { 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -189,7 +189,7 @@ util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChar
             aOslDTime.Day, aOslDTime.Month, aOslDTime.Year, false);
 }
 
-// ------------------------------------------------
+
 uno::Sequence< OUString > OOXMLDocPropHandler::GetKeywordsSet( const OUString& aChars )
 {
     if ( !aChars.isEmpty() )
@@ -212,7 +212,7 @@ uno::Sequence< OUString > OOXMLDocPropHandler::GetKeywordsSet( const OUString& a
     return uno::Sequence< OUString >();
 }
 
-// ------------------------------------------------
+
 void OOXMLDocPropHandler::UpdateDocStatistic( const OUString& aChars )
 {
     uno::Sequence< beans::NamedValue > aSet = m_xDocProp->getDocumentStatistics();
@@ -264,22 +264,22 @@ void OOXMLDocPropHandler::UpdateDocStatistic( const OUString& aChars )
     }
 }
 
-// ------------------------------------------------
+
 // com.sun.star.xml.sax.XFastDocumentHandler
-// ------------------------------------------------
+
 void SAL_CALL OOXMLDocPropHandler::startDocument()
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
-// ------------------------------------------------
+
 void SAL_CALL OOXMLDocPropHandler::endDocument()
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
     InitNew();
 }
 
-// ------------------------------------------------
+
 void SAL_CALL OOXMLDocPropHandler::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& )
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
@@ -287,7 +287,7 @@ void SAL_CALL OOXMLDocPropHandler::setDocumentLocator( const uno::Reference< xml
 
 
 // com.sun.star.xml.sax.XFastContextHandler
-// ------------------------------------------------
+
 void SAL_CALL OOXMLDocPropHandler::startFastElement( ::sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttribs )
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
@@ -329,7 +329,7 @@ void SAL_CALL OOXMLDocPropHandler::startFastElement( ::sal_Int32 nElement, const
     m_nInBlock++;
 }
 
-// ------------------------------------------------
+
 void SAL_CALL OOXMLDocPropHandler::startUnknownElement( const OUString& aNamespace, const OUString& aName, const uno::Reference< xml::sax::XFastAttributeList >& )
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
@@ -341,7 +341,7 @@ void SAL_CALL OOXMLDocPropHandler::startUnknownElement( const OUString& aNamespa
     m_nInBlock++;
 }
 
-// ------------------------------------------------
+
 void SAL_CALL OOXMLDocPropHandler::endFastElement( ::sal_Int32 )
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
@@ -361,7 +361,7 @@ void SAL_CALL OOXMLDocPropHandler::endFastElement( ::sal_Int32 )
     }
 }
 
-// ------------------------------------------------
+
 void SAL_CALL OOXMLDocPropHandler::endUnknownElement( const OUString&, const OUString& )
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
@@ -369,7 +369,7 @@ void SAL_CALL OOXMLDocPropHandler::endUnknownElement( const OUString&, const OUS
         m_nInBlock--;
 }
 
-// ------------------------------------------------
+
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL OOXMLDocPropHandler::createFastChildContext( ::sal_Int32, const uno::Reference< xml::sax::XFastAttributeList >& )
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
@@ -377,14 +377,14 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL OOXMLDocPropHandler::cr
     return uno::Reference< xml::sax::XFastContextHandler >( static_cast< xml::sax::XFastContextHandler* >( this ) );
 }
 
-// ------------------------------------------------
+
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL OOXMLDocPropHandler::createUnknownChildContext( const OUString&, const OUString&, const uno::Reference< xml::sax::XFastAttributeList >& )
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
     return uno::Reference< xml::sax::XFastContextHandler >( static_cast< xml::sax::XFastContextHandler* >( this ) );
 }
 
-// ------------------------------------------------
+
 void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
@@ -668,13 +668,13 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
     }
 }
 
-// ------------------------------------------------
+
 void SAL_CALL OOXMLDocPropHandler::ignorableWhitespace( const OUString& )
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
-// ------------------------------------------------
+
 void SAL_CALL OOXMLDocPropHandler::processingInstruction( const OUString&, const OUString& )
     throw (xml::sax::SAXException, uno::RuntimeException)
 {

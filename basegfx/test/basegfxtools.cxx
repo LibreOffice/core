@@ -93,7 +93,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfxtools::KeyStopLerpTest);
 } // namespace basegfxtools
 

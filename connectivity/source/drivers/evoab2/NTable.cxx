@@ -32,7 +32,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace connectivity::evoab;
-// -------------------------------------------------------------------------
+
 OEvoabTable::OEvoabTable( sdbcx::OCollection* _pTables,
                 OEvoabConnection* _pConnection,
                 const OUString& _Name,
@@ -50,7 +50,7 @@ OEvoabTable::OEvoabTable( sdbcx::OCollection* _pTables,
 {
     construct();
 }
-// -------------------------------------------------------------------------
+
 void OEvoabTable::refreshColumns()
 {
     TStringVector aVector;

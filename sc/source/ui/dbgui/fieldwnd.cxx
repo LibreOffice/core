@@ -1230,7 +1230,7 @@ ScDPRowFieldControl::~ScDPRowFieldControl()
 {
 }
 
-//-------------------------------------------------------------------
+
 
 Point ScDPRowFieldControl::GetFieldPosition(size_t nIndex)
 {
@@ -1358,7 +1358,7 @@ size_t ScDPRowFieldControl::GetDisplayPosition(size_t nIndex) const
     return INVALID_INDEX;
 }
 
-//-------------------------------------------------------------------
+
 
 OUString ScDPRowFieldControl::GetDescription() const
 {

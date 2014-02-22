@@ -29,7 +29,7 @@ namespace stoc_corefl
 ClassNameList g_aClassNames;
 #endif
 
-//--------------------------------------------------------------------------------------------------
+
 Mutex & getMutexAccess()
 {
     static Mutex * s_pMutex = 0;
@@ -45,7 +45,7 @@ Mutex & getMutexAccess()
     return *s_pMutex;
 }
 
-//__________________________________________________________________________________________________
+
 IdlClassImpl::IdlClassImpl( IdlReflectionServiceImpl * pReflection,
                             const OUString & rName, typelib_TypeClass eTypeClass,
                             typelib_TypeDescription * pTypeDescr )
@@ -69,7 +69,7 @@ IdlClassImpl::IdlClassImpl( IdlReflectionServiceImpl * pReflection,
     g_aClassNames.push_front( _aName );
 #endif
 }
-//__________________________________________________________________________________________________
+
 IdlClassImpl::~IdlClassImpl()
 {
     if (_pTypeDescr)
@@ -85,19 +85,19 @@ IdlClassImpl::~IdlClassImpl()
 }
 
 // XIdlClassImpl default implementation
-//__________________________________________________________________________________________________
+
 TypeClass IdlClassImpl::getTypeClass()
     throw(::com::sun::star::uno::RuntimeException)
 {
     return _eTypeClass;
 }
-//__________________________________________________________________________________________________
+
 OUString IdlClassImpl::getName()
     throw(::com::sun::star::uno::RuntimeException)
 {
     return _aName;
 }
-//__________________________________________________________________________________________________
+
 sal_Bool IdlClassImpl::equals( const Reference< XIdlClass >& xType )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -120,7 +120,7 @@ static const sal_Bool s_aAssignableFromTab[11][11] =
 /* TypeClass_FLOAT */           { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
 /* TypeClass_DOUBLE */          { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
 };
-//__________________________________________________________________________________________________
+
 sal_Bool IdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -140,7 +140,7 @@ sal_Bool IdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )
     }
     return sal_False;
 }
-//__________________________________________________________________________________________________
+
 void IdlClassImpl::createObject( Any & rObj )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -150,21 +150,21 @@ void IdlClassImpl::createObject( Any & rObj )
 }
 
 // what TODO ????
-//__________________________________________________________________________________________________
+
 Sequence< Reference< XIdlClass > > IdlClassImpl::getClasses()
     throw(::com::sun::star::uno::RuntimeException)
 {
     OSL_FAIL( "### unexpected use!" );
     return Sequence< Reference< XIdlClass > >();
 }
-//__________________________________________________________________________________________________
+
 Reference< XIdlClass > IdlClassImpl::getClass( const OUString & )
     throw(::com::sun::star::uno::RuntimeException)
 {
     OSL_FAIL( "### unexpected use!" );
     return Reference< XIdlClass >();
 }
-//__________________________________________________________________________________________________
+
 Sequence< Reference< XIdlClass > > IdlClassImpl::getInterfaces()
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -173,51 +173,51 @@ Sequence< Reference< XIdlClass > > IdlClassImpl::getInterfaces()
 }
 
 // structs, interfaces
-//__________________________________________________________________________________________________
+
 Sequence< Reference< XIdlClass > > IdlClassImpl::getSuperclasses() throw(::com::sun::star::uno::RuntimeException)
 {
     return Sequence< Reference< XIdlClass > >();
 }
 // structs
-//__________________________________________________________________________________________________
+
 Reference< XIdlField > IdlClassImpl::getField( const OUString & )
     throw(::com::sun::star::uno::RuntimeException)
 {
     return Reference< XIdlField >();
 }
-//__________________________________________________________________________________________________
+
 Sequence< Reference< XIdlField > > IdlClassImpl::getFields()
     throw(::com::sun::star::uno::RuntimeException)
 {
     return Sequence< Reference< XIdlField > >();
 }
 // interfaces
-//__________________________________________________________________________________________________
+
 Uik IdlClassImpl::getUik()
     throw(::com::sun::star::uno::RuntimeException)
 {
     return Uik();
 }
-//__________________________________________________________________________________________________
+
 Reference< XIdlMethod > IdlClassImpl::getMethod( const OUString & )
     throw(::com::sun::star::uno::RuntimeException)
 {
     return Reference< XIdlMethod >();
 }
-//__________________________________________________________________________________________________
+
 Sequence< Reference< XIdlMethod > > IdlClassImpl::getMethods()
     throw(::com::sun::star::uno::RuntimeException)
 {
     return Sequence< Reference< XIdlMethod > >();
 }
 // array
-//__________________________________________________________________________________________________
+
 Reference< XIdlClass > IdlClassImpl::getComponentType()
     throw(::com::sun::star::uno::RuntimeException)
 {
     return Reference< XIdlClass >();
 }
-//__________________________________________________________________________________________________
+
 Reference< XIdlArray > IdlClassImpl::getArray()
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -230,7 +230,7 @@ Reference< XIdlArray > IdlClassImpl::getArray()
 //##################################################################################################
 
 
-//__________________________________________________________________________________________________
+
 IdlMemberImpl::IdlMemberImpl( IdlReflectionServiceImpl * pReflection, const OUString & rName,
                               typelib_TypeDescription * pTypeDescr,
                               typelib_TypeDescription * pDeclTypeDescr )
@@ -247,7 +247,7 @@ IdlMemberImpl::IdlMemberImpl( IdlReflectionServiceImpl * pReflection, const OUSt
     if (! _pDeclTypeDescr->bComplete)
         typelib_typedescription_complete( &_pDeclTypeDescr );
 }
-//__________________________________________________________________________________________________
+
 IdlMemberImpl::~IdlMemberImpl()
 {
     typelib_typedescription_release( _pDeclTypeDescr );
@@ -256,7 +256,7 @@ IdlMemberImpl::~IdlMemberImpl()
 }
 
 // XIdlMember
-//__________________________________________________________________________________________________
+
 Reference< XIdlClass > IdlMemberImpl::getDeclaringClass()
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -269,7 +269,7 @@ Reference< XIdlClass > IdlMemberImpl::getDeclaringClass()
     }
     return _xDeclClass;
 }
-//__________________________________________________________________________________________________
+
 OUString IdlMemberImpl::getName()
     throw(::com::sun::star::uno::RuntimeException)
 {

@@ -94,7 +94,7 @@ inline OUString GetUsageText( const sal_uInt16 eU )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxPageItem::GetPresentation
 (
@@ -155,7 +155,7 @@ SfxItemPresentation SvxPageItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//------------------------------------------------------------------------
+
 bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
@@ -192,7 +192,7 @@ bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
     return true;
 }
-//------------------------------------------------------------------------
+
 bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     switch( nMemberId )
@@ -234,7 +234,7 @@ bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxPoolItem* SvxPageItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
@@ -257,7 +257,7 @@ SfxPoolItem* SvxPageItem::Create( SvStream& rStream, sal_uInt16 ) const
     return pPage;
 }
 
-//------------------------------------------------------------------------
+
 
 SvStream& SvxPageItem::Store( SvStream &rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
@@ -295,7 +295,7 @@ SfxPoolItem* SvxSetItem::Clone( SfxItemPool * ) const
     return new SvxSetItem(*this);
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxSetItem::GetPresentation
 (

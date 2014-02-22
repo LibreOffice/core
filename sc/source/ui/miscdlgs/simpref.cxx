@@ -61,26 +61,26 @@ ScSimpleRefDlg::ScSimpleRefDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pPa
     SetDispatcherLock( true ); // Modal-Modus einschalten
 }
 
-//----------------------------------------------------------------------------
+
 ScSimpleRefDlg::~ScSimpleRefDlg()
 {
     SetDispatcherLock( false ); // Modal-Modus einschalten
 }
 
-//----------------------------------------------------------------------------
+
 void ScSimpleRefDlg::FillInfo(SfxChildWinInfo& rWinInfo) const
 {
     ScAnyRefDlg::FillInfo(rWinInfo);
     rWinInfo.bVisible=bAutoReOpen;
 }
 
-//----------------------------------------------------------------------------
+
 void ScSimpleRefDlg::SetRefString(const OUString &rStr)
 {
     m_pEdAssign->SetText(rStr);
 }
 
-//----------------------------------------------------------------------------
+
 void ScSimpleRefDlg::Init()
 {
     m_pBtnOk->SetClickHdl      ( LINK( this, ScSimpleRefDlg, OkBtnHdl ) );
@@ -88,7 +88,7 @@ void ScSimpleRefDlg::Init()
     bCloseFlag=false;
 }
 
-//----------------------------------------------------------------------------
+
 // Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
 //  neue Selektion im Referenz-Fenster angezeigt wird.
 void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
@@ -126,14 +126,14 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 }
 
 
-//----------------------------------------------------------------------------
+
 bool ScSimpleRefDlg::Close()
 {
     CancelBtnHdl(m_pBtnCancel);
     return true;
 }
 
-//------------------------------------------------------------------------
+
 void ScSimpleRefDlg::SetActive()
 {
     m_pEdAssign->GrabFocus();
@@ -144,7 +144,7 @@ void ScSimpleRefDlg::SetActive()
 
     RefInputDone();
 }
-//------------------------------------------------------------------------
+
 bool ScSimpleRefDlg::IsRefInputMode() const
 {
     return true;
@@ -193,7 +193,7 @@ void ScSimpleRefDlg::RefInputDone( bool bForced)
     if ( (bForced || bCloseOnButtonUp) && bCloseFlag )
         OkBtnHdl(m_pBtnOk);
 }
-//------------------------------------------------------------------------
+
 // Handler:
 // ========
 IMPL_LINK_NOARG(ScSimpleRefDlg, OkBtnHdl)
@@ -207,7 +207,7 @@ IMPL_LINK_NOARG(ScSimpleRefDlg, OkBtnHdl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(ScSimpleRefDlg, CancelBtnHdl)
 {
     bAutoReOpen=false;
@@ -221,6 +221,6 @@ IMPL_LINK_NOARG(ScSimpleRefDlg, CancelBtnHdl)
 
 
 
-//------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -72,7 +72,7 @@ SwRewriter SwUndoBookmark::GetRewriter() const
     return aResult;
 }
 
-//----------------------------------------------------------------------
+
 
 
 SwUndoInsBookmark::SwUndoInsBookmark( const ::sw::mark::IMark& rBkmk )

@@ -275,35 +275,35 @@ sal_Int32 ReadThroughComponent(
     return 1;
 }
 
-//---------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > ORptImportHelper::create(uno::Reference< uno::XComponentContext > const & xContext)
 {
     return static_cast< XServiceInfo* >(new ORptFilter(xContext, IMPORT_SETTINGS ));
 }
-//---------------------------------------------------------------------
+
 OUString ORptImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
 {
     return OUString(SERVICE_SETTINGSIMPORTER);
 }
-//---------------------------------------------------------------------
+
 Sequence< OUString > ORptImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
     Sequence< OUString > aSupported(1);
     aSupported[0] = SERVICE_IMPORTFILTER;
     return aSupported;
 }
-//---------------------------------------------------------------------
+
 Reference< XInterface > ORptContentImportHelper::create(const Reference< XComponentContext > & xContext)
 {
     return static_cast< XServiceInfo* >(new ORptFilter(xContext,IMPORT_AUTOSTYLES |   IMPORT_CONTENT | IMPORT_SCRIPTS |
         IMPORT_FONTDECLS ));
 }
-//---------------------------------------------------------------------
+
 OUString ORptContentImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
 {
     return OUString(SERVICE_CONTENTIMPORTER);
 }
-//---------------------------------------------------------------------
+
 Sequence< OUString > ORptContentImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
     Sequence< OUString > aSupported(1);
@@ -311,19 +311,19 @@ Sequence< OUString > ORptContentImportHelper::getSupportedServiceNames_Static(  
     return aSupported;
 }
 
-//---------------------------------------------------------------------
+
 Reference< XInterface > ORptStylesImportHelper::create(Reference< XComponentContext > const & xContext)
 {
     return static_cast< XServiceInfo* >(new ORptFilter(xContext,
         IMPORT_STYLES | IMPORT_MASTERSTYLES | IMPORT_AUTOSTYLES |
         IMPORT_FONTDECLS ));
 }
-//---------------------------------------------------------------------
+
 OUString ORptStylesImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
 {
     return OUString(SERVICE_STYLESIMPORTER);
 }
-//---------------------------------------------------------------------
+
 Sequence< OUString > ORptStylesImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
     Sequence< OUString > aSupported(1);
@@ -331,18 +331,18 @@ Sequence< OUString > ORptStylesImportHelper::getSupportedServiceNames_Static(  )
     return aSupported;
 }
 
-//---------------------------------------------------------------------
+
 Reference< XInterface > ORptMetaImportHelper::create(Reference< XComponentContext > const & xContext)
 {
     return static_cast< XServiceInfo* >(new ORptFilter(xContext,
         IMPORT_META));
 }
-//---------------------------------------------------------------------
+
 OUString ORptMetaImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
 {
     return OUString(SERVICE_METAIMPORTER);
 }
-//---------------------------------------------------------------------
+
 Sequence< OUString > ORptMetaImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
     Sequence< OUString > aSupported(1);
@@ -350,9 +350,9 @@ Sequence< OUString > ORptMetaImportHelper::getSupportedServiceNames_Static(  ) t
     return aSupported;
 }
 
-// -------------
+
 // - ORptFilter -
-// -------------
+
 ORptFilter::ORptFilter( const uno::Reference< XComponentContext >& _rxContext,sal_uInt16 nImportFlags )
     :SvXMLImport(_rxContext, getImplementationName_Static(), nImportFlags)
 {
@@ -373,18 +373,18 @@ ORptFilter::ORptFilter( const uno::Reference< XComponentContext >& _rxContext,sa
     m_xTableStylesPropertySetMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_TABLE_DEFAULTS, false );
 }
 
-// -----------------------------------------------------------------------------
+
 
 ORptFilter::~ORptFilter() throw()
 {
 }
-//------------------------------------------------------------------------------
+
 uno::Reference< XInterface > ORptFilter::create(uno::Reference< XComponentContext > const & xContext)
 {
     return *(new ORptFilter(xContext));
 }
 
-// -----------------------------------------------------------------------------
+
 OUString ORptFilter::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
     return OUString("com.sun.star.comp.report.OReportFilter");
@@ -415,7 +415,7 @@ sal_Bool SAL_CALL ORptFilter::filter( const Sequence< PropertyValue >& rDescript
 
     return bRet;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {
@@ -616,7 +616,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
     return bRet;
 }
-// -----------------------------------------------------------------------------
+
 SvXMLImportContext* ORptFilter::CreateContext( sal_uInt16 nPrefix,
                                       const OUString& rLocalName,
                                       const uno::Reference< xml::sax::XAttributeList >& xAttrList )
@@ -679,7 +679,7 @@ SvXMLImportContext* ORptFilter::CreateContext( sal_uInt16 nPrefix,
 
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 const SvXMLTokenMap& ORptFilter::GetDocElemTokenMap() const
 {
     if ( !m_pDocElemTokenMap.get() )
@@ -700,21 +700,21 @@ const SvXMLTokenMap& ORptFilter::GetDocElemTokenMap() const
     }
     return *m_pDocElemTokenMap;
 }
-// -----------------------------------------------------------------------------
+
 const SvXMLTokenMap& ORptFilter::GetReportElemTokenMap() const
 {
     if ( !m_pReportElemTokenMap.get() )
         m_pReportElemTokenMap.reset(OXMLHelper::GetReportElemTokenMap());
     return *m_pReportElemTokenMap;
 }
-// -----------------------------------------------------------------------------
+
 const SvXMLTokenMap& ORptFilter::GetSubDocumentElemTokenMap() const
 {
     if ( !m_pSubDocumentElemTokenMap.get() )
         m_pSubDocumentElemTokenMap.reset(OXMLHelper::GetSubDocumentElemTokenMap());
     return *m_pSubDocumentElemTokenMap;
 }
-// -----------------------------------------------------------------------------
+
 const SvXMLTokenMap& ORptFilter::GetFunctionElemTokenMap() const
 {
     if ( !m_pFunctionElemTokenMap.get() )
@@ -732,7 +732,7 @@ const SvXMLTokenMap& ORptFilter::GetFunctionElemTokenMap() const
     }
     return *m_pFunctionElemTokenMap;
 }
-// -----------------------------------------------------------------------------
+
 const SvXMLTokenMap& ORptFilter::GetFormatElemTokenMap() const
 {
     if ( !m_pFormatElemTokenMap.get() )
@@ -748,7 +748,7 @@ const SvXMLTokenMap& ORptFilter::GetFormatElemTokenMap() const
     }
     return *m_pFormatElemTokenMap;
 }
-// -----------------------------------------------------------------------------
+
 const SvXMLTokenMap& ORptFilter::GetGroupElemTokenMap() const
 {
     if ( !m_pGroupElemTokenMap.get() )
@@ -774,7 +774,7 @@ const SvXMLTokenMap& ORptFilter::GetGroupElemTokenMap() const
     }
     return *m_pGroupElemTokenMap;
 }
-// -----------------------------------------------------------------------------
+
 const SvXMLTokenMap& ORptFilter::GetReportElementElemTokenMap() const
 {
     if ( !m_pElemTokenMap.get() )
@@ -792,7 +792,7 @@ const SvXMLTokenMap& ORptFilter::GetReportElementElemTokenMap() const
     }
     return *m_pElemTokenMap;
 }
-// -----------------------------------------------------------------------------
+
 const SvXMLTokenMap& ORptFilter::GetControlElemTokenMap() const
 {
     if ( !m_pControlElemTokenMap.get() )
@@ -814,7 +814,7 @@ const SvXMLTokenMap& ORptFilter::GetControlElemTokenMap() const
     }
     return *m_pControlElemTokenMap;
 }
-// -----------------------------------------------------------------------------
+
 const SvXMLTokenMap& ORptFilter::GetControlPropertyElemTokenMap() const
 {
     if ( !m_pControlElemTokenMap.get() )
@@ -836,7 +836,7 @@ const SvXMLTokenMap& ORptFilter::GetControlPropertyElemTokenMap() const
     }
     return *m_pControlElemTokenMap;
 }
-// -----------------------------------------------------------------------------
+
 const SvXMLTokenMap& ORptFilter::GetComponentElemTokenMap() const
 {
     if ( !m_pComponentElemTokenMap.get() )
@@ -852,7 +852,7 @@ const SvXMLTokenMap& ORptFilter::GetComponentElemTokenMap() const
     }
     return *m_pComponentElemTokenMap;
 }
-// -----------------------------------------------------------------------------
+
 const SvXMLTokenMap& ORptFilter::GetColumnTokenMap() const
 {
     if ( !m_pColumnTokenMap.get() )
@@ -876,7 +876,7 @@ const SvXMLTokenMap& ORptFilter::GetColumnTokenMap() const
     }
     return *m_pColumnTokenMap;
 }
-// -----------------------------------------------------------------------------
+
 const SvXMLTokenMap& ORptFilter::GetSectionElemTokenMap() const
 {
     if ( !m_pSectionElemTokenMap.get() )
@@ -899,7 +899,7 @@ const SvXMLTokenMap& ORptFilter::GetSectionElemTokenMap() const
     }
     return *m_pSectionElemTokenMap;
 }
-// -----------------------------------------------------------------------------
+
 const SvXMLTokenMap& ORptFilter::GetCellElemTokenMap() const
 {
     if ( !m_pCellElemTokenMap.get() )
@@ -924,7 +924,7 @@ const SvXMLTokenMap& ORptFilter::GetCellElemTokenMap() const
     }
     return *m_pCellElemTokenMap;
 }
-// -----------------------------------------------------------------------------
+
 SvXMLImportContext* ORptFilter::CreateStylesContext(const OUString& rLocalName,
                                      const uno::Reference< XAttributeList>& xAttrList, sal_Bool bIsAutoStyle )
 {
@@ -939,20 +939,20 @@ SvXMLImportContext* ORptFilter::CreateStylesContext(const OUString& rLocalName,
     }
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 SvXMLImport&         ORptFilter::getGlobalContext()
 {
     return *this;
 }
-// -----------------------------------------------------------------------------
+
 void ORptFilter::enterEventContext()
 {
 }
-// -----------------------------------------------------------------------------
+
 void ORptFilter::leaveEventContext()
 {
 }
-// -----------------------------------------------------------------------------
+
 SvXMLImportContext *ORptFilter::CreateFontDeclsContext(
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
@@ -964,23 +964,23 @@ SvXMLImportContext *ORptFilter::CreateFontDeclsContext(
     SetFontDecls( pFSContext );
     return pFSContext;
 }
-// -----------------------------------------------------------------------------
+
 XMLShapeImportHelper* ORptFilter::CreateShapeImport()
 {
     return new XMLShapeImportHelper( *this,GetModel() );
 }
-// -----------------------------------------------------------------------------
+
 void ORptFilter::FinishStyles()
 {
     if( GetStyles() )
         GetStyles()->FinishStyles( sal_True );
 }
-// -----------------------------------------------------------------------------
+
 OUString ORptFilter::convertFormula(const OUString& _sFormula)
 {
     return _sFormula;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL ORptFilter::startDocument( void )
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
@@ -994,7 +994,7 @@ void SAL_CALL ORptFilter::startDocument( void )
         SvXMLImport::startDocument();
     }
 }
-// -----------------------------------------------------------------------------
+
 void ORptFilter::endDocument( void )
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
@@ -1013,17 +1013,17 @@ void ORptFilter::endDocument( void )
     // delegate to parent: takes care of error handling
     SvXMLImport::endDocument();
 }
-// -----------------------------------------------------------------------------
+
 void ORptFilter::removeFunction(const OUString& _sFunctionName)
 {
     m_aFunctions.erase(_sFunctionName);
 }
-// -----------------------------------------------------------------------------
+
 void ORptFilter::insertFunction(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunction > & _xFunction)
 {
     m_aFunctions.insert(TGroupFunctionMap::value_type(_xFunction->getName(),_xFunction));
 }
-// -----------------------------------------------------------------------------
+
 SvXMLImportContext* ORptFilter::CreateMetaContext(const OUString& rLocalName,const uno::Reference<xml::sax::XAttributeList>&)
 {
     SvXMLImportContext* pContext = NULL;
@@ -1035,7 +1035,7 @@ SvXMLImportContext* ORptFilter::CreateMetaContext(const OUString& rLocalName,con
     }
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ORptFilter::isOldFormat() const
 {
     sal_Bool bOldFormat = sal_True;
@@ -1051,8 +1051,8 @@ sal_Bool ORptFilter::isOldFormat() const
     return bOldFormat;
 }
 
-// -----------------------------------------------------------------------------
+
 }// rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

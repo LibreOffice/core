@@ -72,7 +72,7 @@ namespace bridge_test
 template< class T>
 Sequence<T> cloneSequence(const Sequence<T>& val);
 
-//--------------------------------------------------------------------------------------------------
+
 inline static Sequence< OUString > getSupportedServiceNames()
 {
     OUString aName( SERVICENAME );
@@ -282,7 +282,7 @@ static sal_Bool performAnyTest( const Reference< XBridgeTest > &xLBT, const Test
     return bReturn;
 }
 
-//_______________________________________________________________________________________
+
 static sal_Bool performSequenceOfCallTest( const Reference < XBridgeTest > &xLBT )
 {
     sal_Int32 i,nRounds;
@@ -327,7 +327,7 @@ public:
 };
 
 
-//_______________________________________________________________________________________
+
 static sal_Bool performRecursiveCallTest( const Reference < XBridgeTest > & xLBT )
 {
     xLBT->startRecursiveCall( new ORecursiveCall , 50 );
@@ -344,20 +344,20 @@ public:
     virtual void SAL_CALL release() throw ();
 };
 
-//______________________________________________________________________________
+
 MyClass::MyClass()
 {
 }
-//______________________________________________________________________________
+
 MyClass::~MyClass()
 {
 }
-//______________________________________________________________________________
+
 void MyClass::acquire() throw ()
 {
     OWeakObject::acquire();
 }
-//______________________________________________________________________________
+
 void MyClass::release() throw ()
 {
     OWeakObject::release();
@@ -1234,19 +1234,19 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
 }
 
 // XServiceInfo
-//__________________________________________________________________________________________________
+
 OUString TestBridgeImpl::getImplementationName()
     throw (RuntimeException)
 {
     return OUString( IMPLNAME );
 }
-//__________________________________________________________________________________________________
+
 sal_Bool TestBridgeImpl::supportsService( const OUString & rServiceName )
     throw (RuntimeException)
 {
     return cppu::supportsService(this, rServiceName);
 }
-//__________________________________________________________________________________________________
+
 Sequence< OUString > TestBridgeImpl::getSupportedServiceNames()
     throw (RuntimeException)
 {

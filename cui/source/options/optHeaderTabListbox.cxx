@@ -38,7 +38,7 @@ public:
         const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
 };
 
-// -----------------------------------------------------------------------
+
 
 void OptLBoxString_Impl::Paint(
     const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
@@ -52,14 +52,14 @@ void OptLBoxString_Impl::Paint(
     rDev.DrawText( rPos, GetText() );
     rDev.SetFont( aOldFont );
 }
-// -----------------------------------------------------------------------------
+
 
 OptHeaderTabListBox::OptHeaderTabListBox(SvSimpleTableContainer& rParent, WinBits nWinStyle)
     : SvSimpleTable(rParent, nWinStyle)
 {
 }
 
-// -----------------------------------------------------------------------
+
 void OptHeaderTabListBox::InitEntry( SvTreeListEntry* pEntry, const OUString& rTxt,
                                      const Image& rImg1, const Image& rImg2,
                                      SvLBoxButtonKind eButtonKind )

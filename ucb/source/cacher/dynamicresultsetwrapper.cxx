@@ -33,11 +33,11 @@ using namespace com::sun::star::uno;
 using namespace cppu;
 
 
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 // class DynamicResultSetWrapper
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 
 DynamicResultSetWrapper::DynamicResultSetWrapper(
                     Reference< XDynamicResultSet > xOrigin
@@ -121,9 +121,9 @@ void SAL_CALL DynamicResultSetWrapper
     m_xMyResultTwo = xResultSet;
 }
 
-//--------------------------------------------------------------------------
+
 // XInterface methods.
-//--------------------------------------------------------------------------
+
 //list all interfaces inclusive baseclasses of interfaces
 QUERYINTERFACE_IMPL_START( DynamicResultSetWrapper )
     (static_cast< XComponent* >(this)) //base of XDynamicResultSet
@@ -131,9 +131,9 @@ QUERYINTERFACE_IMPL_START( DynamicResultSetWrapper )
     , (static_cast< XSourceInitialization* >(this))
 QUERYINTERFACE_IMPL_END
 
-//--------------------------------------------------------------------------
+
 // XComponent methods.
-//--------------------------------------------------------------------------
+
 // virtual
 void SAL_CALL DynamicResultSetWrapper
     ::dispose() throw( RuntimeException )
@@ -169,7 +169,7 @@ void SAL_CALL DynamicResultSetWrapper
     m_bInDispose = sal_False;
 }
 
-//--------------------------------------------------------------------------
+
 // virtual
 void SAL_CALL DynamicResultSetWrapper
     ::addEventListener( const Reference< XEventListener >& Listener )
@@ -185,7 +185,7 @@ void SAL_CALL DynamicResultSetWrapper
     m_pDisposeEventListeners->addInterface( Listener );
 }
 
-//--------------------------------------------------------------------------
+
 // virtual
 void SAL_CALL DynamicResultSetWrapper
     ::removeEventListener( const Reference< XEventListener >& Listener )
@@ -198,9 +198,9 @@ void SAL_CALL DynamicResultSetWrapper
         m_pDisposeEventListeners->removeInterface( Listener );
 }
 
-//--------------------------------------------------------------------------
+
 // own methods
-//--------------------------------------------------------------------------
+
 
 //virtual
 void SAL_CALL DynamicResultSetWrapper
@@ -287,9 +287,9 @@ void SAL_CALL DynamicResultSetWrapper
     */
 }
 
-//--------------------------------------------------------------------------
+
 // XSourceInitialization
-//--------------------------------------------------------------------------
+
 //virtual
 void SAL_CALL DynamicResultSetWrapper
     ::setSource( const Reference< XInterface > & Source )
@@ -329,9 +329,9 @@ void SAL_CALL DynamicResultSetWrapper
     m_aSourceSet.set();
 }
 
-//--------------------------------------------------------------------------
+
 // XDynamicResultSet
-//--------------------------------------------------------------------------
+
 //virtual
 Reference< XResultSet > SAL_CALL DynamicResultSetWrapper
     ::getStaticResultSet()
@@ -447,11 +447,11 @@ sal_Int16 SAL_CALL DynamicResultSetWrapper
     return xSource->getCapabilities();
 }
 
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 // class DynamicResultSetWrapperListener
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 
 DynamicResultSetWrapperListener::DynamicResultSetWrapperListener(
         DynamicResultSetWrapper* pOwner )
@@ -465,18 +465,18 @@ DynamicResultSetWrapperListener::~DynamicResultSetWrapperListener()
 
 }
 
-//--------------------------------------------------------------------------
+
 // XInterface methods.
-//--------------------------------------------------------------------------
+
 //list all interfaces inclusive baseclasses of interfaces
 XINTERFACE_IMPL_2( DynamicResultSetWrapperListener
                    , XDynamicResultSetListener
                    , XEventListener //base of XDynamicResultSetListener
                    );
 
-//--------------------------------------------------------------------------
+
 // XDynamicResultSetListener methods:
-//--------------------------------------------------------------------------
+
 //virtual
 void SAL_CALL DynamicResultSetWrapperListener
     ::disposing( const EventObject& rEventObject )
@@ -499,9 +499,9 @@ void SAL_CALL DynamicResultSetWrapperListener
         m_pOwner->impl_notify( Changes );
 }
 
-//--------------------------------------------------------------------------
+
 // own methods:
-//--------------------------------------------------------------------------
+
 
 void SAL_CALL DynamicResultSetWrapperListener
     ::impl_OwnerDies()

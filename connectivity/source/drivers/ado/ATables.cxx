@@ -48,19 +48,19 @@ sdbcx::ObjectType OTables::createObject(const OUString& _rName)
     OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
     return new OAdoTable(this,isCaseSensitive(),m_pCatalog,m_aCollection.GetItem(_rName));
 }
-// -------------------------------------------------------------------------
+
 void OTables::impl_refresh(  ) throw(RuntimeException)
 {
     OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
     m_aCollection.Refresh();
     m_pCatalog->refreshTables();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OTables::createDescriptor()
 {
     return new OAdoTable(this,isCaseSensitive(),m_pCatalog);
 }
-// -------------------------------------------------------------------------
+
 // XAppend
 sdbcx::ObjectType OTables::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
 {
@@ -75,7 +75,7 @@ sdbcx::ObjectType OTables::appendObject( const OUString&, const Reference< XProp
 
     return new OAdoTable(this,isCaseSensitive(),m_pCatalog,pTable->getImpl());
 }
-// -------------------------------------------------------------------------
+
 // XDrop
 void OTables::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
 {
@@ -83,7 +83,7 @@ void OTables::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
     if ( !m_aCollection.Delete(_sElementName) )
         ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
 }
-// -----------------------------------------------------------------------------
+
 void OTables::appendNew(const OUString& _rsNewTable)
 {
     OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
@@ -97,7 +97,7 @@ void OTables::appendNew(const OUString& _rsNewTable)
     while (aListenerLoop.hasMoreElements())
         static_cast<XContainerListener*>(aListenerLoop.next())->elementInserted(aEvent);
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

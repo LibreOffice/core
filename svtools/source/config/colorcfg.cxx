@@ -42,7 +42,7 @@
 #include <vcl/settings.hxx>
 #include <rtl/instance.hxx>
 
-//-----------------------------------------------------------------------------
+
 using namespace utl;
 using namespace com::sun::star;
 
@@ -360,7 +360,7 @@ IMPL_LINK( ColorConfig_Impl, DataChangedEventListener, VclWindowEvent*, pEvent )
         return 0L;
 }
 
-// ---------------------------------------------------------------------------
+
 
 /** updates the font color in the vcl window settings */
 void ColorConfig_Impl::ImplUpdateApplicationSettings()
@@ -387,7 +387,7 @@ void ColorConfig_Impl::ImplUpdateApplicationSettings()
     }
 }
 
-// ---------------------------------------------------------------------------
+
 
 ColorConfig::ColorConfig()
 {
@@ -600,17 +600,17 @@ void EditableColorConfig::Commit()
         m_pImpl->Commit();
     m_bModified = sal_False;
 }
-// -----------------------------------------------------------------------------
+
 void EditableColorConfig::DisableBroadcast()
 {
     m_pImpl->BlockBroadcasts(true);
 }
-// -----------------------------------------------------------------------------
+
 void EditableColorConfig::EnableBroadcast()
 {
     m_pImpl->BlockBroadcasts(false);
 }
-// -----------------------------------------------------------------------------
+
 
 }//namespace svtools
 

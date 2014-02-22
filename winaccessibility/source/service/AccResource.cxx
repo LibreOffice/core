@@ -39,13 +39,13 @@
 //==================================================================
 SimpleResMgr* ResourceManager::m_pImpl = NULL;
 
-//------------------------------------------------------------------
+
 ResourceManager::EnsureDelete::~EnsureDelete()
 {
     delete ResourceManager::m_pImpl;
 }
 
-//------------------------------------------------------------------
+
 void ResourceManager::ensureImplExists()
 {
     //Comment the following code because the acc resource is not necessary now. Can open them if necessary
@@ -68,7 +68,7 @@ void ResourceManager::ensureImplExists()
   */
 }
 
-//------------------------------------------------------------------
+
 ::rtl::OUString ResourceManager::loadString(sal_uInt16 _nResId)
 {
     ::rtl::OUString sReturn;

@@ -70,7 +70,7 @@ namespace cppu
 {
 
 #ifdef CONTEXT_DIAG
-//--------------------------------------------------------------------------------------------------
+
 static OUString val2str( void const * pVal, typelib_TypeDescriptionReference * pTypeRef )
 {
     OSL_ASSERT( pVal );
@@ -255,7 +255,7 @@ static OUString val2str( void const * pVal, typelib_TypeDescriptionReference * p
 
     return buf.makeStringAndClear();
 }
-//--------------------------------------------------------------------------------------------------
+
 static void dumpEntry( OUString const & key, Any const & value )
 {
     OUString val( val2str( value.getValue(), value.getValueTypeRef() ) );
@@ -264,7 +264,7 @@ static void dumpEntry( OUString const & key, Any const & value )
     ::fprintf( stderr, "| %s = %s\n", key_str.getStr(), val_str.getStr() );
 }
 #endif
-//--------------------------------------------------------------------------------------------------
+
 static inline void try_dispose( Reference< XInterface > const & xInstance )
     SAL_THROW( (RuntimeException) )
 {
@@ -274,7 +274,7 @@ static inline void try_dispose( Reference< XInterface > const & xInstance )
         xComp->dispose();
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 static inline void try_dispose( Reference< lang::XComponent > const & xComp )
     SAL_THROW( (RuntimeException) )
 {
@@ -305,7 +305,7 @@ public:
     virtual void SAL_CALL disposing( lang::EventObject const & rSource )
         throw (RuntimeException);
 };
-//__________________________________________________________________________________________________
+
 inline void DisposingForwarder::listen(
     Reference< lang::XComponent > const & xSource,
     Reference< lang::XComponent > const & xTarget )
@@ -316,7 +316,7 @@ inline void DisposingForwarder::listen(
         xSource->addEventListener( new DisposingForwarder( xTarget ) );
     }
 }
-//__________________________________________________________________________________________________
+
 void DisposingForwarder::disposing( lang::EventObject const & )
     throw (RuntimeException)
 {
@@ -400,7 +400,7 @@ public:
 };
 
 // XNameContainer
-//______________________________________________________________________________
+
 void ComponentContext::insertByName(
     OUString const & name, Any const & element )
     throw (lang::IllegalArgumentException, container::ElementExistException,
@@ -421,7 +421,7 @@ void ComponentContext::insertByName(
             static_cast<OWeakObject *>(this) );
 }
 
-//______________________________________________________________________________
+
 void ComponentContext::removeByName( OUString const & name )
         throw (container::NoSuchElementException,
                lang::WrappedTargetException, RuntimeException)
@@ -438,7 +438,7 @@ void ComponentContext::removeByName( OUString const & name )
 }
 
 // XNameReplace
-//______________________________________________________________________________
+
 void ComponentContext::replaceByName(
     OUString const & name, Any const & element )
     throw (lang::IllegalArgumentException,container::NoSuchElementException,
@@ -464,7 +464,7 @@ void ComponentContext::replaceByName(
 }
 
 // XNameAccess
-//______________________________________________________________________________
+
 Any ComponentContext::getByName( OUString const & name )
     throw (container::NoSuchElementException,
            lang::WrappedTargetException, RuntimeException)
@@ -472,7 +472,7 @@ Any ComponentContext::getByName( OUString const & name )
     return getValueByName( name );
 }
 
-//______________________________________________________________________________
+
 Sequence<OUString> ComponentContext::getElementNames()
     throw (RuntimeException)
 {
@@ -487,7 +487,7 @@ Sequence<OUString> ComponentContext::getElementNames()
     return ret;
 }
 
-//______________________________________________________________________________
+
 sal_Bool ComponentContext::hasByName( OUString const & name )
     throw (RuntimeException)
 {
@@ -496,20 +496,20 @@ sal_Bool ComponentContext::hasByName( OUString const & name )
 }
 
 // XElementAccess
-//______________________________________________________________________________
+
 Type ComponentContext::getElementType() throw (RuntimeException)
 {
     return ::getVoidCppuType();
 }
 
-//______________________________________________________________________________
+
 sal_Bool ComponentContext::hasElements() throw (RuntimeException)
 {
     MutexGuard guard( m_mutex );
     return ! m_map.empty();
 }
 
-//__________________________________________________________________________________________________
+
 Any ComponentContext::lookupMap( OUString const & rName )
     SAL_THROW( (RuntimeException) )
 {
@@ -629,7 +629,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
     return ret;
 }
 
-//__________________________________________________________________________________________________
+
 Any ComponentContext::getValueByName( OUString const & rName )
     throw (RuntimeException)
 {
@@ -649,7 +649,7 @@ Any ComponentContext::getValueByName( OUString const & rName )
     }
     return ret;
 }
-//__________________________________________________________________________________________________
+
 Reference< lang::XMultiComponentFactory > ComponentContext::getServiceManager()
     throw (RuntimeException)
 {
@@ -661,7 +661,7 @@ Reference< lang::XMultiComponentFactory > ComponentContext::getServiceManager()
     }
     return m_xSMgr;
 }
-//__________________________________________________________________________________________________
+
 ComponentContext::~ComponentContext()
     SAL_THROW(())
 {
@@ -674,7 +674,7 @@ ComponentContext::~ComponentContext()
         delete iPos->second;
     m_map.clear();
 }
-//__________________________________________________________________________________________________
+
 void ComponentContext::disposing()
 {
 #ifdef CONTEXT_DIAG
@@ -739,7 +739,7 @@ void ComponentContext::disposing()
         delete iPos->second;
     m_map.clear();
 }
-//__________________________________________________________________________________________________
+
 ComponentContext::ComponentContext(
     ContextEntry_Init const * pEntries, sal_Int32 nEntries,
     Reference< XComponentContext > const & xDelegate )

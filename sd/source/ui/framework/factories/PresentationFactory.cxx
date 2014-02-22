@@ -232,7 +232,7 @@ void SAL_CALL PresentationFactory::disposing (
 
 
 
-//-----------------------------------------------------------------------------
+
 
 void PresentationFactory::ThrowIfDisposed (void) const
     throw (lang::DisposedException)

@@ -41,7 +41,7 @@
 
 namespace framework{
 
-//_________________________________________________________________________________________________________________
+
 
 QuietInteraction::QuietInteraction()
     : ThreadHelpBase     ( &Application::GetSolarMutex() )
@@ -49,7 +49,7 @@ QuietInteraction::QuietInteraction()
 {
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XInteractionRequest >& xRequest ) throw( css::uno::RuntimeException )
 {
@@ -138,7 +138,7 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
         xAbort->select();
 }
 
-//_________________________________________________________________________________________________________________
+
 
 css::uno::Any QuietInteraction::getRequest() const
 {
@@ -148,7 +148,7 @@ css::uno::Any QuietInteraction::getRequest() const
     /* } SAFE */
 }
 
-//_________________________________________________________________________________________________________________
+
 
 sal_Bool QuietInteraction::wasUsed() const
 {

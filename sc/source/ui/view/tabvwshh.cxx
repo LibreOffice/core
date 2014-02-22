@@ -40,7 +40,7 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------
+
 
 void ScTabViewShell::ExecuteSbx( SfxRequest& /* rReq */ )
 {
@@ -53,7 +53,7 @@ void ScTabViewShell::GetSbxState( SfxItemSet& /* rSet */ )
     //  SID_RANGE_REGION (CurrentRegion) - removed (old Basic)
 }
 
-//------------------------------------------------------------------
+
 
 void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
 {

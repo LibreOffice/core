@@ -613,7 +613,7 @@ Reference<drawing::XDrawPage> SAL_CALL PresenterToolBar::getCurrentPage (void)
     return mxCurrentSlide;
 }
 
-//-----------------------------------------------------------------------------
+
 
 void PresenterToolBar::CreateControls (
     const OUString& rsConfigurationPath)

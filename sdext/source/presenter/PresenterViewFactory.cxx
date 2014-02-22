@@ -287,7 +287,7 @@ void SAL_CALL PresenterViewFactory::releaseResource (const Reference<XResource>&
     }
 }
 
-//-----------------------------------------------------------------------------
+
 
 Reference<XResource> PresenterViewFactory::GetViewFromCache(
     const Reference<XResourceId>& rxViewId,

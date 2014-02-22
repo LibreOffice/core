@@ -25,7 +25,7 @@
 namespace inprocserv
 {
 
-//-------------------------------------------------------------------------------
+
 BOOL StringsEqual( LPCOLESTR pszNameFromOutside, wchar_t* pOwnName )
 {
     BOOL bResult = TRUE;
@@ -47,13 +47,13 @@ BOOL StringsEqual( LPCOLESTR pszNameFromOutside, wchar_t* pOwnName )
     return bResult;
 }
 
-//-------------------------------------------------------------------------------
+
 HRESULT InprocEmbedDocument_Impl::Init()
 {
     return S_OK;
 }
 
-//-------------------------------------------------------------------------------
+
 void InprocEmbedDocument_Impl::SetName( LPCOLESTR pszNameFromOutside, wchar_t*& pOwnName )
 {
     if ( !pszNameFromOutside )
@@ -76,7 +76,7 @@ void InprocEmbedDocument_Impl::SetName( LPCOLESTR pszNameFromOutside, wchar_t*& 
     pOwnName[nLen] = 0;
 }
 
-//-------------------------------------------------------------------------------
+
 BOOL InprocEmbedDocument_Impl::CheckDefHandler()
 {
     // set the own listener
@@ -233,7 +233,7 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
     return TRUE;
 }
 
-//-------------------------------------------------------------------------------
+
 DWORD InprocEmbedDocument_Impl::InsertAdviseLinkToList( const ComSmart<OleWrapperAdviseSink>& pOwnAdvise, ComSmart< OleWrapperAdviseSink > pAdvises[] )
 {
     // the result should start from 1 in case of success, the element 0 can be used for own needs
@@ -258,7 +258,7 @@ DWORD InprocEmbedDocument_Impl::InsertAdviseLinkToList( const ComSmart<OleWrappe
     return nResult;
 }
 
-//-------------------------------------------------------------------------------
+
 void InprocEmbedDocument_Impl::Clean()
 {
     m_pDefHandler = (IUnknown*)NULL;
@@ -301,7 +301,7 @@ void InprocEmbedDocument_Impl::Clean()
 }
 
 // IUnknown
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::QueryInterface( REFIID riid, void FAR* FAR* ppv )
 {
     if(IsEqualIID(riid, IID_IUnknown))
@@ -393,13 +393,13 @@ STDMETHODIMP InprocEmbedDocument_Impl::QueryInterface( REFIID riid, void FAR* FA
     return ResultFromScode(E_NOINTERFACE);
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP_(ULONG) InprocEmbedDocument_Impl::AddRef()
 {
     return ++m_refCount;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP_(ULONG) InprocEmbedDocument_Impl::Release()
 {
     // unfortunately there are reentrance problems in mfc that have to be workarounded
@@ -416,7 +416,7 @@ STDMETHODIMP_(ULONG) InprocEmbedDocument_Impl::Release()
 }
 
 // IPersist
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetClassID( CLSID* pClassId )
 {
     *pClassId = *&m_guid;
@@ -424,7 +424,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetClassID( CLSID* pClassId )
 }
 
 // IPersistStorage
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::IsDirty()
 {
     if ( m_pDefHandler == NULL || m_pOleAdvises[0] == NULL || m_pOleAdvises[0]->IsClosed() )
@@ -443,7 +443,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::IsDirty()
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::InitNew( IStorage *pStg )
 {
     if ( CheckDefHandler() )
@@ -475,7 +475,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InitNew( IStorage *pStg )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Load( IStorage *pStg )
 {
     if ( CheckDefHandler() )
@@ -507,7 +507,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Load( IStorage *pStg )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
 {
     if ( fSameAsLoad && ( m_pDefHandler == NULL || m_pOleAdvises[0] == NULL || m_pOleAdvises[0]->IsClosed() ) )
@@ -526,7 +526,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoa
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )
 {
     if ( m_pDefHandler == NULL || m_pOleAdvises[0] == NULL || m_pOleAdvises[0]->IsClosed() )
@@ -569,7 +569,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::HandsOffStorage()
 {
     if ( CheckDefHandler() )
@@ -594,7 +594,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::HandsOffStorage()
 }
 
 // IPersistFile
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD dwMode )
 {
     if ( CheckDefHandler() && pszFileName )
@@ -624,7 +624,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD dwMode
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRemember )
 {
     if ( CheckDefHandler() )
@@ -640,7 +640,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRememb
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::SaveCompleted( LPCOLESTR pszFileName )
 {
     if ( CheckDefHandler() )
@@ -669,7 +669,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SaveCompleted( LPCOLESTR pszFileName )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetCurFile( LPOLESTR *ppszFileName )
 {
     if ( CheckDefHandler() )
@@ -686,7 +686,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetCurFile( LPOLESTR *ppszFileName )
 }
 
 // IOleObject
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::SetClientSite( IOleClientSite* pSite )
 {
     if ( pSite == m_pClientSite )
@@ -733,7 +733,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetClientSite( IOleClientSite* pSite )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetClientSite( IOleClientSite** pSite )
 {
     if ( CheckDefHandler() )
@@ -749,7 +749,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetClientSite( IOleClientSite** pSite )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, LPCOLESTR szContainerObj )
 {
 
@@ -768,7 +768,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, L
     return S_OK;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Close( DWORD dwSaveOption )
 {
     HRESULT ret = S_OK;
@@ -796,7 +796,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Close( DWORD dwSaveOption )
     return ret;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::SetMoniker( DWORD dwWhichMoniker, IMoniker * pmk )
 {
     if ( CheckDefHandler() )
@@ -812,7 +812,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetMoniker( DWORD dwWhichMoniker, IMonike
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetMoniker( DWORD dwAssign, DWORD dwWhichMoniker, IMoniker ** ppmk )
 {
     if ( CheckDefHandler() )
@@ -828,7 +828,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetMoniker( DWORD dwAssign, DWORD dwWhich
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::InitFromData( IDataObject * pDataObject, BOOL fCreation, DWORD dwReserved )
 {
     if ( CheckDefHandler() )
@@ -844,7 +844,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InitFromData( IDataObject * pDataObject, 
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetClipboardData( DWORD dwReserved, IDataObject ** ppDataObject )
 {
     if ( CheckDefHandler() )
@@ -860,7 +860,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetClipboardData( DWORD dwReserved, IData
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::DoVerb(
     LONG iVerb,
     LPMSG pMsg,
@@ -890,7 +890,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::DoVerb(
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::EnumVerbs( IEnumOLEVERB ** ppEnumOleVerb )
 {
     if ( CheckDefHandler() )
@@ -906,7 +906,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::EnumVerbs( IEnumOLEVERB ** ppEnumOleVerb 
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Update()
 {
 
@@ -923,7 +923,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Update()
     return S_OK;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::IsUpToDate()
 {
     if ( CheckDefHandler() )
@@ -939,7 +939,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::IsUpToDate()
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetUserClassID( CLSID *pClsid )
 {
     if ( pClsid )
@@ -948,7 +948,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetUserClassID( CLSID *pClsid )
     return S_OK;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetUserType( DWORD dwFormOfType, LPOLESTR * pszUserType )
 {
     if ( CheckDefHandler() )
@@ -964,7 +964,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetUserType( DWORD dwFormOfType, LPOLESTR
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::SetExtent( DWORD dwDrawAspect, SIZEL *psizel )
 {
     if ( CheckDefHandler() )
@@ -980,7 +980,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetExtent( DWORD dwDrawAspect, SIZEL *psi
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetExtent( DWORD dwDrawAspect, SIZEL * psizel )
 {
     if ( CheckDefHandler() )
@@ -996,7 +996,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetExtent( DWORD dwDrawAspect, SIZEL * ps
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Advise( IAdviseSink *pAdvSink, DWORD *pdwConnection )
 {
 
@@ -1037,7 +1037,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Advise( IAdviseSink *pAdvSink, DWORD *pdw
     return S_OK;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Unadvise( DWORD dwConnection )
 {
     if ( DEFAULT_ARRAY_LEN > dwConnection && dwConnection > 0 && m_pOleAdvises[dwConnection] )
@@ -1064,13 +1064,13 @@ STDMETHODIMP InprocEmbedDocument_Impl::Unadvise( DWORD dwConnection )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::EnumAdvise( IEnumSTATDATA ** /*ppenumAdvise*/ )
 {
     return E_NOTIMPL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetMiscStatus( DWORD dwAspect, DWORD * pdwStatus )
 {
     if ( CheckDefHandler() )
@@ -1086,7 +1086,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetMiscStatus( DWORD dwAspect, DWORD * pd
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::SetColorScheme( LOGPALETTE * pLogpal )
 {
     if ( CheckDefHandler() )
@@ -1103,7 +1103,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetColorScheme( LOGPALETTE * pLogpal )
 }
 
 //IDataObject
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetData( FORMATETC * pFormatetc, STGMEDIUM * pMedium )
 {
     if ( CheckDefHandler() )
@@ -1119,7 +1119,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetData( FORMATETC * pFormatetc, STGMEDIU
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetDataHere( FORMATETC * pFormatetc, STGMEDIUM * pMedium )
 {
     if ( CheckDefHandler() )
@@ -1135,7 +1135,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetDataHere( FORMATETC * pFormatetc, STGM
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::QueryGetData( FORMATETC * pFormatetc )
 {
     if ( CheckDefHandler() )
@@ -1151,7 +1151,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::QueryGetData( FORMATETC * pFormatetc )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetCanonicalFormatEtc( FORMATETC * pFormatetcIn, FORMATETC * pFormatetcOut )
 {
     if ( CheckDefHandler() )
@@ -1167,7 +1167,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetCanonicalFormatEtc( FORMATETC * pForma
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::SetData( FORMATETC * pFormatetc, STGMEDIUM * pMedium, BOOL fRelease )
 {
     if ( CheckDefHandler() )
@@ -1183,7 +1183,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetData( FORMATETC * pFormatetc, STGMEDIU
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC ** ppFormatetc )
 {
     if ( CheckDefHandler() )
@@ -1199,7 +1199,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::EnumFormatEtc( DWORD dwDirection, IEnumFO
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::DAdvise( FORMATETC * pFormatetc, DWORD advf, IAdviseSink * pAdvSink, DWORD * pdwConnection )
 {
 
@@ -1240,7 +1240,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::DAdvise( FORMATETC * pFormatetc, DWORD ad
     return S_OK;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::DUnadvise( DWORD dwConnection )
 {
     if ( m_pDefHandler && DEFAULT_ARRAY_LEN > dwConnection && dwConnection > 0 && m_pDataAdvises[dwConnection] )
@@ -1267,7 +1267,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::DUnadvise( DWORD dwConnection )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::EnumDAdvise( IEnumSTATDATA ** ppenumAdvise )
 {
     if ( CheckDefHandler() )
@@ -1284,7 +1284,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::EnumDAdvise( IEnumSTATDATA ** ppenumAdvis
 }
 
 // IRunnableObject
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetRunningClass( LPCLSID lpClsid )
 {
     if ( CheckDefHandler() )
@@ -1300,7 +1300,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetRunningClass( LPCLSID lpClsid )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Run( LPBINDCTX pbc )
 {
     if ( CheckDefHandler() )
@@ -1316,7 +1316,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Run( LPBINDCTX pbc )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 BOOL STDMETHODCALLTYPE InprocEmbedDocument_Impl::IsRunning()
 {
    if ( CheckDefHandler() )
@@ -1333,7 +1333,7 @@ BOOL STDMETHODCALLTYPE InprocEmbedDocument_Impl::IsRunning()
 
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::LockRunning( BOOL fLock, BOOL fLastUnlockCloses )
 {
    if ( CheckDefHandler() )
@@ -1349,7 +1349,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::LockRunning( BOOL fLock, BOOL fLastUnlock
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::SetContainedObject( BOOL fContained)
 {
    if ( CheckDefHandler() )
@@ -1367,7 +1367,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetContainedObject( BOOL fContained)
 
 
 // IViewObject methods
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Draw( DWORD dwDrawAspect, LONG lindex, void *pvAspect, DVTARGETDEVICE *ptd, HDC hdcTargetDev, HDC hdcDraw, LPCRECTL lprcBounds, LPCRECTL lprcWBounds, BOOL ( STDMETHODCALLTYPE *pfnContinue )( ULONG_PTR dwContinue ), ULONG_PTR dwContinue )
 {
     if ( CheckDefHandler() )
@@ -1383,7 +1383,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Draw( DWORD dwDrawAspect, LONG lindex, vo
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetColorSet( DWORD dwDrawAspect, LONG lindex, void *pvAspect, DVTARGETDEVICE *ptd, HDC hicTargetDev, LOGPALETTE **ppColorSet )
 {
     if ( CheckDefHandler() )
@@ -1399,7 +1399,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetColorSet( DWORD dwDrawAspect, LONG lin
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Freeze( DWORD dwDrawAspect, LONG lindex, void *pvAspect, DWORD *pdwFreeze )
 {
     if ( CheckDefHandler() )
@@ -1415,7 +1415,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Freeze( DWORD dwDrawAspect, LONG lindex, 
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Unfreeze( DWORD dwFreeze )
 {
     if ( CheckDefHandler() )
@@ -1431,7 +1431,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Unfreeze( DWORD dwFreeze )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::SetAdvise( DWORD aspects, DWORD advf, IAdviseSink *pAdvSink )
 {
 
@@ -1463,7 +1463,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetAdvise( DWORD aspects, DWORD advf, IAd
     return S_OK;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetAdvise( DWORD *pAspects, DWORD *pAdvf, IAdviseSink **ppAdvSink )
 {
     if ( !ppAdvSink )
@@ -1488,7 +1488,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetAdvise( DWORD *pAspects, DWORD *pAdvf,
 }
 
 // IViewObject2 methods
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetExtent( DWORD dwDrawAspect, LONG lindex, DVTARGETDEVICE *ptd, LPSIZEL lpsizel )
 {
     if ( CheckDefHandler() )
@@ -1507,7 +1507,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetExtent( DWORD dwDrawAspect, LONG linde
 
 
 // IOleWindow methods
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetWindow( HWND *phwnd )
 {
     if ( CheckDefHandler() )
@@ -1523,7 +1523,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetWindow( HWND *phwnd )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::ContextSensitiveHelp( BOOL fEnterMode )
 {
     if ( CheckDefHandler() )
@@ -1541,7 +1541,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::ContextSensitiveHelp( BOOL fEnterMode )
 
 
 // IOleInPlaceObject methods
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::InPlaceDeactivate( void )
 {
     if ( CheckDefHandler() )
@@ -1557,7 +1557,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InPlaceDeactivate( void )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::UIDeactivate( void )
 {
     if ( CheckDefHandler() )
@@ -1573,7 +1573,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::UIDeactivate( void )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::SetObjectRects( LPCRECT lprcPosRect, LPCRECT lprcClipRect )
 {
     if ( CheckDefHandler() )
@@ -1589,7 +1589,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetObjectRects( LPCRECT lprcPosRect, LPCR
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::ReactivateAndUndo( void )
 {
     if ( CheckDefHandler() )
@@ -1607,7 +1607,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::ReactivateAndUndo( void )
 
 
 // IDispatch methods
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetTypeInfoCount( UINT *pctinfo )
 {
     if ( CheckDefHandler() )
@@ -1623,7 +1623,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetTypeInfoCount( UINT *pctinfo )
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetTypeInfo( UINT iTInfo, LCID lcid, ITypeInfo **ppTInfo )
 {
     if ( CheckDefHandler() )
@@ -1639,7 +1639,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetTypeInfo( UINT iTInfo, LCID lcid, ITyp
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::GetIDsOfNames( REFIID riid, LPOLESTR *rgszNames, UINT cNames, LCID lcid, DISPID *rgDispId )
 {
     if ( CheckDefHandler() )
@@ -1655,7 +1655,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetIDsOfNames( REFIID riid, LPOLESTR *rgs
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::Invoke( DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pDispParams, VARIANT *pVarResult, EXCEPINFO *pExcepInfo, UINT *puArgErr )
 {
     if ( CheckDefHandler() )
@@ -1677,26 +1677,26 @@ STDMETHODIMP InprocEmbedDocument_Impl::Invoke( DISPID dispIdMember, REFIID riid,
 // ====
 
 // IUnknown
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::QueryInterface( REFIID riid, void FAR* FAR* ppv )
 {
     return m_rOwnDocument.QueryInterface( riid, ppv );
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP_(ULONG) InprocEmbedDocument_Impl::InternalCacheWrapper::AddRef()
 {
     return m_rOwnDocument.AddRef();
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP_(ULONG) InprocEmbedDocument_Impl::InternalCacheWrapper::Release()
 {
     return m_rOwnDocument.Release();
 }
 
 // IOleCache methods
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::Cache( FORMATETC *pformatetc, DWORD advf, DWORD *pdwConnection )
 {
     if ( m_rOwnDocument.CheckDefHandler() )
@@ -1712,7 +1712,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::Cache( FORMATETC *p
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::Uncache( DWORD dwConnection )
 {
     if ( m_rOwnDocument.CheckDefHandler() )
@@ -1728,7 +1728,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::Uncache( DWORD dwCo
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::EnumCache( IEnumSTATDATA **ppenumSTATDATA )
 {
     if ( m_rOwnDocument.CheckDefHandler() )
@@ -1744,7 +1744,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::EnumCache( IEnumSTA
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::InitCache( IDataObject *pDataObject )
 {
     if ( m_rOwnDocument.CheckDefHandler() )
@@ -1760,7 +1760,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::InitCache( IDataObj
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::SetData( FORMATETC *pformatetc, STGMEDIUM *pmedium, BOOL fRelease )
 {
     if ( m_rOwnDocument.CheckDefHandler() )
@@ -1777,7 +1777,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::SetData( FORMATETC 
 }
 
 // IOleCache2 methods
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::UpdateCache( LPDATAOBJECT pDataObject, DWORD grfUpdf, LPVOID pReserved )
 {
     if ( m_rOwnDocument.CheckDefHandler() )
@@ -1793,7 +1793,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::UpdateCache( LPDATA
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::DiscardCache( DWORD dwDiscardOptions )
 {
     if ( m_rOwnDocument.CheckDefHandler() )

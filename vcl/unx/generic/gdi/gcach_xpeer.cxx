@@ -35,7 +35,7 @@ X11GlyphPeer::X11GlyphPeer()
 {
 }
 
-// ---------------------------------------------------------------------------
+
 
 X11GlyphPeer::~X11GlyphPeer()
 {
@@ -69,7 +69,7 @@ X11GlyphCache::X11GlyphCache( X11GlyphPeer& rPeer )
 {
 }
 
-// ---------------------------------------------------------------------------
+
 
 namespace
 {
@@ -111,7 +111,7 @@ X11GlyphCache& X11GlyphCache::GetInstance()
     return theGlyphCacheHolder::get().getGlyphCache();
 }
 
-// ---------------------------------------------------------------------------
+
 
 void X11GlyphCache::KillInstance()
 {

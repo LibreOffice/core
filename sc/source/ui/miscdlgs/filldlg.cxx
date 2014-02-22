@@ -22,7 +22,7 @@
 
 
 
-//----------------------------------------------------------------------------
+
 
 #include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
@@ -42,7 +42,7 @@
 //============================================================================
 // class ScFillSeriesDlg
 
-//----------------------------------------------------------------------------
+
 
 ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
                                   ScDocument&   rDocument,
@@ -88,13 +88,13 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
 }
 
 
-//----------------------------------------------------------------------------
+
 
 ScFillSeriesDlg::~ScFillSeriesDlg()
 {
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScFillSeriesDlg::SetEdStartValEnabled(bool bFlag)
 {
@@ -111,7 +111,7 @@ void ScFillSeriesDlg::SetEdStartValEnabled(bool bFlag)
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
 {
@@ -200,7 +200,7 @@ void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScFillSeriesDlg::CheckStartVal()
 {
@@ -221,7 +221,7 @@ bool ScFillSeriesDlg::CheckStartVal()
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScFillSeriesDlg::CheckIncrementVal()
 {
@@ -232,7 +232,7 @@ bool ScFillSeriesDlg::CheckIncrementVal()
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScFillSeriesDlg::CheckEndVal()
 {
@@ -253,9 +253,9 @@ bool ScFillSeriesDlg::CheckEndVal()
 }
 
 
-//----------------------------------------------------------------------------
+
 // Handler:
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScFillSeriesDlg, DisableHdl, Button *, pBtn )
 {
@@ -294,7 +294,7 @@ IMPL_LINK( ScFillSeriesDlg, DisableHdl, Button *, pBtn )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScFillSeriesDlg, OKHdl)
 {

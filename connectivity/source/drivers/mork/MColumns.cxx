@@ -82,12 +82,12 @@ sdbcx::ObjectType OColumns::createObject(const OUString& _rName)
     return xRet;
 }
 
-// -------------------------------------------------------------------------
+
 void OColumns::impl_refresh() throw(RuntimeException)
 {
     m_pTable->refreshColumns();
 }
-// -----------------------------------------------------------------------------
+
 
 
 

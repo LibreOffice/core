@@ -326,7 +326,7 @@ void SAL_CALL PresenterScreen::disposing (const lang::EventObject& /*rEvent*/)
     RequestShutdownPresenterScreen();
 }
 
-//-----------------------------------------------------------------------------
+
 
 void PresenterScreen::InitializePresenterScreen (void)
 {

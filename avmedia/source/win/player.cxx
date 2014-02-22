@@ -76,9 +76,9 @@ bool isWindowsVistaOrHigher()
     return  osvi.dwMajorVersion >= 6;
 }
 
-// ----------------
+
 // - Player -
-// ----------------
+
 
 Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     Player_BASE(m_aMutex),

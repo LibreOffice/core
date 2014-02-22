@@ -23,13 +23,13 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 
-//----------------------------------------------------------------------------
+
 namespace utl
 {
-//----------------------------------------------------------------------------
 
 
-//----------------------------------------------------------------------------
+
+
 
 static
 void lcl_resolveCharEntities(OUString & aLocalString)
@@ -73,7 +73,7 @@ void lcl_resolveCharEntities(OUString & aLocalString)
     aLocalString = aResult.makeStringAndClear();
 }
 
-//----------------------------------------------------------------------------
+
 bool splitLastFromConfigurationPath(OUString const& _sInPath,
                                         OUString& _rsOutPath,
                                         OUString& _rsLocalName)
@@ -141,7 +141,7 @@ bool splitLastFromConfigurationPath(OUString const& _sInPath,
     return nPos >= 0;
 }
 
-//----------------------------------------------------------------------------
+
 OUString extractFirstFromConfigurationPath(OUString const& _sInPath, OUString* _sOutPath)
 {
     sal_Int32 nSep      = _sInPath.indexOf('/');
@@ -184,7 +184,7 @@ OUString extractFirstFromConfigurationPath(OUString const& _sInPath, OUString* _
     return sResult;
 }
 
-//----------------------------------------------------------------------------
+
 
 // find the position after the prefix in the nested path
 static inline
@@ -215,14 +215,14 @@ sal_Int32 lcl_findPrefixEnd(OUString const& _sNestedPath, OUString const& _sPref
     return bIsPrefix ? nPrefixLength : 0;
 }
 
-//----------------------------------------------------------------------------
+
 bool isPrefixOfConfigurationPath(OUString const& _sNestedPath,
                                      OUString const& _sPrefixPath)
 {
     return _sPrefixPath.isEmpty() || lcl_findPrefixEnd(_sNestedPath,_sPrefixPath) != 0;
 }
 
-//----------------------------------------------------------------------------
+
 OUString dropPrefixFromConfigurationPath(OUString const& _sNestedPath,
                                          OUString const& _sPrefixPath)
 {
@@ -238,7 +238,7 @@ OUString dropPrefixFromConfigurationPath(OUString const& _sNestedPath,
     }
 }
 
-//----------------------------------------------------------------------------
+
 static
 OUString lcl_wrapName(const OUString& _sContent, const OUString& _sType)
 {
@@ -276,14 +276,14 @@ OUString lcl_wrapName(const OUString& _sContent, const OUString& _sType)
     return aNormalized.makeStringAndClear();
 }
 
-//----------------------------------------------------------------------------
+
 
 OUString wrapConfigurationElementName(OUString const& _sElementName)
 {
     return lcl_wrapName(_sElementName, "*" );
 }
 
-//----------------------------------------------------------------------------
+
 
 OUString wrapConfigurationElementName(OUString const& _sElementName,
                                       OUString const& _sTypeName)
@@ -292,7 +292,7 @@ OUString wrapConfigurationElementName(OUString const& _sElementName,
     return lcl_wrapName(_sElementName, _sTypeName);
 }
 
-//----------------------------------------------------------------------------
+
 } // namespace utl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

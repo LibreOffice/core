@@ -89,7 +89,7 @@ void ImplInitSVData()
     pImplSVData->maAppData.mnDefaultLayoutBorder = -1;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDeInitSVData()
 {
@@ -110,14 +110,14 @@ void ImplDeInitSVData()
         delete pSVData->mpPaperNames, pSVData->mpPaperNames = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDestroySVData()
 {
     pImplSVData = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 Window* ImplGetDefaultWindow()
 {
@@ -149,7 +149,7 @@ Window* ImplGetDefaultWindow()
     return pSVData->mpDefaultWin;
 }
 
-// -----------------------------------------------------------------------
+
 
 ResMgr* ImplGetResMgr()
 {
@@ -315,7 +315,7 @@ bool ImplInitAccessBridge()
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 Window* ImplFindWindow( const SalFrame* pFrame, ::Point& rSalFramePos )
 {

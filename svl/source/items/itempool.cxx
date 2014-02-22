@@ -107,7 +107,7 @@ const SfxPoolItem* SfxItemPool::GetPoolDefaultItem( sal_uInt16 nWhich ) const
     return pRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxItemPool::IsItemFlag_Impl( sal_uInt16 nPos, sal_uInt16 nFlag ) const
 {
@@ -115,7 +115,7 @@ bool SfxItemPool::IsItemFlag_Impl( sal_uInt16 nPos, sal_uInt16 nFlag ) const
     return nFlag == (nItemFlag & nFlag);
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxItemPool::IsItemFlag( sal_uInt16 nWhich, sal_uInt16 nFlag ) const
 {
@@ -128,14 +128,14 @@ bool SfxItemPool::IsItemFlag( sal_uInt16 nWhich, sal_uInt16 nFlag ) const
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxBroadcaster& SfxItemPool::BC()
 {
     return pImp->aBC;
 }
 
-// -----------------------------------------------------------------------
+
 
 
 SfxItemPool::SfxItemPool
@@ -203,7 +203,7 @@ SfxItemPool::SfxItemPool
         SetDefaults(pDefaults);
 }
 
-// -----------------------------------------------------------------------
+
 
 
 SfxItemPool::SfxItemPool
@@ -279,7 +279,7 @@ SfxItemPool::SfxItemPool
         SetSecondaryPool( rPool.pImp->mpSecondary->Clone() );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxItemPool::SetDefaults( SfxPoolItem **pDefaults )
 {
@@ -304,7 +304,7 @@ void SfxItemPool::SetDefaults( SfxPoolItem **pDefaults )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxItemPool::ReleaseDefaults
 (
@@ -336,7 +336,7 @@ void SfxItemPool::ReleaseDefaults
         pImp->ppStaticDefaults = 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxItemPool::ReleaseDefaults
 (
@@ -379,7 +379,7 @@ void SfxItemPool::ReleaseDefaults
         { delete[] pDefaults; pDefaults = 0; }
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxItemPool::~SfxItemPool()
 {
@@ -424,7 +424,7 @@ void SfxItemPool::Free(SfxItemPool* pPool)
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 
 void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
@@ -490,7 +490,7 @@ void SfxItemPool::SetItemInfos(SfxItemInfo const*const pInfos)
     CHECK_SLOTS();
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxMapUnit SfxItemPool::GetMetric( sal_uInt16 ) const
 {
@@ -499,7 +499,7 @@ SfxMapUnit SfxItemPool::GetMetric( sal_uInt16 ) const
     return pImp->eDefMetric;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxItemPool::SetDefaultMetric( SfxMapUnit eNewMetric )
 {
@@ -513,7 +513,7 @@ const OUString& SfxItemPool::GetName() const
     return pImp->aName;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxItemPresentation SfxItemPool::GetPresentation
 (
@@ -530,7 +530,7 @@ SfxItemPresentation SfxItemPool::GetPresentation
 }
 
 
-// -----------------------------------------------------------------------
+
 
 SfxItemPool* SfxItemPool::Clone() const
 {
@@ -540,7 +540,7 @@ SfxItemPool* SfxItemPool::Clone() const
     return pPool;
 }
 
-// ----------------------------------------------------------------------
+
 
 void SfxItemPool::Delete()
 {
@@ -631,7 +631,7 @@ void SfxItemPool::Delete()
     pImp->DeleteItems();
 }
 
-// ----------------------------------------------------------------------
+
 
 void SfxItemPool::SetPoolDefaultItem(const SfxPoolItem &rItem)
 {
@@ -682,7 +682,7 @@ void SfxItemPool::ResetPoolDefaultItem( sal_uInt16 nWhichId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
 {
@@ -811,7 +811,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     return *pNewItem;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxItemPool::Remove( const SfxPoolItem& rItem )
 {
@@ -892,7 +892,7 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
     SFX_ASSERT( false, rItem.Which(), "removing Item not in Pool" );
 }
 
-// -----------------------------------------------------------------------
+
 
 const SfxPoolItem& SfxItemPool::GetDefaultItem( sal_uInt16 nWhich ) const
 {
@@ -939,7 +939,7 @@ void SfxItemPool::FreezeIdRanges()
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void SfxItemPool::FillItemIdRanges_Impl( sal_uInt16*& pWhichRanges ) const
 {
@@ -990,7 +990,7 @@ const SfxPoolItem *SfxItemPool::GetItem2(sal_uInt16 nWhich, sal_uInt32 nOfst) co
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt32 SfxItemPool::GetItemCount2(sal_uInt16 nWhich) const
 {
@@ -1010,7 +1010,7 @@ sal_uInt32 SfxItemPool::GetItemCount2(sal_uInt16 nWhich) const
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 SfxItemPool::GetWhich( sal_uInt16 nSlotId, bool bDeep ) const
 {
@@ -1026,7 +1026,7 @@ sal_uInt16 SfxItemPool::GetWhich( sal_uInt16 nSlotId, bool bDeep ) const
     return nSlotId;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 SfxItemPool::GetSlotId( sal_uInt16 nWhich, bool bDeep ) const
 {
@@ -1045,7 +1045,7 @@ sal_uInt16 SfxItemPool::GetSlotId( sal_uInt16 nWhich, bool bDeep ) const
     return nSID ? nSID : nWhich;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 SfxItemPool::GetTrueWhich( sal_uInt16 nSlotId, bool bDeep ) const
 {
@@ -1061,7 +1061,7 @@ sal_uInt16 SfxItemPool::GetTrueWhich( sal_uInt16 nSlotId, bool bDeep ) const
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 SfxItemPool::GetTrueSlotId( sal_uInt16 nWhich, bool bDeep ) const
 {

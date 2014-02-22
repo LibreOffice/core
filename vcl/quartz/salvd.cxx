@@ -33,7 +33,7 @@
 #endif
 #include "quartz/salgdi.h"
 
-// -----------------------------------------------------------------------
+
 
 SalVirtualDevice* AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
     long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
@@ -51,7 +51,7 @@ SalVirtualDevice* AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
 #endif
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
 {
@@ -113,7 +113,7 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 AquaSalVirtualDevice::~AquaSalVirtualDevice()
 {
@@ -126,7 +126,7 @@ AquaSalVirtualDevice::~AquaSalVirtualDevice()
     Destroy();
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalVirtualDevice::Destroy()
 {
@@ -153,7 +153,7 @@ void AquaSalVirtualDevice::Destroy()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SalGraphics* AquaSalVirtualDevice::GetGraphics()
 {
@@ -164,14 +164,14 @@ SalGraphics* AquaSalVirtualDevice::GetGraphics()
     return mpGraphics;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 {
     mbGraphicsUsed = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 {
@@ -278,7 +278,7 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 #endif
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalVirtualDevice::GetSize( long& rWidth, long& rHeight )
 {

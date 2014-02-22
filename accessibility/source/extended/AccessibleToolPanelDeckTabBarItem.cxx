@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "accessibility/extended/AccessibleToolPanelDeckTabBarItem.hxx"
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -34,11 +33,8 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
-//......................................................................................................................
 namespace accessibility
 {
-//......................................................................................................................
-
     typedef ::com::sun::star::awt::Rectangle    UnoRectangle;
     typedef ::com::sun::star::awt::Point        UnoPoint;
 
@@ -66,9 +62,7 @@ namespace accessibility
     namespace AccessibleStateType = ::com::sun::star::accessibility::AccessibleStateType;
     namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
 
-    //==================================================================================================================
-    //= AccessibleToolPanelDeckTabBarItem_Impl
-    //==================================================================================================================
+    // AccessibleToolPanelDeckTabBarItem_Impl
     class AccessibleToolPanelDeckTabBarItem_Impl : public ::svt::IToolPanelDeckListener
     {
     public:
@@ -115,10 +109,7 @@ namespace accessibility
         size_t                              m_nItemPos;
     };
 
-    //==================================================================================================================
-    //= AccessibleToolPanelDeckTabBarItem_Impl
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    // AccessibleToolPanelDeckTabBarItem_Impl
     AccessibleToolPanelDeckTabBarItem_Impl::AccessibleToolPanelDeckTabBarItem_Impl( AccessibleToolPanelDeckTabBarItem& i_rAntiImpl,
             const Reference< XAccessible >& i_rAccessibleParent, ::svt::IToolPanelDeck& i_rPanelDeck, ::svt::PanelTabBar& i_rTabBar,
             const size_t i_nItemPos )
@@ -131,19 +122,16 @@ namespace accessibility
         m_pPanelDeck->AddListener( *this );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     AccessibleToolPanelDeckTabBarItem_Impl::~AccessibleToolPanelDeckTabBarItem_Impl()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelDeckTabBarItem_Impl::checkDisposed() const
     {
         if ( isDisposed() )
             throw DisposedException( OUString(), *&m_rAntiImpl );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelDeckTabBarItem_Impl::dispose()
     {
         ENSURE_OR_RETURN_VOID( !isDisposed(), "AccessibleToolPanelDeckTabBarItem_Impl::dispose: disposed twice!" );
@@ -154,14 +142,12 @@ namespace accessibility
         m_pTabBar = NULL;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessibleComponent > AccessibleToolPanelDeckTabBarItem_Impl::getParentAccessibleComponent() const
     {
         Reference< XAccessible > xAccessibleParent( m_rAntiImpl.getAccessibleParent(), UNO_QUERY_THROW );
         return Reference< XAccessibleComponent >( xAccessibleParent->getAccessibleContext(), UNO_QUERY );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     OUString AccessibleToolPanelDeckTabBarItem_Impl::getPanelDisplayName()
     {
         const ::svt::PToolPanel pPanel( m_pPanelDeck->GetPanel( getItemPos() ) );
@@ -170,13 +156,11 @@ namespace accessibility
         return pPanel->GetDisplayName();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelDeckTabBarItem_Impl::impl_notifyBoundRectChanges()
     {
         m_rAntiImpl.NotifyAccessibleEvent( AccessibleEventId::BOUNDRECT_CHANGED, Any(), Any() );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelDeckTabBarItem_Impl::impl_notifyStateChange( const sal_Int16 i_nLostState, const sal_Int16 i_nGainedState )
     {
         m_rAntiImpl.NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED,
@@ -185,7 +169,6 @@ namespace accessibility
         );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelDeckTabBarItem_Impl::PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition )
     {
         (void)i_pPanel;
@@ -194,7 +177,6 @@ namespace accessibility
         impl_notifyBoundRectChanges();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelDeckTabBarItem_Impl::PanelRemoved( const size_t i_nPosition )
     {
         if ( i_nPosition == m_nItemPos )
@@ -208,7 +190,6 @@ namespace accessibility
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelDeckTabBarItem_Impl::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive )
     {
         if ( m_nItemPos == i_rOldActive )
@@ -223,7 +204,6 @@ namespace accessibility
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelDeckTabBarItem_Impl::LayouterChanged( const ::svt::PDeckLayouter& i_rNewLayouter )
     {
         (void)i_rNewLayouter;
@@ -232,16 +212,12 @@ namespace accessibility
         dispose();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelDeckTabBarItem_Impl::Dying()
     {
         // if the tool panel deck is dying, then its layouter dies, so should we.
         dispose();
     }
 
-    //==================================================================================================================
-    //= ItemMethodGuard
-    //==================================================================================================================
     class ItemMethodGuard
     {
     public:
@@ -258,10 +234,6 @@ namespace accessibility
         SolarMutexGuard  m_aGuard;
     };
 
-    //==================================================================================================================
-    //= AccessibleToolPanelDeckTabBarItem
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
     AccessibleToolPanelDeckTabBarItem::AccessibleToolPanelDeckTabBarItem( const Reference< XAccessible >& i_rAccessibleParent,
             ::svt::IToolPanelDeck& i_rPanelDeck, ::svt::PanelTabBar& i_rTabBar, const size_t i_nItemPos )
         : ::comphelper::OAccessibleExtendedComponentHelper(
@@ -271,52 +243,44 @@ namespace accessibility
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     AccessibleToolPanelDeckTabBarItem::~AccessibleToolPanelDeckTabBarItem()
     {
     }
 
-    //--------------------------------------------------------------------
     sal_Int32 SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleChildCount(  ) throw (RuntimeException)
     {
         return 0;
     }
 
-    //--------------------------------------------------------------------
     Reference< XAccessible > SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         (void)i;
         throw IndexOutOfBoundsException( OUString(), *this );
     }
 
-    //--------------------------------------------------------------------
     Reference< XAccessible > SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleParent(  ) throw (RuntimeException)
     {
         ItemMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getAccessibleParent();
     }
 
-    //--------------------------------------------------------------------
     sal_Int16 SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleRole(  ) throw (RuntimeException)
     {
         return AccessibleRole::PAGE_TAB;
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleDescription(  ) throw (RuntimeException)
     {
         ItemMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getPanelDisplayName();
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleName(  ) throw (RuntimeException)
     {
         ItemMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getPanelDisplayName();
     }
 
-    //--------------------------------------------------------------------
     Reference< XAccessibleRelationSet > SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleRelationSet(  ) throw (RuntimeException)
     {
         ItemMethodGuard aGuard( *m_pImpl );
@@ -324,7 +288,6 @@ namespace accessibility
         return pRelationSet;
     }
 
-    //--------------------------------------------------------------------
     Reference< XAccessibleStateSet > SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleStateSet(  ) throw (RuntimeException)
     {
         ItemMethodGuard aGuard( *m_pImpl );
@@ -355,8 +318,6 @@ namespace accessibility
         return pStateSet;
     }
 
-
-    //--------------------------------------------------------------------
     Reference< XAccessible > SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleAtPoint( const UnoPoint& i_rLocation ) throw (RuntimeException)
     {
         ItemMethodGuard aGuard( *m_pImpl );
@@ -365,14 +326,12 @@ namespace accessibility
         return NULL;
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL AccessibleToolPanelDeckTabBarItem::grabFocus(  ) throw (RuntimeException)
     {
         ItemMethodGuard aGuard( *m_pImpl );
         m_pImpl->getTabBar()->FocusPanelItem( m_pImpl->getItemPos() );
     }
 
-    //--------------------------------------------------------------------
     ::sal_Int32 SAL_CALL AccessibleToolPanelDeckTabBarItem::getForeground(  ) throw (RuntimeException)
     {
         ItemMethodGuard aGuard( *m_pImpl );
@@ -380,7 +339,6 @@ namespace accessibility
         return xParentComponent->getForeground();
     }
 
-    //--------------------------------------------------------------------
     ::sal_Int32 SAL_CALL AccessibleToolPanelDeckTabBarItem::getBackground(  ) throw (RuntimeException)
     {
         ItemMethodGuard aGuard( *m_pImpl );
@@ -388,7 +346,6 @@ namespace accessibility
         return xParentComponent->getBackground();
     }
 
-    //--------------------------------------------------------------------
     Reference< XFont > SAL_CALL AccessibleToolPanelDeckTabBarItem::getFont(  ) throw (RuntimeException)
     {
         ItemMethodGuard aGuard( *m_pImpl );
@@ -398,7 +355,6 @@ namespace accessibility
         return xParentComponent->getFont();
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getTitledBorderText(  ) throw (RuntimeException)
     {
         ItemMethodGuard aGuard( *m_pImpl );
@@ -406,14 +362,12 @@ namespace accessibility
         return OUString();
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getToolTipText(  ) throw (RuntimeException)
     {
         ItemMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getPanelDisplayName();
     }
 
-    //--------------------------------------------------------------------
     UnoRectangle SAL_CALL AccessibleToolPanelDeckTabBarItem::implGetBounds() throw (RuntimeException)
     {
         ItemMethodGuard aGuard( *m_pImpl );
@@ -430,15 +384,11 @@ namespace accessibility
         );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL AccessibleToolPanelDeckTabBarItem::disposing()
     {
         ItemMethodGuard aGuard( *m_pImpl );
         m_pImpl->dispose();
     }
-
-//......................................................................................................................
 } // namespace accessibility
-//......................................................................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

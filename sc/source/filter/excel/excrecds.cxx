@@ -567,7 +567,7 @@ XclExpFiltermode::XclExpFiltermode() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpAutofilterinfo::XclExpAutofilterinfo( const ScAddress& rStartPos, SCCOL nScCol ) :
     XclExpUInt16Record( EXC_ID_AUTOFILTERINFO, static_cast< sal_uInt16 >( nScCol ) ),
@@ -575,7 +575,7 @@ XclExpAutofilterinfo::XclExpAutofilterinfo( const ScAddress& rStartPos, SCCOL nS
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ExcFilterCondition::ExcFilterCondition() :
         nType( EXC_AFTYPE_NOTUSED ),
@@ -673,7 +673,7 @@ void ExcFilterCondition::SaveText( XclExpStream& rStrm )
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpAutofilter::XclExpAutofilter( const XclExpRoot& rRoot, sal_uInt16 nC ) :
     XclExpRecord( EXC_ID_AUTOFILTER, 24 ),
@@ -896,7 +896,7 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_filterColumn );
 }
 
-// ----------------------------------------------------------------------------
+
 
 ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
     XclExpRoot( rRoot ),
@@ -1068,7 +1068,7 @@ bool ExcAutoFilterRecs::HasFilterMode() const
     return pFilterMode != NULL;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpFilterManager::XclExpFilterManager( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )

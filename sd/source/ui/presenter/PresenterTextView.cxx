@@ -189,7 +189,7 @@ void SAL_CALL PresenterTextView::initialize (const Sequence<Any>& rArguments)
 
 
 
-//-----------------------------------------------------------------------------
+
 
 Any PresenterTextView::GetPropertyValue (const OUString& rsPropertyName)
 {

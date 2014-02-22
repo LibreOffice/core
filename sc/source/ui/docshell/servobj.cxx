@@ -29,7 +29,7 @@
 
 using namespace formula;
 
-// -----------------------------------------------------------------------
+
 
 static bool lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, const OUString& rName )
 {

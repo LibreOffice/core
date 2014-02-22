@@ -162,13 +162,13 @@ sal_Bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
     return bStatus;
 }
 
-// -------------------------------------------------------------------------------------------
+
 
 void PCDReader::MayCallback(sal_uLong /*nPercent*/)
 {
 }
 
-// -------------------------------------------------------------------------------------------
+
 
 void PCDReader::CheckPCDImagePacFile()
 {
@@ -181,7 +181,7 @@ void PCDReader::CheckPCDImagePacFile()
         bStatus = sal_False;
 }
 
-// -------------------------------------------------------------------------------------------
+
 
 void PCDReader::ReadOrientation()
 {
@@ -192,7 +192,7 @@ void PCDReader::ReadOrientation()
     nOrientation &= 0x03;
 }
 
-// -------------------------------------------------------------------------------------------
+
 
 void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
 {

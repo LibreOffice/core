@@ -29,7 +29,7 @@ namespace rptui
 using namespace ::com::sun::star;
 TYPEINIT1( OReportPage, SdrPage );
 
-//----------------------------------------------------------------------------
+
 OReportPage::OReportPage( OReportModel& _rModel
                          ,const uno::Reference< report::XSection >& _xSection
                          ,bool bMasterPage )
@@ -40,7 +40,7 @@ OReportPage::OReportPage( OReportModel& _rModel
 {
 }
 
-//----------------------------------------------------------------------------
+
 
 OReportPage::OReportPage( const OReportPage& rPage )
     :SdrPage( rPage )
@@ -51,20 +51,20 @@ OReportPage::OReportPage( const OReportPage& rPage )
 {
 }
 
-//----------------------------------------------------------------------------
+
 
 OReportPage::~OReportPage()
 {
 }
 
-//----------------------------------------------------------------------------
+
 
 SdrPage* OReportPage::Clone() const
 {
     return new OReportPage( *this );
 }
 
-//----------------------------------------------------------------------------
+
 sal_uLong OReportPage::getIndexOf(const uno::Reference< report::XReportComponent >& _xObject)
 {
     sal_uLong nCount = GetObjCount();
@@ -80,7 +80,7 @@ sal_uLong OReportPage::getIndexOf(const uno::Reference< report::XReportComponent
     }
     return i;
 }
-//----------------------------------------------------------------------------
+
 void OReportPage::removeSdrObject(const uno::Reference< report::XReportComponent >& _xObject)
 {
     sal_uLong nPos = getIndexOf(_xObject);
@@ -93,7 +93,7 @@ void OReportPage::removeSdrObject(const uno::Reference< report::XReportComponent
         RemoveObject(nPos);
     }
 }
-// -----------------------------------------------------------------------------
+
 SdrObject* OReportPage::RemoveObject(sal_uLong nObjNum)
 {
     SdrObject* pObj = SdrPage::RemoveObject(nObjNum);
@@ -115,7 +115,7 @@ SdrObject* OReportPage::RemoveObject(sal_uLong nObjNum)
     }
     return pObj;
 }
-//----------------------------------------------------------------------------
+
 void OReportPage::insertObject(const uno::Reference< report::XReportComponent >& _xObject)
 {
     OSL_ENSURE(_xObject.is(),"Object is not valid to create a SdrObject!");
@@ -131,17 +131,17 @@ void OReportPage::insertObject(const uno::Reference< report::XReportComponent >&
     if ( pObject )
         pObject->StartListening();
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< report::XSection > OReportPage::getSection() const
 {
     return m_xSection;
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > OReportPage::createUnoPage()
 {
     return static_cast<cppu::OWeakObject*>( new reportdesign::OReportDrawPage(this,m_xSection) );
 }
-// -----------------------------------------------------------------------------
+
 void OReportPage::removeTempObject(SdrObject *_pToRemoveObj)
 {
     if (_pToRemoveObj)
@@ -174,7 +174,7 @@ void OReportPage::resetSpecialMode()
 
     m_bSpecialInsertMode = false;
 }
-// -----------------------------------------------------------------------------
+
 void OReportPage::NbcInsertObject(SdrObject* pObj, sal_uLong nPos, const SdrInsertReason* pReason)
 {
     SdrPage::NbcInsertObject(pObj, nPos, pReason);

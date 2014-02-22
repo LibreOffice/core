@@ -146,7 +146,7 @@ static bool sal_GetVisualInfo( Display *pDisplay, XID nVID, XVisualInfo &rVI )
     return true;
 }
 
-// ---------------------------------------------------------------------------
+
 extern "C" srv_vendor_t
 sal_GetServerVendor( Display *p_display )
 {

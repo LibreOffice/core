@@ -49,7 +49,7 @@
     INFO - INFO - INFO - INFO - INFO - INFO
 ----------------------------------------------*/
 
-//-----------------------------
+
 
 CPropertySheet::CPropertySheet(long RefCnt) :
     m_RefCnt(RefCnt)
@@ -58,7 +58,7 @@ CPropertySheet::CPropertySheet(long RefCnt) :
     InterlockedIncrement(&g_DllRefCnt);
 }
 
-//-----------------------------
+
 
 CPropertySheet::~CPropertySheet()
 {
@@ -66,9 +66,9 @@ CPropertySheet::~CPropertySheet()
     InterlockedDecrement(&g_DllRefCnt);
 }
 
-//-----------------------------
+
 // IUnknown methods
-//-----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CPropertySheet::QueryInterface(
     REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject)
@@ -94,7 +94,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::QueryInterface(
     return E_NOINTERFACE;
 }
 
-//-----------------------------
+
 
 ULONG STDMETHODCALLTYPE CPropertySheet::AddRef(void)
 {
@@ -102,7 +102,7 @@ ULONG STDMETHODCALLTYPE CPropertySheet::AddRef(void)
     return InterlockedIncrement(&m_RefCnt);
 }
 
-//-----------------------------
+
 
 ULONG STDMETHODCALLTYPE CPropertySheet::Release(void)
 {
@@ -115,9 +115,9 @@ ULONG STDMETHODCALLTYPE CPropertySheet::Release(void)
     return refcnt;
 }
 
-//-----------------------------
+
 // IShellExtInit
-//-----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CPropertySheet::Initialize(
     LPCITEMIDLIST /*pidlFolder*/, LPDATAOBJECT lpdobj, HKEY /*hkeyProgID*/)
@@ -166,9 +166,9 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::Initialize(
     return hr;
 }
 
-//-----------------------------
+
 // IShellPropSheetExt
-//-----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
 {
@@ -239,7 +239,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddP
     return NOERROR;
 }
 
-//-----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CPropertySheet::ReplacePage(
     UINT /*uPageID*/, LPFNADDPROPSHEETPAGE /*lpfnReplaceWith*/, LPARAM /*lParam*/)
@@ -247,7 +247,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::ReplacePage(
     return E_NOTIMPL;
 }
 
-//-----------------------------
+
 
 UINT CALLBACK CPropertySheet::PropPageSummaryCallback(
     HWND /*hwnd*/, UINT uMsg, LPPROPSHEETPAGE ppsp)
@@ -266,7 +266,7 @@ UINT CALLBACK CPropertySheet::PropPageSummaryCallback(
 }
 
 
-//-----------------------------
+
 
 BOOL CALLBACK CPropertySheet::PropPageSummaryProc(HWND hwnd, UINT uiMsg, WPARAM /*wParam*/, LPARAM lParam)
 {
@@ -284,7 +284,7 @@ BOOL CALLBACK CPropertySheet::PropPageSummaryProc(HWND hwnd, UINT uiMsg, WPARAM 
     return FALSE;
 }
 
-//-----------------------------
+
 
 BOOL CALLBACK CPropertySheet::PropPageStatisticsProc(HWND hwnd, UINT uiMsg, WPARAM /*wParam*/, LPARAM lParam)
 {
@@ -329,7 +329,7 @@ void CPropertySheet::InitPropPageSummary(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)
     }
 }
 
-//---------------------------------
+
 /**
 */
 void CPropertySheet::InitPropPageStatistics(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)

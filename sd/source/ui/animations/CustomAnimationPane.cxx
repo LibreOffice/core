@@ -103,7 +103,7 @@ using ::sd::framework::FrameworkHelper;
 
 namespace sd {
 
-// --------------------------------------------------------------------
+
 
 void fillDurationComboBox( ListBox* pBox )
 {
@@ -147,7 +147,7 @@ void fillRepeatComboBox( ListBox* pBox )
     pBox->SetEntryData( pBox->InsertEntry( aEndOfSlide ), (void*)((sal_Int32)-2) );
 }
 
-// --------------------------------------------------------------------
+
 
 
 CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBase,

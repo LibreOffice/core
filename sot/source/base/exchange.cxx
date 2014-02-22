@@ -50,7 +50,7 @@ struct DataFlavorRepresentation
     const ::com::sun::star::uno::Type*  pType;
 };
 
-// -----------------------------------------------------------------------------
+
 
 namespace
 {
@@ -212,7 +212,7 @@ namespace
             const DataFlavorRepresentation, ImplFormatArray_Impl > {};
 }
 
-//-----------------------------------------------------------------------
+
 
 static tDataFlavorList& InitFormats_Impl()
 {

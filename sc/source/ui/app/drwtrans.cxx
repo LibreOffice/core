@@ -74,15 +74,15 @@
 
 using namespace com::sun::star;
 
-// -----------------------------------------------------------------------
+
 
 #define SCDRAWTRANS_TYPE_EMBOBJ         1
 #define SCDRAWTRANS_TYPE_DRAWMODEL      2
 #define SCDRAWTRANS_TYPE_DOCUMENT       3
 
-// -----------------------------------------------------------------------
 
-// -----------------------------------------------------------------------
+
+
 
 ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContainerShell,
                                         const TransferableObjectDescriptor& rDesc ) :

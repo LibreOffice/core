@@ -32,7 +32,7 @@ namespace framework{
 #define PROTOCOL_VALUE      "service:"
 #define PROTOCOL_LENGTH     8
 
-//_________________________________________________________________________________________________________________
+
 // XInterface, XTypeProvider, XServiceInfo
 
 DEFINE_XSERVICEINFO_MULTISERVICE(ServiceHandler                   ,
@@ -50,7 +50,7 @@ DEFINE_INIT_SERVICE(ServiceHandler,
                     }
                    )
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      standard ctor
@@ -67,7 +67,7 @@ ServiceHandler::ServiceHandler( const css::uno::Reference< css::lang::XMultiServ
 {
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      standard dtor
@@ -78,7 +78,7 @@ ServiceHandler::~ServiceHandler()
     m_xFactory = NULL;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      decide if this dispatch implementation can be used for requested URL or not
@@ -99,7 +99,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL ServiceHandler::queryDispa
     return xDispatcher;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      do the same like dispatch() but for multiple requests at the same time
@@ -119,7 +119,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Serv
     return lDispatcher;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      dispatch URL with arguments
@@ -141,7 +141,7 @@ void SAL_CALL ServiceHandler::dispatch( const css::util::URL&                   
     // No notification for status listener!
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      dispatch with guaranteed notifications about success
@@ -179,7 +179,7 @@ void SAL_CALL ServiceHandler::dispatchWithNotification( const css::util::URL&   
     }
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      threadsafe helper for dispatch calls
@@ -256,7 +256,7 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
     return xService;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      add/remove listener for state events
@@ -275,7 +275,7 @@ void SAL_CALL ServiceHandler::addStatusListener( const css::uno::Reference< css:
     // not suported yet
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void SAL_CALL ServiceHandler::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
                                                     const css::util::URL&                                     /*aURL*/      ) throw( css::uno::RuntimeException )

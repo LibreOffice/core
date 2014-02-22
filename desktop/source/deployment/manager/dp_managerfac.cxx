@@ -74,7 +74,7 @@ extern sdecl::ServiceDecl const serviceDecl(
     "com.sun.star.comp.deployment.PackageManagerFactory",
     "com.sun.star.comp.deployment.PackageManagerFactory" );
 
-//______________________________________________________________________________
+
 PackageManagerFactoryImpl::PackageManagerFactoryImpl(
     Reference<XComponentContext> const & xComponentContext )
     : t_pmfac_helper( getMutex() ),
@@ -82,12 +82,12 @@ PackageManagerFactoryImpl::PackageManagerFactoryImpl(
 {
 }
 
-//______________________________________________________________________________
+
 PackageManagerFactoryImpl::~PackageManagerFactoryImpl()
 {
 }
 
-//______________________________________________________________________________
+
 inline void PackageManagerFactoryImpl::check()
 {
     ::osl::MutexGuard guard( getMutex() );
@@ -99,7 +99,7 @@ inline void PackageManagerFactoryImpl::check()
     }
 }
 
-//______________________________________________________________________________
+
 void PackageManagerFactoryImpl::disposing()
 {
     // dispose all managers:
@@ -118,7 +118,7 @@ void PackageManagerFactoryImpl::disposing()
 }
 
 // XPackageManagerFactory
-//______________________________________________________________________________
+
 Reference<deployment::XPackageManager>
 PackageManagerFactoryImpl::getPackageManager( OUString const & context )
     throw (RuntimeException)

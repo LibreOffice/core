@@ -102,7 +102,7 @@ public:
 
     type_info * getRTTI( typelib_CompoundTypeDescription * ) SAL_THROW(());
 };
-//__________________________________________________________________________________________________
+
 RTTI::RTTI() SAL_THROW(())
 #if defined(FREEBSD) && __FreeBSD_version < 702104
     : m_hApp( dlopen( 0, RTLD_NOW | RTLD_GLOBAL ) )
@@ -111,13 +111,13 @@ RTTI::RTTI() SAL_THROW(())
 #endif
 {
 }
-//__________________________________________________________________________________________________
+
 RTTI::~RTTI() SAL_THROW(())
 {
     dlclose( m_hApp );
 }
 
-//__________________________________________________________________________________________________
+
 type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW(())
 {
     type_info * rtti;
@@ -200,7 +200,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
     return rtti;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 extern "C" {
 static void _GLIBCXX_CDTOR_CALLABI deleteException( void * pExc )
 {
