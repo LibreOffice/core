@@ -34,8 +34,6 @@
 #include <tools/debug.hxx>
 
 
-// =======================================================================
-
 class FloatingWindow::ImplData
 {
 public:
@@ -60,7 +58,6 @@ Rectangle& FloatingWindow::ImplGetItemEdgeClipRect()
     return mpImplData->maItemEdgeClipRect;
 }
 
-// =======================================================================
 
 void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -138,8 +135,6 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
     ImplInitSettings();
 }
 
-
-
 void FloatingWindow::ImplInitSettings()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -154,15 +149,12 @@ void FloatingWindow::ImplInitSettings()
     SetBackground( aColor );
 }
 
-// =======================================================================
 
 FloatingWindow::FloatingWindow( Window* pParent, WinBits nStyle ) :
     SystemWindow( WINDOW_FLOATINGWINDOW )
 {
     ImplInit( pParent, nStyle );
 }
-
-
 
 FloatingWindow::FloatingWindow( Window* pParent, const ResId& rResId ) :
     SystemWindow( WINDOW_FLOATINGWINDOW )
@@ -176,8 +168,6 @@ FloatingWindow::FloatingWindow( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-
-
 void FloatingWindow::ImplLoadRes( const ResId& rResId )
 {
     SystemWindow::ImplLoadRes( rResId );
@@ -187,7 +177,7 @@ void FloatingWindow::ImplLoadRes( const ResId& rResId )
     if ( (RSC_FLOATINGWINDOW_WHMAPMODE | RSC_FLOATINGWINDOW_WIDTH |
           RSC_FLOATINGWINDOW_HEIGHT) & nObjMask )
     {
-        // Groessenangabe aus der Resource verwenden
+        // use Sizes from the Resource
         Size    aSize;
         MapUnit eSizeMap = MAP_PIXEL;
 
@@ -208,8 +198,6 @@ void FloatingWindow::ImplLoadRes( const ResId& rResId )
     }
 }
 
-
-
 FloatingWindow::~FloatingWindow()
 {
     if( mbPopupModeCanceled )
@@ -226,20 +214,16 @@ FloatingWindow::~FloatingWindow()
     delete mpImplData;
 }
 
-
-
 Point FloatingWindow::CalcFloatingPosition( Window* pWindow, const Rectangle& rRect, sal_uLong nFlags, sal_uInt16& rArrangeIndex )
 {
     return ImplCalcPos( pWindow, rRect, nFlags, rArrangeIndex );
 }
 
-
-
 Point FloatingWindow::ImplCalcPos( Window* pWindow,
                                    const Rectangle& rRect, sal_uLong nFlags,
                                    sal_uInt16& rArrangeIndex )
 {
-    // Fenster-Position ermitteln
+    // get window position
     Point       aPos;
     Size        aSize = pWindow->GetSizePixel();
     Rectangle   aScreenRect = pWindow->ImplGetFrameWindow()->GetDesktopRectPixel();
@@ -397,7 +381,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
                 break;
         }
 
-        // Evt. noch anpassen
+        // adjust if necessary
         if ( bBreak && !(nFlags & FLOATWIN_POPUPMODE_NOAUTOARRANGE) )
         {
             if ( (nArrangeAry[nArrangeIndex] == FLOATWIN_POPUPMODE_LEFT)  ||
@@ -446,8 +430,6 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
     // caller expects cordinates relative to top-level win
     return pW->OutputToScreenPixel( aPos );
 }
-
-
 
 FloatingWindow* FloatingWindow::ImplFloatHitTest( Window* pReference, const Point& rPos, sal_uInt16& rHitTest )
 {
@@ -505,8 +487,6 @@ FloatingWindow* FloatingWindow::ImplFloatHitTest( Window* pReference, const Poin
     return NULL;
 }
 
-
-
 FloatingWindow* FloatingWindow::ImplFindLastLevelFloat()
 {
     FloatingWindow* pWin = this;
@@ -524,8 +504,6 @@ FloatingWindow* FloatingWindow::ImplFindLastLevelFloat()
     return pLastFoundWin;
 }
 
-
-
 bool FloatingWindow::ImplIsFloatPopupModeWindow( const Window* pWindow )
 {
     FloatingWindow* pWin = this;
@@ -542,8 +520,6 @@ bool FloatingWindow::ImplIsFloatPopupModeWindow( const Window* pWindow )
     return false;
 }
 
-
-
 IMPL_LINK_NOARG(FloatingWindow, ImplEndPopupModeHdl)
 {
     mnPostId            = 0;
@@ -553,11 +529,9 @@ IMPL_LINK_NOARG(FloatingWindow, ImplEndPopupModeHdl)
     return 0;
 }
 
-
-
 bool FloatingWindow::Notify( NotifyEvent& rNEvt )
 {
-    // Zuerst Basisklasse rufen wegen TabSteuerung
+    // call Base Class first for tab control
     bool nRet = SystemWindow::Notify( rNEvt );
     if ( !nRet )
     {
@@ -578,8 +552,6 @@ bool FloatingWindow::Notify( NotifyEvent& rNEvt )
     return nRet;
 }
 
-
-
 void FloatingWindow::StateChanged( StateChangedType nType )
 {
     SystemWindow::StateChanged( nType );
@@ -590,8 +562,6 @@ void FloatingWindow::StateChanged( StateChangedType nType )
         Invalidate();
     }
 }
-
-
 
 void FloatingWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -605,26 +575,20 @@ void FloatingWindow::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-
-
 void FloatingWindow::ImplCallPopupModeEnd()
 {
-    // PopupMode wurde beendet
+    // PopupMode is finished
     mbInPopupMode = false;
 
-    // Handler asyncron rufen
+    // call Handler asyncron.
     if ( !mnPostId )
         Application::PostUserEvent( mnPostId, LINK( this, FloatingWindow, ImplEndPopupModeHdl ) );
 }
-
-
 
 void FloatingWindow::PopupModeEnd()
 {
     maPopupModeEndHdl.Call( this );
 }
-
-
 
 void FloatingWindow::SetTitleType( sal_uInt16 nTitle )
 {
@@ -645,8 +609,6 @@ void FloatingWindow::SetTitleType( sal_uInt16 nTitle )
         ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
     }
 }
-
-
 
 void FloatingWindow::StartPopupMode( const Rectangle& rRect, sal_uLong nFlags )
 {
@@ -729,8 +691,6 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, sal_uLong nFlags )
     Show( true, SHOW_NOACTIVATE );
 }
 
-
-
 void FloatingWindow::StartPopupMode( ToolBox* pBox, sal_uLong nFlags )
 {
     // get selected button
@@ -761,7 +721,7 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, sal_uLong nFlags )
  *  don't set since it disables closing floaters with escape
  */
 
-    // Flags fuer Positionierung bestimmen
+    // set Flags for positioning
     if ( !(nFlags & (FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_UP |
                      FLOATWIN_POPUPMODE_LEFT | FLOATWIN_POPUPMODE_RIGHT |
                      FLOATWIN_POPUPMODE_NOAUTOARRANGE)) )
@@ -772,11 +732,9 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, sal_uLong nFlags )
              nFlags |= FLOATWIN_POPUPMODE_RIGHT;
     }
 
-    // FloatingModus starten
+    // start FloatingMode
     StartPopupMode( aRect, nFlags );
 }
-
-
 
 void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uLong nFocusId )
 {
@@ -787,24 +745,24 @@ void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uLong nFocusId )
 
     mbInCleanUp = true; // prevent killing this window due to focus change while working with it
 
-    // Bei allen nachfolgenden PopupMode-Fenster den Modus auch beenden
+    // stop the PopupMode also for all following PopupMode windows
     while ( pSVData->maWinData.mpFirstFloat && pSVData->maWinData.mpFirstFloat != this )
         pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL );
 
 
-    // Fenster aus der Liste austragen
+    // delete window from the list
     pSVData->maWinData.mpFirstFloat = mpNextFloat;
     mpNextFloat = NULL;
 
     sal_uLong nPopupModeFlags = mnPopupModeFlags;
 
-    // Wenn nicht abgerissen wurde, dann Fenster wieder Hiden
+    // hide window again if it was not deleted
     if ( !(nFlags & FLOATWIN_POPUPMODEEND_TEAROFF) ||
          !(nPopupModeFlags & FLOATWIN_POPUPMODE_ALLOWTEAROFF) )
     {
         Show( false, SHOW_NOFOCUSCHANGE );
 
-        // Focus evt. auf ein entsprechendes FloatingWindow weiterschalten
+        // maybe pass focus on to a suitable FloatingWindow
         if ( nFocusId )
             Window::EndSaveFocus( nFocusId );
         else if ( pSVData->maWinData.mpFocusWin && pSVData->maWinData.mpFirstFloat &&
@@ -822,21 +780,21 @@ void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uLong nFocusId )
 
     mbPopupModeCanceled = (nFlags & FLOATWIN_POPUPMODEEND_CANCEL) != 0;
 
-    // Gegebenenfalls den Title wieder herstellen
+    // redo title
     SetTitleType( mnOldTitle );
 
-    // ToolBox wieder auf normal schalten
+    // set ToolBox again to normal
     if ( mpImplData->mpBox )
     {
         mpImplData->mpBox->ImplFloatControl( false, this );
         mpImplData->mpBox = NULL;
     }
 
-    // Je nach Parameter den PopupModeEnd-Handler rufen
+    // call PopupModeEnd-Handler depending on parameter
     if ( !(nFlags & FLOATWIN_POPUPMODEEND_DONTCALLHDL) )
         ImplCallPopupModeEnd();
 
-    // Je nach Parameter die restlichen Fenster auch noch schliessen
+    // close all other windows depending on parameter
     if ( nFlags & FLOATWIN_POPUPMODEEND_CLOSEALL )
     {
         if ( !(nPopupModeFlags & FLOATWIN_POPUPMODE_NEWLEVEL) )
@@ -852,18 +810,14 @@ void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uLong nFocusId )
     mbInCleanUp = false;
 }
 
-
-
 void FloatingWindow::EndPopupMode( sal_uInt16 nFlags )
 {
     ImplEndPopupMode( nFlags );
 }
 
-
-
 void FloatingWindow::AddPopupModeWindow( Window* pWindow )
 {
-    // !!! bisher erst 1 Fenster und noch keine Liste
+    // !!! up-to-now only 1 window and not yet a list
     mpFirstPopupModeWin = pWindow;
 }
 
