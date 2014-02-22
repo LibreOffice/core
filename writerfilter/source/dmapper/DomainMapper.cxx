@@ -1308,12 +1308,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         rContext->Insert(PROP_CHAR_EMPHASIS, uno::makeAny ( getEmphasisValue (nIntValue)));
         break;  // sprmCKcd
     case NS_sprm::LN_CFEmboss:// sprmCFEmboss
-    case 60:// sprmCFBold
-    case NS_sprm::LN_CFBoldBi:// sprmCFBoldBi    (offset 0x27 to normal bold)
-    case NS_sprm::LN_CFItalicBi:// sprmCFItalicBi  (offset 0x27 to normal italic)
-    case NS_sprm::LN_CFBold: //sprmCFBold
-    case 61: /*sprmCFItalic*/
-    case NS_sprm::LN_CFItalic: //sprmCFItalic
+    case NS_ooxml::LN_EG_RPrBase_b:
+    case NS_ooxml::LN_EG_RPrBase_bCs:
+    case NS_ooxml::LN_EG_RPrBase_i:
+    case NS_ooxml::LN_EG_RPrBase_iCs:
     case NS_sprm::LN_CFStrike: //sprmCFStrike
     case NS_sprm::LN_CFOutline: //sprmCFOutline
     case NS_sprm::LN_CFShadow: //sprmCFShadow
@@ -1325,15 +1323,13 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             PropertyIds ePropertyId = PROP_CHAR_WEIGHT; //initialized to prevent warning!
             switch( nSprmId )
             {
-            case 60:// sprmCFBold
-            case NS_sprm::LN_CFBoldBi: // sprmCFBoldBi
-            case NS_sprm::LN_CFBold: /*sprmCFBold*/
-                ePropertyId = nSprmId != NS_sprm::LN_CFBoldBi ? PROP_CHAR_WEIGHT : PROP_CHAR_WEIGHT_COMPLEX;
+            case NS_ooxml::LN_EG_RPrBase_b:
+            case NS_ooxml::LN_EG_RPrBase_bCs:
+                ePropertyId = nSprmId != NS_ooxml::LN_EG_RPrBase_bCs ? PROP_CHAR_WEIGHT : PROP_CHAR_WEIGHT_COMPLEX;
                 break;
-            case 61: /*sprmCFItalic*/
-            case NS_sprm::LN_CFItalicBi: // sprmCFItalicBi
-            case NS_sprm::LN_CFItalic: /*sprmCFItalic*/
-                ePropertyId = nSprmId == 0x836 ? PROP_CHAR_POSTURE : PROP_CHAR_POSTURE_COMPLEX;
+            case NS_ooxml::LN_EG_RPrBase_i:
+            case NS_ooxml::LN_EG_RPrBase_iCs:
+                ePropertyId = nSprmId == NS_ooxml::LN_EG_RPrBase_i ? PROP_CHAR_POSTURE : PROP_CHAR_POSTURE_COMPLEX;
                 break;
             case NS_sprm::LN_CFStrike: /*sprmCFStrike*/
             case NS_sprm::LN_CFDStrike : /*sprmCFDStrike double strike through*/
@@ -1391,34 +1387,32 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
 
                 switch( nSprmId )
                 {
-                    case 60:/*sprmCFBold*/
-                    case NS_sprm::LN_CFBold: /*sprmCFBold*/
-                    case NS_sprm::LN_CFBoldBi: // sprmCFBoldBi
+                    case NS_ooxml::LN_EG_RPrBase_b:
+                    case NS_ooxml::LN_EG_RPrBase_bCs:
                     {
                         uno::Any aBold( uno::makeAny( nIntValue ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL ) );
 
                         rContext->Insert(ePropertyId, aBold );
-                        if( nSprmId != NS_sprm::LN_CFBoldBi ) // sprmCFBoldBi
+                        if( nSprmId != NS_ooxml::LN_EG_RPrBase_bCs )
                             rContext->Insert(PROP_CHAR_WEIGHT_ASIAN, aBold );
 
                         uno::Reference<beans::XPropertySet> xCharStyle(m_pImpl->GetCurrentNumberingCharStyle());
                         if (xCharStyle.is())
                             xCharStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_CHAR_WEIGHT), aBold);
-                        if (nSprmId == NS_sprm::LN_CFBold)
+                        if (nSprmId == NS_ooxml::LN_EG_RPrBase_b)
                             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "b", OUString::number(nIntValue));
-                        else if (nSprmId == NS_sprm::LN_CFBoldBi)
+                        else if (nSprmId == NS_ooxml::LN_EG_RPrBase_bCs)
                             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "bCs", OUString::number(nIntValue));
                     }
                     break;
-                    case 61: /*sprmCFItalic*/
-                    case NS_sprm::LN_CFItalic: /*sprmCFItalic*/
-                    case NS_sprm::LN_CFItalicBi: // sprmCFItalicBi
+                    case NS_ooxml::LN_EG_RPrBase_i:
+                    case NS_ooxml::LN_EG_RPrBase_iCs:
                     {
                         uno::Any aPosture( uno::makeAny( nIntValue ? awt::FontSlant_ITALIC : awt::FontSlant_NONE ) );
                         rContext->Insert( ePropertyId, aPosture );
-                        if( nSprmId != NS_sprm::LN_CFItalicBi ) // sprmCFItalicBi
+                        if (nSprmId != NS_ooxml::LN_EG_RPrBase_iCs)
                             rContext->Insert(PROP_CHAR_POSTURE_ASIAN, aPosture );
-                        if (nSprmId == NS_sprm::LN_CFItalic)
+                        if (nSprmId == NS_ooxml::LN_EG_RPrBase_i)
                             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "i", OUString::number(nIntValue));
                     }
                     break;

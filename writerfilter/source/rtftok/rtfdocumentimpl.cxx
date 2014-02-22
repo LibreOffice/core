@@ -3841,10 +3841,10 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     // Trivial character sprms.
     switch (nKeyword)
     {
-        case RTF_B: nSprm = NS_sprm::LN_CFBold; break;
-        case RTF_AB: nSprm = NS_sprm::LN_CFBoldBi; break;
-        case RTF_I: nSprm = NS_sprm::LN_CFItalic; break;
-        case RTF_AI: nSprm = NS_sprm::LN_CFItalicBi; break;
+        case RTF_B: nSprm = NS_ooxml::LN_EG_RPrBase_b; break;
+        case RTF_AB: nSprm = NS_ooxml::LN_EG_RPrBase_bCs; break;
+        case RTF_I: nSprm = NS_ooxml::LN_EG_RPrBase_i; break;
+        case RTF_AI: nSprm = NS_ooxml::LN_EG_RPrBase_iCs; break;
         case RTF_UL: nSprm = NS_sprm::LN_CKul; break;
         case RTF_OUTL: nSprm = NS_sprm::LN_CFOutline; break;
         case RTF_SHAD: nSprm = NS_sprm::LN_CFShadow; break;

@@ -23112,10 +23112,10 @@
       <kind name="paragraph"/>
       <element name="rStyle" tokenid="ooxml:EG_RPrBase_rStyle"/>
       <element name="rFonts" tokenid="ooxml:EG_RPrBase_rFonts"/>
-      <element name="b" tokenid="sprm:CFBold"/>
-      <element name="bCs" tokenid="sprm:CFBoldBi"/>
-      <element name="i" tokenid="sprm:CFItalic"/>
-      <element name="iCs" tokenid="sprm:CFItalicBi"/>
+      <element name="b" tokenid="ooxml:EG_RPrBase_b"/>
+      <element name="bCs" tokenid="ooxml:EG_RPrBase_bCs"/>
+      <element name="i" tokenid="ooxml:EG_RPrBase_i"/>
+      <element name="iCs" tokenid="ooxml:EG_RPrBase_iCs"/>
       <element name="caps" tokenid="sprm:CFCaps"/>
       <element name="smallCaps" tokenid="sprm:CFSmallCaps"/>
       <element name="strike" tokenid="sprm:CFStrike"/>
