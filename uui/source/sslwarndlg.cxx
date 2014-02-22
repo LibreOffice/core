@@ -36,7 +36,7 @@ void SSLWarnDialog::ViewCert()
     xDocumentDigitalSignatures.get()->showCertificate(getCert());
 }
 
-// -----------------------------------------------------------------------
+
 
 SSLWarnDialog::SSLWarnDialog(Window* pParent,
     const css::uno::Reference< css::security::XCertificate >& rXCert,

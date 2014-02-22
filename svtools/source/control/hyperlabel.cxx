@@ -63,7 +63,7 @@ namespace svt
         HyperLabelImpl();
     };
 
-    //---------------------------------------------------------------------
+
     HyperLabelImpl::HyperLabelImpl()
     {
     }
@@ -209,7 +209,7 @@ namespace svt
     }
 
 
-    //------------------------------------------------------------------------------
+
     void HyperLabel::DataChanged( const DataChangedEvent& rDCEvt )
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();

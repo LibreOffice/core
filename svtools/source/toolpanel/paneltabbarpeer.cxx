@@ -48,19 +48,19 @@ namespace svt
     //==================================================================================================================
     //= PanelTabBarPeer
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     PanelTabBarPeer::PanelTabBarPeer( PanelTabBar& i_rTabBar )
         :VCLXWindow()
         ,m_pTabBar( &i_rTabBar )
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     PanelTabBarPeer::~PanelTabBarPeer()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XAccessibleContext > PanelTabBarPeer::CreateAccessibleContext()
     {
         SolarMutexGuard aSolarGuard;
@@ -75,7 +75,7 @@ namespace svt
         return m_aAccessibleFactory.getFactory().createAccessibleToolPanelTabBar( xAccessibleParent, m_pTabBar->GetPanelDeck(), *m_pTabBar );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL PanelTabBarPeer::dispose() throw(RuntimeException)
     {
         {

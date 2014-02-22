@@ -27,7 +27,7 @@
 
 using namespace ::svxform;
 
-//-----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL SvxFmMSFactory::createInstance(const OUString& rServiceSpecifier) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xRet;
@@ -46,7 +46,7 @@ using namespace ::svxform;
     return xRet;
 }
 
-//-----------------------------------------------------------------------------
+
 
 // Encapsulation violation: We *know* that
 // SvxUnoDrawMSFactory::createInstanceWithArguments() always throws.
@@ -60,7 +60,7 @@ SAL_WNOUNREACHABLE_CODE_PUSH
 
 SAL_WNOUNREACHABLE_CODE_POP
 
-//-----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL SvxFmMSFactory::getAvailableServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
 {
     static const OUString aSvxComponentServiceNameList[] =

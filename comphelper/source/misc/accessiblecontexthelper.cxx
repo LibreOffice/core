@@ -69,7 +69,7 @@ namespace comphelper
         }
     };
 
-    //---------------------------------------------------------------------
+
     inline  void OContextHelper_Impl::setCreator( const Reference< XAccessible >& _rAcc )
     {
         m_aCreator = _rAcc;
@@ -78,7 +78,7 @@ namespace comphelper
     //=====================================================================
     //= OAccessibleContextHelper
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OAccessibleContextHelper::OAccessibleContextHelper( IMutex* _pExternalLock )
         :OAccessibleContextHelper_Base( GetMutex() )
         ,m_pImpl( NULL )
@@ -88,13 +88,13 @@ namespace comphelper
         m_pImpl->setExternalLock( _pExternalLock );
     }
 
-    //---------------------------------------------------------------------
+
     void OAccessibleContextHelper::forgetExternalLock()
     {
         m_pImpl->setExternalLock( NULL );
     }
 
-    //---------------------------------------------------------------------
+
     OAccessibleContextHelper::~OAccessibleContextHelper( )
     {
         forgetExternalLock();
@@ -107,13 +107,13 @@ namespace comphelper
         m_pImpl = NULL;
     }
 
-    //---------------------------------------------------------------------
+
     IMutex* OAccessibleContextHelper::getExternalLock( )
     {
         return m_pImpl->getExternalLock();
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OAccessibleContextHelper::disposing()
     {
         // rhbz#1001768: de facto this class is locked by SolarMutex;
@@ -127,7 +127,7 @@ namespace comphelper
         }
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OAccessibleContextHelper::addAccessibleEventListener( const Reference< XAccessibleEventListener >& _rxListener ) throw (RuntimeException)
     {
         OMutexGuard aGuard( getExternalLock() );
@@ -150,7 +150,7 @@ namespace comphelper
         }
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OAccessibleContextHelper::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& _rxListener ) throw (RuntimeException)
     {
         OMutexGuard aGuard( getExternalLock() );
@@ -175,7 +175,7 @@ namespace comphelper
         }
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OAccessibleContextHelper::NotifyAccessibleEvent( const sal_Int16 _nEventId,
         const Any& _rOldValue, const Any& _rNewValue )
     {
@@ -195,20 +195,20 @@ namespace comphelper
         AccessibleEventNotifier::addEvent( m_pImpl->getClientId( ), aEvent );
     }
 
-    //---------------------------------------------------------------------
+
     bool OAccessibleContextHelper::isAlive() const
     {
         return !GetBroadcastHelper().bDisposed && !GetBroadcastHelper().bInDispose;
     }
 
-    //---------------------------------------------------------------------
+
     void OAccessibleContextHelper::ensureAlive() const SAL_THROW( ( DisposedException ) )
     {
         if( !isAlive() )
             throw DisposedException();
     }
 
-    //---------------------------------------------------------------------
+
     void OAccessibleContextHelper::ensureDisposed( )
     {
         if ( !GetBroadcastHelper().bDisposed )
@@ -219,19 +219,19 @@ namespace comphelper
         }
     }
 
-    //---------------------------------------------------------------------
+
     void OAccessibleContextHelper::lateInit( const Reference< XAccessible >& _rxAccessible )
     {
         m_pImpl->setCreator( _rxAccessible );
     }
 
-    //---------------------------------------------------------------------
+
     Reference< XAccessible > OAccessibleContextHelper::getAccessibleCreator( ) const
     {
         return m_pImpl->getCreator();
     }
 
-    //---------------------------------------------------------------------
+
     sal_Int32 SAL_CALL OAccessibleContextHelper::getAccessibleIndexInParent(  ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
@@ -277,7 +277,7 @@ namespace comphelper
         return nRet;
     }
 
-    //---------------------------------------------------------------------
+
     Locale SAL_CALL OAccessibleContextHelper::getLocale(  ) throw (IllegalAccessibleComponentStateException, RuntimeException)
     {
         // simply ask the parent
@@ -292,7 +292,7 @@ namespace comphelper
         return xParentContext->getLocale();
     }
 
-    //---------------------------------------------------------------------
+
     Reference< XAccessibleContext > OAccessibleContextHelper::implGetParentContext() SAL_THROW( ( RuntimeException ) )
     {
         Reference< XAccessible > xParent = getAccessibleParent();

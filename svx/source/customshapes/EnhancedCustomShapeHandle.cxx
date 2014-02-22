@@ -21,7 +21,7 @@
 #include "svx/EnhancedCustomShape2d.hxx"
 #include "svx/unoapi.hxx"
 
-// -----------------------------------------------------------------------------
+
 
 EnhancedCustomShapeHandle::EnhancedCustomShapeHandle( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xCustomShape, sal_uInt32 nIndex ) :
     mnIndex     ( nIndex ),
@@ -29,20 +29,20 @@ EnhancedCustomShapeHandle::EnhancedCustomShapeHandle( com::sun::star::uno::Refer
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 EnhancedCustomShapeHandle::~EnhancedCustomShapeHandle()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL EnhancedCustomShapeHandle::acquire() throw()
 {
     OWeakObject::acquire();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL EnhancedCustomShapeHandle::release() throw()
 {

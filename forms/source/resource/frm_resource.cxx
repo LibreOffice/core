@@ -24,7 +24,7 @@
 // ---- needed as long as we have no contexts for components ---
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-//---------------------------------------------------
+
 
 #include <svl/solar.hrc>
 
@@ -37,13 +37,13 @@ namespace frm
     //==================================================================
     SimpleResMgr* ResourceManager::m_pImpl = NULL;
 
-    //------------------------------------------------------------------
+
     ResourceManager::EnsureDelete::~EnsureDelete()
     {
         delete ResourceManager::m_pImpl;
     }
 
-    //------------------------------------------------------------------
+
     void ResourceManager::ensureImplExists()
     {
         if (m_pImpl)
@@ -58,7 +58,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+
     OUString ResourceManager::loadString(sal_uInt16 _nResId)
     {
         OUString sReturn;

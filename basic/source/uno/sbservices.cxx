@@ -24,7 +24,7 @@ namespace basic
 {
 //........................................................................
 
-    //--------------------------------------------------------------------
+
     extern void createRegistryInfo_SfxDialogLibraryContainer();
     extern void createRegistryInfo_SfxScriptLibraryContainer();
 

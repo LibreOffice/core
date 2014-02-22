@@ -40,9 +40,9 @@
 
 #include <windows.h>
 
-//--------------------------------------------------------------
+
 //  namesapces
-//--------------------------------------------------------------
+
 
 using namespace ::rtl                   ;
 using namespace ::cppu                  ;
@@ -53,15 +53,15 @@ using namespace std                     ;
 
 #define RDB_SYSPATH "D:\\Projects\\gsl\\sysui\\wntmsci7\\bin\\applicat.rdb"
 
-//--------------------------------------------------------------
+
 //  global variables
-//--------------------------------------------------------------
+
 
 Reference< XMultiServiceFactory >   g_xFactory;
 
-//--------------------------------------------------------------
+
 //  main
-//--------------------------------------------------------------
+
 
 
 int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/  )
@@ -72,9 +72,9 @@ int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/  )
 
     //CreateDeepDirectory( );
 
-    //-------------------------------------------------
+
     // get the global service-manager
-    //-------------------------------------------------
+
 
     // Get global factory for uno services.
     OUString rdbName = OUString( RDB_SYSPATH );
@@ -89,9 +89,9 @@ int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/  )
 
     printf("Creating RegistryServiceFactory successful\n");
 
-    //-------------------------------------------------
+
     // try to get an Interface to a XFilePicker Service
-    //-------------------------------------------------
+
 
     Reference< XFolderPicker2 > xFolderPicker;
 
@@ -124,9 +124,9 @@ int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/  )
         MessageBox( NULL, "Exception caught!", "Error", MB_OK );
     }
 
-    //--------------------------------------------------
+
     // shutdown
-    //--------------------------------------------------
+
 
     // Cast factory to XComponent
     Reference< XComponent > xComponent( g_xFactory, UNO_QUERY );

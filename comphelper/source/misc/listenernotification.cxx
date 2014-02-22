@@ -32,7 +32,7 @@ namespace comphelper
     //====================================================================
     //= OListenerContainer
     //====================================================================
-    //--------------------------------------------------------------------
+
     OListenerContainer::OListenerContainer( ::osl::Mutex& _rMutex )
         :m_aListeners( _rMutex )
     {
@@ -40,7 +40,7 @@ namespace comphelper
 
     OListenerContainer::~OListenerContainer() {}
 
-    //--------------------------------------------------------------------
+
     void OListenerContainer::impl_addListener( const Reference< XEventListener >& _rxListener )
     {
         OSL_PRECOND( _rxListener.is(), "OListenerContainer::impl_addListener: a NULL listener?!" );
@@ -48,7 +48,7 @@ namespace comphelper
             m_aListeners.addInterface( _rxListener );
     }
 
-    //--------------------------------------------------------------------
+
     void OListenerContainer::impl_removeListener( const Reference< XEventListener >& _rxListener )
     {
 #if OSL_DEBUG_LEVEL > 0
@@ -63,19 +63,19 @@ namespace comphelper
         m_aListeners.removeInterface( _rxListener );
     }
 
-    //--------------------------------------------------------------------
+
     void OListenerContainer::disposing( const EventObject& _rEventSource )
     {
         m_aListeners.disposeAndClear( _rEventSource );
     }
 
-    //--------------------------------------------------------------------
+
     void OListenerContainer::clear()
     {
         m_aListeners.clear();
     }
 
-    //--------------------------------------------------------------------
+
     bool OListenerContainer::impl_notify( const EventObject& _rEvent ) SAL_THROW(( Exception ))
     {
         ::cppu::OInterfaceIteratorHelper aIter( m_aListeners );

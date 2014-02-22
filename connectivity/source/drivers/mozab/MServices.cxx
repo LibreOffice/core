@@ -41,7 +41,7 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
             rtl_ModuleCount*
         );
 
-//---------------------------------------------------------------------------------------
+
 struct ProviderRequest
 {
     Reference< XSingleServiceFactory > xRet;
@@ -79,7 +79,7 @@ struct ProviderRequest
     void* getProvider() const { return xRet.get(); }
 };
 
-//---------------------------------------------------------------------------------------
+
 typedef void* (SAL_CALL * OMozillaBootstrap_CreateInstanceFunction)(const Reference< XMultiServiceFactory >& _rxFactory );
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL createMozillaBootstrap(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
 {
@@ -109,7 +109,7 @@ typedef void* (SAL_CALL * OMozillaBootstrap_CreateInstanceFunction)(const Refere
         }
         return NULL;
 }
-//---------------------------------------------------------------------------------------
+
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL mozab_component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,

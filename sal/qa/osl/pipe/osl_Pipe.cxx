@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//------------------------------------------------------------------------
+
 // include files
-//------------------------------------------------------------------------
+
 
 #include <sal/types.h>
 #include "cppunit/TestAssert.h"
@@ -47,9 +47,9 @@ using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OString;
 
-//------------------------------------------------------------------------
+
 // helper functions
-//------------------------------------------------------------------------
+
 
 /** print Boolean value.
  */
@@ -118,9 +118,9 @@ inline void printPipeError( ::osl::Pipe aPipe )
 
 
 
-//------------------------------------------------------------------------
+
 // pipe name and transfer contents
-//------------------------------------------------------------------------
+
 const rtl::OUString aTestPipeName("testpipe2");
 const rtl::OUString aTestPipe1("testpipe1");
 const rtl::OUString aTestString("Sun Microsystems");
@@ -128,16 +128,16 @@ const rtl::OUString aTestString("Sun Microsystems");
 const OString m_pTestString1("Sun Microsystems");
 const OString m_pTestString2("test pipe PASS/OK");
 
-//------------------------------------------------------------------------
+
 // test code start here
-//------------------------------------------------------------------------
+
 
 namespace osl_Pipe
 {
 
-//------------------------------------------------------------------------
+
 // most return value -1 denote a fail of operation.
-//------------------------------------------------------------------------
+
 #define OSL_PIPE_FAIL   -1
 
     /** testing the methods:
@@ -623,7 +623,7 @@ namespace osl_Pipe
     }; // class getHandle
 
 
-// -----------------------------------------------------------------------------
+
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::ctors);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::is);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::create);
@@ -633,7 +633,7 @@ namespace osl_Pipe
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::close);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::getError);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::getHandle);
-// -----------------------------------------------------------------------------
+
 
 } // namespace osl_Pipe
 
@@ -781,7 +781,7 @@ namespace osl_StreamPipe
         osl_waitThread(&nTV);
     }
     // test read/write & send/recv data to pipe
-    // -----------------------------------------------------------------------------
+
 
     class Pipe_DataSink_Thread : public Thread
     {
@@ -922,11 +922,11 @@ namespace osl_StreamPipe
         CPPUNIT_TEST_SUITE_END( );
     }; // class recv
 
-// -----------------------------------------------------------------------------
+
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamPipe::ctors);
 //CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamPipe::assign);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamPipe::recv);
-// -----------------------------------------------------------------------------
+
 
 } // namespace osl_StreamPipe
 

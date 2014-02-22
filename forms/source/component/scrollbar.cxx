@@ -22,7 +22,7 @@
 #include <comphelper/basicio.hxx>
 #include <rtl/math.hxx>
 
-//--------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_OScrollBarModel()
 {
     static ::frm::OMultiInstanceAutoRegistration< ::frm::OScrollBarModel >   aRegisterModel;
@@ -45,7 +45,7 @@ namespace frm
     //====================================================================
     //= helper
     //====================================================================
-    //--------------------------------------------------------------------
+
     Any translateExternalDoubleToControlIntValue(
         const Any& _rExternalValue, const Reference< XPropertySet >& _rxProperties,
         const OUString& _rMinValueName, const OUString& _rMaxValueName )
@@ -78,7 +78,7 @@ namespace frm
         return makeAny( nControlValue );
     }
 
-    //--------------------------------------------------------------------
+
     Any translateControlIntToExternalDoubleValue( const Any& _rControlIntValue )
     {
         Any aExternalDoubleValue;
@@ -97,8 +97,8 @@ namespace frm
     //====================================================================
     //= OScrollBarModel
     //====================================================================
-    //--------------------------------------------------------------------
-    //--------------------------------------------------------------------
+
+
     OScrollBarModel::OScrollBarModel( const Reference<XComponentContext>& _rxFactory )
         :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_SCROLLBAR, VCL_CONTROL_SCROLLBAR, sal_True, sal_True, sal_False )
         ,m_nDefaultScrollValue( 0 )
@@ -108,35 +108,35 @@ namespace frm
         initValueProperty( PROPERTY_SCROLL_VALUE, PROPERTY_ID_SCROLL_VALUE );
     }
 
-    //--------------------------------------------------------------------
+
     OScrollBarModel::OScrollBarModel( const OScrollBarModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
         :OBoundControlModel( _pOriginal, _rxFactory )
     {
         m_nDefaultScrollValue = _pOriginal->m_nDefaultScrollValue;
     }
 
-    //--------------------------------------------------------------------
+
     OScrollBarModel::~OScrollBarModel( )
     {
     }
 
-    //--------------------------------------------------------------------
+
     IMPLEMENT_SERVICE_REGISTRATION_2( OScrollBarModel, OControlModel, FRM_SUN_COMPONENT_SCROLLBAR, BINDABLE_INTEGER_VALUE_RANGE )
         // note that we're passing OControlModel as "base class". This is because
         // OBoundControlModel, our real base class, claims to support the DataAwareControlModel
         // service, which isn't really true for us. We only derive from this class
         // to benefit from the functionality for binding to spreadsheet cells
 
-    //------------------------------------------------------------------------------
+
     IMPLEMENT_DEFAULT_CLONING( OScrollBarModel )
 
-    //------------------------------------------------------------------------------
+
     void SAL_CALL OScrollBarModel::disposing()
     {
         OBoundControlModel::disposing();
     }
 
-    //--------------------------------------------------------------------
+
     void OScrollBarModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
         BEGIN_DESCRIBE_PROPERTIES( 3, OControlModel )
@@ -146,7 +146,7 @@ namespace frm
         END_DESCRIBE_PROPERTIES();
     }
 
-    //------------------------------------------------------------------------------
+
     void OScrollBarModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         switch ( _nHandle )
@@ -160,7 +160,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+
     void OScrollBarModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw ( Exception )
     {
         switch ( _nHandle )
@@ -175,7 +175,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+
     sal_Bool OScrollBarModel::convertFastPropertyValue(
                 Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
                 throw ( IllegalArgumentException )
@@ -194,7 +194,7 @@ namespace frm
         return bModified;
     }
 
-    //--------------------------------------------------------------------
+
     Any OScrollBarModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
     {
         Any aReturn;
@@ -213,33 +213,33 @@ namespace frm
         return aReturn;
     }
 
-    //------------------------------------------------------------------------------
+
     Any OScrollBarModel::translateDbColumnToControlValue( )
     {
         OSL_FAIL( "OScrollBarModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
         return Any();
     }
 
-    //------------------------------------------------------------------------------
+
     sal_Bool OScrollBarModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     {
         OSL_FAIL( "OScrollBarModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
         return sal_True;
     }
 
-    //------------------------------------------------------------------------------
+
     Any OScrollBarModel::getDefaultForReset() const
     {
         return makeAny( (sal_Int32)m_nDefaultScrollValue );
     }
 
-    //--------------------------------------------------------------------
+
     OUString SAL_CALL OScrollBarModel::getServiceName() throw( RuntimeException )
     {
         return OUString(FRM_SUN_COMPONENT_SCROLLBAR);
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OScrollBarModel::write( const Reference< XObjectOutputStream >& _rxOutStream )
         throw( IOException, RuntimeException )
     {
@@ -256,7 +256,7 @@ namespace frm
         writeHelpTextCompatibly( _rxOutStream );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OScrollBarModel::read( const Reference< XObjectInputStream>& _rxInStream ) throw( IOException, RuntimeException )
     {
         OBoundControlModel::read( _rxInStream );
@@ -279,7 +279,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     Any OScrollBarModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
     {
         return translateExternalDoubleToControlIntValue( _rExternalValue, m_xAggregateSet,
@@ -287,14 +287,14 @@ namespace frm
             OUString( "ScrollValueMax" ) );
     }
 
-    //--------------------------------------------------------------------
+
     Any OScrollBarModel::translateControlValueToExternalValue( ) const
     {
         // by definition, the base class simply obtains the property value
         return translateControlIntToExternalDoubleValue( OBoundControlModel::translateControlValueToExternalValue() );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< Type > OScrollBarModel::getSupportedBindingTypes()
     {
         return Sequence< Type >( &::getCppuType( static_cast< double* >( NULL ) ), 1 );

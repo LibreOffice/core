@@ -2055,7 +2055,7 @@ IMPL_LINK( OfaQuoteTabPage, StdQuoteHdl, PushButton*, pBtn )
     return 0;
 }
 
-// --------------------------------------------------
+
 
 OUString OfaQuoteTabPage::ChangeStringExt_Impl( sal_UCS4 cChar )
 {

@@ -67,9 +67,9 @@ using ::rtl::OUString;
 #define IP_PORT_MYPORT8 8896
 #define IP_PORT_MYPORT9 8897
 
-//------------------------------------------------------------------------
+
 // helper functions
-//------------------------------------------------------------------------
+
 
 // just used to test socket::close() when accepting
 class AcceptorThread : public Thread
@@ -1411,7 +1411,7 @@ namespace osl_Socket
     }; // class getHandle
 
 
-// -----------------------------------------------------------------------------
+
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Socket::ctors);
@@ -1435,7 +1435,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(osl_Socket::getHandle);
 
 } // namespace osl_Socket
 
-// -----------------------------------------------------------------------------
+
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

@@ -38,7 +38,7 @@ using namespace ::com::sun::star;
 // OInstanceLocker
 // ====================================================================
 
-// --------------------------------------------------------
+
 OInstanceLocker::OInstanceLocker( const uno::Reference< uno::XComponentContext >& xContext )
 : m_xContext( xContext )
 , m_pLockListener( NULL )
@@ -48,7 +48,7 @@ OInstanceLocker::OInstanceLocker( const uno::Reference< uno::XComponentContext >
 {
 }
 
-// --------------------------------------------------------
+
 OInstanceLocker::~OInstanceLocker()
 {
     if ( !m_bDisposed )
@@ -69,7 +69,7 @@ OInstanceLocker::~OInstanceLocker()
 }
 
 // XComponent
-// --------------------------------------------------------
+
 void SAL_CALL OInstanceLocker::dispose()
     throw (uno::RuntimeException)
 {
@@ -95,7 +95,7 @@ void SAL_CALL OInstanceLocker::dispose()
     m_bDisposed = true;
 }
 
-// --------------------------------------------------------
+
 void SAL_CALL OInstanceLocker::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
     throw (uno::RuntimeException)
 {
@@ -109,7 +109,7 @@ void SAL_CALL OInstanceLocker::addEventListener( const uno::Reference< lang::XEv
     m_pListenersContainer->addInterface( xListener );
 }
 
-// --------------------------------------------------------
+
 void SAL_CALL OInstanceLocker::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
     throw (uno::RuntimeException)
 {
@@ -119,7 +119,7 @@ void SAL_CALL OInstanceLocker::removeEventListener( const uno::Reference< lang::
 }
 
 // XInitialization
-// --------------------------------------------------------
+
 void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArguments )
     throw (uno::Exception, uno::RuntimeException)
 {
@@ -208,20 +208,20 @@ uno::Sequence< OUString > SAL_CALL OInstanceLocker::getSupportedServiceNames()
 }
 
 // Static methods
-// --------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL OInstanceLocker::getSupportedServiceNames_static()
 {
     const OUString aServiceName( "com.sun.star.embed.InstanceLocker" );
     return uno::Sequence< OUString >( &aServiceName, 1 );
 }
 
-// --------------------------------------------------------
+
 OUString SAL_CALL OInstanceLocker::getImplementationName_static()
 {
     return OUString( "com.sun.star.comp.embed.InstanceLocker" );
 }
 
-// --------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL OInstanceLocker::Create(
                                 const uno::Reference< uno::XComponentContext >& rxContext )
 {
@@ -234,7 +234,7 @@ uno::Reference< uno::XInterface > SAL_CALL OInstanceLocker::Create(
 // OLockListener
 // ====================================================================
 
-// --------------------------------------------------------
+
 OLockListener::OLockListener( const uno::WeakReference< lang::XComponent >& xWrapper,
                     const uno::Reference< uno::XInterface >& xInstance,
                     sal_Int32 nMode,
@@ -248,12 +248,12 @@ OLockListener::OLockListener( const uno::WeakReference< lang::XComponent >& xWra
 {
 }
 
-// --------------------------------------------------------
+
 OLockListener::~OLockListener()
 {
 }
 
-// --------------------------------------------------------
+
 void OLockListener::Dispose()
 {
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
@@ -293,7 +293,7 @@ void OLockListener::Dispose()
 }
 
 // XEventListener
-// --------------------------------------------------------
+
 void SAL_CALL OLockListener::disposing( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
@@ -318,7 +318,7 @@ void SAL_CALL OLockListener::disposing( const lang::EventObject& aEvent )
 
 
 // XCloseListener
-// --------------------------------------------------------
+
 void SAL_CALL OLockListener::queryClosing( const lang::EventObject& aEvent, sal_Bool )
     throw (util::CloseVetoException, uno::RuntimeException)
 {
@@ -348,7 +348,7 @@ void SAL_CALL OLockListener::queryClosing( const lang::EventObject& aEvent, sal_
     }
 }
 
-// --------------------------------------------------------
+
 void SAL_CALL OLockListener::notifyClosing( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
@@ -379,7 +379,7 @@ void SAL_CALL OLockListener::notifyClosing( const lang::EventObject& aEvent )
 
 
 // XTerminateListener
-// --------------------------------------------------------
+
 void SAL_CALL OLockListener::queryTermination( const lang::EventObject& aEvent )
     throw (frame::TerminationVetoException, uno::RuntimeException)
 {
@@ -408,7 +408,7 @@ void SAL_CALL OLockListener::queryTermination( const lang::EventObject& aEvent )
     }
 }
 
-// --------------------------------------------------------
+
 void SAL_CALL OLockListener::notifyTermination( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
@@ -444,7 +444,7 @@ void SAL_CALL OLockListener::notifyTermination( const lang::EventObject& aEvent 
 
 
 // XInitialization
-// --------------------------------------------------------
+
 bool OLockListener::Init()
 {
     ::osl::ResettableMutexGuard aGuard( m_aMutex );

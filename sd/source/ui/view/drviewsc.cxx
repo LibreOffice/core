@@ -354,7 +354,7 @@ void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 IMPL_LINK( DrawViewShell, NameObjectHdl, AbstractSvxNameDialog*, pDialog )
 {

@@ -74,7 +74,7 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 //! Clipping-Markierungen
 
@@ -117,14 +117,14 @@ static const SfxItemPropertyMapEntry* lcl_GetViewOptPropertyMap()
     return aViewOptPropertyMap_Impl;
 }
 
-//------------------------------------------------------------------------
+
 
 #define SCTABVIEWOBJ_SERVICE        "com.sun.star.sheet.SpreadsheetView"
 #define SCVIEWSETTINGS_SERVICE      "com.sun.star.sheet.SpreadsheetViewSettings"
 
 SC_SIMPLE_SERVICE_INFO( ScViewPaneBase, "ScViewPaneObj", "com.sun.star.sheet.SpreadsheetViewPane" )
 
-//------------------------------------------------------------------------
+
 
 ScViewPaneBase::ScViewPaneBase(ScTabViewShell* pViewSh, sal_uInt16 nP) :
     pViewShell( pViewSh ),
@@ -424,7 +424,7 @@ awt::Rectangle ScViewPaneBase::GetVisArea() const
     return aVisArea;
 }
 
-//------------------------------------------------------------------------
+
 
 ScViewPaneObj::ScViewPaneObj(ScTabViewShell* pViewSh, sal_uInt16 nP) :
     ScViewPaneBase( pViewSh, nP )
@@ -456,7 +456,7 @@ void SAL_CALL ScViewPaneObj::release() throw()
     OWeakObject::release();
 }
 
-//------------------------------------------------------------------------
+
 
 //  Default-ctor wird fuer SMART_REFLECTION_IMPLEMENTATION gebraucht
 

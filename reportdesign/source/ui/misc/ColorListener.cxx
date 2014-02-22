@@ -37,12 +37,12 @@ OColorListener::OColorListener(Window* _pParent ,const OUString& _sColorEntry)
     m_nColor = m_aExtendedColorConfig.GetColorValue(CFG_REPORTDESIGNER,m_sColorEntry).getColor();
     m_nTextBoundaries = m_aColorConfig.GetColorValue(::svtools::DOCBOUNDARIES).nColor;
 }
-// -----------------------------------------------------------------------------
+
 OColorListener::~OColorListener()
 {
     EndListening(m_aExtendedColorConfig);
 }
-// -----------------------------------------------------------------------
+
 void OColorListener::Notify(SfxBroadcaster & /*rBc*/, SfxHint const & rHint)
 {
     if (rHint.ISA(SfxSimpleHint)
@@ -54,7 +54,7 @@ void OColorListener::Notify(SfxBroadcaster & /*rBc*/, SfxHint const & rHint)
         Invalidate(INVALIDATE_NOCHILDREN|INVALIDATE_NOERASE);
     }
 }
-//-----------------------------------------------------------------------------
+
 void OColorListener::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
@@ -66,7 +66,7 @@ void OColorListener::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
 }
-// -----------------------------------------------------------------------------
+
 void OColorListener::setCollapsed(sal_Bool _bCollapsed)
 {
     if ( m_bCollapsed != _bCollapsed )
@@ -76,7 +76,7 @@ void OColorListener::setCollapsed(sal_Bool _bCollapsed)
             m_aCollapsedLink.Call(this);
     }
 }
-// -----------------------------------------------------------------------------
+
 void OColorListener::setMarked(sal_Bool _bMark)
 {
     if ( m_bMarked != _bMark)

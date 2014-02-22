@@ -24,9 +24,9 @@
 #include <cppuhelper/supportsservice.hxx>
 #include "WinFOPImpl.hxx"
 
-//------------------------------------------------------------------------
+
 // namespace directives
-//------------------------------------------------------------------------
+
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::RuntimeException;
@@ -43,9 +43,9 @@ using namespace com::sun::star::ui::dialogs;
 
 #define FOLDERPICKER_IMPL_NAME  "com.sun.star.ui.dialogs.Win32FolderPicker"
 
-//------------------------------------------------------------------------
+
 // helper functions
-//------------------------------------------------------------------------
+
 
 namespace
 {
@@ -57,9 +57,9 @@ namespace
     }
 }
 
-//-----------------------------------------------------------------------------------------
+
 //
-//-----------------------------------------------------------------------------------------
+
 
 CFolderPicker::CFolderPicker( const Reference< XMultiServiceFactory >& xServiceMgr ) :
     m_xServiceMgr( xServiceMgr )
@@ -67,9 +67,9 @@ CFolderPicker::CFolderPicker( const Reference< XMultiServiceFactory >& xServiceM
     m_pFolderPickerImpl = std::auto_ptr< CWinFolderPickerImpl > ( new CWinFolderPickerImpl( this ) );
 }
 
-//-----------------------------------------------------------------------------------------
+
 //
-//-----------------------------------------------------------------------------------------
+
 
 void SAL_CALL CFolderPicker::setTitle( const OUString& aTitle ) throw( RuntimeException )
 {
@@ -78,9 +78,9 @@ void SAL_CALL CFolderPicker::setTitle( const OUString& aTitle ) throw( RuntimeEx
     m_pFolderPickerImpl->setTitle( aTitle );
 }
 
-//-----------------------------------------------------------------------------------------
+
 //
-//-----------------------------------------------------------------------------------------
+
 
 void SAL_CALL CFolderPicker::setDisplayDirectory( const OUString& aDirectory )
     throw( IllegalArgumentException, RuntimeException )
@@ -90,9 +90,9 @@ void SAL_CALL CFolderPicker::setDisplayDirectory( const OUString& aDirectory )
     m_pFolderPickerImpl->setDisplayDirectory( aDirectory );
 }
 
-//-----------------------------------------------------------------------------------------
+
 //
-//-----------------------------------------------------------------------------------------
+
 
 OUString SAL_CALL CFolderPicker::getDisplayDirectory( )
     throw( RuntimeException )
@@ -102,9 +102,9 @@ OUString SAL_CALL CFolderPicker::getDisplayDirectory( )
     return m_pFolderPickerImpl->getDisplayDirectory( );
 }
 
-//-----------------------------------------------------------------------------------------
+
 //
-//-----------------------------------------------------------------------------------------
+
 
 OUString SAL_CALL CFolderPicker::getDirectory( ) throw( RuntimeException )
 {
@@ -113,9 +113,9 @@ OUString SAL_CALL CFolderPicker::getDirectory( ) throw( RuntimeException )
     return m_pFolderPickerImpl->getDirectory( );
 }
 
-//-----------------------------------------------------------------------------------------
+
 //
-//-----------------------------------------------------------------------------------------
+
 
 void SAL_CALL CFolderPicker::setDescription( const OUString& aDescription ) throw( RuntimeException )
 {
@@ -124,9 +124,9 @@ void SAL_CALL CFolderPicker::setDescription( const OUString& aDescription ) thro
     m_pFolderPickerImpl->setDescription( aDescription );
 }
 
-//-----------------------------------------------------------------------------------------
+
 //
-//-----------------------------------------------------------------------------------------
+
 
 sal_Int16 SAL_CALL CFolderPicker::execute( )
     throw( RuntimeException )
@@ -140,9 +140,9 @@ sal_Int16 SAL_CALL CFolderPicker::execute( )
     return m_pFolderPickerImpl->execute( );
 }
 
-// -------------------------------------------------
+
 // XServiceInfo
-// -------------------------------------------------
+
 
 OUString SAL_CALL CFolderPicker::getImplementationName(  )
     throw( RuntimeException )
@@ -157,9 +157,9 @@ sal_Bool SAL_CALL CFolderPicker::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-// -------------------------------------------------
+
 //  XServiceInfo
-// -------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL CFolderPicker::getSupportedServiceNames(   )
     throw( RuntimeException )
@@ -167,9 +167,9 @@ Sequence< OUString > SAL_CALL CFolderPicker::getSupportedServiceNames(   )
     return FolderPicker_getSupportedServiceNames();
 }
 
-// -------------------------------------------------
+
 //  XCancellable
-// -------------------------------------------------
+
 
 void SAL_CALL CFolderPicker::cancel( )
     throw(RuntimeException)
@@ -179,10 +179,10 @@ void SAL_CALL CFolderPicker::cancel( )
     m_pFolderPickerImpl->cancel( );
 }
 
-//------------------------------------------------
+
 // overwrite base class method, which is called
 // by base class dispose function
-//------------------------------------------------
+
 
 void SAL_CALL CFolderPicker::disposing()
 {

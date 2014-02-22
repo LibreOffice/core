@@ -74,7 +74,7 @@ BitSet BitSet::operator<<( sal_uInt16 nOffset ) const
     return aSet;
 }
 
-//--------------------------------------------------------------------
+
 
 // substracts nOffset from each bit-value in the set
 
@@ -83,7 +83,7 @@ BitSet BitSet::operator>>( sal_uInt16 ) const
     return BitSet();
 }
 
-//--------------------------------------------------------------------
+
 
 // internal code for operator= and copy-ctor
 
@@ -100,7 +100,7 @@ void BitSet::CopyFrom( const BitSet& rSet )
         pBitmap = 0;
 }
 
-//--------------------------------------------------------------------
+
 
 // creates an empty bitset
 
@@ -111,7 +111,7 @@ BitSet::BitSet()
     pBitmap = 0;
 }
 
-//--------------------------------------------------------------------
+
 
 // creates a copy of bitset rOrig
 
@@ -120,7 +120,7 @@ BitSet::BitSet( const BitSet& rOrig )
     CopyFrom(rOrig);
 }
 
-//--------------------------------------------------------------------
+
 
 // frees the storage
 
@@ -129,7 +129,7 @@ BitSet::~BitSet()
     delete [] pBitmap;
 }
 
-//--------------------------------------------------------------------
+
 
 // assignment from another bitset
 
@@ -143,7 +143,7 @@ BitSet& BitSet::operator=( const BitSet& rOrig )
     return *this;
 }
 
-//--------------------------------------------------------------------
+
 
 // assignment from a single bit
 
@@ -163,7 +163,7 @@ BitSet& BitSet::operator=( sal_uInt16 nBit )
     return *this;
 }
 
-//--------------------------------------------------------------------
+
 
 // creates the asymetric difference with another bitset
 
@@ -184,7 +184,7 @@ BitSet& BitSet::operator-=(sal_uInt16 nBit)
     return *this;
 }
 
-//--------------------------------------------------------------------
+
 
 // unites with the bits of rSet
 
@@ -220,7 +220,7 @@ BitSet& BitSet::operator|=( const BitSet& rSet )
     return *this;
 }
 
-//--------------------------------------------------------------------
+
 
 // unites with a single bit
 
@@ -252,7 +252,7 @@ BitSet& BitSet::operator|=( sal_uInt16 nBit )
     return *this;
 }
 
-//--------------------------------------------------------------------
+
 
 // determines if the bit is set (may be the only one)
 
@@ -266,7 +266,7 @@ sal_Bool BitSet::Contains( sal_uInt16 nBit ) const
     return ( nBitVal & *(pBitmap+nBlock) ) == nBitVal;
 }
 
-//--------------------------------------------------------------------
+
 
 // determines if the bitsets are equal
 
@@ -283,7 +283,7 @@ sal_Bool BitSet::operator==( const BitSet& rSet ) const
     return sal_True;
 }
 
-//--------------------------------------------------------------------
+
 
 // counts the number of 1-bits in the parameter
 
@@ -299,7 +299,7 @@ sal_uInt16 BitSet::CountBits( sal_uIntPtr nBits )
     return nCount;
 }
 
-//--------------------------------------------------------------------
+
 
 sal_uInt16 IndexBitSet::GetFreeIndex()
 {

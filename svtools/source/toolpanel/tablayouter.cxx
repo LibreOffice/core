@@ -79,22 +79,22 @@ namespace svt
     //====================================================================
     //= TabDeckLayouter
     //====================================================================
-    //--------------------------------------------------------------------
+
     TabDeckLayouter::TabDeckLayouter( Window& i_rParent, IToolPanelDeck& i_rPanels,
             const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
         :m_pData( new TabDeckLayouter_Data( i_rParent, i_rPanels, i_eAlignment, i_eItemContent ) )
     {
     }
 
-    //--------------------------------------------------------------------
+
     TabDeckLayouter::~TabDeckLayouter()
     {
     }
 
-    //--------------------------------------------------------------------
+
     IMPLEMENT_IREFERENCE( TabDeckLayouter )
 
-    //--------------------------------------------------------------------
+
     TabItemContent TabDeckLayouter::GetTabItemContent() const
     {
         if ( lcl_checkDisposed( *m_pData ) )
@@ -102,7 +102,7 @@ namespace svt
         return m_pData->pTabBar->GetTabItemContent();
     }
 
-    //--------------------------------------------------------------------
+
     void TabDeckLayouter::SetTabItemContent( const TabItemContent& i_eItemContent )
     {
         if ( lcl_checkDisposed( *m_pData ) )
@@ -110,7 +110,7 @@ namespace svt
         m_pData->pTabBar->SetTabItemContent( i_eItemContent );
     }
 
-    //--------------------------------------------------------------------
+
     TabAlignment TabDeckLayouter::GetTabAlignment() const
     {
         if ( lcl_checkDisposed( *m_pData ) )
@@ -118,7 +118,7 @@ namespace svt
         return m_pData->eAlignment;
     }
 
-    //--------------------------------------------------------------------
+
     Rectangle TabDeckLayouter::Layout( const Rectangle& i_rDeckPlayground )
     {
         if ( lcl_checkDisposed( *m_pData ) )
@@ -169,13 +169,13 @@ namespace svt
         return aPanelRect;
     }
 
-    //--------------------------------------------------------------------
+
     void TabDeckLayouter::Destroy()
     {
         m_pData->pTabBar.reset();
     }
 
-    //--------------------------------------------------------------------
+
     void TabDeckLayouter::SetFocusToPanelSelector()
     {
         if ( lcl_checkDisposed( *m_pData ) )
@@ -183,7 +183,7 @@ namespace svt
         m_pData->pTabBar->GrabFocus();
     }
 
-    //--------------------------------------------------------------------
+
     size_t TabDeckLayouter::GetAccessibleChildCount() const
     {
         if ( lcl_checkDisposed( *m_pData ) )
@@ -192,7 +192,7 @@ namespace svt
         return 1;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XAccessible > TabDeckLayouter::GetAccessibleChild( const size_t i_nChildIndex, const Reference< XAccessible >& i_rParentAccessible )
     {
         (void)i_nChildIndex;

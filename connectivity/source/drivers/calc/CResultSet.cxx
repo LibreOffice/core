@@ -35,19 +35,19 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 
-//------------------------------------------------------------------------------
+
 OCalcResultSet::OCalcResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator& _aSQLIterator)
                 : file::OResultSet(pStmt,_aSQLIterator)
                 ,m_bBookmarkable(sal_True)
 {
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),         PROPERTY_ID_ISBOOKMARKABLE,       PropertyAttribute::READONLY,&m_bBookmarkable,                ::getBooleanCppuType());
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL OCalcResultSet::getImplementationName(  ) throw ( RuntimeException)
 {
     return OUString("com.sun.star.sdbcx.calc.ResultSet");
 }
-// -------------------------------------------------------------------------
+
 Sequence< OUString > SAL_CALL OCalcResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
 {
      Sequence< OUString > aSupported(2);
@@ -60,19 +60,19 @@ sal_Bool SAL_CALL OCalcResultSet::supportsService( const OUString& _rServiceName
 {
     return cppu::supportsService(this, _rServiceName);
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OCalcResultSet::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = OResultSet::queryInterface(rType);
     return aRet.hasValue() ? aRet : OCalcResultSet_BASE::queryInterface(rType);
 }
-// -------------------------------------------------------------------------
+
  Sequence<  Type > SAL_CALL OCalcResultSet::getTypes(  ) throw( RuntimeException)
 {
     return ::comphelper::concatSequences(OResultSet::getTypes(),OCalcResultSet_BASE::getTypes());
 }
 
-// -------------------------------------------------------------------------
+
 // XRowLocate
 Any SAL_CALL OCalcResultSet::getBookmark(  ) throw( SQLException,  RuntimeException)
 {
@@ -82,7 +82,7 @@ Any SAL_CALL OCalcResultSet::getBookmark(  ) throw( SQLException,  RuntimeExcept
 
     return makeAny((sal_Int32)(m_aRow->get())[0]->getValue());
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OCalcResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -93,7 +93,7 @@ sal_Bool SAL_CALL OCalcResultSet::moveToBookmark( const  Any& bookmark ) throw( 
 
     return Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),sal_True);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OCalcResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows ) throw( SQLException,  RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -107,17 +107,17 @@ sal_Bool SAL_CALL OCalcResultSet::moveRelativeToBookmark( const  Any& bookmark, 
     return relative(rows);
 }
 
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OCalcResultSet::compareBookmarks( const Any& lhs, const  Any& rhs ) throw( SQLException,  RuntimeException)
 {
     return (lhs == rhs) ? 0 : 2;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OCalcResultSet::hasOrderedBookmarks(  ) throw( SQLException,  RuntimeException)
 {
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OCalcResultSet::hashBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -126,7 +126,7 @@ sal_Int32 SAL_CALL OCalcResultSet::hashBookmark( const  Any& bookmark ) throw( S
 
     return comphelper::getINT32(bookmark);
 }
-// -------------------------------------------------------------------------
+
 // XDeleteRows
 Sequence< sal_Int32 > SAL_CALL OCalcResultSet::deleteRows( const  Sequence<  Any >& /*rows*/ ) throw( SQLException,  RuntimeException)
 {
@@ -136,41 +136,41 @@ Sequence< sal_Int32 > SAL_CALL OCalcResultSet::deleteRows( const  Sequence<  Any
     ::dbtools::throwFeatureNotImplementedException( "XDeleteRows::deleteRows", *this );
     return Sequence< sal_Int32 >();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool OCalcResultSet::fillIndexValues(const Reference< XColumnsSupplier> &/*_xIndex*/)
 {
     //  Calc table has no index
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper & OCalcResultSet::getInfoHelper()
 {
     return *OCalcResultSet_BASE3::getArrayHelper();
 }
-// -----------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* OCalcResultSet::createArrayHelper() const
 {
     Sequence< Property > aProps;
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
-// -------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+
+
 void SAL_CALL OCalcResultSet::acquire() throw()
 {
     OCalcResultSet_BASE2::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OCalcResultSet::release() throw()
 {
     OCalcResultSet_BASE2::release();
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OCalcResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

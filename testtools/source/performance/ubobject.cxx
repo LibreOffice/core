@@ -44,7 +44,7 @@ using namespace com::sun::star::test::performance;
 namespace benchmark_object
 {
 
-//--------------------------------------------------------------------------------------------------
+
 inline static Sequence< OUString > getSupportedServiceNames()
 {
     OUString aName( SERVICENAME);
@@ -201,19 +201,19 @@ public:
 //##################################################################################################
 
 // XServiceInfo
-//__________________________________________________________________________________________________
+
 OUString ServiceImpl::getImplementationName()
     throw (RuntimeException)
 {
     return OUString( IMPLNAME );
 }
-//__________________________________________________________________________________________________
+
 sal_Bool ServiceImpl::supportsService( const OUString & rServiceName )
     throw (RuntimeException)
 {
     return cppu::supportsService(this, rServiceName);
 }
-//__________________________________________________________________________________________________
+
 Sequence< OUString > ServiceImpl::getSupportedServiceNames()
     throw (RuntimeException)
 {

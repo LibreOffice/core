@@ -49,7 +49,7 @@ namespace ucb { namespace ucp { namespace ext
     //==================================================================================================================
     //= ResultSet
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     ResultSet::ResultSet( const Reference< XComponentContext >& rxContext, const ::rtl::Reference< Content >& i_rContent,
             const OpenCommandArgument2& i_rCommand, const Reference< XCommandEnvironment >& i_rEnv )
         :ResultSetImplHelper( rxContext, i_rCommand )
@@ -58,7 +58,7 @@ namespace ucb { namespace ucp { namespace ext
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void ResultSet::initStatic()
     {
         ::rtl::Reference< DataSupplier > pDataSupplier( new DataSupplier(
@@ -75,7 +75,7 @@ namespace ucb { namespace ucp { namespace ext
         pDataSupplier->fetchData();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void ResultSet::initDynamic()
     {
         initStatic();

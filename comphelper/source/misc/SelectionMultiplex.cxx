@@ -33,20 +33,20 @@ using namespace ::com::sun::star::view;
 //========================================================================
 //= OSelectionChangeListener
 //========================================================================
-//------------------------------------------------------------------------
+
 OSelectionChangeListener::~OSelectionChangeListener()
 {
     if (m_pAdapter)
         m_pAdapter->dispose();
 }
 
-//------------------------------------------------------------------
+
 void OSelectionChangeListener::_disposing(const EventObject&) throw( RuntimeException)
 {
     // nothing to do here
 }
 
-//------------------------------------------------------------------
+
 void OSelectionChangeListener::setAdapter(OSelectionChangeMultiplexer* pAdapter)
 {
     if (m_pAdapter)
@@ -67,7 +67,7 @@ void OSelectionChangeListener::setAdapter(OSelectionChangeMultiplexer* pAdapter)
 //========================================================================
 //= OSelectionChangeMultiplexer
 //========================================================================
-//------------------------------------------------------------------
+
 OSelectionChangeMultiplexer::OSelectionChangeMultiplexer(OSelectionChangeListener* _pListener, const  Reference< XSelectionSupplier>& _rxSet, bool _bAutoReleaseSet)
             :m_xSet(_rxSet)
             ,m_pListener(_pListener)
@@ -84,24 +84,24 @@ OSelectionChangeMultiplexer::OSelectionChangeMultiplexer(OSelectionChangeListene
     osl_atomic_decrement(&m_refCount);
 }
 
-//------------------------------------------------------------------
+
 OSelectionChangeMultiplexer::~OSelectionChangeMultiplexer()
 {
 }
 
-//------------------------------------------------------------------
+
 void OSelectionChangeMultiplexer::lock()
 {
     ++m_nLockCount;
 }
 
-//------------------------------------------------------------------
+
 void OSelectionChangeMultiplexer::unlock()
 {
     --m_nLockCount;
 }
 
-//------------------------------------------------------------------
+
 void OSelectionChangeMultiplexer::dispose()
 {
     if (m_bListening)
@@ -121,7 +121,7 @@ void OSelectionChangeMultiplexer::dispose()
 }
 
 // XEventListener
-//------------------------------------------------------------------
+
 void SAL_CALL OSelectionChangeMultiplexer::disposing( const  EventObject& _rSource) throw( RuntimeException)
 {
     if (m_pListener)
@@ -142,7 +142,7 @@ void SAL_CALL OSelectionChangeMultiplexer::disposing( const  EventObject& _rSour
 }
 
 // XSelectionChangeListener
-//------------------------------------------------------------------
+
 void SAL_CALL OSelectionChangeMultiplexer::selectionChanged( const  EventObject& _rEvent ) throw( RuntimeException)
 {
     if (m_pListener && !locked())

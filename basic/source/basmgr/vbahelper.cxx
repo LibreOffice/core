@@ -48,7 +48,7 @@ uno::Reference< frame::XModuleManager2 > lclCreateModuleManager()
     return frame::ModuleManager::create(xContext);
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** Implementation of an enumeration of all open documents of the same type.
  */
@@ -98,7 +98,7 @@ uno::Any SAL_CALL DocumentsEnumeration::nextElement() throw (container::NoSuchEl
     return uno::Any( *maModelIt++ );
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** Locks or unlocks the controllers of the specified document model.
  */
@@ -116,7 +116,7 @@ void lclLockControllers( const uno::Reference< frame::XModel >& rxModel, sal_Boo
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** Enables or disables the container windows of all controllers of the
     specified document model.
@@ -147,7 +147,7 @@ void lclEnableContainerWindows( const uno::Reference< frame::XModel >& rxModel, 
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 typedef void (*ModifyDocumentFunc)( const uno::Reference< frame::XModel >&, sal_Bool );
 
@@ -168,7 +168,7 @@ void lclIterateDocuments( ModifyDocumentFunc pModifyDocumentFunc, const uno::Ref
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 struct CurrDirPool
 {

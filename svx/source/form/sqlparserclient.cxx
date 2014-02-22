@@ -31,12 +31,12 @@ namespace svxform
     //====================================================================
     //= OSQLParserClient
     //====================================================================
-    //--------------------------------------------------------------------
+
     OSQLParserClient::OSQLParserClient(const Reference< XComponentContext >& rxContext)
     {
         m_xContext = rxContext;
     }
-    //--------------------------------------------------------------------
+
     bool OSQLParserClient::ensureLoaded() const
     {
         if ( !ODbtoolsClient::ensureLoaded() )

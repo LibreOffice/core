@@ -66,7 +66,7 @@ void ScHeaderFooterEditSource::UpdateData()
     mrTextData.UpdateData();
 }
 
-//------------------------------------------------------------------------
+
 
 ScCellEditSource::ScCellEditSource(ScDocShell* pDocSh, const ScAddress& rP) :
     pCellTextData(new ScCellTextData(pDocSh, rP)) {}
@@ -106,7 +106,7 @@ ScEditEngineDefaulter* ScCellEditSource::GetEditEngine()
     return pCellTextData->GetEditEngine();
 }
 
-//------------------------------------------------------------------------
+
 
 ScAnnotationEditSource::ScAnnotationEditSource(ScDocShell* pDocSh, const ScAddress& rP) :
     pDocShell( pDocSh ),
@@ -216,7 +216,7 @@ void ScAnnotationEditSource::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 ScSimpleEditSource::ScSimpleEditSource( SvxTextForwarder* pForw ) :
     pForwarder( pForw )
@@ -245,7 +245,7 @@ void ScSimpleEditSource::UpdateData()
     //  nothing
 }
 
-//------------------------------------------------------------------------
+
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ScAccessibilityEditSource::ScAccessibilityEditSource( ::std::auto_ptr < ScAccessibleTextData > pAccessibleCellTextData )

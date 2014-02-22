@@ -30,7 +30,7 @@
 // SvxClickInfoCtr
 //=============================================================================
 
-//-----------------------------------------------------------------------------
+
 SvxClickInfoCtr::SvxClickInfoCtr( Window* pParent, const ResId& rResId ) :
         Control( pParent, rResId ),
         aFixedInfo( this)
@@ -39,13 +39,13 @@ SvxClickInfoCtr::SvxClickInfoCtr( Window* pParent, const ResId& rResId ) :
     aFixedInfo.Show();
 }
 
-//-----------------------------------------------------------------------------
+
 void SvxClickInfoCtr::MouseButtonDown( const MouseEvent& )
 {
     aActivateLink.Call(this);
 }
 
-//-----------------------------------------------------------------------------
+
 bool SvxClickInfoCtr::PreNotify( NotifyEvent& rNEvt )
 {
     if(rNEvt.GetType()==EVENT_GETFOCUS || rNEvt.GetType()==EVENT_MOUSEBUTTONDOWN)
@@ -56,19 +56,19 @@ bool SvxClickInfoCtr::PreNotify( NotifyEvent& rNEvt )
     return Control::PreNotify(rNEvt);
 }
 
-//-----------------------------------------------------------------------------
+
 void SvxClickInfoCtr::SetText( const OUString& rStr )
 {
     aFixedInfo.SetText(rStr );
 }
 
-//-----------------------------------------------------------------------------
+
 OUString SvxClickInfoCtr::GetText() const
 {
     return aFixedInfo.GetText();
 }
 
-//-----------------------------------------------------------------------------
+
 SvxClickInfoCtr::~SvxClickInfoCtr()
 {
 }
@@ -76,7 +76,7 @@ SvxClickInfoCtr::~SvxClickInfoCtr()
 //=============================================================================
 // SvxCommonLinguisticControl
 //=============================================================================
-//-----------------------------------------------------------------------------
+
 SvxCommonLinguisticControl::SvxCommonLinguisticControl( ModalDialog* _pParent )
     :Window( _pParent, CUI_RES( RID_SVX_WND_COMMON_LINGU ) )
     ,aWordText      ( this, CUI_RES( FT_WORD ) )
@@ -100,7 +100,7 @@ SvxCommonLinguisticControl::SvxCommonLinguisticControl( ModalDialog* _pParent )
     Show();
 }
 
-// -----------------------------------------------------------------------
+
 PushButton* SvxCommonLinguisticControl::implGetButton( ButtonType _eType  ) const
 {
     const PushButton* pButton = NULL;
@@ -116,7 +116,7 @@ PushButton* SvxCommonLinguisticControl::implGetButton( ButtonType _eType  ) cons
     return const_cast< PushButton* >( pButton );
 }
 
-// -----------------------------------------------------------------------
+
 void SvxCommonLinguisticControl::SetButtonHandler( ButtonType _eType, const Link& _rHandler )
 {
     Button* pButton = GetButton( _eType );
@@ -124,7 +124,7 @@ void SvxCommonLinguisticControl::SetButtonHandler( ButtonType _eType, const Link
         pButton->SetClickHdl( _rHandler );
 }
 
-// -----------------------------------------------------------------------
+
 void SvxCommonLinguisticControl::EnableButton( ButtonType _eType, sal_Bool _bEnable )
 {
     Button* pButton = GetButton( _eType );
@@ -132,7 +132,7 @@ void SvxCommonLinguisticControl::EnableButton( ButtonType _eType, sal_Bool _bEna
         pButton->Enable( _bEnable );
 }
 
-// -----------------------------------------------------------------------
+
 void SvxCommonLinguisticControl::InsertControlGroup( Window& _rFirstGroupWindow, Window& _rLastGroupWindow, ControlGroup _eInsertAfter )
 {
     Window* pInsertAfter = NULL;    // will be the last window of our own "undividable" group, after which we insert the foreign group
@@ -170,7 +170,7 @@ void SvxCommonLinguisticControl::InsertControlGroup( Window& _rFirstGroupWindow,
         // (FirstWindow, LastWindow) was no valid control group
 }
 
-//-----------------------------------------------------------------------------
+
 void SvxCommonLinguisticControl::Paint( const Rectangle& rRect )
 {
     Window::Paint(rRect );
@@ -181,7 +181,7 @@ void SvxCommonLinguisticControl::Paint( const Rectangle& rRect )
     aDecoView.DrawButton( aRect, BUTTON_DRAW_NOFILL );
 }
 
-//-----------------------------------------------------------------------------
+
 void SvxCommonLinguisticControl::Enlarge( sal_Int32 _nX, sal_Int32 _nY )
 {
     Size aSize;

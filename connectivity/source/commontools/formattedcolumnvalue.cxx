@@ -94,7 +94,7 @@ namespace dbtools
         }
     };
 
-    //--------------------------------------------------------------------
+
     namespace
     {
         //................................................................
@@ -214,7 +214,7 @@ namespace dbtools
     //====================================================================
     //= FormattedColumnValue
     //====================================================================
-    //--------------------------------------------------------------------
+
     FormattedColumnValue::FormattedColumnValue( const Reference< XComponentContext >& _rxContext,
             const Reference< XRowSet >& _rxRowSet, const Reference< XPropertySet >& i_rColumn )
         :m_pData( new FormattedColumnValue_Data )
@@ -222,7 +222,7 @@ namespace dbtools
         lcl_initColumnDataValue_nothrow( _rxContext, *m_pData, _rxRowSet, i_rColumn );
     }
 
-    //--------------------------------------------------------------------
+
     FormattedColumnValue::FormattedColumnValue( const Reference< XNumberFormatter >& i_rNumberFormatter,
             const Reference< XPropertySet >& _rxColumn )
         :m_pData( new FormattedColumnValue_Data )
@@ -230,49 +230,49 @@ namespace dbtools
         lcl_initColumnDataValue_nothrow( *m_pData, i_rNumberFormatter, _rxColumn );
     }
 
-    //--------------------------------------------------------------------
+
     void FormattedColumnValue::clear()
     {
         lcl_clear_nothrow( *m_pData );
     }
 
-    //--------------------------------------------------------------------
+
     FormattedColumnValue::~FormattedColumnValue()
     {
         clear();
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int32 FormattedColumnValue::getFormatKey() const
     {
         return m_pData->m_nFormatKey;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int32 FormattedColumnValue::getFieldType() const
     {
         return m_pData->m_nFieldType;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int16 FormattedColumnValue::getKeyType() const
     {
         return m_pData->m_nKeyType;
     }
 
-    //--------------------------------------------------------------------
+
     const Reference< XColumn >& FormattedColumnValue::getColumn() const
     {
         return m_pData->m_xColumn;
     }
 
-    //--------------------------------------------------------------------
+
     const Reference< XColumnUpdate >& FormattedColumnValue::getColumnUpdate() const
     {
         return m_pData->m_xColumnUpdate;
     }
 
-    //--------------------------------------------------------------------
+
     bool FormattedColumnValue::setFormattedValue( const OUString& _rFormattedStringValue ) const
     {
         OSL_PRECOND( m_pData->m_xColumnUpdate.is(), "FormattedColumnValue::setFormattedValue: no column!" );
@@ -299,7 +299,7 @@ namespace dbtools
         return true;
     }
 
-    //--------------------------------------------------------------------
+
     OUString FormattedColumnValue::getFormattedValue() const
     {
         OSL_PRECOND( m_pData->m_xColumn.is(), "FormattedColumnValue::setFormattedValue: no column!" );

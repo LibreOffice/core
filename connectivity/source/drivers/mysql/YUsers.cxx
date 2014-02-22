@@ -47,24 +47,24 @@ OUsers::OUsers( ::cppu::OWeakObject& _rParent,
     ,m_pParent(_pParent)
 {
 }
-// -----------------------------------------------------------------------------
+
 
 sdbcx::ObjectType OUsers::createObject(const OUString& _rName)
 {
     return new OMySQLUser(m_xConnection,_rName);
 }
-// -------------------------------------------------------------------------
+
 void OUsers::impl_refresh() throw(RuntimeException)
 {
     m_pParent->refreshUsers();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OUsers::createDescriptor()
 {
     OUserExtend* pNew = new OUserExtend(m_xConnection);
     return pNew;
 }
-// -------------------------------------------------------------------------
+
 // XAppend
 sdbcx::ObjectType OUsers::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
@@ -89,7 +89,7 @@ sdbcx::ObjectType OUsers::appendObject( const OUString& _rForName, const Referen
 
     return createObject( _rForName );
 }
-// -------------------------------------------------------------------------
+
 // XDrop
 void OUsers::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
 {
@@ -103,6 +103,6 @@ void OUsers::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
     ::comphelper::disposeComponent(xStmt);
 }
 
-// -------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

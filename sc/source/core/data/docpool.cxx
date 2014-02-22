@@ -186,7 +186,7 @@ static SfxItemInfo const  aItemInfos[] =
     { SID_SCGRIDSHOW,               SFX_ITEM_POOLABLE }
 };
 
-// -----------------------------------------------------------------------
+
 
 ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool)
 
@@ -597,7 +597,7 @@ void ScDocumentPool::DeleteVersionMaps()
     pVersionMap1 = 0;
 }
 
-// ----------------------------------------------------------------------------------------
+
 //
 //  Fuer die Pattern-Attribute (SetItems) kann der sal_uInt16 RefCount leicht ueberlaufen
 //  (z.B. 600 ganze Zeilen abwechselnd formatieren).
@@ -654,7 +654,7 @@ void ScDocumentPool::CheckRef( const SfxPoolItem& rItem )
     }
 }
 
-// ----------------------------------------------------------------------------------------
+
 
 void ScDocumentPool::StyleDeleted( ScStyleSheet* pStyle )
 {

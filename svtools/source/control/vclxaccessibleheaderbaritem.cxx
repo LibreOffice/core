@@ -56,7 +56,7 @@ VCLXAccessibleHeaderBarItem::VCLXAccessibleHeaderBarItem( HeaderBar*    pHeadBar
     m_pExternalLock = static_cast< VCLExternalSolarLock* >( getExternalLock() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleHeaderBarItem::~VCLXAccessibleHeaderBarItem()
 {
@@ -64,13 +64,13 @@ VCLXAccessibleHeaderBarItem::~VCLXAccessibleHeaderBarItem()
     m_pExternalLock = NULL;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleHeaderBarItem::ProcessWindowEvent( const VclWindowEvent& )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleHeaderBarItem::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
@@ -88,9 +88,9 @@ void VCLXAccessibleHeaderBarItem::FillAccessibleStateSet( utl::AccessibleStateSe
     }
 }
 
-// -----------------------------------------------------------------------------
+
 // OCommonAccessibleComponent
-// -----------------------------------------------------------------------------
+
 
 awt::Rectangle VCLXAccessibleHeaderBarItem::implGetBounds() throw (RuntimeException)
 {
@@ -105,21 +105,21 @@ awt::Rectangle VCLXAccessibleHeaderBarItem::implGetBounds() throw (RuntimeExcept
     return aBounds;
 }
 
-// -----------------------------------------------------------------------------
+
 // XInterface
-// -----------------------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleHeaderBarItem, AccessibleExtendedComponentHelper_BASE, VCLXAccessibleHeaderBarItem_BASE )
 
-// -----------------------------------------------------------------------------
+
 // XTypeProvider
-// -----------------------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleHeaderBarItem, AccessibleExtendedComponentHelper_BASE, VCLXAccessibleHeaderBarItem_BASE )
 
-// -----------------------------------------------------------------------------
+
 // XComponent
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleHeaderBarItem::disposing()
 {
@@ -152,9 +152,9 @@ Reference< XAccessibleContext > VCLXAccessibleHeaderBarItem::getAccessibleContex
     return this;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleContext
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleHeaderBarItem::getAccessibleChildCount() throw (RuntimeException)
 {
@@ -163,7 +163,7 @@ sal_Int32 VCLXAccessibleHeaderBarItem::getAccessibleChildCount() throw (RuntimeE
     return 0;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > VCLXAccessibleHeaderBarItem::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -175,7 +175,7 @@ Reference< XAccessible > VCLXAccessibleHeaderBarItem::getAccessibleChild( sal_In
     return Reference< XAccessible >();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > VCLXAccessibleHeaderBarItem::getAccessibleParent() throw (RuntimeException)
 {
@@ -190,7 +190,7 @@ Reference< XAccessible > VCLXAccessibleHeaderBarItem::getAccessibleParent() thro
     return xParent;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleHeaderBarItem::getAccessibleIndexInParent() throw (RuntimeException)
 {
@@ -198,7 +198,7 @@ sal_Int32 VCLXAccessibleHeaderBarItem::getAccessibleIndexInParent() throw (Runti
     return m_nIndexInParent - 1;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int16 VCLXAccessibleHeaderBarItem::getAccessibleRole() throw (RuntimeException)
 {
@@ -207,7 +207,7 @@ sal_Int16 VCLXAccessibleHeaderBarItem::getAccessibleRole() throw (RuntimeExcepti
     return AccessibleRole::COLUMN_HEADER;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleHeaderBarItem::getAccessibleDescription() throw (RuntimeException)
 {
@@ -216,7 +216,7 @@ OUString VCLXAccessibleHeaderBarItem::getAccessibleDescription() throw (RuntimeE
     return sDescription;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleHeaderBarItem::getAccessibleName() throw (RuntimeException)
 {
@@ -228,7 +228,7 @@ OUString VCLXAccessibleHeaderBarItem::getAccessibleName() throw (RuntimeExceptio
     return sName;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessibleRelationSet > VCLXAccessibleHeaderBarItem::getAccessibleRelationSet(  ) throw (RuntimeException)
 {
@@ -239,7 +239,7 @@ Reference< XAccessibleRelationSet > VCLXAccessibleHeaderBarItem::getAccessibleRe
     return xSet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessibleStateSet > VCLXAccessibleHeaderBarItem::getAccessibleStateSet(  ) throw (RuntimeException)
 {
@@ -260,7 +260,7 @@ Reference< XAccessibleStateSet > VCLXAccessibleHeaderBarItem::getAccessibleState
     return xSet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 com::sun::star::lang::Locale VCLXAccessibleHeaderBarItem::getLocale() throw (IllegalAccessibleComponentStateException, RuntimeException)
 {
@@ -269,9 +269,9 @@ com::sun::star::lang::Locale VCLXAccessibleHeaderBarItem::getLocale() throw (Ill
     return Application::GetSettings().GetLanguageTag().getLocale();
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleComponent
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > VCLXAccessibleHeaderBarItem::getAccessibleAtPoint( const awt::Point& ) throw (RuntimeException)
 {
@@ -280,7 +280,7 @@ Reference< XAccessible > VCLXAccessibleHeaderBarItem::getAccessibleAtPoint( cons
     return Reference< XAccessible >();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleHeaderBarItem::getForeground() throw (RuntimeException)
 {
@@ -290,7 +290,7 @@ sal_Int32 VCLXAccessibleHeaderBarItem::getForeground() throw (RuntimeException)
     return nColor;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleHeaderBarItem::getBackground() throw (RuntimeException)
 {
@@ -300,9 +300,9 @@ sal_Int32 VCLXAccessibleHeaderBarItem::getBackground() throw (RuntimeException)
     return nColor;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleExtendedComponent
-// -----------------------------------------------------------------------------
+
 
 Reference< awt::XFont > VCLXAccessibleHeaderBarItem::getFont() throw (RuntimeException)
 {
@@ -312,7 +312,7 @@ Reference< awt::XFont > VCLXAccessibleHeaderBarItem::getFont() throw (RuntimeExc
     return xFont;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleHeaderBarItem::getTitledBorderText() throw (RuntimeException)
 {
@@ -322,7 +322,7 @@ OUString VCLXAccessibleHeaderBarItem::getTitledBorderText() throw (RuntimeExcept
     return sText;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleHeaderBarItem::getToolTipText() throw (RuntimeException)
 {

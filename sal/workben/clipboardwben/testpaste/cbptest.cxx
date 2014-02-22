@@ -55,9 +55,9 @@ LPSTREAM            g_pStm    = NULL;
 char*               pTextBuff = NULL;
 DWORD               lData     = 0;
 
-//----------------------------------------------------
+
 // a thread function
-//----------------------------------------------------
+
 
 unsigned int _stdcall ThreadProc(LPVOID pParam)
 {
@@ -119,9 +119,9 @@ unsigned int _stdcall ThreadProc(LPVOID pParam)
     return 0;
 }
 
-//----------------------------------------------------
+
 // WinMain
-//----------------------------------------------------
+
 
 int APIENTRY WinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
@@ -348,9 +348,9 @@ void PasteClipboardData2(HWND hwndParent)
     }
 }
 
-//----------------------------------------------------
+
 // clipboard handling
-//----------------------------------------------------
+
 
 /*
 void PasteClipboardData(HWND hwndParent)

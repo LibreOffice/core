@@ -519,7 +519,7 @@ static double lcl_sca_XirrResult_Deriv1( const ScaDoubleList& rValues, const Sca
 #undef D_
 
 
-// ----------------------------------------------------------------------------
+
 // XIRR calculation
 
 double SAL_CALL AnalysisAddIn::getXirr(

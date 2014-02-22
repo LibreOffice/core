@@ -102,7 +102,7 @@ PSDReader::~PSDReader()
     delete mpFileHeader;
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool PSDReader::ReadPSD(Graphic & rGraphic )
 {
@@ -166,7 +166,7 @@ sal_Bool PSDReader::ReadPSD(Graphic & rGraphic )
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool PSDReader::ImplReadHeader()
 {
@@ -331,7 +331,7 @@ sal_Bool PSDReader::ImplReadHeader()
     return sal_True;
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool PSDReader::ImplReadBody()
 {

@@ -60,7 +60,7 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
-// -----------------------------------------------------------------------
+
 
 bool areListsEqual( const Sequence< OUString >& rListA, const Sequence< OUString >& rListB )
 {
@@ -197,7 +197,7 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
 #endif
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxJavaOptionsPage::~SvxJavaOptionsPage()
 {
@@ -217,7 +217,7 @@ SvxJavaOptionsPage::~SvxJavaOptionsPage()
 #endif
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxJavaOptionsPage, EnableHdl_Impl)
 {
@@ -227,7 +227,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, EnableHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxJavaOptionsPage, CheckHdl_Impl, SvSimpleTable *, pList )
 {
@@ -238,7 +238,7 @@ IMPL_LINK( SvxJavaOptionsPage, CheckHdl_Impl, SvSimpleTable *, pList )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxJavaOptionsPage, SelectHdl_Impl)
 {
@@ -254,7 +254,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, SelectHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxJavaOptionsPage, AddHdl_Impl)
 {
@@ -281,7 +281,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, AddHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl)
 {
@@ -330,7 +330,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl)
 {
@@ -375,7 +375,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxJavaOptionsPage, ResetHdl_Impl)
 {
@@ -383,7 +383,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ResetHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxJavaOptionsPage, StartFolderPickerHdl)
 {
@@ -403,7 +403,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, StartFolderPickerHdl)
     return 0L;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
 {
@@ -416,7 +416,7 @@ IMPL_LINK( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
     return 0L;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG( SvxJavaOptionsPage, ExpertConfigHdl_Impl )
 {
@@ -431,7 +431,7 @@ IMPL_LINK_NOARG( SvxJavaOptionsPage, ExpertConfigHdl_Impl )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxJavaOptionsPage::ClearJavaInfo()
 {
@@ -452,7 +452,7 @@ void SvxJavaOptionsPage::ClearJavaInfo()
 #endif
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxJavaOptionsPage::ClearJavaList()
 {
@@ -466,7 +466,7 @@ void SvxJavaOptionsPage::ClearJavaList()
     m_pJavaList->Clear();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxJavaOptionsPage::LoadJREs()
 {
@@ -512,7 +512,7 @@ void SvxJavaOptionsPage::LoadJREs()
 #endif
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxJavaOptionsPage::AddJRE( JavaInfo* _pInfo )
 {
@@ -534,7 +534,7 @@ void SvxJavaOptionsPage::AddJRE( JavaInfo* _pInfo )
 #endif
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxJavaOptionsPage::HandleCheckEntry( SvTreeListEntry* _pEntry )
 {
@@ -556,7 +556,7 @@ void SvxJavaOptionsPage::HandleCheckEntry( SvTreeListEntry* _pEntry )
         m_pJavaList->SetCheckButtonState( _pEntry, SV_BUTTON_CHECKED );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
 {
@@ -631,14 +631,14 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
 #endif
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SvxJavaOptionsPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return ( new SvxJavaOptionsPage( pParent, rAttrSet ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
 {
@@ -745,7 +745,7 @@ sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
     return bModified;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxJavaOptionsPage::Reset( const SfxItemSet& /*rSet*/ )
 {
@@ -774,7 +774,7 @@ void SvxJavaOptionsPage::Reset( const SfxItemSet& /*rSet*/ )
     m_aResetTimer.Start();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxJavaOptionsPage::FillUserData()
 {
@@ -806,13 +806,13 @@ SvxJavaParameterDlg::SvxJavaParameterDlg( Window* pParent ) :
     EnableRemoveButton();
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxJavaParameterDlg::~SvxJavaParameterDlg()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxJavaParameterDlg, ModifyHdl_Impl)
 {
@@ -822,7 +822,7 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, ModifyHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxJavaParameterDlg, AssignHdl_Impl)
 {
@@ -841,7 +841,7 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, AssignHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxJavaParameterDlg, SelectHdl_Impl)
 {
@@ -849,7 +849,7 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, SelectHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxJavaParameterDlg, DblClickHdl_Impl)
 {
@@ -859,7 +859,7 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, DblClickHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxJavaParameterDlg, RemoveHdl_Impl)
 {
@@ -880,7 +880,7 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, RemoveHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 short SvxJavaParameterDlg::Execute()
 {
@@ -889,7 +889,7 @@ short SvxJavaParameterDlg::Execute()
     return ModalDialog::Execute();
 }
 
-// -----------------------------------------------------------------------
+
 
 Sequence< OUString > SvxJavaParameterDlg::GetParameters() const
 {
@@ -901,7 +901,7 @@ Sequence< OUString > SvxJavaParameterDlg::GetParameters() const
     return aParamList;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxJavaParameterDlg::SetParameters( Sequence< OUString >& rParams )
 {
@@ -936,7 +936,7 @@ SvxJavaClassPathDlg::SvxJavaClassPathDlg(Window* pParent)
     m_pPathList->GrabFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxJavaClassPathDlg::~SvxJavaClassPathDlg()
 {
@@ -945,7 +945,7 @@ SvxJavaClassPathDlg::~SvxJavaClassPathDlg()
         delete static_cast< OUString* >( m_pPathList->GetEntryData(i) );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl)
 {
@@ -982,7 +982,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl)
 {
@@ -1019,7 +1019,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxJavaClassPathDlg, RemoveHdl_Impl)
 {
@@ -1040,7 +1040,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, RemoveHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxJavaClassPathDlg, SelectHdl_Impl)
 {
@@ -1048,7 +1048,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, SelectHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxJavaClassPathDlg::IsPathDuplicate( const OUString& _rPath )
 {
@@ -1068,7 +1068,7 @@ bool SvxJavaClassPathDlg::IsPathDuplicate( const OUString& _rPath )
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString SvxJavaClassPathDlg::GetClassPath() const
 {
@@ -1087,7 +1087,7 @@ OUString SvxJavaClassPathDlg::GetClassPath() const
     return sPath;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxJavaClassPathDlg::SetClassPath( const OUString& _rPath )
 {

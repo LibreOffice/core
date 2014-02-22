@@ -41,9 +41,9 @@ TYPEINIT1(ScTablesHint,         SfxHint);
 TYPEINIT1(ScEditViewHint,       SfxHint);
 TYPEINIT1(ScIndexHint,          SfxHint);
 
-// -----------------------------------------------------------------------
+
 //      ScInputStatusItem - Status-Update fuer Eingabezeile
-// -----------------------------------------------------------------------
+
 
 ScInputStatusItem::ScInputStatusItem(
     sal_uInt16 nWhichP, const ScAddress& rCurPos, const ScAddress& rStartPos,
@@ -109,9 +109,9 @@ const std::vector<editeng::MisspellRanges>* ScInputStatusItem::GetMisspellRanges
 //  ScPaintHint ist nach schints.cxx verschoben
 //
 
-// -----------------------------------------------------------------------
+
 //  ScTablesHint - Views anpassen, wenn Tabellen eingefuegt / geloescht
-// -----------------------------------------------------------------------
+
 
 ScTablesHint::ScTablesHint(sal_uInt16 nNewId, SCTAB nTable1, SCTAB nTable2) :
     nId( nNewId ),
@@ -125,9 +125,9 @@ ScTablesHint::~ScTablesHint()
 }
 
 
-// -----------------------------------------------------------------------
+
 //  ScIndexHint
-// -----------------------------------------------------------------------
+
 
 ScIndexHint::ScIndexHint(sal_uInt16 nNewId, sal_uInt16 nIdx) :
     nId( nNewId ),
@@ -140,9 +140,9 @@ ScIndexHint::~ScIndexHint()
 }
 
 
-// -----------------------------------------------------------------------
+
 //      ScEditViewHint - neue EditView fuer Cursorposition anlegen
-// -----------------------------------------------------------------------
+
 
 ScEditViewHint::ScEditViewHint( ScEditEngineDefaulter* pEngine, const ScAddress& rCurPos ) :
     pEditEngine( pEngine ),
@@ -154,9 +154,9 @@ ScEditViewHint::~ScEditViewHint()
 {
 }
 
-// -----------------------------------------------------------------------
+
 //      ScSortItem - Daten fuer den Sortierdialog
-// -----------------------------------------------------------------------
+
 
 ScSortItem::ScSortItem( sal_uInt16              nWhichP,
                         ScViewData*         ptrViewData,
@@ -167,7 +167,7 @@ ScSortItem::ScSortItem( sal_uInt16              nWhichP,
     if ( pSortData ) theSortData = *pSortData;
 }
 
-//------------------------------------------------------------------------
+
 
 ScSortItem::ScSortItem( sal_uInt16              nWhichP,
                         const ScSortParam*  pSortData ) :
@@ -177,7 +177,7 @@ ScSortItem::ScSortItem( sal_uInt16              nWhichP,
     if ( pSortData ) theSortData = *pSortData;
 }
 
-//------------------------------------------------------------------------
+
 
 ScSortItem::ScSortItem( const ScSortItem& rItem ) :
         SfxPoolItem ( rItem ),
@@ -190,14 +190,14 @@ ScSortItem::~ScSortItem()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 OUString ScSortItem::GetValueText() const
 {
     return OUString("SortItem");
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScSortItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -209,14 +209,14 @@ bool ScSortItem::operator==( const SfxPoolItem& rItem ) const
             && (theSortData == rOther.theSortData) );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxPoolItem* ScSortItem::Clone( SfxItemPool * ) const
 {
     return new ScSortItem( *this );
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScSortItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /* nMemberUd */ ) const
 {
@@ -225,9 +225,9 @@ bool ScSortItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /* nMembe
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 //      ScQueryItem - Daten fuer den Filterdialog
-// -----------------------------------------------------------------------
+
 
 ScQueryItem::ScQueryItem( sal_uInt16                nWhichP,
                           ScViewData*           ptrViewData,
@@ -243,7 +243,7 @@ ScQueryItem::ScQueryItem( sal_uInt16                nWhichP,
         mpQueryData.reset(new ScQueryParam);
 }
 
-//------------------------------------------------------------------------
+
 
 ScQueryItem::ScQueryItem( sal_uInt16                nWhichP,
                           const ScQueryParam*   pQueryData ) :
@@ -258,7 +258,7 @@ ScQueryItem::ScQueryItem( sal_uInt16                nWhichP,
         mpQueryData.reset(new ScQueryParam);
 }
 
-//------------------------------------------------------------------------
+
 
 ScQueryItem::ScQueryItem( const ScQueryItem& rItem ) :
         SfxPoolItem ( rItem ),
@@ -273,7 +273,7 @@ ScQueryItem::~ScQueryItem()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 void ScQueryItem::SetAdvancedQuerySource(const ScRange* pSource)
 {
@@ -297,14 +297,14 @@ bool ScQueryItem::GetAdvancedQuerySource(ScRange& rSource) const
     return bIsAdvanced;
 }
 
-//------------------------------------------------------------------------
+
 
 OUString ScQueryItem::GetValueText() const
 {
     return OUString("QueryItem");
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScQueryItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -318,16 +318,16 @@ bool ScQueryItem::operator==( const SfxPoolItem& rItem ) const
             && (*mpQueryData == *rQueryItem.mpQueryData) );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxPoolItem* ScQueryItem::Clone( SfxItemPool * ) const
 {
     return new ScQueryItem( *this );
 }
 
-// -----------------------------------------------------------------------
+
 //      ScSubTotalItem - Daten fuer den Zwischenergebnisdialog
-// -----------------------------------------------------------------------
+
 
 ScSubTotalItem::ScSubTotalItem( sal_uInt16                  nWhichP,
                                 ScViewData*             ptrViewData,
@@ -338,7 +338,7 @@ ScSubTotalItem::ScSubTotalItem( sal_uInt16                  nWhichP,
     if ( pSubTotalData ) theSubTotalData = *pSubTotalData;
 }
 
-//------------------------------------------------------------------------
+
 
 ScSubTotalItem::ScSubTotalItem( sal_uInt16                  nWhichP,
                                 const ScSubTotalParam*  pSubTotalData ) :
@@ -348,7 +348,7 @@ ScSubTotalItem::ScSubTotalItem( sal_uInt16                  nWhichP,
     if ( pSubTotalData ) theSubTotalData = *pSubTotalData;
 }
 
-//------------------------------------------------------------------------
+
 
 ScSubTotalItem::ScSubTotalItem( const ScSubTotalItem& rItem ) :
         SfxPoolItem     ( rItem ),
@@ -361,14 +361,14 @@ ScSubTotalItem::~ScSubTotalItem()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 OUString ScSubTotalItem::GetValueText() const
 {
     return OUString("SubTotalItem");
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScSubTotalItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -380,14 +380,14 @@ bool ScSubTotalItem::operator==( const SfxPoolItem& rItem ) const
             && (theSubTotalData == rSTItem.theSubTotalData) );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxPoolItem* ScSubTotalItem::Clone( SfxItemPool * ) const
 {
     return new ScSubTotalItem( *this );
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScSubTotalItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /* nMemberUd */ ) const
 {
@@ -396,9 +396,9 @@ bool ScSubTotalItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /* nM
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 //      ScUserListItem - Transporter fuer den Benutzerlisten-TabPage
-// -----------------------------------------------------------------------
+
 
 ScUserListItem::ScUserListItem( sal_uInt16 nWhichP )
     :   SfxPoolItem ( nWhichP ),
@@ -406,7 +406,7 @@ ScUserListItem::ScUserListItem( sal_uInt16 nWhichP )
 {
 }
 
-//------------------------------------------------------------------------
+
 
 ScUserListItem::ScUserListItem( const ScUserListItem& rItem )
     :   SfxPoolItem ( rItem )
@@ -422,14 +422,14 @@ ScUserListItem::~ScUserListItem()
     delete pUserList;
 }
 
-//------------------------------------------------------------------------
+
 
 OUString ScUserListItem::GetValueText() const
 {
     return OUString("ScUserListItem");
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScUserListItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -447,14 +447,14 @@ bool ScUserListItem::operator==( const SfxPoolItem& rItem ) const
 }
 
 
-//------------------------------------------------------------------------
+
 
 SfxPoolItem* ScUserListItem::Clone( SfxItemPool * ) const
 {
     return new ScUserListItem( *this );
 }
 
-//------------------------------------------------------------------------
+
 
 void ScUserListItem::SetUserList( const ScUserList& rUserList )
 {
@@ -462,9 +462,9 @@ void ScUserListItem::SetUserList( const ScUserList& rUserList )
     pUserList = new ScUserList( rUserList );
 }
 
-// -----------------------------------------------------------------------
+
 //      ScConsolidateItem - Daten fuer den Konsolidieren-Dialog
-// -----------------------------------------------------------------------
+
 
 ScConsolidateItem::ScConsolidateItem(
                             sal_uInt16                      nWhichP,
@@ -474,7 +474,7 @@ ScConsolidateItem::ScConsolidateItem(
     if ( pConsolidateData ) theConsData = *pConsolidateData;
 }
 
-//------------------------------------------------------------------------
+
 
 ScConsolidateItem::ScConsolidateItem( const ScConsolidateItem& rItem ) :
         SfxPoolItem ( rItem ),
@@ -482,20 +482,20 @@ ScConsolidateItem::ScConsolidateItem( const ScConsolidateItem& rItem ) :
 {
 }
 
-//------------------------------------------------------------------------
+
 
 ScConsolidateItem::~ScConsolidateItem()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 OUString ScConsolidateItem::GetValueText() const
 {
     return OUString("ScConsolidateItem");
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScConsolidateItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -506,7 +506,7 @@ bool ScConsolidateItem::operator==( const SfxPoolItem& rItem ) const
     return ( theConsData == rCItem.theConsData);
 }
 
-//------------------------------------------------------------------------
+
 
 SfxPoolItem* ScConsolidateItem::Clone( SfxItemPool * ) const
 {
@@ -514,9 +514,9 @@ SfxPoolItem* ScConsolidateItem::Clone( SfxItemPool * ) const
 }
 
 
-// -----------------------------------------------------------------------
+
 //      ScPivotItem - Daten fuer den Pivot-Dialog
-// -----------------------------------------------------------------------
+
 
 ScPivotItem::ScPivotItem( sal_uInt16 nWhichP, const ScDPSaveData* pData,
                              const ScRange* pRange, bool bNew ) :
@@ -531,7 +531,7 @@ ScPivotItem::ScPivotItem( sal_uInt16 nWhichP, const ScDPSaveData* pData,
     bNewSheet = bNew;
 }
 
-//------------------------------------------------------------------------
+
 
 ScPivotItem::ScPivotItem( const ScPivotItem& rItem ) :
         SfxPoolItem ( rItem ),
@@ -542,21 +542,21 @@ ScPivotItem::ScPivotItem( const ScPivotItem& rItem ) :
     pSaveData = new ScDPSaveData(*rItem.pSaveData);
 }
 
-//------------------------------------------------------------------------
+
 
 ScPivotItem::~ScPivotItem()
 {
     delete pSaveData;
 }
 
-//------------------------------------------------------------------------
+
 
 OUString ScPivotItem::GetValueText() const
 {
     return OUString("ScPivotItem");
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScPivotItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -569,7 +569,7 @@ bool ScPivotItem::operator==( const SfxPoolItem& rItem ) const
              bNewSheet  == rPItem.bNewSheet );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxPoolItem* ScPivotItem::Clone( SfxItemPool * ) const
 {
@@ -577,9 +577,9 @@ SfxPoolItem* ScPivotItem::Clone( SfxItemPool * ) const
 }
 
 
-// -----------------------------------------------------------------------
+
 //      ScSolveItem - Daten fuer den Solver-Dialog
-// -----------------------------------------------------------------------
+
 
 ScSolveItem::ScSolveItem( sal_uInt16                nWhichP,
                           const ScSolveParam*   pSolveData )
@@ -588,7 +588,7 @@ ScSolveItem::ScSolveItem( sal_uInt16                nWhichP,
     if ( pSolveData ) theSolveData = *pSolveData;
 }
 
-//------------------------------------------------------------------------
+
 
 ScSolveItem::ScSolveItem( const ScSolveItem& rItem )
     :   SfxPoolItem     ( rItem ),
@@ -596,20 +596,20 @@ ScSolveItem::ScSolveItem( const ScSolveItem& rItem )
 {
 }
 
-//------------------------------------------------------------------------
+
 
 ScSolveItem::~ScSolveItem()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 OUString ScSolveItem::GetValueText() const
 {
     return OUString("ScSolveItem");
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScSolveItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -620,16 +620,16 @@ bool ScSolveItem::operator==( const SfxPoolItem& rItem ) const
     return ( theSolveData == rPItem.theSolveData );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxPoolItem* ScSolveItem::Clone( SfxItemPool * ) const
 {
     return new ScSolveItem( *this );
 }
 
-// -----------------------------------------------------------------------
+
 //      ScTabOpItem - Daten fuer den TabOp-Dialog
-// -----------------------------------------------------------------------
+
 
 ScTabOpItem::ScTabOpItem( sal_uInt16                nWhichP,
                           const ScTabOpParam*   pTabOpData )
@@ -638,7 +638,7 @@ ScTabOpItem::ScTabOpItem( sal_uInt16                nWhichP,
     if ( pTabOpData ) theTabOpData = *pTabOpData;
 }
 
-//------------------------------------------------------------------------
+
 
 ScTabOpItem::ScTabOpItem( const ScTabOpItem& rItem )
     :   SfxPoolItem     ( rItem ),
@@ -646,20 +646,20 @@ ScTabOpItem::ScTabOpItem( const ScTabOpItem& rItem )
 {
 }
 
-//------------------------------------------------------------------------
+
 
 ScTabOpItem::~ScTabOpItem()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 OUString ScTabOpItem::GetValueText() const
 {
     return OUString("ScTabOpItem");
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScTabOpItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -670,7 +670,7 @@ bool ScTabOpItem::operator==( const SfxPoolItem& rItem ) const
     return ( theTabOpData == rPItem.theTabOpData );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxPoolItem* ScTabOpItem::Clone( SfxItemPool * ) const
 {

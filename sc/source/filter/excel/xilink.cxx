@@ -157,7 +157,7 @@ inline XclImpStream& operator>>( XclImpStream& rStrm, XclImpXti& rXti )
     return rStrm >> rXti.mnSupbook >> rXti.mnSBTabFirst >> rXti.mnSBTabLast;
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** Implementation of the link manager. */
 class XclImpLinkManagerImpl : protected XclImpRoot

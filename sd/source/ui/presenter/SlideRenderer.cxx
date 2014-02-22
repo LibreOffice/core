@@ -170,7 +170,7 @@ awt::Size SAL_CALL SlideRenderer::calculatePreviewSize (
 
 
 
-//-----------------------------------------------------------------------------
+
 
 BitmapEx SlideRenderer::CreatePreview (
     const Reference<drawing::XDrawPage>& rxSlide,

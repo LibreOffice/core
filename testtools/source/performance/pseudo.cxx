@@ -59,7 +59,7 @@ struct pseudo_unoInterfaceProxy : public uno_Interface
                                      typelib_InterfaceTypeDescription * pTypeDescr_,
                                      const OUString & rOId_ );
 };
-//--------------------------------------------------------------------------------------------------
+
 static void SAL_CALL pseudo_unoInterfaceProxy_dispatch(
     uno_Interface * pUnoI,
     const typelib_TypeDescription * pMemberType,
@@ -71,7 +71,7 @@ static void SAL_CALL pseudo_unoInterfaceProxy_dispatch(
     (*pThis->pUnoI->pDispatcher)( pThis->pUnoI, pMemberType, pReturn, pArgs, ppException );
 }
 
-//--------------------------------------------------------------------------------------------------
+
 static void SAL_CALL pseudo_unoInterfaceProxy_free( uno_ExtEnvironment * pEnv, void * pProxy )
 {
     pseudo_unoInterfaceProxy * pThis =
@@ -89,7 +89,7 @@ static void SAL_CALL pseudo_unoInterfaceProxy_free( uno_ExtEnvironment * pEnv, v
 #endif
     delete pThis;
 }
-//--------------------------------------------------------------------------------------------------
+
 static void SAL_CALL pseudo_unoInterfaceProxy_acquire( uno_Interface * pUnoI )
 {
     if (1 == osl_atomic_increment( &static_cast< pseudo_unoInterfaceProxy * >( pUnoI )->nRef ))
@@ -105,7 +105,7 @@ static void SAL_CALL pseudo_unoInterfaceProxy_acquire( uno_Interface * pUnoI )
         OSL_ASSERT( pThis == static_cast< uno_Interface * >( pUnoI ) );
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 static void SAL_CALL pseudo_unoInterfaceProxy_release( uno_Interface * pUnoI )
 {
     if (! osl_atomic_decrement( & static_cast< pseudo_unoInterfaceProxy * >( pUnoI )->nRef ))
@@ -115,7 +115,7 @@ static void SAL_CALL pseudo_unoInterfaceProxy_release( uno_Interface * pUnoI )
             static_cast< pseudo_unoInterfaceProxy * >( pUnoI )->pPseudoMapping->pTo, pUnoI );
     }
 }
-//__________________________________________________________________________________________________
+
 inline pseudo_unoInterfaceProxy::pseudo_unoInterfaceProxy(
     pseudo_Mapping * pPseudoMapping_, uno_Interface * pUnoI_,
     typelib_InterfaceTypeDescription * pTypeDescr_, const OUString & rOId_ )
@@ -137,7 +137,7 @@ inline pseudo_unoInterfaceProxy::pseudo_unoInterfaceProxy(
     uno_Interface::pDispatcher = pseudo_unoInterfaceProxy_dispatch;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 static void SAL_CALL pseudo_Mapping_mapInterface(
     uno_Mapping * pMapping, void ** ppOut,
     void * pUnoI, typelib_InterfaceTypeDescription * pTypeDescr )
@@ -180,12 +180,12 @@ static void SAL_CALL pseudo_Mapping_mapInterface(
         }
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 static void SAL_CALL pseudo_Mapping_free( uno_Mapping * pMapping )
 {
     delete static_cast< pseudo_Mapping * >( pMapping );
 }
-//--------------------------------------------------------------------------------------------------
+
 static void SAL_CALL pseudo_Mapping_acquire( uno_Mapping * pMapping )
 {
     if (1 == osl_atomic_increment( & static_cast< pseudo_Mapping * >( pMapping )->nRef ))
@@ -198,7 +198,7 @@ static void SAL_CALL pseudo_Mapping_acquire( uno_Mapping * pMapping )
                              aMappingPurpose.pData );
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 static void SAL_CALL pseudo_Mapping_release( uno_Mapping * pMapping )
 {
     if (! osl_atomic_decrement( & static_cast< pseudo_Mapping * >( pMapping )->nRef ))
@@ -207,7 +207,7 @@ static void SAL_CALL pseudo_Mapping_release( uno_Mapping * pMapping )
     }
 }
 
-//__________________________________________________________________________________________________
+
 pseudo_Mapping::pseudo_Mapping( uno_ExtEnvironment * pFrom_, uno_ExtEnvironment * pTo_ )
     : nRef( 1 )
     , pFrom( pFrom_ )
@@ -220,7 +220,7 @@ pseudo_Mapping::pseudo_Mapping( uno_ExtEnvironment * pFrom_, uno_ExtEnvironment 
     uno_Mapping::release = pseudo_Mapping_release;
     uno_Mapping::mapInterface = pseudo_Mapping_mapInterface;
 }
-//__________________________________________________________________________________________________
+
 pseudo_Mapping::~pseudo_Mapping()
 {
     (*((uno_Environment *)pTo)->release)( (uno_Environment *)pTo );

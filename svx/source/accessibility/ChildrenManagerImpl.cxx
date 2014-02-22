@@ -1143,14 +1143,14 @@ AccessibleShape* ChildDescriptor::GetAccessibleShape (void) const
 {
     return static_cast<AccessibleShape*> (mxAccessibleShape.get());
 }
-// -----------------------------------------------------------------------------
+
 void ChildDescriptor::setIndexAtAccessibleShape(sal_Int32 _nIndex)
 {
     AccessibleShape* pShape = GetAccessibleShape();
     if ( pShape )
         pShape->setIndexInParent(_nIndex);
 }
-// -----------------------------------------------------------------------------
+
 
 
 

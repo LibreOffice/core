@@ -70,7 +70,7 @@ static int* gpnInit = 0;
 static NSMenu* pDockMenu = nil;
 static bool bNoSVMain = true;
 static bool bLeftMain = false;
-// -----------------------------------------------------------------------
+
 
 class AquaDelayedSettingsChanged : public Timer
 {
@@ -245,7 +245,7 @@ void SalAbort( const OUString& rErrorText, bool bDumpCore )
         _exit(1);
 }
 
-// -----------------------------------------------------------------------
+
 
 void InitSalData()
 {
@@ -253,7 +253,7 @@ void InitSalData()
     SetSalData( pSalData );
 }
 
-// -----------------------------------------------------------------------
+
 
 const OUString& SalGetDesktopEnvironment()
 {
@@ -261,7 +261,7 @@ const OUString& SalGetDesktopEnvironment()
     return aDesktopEnvironment;
 }
 
-// -----------------------------------------------------------------------
+
 
 void DeInitSalData()
 {
@@ -275,13 +275,13 @@ void DeInitSalData()
     SetSalData( NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 extern "C" {
 #include <crt_externs.h>
 }
 
-// -----------------------------------------------------------------------
+
 
 void InitSalMain()
 {
@@ -325,7 +325,7 @@ bool SalYieldMutex::tryToAcquire()
         return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 // some convenience functions regarding the yield mutex, aka solar mutex
 
@@ -382,14 +382,14 @@ SalInstance* CreateSalInstance()
     return pInst;
 }
 
-// -----------------------------------------------------------------------
+
 
 void DestroySalInstance( SalInstance* pInst )
 {
     delete pInst;
 }
 
-// -----------------------------------------------------------------------
+
 
 AquaSalInstance::AquaSalInstance()
 {
@@ -403,7 +403,7 @@ AquaSalInstance::AquaSalInstance()
     maWaitingYieldCond = osl_createCondition();
 }
 
-// -----------------------------------------------------------------------
+
 
 AquaSalInstance::~AquaSalInstance()
 {
@@ -414,7 +414,7 @@ AquaSalInstance::~AquaSalInstance()
     osl_destroyCondition( maWaitingYieldCond );
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::wakeupYield()
 {
@@ -437,7 +437,7 @@ void AquaSalInstance::wakeupYield()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::PostUserEvent( AquaSalFrame* pFrame, sal_uInt16 nType, void* pData )
 {
@@ -449,14 +449,14 @@ void AquaSalInstance::PostUserEvent( AquaSalFrame* pFrame, sal_uInt16 nType, voi
     wakeupYield();
 }
 
-// -----------------------------------------------------------------------
+
 
 comphelper::SolarMutex* AquaSalInstance::GetYieldMutex()
 {
     return mpSalYieldMutex;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uLong AquaSalInstance::ReleaseYieldMutex()
 {
@@ -478,7 +478,7 @@ sal_uLong AquaSalInstance::ReleaseYieldMutex()
         return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::AcquireYieldMutex( sal_uLong nCount )
 {
@@ -490,7 +490,7 @@ void AquaSalInstance::AcquireYieldMutex( sal_uLong nCount )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalInstance::CheckYieldMutex()
 {
@@ -505,14 +505,14 @@ bool AquaSalInstance::CheckYieldMutex()
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalInstance::isNSAppThread() const
 {
     return osl::Thread::getCurrentIdentifier() == maMainThread;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
 {
@@ -611,7 +611,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
     };
 }
 
-// -----------------------------------------------------------------------
+
 
 class ReleasePoolHolder
 {
@@ -767,7 +767,7 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalInstance::AnyInput( sal_uInt16 nType )
 {
@@ -813,14 +813,14 @@ bool AquaSalInstance::AnyInput( sal_uInt16 nType )
     return (pEvent != NULL);
 }
 
-// -----------------------------------------------------------------------
+
 
 SalFrame* AquaSalInstance::CreateChildFrame( SystemParentData*, sal_uLong /*nSalFrameStyle*/ )
 {
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 SalFrame* AquaSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nSalFrameStyle )
 {
@@ -830,14 +830,14 @@ SalFrame* AquaSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nSalFrameSt
     return pFrame;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::DestroyFrame( SalFrame* pFrame )
 {
     delete pFrame;
 }
 
-// -----------------------------------------------------------------------
+
 
 SalObject* AquaSalInstance::CreateObject( SalFrame* pParent, SystemWindowData* /* pWindowData */, sal_Bool /* bShow */ )
 {
@@ -850,28 +850,28 @@ SalObject* AquaSalInstance::CreateObject( SalFrame* pParent, SystemWindowData* /
     return pObject;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::DestroyObject( SalObject* pObject )
 {
     delete ( pObject );
 }
 
-// -----------------------------------------------------------------------
+
 
 SalPrinter* AquaSalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
 {
     return new AquaSalPrinter( dynamic_cast<AquaSalInfoPrinter*>(pInfoPrinter) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::DestroyPrinter( SalPrinter* pPrinter )
 {
     delete pPrinter;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 {
@@ -899,20 +899,20 @@ void AquaSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
 {
     delete pInfo;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString AquaSalInstance::GetDefaultPrinter()
 {
@@ -938,7 +938,7 @@ OUString AquaSalInstance::GetDefaultPrinter()
     return maDefaultPrinter;
 }
 
-// -----------------------------------------------------------------------
+
 
 SalInfoPrinter* AquaSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                 ImplJobSetup* pSetupData )
@@ -957,7 +957,7 @@ SalInfoPrinter* AquaSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueI
     return pNewInfoPrinter;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
 {
@@ -967,33 +967,33 @@ void AquaSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
     delete pPrinter;
 }
 
-// -----------------------------------------------------------------------
+
 
 SalSystem* AquaSalInstance::CreateSystem()
 {
     return new AquaSalSystem();
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::DestroySystem( SalSystem* pSystem )
 {
     delete pSystem;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::SetEventCallback( void*, bool(*)(void*,void*,int) )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::SetErrorEventCallback( void*, bool(*)(void*,void*,int) )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void* AquaSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes )
 {
@@ -1065,35 +1065,35 @@ void AquaSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OU
 }
 
 
-// -----------------------------------------------------------------------
+
 
 SalTimer* AquaSalInstance::CreateSalTimer()
 {
     return new AquaSalTimer();
 }
 
-// -----------------------------------------------------------------------
+
 
 SalSystem* AquaSalInstance::CreateSalSystem()
 {
     return new AquaSalSystem();
 }
 
-// -----------------------------------------------------------------------
+
 
 SalBitmap* AquaSalInstance::CreateSalBitmap()
 {
     return new QuartzSalBitmap();
 }
 
-// -----------------------------------------------------------------------
+
 
 SalSession* AquaSalInstance::CreateSalSession()
 {
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 class MacImeStatus : public SalI18NImeStatus
 {
@@ -1107,7 +1107,7 @@ public:
     virtual void toggle() {}
 };
 
-// -----------------------------------------------------------------------
+
 
 SalI18NImeStatus* AquaSalInstance::CreateI18NImeStatus()
 {

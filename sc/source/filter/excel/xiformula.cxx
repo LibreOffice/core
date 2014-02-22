@@ -38,13 +38,13 @@ public:
 
     const ScTokenArray* CreateFormula( XclFormulaType eType, const XclTokenArray& rXclTokArr );
 
-    // ------------------------------------------------------------------------
+
 private:
     XclFunctionProvider maFuncProv;     /// Excel function data provider.
     const XclBiff       meBiff;         /// Cached BIFF version to save GetBiff() calls.
 };
 
-// ----------------------------------------------------------------------------
+
 
 XclImpFmlaCompImpl::XclImpFmlaCompImpl( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
@@ -89,7 +89,7 @@ const ScTokenArray* XclImpFmlaCompImpl::CreateFormula(
     return pArray;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpFormulaCompiler::XclImpFormulaCompiler( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),

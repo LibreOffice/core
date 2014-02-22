@@ -62,7 +62,7 @@ SwHyphWrapper::SwHyphWrapper( SwView* pVw,
     SetHyphen();
 }
 
-// -----------------------------------------------------------------------
+
 void SwHyphWrapper::SpellStart( SvxSpellArea eSpell )
 {
     if( SVX_SPELL_OTHER == eSpell && nPageCount )
@@ -74,7 +74,7 @@ void SwHyphWrapper::SpellStart( SvxSpellArea eSpell )
     pView->HyphStart( eSpell );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SwHyphWrapper::SpellContinue()
 {
@@ -101,14 +101,14 @@ sal_Bool SwHyphWrapper::SpellContinue()
     return GetLast().is();
 }
 
-// -----------------------------------------------------------------------
+
 void SwHyphWrapper::SpellEnd()
 {
     PSH->HyphEnd();
     SvxSpellWrapper::SpellEnd();
 }
 
-// -----------------------------------------------------------------------
+
 sal_Bool SwHyphWrapper::SpellMore()
 {
     PSH->Push();
@@ -117,7 +117,7 @@ sal_Bool SwHyphWrapper::SpellMore()
     return sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SwHyphWrapper::InsertHyphen( const sal_uInt16 nPos )
 {
@@ -129,7 +129,7 @@ void SwHyphWrapper::InsertHyphen( const sal_uInt16 nPos )
         PSH->HyphIgnore();
 }
 
-// -----------------------------------------------------------------------
+
 SwHyphWrapper::~SwHyphWrapper()
 {
     if( nPageCount )

@@ -87,7 +87,7 @@ SvxModifyControl::SvxModifyControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, Status
     mpImpl->maTimer.SetTimeoutHdl( LINK(this, SvxModifyControl, OnTimer) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
                                      const SfxPoolItem* pState )
@@ -113,7 +113,7 @@ void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
         mpImpl->maTimer.Start();
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxModifyControl, OnTimer, Timer *, pTimer )
 {
@@ -128,7 +128,7 @@ IMPL_LINK( SvxModifyControl, OnTimer, Timer *, pTimer )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxModifyControl::_repaint()
 {
@@ -136,7 +136,7 @@ void SvxModifyControl::_repaint()
         GetStatusBar().SetItemData( GetId(), 0 );    // force repaint
 }
 
-// -----------------------------------------------------------------------
+
 
 namespace {
 

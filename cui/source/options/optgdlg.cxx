@@ -181,7 +181,7 @@ namespace
         }
 }
 
-// -----------------------------------------------------------------------
+
 
 OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptGeneralPage", "cui/ui/optgeneralpage.ui", rSet)
@@ -227,20 +227,20 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet)
     m_pToolTipsCB->SetClickHdl( aLink );
 }
 
-// -----------------------------------------------------------------------
+
 
 OfaMiscTabPage::~OfaMiscTabPage()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* OfaMiscTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return new OfaMiscTabPage( pParent, rAttrSet );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
 {
@@ -294,7 +294,7 @@ sal_Bool OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
     return bModified;
 }
 
-// -----------------------------------------------------------------------
+
 
 void OfaMiscTabPage::Reset( const SfxItemSet& rSet )
 {
@@ -329,7 +329,7 @@ void OfaMiscTabPage::Reset( const SfxItemSet& rSet )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( OfaMiscTabPage, TwoFigureHdl, NumericField*, pEd )
 {
@@ -353,7 +353,7 @@ IMPL_LINK( OfaMiscTabPage, TwoFigureHdl, NumericField*, pEd )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( OfaMiscTabPage, TwoFigureConfigHdl, NumericField*, pEd )
 {
@@ -365,7 +365,7 @@ IMPL_LINK( OfaMiscTabPage, TwoFigureConfigHdl, NumericField*, pEd )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(OfaMiscTabPage, HelpCheckHdl_Impl)
 {
@@ -373,7 +373,7 @@ IMPL_LINK_NOARG(OfaMiscTabPage, HelpCheckHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 class CanvasSettings
 {
@@ -393,7 +393,7 @@ private:
     mutable sal_Bool           mbHWAccelChecked;
 };
 
-// -------------------------------------------------------------------
+
 CanvasSettings::CanvasSettings() :
     mxForceFlagNameAccess(),
     mbHWAccelAvailable(sal_False),
@@ -452,7 +452,7 @@ CanvasSettings::CanvasSettings() :
     }
 }
 
-// -------------------------------------------------------------------
+
 sal_Bool CanvasSettings::IsHardwareAccelerationAvailable() const
 {
     if( !mbHWAccelChecked )
@@ -499,7 +499,7 @@ sal_Bool CanvasSettings::IsHardwareAccelerationAvailable() const
     return mbHWAccelAvailable;
 }
 
-// -------------------------------------------------------------------
+
 sal_Bool CanvasSettings::IsHardwareAccelerationEnabled() const
 {
     bool bForceLastEntry(false);
@@ -512,7 +512,7 @@ sal_Bool CanvasSettings::IsHardwareAccelerationEnabled() const
     return !bForceLastEntry;
 }
 
-// -------------------------------------------------------------------
+
 void CanvasSettings::EnabledHardwareAcceleration( sal_Bool _bEnabled ) const
 {
     Reference< XNameReplace > xNameReplace(
@@ -1414,7 +1414,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 
     return sal_False;
 }
-//-----------------------------------------------------------------------------
+
 void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
 {
     OUString sLang = pLangConfig->aSysLocaleOptions.GetLocaleConfigString();

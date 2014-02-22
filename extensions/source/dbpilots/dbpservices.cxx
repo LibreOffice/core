@@ -19,20 +19,20 @@
 
 #include "componentmodule.hxx"
 
-//---------------------------------------------------------------------------------------
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
-//---------------------------------------------------------------------------------------
+
 
 extern "C" void SAL_CALL createRegistryInfo_OGroupBoxWizard();
 extern "C" void SAL_CALL createRegistryInfo_OListComboWizard();
 extern "C" void SAL_CALL createRegistryInfo_OGridWizard();
 
-//---------------------------------------------------------------------------------------
+
 
 extern "C" void SAL_CALL dbp_initializeModule()
 {
@@ -47,7 +47,7 @@ extern "C" void SAL_CALL dbp_initializeModule()
     }
 }
 
-//---------------------------------------------------------------------------------------
+
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL dbp_component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,

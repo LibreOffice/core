@@ -213,7 +213,7 @@ extern "C"
     }
 
 }
-// -----------------------------------------------------------------------
+
 void BibliographyLoader::cancel(void) throw (::com::sun::star::uno::RuntimeException)
 {
     //!
@@ -244,7 +244,7 @@ void BibliographyLoader::load(const Reference< XFrame > & rFrame, const OUString
     }
 }
 
-// -----------------------------------------------------------------------
+
 void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUString& /*rURL*/,
         const Sequence< PropertyValue >& /*rArgs*/,
         const Reference< XLoadEventListener > & rListener)
@@ -440,7 +440,7 @@ static OUString lcl_AddProperty(Reference< XNameAccess >  xColumns,
         uRet = xCol->getString();
     return uRet;
 }
-//-----------------------------------------------------------------------------
+
 Any BibliographyLoader::getByName(const OUString& rName) throw
                         ( NoSuchElementException, WrappedTargetException, RuntimeException )
 {

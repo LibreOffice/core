@@ -102,13 +102,13 @@ OXMLReport::OXMLReport( ORptFilter& rImport,
         OSL_FAIL("Exception catched while filling the report definition props");
     }
 }
-// -----------------------------------------------------------------------------
+
 
 OXMLReport::~OXMLReport()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OXMLReport::impl_initRuntimeDefaults() const
 {
@@ -126,7 +126,7 @@ void OXMLReport::impl_initRuntimeDefaults() const
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 SvXMLImportContext* OXMLReport::CreateChildContext(
         sal_uInt16 nPrefix,
@@ -198,7 +198,7 @@ SvXMLImportContext* OXMLReport::CreateChildContext(
 
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 void OXMLReport::EndElement()
 {
     Reference< XFunctions > xFunctions = m_xComponent->getFunctions();
@@ -213,14 +213,14 @@ void OXMLReport::EndElement()
     if ( !m_aDetailFields.empty() )
         m_xComponent->setDetailFields(Sequence< OUString>(&*m_aDetailFields.begin(),m_aDetailFields.size()));
 }
-// -----------------------------------------------------------------------------
+
 void OXMLReport::addMasterDetailPair(const ::std::pair< OUString,OUString >& _aPair)
 {
     m_aMasterFields.push_back(_aPair.first);
     m_aDetailFields.push_back(_aPair.second);
 }
-//----------------------------------------------------------------------------
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

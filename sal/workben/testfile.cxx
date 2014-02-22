@@ -78,9 +78,9 @@ void printFileName(const ::rtl::OUString& str)
     return;
 }
 
-//--------------------------------------------------
+
 // Initialization
-//--------------------------------------------------
+
 
 sal_Bool testLineBreak( sal_Char *pCount , sal_uInt64 nLen , sal_uInt32 *cLineBreak )
 {
@@ -267,9 +267,9 @@ sal_Bool Initialize( void )
     return sal_True;
 }
 
-//--------------------------------------------------
+
 // Shutdown
-//--------------------------------------------------
+
 
 sal_Bool Shutdown( void )
 {
@@ -318,9 +318,9 @@ sal_Bool Shutdown( void )
     return fSuccess;
 }
 
-//--------------------------------------------------
+
 // helper functions
-//--------------------------------------------------
+
 
 // Show FileType
 void showFileType( FileStatus::Type aType )
@@ -440,9 +440,9 @@ TimeValue getSystemTime()
 }
 
 
-//--------------------------------------------------
+
 // DirectoryOpenAndCloseTest
-//--------------------------------------------------
+
 
 void DirectoryOpenAndCloseTest( void )
 {
@@ -453,9 +453,9 @@ void DirectoryOpenAndCloseTest( void )
     printf( "Directory-Open-And-Close-Test\n");
     printf( "--------------------------------------------\n\n");
 
-    //--------------------------------------------------
+
     // open an existing directory
-    //--------------------------------------------------
+
 
     pDir=new Directory( dir1 );
     printf( "Open an existing directory: ");
@@ -477,9 +477,9 @@ void DirectoryOpenAndCloseTest( void )
     delete pDir;
     printf( "\n" );
 
-    //--------------------------------------------------
+
     // open a not existing directory
-    //--------------------------------------------------
+
 
     pDir=new Directory( dir_not_exist );
 
@@ -495,9 +495,9 @@ void DirectoryOpenAndCloseTest( void )
 
     printf( "\n" );
 
-    //--------------------------------------------------
+
     // open a directory with a wrong semantic
-    //--------------------------------------------------
+
     pDir=new Directory( dir_wrong_semantic );
 
     printf( "Open a directory with a wrong semantic: ");
@@ -511,9 +511,9 @@ void DirectoryOpenAndCloseTest( void )
 
     printf( "\n" );
 
-    //--------------------------------------------------
+
     // open an existing directory on a server
-    //--------------------------------------------------
+
 
     pDir=new Directory( dir_on_server );
 
@@ -531,9 +531,9 @@ void DirectoryOpenAndCloseTest( void )
     delete pDir;
     printf( "\n" );
 
-    //--------------------------------------------------
+
     // open a not existing directory on a server
-    //--------------------------------------------------
+
 
     pDir=new Directory( dir_not_exist_on_server );
 
@@ -547,9 +547,9 @@ void DirectoryOpenAndCloseTest( void )
     delete pDir;
     printf( "\n" );
 
-    //--------------------------------------------------
+
     // Close a not existing directory
-    //--------------------------------------------------
+
 
     pDir=new Directory( dir_not_exist );
     printf( "Close a not existing directory: ");
@@ -564,9 +564,9 @@ void DirectoryOpenAndCloseTest( void )
 
 }
 
-//--------------------------------------------------
+
 // DirectoryCreateAndRemoveTest
-//--------------------------------------------------
+
 
 void DirectoryCreateAndRemoveTest( void )
 {
@@ -577,9 +577,9 @@ void DirectoryCreateAndRemoveTest( void )
     printf( "Directory-Create-And-Remove-Test\n" );
     printf( "--------------------------------------------\n\n" );
 
-    //--------------------------------------------------
+
     // Create directory
-    //--------------------------------------------------
+
     printf( "Create a not existing directory: ");
     printFileName( dir_not_exist );
     printf( "\n" );
@@ -597,9 +597,9 @@ void DirectoryCreateAndRemoveTest( void )
 
     printf( "\n" );
 
-    //--------------------------------------------------
+
     // Create a directory on a server
-    //--------------------------------------------------
+
 
     printf( "Create a not existing directory on a server: ");
     printFileName( dir_not_exist_on_server );
@@ -617,9 +617,9 @@ void DirectoryCreateAndRemoveTest( void )
 
     printf( "\n" );
 
-    //--------------------------------------------------
+
     // Remove Directories
-    //--------------------------------------------------
+
 
     printf( "Remove the created directories: \n" );
 
@@ -636,9 +636,9 @@ void DirectoryCreateAndRemoveTest( void )
 
     printf( "\n" );
 
-    //--------------------------------------------------
+
     // Remove a not existing directory
-    //--------------------------------------------------
+
 
     printf( "Remove a not existing directory: ");
     printFileName( dir_not_exist );
@@ -651,9 +651,9 @@ void DirectoryCreateAndRemoveTest( void )
     return;
 }
 
-//--------------------------------------------------
+
 // FileOpenAndCloseTest
-//--------------------------------------------------
+
 
 static void FileOpenAndCloseTest( void )
 {
@@ -671,41 +671,41 @@ static void FileOpenAndCloseTest( void )
     printFileName( file1 );
     printf( "\n" );
 
-    //--------------------------------------------------
+
     // open an existing file (Read)
-    //--------------------------------------------------
+
 
     rc=pFile->open( osl_File_OpenFlag_Read );
     print_error( rtl::OString( "Open File (Read)" ), rc );
 
-    //--------------------------------------------------
+
     // close the file
-    //--------------------------------------------------
+
 
     rc=pFile->close();
     print_error( rtl::OString( "Close File" ), rc );
 
     printf( "\n" );
 
-    //--------------------------------------------------
+
     // open an existing file (Write)
-    //--------------------------------------------------
+
 
     rc=pFile->open( osl_File_OpenFlag_Write );
     print_error( rtl::OString( "Open File (Write)" ), rc );
 
-    //--------------------------------------------------
+
     // close the file
-    //--------------------------------------------------
+
 
      rc=pFile->close();
     print_error( rtl::OString( "Close File" ), rc );
 
     printf( "\n" );
 
-    //--------------------------------------------------
+
     // close the file a second time
-    //--------------------------------------------------
+
 
      rc=pFile->close();
     print_error( rtl::OString( "Close the file a second time" ), rc );
@@ -714,9 +714,9 @@ static void FileOpenAndCloseTest( void )
     PressKey();
 }
 
-//--------------------------------------------------
+
 // FileCreateAndRemoveTest
-//--------------------------------------------------
+
 
 void FileCreateAndRemoveTest()
 {
@@ -733,39 +733,39 @@ void FileCreateAndRemoveTest()
     printFileName( file_not_exist );
     printf( "\n" );
 
-    //----------------------------------------------------
+
     // open (create) a not existing file (Read and write)
-    //----------------------------------------------------
+
 
     rc = pFile->open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
 
     print_error( rtl::OString( "Create and Open File (Read & Write)" ), rc );
 
-    //----------------------------------------------------
+
     // close the file
-    //----------------------------------------------------
+
 
     rc=pFile->close();
     print_error( rtl::OString( "Close File" ), rc );
 
-    //----------------------------------------------------
+
     // remove the file
-    //----------------------------------------------------
+
 
     rc=pFile->remove( file_not_exist );
     print_error( rtl::OString(" Remove File" ), rc );
 
     printf( "\n" );
 
-    //----------------------------------------------------
+
     // remove the same file a second time
-    //----------------------------------------------------
+
     rc=pFile->remove( file_not_exist );
     print_error( rtl::OString( "Remove a not existing File" ), rc );
 
-    //----------------------------------------------------
+
     // remove an open file
-    //----------------------------------------------------
+
 
     pFile->open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
 
@@ -780,9 +780,9 @@ void FileCreateAndRemoveTest()
     return;
 }
 
-//--------------------------------------------------
+
 // FileWriteAndReadTest
-//--------------------------------------------------
+
 
 void FileWriteAndReadTest( void )
 {
@@ -806,9 +806,9 @@ void FileWriteAndReadTest( void )
     printFileName( file_not_exist );
     printf("\n");
 
-    //----------------------------------------------------
+
     // open (create) a not existing file (Read and write)
-    //----------------------------------------------------
+
 
     rc = pFile->open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
 
@@ -816,9 +816,9 @@ void FileWriteAndReadTest( void )
 
     printf( "\n" );
 
-    //----------------------------------------------------
+
     // write a string to the file
-    //----------------------------------------------------
+
     rc=pFile->write( pWriteBuffer , nLen , uWritten );
     print_error( rtl::OString( "Write File" ), rc );
 
@@ -829,18 +829,18 @@ void FileWriteAndReadTest( void )
 
     printf( "\n" );
 
-    //----------------------------------------------------
+
     // move the filepointer to the beginning
-    //----------------------------------------------------
+
 
     rc=pFile->setPos( osl_Pos_Absolut , 0 );
     print_error( rtl::OString( "Set FilePointer to the beginning of the file" ), rc );
 
     printf( "\n" );
 
-    //----------------------------------------------------
+
     // read the string
-    //----------------------------------------------------
+
 
     pReadBuffer=(sal_Char*) rtl_allocateMemory( (sal_uInt32)(nLen+1)*sizeof(sal_Char) );
     memset( pReadBuffer, 0, (sal_uInt32)(nLen+1)*sizeof(sal_Char) );
@@ -873,9 +873,9 @@ void FileWriteAndReadTest( void )
 
 }
 
-//--------------------------------------------------
+
 // FileCopyMoveTest
-//--------------------------------------------------
+
 
 void FileCopyAndMoveTest( void )
 {
@@ -889,9 +889,9 @@ void FileCopyAndMoveTest( void )
     File    *pFile;
     rtl::OUString   destPath(dir2);
 
-    //--------------------------------------------------
+
     // FileCopyTest
-    //--------------------------------------------------
+
 
     destPath+=rtl::OUString("/");
     destPath+=file3;
@@ -922,9 +922,9 @@ void FileCopyAndMoveTest( void )
 
     printf( "\n" );
 
-    //--------------------------------------------------
+
     // Copy a file to a not existing directory
-    //--------------------------------------------------
+
 
     destPath=rtl::OUString( dir_not_exist );
     destPath+=rtl::OUString("/");
@@ -940,9 +940,9 @@ void FileCopyAndMoveTest( void )
 
     printf( "\n" );
 
-    //--------------------------------------------------
+
     // Copy a directory
-    //--------------------------------------------------
+
 
     printf( "Copy the directory: ");
     printFileName( dir1 );
@@ -955,9 +955,9 @@ void FileCopyAndMoveTest( void )
 
     printf( "\n" );
 
-    //--------------------------------------------------
+
     // FileMoveTest
-    //--------------------------------------------------
+
 
     destPath=rtl::OUString( dir2 );
     destPath+=rtl::OUString("/");
@@ -1004,9 +1004,9 @@ void FileCopyAndMoveTest( void )
     printf( "\n" );
 
 
-    //--------------------------------------------------
+
     // Move a file to a not existing directory
-    //--------------------------------------------------
+
 
     destPath=rtl::OUString( dir_not_exist );
     destPath+=rtl::OUString("/");
@@ -1024,9 +1024,9 @@ void FileCopyAndMoveTest( void )
 
     printf( "\n" );
 
-    //--------------------------------------------------
+
     // Move a directory
-    //--------------------------------------------------
+
 
     printf( "Move a directory: \n");
 
@@ -1050,9 +1050,9 @@ void FileCopyAndMoveTest( void )
     return;
 }
 
-//----------------------------------------------------
+
 // FileSizeTest
-//----------------------------------------------------
+
 
 void FileSizeTest( void )
 {
@@ -1077,9 +1077,9 @@ void FileSizeTest( void )
 
     if ( rc == FileBase::E_None )
     {
-        //----------------------------------------------------
+
         // Set Filesize to 5000
-        //----------------------------------------------------
+
 
         printf( "Set FileSize to 5000\n" );
         rc=aFile.setSize( 5000 );
@@ -1088,9 +1088,9 @@ void FileSizeTest( void )
         printf( "\n" );
         printf( "Verify:\n" );
 
-        //----------------------------------------------------
+
         // Check whether Filesize is set to 5000
-        //----------------------------------------------------
+
 
         rc=DirectoryItem::get( file_not_exist, aItem );
         print_error( rtl::OString( "Get DirectoryItem" ), rc );
@@ -1114,9 +1114,9 @@ void FileSizeTest( void )
 
         printf( "\n" );
 
-        //----------------------------------------------------
+
         // Set Filesize to -1
-        //----------------------------------------------------
+
 
         printf( "Set FileSize to -1\n" );
         rc=aFile.setSize( -1 );
@@ -1139,9 +1139,9 @@ void FileSizeTest( void )
 }
 
 
-//----------------------------------------------------
+
 // FilePointerTest
-//----------------------------------------------------
+
 
 void FilePointerTest( void )
 {
@@ -1166,9 +1166,9 @@ void FilePointerTest( void )
     if ( rc==FileBase::E_None )
     {
 
-        //----------------------------------------------------
+
         // get the position of the filepointer
-        //----------------------------------------------------
+
 
         rc =rFile.getPos( filepointer );
         print_error( rtl::OString( "GetPos" ), rc );
@@ -1176,9 +1176,9 @@ void FilePointerTest( void )
 
         printf( "\n" );
 
-        //----------------------------------------------------
+
         // set the filepointer at the end of a file
-        //----------------------------------------------------
+
 
         printf( "Set FileSize to 5000\n" );
         rFile.setSize( 5000 );
@@ -1218,9 +1218,9 @@ void FilePointerTest( void )
     return;
 }
 
-//--------------------------------------------------
+
 // FileAttributesTest
-//--------------------------------------------------
+
 
 void verifyFileAttributes( void )
 {
@@ -1408,9 +1408,9 @@ void FileAttributesTest( void )
 }
 #endif
 
-//--------------------------------------------------
+
 // FileTimeTest
-//--------------------------------------------------
+
 
 void FileTimeTest( void )
 {
@@ -1472,17 +1472,17 @@ void FileTimeTest( void )
     printf( "\nModifyTime \t : ");
     showTime( aModifyTime );
 
-    //--------------------------------------------------
+
     // setTime
-    //--------------------------------------------------
+
 
     printf( "\n" );
     rc=File::setTime( file1 , aCreationTime , aAccessTime , aModifyTime );
     print_error( rtl::OString( "SetTime" ), rc );
 
-    //--------------------------------------------------
+
     // Verify
-    //--------------------------------------------------
+
 
     FileStatus rStatus( osl_FileStatus_Mask_CreationTime | osl_FileStatus_Mask_AccessTime | osl_FileStatus_Mask_ModifyTime);
 
@@ -1499,9 +1499,9 @@ void FileTimeTest( void )
 
         if ( rc==FileBase::E_None )
         {
-            //--------------------------------------------------
+
             // GetCreationTime
-            //--------------------------------------------------
+
 
             aCreationTimeRead=rStatus.getCreationTime();
 #ifdef WNT
@@ -1513,9 +1513,9 @@ void FileTimeTest( void )
             showTime( aCreationTimeRead );
             printf( "\n" );
 #endif
-            //--------------------------------------------------
+
             // GetAccessTime
-            //--------------------------------------------------
+
 
             aAccessTimeRead=rStatus.getAccessTime();
 
@@ -1527,9 +1527,9 @@ void FileTimeTest( void )
             showTime( aAccessTimeRead );
             printf( "\n" );
 
-            //--------------------------------------------------
+
             // GetModifyTime
-            //--------------------------------------------------
+
 
             aModifyTimeRead=rStatus.getModifyTime();
 
@@ -1548,9 +1548,9 @@ void FileTimeTest( void )
 }
 
 
-//--------------------------------------------------
+
 // DirectoryItemTest
-//--------------------------------------------------
+
 
 void DirectoryItemTest( void )
 {
@@ -1564,9 +1564,9 @@ void DirectoryItemTest( void )
     printf( "Directory-Item-Test\n" );
     printf( "--------------------------------------------\n\n" );
 
-    //--------------------------------------------------
+
     // get DirectoryItem from an existing directory
-    //--------------------------------------------------
+
 
     printf( "Get DirectoryItem from an existing Directory: ");
     printFileName( dir1 );
@@ -1589,9 +1589,9 @@ void DirectoryItemTest( void )
 
     printf( "\n" );
 
-    //--------------------------------------------------
+
     // get DirectoryItem from a not existing directory
-    //--------------------------------------------------
+
 
     printf( "Get DirectoryItem from a not existing Directory: ");
     printFileName( dir_not_exist );
@@ -1602,9 +1602,9 @@ void DirectoryItemTest( void )
 
     printf( "\n" );
 
-    //--------------------------------------------------
+
     // get DirectoryItem from an existing file
-    //--------------------------------------------------
+
 
     printf( "Get DirectoryItem from an existing File: ");
     printFileName( file1 );
@@ -1627,9 +1627,9 @@ void DirectoryItemTest( void )
 
     printf( "\n" );
 
-    //--------------------------------------------------
+
     // get DirectoryItem from a not existing file
-    //--------------------------------------------------
+
 
     printf( "Get DirectoryItem from a not existing File: ");
     printFileName( file_not_exist );
@@ -1640,9 +1640,9 @@ void DirectoryItemTest( void )
 
     printf( "\n" );
 
-    //----------------------------------------------------------
+
     // get DirectoryItem from a directory with a wrong semantic
-    //----------------------------------------------------------
+
 
     printf( "Get DirectoryItem from a Directory with a wrong semantic: ");
     printFileName( dir_not_exist );
@@ -1653,9 +1653,9 @@ void DirectoryItemTest( void )
 
     printf( "\n" );
 
-    //---------------------------------------------------
+
     // get DirectoryItem from a file-handle
-    //--------------------------------------------------
+
 
     pFile=new File( file1 );
 
@@ -1688,9 +1688,9 @@ void DirectoryItemTest( void )
 
     printf( "\n" );
 
-    //---------------------------------------------------
+
     // get DirectoryItem
-    //--------------------------------------------------
+
 
     printf( "Get DirectoryItem from an empty File-Handle\n" );
     rc=DirectoryItem::get( file1 , aItem );
@@ -1698,9 +1698,9 @@ void DirectoryItemTest( void )
 
     printf( "\n" );
 
-    //--------------------------------------------------
+
     // GetNextItem from a directory
-    //--------------------------------------------------
+
 
     pDir=new Directory( dir1 );
     printf( "Get next DirectoryItem from a directory: ");
@@ -1714,9 +1714,9 @@ void DirectoryItemTest( void )
 
     if ( pDir->isOpen() )
     {
-        //--------------------------------------------------
+
         // get all files from the directory
-        //--------------------------------------------------
+
 
         rtl::OUString   str;
         rtl::OUString   str1[2];
@@ -1743,9 +1743,9 @@ void DirectoryItemTest( void )
 
         printf( "\n" );
 
-        //--------------------------------------------------
+
         // Reset-Test
-        //--------------------------------------------------
+
 
         for (int i=0; i<2; i++)
         {
@@ -1774,9 +1774,9 @@ void DirectoryItemTest( void )
 
     printf( "\n");
 
-    //--------------------------------------------------
+
     // GetNextItem from a closed directory
-    //--------------------------------------------------
+
 
     printf( "Get next DirectoryItem from a closed directory: ");
     printFileName( dir1 );
@@ -1792,15 +1792,15 @@ void DirectoryItemTest( void )
     return;
 }
 
-//--------------------------------------------------
+
 // FileStatusTest (for different types)
-//--------------------------------------------------
+
 
 void FileStatusTest( FileStatus *pStatus )
 {
-    //--------------------------------------------------
+
     // GetFileType of the directory
-    //--------------------------------------------------
+
 
     FileStatus::Type    aType;
 
@@ -1808,9 +1808,9 @@ void FileStatusTest( FileStatus *pStatus )
     aType=pStatus->getFileType();
     showFileType( aType );
 
-    //--------------------------------------------------
+
     // GetAttributes
-    //--------------------------------------------------
+
 
     sal_uInt64          uAttributes;
 
@@ -1818,9 +1818,9 @@ void FileStatusTest( FileStatus *pStatus )
     uAttributes=pStatus->getAttributes();
     showAttributes( uAttributes );
 
-    //--------------------------------------------------
+
     // GetCreationTime
-    //--------------------------------------------------
+
 
     TimeValue   aCreationTime;
 
@@ -1830,9 +1830,9 @@ void FileStatusTest( FileStatus *pStatus )
     printf( "CreationTime: " );
     showTime( aCreationTime );
 
-    //--------------------------------------------------
+
     // GetAccessTime
-    //--------------------------------------------------
+
 
     TimeValue   aAccessTime;
 
@@ -1842,9 +1842,9 @@ void FileStatusTest( FileStatus *pStatus )
     printf( "AccessTime: " );
     showTime( aAccessTime );
 
-    //--------------------------------------------------
+
     // GetModifyTime
-    //--------------------------------------------------
+
 
     TimeValue   aModifyTime;
 
@@ -1854,9 +1854,9 @@ void FileStatusTest( FileStatus *pStatus )
     printf( "ModifyTime: " );
     showTime( aModifyTime );
 
-    //--------------------------------------------------
+
     // GetFileSize
-    //--------------------------------------------------
+
 
     sal_uInt64          FileSize;
 
@@ -1865,9 +1865,9 @@ void FileStatusTest( FileStatus *pStatus )
     FileSize=pStatus->getFileSize();
     printf( "FileSize: %" SAL_PRIuUINT64 "\n", FileSize);
 
-    //--------------------------------------------------
+
     // GetFileName
-    //--------------------------------------------------
+
 
     rtl::OUString           FileName;
 
@@ -1878,9 +1878,9 @@ void FileStatusTest( FileStatus *pStatus )
     printFileName( FileName );
     printf( "\n" );
 
-    //--------------------------------------------------
+
     // GetFileURL
-    //--------------------------------------------------
+
 
     rtl::OUString           FileURL;
 
@@ -1891,9 +1891,9 @@ void FileStatusTest( FileStatus *pStatus )
     printFileName( FileURL );
     printf( "\n" );
 
-    //--------------------------------------------------
+
     // GetLinkTargetURL
-    //--------------------------------------------------
+
 
     rtl::OUString           LinkTargetURL;
 
@@ -1907,9 +1907,9 @@ void FileStatusTest( FileStatus *pStatus )
     return;
 }
 
-//--------------------------------------------------
+
 // DirectoryFileStatusTest
-//--------------------------------------------------
+
 
 void DirectoryFileStatusTest( void )
 {
@@ -1946,9 +1946,9 @@ void DirectoryFileStatusTest( void )
     return;
 }
 
-//--------------------------------------------------
+
 // FileFileStatusTest
-//--------------------------------------------------
+
 
 void FileFileStatusTest( void )
 {
@@ -1985,9 +1985,9 @@ void FileFileStatusTest( void )
     return;
 }
 
-//--------------------------------------------------
+
 // VolumeFileStatusTest
-//--------------------------------------------------
+
 
 void VolumeFileStatusTest( void )
 {
@@ -2025,9 +2025,9 @@ void VolumeFileStatusTest( void )
 }
 
 
-//--------------------------------------------------
+
 // VolumeInfoTest
-//--------------------------------------------------
+
 
 void VolumeInfoTest( void )
 {
@@ -2048,67 +2048,67 @@ void VolumeInfoTest( void )
 
     printf( "\n" );
 
-    //--------------------------------------------------
+
     // getRemoteFlag
-    //--------------------------------------------------
+
 
     if ( rInfo.getRemoteFlag() )
         printf( "RemoteFlag: Yes\n" );
     else
         printf( "RemoteFlag: No\n" );
 
-    //--------------------------------------------------
+
     // getRemoveableFlag
-    //--------------------------------------------------
+
 
     if ( rInfo.getRemoveableFlag() )
         printf( "RemoveableFlag: Yes\n" );
     else
         printf( "RemoveableFlag: No\n" );
 
-    //--------------------------------------------------
+
     // getTotalSpace
-    //--------------------------------------------------
+
 
     sal_uInt64  TotalSpace;
     TotalSpace=rInfo.getTotalSpace();
     printf( "Total Space: %" SAL_PRIuUINT64 "\n",TotalSpace );
 
-    //--------------------------------------------------
+
     // getFreeSpace
-    //--------------------------------------------------
+
 
     sal_uInt64  FreeSpace;
     FreeSpace=rInfo.getFreeSpace();
     printf( "Free Space: %" SAL_PRIuUINT64 "\n",FreeSpace );
 
-    //--------------------------------------------------
+
     // getUsedSpace
-    //--------------------------------------------------
+
 
     sal_uInt64  UsedSpace;
     UsedSpace=rInfo.getUsedSpace();
     printf( "Used Space: %" SAL_PRIuUINT64 "\n",UsedSpace );
 
-    //--------------------------------------------------
+
     // getMaxNameLength
-    //--------------------------------------------------
+
 
     sal_uInt32  MaxNameLength;
     MaxNameLength=rInfo.getMaxNameLength();
     printf( "MaxNameLength: %" SAL_PRIuUINT32 "\n",MaxNameLength );
 
-    //--------------------------------------------------
+
     // getMaxPathLength
-    //--------------------------------------------------
+
 
     sal_uInt32  MaxPathLength;
     MaxPathLength=rInfo.getMaxPathLength();
     printf( "MaxPathLength: %" SAL_PRIuUINT32 "\n",MaxPathLength );
 
-    //--------------------------------------------------
+
     // getFileSystemName
-    //--------------------------------------------------
+
 
     rtl::OUString   FileSystemName;
     FileSystemName=rInfo.getFileSystemName();
@@ -2120,9 +2120,9 @@ void VolumeInfoTest( void )
     return;
 }
 
-//--------------------------------------------------
+
 // FileBaseTest
-//--------------------------------------------------
+
 
 void ConvertPathTest(rtl::OUString& strPath)
 {
@@ -2133,9 +2133,9 @@ void ConvertPathTest(rtl::OUString& strPath)
     rtl::OUString       strNormPathFromFileURL;
     rtl::OUString       strSystemPath;
 
-    //--------------------------------------------------
+
     // normalizePath
-    //--------------------------------------------------
+
 
     rc=FileBase::getFileURLFromSystemPath( strPath, strNormPath );
 
@@ -2148,9 +2148,9 @@ void ConvertPathTest(rtl::OUString& strPath)
     else
         printf( "normalizePath: Error \n" );
 
-    //--------------------------------------------------
+
     // getFileURLFromSystemPath
-    //--------------------------------------------------
+
 
     if ( !strNormPath.isEmpty() )
     {
@@ -2168,9 +2168,9 @@ void ConvertPathTest(rtl::OUString& strPath)
     else
         printf( "getFileURLFromSystemPath: not tested \n" );
 
-    //--------------------------------------------------
+
     // getNormalizedPathFromFileURL
-    //--------------------------------------------------
+
 
     if ( !strFileURL.isEmpty() )
     {
@@ -2189,9 +2189,9 @@ void ConvertPathTest(rtl::OUString& strPath)
         printf( "getNormalizedPathFromFileURL: not tested \n" );
 
 
-    //--------------------------------------------------
+
     // getSystemPathFromFileURL
-    //--------------------------------------------------
+
 
     if ( !strNormPath.isEmpty() )
     {
@@ -2209,9 +2209,9 @@ void ConvertPathTest(rtl::OUString& strPath)
     else
         printf( "getSystemPathFromFileURL: not tested \n" );
 
-    //--------------------------------------------------
+
     // Verify
-    //--------------------------------------------------
+
 
     if ( strNormPathFromFileURL == strNormPath )
         printf( "\nVerify: OK ! ( Normalized-Path == Normalized-Path-From-File-URL )\n" );
@@ -2227,9 +2227,9 @@ void FileBaseTest()
     printf( "FileBase-Test\n" );
     printf( "--------------------------------------------\n\n" );
 
-    //--------------------------------------------------
+
     // ConvertPath-Test (Local File)
-    //--------------------------------------------------
+
 
     printf( "- Local File: ");
     printFileName( file1 );
@@ -2237,9 +2237,9 @@ void FileBaseTest()
 
     ConvertPathTest(file1);
 
-    //--------------------------------------------------
+
     // ConvertPath-Test (File on a server)
-    //--------------------------------------------------
+
 
     printf( "\n- File on server: ");
     printFileName( file_on_server );
@@ -2252,9 +2252,9 @@ void FileBaseTest()
 }
 
 
-//--------------------------------------------------
+
 // AbsolutePathTest
-//--------------------------------------------------
+
 void DoAbsolutePathTest(rtl::OUString strDirBase, rtl::OUString strRelative)
 {
     FileBase::RC    rc;
@@ -2304,9 +2304,9 @@ void AbsolutePathTest(void)
 }
 
 
-//--------------------------------------------------
+
 // searchPathTest
-//--------------------------------------------------
+
 
 void SearchPathTest(void)
 {
@@ -2327,9 +2327,9 @@ void SearchPathTest(void)
     rc=FileBase::getSystemPathFromFileURL( strNormPath, strSystemPath );
     print_error( rtl::OString( "getSystemPathFromFileURL" ), rc );
 
-    //--------------------------------------------------
+
     // searchFileURL (with a normalized path)
-    //--------------------------------------------------
+
 
     if ( !strNormPath.isEmpty() )
     {
@@ -2351,9 +2351,9 @@ void SearchPathTest(void)
     else
         printf( "searchFileURL (with a normalized path): not tested\n" );
 
-    //--------------------------------------------------
+
     // searchFileURL (with a File-URL)
-    //--------------------------------------------------
+
 
     if ( !strFileURL.isEmpty() )
     {
@@ -2375,9 +2375,9 @@ void SearchPathTest(void)
     else
         printf( "searchFileURL (with a FileURL path): not tested\n" );
 
-    //--------------------------------------------------
+
     // searchFileURL (with a systempath)
-    //--------------------------------------------------
+
 
     if ( !strSystemPath.isEmpty() )
     {
@@ -2399,9 +2399,9 @@ void SearchPathTest(void)
     else
         printf( "searchFileURL (with a systempath): not tested\n" );
 
-    //--------------------------------------------------
+
     // searchFileURL (File and no searchpath)
-    //--------------------------------------------------
+
 
     printf( "\nsearchFileURL:  File (no searchpath) : ");
     printFileName( file3 );
@@ -2418,9 +2418,9 @@ void SearchPathTest(void)
     else
         printf( "searchFileURL:  File not found: OK ! \n" );
 
-    //--------------------------------------------------
+
     // searchFileURL (File and Path)
-    //--------------------------------------------------
+
 
     printf( "\nsearchFileURL:  File : ");
     printFileName( file3 );
@@ -2439,9 +2439,9 @@ void SearchPathTest(void)
     else
         printf( "searchFileURL:  File not found: Error\n" );
 
-    //------------------------------------------------------------
+
     // searchFileURL (File and searchpath with two entries)
-    //------------------------------------------------------------
+
 
     rtl::OUString       strSearchPath( dir_not_exist );
     strSearchPath+=rtl::OUString(";");
@@ -2464,9 +2464,9 @@ void SearchPathTest(void)
     else
         printf( "searchFileURL:  File not found: Error\n" );
 
-    //-------------------------------------------------------------------
+
     // searchFileURL (File and searchpath (with a wrong semantic))
-    //-------------------------------------------------------------------
+
 
     strSearchPath=rtl::OUString( dir_wrong_semantic );
 
@@ -2486,9 +2486,9 @@ void SearchPathTest(void)
     return;
 }
 
-//--------------------------------------------------
+
 // CanonicalNameTest
-//--------------------------------------------------
+
 
 void getCanonicalNameTest(rtl::OUString strPath)
 {
@@ -2531,9 +2531,9 @@ void CanonicalNameTest(void)
     return;
 }
 
-//--------------------------------------------------
+
 // print_error
-//--------------------------------------------------
+
 
 void print_error( const ::rtl::OString& str, FileBase::RC rc )
 {
@@ -2680,9 +2680,9 @@ void print_error( const ::rtl::OString& str, FileBase::RC rc )
     return;
 }
 
-//--------------------------------------------------
+
 // main
-//--------------------------------------------------
+
 #if defined WNT
         #define MAIN _cdecl main
 #else

@@ -29,7 +29,7 @@
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <osl/diagnose.h>
 
-//-----------------------------------------------------------------------------
+
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace com::sun::star::io;
@@ -73,7 +73,7 @@ struct SortInfo
     Reference < XAnyCompare >   mxCompareFunction;
 };
 
-//-----------------------------------------------------------------------------
+
 
 struct SortListData
 {
@@ -176,7 +176,7 @@ SortedResultSet::SortedResultSet( Reference< XResultSet > aResult )
     mbIsCopy    = sal_False;
 }
 
-//--------------------------------------------------------------------------
+
 SortedResultSet::~SortedResultSet()
 {
     mxOriginal.clear();
@@ -202,9 +202,9 @@ SortedResultSet::~SortedResultSet()
     delete mpVetoChangeListeners;
 }
 
-//--------------------------------------------------------------------------
+
 // XInterface methods.
-//--------------------------------------------------------------------------
+
 
 XINTERFACE_IMPL_9( SortedResultSet,
                    XTypeProvider,
@@ -217,9 +217,9 @@ XINTERFACE_IMPL_9( SortedResultSet,
                    XResultSetMetaDataSupplier,
                    XPropertySet );
 
-//--------------------------------------------------------------------------
+
 // XTypeProvider methods.
-//--------------------------------------------------------------------------
+
 
 XTYPEPROVIDER_IMPL_9( SortedResultSet,
                       XTypeProvider,
@@ -232,17 +232,17 @@ XTYPEPROVIDER_IMPL_9( SortedResultSet,
                       XResultSetMetaDataSupplier,
                       XPropertySet );
 
-//--------------------------------------------------------------------------
+
 // XServiceInfo methods.
-//--------------------------------------------------------------------------
+
 
 XSERVICEINFO_NOFACTORY_IMPL_1( SortedResultSet,
                                OUString( "com.sun.star.comp.ucb.SortedResultSet" ),
                                OUString( RESULTSET_SERVICE_NAME ) );
 
-//--------------------------------------------------------------------------
+
 // XComponent methods.
-//--------------------------------------------------------------------------
+
 void SAL_CALL SortedResultSet::dispose()
     throw( RuntimeException )
 {
@@ -273,7 +273,7 @@ void SAL_CALL SortedResultSet::dispose()
     mxOther.clear();
 }
 
-//--------------------------------------------------------------------------
+
 void SAL_CALL SortedResultSet::addEventListener(
                             const Reference< XEventListener >& Listener )
     throw( RuntimeException )
@@ -287,7 +287,7 @@ void SAL_CALL SortedResultSet::addEventListener(
     mpDisposeEventListeners->addInterface( Listener );
 }
 
-//--------------------------------------------------------------------------
+
 void SAL_CALL SortedResultSet::removeEventListener(
                             const Reference< XEventListener >& Listener )
     throw( RuntimeException )
@@ -298,9 +298,9 @@ void SAL_CALL SortedResultSet::removeEventListener(
         mpDisposeEventListeners->removeInterface( Listener );
 }
 
-//--------------------------------------------------------------------------
+
 // XContentAccess methods.
-//--------------------------------------------------------------------------
+
 
 OUString SAL_CALL
 SortedResultSet::queryContentIdentifierString()
@@ -310,7 +310,7 @@ SortedResultSet::queryContentIdentifierString()
     return Reference< XContentAccess >::query(mxOriginal)->queryContentIdentifierString();
 }
 
-//--------------------------------------------------------------------------
+
 Reference< XContentIdentifier > SAL_CALL
 SortedResultSet::queryContentIdentifier()
     throw( RuntimeException )
@@ -319,7 +319,7 @@ SortedResultSet::queryContentIdentifier()
     return Reference< XContentAccess >::query(mxOriginal)->queryContentIdentifier();
 }
 
-//--------------------------------------------------------------------------
+
 Reference< XContent > SAL_CALL
 SortedResultSet::queryContent()
     throw( RuntimeException )
@@ -329,9 +329,9 @@ SortedResultSet::queryContent()
 }
 
 
-//--------------------------------------------------------------------------
+
 // XResultSet methods.
-//--------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SortedResultSet::next()
     throw ( SQLException, RuntimeException )
 {
@@ -354,7 +354,7 @@ sal_Bool SAL_CALL SortedResultSet::next()
     return sal_False;
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SortedResultSet::isBeforeFirst()
     throw ( SQLException, RuntimeException )
 {
@@ -364,7 +364,7 @@ sal_Bool SAL_CALL SortedResultSet::isBeforeFirst()
         return sal_True;
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SortedResultSet::isAfterLast()
     throw ( SQLException, RuntimeException )
 {
@@ -374,7 +374,7 @@ sal_Bool SAL_CALL SortedResultSet::isAfterLast()
         return sal_False;
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SortedResultSet::isFirst()
     throw ( SQLException, RuntimeException )
 {
@@ -384,7 +384,7 @@ sal_Bool SAL_CALL SortedResultSet::isFirst()
         return sal_False;
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SortedResultSet::isLast()
     throw ( SQLException, RuntimeException )
 {
@@ -394,7 +394,7 @@ sal_Bool SAL_CALL SortedResultSet::isLast()
         return sal_False;
 }
 
-//-------------------------------------------------------------------------
+
 void SAL_CALL SortedResultSet::beforeFirst()
     throw ( SQLException, RuntimeException )
 {
@@ -403,7 +403,7 @@ void SAL_CALL SortedResultSet::beforeFirst()
     mxOriginal->beforeFirst();
 }
 
-//-------------------------------------------------------------------------
+
 void SAL_CALL SortedResultSet::afterLast()
     throw ( SQLException, RuntimeException )
 {
@@ -412,7 +412,7 @@ void SAL_CALL SortedResultSet::afterLast()
     mxOriginal->afterLast();
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SortedResultSet::first()
     throw ( SQLException, RuntimeException )
 {
@@ -431,7 +431,7 @@ sal_Bool SAL_CALL SortedResultSet::first()
     }
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SortedResultSet::last()
     throw ( SQLException, RuntimeException )
 {
@@ -450,14 +450,14 @@ sal_Bool SAL_CALL SortedResultSet::last()
     }
 }
 
-//-------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL SortedResultSet::getRow()
     throw ( SQLException, RuntimeException )
 {
     return mnCurEntry;
 }
 
-//-------------------------------------------------------------------------
+
 /**
  moves the cursor to the given row number in the result set.
  <p>If the row number is positive, the cursor moves to the given row
@@ -524,7 +524,7 @@ sal_Bool SAL_CALL SortedResultSet::absolute( sal_Int32 row )
     }
 }
 
-//-------------------------------------------------------------------------
+
 /**
  moves the cursor a relative number of rows, either positive or negative.
  <p>
@@ -579,7 +579,7 @@ sal_Bool SAL_CALL SortedResultSet::relative( sal_Int32 rows )
     }
 }
 
-//-------------------------------------------------------------------------
+
 /**
  moves the cursor to the previous row in the result set.
  <p>Note: <code>previous()</code> is not the same as
@@ -612,7 +612,7 @@ sal_Bool SAL_CALL SortedResultSet::previous()
     return sal_False;
 }
 
-//-------------------------------------------------------------------------
+
 void SAL_CALL SortedResultSet::refreshRow()
     throw ( SQLException, RuntimeException )
 {
@@ -626,7 +626,7 @@ void SAL_CALL SortedResultSet::refreshRow()
     mxOriginal->refreshRow();
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SortedResultSet::rowUpdated()
     throw ( SQLException, RuntimeException )
 {
@@ -640,7 +640,7 @@ sal_Bool SAL_CALL SortedResultSet::rowUpdated()
     return mxOriginal->rowUpdated();
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SortedResultSet::rowInserted()
     throw ( SQLException, RuntimeException )
 {
@@ -654,7 +654,7 @@ sal_Bool SAL_CALL SortedResultSet::rowInserted()
     return mxOriginal->rowInserted();
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SortedResultSet::rowDeleted()
     throw ( SQLException, RuntimeException )
 {
@@ -668,7 +668,7 @@ sal_Bool SAL_CALL SortedResultSet::rowDeleted()
     return mxOriginal->rowDeleted();
 }
 
-//-------------------------------------------------------------------------
+
 Reference< XInterface > SAL_CALL SortedResultSet::getStatement()
     throw ( SQLException, RuntimeException )
 {
@@ -682,9 +682,9 @@ Reference< XInterface > SAL_CALL SortedResultSet::getStatement()
     return mxOriginal->getStatement();
 }
 
-//--------------------------------------------------------------------------
+
 // XRow methods.
-//--------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL SortedResultSet::wasNull()
     throw( SQLException, RuntimeException )
@@ -693,7 +693,7 @@ sal_Bool SAL_CALL SortedResultSet::wasNull()
     return Reference< XRow >::query(mxOriginal)->wasNull();
 }
 
-//-------------------------------------------------------------------------
+
 OUString SAL_CALL SortedResultSet::getString( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
@@ -701,7 +701,7 @@ OUString SAL_CALL SortedResultSet::getString( sal_Int32 columnIndex )
     return Reference< XRow >::query(mxOriginal)->getString( columnIndex );
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SortedResultSet::getBoolean( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
@@ -709,7 +709,7 @@ sal_Bool SAL_CALL SortedResultSet::getBoolean( sal_Int32 columnIndex )
     return Reference< XRow >::query(mxOriginal)->getBoolean( columnIndex );
 }
 
-//-------------------------------------------------------------------------
+
 sal_Int8 SAL_CALL SortedResultSet::getByte( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
@@ -717,7 +717,7 @@ sal_Int8 SAL_CALL SortedResultSet::getByte( sal_Int32 columnIndex )
     return Reference< XRow >::query(mxOriginal)->getByte( columnIndex );
 }
 
-//-------------------------------------------------------------------------
+
 sal_Int16 SAL_CALL SortedResultSet::getShort( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
@@ -725,14 +725,14 @@ sal_Int16 SAL_CALL SortedResultSet::getShort( sal_Int32 columnIndex )
     return Reference< XRow >::query(mxOriginal)->getShort( columnIndex );
 }
 
-//-------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL SortedResultSet::getInt( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getInt( columnIndex );
 }
-//-------------------------------------------------------------------------
+
 sal_Int64 SAL_CALL SortedResultSet::getLong( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
@@ -740,7 +740,7 @@ sal_Int64 SAL_CALL SortedResultSet::getLong( sal_Int32 columnIndex )
     return Reference< XRow >::query(mxOriginal)->getLong( columnIndex );
 }
 
-//-------------------------------------------------------------------------
+
 float SAL_CALL SortedResultSet::getFloat( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
@@ -748,7 +748,7 @@ float SAL_CALL SortedResultSet::getFloat( sal_Int32 columnIndex )
     return Reference< XRow >::query(mxOriginal)->getFloat( columnIndex );
 }
 
-//-------------------------------------------------------------------------
+
 double SAL_CALL SortedResultSet::getDouble( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
@@ -756,7 +756,7 @@ double SAL_CALL SortedResultSet::getDouble( sal_Int32 columnIndex )
     return Reference< XRow >::query(mxOriginal)->getDouble( columnIndex );
 }
 
-//-------------------------------------------------------------------------
+
 Sequence< sal_Int8 > SAL_CALL SortedResultSet::getBytes( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
@@ -764,7 +764,7 @@ Sequence< sal_Int8 > SAL_CALL SortedResultSet::getBytes( sal_Int32 columnIndex )
     return Reference< XRow >::query(mxOriginal)->getBytes( columnIndex );
 }
 
-//-------------------------------------------------------------------------
+
 Date SAL_CALL SortedResultSet::getDate( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
@@ -772,7 +772,7 @@ Date SAL_CALL SortedResultSet::getDate( sal_Int32 columnIndex )
     return Reference< XRow >::query(mxOriginal)->getDate( columnIndex );
 }
 
-//-------------------------------------------------------------------------
+
 Time SAL_CALL SortedResultSet::getTime( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
@@ -780,7 +780,7 @@ Time SAL_CALL SortedResultSet::getTime( sal_Int32 columnIndex )
     return Reference< XRow >::query(mxOriginal)->getTime( columnIndex );
 }
 
-//-------------------------------------------------------------------------
+
 DateTime SAL_CALL SortedResultSet::getTimestamp( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
@@ -788,7 +788,7 @@ DateTime SAL_CALL SortedResultSet::getTimestamp( sal_Int32 columnIndex )
     return Reference< XRow >::query(mxOriginal)->getTimestamp( columnIndex );
 }
 
-//-------------------------------------------------------------------------
+
 Reference< XInputStream > SAL_CALL
 SortedResultSet::getBinaryStream( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
@@ -797,7 +797,7 @@ SortedResultSet::getBinaryStream( sal_Int32 columnIndex )
     return Reference< XRow >::query(mxOriginal)->getBinaryStream( columnIndex );
 }
 
-//-------------------------------------------------------------------------
+
 Reference< XInputStream > SAL_CALL
 SortedResultSet::getCharacterStream( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
@@ -806,7 +806,7 @@ SortedResultSet::getCharacterStream( sal_Int32 columnIndex )
     return Reference< XRow >::query(mxOriginal)->getCharacterStream( columnIndex );
 }
 
-//-------------------------------------------------------------------------
+
 Any SAL_CALL SortedResultSet::getObject( sal_Int32 columnIndex,
                        const Reference< XNameAccess >& typeMap )
     throw( SQLException, RuntimeException )
@@ -816,7 +816,7 @@ Any SAL_CALL SortedResultSet::getObject( sal_Int32 columnIndex,
                                                             typeMap);
 }
 
-//-------------------------------------------------------------------------
+
 Reference< XRef > SAL_CALL SortedResultSet::getRef( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
@@ -824,7 +824,7 @@ Reference< XRef > SAL_CALL SortedResultSet::getRef( sal_Int32 columnIndex )
     return Reference< XRow >::query(mxOriginal)->getRef( columnIndex );
 }
 
-//-------------------------------------------------------------------------
+
 Reference< XBlob > SAL_CALL SortedResultSet::getBlob( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
@@ -832,7 +832,7 @@ Reference< XBlob > SAL_CALL SortedResultSet::getBlob( sal_Int32 columnIndex )
     return Reference< XRow >::query(mxOriginal)->getBlob( columnIndex );
 }
 
-//-------------------------------------------------------------------------
+
 Reference< XClob > SAL_CALL SortedResultSet::getClob( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
@@ -840,7 +840,7 @@ Reference< XClob > SAL_CALL SortedResultSet::getClob( sal_Int32 columnIndex )
     return Reference< XRow >::query(mxOriginal)->getClob( columnIndex );
 }
 
-//-------------------------------------------------------------------------
+
 Reference< XArray > SAL_CALL SortedResultSet::getArray( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
@@ -849,9 +849,9 @@ Reference< XArray > SAL_CALL SortedResultSet::getArray( sal_Int32 columnIndex )
 }
 
 
-//--------------------------------------------------------------------------
+
 // XCloseable methods.
-//--------------------------------------------------------------------------
+
 
 void SAL_CALL SortedResultSet::close()
     throw( SQLException, RuntimeException )
@@ -860,9 +860,9 @@ void SAL_CALL SortedResultSet::close()
     Reference< XCloseable >::query(mxOriginal)->close();
 }
 
-//--------------------------------------------------------------------------
+
 // XResultSetMetaDataSupplier methods.
-//--------------------------------------------------------------------------
+
 
 Reference< XResultSetMetaData > SAL_CALL SortedResultSet::getMetaData()
     throw( SQLException, RuntimeException )
@@ -872,9 +872,9 @@ Reference< XResultSetMetaData > SAL_CALL SortedResultSet::getMetaData()
 }
 
 
-//--------------------------------------------------------------------------
+
 // XPropertySet methods.
-//--------------------------------------------------------------------------
+
 
 Reference< XPropertySetInfo > SAL_CALL
 SortedResultSet::getPropertySetInfo() throw( RuntimeException )
@@ -890,7 +890,7 @@ SortedResultSet::getPropertySetInfo() throw( RuntimeException )
     return Reference< XPropertySetInfo >( mpPropSetInfo );
 }
 
-//--------------------------------------------------------------------------
+
 void SAL_CALL SortedResultSet::setPropertyValue(
                         const OUString& PropertyName,
                         const Any& )
@@ -909,7 +909,7 @@ void SAL_CALL SortedResultSet::setPropertyValue(
         throw UnknownPropertyException();
 }
 
-//--------------------------------------------------------------------------
+
 Any SAL_CALL SortedResultSet::getPropertyValue( const OUString& PropertyName )
     throw( UnknownPropertyException,
            WrappedTargetException,
@@ -950,7 +950,7 @@ Any SAL_CALL SortedResultSet::getPropertyValue( const OUString& PropertyName )
     return aRet;
 }
 
-//--------------------------------------------------------------------------
+
 void SAL_CALL SortedResultSet::addPropertyChangeListener(
                         const OUString& PropertyName,
                         const Reference< XPropertyChangeListener >& Listener )
@@ -967,7 +967,7 @@ void SAL_CALL SortedResultSet::addPropertyChangeListener(
     mpPropChangeListeners->addInterface( PropertyName, Listener );
 }
 
-//--------------------------------------------------------------------------
+
 void SAL_CALL SortedResultSet::removePropertyChangeListener(
                         const OUString& PropertyName,
                         const Reference< XPropertyChangeListener >& Listener )
@@ -981,7 +981,7 @@ void SAL_CALL SortedResultSet::removePropertyChangeListener(
         mpPropChangeListeners->removeInterface( PropertyName, Listener );
 }
 
-//--------------------------------------------------------------------------
+
 void SAL_CALL SortedResultSet::addVetoableChangeListener(
                         const OUString& PropertyName,
                         const Reference< XVetoableChangeListener >& Listener )
@@ -998,7 +998,7 @@ void SAL_CALL SortedResultSet::addVetoableChangeListener(
     mpVetoChangeListeners->addInterface( PropertyName, Listener );
 }
 
-//--------------------------------------------------------------------------
+
 void SAL_CALL SortedResultSet::removeVetoableChangeListener(
                         const OUString& PropertyName,
                         const Reference< XVetoableChangeListener >& Listener )
@@ -1012,9 +1012,9 @@ void SAL_CALL SortedResultSet::removeVetoableChangeListener(
         mpVetoChangeListeners->removeInterface( PropertyName, Listener );
 }
 
-//--------------------------------------------------------------------------
+
 // private methods
-//--------------------------------------------------------------------------
+
 sal_IntPtr SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
                                    Reference < XResultSet > xResultTwo,
                                    sal_IntPtr nIndexOne, sal_IntPtr nIndexTwo,
@@ -1229,7 +1229,7 @@ sal_IntPtr SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
     return nCompare;
 }
 
-//--------------------------------------------------------------------------
+
 sal_IntPtr SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
                                    Reference < XResultSet > xResultTwo,
                                    sal_IntPtr nIndexOne, sal_IntPtr nIndexTwo )
@@ -1271,7 +1271,7 @@ sal_IntPtr SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
     return nCompare;
 }
 
-//--------------------------------------------------------------------------
+
 sal_IntPtr SortedResultSet::Compare( SortListData *pOne,
                                SortListData *pTwo )
     throw( SQLException, RuntimeException )
@@ -1310,7 +1310,7 @@ sal_IntPtr SortedResultSet::Compare( SortListData *pOne,
     return nCompare;
 }
 
-//--------------------------------------------------------------------------
+
 sal_IntPtr SortedResultSet::FindPos( SortListData *pEntry,
                                sal_IntPtr _nStart, sal_IntPtr _nEnd )
     throw( SQLException, RuntimeException )
@@ -1345,7 +1345,7 @@ sal_IntPtr SortedResultSet::FindPos( SortListData *pEntry,
         return nMid+1;
 }
 
-//--------------------------------------------------------------------------
+
 void SortedResultSet::PropertyChanged( const PropertyChangeEvent& rEvt )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
@@ -1383,11 +1383,11 @@ void SortedResultSet::PropertyChanged( const PropertyChangeEvent& rEvt )
     }
 }
 
-//-------------------------------------------------------------------------
 
-//--------------------------------------------------------------------------
+
+
 // public methods
-//--------------------------------------------------------------------------
+
 
 void SortedResultSet::CopyData( SortedResultSet *pSource )
 {
@@ -1421,7 +1421,7 @@ void SortedResultSet::CopyData( SortedResultSet *pSource )
     }
 }
 
-//--------------------------------------------------------------------------
+
 void SortedResultSet::Initialize(
                 const Sequence < NumberedSortingInfo > &xSortInfo,
                 const Reference< XAnyCompareFactory > &xCompFactory )
@@ -1469,7 +1469,7 @@ void SortedResultSet::Initialize(
     mnCount = maS2O.Count() - 1;
 }
 
-//--------------------------------------------------------------------------
+
 void SortedResultSet::CheckProperties( sal_IntPtr nOldCount, sal_Bool bWasFinal )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
@@ -1509,7 +1509,7 @@ void SortedResultSet::CheckProperties( sal_IntPtr nOldCount, sal_Bool bWasFinal 
     catch (const WrappedTargetException&) {}
 }
 
-//-------------------------------------------------------------------------
+
 void SortedResultSet::InsertNew( sal_IntPtr nPos, sal_IntPtr nCount )
 {
     // for all entries in the msS20-list, which are >= nPos, increase by nCount
@@ -1540,7 +1540,7 @@ void SortedResultSet::InsertNew( sal_IntPtr nPos, sal_IntPtr nCount )
     mnCount += nCount;
 }
 
-//-------------------------------------------------------------------------
+
 void SortedResultSet::Remove( sal_IntPtr nPos, sal_IntPtr nCount, EventList *pEvents )
 {
     sal_uInt32  i, j;
@@ -1594,7 +1594,7 @@ void SortedResultSet::Remove( sal_IntPtr nPos, sal_IntPtr nCount, EventList *pEv
     mnCount -= nCount;
 }
 
-//-------------------------------------------------------------------------
+
 void SortedResultSet::Move( sal_IntPtr nPos, sal_IntPtr nCount, sal_IntPtr nOffset )
 {
     if ( !nOffset )
@@ -1672,7 +1672,7 @@ void SortedResultSet::Move( sal_IntPtr nPos, sal_IntPtr nCount, sal_IntPtr nOffs
     delete [] pTmpArr;
 }
 
-//--------------------------------------------------------------------------
+
 void SortedResultSet::BuildSortInfo(
                 Reference< XResultSet > aResult,
                 const Sequence < NumberedSortingInfo > &xSortInfo,
@@ -1723,7 +1723,7 @@ void SortedResultSet::BuildSortInfo(
     }
 }
 
-//-------------------------------------------------------------------------
+
 void SortedResultSet::SetChanged( sal_IntPtr nPos, sal_IntPtr nCount )
 {
     for ( sal_IntPtr i=0; i<nCount; i++ )
@@ -1742,7 +1742,7 @@ void SortedResultSet::SetChanged( sal_IntPtr nPos, sal_IntPtr nCount )
     }
 }
 
-//-------------------------------------------------------------------------
+
 void SortedResultSet::ResortModified( EventList* pList )
 {
     sal_uInt32 i, j;
@@ -1813,7 +1813,7 @@ void SortedResultSet::ResortModified( EventList* pList )
     maModList.Clear();
 }
 
-//-------------------------------------------------------------------------
+
 void SortedResultSet::ResortNew( EventList* pList )
 {
     sal_IntPtr            i, j, nNewPos, nVal;
@@ -1847,11 +1847,11 @@ void SortedResultSet::ResortNew( EventList* pList )
     }
 }
 
-//-------------------------------------------------------------------------
+
 //
 // SortListData
 //
-//-------------------------------------------------------------------------
+
 SortListData::SortListData( sal_IntPtr nPos, sal_Bool bModified )
 {
     mbModified = bModified;
@@ -1872,7 +1872,7 @@ void SortedEntryList::Clear()
     maData.clear();
 }
 
-//-------------------------------------------------------------------------
+
 void SortedEntryList::Insert( SortListData *pEntry, sal_IntPtr nPos )
 {
     if ( nPos < (sal_IntPtr) maData.size() )
@@ -1881,7 +1881,7 @@ void SortedEntryList::Insert( SortListData *pEntry, sal_IntPtr nPos )
         maData.push_back( pEntry );
 }
 
-//-------------------------------------------------------------------------
+
 SortListData* SortedEntryList::Remove( sal_IntPtr nPos )
 {
     SortListData *pData;
@@ -1897,7 +1897,7 @@ SortListData* SortedEntryList::Remove( sal_IntPtr nPos )
     return pData;
 }
 
-//-------------------------------------------------------------------------
+
 SortListData* SortedEntryList::GetData( sal_IntPtr nPos )
 {
     SortListData *pData;
@@ -1910,7 +1910,7 @@ SortListData* SortedEntryList::GetData( sal_IntPtr nPos )
     return pData;
 }
 
-//-------------------------------------------------------------------------
+
 sal_IntPtr SortedEntryList::operator [] ( sal_IntPtr nPos ) const
 {
     SortListData *pData;
@@ -1935,9 +1935,9 @@ sal_IntPtr SortedEntryList::operator [] ( sal_IntPtr nPos ) const
     }
 }
 
-//-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
+
+
+
 void SimpleList::Remove( sal_uInt32 nPos )
 {
     if ( nPos < (sal_uInt32) maData.size() )
@@ -1946,7 +1946,7 @@ void SimpleList::Remove( sal_uInt32 nPos )
     }
 }
 
-//-------------------------------------------------------------------------
+
 void SimpleList::Remove( void* pData )
 {
     sal_Bool    bFound = sal_False;
@@ -1965,7 +1965,7 @@ void SimpleList::Remove( void* pData )
         maData.erase( maData.begin() + i );
 }
 
-//-------------------------------------------------------------------------
+
 void SimpleList::Insert( void* pData, sal_uInt32 nPos )
 {
     if ( nPos < (sal_uInt32) maData.size() )
@@ -1974,7 +1974,7 @@ void SimpleList::Insert( void* pData, sal_uInt32 nPos )
         maData.push_back( pData );
 }
 
-//-------------------------------------------------------------------------
+
 void* SimpleList::GetObject( sal_uInt32 nPos ) const
 {
     if ( nPos < (sal_uInt32) maData.size() )
@@ -1983,18 +1983,18 @@ void* SimpleList::GetObject( sal_uInt32 nPos ) const
         return NULL;
 }
 
-//-------------------------------------------------------------------------
+
 void SimpleList::Replace( void* pData, sal_uInt32 nPos )
 {
     if ( nPos < (sal_uInt32) maData.size() )
         maData[ nPos ] = pData;
 }
 
-//-------------------------------------------------------------------------
+
 //
 // class SRSPropertySetInfo.
 //
-//-------------------------------------------------------------------------
+
 
 SRSPropertySetInfo::SRSPropertySetInfo()
 {
@@ -2009,36 +2009,36 @@ SRSPropertySetInfo::SRSPropertySetInfo()
     maProps[1].Attributes = -1;
 }
 
-//-------------------------------------------------------------------------
+
 SRSPropertySetInfo::~SRSPropertySetInfo()
 {}
 
-//-------------------------------------------------------------------------
+
 // XInterface methods.
-//-------------------------------------------------------------------------
+
 
 XINTERFACE_IMPL_2( SRSPropertySetInfo,
                    XTypeProvider,
                    XPropertySetInfo );
 
-//-------------------------------------------------------------------------
+
 // XTypeProvider methods.
-//-------------------------------------------------------------------------
+
 
 XTYPEPROVIDER_IMPL_2( SRSPropertySetInfo,
                       XTypeProvider,
                       XPropertySetInfo );
 
-//-------------------------------------------------------------------------
+
 // XPropertySetInfo methods.
-//-------------------------------------------------------------------------
+
 Sequence< Property > SAL_CALL
 SRSPropertySetInfo::getProperties() throw( RuntimeException )
 {
     return Sequence < Property > ( maProps, 2 );
 }
 
-//-------------------------------------------------------------------------
+
 Property SAL_CALL
 SRSPropertySetInfo::getPropertyByName( const OUString& Name )
     throw( UnknownPropertyException, RuntimeException )
@@ -2051,7 +2051,7 @@ SRSPropertySetInfo::getPropertyByName( const OUString& Name )
         throw UnknownPropertyException();
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool SAL_CALL
 SRSPropertySetInfo::hasPropertyByName( const OUString& Name )
     throw( RuntimeException )

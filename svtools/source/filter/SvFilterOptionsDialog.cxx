@@ -121,20 +121,20 @@ SvFilterOptionsDialog::SvFilterOptionsDialog( const uno::Reference< uno::XCompon
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 SvFilterOptionsDialog::~SvFilterOptionsDialog()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL SvFilterOptionsDialog::acquire() throw()
 {
     OWeakObject::acquire();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL SvFilterOptionsDialog::release() throw()
 {

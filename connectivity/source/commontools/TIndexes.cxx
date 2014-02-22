@@ -37,7 +37,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace cppu;
 
-// -----------------------------------------------------------------------------
+
 OIndexesHelper::OIndexesHelper(OTableHelper* _pTable,
                  ::osl::Mutex& _rMutex,
              const ::std::vector< OUString> &_rVector
@@ -46,7 +46,7 @@ OIndexesHelper::OIndexesHelper(OTableHelper* _pTable,
     ,m_pTable(_pTable)
 {
 }
-// -----------------------------------------------------------------------------
+
 
 sdbcx::ObjectType OIndexesHelper::createObject(const OUString& _rName)
 {
@@ -109,17 +109,17 @@ sdbcx::ObjectType OIndexesHelper::createObject(const OUString& _rName)
 
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 void OIndexesHelper::impl_refresh() throw(RuntimeException)
 {
     m_pTable->refreshIndexes();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OIndexesHelper::createDescriptor()
 {
     return new OIndexHelper(m_pTable);
 }
-// -------------------------------------------------------------------------
+
 // XAppend
 sdbcx::ObjectType OIndexesHelper::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
@@ -207,7 +207,7 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const OUString& _rForName, const
 
     return createObject( _rForName );
 }
-// -------------------------------------------------------------------------
+
 // XDrop
 void OIndexesHelper::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
 {
@@ -243,7 +243,7 @@ void OIndexesHelper::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 
 
 

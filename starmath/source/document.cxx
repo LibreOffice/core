@@ -844,7 +844,7 @@ sal_Bool SmDocShell::Load( SfxMedium& rMedium )
     return bRet;
 }
 
-//------------------------------------------------------------------
+
 
 sal_Bool SmDocShell::Save()
 {

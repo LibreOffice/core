@@ -108,7 +108,7 @@ struct SfxObjectBars_Impl
     SfxObjectBars_Impl() : nResId(0), nMode(0), pIFace(NULL) {}
 };
 
-//------------------------------------------------------------------
+
 
 struct SfxDispatcher_Impl
 {
@@ -155,11 +155,11 @@ struct SfxDispatcher_Impl
     std::deque< std::deque<SfxToDo_Impl> > aToDoCopyStack;
 };
 
-//------------------------------------------------------------------
+
 
 #define SFX_FLUSH_TIMEOUT    50
 
-//--------------------------------------------------------------------
+
 
 /** This method checks if the stack of the SfxDispatchers is flushed, or if
     push- or pop- commands are pending.
@@ -238,7 +238,7 @@ sal_Bool SfxDispatcher::IsLocked( sal_uInt16 ) const
     return pImp->bLocked;
 }
 
-//--------------------------------------------------------------------
+
 sal_Bool SfxDispatcher::IsAppDispatcher() const
 
 /*  [Description]
@@ -256,7 +256,7 @@ sal_Bool SfxDispatcher::IsAppDispatcher() const
     return !pImp->pFrame;
 }
 
-//--------------------------------------------------------------------
+
 int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest &rReq, sal_Bool bRecord )
 
 /*  [Description]
@@ -560,7 +560,7 @@ void SfxDispatcher::Pop
     }
 }
 
-//--------------------------------------------------------------------
+
 
 IMPL_LINK_INLINE_START( SfxDispatcher, EventHdl_Impl, void *, pvoid )
 
@@ -585,7 +585,7 @@ IMPL_LINK_INLINE_START( SfxDispatcher, EventHdl_Impl, void *, pvoid )
 }
 IMPL_LINK_INLINE_END( SfxDispatcher, EventHdl_Impl, void *, pvoid )
 
-//--------------------------------------------------------------------
+
 sal_Bool SfxDispatcher::CheckVirtualStack( const SfxShell& rShell, sal_Bool bDeep )
 
 /*  [Description]
@@ -628,7 +628,7 @@ sal_Bool SfxDispatcher::CheckVirtualStack( const SfxShell& rShell, sal_Bool bDee
     return bReturn;
 }
 
-//--------------------------------------------------------------------
+
 sal_uInt16 SfxDispatcher::GetShellLevel( const SfxShell& rShell )
 
 /*  [Description]
@@ -664,7 +664,7 @@ sal_uInt16 SfxDispatcher::GetShellLevel( const SfxShell& rShell )
     return USHRT_MAX;
 }
 
-//--------------------------------------------------------------------
+
 SfxShell *SfxDispatcher::GetShell(sal_uInt16 nIdx) const
 
 /*  [Description]
@@ -686,7 +686,7 @@ SfxShell *SfxDispatcher::GetShell(sal_uInt16 nIdx) const
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 SfxBindings* SfxDispatcher::GetBindings() const
 
 /*  [Description]
@@ -707,7 +707,7 @@ SfxBindings* SfxDispatcher::GetBindings() const
         return NULL;
 }
 
-//--------------------------------------------------------------------
+
 SfxViewFrame* SfxDispatcher::GetFrame() const
 
 /*  [Description]
@@ -721,7 +721,7 @@ SfxViewFrame* SfxDispatcher::GetFrame() const
     return pImp->pFrame;
 }
 
-//--------------------------------------------------------------------
+
 void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* /* pOld */ )
 
 /*  [Description]
@@ -799,7 +799,7 @@ void SfxDispatcher::DoParentActivate_Impl()
         (*(pImp->aStack.rbegin() + i ))->ParentActivate();
 }
 
-//--------------------------------------------------------------------
+
 void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
 
 /*  [Description]
@@ -887,7 +887,7 @@ void SfxDispatcher::DoParentDeactivate_Impl()
         (*(pImp->aStack.rbegin() + i))->ParentDeactivate();
 }
 
-//--------------------------------------------------------------------
+
 int SfxDispatcher::GetShellAndSlot_Impl
 (
     sal_uInt16      nSlot,    // the searchable Slot-Id
@@ -938,7 +938,7 @@ int SfxDispatcher::GetShellAndSlot_Impl
     return sal_False;
 }
 
-//--------------------------------------------------------------------
+
 void SfxDispatcher::_Execute
 (
     SfxShell&       rShell,    // to the calling <SfxShell>
@@ -987,7 +987,7 @@ void SfxDispatcher::_Execute
         Call_Impl( rShell, rSlot, rReq, SFX_CALLMODE_RECORD==(eCallMode&SFX_CALLMODE_RECORD) );
 }
 
-//--------------------------------------------------------------------
+
 void MappedPut_Impl( SfxAllItemSet &rSet, const SfxPoolItem &rItem )
 
 /*  [Description]
@@ -1005,7 +1005,7 @@ void MappedPut_Impl( SfxAllItemSet &rSet, const SfxPoolItem &rItem )
     rSet.Put( rItem, nWhich );
 }
 
-//--------------------------------------------------------------------
+
 
 const SfxSlot* SfxDispatcher::GetSlot( const OUString& rCommand )
 {
@@ -1036,7 +1036,7 @@ const SfxSlot* SfxDispatcher::GetSlot( const OUString& rCommand )
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 const SfxPoolItem*  SfxDispatcher::Execute(
     sal_uInt16 nSlot,
     SfxCallMode nCall,
@@ -1072,7 +1072,7 @@ const SfxPoolItem*  SfxDispatcher::Execute(
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 const SfxPoolItem* SfxDispatcher::Execute
 (
     sal_uInt16 nSlot,                 // the Id of the executing function
@@ -1131,7 +1131,7 @@ const SfxPoolItem* SfxDispatcher::Execute
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 const SfxPoolItem* SfxDispatcher::Execute
 (
     sal_uInt16 nSlot,        // the Id of the executing function
@@ -1157,7 +1157,7 @@ const SfxPoolItem* SfxDispatcher::Execute
     return Execute( nSlot, eCall, 0, rArgs );
 }
 
-//--------------------------------------------------------------------
+
 const SfxPoolItem*  SfxDispatcher::Execute
 (
     sal_uInt16 nSlot,
@@ -1188,7 +1188,7 @@ const SfxPoolItem*  SfxDispatcher::Execute
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 const SfxPoolItem* SfxDispatcher::Execute
 (
     sal_uInt16          nSlot,  // the Id of the executing function
@@ -1251,7 +1251,7 @@ const SfxPoolItem* SfxDispatcher::Execute
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 
 IMPL_LINK( SfxDispatcher, PostMsgHandler, SfxRequest*, pReq )
 
@@ -1298,7 +1298,7 @@ IMPL_LINK( SfxDispatcher, PostMsgHandler, SfxRequest*, pReq )
     delete pReq;
     return 0;
 }
-//--------------------------------------------------------------------
+
 void SfxDispatcher::SetMenu_Impl()
 {
 #if HAVE_FEATURE_DESKTOP
@@ -1329,7 +1329,7 @@ void SfxDispatcher::SetMenu_Impl()
 #endif
 }
 
-//--------------------------------------------------------------------
+
 void SfxDispatcher::Update_Impl( sal_Bool bForce )
 {
     SFX_STACK(SfxDispatcher::Update_Impl);
@@ -1606,7 +1606,7 @@ void SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, sal_Bo
     }
 }
 
-//--------------------------------------------------------------------
+
 void SfxDispatcher::FlushImpl()
 
 /*  [Description]
@@ -1756,7 +1756,7 @@ void SfxDispatcher::FlushImpl()
     SAL_INFO("sfx.control", "SfxDispatcher(" << this << ")::Flush() done");
 }
 
-//--------------------------------------------------------------------
+
 void SfxDispatcher::SetSlotFilter
 (
     // HACK(hier muss mal ein enum rein) ???
@@ -1817,7 +1817,7 @@ void SfxDispatcher::SetSlotFilter
     GetBindings()->InvalidateAll(sal_True);
 }
 
-//--------------------------------------------------------------------
+
 extern "C"
 #ifdef WNT
 int _cdecl
@@ -1830,7 +1830,7 @@ SfxCompareSIDs_Impl( const void* pSmaller, const void* pBigger )
     return ( (long) *((sal_uInt16*)pSmaller) ) - ( (long) *((sal_uInt16*)pBigger) );
 }
 
-//--------------------------------------------------------------------
+
 sal_Bool SfxDispatcher::IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) const
 
 /*  [Description]
@@ -1862,7 +1862,7 @@ sal_Bool SfxDispatcher::IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) const
     return pImp->bFilterEnabling ? bFound : !bFound;
 }
 
-//--------------------------------------------------------------------
+
 sal_Bool SfxDispatcher::_TryIntercept_Impl
 (
     sal_uInt16      nSlot,    // Slot-Id to search for
@@ -2062,7 +2062,7 @@ sal_Bool SfxDispatcher::_FindServer
     return sal_False;
 }
 
-//--------------------------------------------------------------------
+
 sal_Bool SfxDispatcher::_FillState
 (
     const SfxSlotServer&  rSvr,      // <Slot-Server> to query
@@ -2171,7 +2171,7 @@ SfxPopupMenuManager* SfxDispatcher::Popup( sal_uInt16 nConfigId,Window *pWin, co
 }
 
 
-//----------------------------------------------------------------------
+
 void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId, Window *pWin, const Point *pPos )
 {
     SfxDispatcher &rDisp = *SFX_APP()->GetDispatcher_Impl();
@@ -2196,14 +2196,14 @@ void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId, Window *pWin, const Poin
     }
 }
 
-//----------------------------------------------------------------------
+
 void SfxDispatcher::ExecutePopup( const ResId &rId, Window *pWin, const Point *pPos )
 {
     Window *pWindow = pWin ? pWin : pImp->pFrame->GetFrame().GetWorkWindow_Impl()->GetWindow();
     SfxPopupMenuManager::ExecutePopup( rId, GetFrame(), pPos ? *pPos : pWindow->GetPointerPosPixel(), pWindow );
 }
 
-//--------------------------------------------------------------------
+
 void SfxDispatcher::Lock( sal_Bool bLock )
 
 /*  [Description]
@@ -2237,7 +2237,7 @@ sal_uInt32 SfxDispatcher::GetObjectBarId( sal_uInt16 nPos ) const
     return pImp->aObjBars[nPos].nResId;
 }
 
-//-------------------------------------------------------------------------
+
 void SfxDispatcher::HideUI( sal_Bool bHide )
 {
     sal_Bool bWasHidden = pImp->bNoUI;
@@ -2277,7 +2277,7 @@ sal_Bool SfxDispatcher::GetReadOnly_Impl() const
     return pImp->bReadOnly;
 }
 
-//-------------------------------------------------------------------------
+
 void SfxDispatcher::SetQuietMode_Impl( sal_Bool bOn )
 
 /*  [Description]

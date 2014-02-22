@@ -51,7 +51,7 @@ using namespace ::com::sun::star;
 
 namespace svt {
 
-// ----------------------------------------------------------------------
+
 ShareControlFile::ShareControlFile( const OUString& aOrigURL )
 : LockFileCommon( aOrigURL, OUString( ".~sharing."  ) )
 {
@@ -61,7 +61,7 @@ ShareControlFile::ShareControlFile( const OUString& aOrigURL )
         throw io::NotConnectedException();
 }
 
-// ----------------------------------------------------------------------
+
 ShareControlFile::~ShareControlFile()
 {
     try
@@ -72,7 +72,7 @@ ShareControlFile::~ShareControlFile()
     {}
 }
 
-// ----------------------------------------------------------------------
+
 void ShareControlFile::OpenStream()
 {
     // if it is called outside of constructor the mutex must be locked already
@@ -128,7 +128,7 @@ void ShareControlFile::OpenStream()
     }
 }
 
-// ----------------------------------------------------------------------
+
 void ShareControlFile::Close()
 {
     // if it is called outside of destructor the mutex must be locked
@@ -154,7 +154,7 @@ void ShareControlFile::Close()
     }
 }
 
-// ----------------------------------------------------------------------
+
 uno::Sequence< uno::Sequence< OUString > > ShareControlFile::GetUsersData()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -191,7 +191,7 @@ uno::Sequence< uno::Sequence< OUString > > ShareControlFile::GetUsersData()
     return m_aUsersData;
 }
 
-// ----------------------------------------------------------------------
+
 void ShareControlFile::SetUsersDataAndStore( const uno::Sequence< uno::Sequence< OUString > >& aUsersData )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -227,7 +227,7 @@ void ShareControlFile::SetUsersDataAndStore( const uno::Sequence< uno::Sequence<
     m_aUsersData = aUsersData;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Sequence< OUString > ShareControlFile::InsertOwnEntry()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -273,7 +273,7 @@ uno::Sequence< OUString > ShareControlFile::InsertOwnEntry()
     return aNewEntry;
 }
 
-// ----------------------------------------------------------------------
+
 bool ShareControlFile::HasOwnEntry()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -300,7 +300,7 @@ bool ShareControlFile::HasOwnEntry()
     return false;
 }
 
-// ----------------------------------------------------------------------
+
 void ShareControlFile::RemoveEntry( const uno::Sequence< OUString >& aArgEntry )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -341,7 +341,7 @@ void ShareControlFile::RemoveEntry( const uno::Sequence< OUString >& aArgEntry )
     }
 }
 
-// ----------------------------------------------------------------------
+
 void ShareControlFile::RemoveFile()
 {
     ::osl::MutexGuard aGuard( m_aMutex );

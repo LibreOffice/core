@@ -1525,7 +1525,7 @@ SvxDescriptionEdit::SvxDescriptionEdit( Window* pParent, const ResId& _rId ) :
     SetBorderStyle( WINDOW_BORDER_MONO );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxDescriptionEdit::SetNewText( const OUString& _rText )
 {
@@ -4663,7 +4663,7 @@ SvTreeListEntry* SvxToolbarConfigPage::AddFunction(
     return pNewLBEntry;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxToolbarEntriesListBox::SvxToolbarEntriesListBox(
     Window* pParent, const ResId& aResId )
@@ -4676,14 +4676,14 @@ SvxToolbarEntriesListBox::SvxToolbarEntriesListBox(
     EnableCheckButton( m_pButtonData );
 }
 
-// --------------------------------------------------------
+
 
 SvxToolbarEntriesListBox::~SvxToolbarEntriesListBox()
 {
     delete m_pButtonData;
 }
 
-// --------------------------------------------------------
+
 
 void SvxToolbarEntriesListBox::BuildCheckBoxButtonImages( SvLBoxButtonData* pData )
 {
@@ -4753,7 +4753,7 @@ void SvxToolbarEntriesListBox::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// --------------------------------------------------------
+
 
 void SvxToolbarEntriesListBox::ChangeVisibility( SvTreeListEntry* pEntry )
 {

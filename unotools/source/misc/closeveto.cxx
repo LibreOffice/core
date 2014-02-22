@@ -77,7 +77,7 @@ namespace utl
         bool    m_bHasOwnership;
     };
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL CloseListener_Impl::queryClosing( const EventObject& i_source, ::sal_Bool i_deliverOwnership ) throw (CloseVetoException, RuntimeException)
     {
         (void)i_source;
@@ -88,13 +88,13 @@ namespace utl
         throw CloseVetoException();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL CloseListener_Impl::notifyClosing( const EventObject& i_source ) throw (RuntimeException)
     {
         (void)i_source;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL CloseListener_Impl::disposing( const EventObject& i_source ) throw (RuntimeException)
     {
         (void)i_source;
@@ -114,7 +114,7 @@ namespace utl
     //==================================================================================================================
     namespace
     {
-        //--------------------------------------------------------------------------------------------------------------
+
         void lcl_init( CloseVeto_Data& i_data, const Reference< XInterface >& i_closeable )
         {
             i_data.xCloseable.set( i_closeable, UNO_QUERY );
@@ -124,7 +124,7 @@ namespace utl
             i_data.xCloseable->addCloseListener( i_data.pListener.get() );
         }
 
-        //--------------------------------------------------------------------------------------------------------------
+
         void lcl_deinit( CloseVeto_Data& i_data )
         {
             if ( !i_data.xCloseable.is() )
@@ -149,14 +149,14 @@ namespace utl
     //==================================================================================================================
     //= CloseVeto
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     CloseVeto::CloseVeto( const Reference< XInterface >& i_closeable )
         :m_pData( new CloseVeto_Data )
     {
         lcl_init( *m_pData, i_closeable );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     CloseVeto::~CloseVeto()
     {
         lcl_deinit( *m_pData );

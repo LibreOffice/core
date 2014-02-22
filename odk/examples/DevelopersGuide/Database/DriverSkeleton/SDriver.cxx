@@ -53,12 +53,12 @@ namespace connectivity
         }
     }
 }
-// --------------------------------------------------------------------------------
+
 SkeletonDriver::SkeletonDriver()
     : ODriver_BASE(m_aMutex)
 {
 }
-// --------------------------------------------------------------------------------
+
 void SkeletonDriver::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -76,7 +76,7 @@ void SkeletonDriver::disposing()
 }
 
 // static ServiceInfo
-//------------------------------------------------------------------------------
+
 rtl::OUString SkeletonDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
     return rtl::OUString("com.sun.star.comp.sdbc.SkeletonDriver");
@@ -118,7 +118,7 @@ Reference< XConnection > SAL_CALL SkeletonDriver::connect( const ::rtl::OUString
 
     return xCon;
 }
-// --------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SkeletonDriver::acceptsURL( const ::rtl::OUString& url )
         throw(SQLException, RuntimeException)
 {
@@ -126,23 +126,23 @@ sal_Bool SAL_CALL SkeletonDriver::acceptsURL( const ::rtl::OUString& url )
     // change the URL format to your needs, but please aware that the first on who accepts the URl wins.
     return url.startsWith("sdbc:skeleton:");
 }
-// --------------------------------------------------------------------------------
+
 Sequence< DriverPropertyInfo > SAL_CALL SkeletonDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     // if you have something special to say, return it here :-)
     return Sequence< DriverPropertyInfo >();
 }
-// --------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL SkeletonDriver::getMajorVersion(  ) throw(RuntimeException)
 {
     return 0; // depends on you
 }
-// --------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL SkeletonDriver::getMinorVersion(  ) throw(RuntimeException)
 {
     return 1; // depends on you
 }
-// --------------------------------------------------------------------------------
+
 
 //.........................................................................
 namespace connectivity

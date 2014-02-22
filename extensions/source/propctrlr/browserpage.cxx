@@ -32,7 +32,7 @@ namespace pcr
     //==================================================================
     // class OBrowserPage
     //==================================================================
-    //------------------------------------------------------------------
+
     OBrowserPage::OBrowserPage(Window* pParent,WinBits nWinStyle)
             :TabPage(pParent,nWinStyle)
             ,m_aListBox(this)
@@ -42,12 +42,12 @@ namespace pcr
         m_aListBox.Show();
     }
 
-    //------------------------------------------------------------------
+
     OBrowserPage::~OBrowserPage()
     {
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserPage::Resize()
     {
         Size aSize( GetOutputSizePixel() );
@@ -56,19 +56,19 @@ namespace pcr
         m_aListBox.SetPosSizePixel( Point( LAYOUT_BORDER_LEFT, LAYOUT_BORDER_TOP ), aSize );
     }
 
-    //------------------------------------------------------------------
+
     OBrowserListBox& OBrowserPage::getListBox()
     {
         return m_aListBox;
     }
 
-    //------------------------------------------------------------------
+
     const OBrowserListBox& OBrowserPage::getListBox() const
     {
         return m_aListBox;
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserPage::StateChanged(StateChangedType nType)
     {
         Window::StateChanged( nType);
@@ -76,13 +76,13 @@ namespace pcr
             m_aListBox.ActivateListBox(IsVisible());
     }
 
-    //------------------------------------------------------------------
+
     sal_Int32 OBrowserPage::getMinimumWidth()
     {
         return m_aListBox.GetMinimumWidth() + LAYOUT_BORDER_LEFT + LAYOUT_BORDER_RIGHT;
     }
 
-    //------------------------------------------------------------------
+
     sal_Int32 OBrowserPage::getMinimumHeight()
     {
         return m_aListBox.GetMinimumHeight() + LAYOUT_BORDER_TOP + LAYOUT_BORDER_BOTTOM;

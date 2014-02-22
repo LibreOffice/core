@@ -330,23 +330,23 @@ namespace svxform
         m_aItemList.Show();
         ItemSelectHdl( &m_aItemList );
     }
-    //------------------------------------------------------------------------
+
     XFormsPage::~XFormsPage()
     {
     }
-    //------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(XFormsPage, TbxSelectHdl)
     {
         DoToolBoxAction( m_aToolBox.GetCurItemId() );
         return 0;
     }
-    //------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(XFormsPage, ItemSelectHdl)
     {
         EnableMenuItems( NULL );
         return 0;
     }
-    //------------------------------------------------------------------------
+
     void XFormsPage::AddChildren(
         SvTreeListEntry* _pParent, const ImageList& _rImgLst,
         const Reference< css::xml::dom::XNode >& _xNode )
@@ -416,7 +416,7 @@ namespace svxform
             DBG_UNHANDLED_EXCEPTION();
         }
     }
-    //------------------------------------------------------------------------
+
     bool XFormsPage::DoToolBoxAction( sal_uInt16 _nToolBoxID ) {
 
         bool bHandled = false;
@@ -745,7 +745,7 @@ namespace svxform
         return bHandled;
     }
 
-    //------------------------------------------------------------------------
+
     SvTreeListEntry* XFormsPage::AddEntry( ItemNode* _pNewNode, bool _bIsElement )
     {
         SvTreeListEntry* pParent = m_aItemList.FirstSelected();
@@ -766,7 +766,7 @@ namespace svxform
             sName, aImage, aImage, pParent, sal_False, LIST_APPEND, _pNewNode );
     }
 
-    //------------------------------------------------------------------------
+
     SvTreeListEntry* XFormsPage::AddEntry( const Reference< XPropertySet >& _rEntry )
     {
         SvTreeListEntry* pEntry = NULL;
@@ -837,7 +837,7 @@ namespace svxform
         return pEntry;
     }
 
-    //------------------------------------------------------------------------
+
     void XFormsPage::EditEntry( const Reference< XPropertySet >& _rEntry )
     {
         SvTreeListEntry* pEntry = NULL;
@@ -894,7 +894,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------
+
     bool XFormsPage::RemoveEntry()
     {
         bool bRet = false;
@@ -986,7 +986,7 @@ namespace svxform
         return bRet;
     }
 
-    //------------------------------------------------------------------------
+
     bool XFormsPage::Notify( NotifyEvent& rNEvt )
     {
         bool nHandled = false;
@@ -1005,7 +1005,7 @@ namespace svxform
 
         return nHandled || Window::Notify( rNEvt );
     }
-    //------------------------------------------------------------------------
+
     void XFormsPage::Resize()
     {
         Size aSize = GetOutputSizePixel();
@@ -1016,7 +1016,7 @@ namespace svxform
         aSize.Height() -= ( 4 + aTbxSize.Height() );
         m_aItemList.SetPosSizePixel( Point( 2, 2 + aTbxSize.Height() ), aSize );
     }
-    //------------------------------------------------------------------------
+
     OUString XFormsPage::SetModel( const Reference< css::xforms::XModel >& _xModel, sal_uInt16 _nPagePos )
     {
         DBG_ASSERT( _xModel.is(), "XFormsPage::SetModel(): invalid model" );
@@ -1161,13 +1161,13 @@ namespace svxform
 
         return sRet;
     }
-    //------------------------------------------------------------------------
+
     void XFormsPage::ClearModel()
     {
         m_bHasModel = false;
         m_aItemList.DeleteAndClear();
     }
-    //------------------------------------------------------------------------
+
     OUString XFormsPage::LoadInstance(
         const Sequence< PropertyValue >& _xPropSeq, const ImageList& _rImgLst )
     {
@@ -1216,13 +1216,13 @@ namespace svxform
         return sRet;
     }
 
-    //------------------------------------------------------------------------
+
     bool XFormsPage::DoMenuAction( sal_uInt16 _nMenuID )
     {
         return DoToolBoxAction( _nMenuID );
     }
 
-    //------------------------------------------------------------------------
+
     void XFormsPage::EnableMenuItems( Menu* _pMenu )
     {
         sal_Bool bEnableAdd = sal_False;
@@ -1399,7 +1399,7 @@ namespace svxform
         // load xforms models of the current document
         LoadModels();
     }
-    //------------------------------------------------------------------------
+
     DataNavigatorWindow::~DataNavigatorWindow()
     {
         SvtViewOptions aViewOpt( E_TABDIALOG, CFGNAME_DATANAVIGATOR );
@@ -1422,7 +1422,7 @@ namespace svxform
         m_xDataListener.clear();
     }
 
-    // -----------------------------------------------------------------------
+
     IMPL_LINK( DataNavigatorWindow, ModelSelectHdl, ListBox *, pBox )
     {
         sal_uInt16 nPos = m_aModelsBox.GetSelectEntryPos();
@@ -1437,7 +1437,7 @@ namespace svxform
 
         return 0;
     }
-    // -----------------------------------------------------------------------
+
     IMPL_LINK( DataNavigatorWindow, MenuSelectHdl, MenuButton *, pBtn )
     {
         bool bIsDocModified = false;
@@ -1750,7 +1750,7 @@ namespace svxform
             SetDocModified();
         return 0;
     }
-    // -----------------------------------------------------------------------
+
     IMPL_LINK( DataNavigatorWindow, MenuActivateHdl, MenuButton *, pBtn )
     {
         Menu* pMenu = pBtn->GetPopupMenu();
@@ -1774,7 +1774,7 @@ namespace svxform
         }
         return 0;
     }
-    // -----------------------------------------------------------------------
+
     IMPL_LINK_NOARG(DataNavigatorWindow, ActivatePageHdl)
     {
         sal_uInt16 nId = 0;
@@ -1788,13 +1788,13 @@ namespace svxform
 
         return 0;
     }
-    // -----------------------------------------------------------------------
+
     IMPL_LINK_NOARG(DataNavigatorWindow, UpdateHdl)
     {
         ModelSelectHdl( NULL );
         return 0;
     }
-    // -----------------------------------------------------------------------
+
     XFormsPage* DataNavigatorWindow::GetCurrentPage( sal_uInt16& rCurId )
     {
         rCurId = m_aTabCtrl.GetCurPageId();
@@ -1842,7 +1842,7 @@ namespace svxform
 
         return pPage;
     }
-    // -----------------------------------------------------------------------
+
     void DataNavigatorWindow::LoadModels()
     {
         if ( !m_xFrameModel.is() )
@@ -1898,7 +1898,7 @@ namespace svxform
             ModelSelectHdl( &m_aModelsBox );
         }
     }
-    // -----------------------------------------------------------------------
+
     void DataNavigatorWindow::SetPageModel()
     {
         OUString sModel( m_aModelsBox.GetSelectEntry() );
@@ -1931,7 +1931,7 @@ namespace svxform
             SAL_WARN( "svx.form", "DataNavigatorWindow::SetPageModel(): unexpected exception" );
         }
     }
-    // -----------------------------------------------------------------------
+
     void DataNavigatorWindow::InitPages()
     {
         OUString sModel( m_aModelsBox.GetSelectEntry() );
@@ -1980,7 +1980,7 @@ namespace svxform
             SAL_WARN( "svx.form", "DataNavigatorWindow::SetPageModel(): unexpected exception" );
         }
     }
-    // -----------------------------------------------------------------------
+
     void DataNavigatorWindow::ClearAllPageModels( bool bClearPages )
     {
         if ( m_pInstPage )
@@ -2006,7 +2006,7 @@ namespace svxform
                 m_aTabCtrl.RemovePage( m_aTabCtrl.GetPageId( 1 ) );
         }
     }
-    // -----------------------------------------------------------------------
+
     void DataNavigatorWindow::CreateInstancePage( const Sequence< PropertyValue >& _xPropSeq )
     {
         OUString sInstName;
@@ -2033,13 +2033,13 @@ namespace svxform
         m_aTabCtrl.InsertPage( nPageId, sInstName, m_aTabCtrl.GetPageCount() - 2 );
     }
 
-    //------------------------------------------------------------------------
+
     bool DataNavigatorWindow::HasFirstInstancePage() const
     {
         return ( m_aTabCtrl.GetPageId( 0 ) == TID_INSTANCE );
     }
 
-    //------------------------------------------------------------------------
+
     sal_uInt16 DataNavigatorWindow::GetNewPageId() const
     {
         sal_uInt16 i, nMax = 0, nCount = m_aTabCtrl.GetPageCount();
@@ -2051,7 +2051,7 @@ namespace svxform
         return ( nMax + 1 );
     }
 
-    //------------------------------------------------------------------------
+
     void DataNavigatorWindow::Resize()
     {
         Window::Resize();
@@ -2080,7 +2080,7 @@ namespace svxform
         m_aInstanceBtn.SetPosPixel( aPos );
     }
 
-    //------------------------------------------------------------------------
+
     void DataNavigatorWindow::SetDocModified()
     {
         SfxObjectShell* pCurrentDoc = SfxObjectShell::Current();
@@ -2089,7 +2089,7 @@ namespace svxform
             pCurrentDoc->SetModified();
     }
 
-    //------------------------------------------------------------------------
+
     void DataNavigatorWindow::NotifyChanges( bool _bLoadAll )
     {
         if ( !m_bIsNotifyDisabled )
@@ -2110,7 +2110,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------
+
     void DataNavigatorWindow::AddContainerBroadcaster( const XContainer_ref& xContainer )
     {
         Reference< XContainerListener > xListener(
@@ -2119,7 +2119,7 @@ namespace svxform
         m_aContainerList.push_back( xContainer );
     }
 
-    //------------------------------------------------------------------------
+
     void DataNavigatorWindow::AddEventBroadcaster( const XEventTarget_ref& xTarget )
     {
         Reference< XEventListener > xListener(
@@ -2131,7 +2131,7 @@ namespace svxform
         m_aEventTargetList.push_back( xTarget );
     }
 
-    //------------------------------------------------------------------------
+
     void DataNavigatorWindow::RemoveBroadcaster()
     {
         Reference< XContainerListener > xContainerListener(
@@ -2155,7 +2155,7 @@ namespace svxform
     // class DataNavigator
     //========================================================================
     DBG_NAME(DataNavigator)
-    //------------------------------------------------------------------------
+
     DataNavigator::DataNavigator( SfxBindings* _pBindings, SfxChildWindow* _pMgr, Window* _pParent ) :
 
         SfxDockingWindow( _pBindings, _pMgr, _pParent,
@@ -2177,17 +2177,17 @@ namespace svxform
         m_aDataWin.Show();
     }
 
-    //------------------------------------------------------------------------
+
     DataNavigator::~DataNavigator()
     {
         DBG_DTOR(DataNavigator,NULL);
     }
 
-    //-----------------------------------------------------------------------
+
     void DataNavigator::Update( FmFormShell* /*pFormShell*/ )
     {
     }
-    //-----------------------------------------------------------------------
+
     void DataNavigator::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
     {
         if ( !pState  || SID_FM_DATANAVIGATOR_CONTROL != nSID )
@@ -2202,20 +2202,20 @@ namespace svxform
             Update( NULL );
     }
 
-    //-----------------------------------------------------------------------
+
     void DataNavigator::GetFocus()
     {
         SfxDockingWindow::GetFocus();
     }
 
-    //-----------------------------------------------------------------------
+
     bool DataNavigator::Close()
     {
         Update( NULL );
         return SfxDockingWindow::Close();
     }
 
-    //-----------------------------------------------------------------------
+
     Size DataNavigator::CalcDockingSize( SfxChildAlignment eAlign )
     {
         if ( ( eAlign == SFX_ALIGN_TOP ) || ( eAlign == SFX_ALIGN_BOTTOM ) )
@@ -2224,7 +2224,7 @@ namespace svxform
         return SfxDockingWindow::CalcDockingSize( eAlign );
     }
 
-    //-----------------------------------------------------------------------
+
     SfxChildAlignment DataNavigator::CheckAlignment( SfxChildAlignment eActAlign, SfxChildAlignment eAlign )
     {
         switch ( eAlign )
@@ -2239,7 +2239,7 @@ namespace svxform
         return eActAlign;
     }
 
-    //------------------------------------------------------------------------
+
     void DataNavigator::Resize()
     {
         SfxDockingWindow::Resize();
@@ -2260,10 +2260,10 @@ namespace svxform
     // class NavigatorFrameManager
     //========================================================================
 
-    //-----------------------------------------------------------------------
+
     SFX_IMPL_DOCKINGWINDOW( DataNavigatorManager, SID_FM_SHOW_DATANAVIGATOR )
 
-    //-----------------------------------------------------------------------
+
     DataNavigatorManager::DataNavigatorManager(
         Window* _pParent, sal_uInt16 _nId, SfxBindings* _pBindings, SfxChildWinInfo* _pInfo ) :
 
@@ -2319,7 +2319,7 @@ namespace svxform
         CheckHdl( NULL );
     }
 
-    //------------------------------------------------------------------------
+
     AddDataItemDialog::~AddDataItemDialog()
     {
         if ( m_xTempBinding.is() )
@@ -2346,7 +2346,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK( AddDataItemDialog, CheckHdl, CheckBox *, pBox )
     {
         // Condition buttons are only enable if their check box is checked
@@ -2381,7 +2381,7 @@ namespace svxform
         return 0;
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK( AddDataItemDialog, ConditionHdl, PushButton *, pBtn )
     {
         OUString sTemp, sPropName;
@@ -2460,7 +2460,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(AddDataItemDialog, OKHdl)
     {
         bool bIsHandleBinding = ( DITBinding == m_eItemType );
@@ -2524,7 +2524,7 @@ namespace svxform
         return 0;
     }
 
-    //------------------------------------------------------------------------
+
     void AddDataItemDialog::InitDialog()
     {
         // set handler
@@ -2546,7 +2546,7 @@ namespace svxform
         m_pOKBtn->SetClickHdl( LINK( this, AddDataItemDialog, OKHdl ) );
     }
 
-    //------------------------------------------------------------------------
+
     void AddDataItemDialog::InitFromNode()
     {
         if ( m_pItemNode )
@@ -2690,7 +2690,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------
+
     void AddDataItemDialog::InitDataTypeBox()
     {
         if ( m_eItemType != DITText )
@@ -2818,7 +2818,7 @@ namespace svxform
         ResultHdl( &m_aResultTimer );
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(AddConditionDialog, EditHdl)
     {
         Reference< XNameContainer > xNameContnr;
@@ -2843,7 +2843,7 @@ namespace svxform
         return 0;
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(AddConditionDialog, OKHdl)
     {
 /*!!!
@@ -2861,14 +2861,14 @@ namespace svxform
         return 0;
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(AddConditionDialog, ModifyHdl)
     {
         m_aResultTimer.Start();
         return 0;
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(AddConditionDialog, ResultHdl)
     {
         OUString sCondition = comphelper::string::strip(m_pConditionED->GetText(), ' ');
@@ -2932,13 +2932,13 @@ namespace svxform
         SelectHdl( m_pNamespacesList );
     }
 
-    //------------------------------------------------------------------------
+
     NamespaceItemDialog::~NamespaceItemDialog()
     {
         delete m_pNamespacesList;
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK( NamespaceItemDialog, SelectHdl, SvSimpleTable *,  EMPTYARG )
     {
         sal_Bool bEnable = ( m_pNamespacesList->FirstSelected() != NULL );
@@ -2948,7 +2948,7 @@ namespace svxform
         return 0;
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK( NamespaceItemDialog, ClickHdl, PushButton *, pBtn )
     {
         if ( m_pAddNamespaceBtn == pBtn )
@@ -2998,7 +2998,7 @@ namespace svxform
         return 0;
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(NamespaceItemDialog, OKHdl)
     {
         try
@@ -3030,7 +3030,7 @@ namespace svxform
         return 0;
     }
 
-    //------------------------------------------------------------------------
+
     void NamespaceItemDialog::LoadNamespaces()
     {
         try
@@ -3080,7 +3080,7 @@ namespace svxform
         m_pOKBtn->SetClickHdl( LINK( this, ManageNamespaceDialog, OKHdl ) );
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(ManageNamespaceDialog, OKHdl)
     {
         OUString sPrefix = m_pPrefixED->GetText();
@@ -3133,7 +3133,7 @@ namespace svxform
         m_pOKBtn->SetClickHdl( LINK( this, AddSubmissionDialog, OKHdl ) );
     }
 
-    //------------------------------------------------------------------------
+
     AddSubmissionDialog::~AddSubmissionDialog()
     {
         // #i38991# if we have added a binding, we need to remove it as well.
@@ -3141,7 +3141,7 @@ namespace svxform
             m_xUIHelper->removeBindingIfUseless( m_xCreatedBinding );
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(AddSubmissionDialog, RefHdl)
     {
         AddConditionDialog aDlg( this, PN_BINDING_EXPR, m_xTempBinding );
@@ -3152,7 +3152,7 @@ namespace svxform
         return 0;
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(AddSubmissionDialog, OKHdl)
     {
         OUString sName(m_pNameED->GetText());
@@ -3216,7 +3216,7 @@ namespace svxform
         return 0;
     }
 
-    //------------------------------------------------------------------------
+
     void AddSubmissionDialog::FillAllBoxes()
     {
         // method box
@@ -3366,7 +3366,7 @@ namespace svxform
         m_sAllFilterName = ResId(STR_FILTERNAME_ALL, *ResMgr::CreateResMgr("fps_office")).toString();
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(AddInstanceDialog, FilePickerHdl)
     {
         ::sfx2::FileDialogHelper aDlg(

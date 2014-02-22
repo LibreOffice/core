@@ -66,7 +66,7 @@ namespace svt
     }
 
     // ============================================================================
-    // ----------------------------------------------------------------------------
+
     Reference< XAccessible > BrowseBoxImpl::getAccessibleHeaderBar( AccessibleBrowseBoxObjType _eObjType )
     {
         if ( m_pAccessible && m_pAccessible->isAlive() )
@@ -74,7 +74,7 @@ namespace svt
         return NULL;
     }
 
-    // ----------------------------------------------------------------------------
+
     Reference< XAccessible > BrowseBoxImpl::getAccessibleTable( )
     {
         if ( m_pAccessible && m_pAccessible->isAlive() )
@@ -107,7 +107,7 @@ Reference< XAccessible > BrowseBox::CreateAccessible()
 
     return xAccessible;
 }
-// -----------------------------------------------------------------------------
+
 
 // Children -------------------------------------------------------------------
 
@@ -125,7 +125,7 @@ Reference< XAccessible > BrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_u
         OFFSET_DEFAULT
     );
 }
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > BrowseBox::CreateAccessibleRowHeader( sal_Int32 _nRow )
 {
@@ -138,7 +138,7 @@ Reference< XAccessible > BrowseBox::CreateAccessibleRowHeader( sal_Int32 _nRow )
         m_pImpl->m_aFactoryAccess.getFactory()
     );
 }
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > BrowseBox::CreateAccessibleColumnHeader( sal_uInt16 _nColumnPos )
 {
@@ -151,20 +151,20 @@ Reference< XAccessible > BrowseBox::CreateAccessibleColumnHeader( sal_uInt16 _nC
             m_pImpl->m_aFactoryAccess.getFactory()
     );
 }
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 BrowseBox::GetAccessibleControlCount() const
 {
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > BrowseBox::CreateAccessibleControl( sal_Int32 )
 {
     DBG_ASSERT( false, "BrowseBox::CreateAccessibleControl: to be overwritten!" );
     return NULL;
 }
-// -----------------------------------------------------------------------------
+
 
 // Conversions ----------------------------------------------------------------
 
@@ -176,7 +176,7 @@ sal_Bool BrowseBox::ConvertPointToCellAddress(
     rnColumnPos = GetColumnAtXPosPixel(rPoint.X());
     return rnRow != BROWSER_INVALIDID && rnColumnPos != BROWSER_INVALIDID;
 }
-// -----------------------------------------------------------------------------
+
 
 sal_Bool BrowseBox::ConvertPointToRowHeader( sal_Int32& rnRow, const Point& rPoint )
 {
@@ -184,14 +184,14 @@ sal_Bool BrowseBox::ConvertPointToRowHeader( sal_Int32& rnRow, const Point& rPoi
     //  sal_uInt16 nColumnId = GetColumnAtXPosPixel(rPoint.X());
     return rnRow != BROWSER_INVALIDID;// && nColumnId == 0;
 }
-// -----------------------------------------------------------------------------
+
 
 sal_Bool BrowseBox::ConvertPointToColumnHeader( sal_uInt16& _rnColumnPos, const Point& _rPoint )
 {
     _rnColumnPos = GetColumnAtXPosPixel(_rPoint.X());
     return _rnColumnPos != BROWSER_INVALIDID;
 }
-// -----------------------------------------------------------------------------
+
 
 sal_Bool BrowseBox::ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint )
 {
@@ -204,7 +204,7 @@ sal_Bool BrowseBox::ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point
 
     return bRet;
 }
-// -----------------------------------------------------------------------------
+
 
 // Object data and state ------------------------------------------------------
 
@@ -272,7 +272,7 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
     }
     return aRetText;
 }
-// -----------------------------------------------------------------------------
+
 
 OUString BrowseBox::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 ) const
 {
@@ -305,20 +305,20 @@ OUString BrowseBox::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxOb
     }
     return aRetText;
 }
-// -----------------------------------------------------------------------------
+
 
 OUString BrowseBox::GetRowDescription( sal_Int32 ) const
 {
     return OUString();
 }
-// -----------------------------------------------------------------------------
+
 
 OUString BrowseBox::GetColumnDescription( sal_uInt16 _nColumn ) const
 {
     return OUString( GetColumnTitle( GetColumnId( _nColumn ) ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void BrowseBox::FillAccessibleStateSet(
         ::utl::AccessibleStateSetHelper& rStateSet,
@@ -379,7 +379,7 @@ void BrowseBox::FillAccessibleStateSet(
             break;
     }
 }
-// -----------------------------------------------------------------------
+
 void BrowseBox::FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet,
                                                sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const
 {
@@ -391,20 +391,20 @@ void BrowseBox::FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& 
     else // only transient when column is not focused
         _rStateSet.AddState( AccessibleStateType::TRANSIENT );
 }
-// -----------------------------------------------------------------------------
+
 
 void BrowseBox::GrabTableFocus()
 {
     GrabFocus();
 }
-// -----------------------------------------------------------------------------
+
 OUString BrowseBox::GetCellText(long, sal_uInt16 ) const
 {
     DBG_ASSERT(false,"This method has to be implemented by the derived classes! BUG!!");
     return OUString();
 }
 
-// -----------------------------------------------------------------------------
+
 void BrowseBox::commitHeaderBarEvent(sal_Int16 nEventId,
         const Any& rNewValue, const Any& rOldValue, sal_Bool _bColumnHeaderBar )
 {
@@ -413,81 +413,81 @@ void BrowseBox::commitHeaderBarEvent(sal_Int16 nEventId,
             rNewValue, rOldValue, _bColumnHeaderBar );
 }
 
-// -----------------------------------------------------------------------------
+
 void BrowseBox::commitTableEvent( sal_Int16 _nEventId, const Any& _rNewValue, const Any& _rOldValue )
 {
     if ( isAccessibleAlive() )
         m_pImpl->m_pAccessible->commitTableEvent( _nEventId, _rNewValue, _rOldValue );
 }
-// -----------------------------------------------------------------------------
+
 void BrowseBox::commitBrowseBoxEvent( sal_Int16 _nEventId, const Any& _rNewValue, const Any& _rOldValue )
 {
     if ( isAccessibleAlive() )
         m_pImpl->m_pAccessible->commitEvent( _nEventId, _rNewValue, _rOldValue);
 }
 
-// -----------------------------------------------------------------------------
+
 ::svt::IAccessibleFactory& BrowseBox::getAccessibleFactory()
 {
     return m_pImpl->m_aFactoryAccess.getFactory();
 }
 
-// -----------------------------------------------------------------------------
+
 sal_Bool BrowseBox::isAccessibleAlive( ) const
 {
     return ( NULL != m_pImpl->m_pAccessible ) && m_pImpl->m_pAccessible->isAlive();
 }
-// -----------------------------------------------------------------------------
+
 // IAccessibleTableProvider
-// -----------------------------------------------------------------------------
+
 sal_Int32 BrowseBox::GetCurrRow() const
 {
     return GetCurRow();
 }
-// -----------------------------------------------------------------------------
+
 sal_uInt16 BrowseBox::GetCurrColumn() const
 {
     return GetColumnPos( GetCurColumnId() );
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool BrowseBox::HasRowHeader() const
 {
     return ( GetColumnId( 0 ) == HandleColumnId ); // HandleColumn == RowHeader
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool BrowseBox::IsCellFocusable() const
 {
     return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool BrowseBox::GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn )
 {
     return GoToRowColumnId( _nRow, GetColumnId( _nColumn ) );
 }
-// -----------------------------------------------------------------------------
+
 void BrowseBox::SelectColumn( sal_uInt16 _nColumn, sal_Bool _bSelect )
 {
     SelectColumnPos( _nColumn, _bSelect );
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool BrowseBox::IsColumnSelected( long _nColumn ) const
 {
     return ( pColSel && (0 <= _nColumn) && (_nColumn <= 0xFFF) ) ?
         pColSel->IsSelected( static_cast< sal_uInt16 >( _nColumn ) ) :
         sal_False;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 BrowseBox::GetSelectedRowCount() const
 {
     return GetSelectRowCount();
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 BrowseBox::GetSelectedColumnCount() const
 {
     const MultiSelection* pColumnSel = GetColumnSelection();
     return pColumnSel ? pColumnSel->GetSelectCount() : 0;
 }
-// -----------------------------------------------------------------------------
+
 void BrowseBox::GetAllSelectedRows( ::com::sun::star::uno::Sequence< sal_Int32 >& _rRows ) const
 {
     sal_Int32 nCount = GetSelectRowCount();
@@ -501,7 +501,7 @@ void BrowseBox::GetAllSelectedRows( ::com::sun::star::uno::Sequence< sal_Int32 >
                     "BrowseBox::GetAllSelectedRows - too many selected rows found" );
     }
 }
-// -----------------------------------------------------------------------------
+
 void BrowseBox::GetAllSelectedColumns( ::com::sun::star::uno::Sequence< sal_Int32 >& _rColumns ) const
 {
     const MultiSelection* pColumnSel = GetColumnSelection();
@@ -526,43 +526,43 @@ void BrowseBox::GetAllSelectedColumns( ::com::sun::star::uno::Sequence< sal_Int3
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool BrowseBox::IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const
 {
     return IsFieldVisible( _nRow, GetColumnId( _nColumnPos ) );
 }
-// -----------------------------------------------------------------------------
+
 OUString BrowseBox::GetAccessibleCellText(long _nRow, sal_uInt16 _nColPos) const
 {
     return GetCellText( _nRow, GetColumnId( _nColPos ) );
 }
 
-// -----------------------------------------------------------------------------
+
 sal_Bool BrowseBox::GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector )
 {
     return Control::GetGlyphBoundRects( rOrigin, rStr, nIndex, nLen, nBase, rVector );
 }
-// -----------------------------------------------------------------------------
+
 Rectangle BrowseBox::GetWindowExtentsRelative( Window *pRelativeWindow ) const
 {
     return Control::GetWindowExtentsRelative( pRelativeWindow );
 }
-// -----------------------------------------------------------------------------
+
 void BrowseBox::GrabFocus()
 {
     Control::GrabFocus();
 }
-// -----------------------------------------------------------------------------
+
 Reference< XAccessible > BrowseBox::GetAccessible( sal_Bool bCreate )
 {
     return Control::GetAccessible( bCreate );
 }
-// -----------------------------------------------------------------------------
+
 Window* BrowseBox::GetAccessibleParentWindow() const
 {
     return Control::GetAccessibleParentWindow();
 }
-// -----------------------------------------------------------------------------
+
 Window* BrowseBox::GetWindowInstance()
 {
     return this;

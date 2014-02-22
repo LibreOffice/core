@@ -27,7 +27,7 @@ using namespace ::std;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
-// -----------------------------------------------------------------------------
+
 
 static MapMode aTWIPSMode( MAP_TWIP );
 static MapMode a100thmmMode( MAP_100TH_MM );
@@ -39,7 +39,7 @@ static sal_Int32 map100thmm( sal_Int32 n100thMM )
     return nX;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int32 nDocWidthInput, sal_Int32 nDocHeightInput, sal_Int32 nJPEGcompressMode )
 :   mpClipPolyPolygon( NULL ),
@@ -98,7 +98,7 @@ Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int
 #endif
 }
 
-// -----------------------------------------------------------------------------
+
 
 Writer::~Writer()
 {
@@ -107,7 +107,7 @@ Writer::~Writer()
     delete mpTag;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ImplCopySvStreamToXOutputStream( SvStream& rIn, Reference< XOutputStream > &xOut )
 {
@@ -138,7 +138,7 @@ void ImplCopySvStreamToXOutputStream( SvStream& rIn, Reference< XOutputStream > 
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::storeTo( Reference< XOutputStream > &xOutStream )
 {
@@ -183,7 +183,7 @@ void Writer::storeTo( Reference< XOutputStream > &xOutStream )
     ImplCopySvStreamToXOutputStream( *mpMovieStream, xOutStream );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_uInt16 Writer::startSprite()
 {
@@ -193,7 +193,7 @@ sal_uInt16 Writer::startSprite()
     return nShapeId;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::endSprite()
 {
@@ -215,7 +215,7 @@ void Writer::endSprite()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::placeShape( sal_uInt16 nID, sal_uInt16 nDepth, sal_Int32 x, sal_Int32 y, sal_uInt16 nClip, const char* pName )
 {
@@ -252,7 +252,7 @@ void Writer::placeShape( sal_uInt16 nID, sal_uInt16 nDepth, sal_Int32 x, sal_Int
 }
 
 #ifdef THEFUTURE
-// -----------------------------------------------------------------------------
+
 
 void Writer::moveShape( sal_uInt16 nDepth, sal_Int32 x, sal_Int32 y )
 {
@@ -281,7 +281,7 @@ void Writer::moveShape( sal_uInt16 nDepth, sal_Int32 x, sal_Int32 y )
 }
 #endif
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::removeShape( sal_uInt16 nDepth )
 {
@@ -290,7 +290,7 @@ void Writer::removeShape( sal_uInt16 nDepth )
     endTag();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::startTag( sal_uInt8 nTagId )
 {
@@ -299,7 +299,7 @@ void Writer::startTag( sal_uInt8 nTagId )
     mpTag = new Tag( nTagId );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::endTag()
 {
@@ -318,14 +318,14 @@ void Writer::endTag()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_uInt16 Writer::createID()
 {
     return mnNextId++;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::showFrame()
 {
@@ -336,7 +336,7 @@ void Writer::showFrame()
         mnFrames++;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_uInt16 Writer::defineShape( const GDIMetaFile& rMtf, sal_Int16 x, sal_Int16 y )
 {
@@ -369,7 +369,7 @@ sal_uInt16 Writer::defineShape( const GDIMetaFile& rMtf, sal_Int16 x, sal_Int16 
     return nId;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_uInt16 Writer::defineShape( const Polygon& rPoly, const FillStyle& rFillStyle )
 {
@@ -377,7 +377,7 @@ sal_uInt16 Writer::defineShape( const Polygon& rPoly, const FillStyle& rFillStyl
     return defineShape( aPolyPoly, rFillStyle );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_uInt16 Writer::defineShape( const PolyPolygon& rPolyPoly, const FillStyle& rFillStyle )
 {
@@ -421,7 +421,7 @@ sal_uInt16 Writer::defineShape( const PolyPolygon& rPolyPoly, const FillStyle& r
     return nShapeId;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_uInt16 Writer::defineShape( const PolyPolygon& rPolyPoly, sal_uInt16 nLineWidth, const Color& rLineColor )
 {
@@ -594,7 +594,7 @@ sal_Bool Writer::streamSound( const char * filename )
 #endif // AUGUSTUS
 
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::stop()
 {
@@ -604,7 +604,7 @@ void Writer::stop()
     endTag();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::waitOnClick( sal_uInt16 nDepth )
 {
@@ -614,7 +614,7 @@ void Writer::waitOnClick( sal_uInt16 nDepth )
     removeShape( nDepth );
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** inserts a doaction tag with an ActionGotoFrame */
 void Writer::gotoFrame( sal_uInt16 nFrame )

@@ -94,7 +94,7 @@ ScRange lcl_getSubRangeByIndex( const ScRange& rRange, sal_Int32 nIndex )
 
 using namespace com::sun::star;
 
-// -----------------------------------------------------------------------
+
 
 //
 // ---  Public-Funktionen
@@ -772,7 +772,7 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
 
         // VisibleCellsY == CellsAtY( GetPosY( eWhichY ), 1, eWhichY )
 
-        //-------------------------------------------------------------------------------
+
         //  falls z.B. Suchen-Dialog offen ist, Cursor nicht hinter den Dialog stellen
         //  wenn moeglich, die Zeile mit dem Cursor oberhalb oder unterhalb des Dialogs
 
@@ -839,7 +839,7 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                 }
             }
         }
-        //-------------------------------------------------------------------------------
+
 
         SCsCOL nNewDeltaX = nDeltaX;
         SCsROW nNewDeltaY = nDeltaY;

@@ -294,7 +294,7 @@ ShutdownIcon::~ShutdownIcon()
     new IdleUnloader (&m_pPlugin);
 }
 
-// ---------------------------------------------------------------------------
+
 
 void ShutdownIcon::OpenURL( const OUString& aURL, const OUString& rTarget, const Sequence< PropertyValue >& aArgs )
 {
@@ -327,7 +327,7 @@ void ShutdownIcon::OpenURL( const OUString& aURL, const OUString& rTarget, const
     }
 }
 
-// ---------------------------------------------------------------------------
+
 
 void ShutdownIcon::FileOpen()
 {
@@ -339,7 +339,7 @@ void ShutdownIcon::FileOpen()
     }
 }
 
-// ---------------------------------------------------------------------------
+
 
 void ShutdownIcon::FromTemplate()
 {
@@ -382,7 +382,7 @@ void ShutdownIcon::FromTemplate()
     }
 }
 
-// ---------------------------------------------------------------------------
+
 #include <tools/rcid.h>
 OUString ShutdownIcon::GetResString( int id )
 {
@@ -398,7 +398,7 @@ OUString ShutdownIcon::GetResString( int id )
     return ResId(id, *m_pResMgr).toString();
 }
 
-// ---------------------------------------------------------------------------
+
 
 OUString ShutdownIcon::GetUrlDescription( const OUString& aUrl )
 {
@@ -407,7 +407,7 @@ OUString ShutdownIcon::GetUrlDescription( const OUString& aUrl )
     return OUString( SvFileInformationManager::GetDescription( INetURLObject( aUrl ) ) );
 }
 
-// ---------------------------------------------------------------------------
+
 
 void ShutdownIcon::StartFileDialog()
 {
@@ -430,7 +430,7 @@ void ShutdownIcon::StartFileDialog()
     m_pFileDlg->StartExecuteModal( STATIC_LINK( this, ShutdownIcon, DialogClosedHdl_Impl ) );
 }
 
-// ---------------------------------------------------------------------------
+
 
 IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYARG )
 {
@@ -574,7 +574,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
     return 0;
 }
 
-// ---------------------------------------------------------------------------
+
 
 void ShutdownIcon::addTerminateListener()
 {
@@ -593,7 +593,7 @@ void ShutdownIcon::addTerminateListener()
     pInst->m_bListenForTermination = true;
 }
 
-// ---------------------------------------------------------------------------
+
 
 void ShutdownIcon::terminateDesktop()
 {
@@ -618,7 +618,7 @@ void ShutdownIcon::terminateDesktop()
     ShutdownIcon::pShutdownIcon = 0;
 }
 
-// ---------------------------------------------------------------------------
+
 
 ShutdownIcon* ShutdownIcon::getInstance()
 {
@@ -626,7 +626,7 @@ ShutdownIcon* ShutdownIcon::getInstance()
     return pShutdownIcon;
 }
 
-// ---------------------------------------------------------------------------
+
 
 ShutdownIcon* ShutdownIcon::createInstance()
 {
@@ -659,7 +659,7 @@ void ShutdownIcon::init() throw( ::com::sun::star::uno::Exception )
     m_xDesktop = xDesktop;
 }
 
-// ---------------------------------------------------------------------------
+
 
 void SAL_CALL ShutdownIcon::disposing()
 {
@@ -667,7 +667,7 @@ void SAL_CALL ShutdownIcon::disposing()
     m_xDesktop.clear();
 }
 
-// ---------------------------------------------------------------------------
+
 
 // XEventListener
 void SAL_CALL ShutdownIcon::disposing( const ::com::sun::star::lang::EventObject& )
@@ -675,7 +675,7 @@ void SAL_CALL ShutdownIcon::disposing( const ::com::sun::star::lang::EventObject
 {
 }
 
-// ---------------------------------------------------------------------------
+
 
 // XTerminateListener
 void SAL_CALL ShutdownIcon::queryTermination( const ::com::sun::star::lang::EventObject& )
@@ -689,7 +689,7 @@ throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::
 }
 
 
-// ---------------------------------------------------------------------------
+
 
 void SAL_CALL ShutdownIcon::notifyTermination( const ::com::sun::star::lang::EventObject& )
 throw(::com::sun::star::uno::RuntimeException)
@@ -697,7 +697,7 @@ throw(::com::sun::star::uno::RuntimeException)
 }
 
 
-// ---------------------------------------------------------------------------
+
 
 void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& aArguments )
     throw( ::com::sun::star::uno::Exception )
@@ -750,14 +750,14 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
 
 }
 
-// -------------------------------
+
 
 void ShutdownIcon::EnterModalMode()
 {
     bModalMode = true;
 }
 
-// -------------------------------
+
 
 void ShutdownIcon::LeaveModalMode()
 {
@@ -781,7 +781,7 @@ bool ShutdownIcon::IsQuickstarterInstalled()
 }
 #endif // !WNT
 
-// ---------------------------------------------------------------------------
+
 
 #if defined (ENABLE_QUICKSTART_APPLET) && defined (UNX)
 /**

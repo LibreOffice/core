@@ -23,7 +23,7 @@
 
 using namespace ::com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 ScDrawDefaultsObj::ScDrawDefaultsObj(ScDocShell* pDocSh) :
     SvxUnoDrawPool( NULL ),

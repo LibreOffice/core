@@ -54,7 +54,7 @@ namespace rptui
                         sal_uInt32             _nUIFlags);
     };
 
-    //------------------------------------------------------------------------
+
     OPropertyInfoImpl::OPropertyInfoImpl(const OUString& _rName, sal_Int32 _nId,
                                    const OUString& aString, const OString& sHid, sal_uInt32 _nUIFlags)
        :sName(_rName)
@@ -65,7 +65,7 @@ namespace rptui
     {
     }
 
-    //------------------------------------------------------------------------
+
     // Vergleichen von PropertyInfo
     struct PropertyInfoLessByName : public ::std::binary_function< OPropertyInfoImpl, OPropertyInfoImpl, bool >
     {
@@ -90,7 +90,7 @@ namespace rptui
 
     sal_uInt16              OPropertyInfoService::s_nCount = 0;
     OPropertyInfoImpl*      OPropertyInfoService::s_pPropertyInfos = NULL;
-    //------------------------------------------------------------------------
+
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo()
     {
         if ( s_pPropertyInfos )
@@ -155,35 +155,35 @@ namespace rptui
         return s_pPropertyInfos;
     }
 
-    //------------------------------------------------------------------------
+
     sal_Int32 OPropertyInfoService::getPropertyId(const OUString& _rName) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_rName);
         return pInfo ? pInfo->nId : -1;
     }
 
-    //------------------------------------------------------------------------
+
     OUString OPropertyInfoService::getPropertyTranslation(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->sTranslation : OUString();
     }
 
-    //------------------------------------------------------------------------
+
     OString OPropertyInfoService::getPropertyHelpId(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->sHelpId : OString();
     }
 
-    //------------------------------------------------------------------------
+
     sal_uInt32 OPropertyInfoService::getPropertyUIFlags(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->nUIFlags : 0;
     }
 
-    //------------------------------------------------------------------------
+
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(const OUString& _rName)
     {
         // intialisierung
@@ -201,7 +201,7 @@ namespace rptui
     }
 
 
-    //------------------------------------------------------------------------
+
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(sal_Int32 _nId)
     {
         // intialisierung
@@ -216,7 +216,7 @@ namespace rptui
         return NULL;
     }
 
-    //------------------------------------------------------------------------
+
     bool OPropertyInfoService::isComposable( const OUString& _rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _rxFormComponentHandler )
     {
         sal_Int32 nId = getPropertyId( _rPropertyName );
@@ -229,7 +229,7 @@ namespace rptui
         return _rxFormComponentHandler->isComposable( _rPropertyName );
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyInfoService::getExcludeProperties(::std::vector< beans::Property >& _rExcludeProperties,const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _xFormComponentHandler)
     {
         uno::Sequence< beans::Property > aProps = _xFormComponentHandler->getSupportedProperties();

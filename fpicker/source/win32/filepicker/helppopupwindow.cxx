@@ -21,15 +21,15 @@
 #include "helppopupwindow.hxx"
 #include <osl/diagnose.h>
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 using osl::Mutex;
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 namespace /* private */
 {
@@ -54,17 +54,17 @@ const sal_Int32 OUTER_FRAME_WIDTH = 1; // pixel
 const DWORD INNER_FRAME_COLOR     = 0xC8D0D4;
 const sal_Int32 INNER_FRAME_WIDTH = 1; // pixel
 
-//---------------------------------------------------
+
 // static member initialization
-//---------------------------------------------------
+
 
 osl::Mutex CHelpPopupWindow::s_Mutex;
 ATOM CHelpPopupWindow::s_ClassAtom = 0;
 sal_Int32 CHelpPopupWindow::s_RegisterWndClassCount = 0;
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 CHelpPopupWindow::CHelpPopupWindow(
     HINSTANCE hInstance,
@@ -88,9 +88,9 @@ CHelpPopupWindow::CHelpPopupWindow(
     m_hBrushShadow  = CreatePatternBrush( m_hBitmapShadow );
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 CHelpPopupWindow::~CHelpPopupWindow( )
 {
@@ -105,18 +105,18 @@ CHelpPopupWindow::~CHelpPopupWindow( )
     DeleteObject( m_hBrushShadow );
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 void SAL_CALL CHelpPopupWindow::setText( const OUString& aHelpText )
 {
     m_HelpText = aHelpText;
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 void SAL_CALL CHelpPopupWindow::show( sal_Int32 x, sal_Int32 y )
 {
@@ -153,9 +153,9 @@ void SAL_CALL CHelpPopupWindow::show( sal_Int32 x, sal_Int32 y )
     ShowWindow( m_hwnd, SW_SHOW );
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 HWND SAL_CALL CHelpPopupWindow::setParent( HWND hwndNewParent )
 {
@@ -166,10 +166,10 @@ HWND SAL_CALL CHelpPopupWindow::setParent( HWND hwndNewParent )
     return oldParent;
 }
 
-//---------------------------------------------------
+
 // calculates the necessary dimensions of the popup
 // window including the margins etc.
-//---------------------------------------------------
+
 
 void SAL_CALL CHelpPopupWindow::calcWindowRect( LPRECT lprect )
 {
@@ -215,9 +215,9 @@ void SAL_CALL CHelpPopupWindow::calcWindowRect( LPRECT lprect )
     ReleaseDC( m_hwnd, hdc );
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 void SAL_CALL CHelpPopupWindow::adjustWindowSize( sal_Int32* cx_new, sal_Int32* cy_new )
 {
@@ -240,9 +240,9 @@ void SAL_CALL CHelpPopupWindow::adjustWindowSize( sal_Int32* cx_new, sal_Int32* 
     *cy_new = rect.bottom;
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 void SAL_CALL CHelpPopupWindow::adjustWindowPos(
     sal_Int32 x, sal_Int32 y, sal_Int32 cx, sal_Int32 cy )
@@ -289,9 +289,9 @@ void SAL_CALL CHelpPopupWindow::adjustWindowPos(
     ReleaseDC( m_hwnd, hdc );
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
 {
@@ -409,18 +409,18 @@ void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
     SetBkColor( hdc, oldBkColor );
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 void SAL_CALL CHelpPopupWindow::onNcDestroy()
 {
     m_hwnd = NULL;
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 void SAL_CALL CHelpPopupWindow::onCreate( HWND hwnd )
 {
@@ -448,9 +448,9 @@ void SAL_CALL CHelpPopupWindow::onCreate( HWND hwnd )
     ReleaseDC( m_hwnd, hdc );
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 LRESULT CALLBACK CHelpPopupWindow::WndProc(
     HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
@@ -522,9 +522,9 @@ LRESULT CALLBACK CHelpPopupWindow::WndProc(
     return lResult;
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 ATOM SAL_CALL CHelpPopupWindow::RegisterWindowClass( )
 {
@@ -562,9 +562,9 @@ ATOM SAL_CALL CHelpPopupWindow::RegisterWindowClass( )
     return s_ClassAtom;
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 void SAL_CALL CHelpPopupWindow::UnregisterWindowClass( )
 {

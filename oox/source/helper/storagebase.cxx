@@ -61,7 +61,7 @@ void lclSplitFirstElement( OUString& orElement, OUString& orRemainder, OUString 
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 StorageBase::StorageBase( const Reference< XInputStream >& rxInStream, bool bBaseStreamAccess ) :
     mxInStream( rxInStream ),

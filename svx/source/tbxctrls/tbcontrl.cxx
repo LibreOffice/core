@@ -88,7 +88,7 @@
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>
 
-// ------------------------------------------------------------------------
+
 
 #define MAX_MRU_FONTNAME_ENTRIES    5
 #define LOGICAL_EDIT_HEIGHT         12
@@ -360,7 +360,7 @@ SvxStyleBox_Impl::~SvxStyleBox_Impl()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxStyleBox_Impl::ReleaseFocus()
 {
@@ -373,7 +373,7 @@ void SvxStyleBox_Impl::ReleaseFocus()
         m_xFrame->getContainerWindow()->setFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxStyleBox_Impl::Select()
 {
@@ -463,14 +463,14 @@ void SvxStyleBox_Impl::Select()
         }
     }
 }
-// -----------------------------------------------------------------------
+
 
 void SvxStyleBox_Impl::SetFamily( SfxStyleFamily eNewFamily )
 {
     eStyleFamily = eNewFamily;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxStyleBox_Impl::PreNotify( NotifyEvent& rNEvt )
 {
@@ -487,7 +487,7 @@ bool SvxStyleBox_Impl::PreNotify( NotifyEvent& rNEvt )
     return ComboBox::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
 {
@@ -707,7 +707,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 IMPL_STATIC_LINK( SvxStyleBox_Impl, FocusHdl_Impl, Control*, _pCtrl )
 {
@@ -717,7 +717,7 @@ IMPL_STATIC_LINK( SvxStyleBox_Impl, FocusHdl_Impl, Control*, _pCtrl )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool lcl_GetDocFontList( const FontList** ppFontList, SvxFontNameBox_Impl* pBox )
 {
@@ -819,7 +819,7 @@ SvxFontNameBox_Impl::~SvxFontNameBox_Impl()
     GetSubEdit()->RemoveEventListener( LINK( this, SvxFontNameBox_Impl, CheckAndMarkUnknownFont ));
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFontNameBox_Impl::FillList()
 {
@@ -860,7 +860,7 @@ IMPL_LINK( SvxFontNameBox_Impl, CheckAndMarkUnknownFont, VclWindowEvent*, event 
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFontNameBox_Impl::Update( const SvxFontItem* pFontItem )
 {
@@ -877,7 +877,7 @@ void SvxFontNameBox_Impl::Update( const SvxFontItem* pFontItem )
         SetText( aCurName );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxFontNameBox_Impl::PreNotify( NotifyEvent& rNEvt )
 {
@@ -891,7 +891,7 @@ bool SvxFontNameBox_Impl::PreNotify( NotifyEvent& rNEvt )
     return FontNameBox::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
 {
@@ -936,7 +936,7 @@ bool SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
     return nHandled || FontNameBox::Notify( rNEvt );
 }
 
-// ---------------------------------------------------------------------------
+
 void SvxFontNameBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -950,7 +950,7 @@ void SvxFontNameBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     FontNameBox::DataChanged( rDCEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFontNameBox_Impl::ReleaseFocus_Impl()
 {
@@ -963,7 +963,7 @@ void SvxFontNameBox_Impl::ReleaseFocus_Impl()
         m_xFrame->getContainerWindow()->setFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFontNameBox_Impl::EnableControls_Impl()
 {
@@ -982,7 +982,7 @@ void SvxFontNameBox_Impl::EnableControls_Impl()
     EnableWYSIWYG( bEnable );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFontNameBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 {
@@ -1164,7 +1164,7 @@ SfxPopupWindow* SvxColorWindow_Impl::Clone() const
     return new SvxColorWindow_Impl( maCommand, theSlotId, GetFrame(), GetText(), GetParent(), mLastColor );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectHdl)
 {
@@ -1216,28 +1216,28 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxColorWindow_Impl::Resize()
 {
     lcl_ResizeValueSet( *this, aColorSet);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxColorWindow_Impl::StartSelection()
 {
     aColorSet.StartSelection();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxColorWindow_Impl::Close()
 {
     return SfxPopupWindow::Close();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
@@ -1352,7 +1352,7 @@ void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
             aFrameSet.SetItemImage( i, aImgList.GetImage( i ) );
     }
 }
-// -----------------------------------------------------------------------
+
 
 #define FRM_VALID_LEFT      0x01
 #define FRM_VALID_RIGHT     0x02
@@ -1478,14 +1478,14 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFrameWindow_Impl::Resize()
 {
     lcl_ResizeValueSet( *this, aFrameSet);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFrameWindow_Impl::StateChanged(
 
@@ -1528,14 +1528,14 @@ void SvxFrameWindow_Impl::StateChanged(
     SfxPopupWindow::StateChanged( nSID, eState, pState );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFrameWindow_Impl::StartSelection()
 {
     aFrameSet.StartSelection();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxFrameWindow_Impl::Close()
 {
@@ -1611,7 +1611,7 @@ SfxPopupWindow* SvxLineWindow_Impl::Clone() const
     return new SvxLineWindow_Impl( GetId(), GetFrame(), GetParent() );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl)
 {
@@ -1643,28 +1643,28 @@ IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineWindow_Impl::Resize()
 {
     m_aLineStyleLb.Resize();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxLineWindow_Impl::Close()
 {
     return SfxPopupWindow::Close();
 }
 
-// -----------------------------------------------------------------------
+
 
 Window* SvxLineWindow_Impl::GetPreferredKeyInputWindow()
 {
     return &m_aLineStyleLb;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineWindow_Impl::GetFocus()
 {
@@ -1683,7 +1683,7 @@ void SvxLineWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 #endif
 }
 
-// -----------------------------------------------------------------------
+
 
 //########################################################################
 // Helper classes
@@ -1702,7 +1702,7 @@ SfxStyleControllerItem_Impl::SfxStyleControllerItem_Impl(
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxStyleControllerItem_Impl::StateChanged(
     sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
@@ -1862,13 +1862,13 @@ SvxStyleToolBoxControl::SvxStyleToolBoxControl(
     }
 }
 
-// -----------------------------------------------------------------------
+
 SvxStyleToolBoxControl::~SvxStyleToolBoxControl()
 {
     delete pImpl;
 }
 
-// -----------------------------------------------------------------------
+
 void SAL_CALL SvxStyleToolBoxControl::initialize( const Sequence< Any >& aArguments )
 throw ( Exception, RuntimeException)
 {
@@ -1919,7 +1919,7 @@ throw (::com::sun::star::uno::RuntimeException)
     DELETEZ( pImpl );
 }
 
-// -----------------------------------------------------------------------
+
 void SAL_CALL SvxStyleToolBoxControl::update() throw (RuntimeException)
 {
     // Do nothing, we will start binding our listener when we are visible.
@@ -1934,7 +1934,7 @@ void SAL_CALL SvxStyleToolBoxControl::update() throw (RuntimeException)
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxStyleFamily SvxStyleToolBoxControl::GetActFamily()
 {
@@ -1952,7 +1952,7 @@ SfxStyleFamily SvxStyleToolBoxControl::GetActFamily()
     return SFX_STYLE_FAMILY_PARA;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxStyleToolBoxControl::FillStyleBox()
 {
@@ -2068,7 +2068,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxStyleToolBoxControl::SelectStyle( const OUString& rStyleName )
 {
@@ -2090,7 +2090,7 @@ void SvxStyleToolBoxControl::SelectStyle( const OUString& rStyleName )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxStyleToolBoxControl::Update()
 {
@@ -2111,7 +2111,7 @@ void SvxStyleToolBoxControl::Update()
         return;
     }
 
-    //--------------------------------------------------------------------
+
     const SfxTemplateItem* pItem = NULL;
 
     if ( nActFamily == 0xffff || 0 == (pItem = pFamilyState[nActFamily-1]) )
@@ -2141,7 +2141,7 @@ void SvxStyleToolBoxControl::Update()
         SelectStyle( pItem->GetStyleName() );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxStyleToolBoxControl::SetFamilyState( sal_uInt16 nIdx,
                                              const SfxTemplateItem* pItem )
@@ -2154,7 +2154,7 @@ void SvxStyleToolBoxControl::SetFamilyState( sal_uInt16 nIdx,
     Update();
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxStyleToolBoxControl, VisibilityNotification)
 {
@@ -2180,7 +2180,7 @@ IMPL_LINK_NOARG(SvxStyleToolBoxControl, VisibilityNotification)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxStyleToolBoxControl::StateChanged(
 
@@ -2220,7 +2220,7 @@ void SvxStyleToolBoxControl::StateChanged(
         Update();
 }
 
-// -----------------------------------------------------------------------
+
 
 Window* SvxStyleToolBoxControl::CreateItemWindow( Window *pParent )
 {
@@ -2253,7 +2253,7 @@ SvxFontNameToolBoxControl::SvxFontNameToolBoxControl(
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFontNameToolBoxControl::StateChanged(
 
@@ -2291,7 +2291,7 @@ void SvxFontNameToolBoxControl::StateChanged(
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
 }
 
-// -----------------------------------------------------------------------
+
 
 Window* SvxFontNameToolBoxControl::CreateItemWindow( Window *pParent )
 {
@@ -2318,21 +2318,21 @@ SvxFontColorToolBoxControl::SvxFontColorToolBoxControl(
     rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxFontColorToolBoxControl::~SvxFontColorToolBoxControl()
 {
     delete pBtnUpdater;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindowType SvxFontColorToolBoxControl::GetPopupWindowType() const
 {
     return SFX_POPUPWINDOW_ONCLICK;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindow* SvxFontColorToolBoxControl::CreatePopupWindow()
 {
@@ -2352,7 +2352,7 @@ SfxPopupWindow* SvxFontColorToolBoxControl::CreatePopupWindow()
     return pColorWin;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFontColorToolBoxControl::StateChanged(
 
@@ -2393,21 +2393,21 @@ SvxColorToolBoxControl::SvxColorToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 n
     pBtnUpdater = new ::svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxColorToolBoxControl::~SvxColorToolBoxControl()
 {
     delete pBtnUpdater;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindowType SvxColorToolBoxControl::GetPopupWindowType() const
 {
     return SFX_POPUPWINDOW_ONCLICK;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindow* SvxColorToolBoxControl::CreatePopupWindow()
 {
@@ -2428,7 +2428,7 @@ SfxPopupWindow* SvxColorToolBoxControl::CreatePopupWindow()
     return pColorWin;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxColorToolBoxControl::StateChanged(
     sal_uInt16 , SfxItemState eState, const SfxPoolItem* pState )
@@ -2501,21 +2501,21 @@ SvxColorExtToolBoxControl::SvxColorExtToolBoxControl(
     pBtnUpdater = new ::svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxColorExtToolBoxControl::~SvxColorExtToolBoxControl()
 {
     delete pBtnUpdater;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindowType SvxColorExtToolBoxControl::GetPopupWindowType() const
 {
     return SFX_POPUPWINDOW_ONTIMEOUT;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindow* SvxColorExtToolBoxControl::CreatePopupWindow()
 {
@@ -2551,7 +2551,7 @@ SfxPopupWindow* SvxColorExtToolBoxControl::CreatePopupWindow()
     return pColorWin;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxColorExtToolBoxControl::StateChanged(
 
@@ -2582,7 +2582,7 @@ void SvxColorExtToolBoxControl::StateChanged(
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxColorExtToolBoxControl::Select( sal_Bool )
 {
@@ -2643,14 +2643,14 @@ SvxFrameToolBoxControl::SvxFrameToolBoxControl(
     rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindowType SvxFrameToolBoxControl::GetPopupWindowType() const
 {
     return SFX_POPUPWINDOW_ONCLICK;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindow* SvxFrameToolBoxControl::CreatePopupWindow()
 {
@@ -2667,7 +2667,7 @@ SfxPopupWindow* SvxFrameToolBoxControl::CreatePopupWindow()
     return pFrameWin;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFrameToolBoxControl::StateChanged(
 
@@ -2697,14 +2697,14 @@ SvxFrameLineStyleToolBoxControl::SvxFrameLineStyleToolBoxControl(
     rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindowType SvxFrameLineStyleToolBoxControl::GetPopupWindowType() const
 {
     return SFX_POPUPWINDOW_ONCLICK;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindow* SvxFrameLineStyleToolBoxControl::CreatePopupWindow()
 {
@@ -2718,7 +2718,7 @@ SfxPopupWindow* SvxFrameLineStyleToolBoxControl::CreatePopupWindow()
     return pLineWin;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFrameLineStyleToolBoxControl::StateChanged(
 
@@ -2749,7 +2749,7 @@ SvxFrameLineColorToolBoxControl::SvxFrameLineColorToolBoxControl(
     rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxFrameLineColorToolBoxControl::~SvxFrameLineColorToolBoxControl()
 {
@@ -2757,14 +2757,14 @@ SvxFrameLineColorToolBoxControl::~SvxFrameLineColorToolBoxControl()
     delete pBtnUpdater;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindowType SvxFrameLineColorToolBoxControl::GetPopupWindowType() const
 {
     return SFX_POPUPWINDOW_ONCLICK;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindow* SvxFrameLineColorToolBoxControl::CreatePopupWindow()
 {
@@ -2783,7 +2783,7 @@ SfxPopupWindow* SvxFrameLineColorToolBoxControl::CreatePopupWindow()
     return pColorWin;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFrameLineColorToolBoxControl::StateChanged(
     sal_uInt16 , SfxItemState eState, const SfxPoolItem* pState )
@@ -2815,13 +2815,13 @@ SvxSimpleUndoRedoController::SvxSimpleUndoRedoController( sal_uInt16 nSlotId, sa
     aDefaultText = rTbx.GetItemText( nId );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxSimpleUndoRedoController::~SvxSimpleUndoRedoController()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxSimpleUndoRedoController::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 {
@@ -2847,7 +2847,7 @@ static void lcl_ResizeValueSet( Window &rWin, ValueSet &rValueSet )
     rValueSet.SetPosSizePixel( Point(2,2), aSize );
 }
 
-// -----------------------------------------------------------------------
+
 
 static void lcl_CalcSizeValueSet( Window &rWin, ValueSet &rValueSet, const Size &aItemSize )
 {
@@ -2857,7 +2857,7 @@ static void lcl_CalcSizeValueSet( Window &rWin, ValueSet &rValueSet, const Size 
     rWin.SetOutputSizePixel( aSize );
 }
 
-// -----------------------------------------------------------------------------
+
 Reference< ::com::sun::star::accessibility::XAccessible > SvxFontNameBox_Impl::CreateAccessible()
 {
     FillList();

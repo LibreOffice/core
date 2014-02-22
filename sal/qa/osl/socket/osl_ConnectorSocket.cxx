@@ -43,9 +43,9 @@
     inline sal_Bool SAL_CALL operator== (const SocketAddr & Addr) const;
  */
 
-//------------------------------------------------------------------------
+
 // include files
-//------------------------------------------------------------------------
+
 
 #include <sal/types.h>
 #include <cppunit/TestFixture.h>
@@ -62,9 +62,9 @@ using ::rtl::OUString;
 #define IP_PORT_FTP     21
 #define IP_PORT_MYPORT3 8884
 
-//------------------------------------------------------------------------
+
 // helper functions
-//------------------------------------------------------------------------
+
 
 class CloseSocketThread : public Thread
 {
@@ -242,14 +242,14 @@ namespace osl_ConnectorSocket
     }; // class connect
 
 
-// -----------------------------------------------------------------------------
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_ConnectorSocket::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_ConnectorSocket::connect);
 
 } // namespace osl_ConnectorSocket
 
-// -----------------------------------------------------------------------------
+
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

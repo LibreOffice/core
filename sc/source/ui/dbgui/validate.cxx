@@ -301,7 +301,7 @@ bool lclGetStringListFromFormula( OUString& rStringList, const OUString& rFmlaSt
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 ScTPValidationValue::ScTPValidationValue( Window* pParent, const SfxItemSet& rArgSet ) :
     SfxTabPage( pParent, ScResId( TP_VALIDATION_VALUES ), rArgSet ),
@@ -611,7 +611,7 @@ IMPL_LINK( ScTPValidationValue, KillFocusHdl, Window *, pWnd )
     return 0;
 }
 
-// ----------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl)
 {
@@ -693,27 +693,27 @@ ScTPValidationHelp::ScTPValidationHelp( Window*         pParent,
     Init();
 }
 
-// -----------------------------------------------------------------------
+
 
 ScTPValidationHelp::~ScTPValidationHelp()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTPValidationHelp::Init()
 {
     pTsbHelp->EnableTriState( false );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16* ScTPValidationHelp::GetRanges()
 {
     return pValueRanges;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* ScTPValidationHelp::Create( Window* pParent,
                                          const SfxItemSet&  rArgSet )
@@ -721,7 +721,7 @@ SfxTabPage* ScTPValidationHelp::Create( Window* pParent,
     return ( new ScTPValidationHelp( pParent, rArgSet ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTPValidationHelp::Reset( const SfxItemSet& rArgSet )
 {
@@ -743,7 +743,7 @@ void ScTPValidationHelp::Reset( const SfxItemSet& rArgSet )
         pEdInputHelp->SetText( EMPTY_OUSTRING );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool ScTPValidationHelp::FillItemSet( SfxItemSet& rArgSet )
 {
@@ -776,13 +776,13 @@ ScTPValidationError::ScTPValidationError( Window*           pParent,
     Init();
 }
 
-// -----------------------------------------------------------------------
+
 
 ScTPValidationError::~ScTPValidationError()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTPValidationError::Init()
 {
@@ -795,14 +795,14 @@ void ScTPValidationError::Init()
     SelectActionHdl( NULL );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16* ScTPValidationError::GetRanges()
 {
     return pValueRanges;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* ScTPValidationError::Create( Window*    pParent,
                                          const SfxItemSet&  rArgSet )
@@ -810,7 +810,7 @@ SfxTabPage* ScTPValidationError::Create( Window*    pParent,
     return ( new ScTPValidationError( pParent, rArgSet ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTPValidationError::Reset( const SfxItemSet& rArgSet )
 {
@@ -839,7 +839,7 @@ void ScTPValidationError::Reset( const SfxItemSet& rArgSet )
     SelectActionHdl( NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool ScTPValidationError::FillItemSet( SfxItemSet& rArgSet )
 {
@@ -851,7 +851,7 @@ sal_Bool ScTPValidationError::FillItemSet( SfxItemSet& rArgSet )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScTPValidationError, SelectActionHdl)
 {
@@ -865,7 +865,7 @@ IMPL_LINK_NOARG(ScTPValidationError, SelectActionHdl)
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScTPValidationError, ClickSearchHdl)
 {

@@ -31,7 +31,7 @@ namespace svxform
     //====================================================================
     //= DelayedEvent
     //====================================================================
-    //--------------------------------------------------------------------
+
     void DelayedEvent::Call( void* _pArg )
     {
         CancelPendingCall();
@@ -40,7 +40,7 @@ namespace svxform
         m_nEventId = Application::PostUserEvent( LINK( this, DelayedEvent, OnCall ), _pArg );
     }
 
-    //--------------------------------------------------------------------
+
     void DelayedEvent::CancelPendingCall()
     {
         if ( m_nEventId )
@@ -48,7 +48,7 @@ namespace svxform
         m_nEventId = 0;
     }
 
-    //--------------------------------------------------------------------
+
     IMPL_LINK( DelayedEvent, OnCall, void*, _pArg )
     {
         m_nEventId = 0;

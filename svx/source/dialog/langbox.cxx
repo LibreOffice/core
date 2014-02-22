@@ -140,7 +140,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxLanguageBox(Window *pPar
     return pListBox;
 }
 
-//------------------------------------------------------------------------
+
 void SvxLanguageBox::Init()
 {
     m_pLangTable = new SvtLanguageTable;
@@ -175,7 +175,7 @@ void SvxLanguageBox::Init()
         m_nLangList = LANG_LIST_ALL;
     }
 }
-//------------------------------------------------------------------------
+
 
 SvxLanguageBox::~SvxLanguageBox()
 {
@@ -183,7 +183,7 @@ SvxLanguageBox::~SvxLanguageBox()
     delete m_pLangTable;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SvxLanguageBox::ImplInsertImgEntry( const OUString& rEntry, sal_uInt16 nPos, bool bChecked )
 {
@@ -195,7 +195,7 @@ sal_uInt16 SvxLanguageBox::ImplInsertImgEntry( const OUString& rEntry, sal_uInt1
     return nRet;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxLanguageBox::SetLanguageList( sal_Int16 nLangList,
         sal_Bool bHasLangNone, sal_Bool bLangNoneIsLangAll, sal_Bool bCheckSpellAvail )
@@ -318,14 +318,14 @@ void SvxLanguageBox::SetLanguageList( sal_Int16 nLangList,
     }
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SvxLanguageBox::InsertLanguage( const LanguageType nLangType, sal_uInt16 nPos )
 {
     return ImplInsertLanguage( nLangType, nPos, ::com::sun::star::i18n::ScriptType::WEAK );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SvxLanguageBox::ImplInsertLanguage( const LanguageType nLangType, sal_uInt16 nPos, sal_Int16 nType )
 {
@@ -381,21 +381,21 @@ sal_uInt16 SvxLanguageBox::ImplInsertLanguage( const LanguageType nLangType, sal
     return nAt;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SvxLanguageBox::InsertDefaultLanguage( sal_Int16 nType, sal_uInt16 nPos )
 {
     return ImplInsertLanguage( LANGUAGE_SYSTEM, nPos, nType );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SvxLanguageBox::InsertSystemLanguage( sal_uInt16 nPos )
 {
     return ImplInsertLanguage( LANGUAGE_USER_SYSTEM_CONFIG, nPos, ::com::sun::star::i18n::ScriptType::WEAK );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SvxLanguageBox::InsertLanguage( const LanguageType nLangType,
         sal_Bool bCheckEntry, sal_uInt16 nPos )
@@ -421,7 +421,7 @@ sal_uInt16 SvxLanguageBox::InsertLanguage( const LanguageType nLangType,
     return nAt;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxLanguageBox::RemoveLanguage( const LanguageType eLangType )
 {
@@ -431,7 +431,7 @@ void SvxLanguageBox::RemoveLanguage( const LanguageType eLangType )
         RemoveEntry( nAt );
 }
 
-//------------------------------------------------------------------------
+
 
 LanguageType SvxLanguageBox::GetSelectLanguage() const
 {
@@ -443,7 +443,7 @@ LanguageType SvxLanguageBox::GetSelectLanguage() const
         return LanguageType( LANGUAGE_DONTKNOW );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxLanguageBox::SelectLanguage( const LanguageType eLangType, sal_Bool bSelect )
 {
@@ -460,7 +460,7 @@ void SvxLanguageBox::SelectLanguage( const LanguageType eLangType, sal_Bool bSel
         SelectEntryPos( nAt, bSelect );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SvxLanguageBox::IsLanguageSelected( const LanguageType eLangType ) const
 {

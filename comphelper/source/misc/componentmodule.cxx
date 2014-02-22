@@ -54,12 +54,12 @@ namespace comphelper
         ~OModuleImpl();
     };
 
-    //-------------------------------------------------------------------------
+
     OModuleImpl::OModuleImpl()
     {
     }
 
-    //-------------------------------------------------------------------------
+
     OModuleImpl::~OModuleImpl()
     {
     }
@@ -67,7 +67,7 @@ namespace comphelper
     //=========================================================================
     //= OModule
     //=========================================================================
-    //-------------------------------------------------------------------------
+
     OModule::OModule()
         : m_nClients(0)
         , m_pImpl(new OModuleImpl)
@@ -79,7 +79,7 @@ namespace comphelper
         delete m_pImpl;
     }
 
-    //-------------------------------------------------------------------------
+
     void OModule::registerClient( OModule::ClientAccess )
     {
         ::osl::MutexGuard aGuard(m_aMutex);
@@ -87,7 +87,7 @@ namespace comphelper
             onFirstClient();
     }
 
-    //-------------------------------------------------------------------------
+
     void OModule::revokeClient( OModule::ClientAccess )
     {
         ::osl::MutexGuard aGuard(m_aMutex);
@@ -95,17 +95,17 @@ namespace comphelper
             onLastClient();
     }
 
-    //--------------------------------------------------------------------------
+
     void OModule::onFirstClient()
     {
     }
 
-    //--------------------------------------------------------------------------
+
     void OModule::onLastClient()
     {
     }
 
-    //--------------------------------------------------------------------------
+
     void OModule::registerImplementation( const ComponentDescription& _rComp )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -115,7 +115,7 @@ namespace comphelper
         m_pImpl->m_aRegisteredComponents.push_back( _rComp );
     }
 
-    //--------------------------------------------------------------------------
+
     void OModule::registerImplementation( const OUString& _rImplementationName, const ::com::sun::star::uno::Sequence< OUString >& _rServiceNames,
         ::cppu::ComponentFactoryFunc _pCreateFunction, FactoryInstantiation _pFactoryFunction )
     {
@@ -123,7 +123,7 @@ namespace comphelper
         registerImplementation( aComponent );
     }
 
-    //--------------------------------------------------------------------------
+
     void* OModule::getComponentFactory( const sal_Char* _pImplementationName )
     {
         Reference< XInterface > xFactory( getComponentFactory(
@@ -131,7 +131,7 @@ namespace comphelper
         return xFactory.get();
     }
 
-    //--------------------------------------------------------------------------
+
     Reference< XInterface > OModule::getComponentFactory( const OUString& _rImplementationName )
     {
         Reference< XInterface > xReturn;

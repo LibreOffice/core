@@ -46,12 +46,12 @@
 
 using namespace connectivity::skeleton;
 
-//------------------------------------------------------------------------------
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
-// --------------------------------------------------------------------------------
+
 OConnection::OConnection(SkeletonDriver*    _pDriver)
                          : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
                          OMetaConnection_BASE(m_aMutex),
@@ -63,7 +63,7 @@ OConnection::OConnection(SkeletonDriver*    _pDriver)
 {
     m_pDriver->acquire();
 }
-//-----------------------------------------------------------------------------
+
 OConnection::~OConnection()
 {
     if(!isClosed())
@@ -71,13 +71,13 @@ OConnection::~OConnection()
     m_pDriver->release();
     m_pDriver = NULL;
 }
-//-----------------------------------------------------------------------------
+
 void SAL_CALL OConnection::release() throw()
 {
     relase_ChildImpl();
 }
-// -----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+
+
 void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     osl_atomic_increment( &m_refCount );
@@ -132,10 +132,10 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     osl_atomic_decrement( &m_refCount );
 }
 // XServiceInfo
-// --------------------------------------------------------------------------------
+
 IMPLEMENT_SERVICE_INFO(OConnection, "com.sun.star.sdbc.drivers.skeleton.OConnection", "com.sun.star.sdbc.Connection")
 
-// --------------------------------------------------------------------------------
+
 Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -147,7 +147,7 @@ Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLExcep
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
     return xReturn;
 }
-// --------------------------------------------------------------------------------
+
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -163,7 +163,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
     return xReturn;
 }
-// --------------------------------------------------------------------------------
+
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -172,7 +172,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::
     // not implemented yet :-) a task to do
     return NULL;
 }
-// --------------------------------------------------------------------------------
+
 ::rtl::OUString SAL_CALL OConnection::nativeSQL( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -180,14 +180,14 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::
 
     return _sSql;
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::setAutoCommit( sal_Bool autoCommit ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
     // here you  have to set your commit mode please have a look at the jdbc documentation to get a clear explanation
 }
-// --------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OConnection::getAutoCommit(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -197,7 +197,7 @@ sal_Bool SAL_CALL OConnection::getAutoCommit(  ) throw(SQLException, RuntimeExce
 
     return sal_True;
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::commit(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -205,7 +205,7 @@ void SAL_CALL OConnection::commit(  ) throw(SQLException, RuntimeException)
 
     // when you database does support transactions you should commit here
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::rollback(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -214,7 +214,7 @@ void SAL_CALL OConnection::rollback(  ) throw(SQLException, RuntimeException)
 
     // same as commit but for the other case
 }
-// --------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OConnection::isClosed(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -222,7 +222,7 @@ sal_Bool SAL_CALL OConnection::isClosed(  ) throw(SQLException, RuntimeException
     // just simple -> we are close when we are disposed that means someone called dispose(); (XComponent)
     return OConnection_BASE::rBHelper.bDisposed;
 }
-// --------------------------------------------------------------------------------
+
 Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -239,7 +239,7 @@ Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLEx
 
     return xMetaData;
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::setReadOnly( sal_Bool readOnly ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -247,7 +247,7 @@ void SAL_CALL OConnection::setReadOnly( sal_Bool readOnly ) throw(SQLException, 
 
     // set you connection to readonly
 }
-// --------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -256,7 +256,7 @@ sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeExcepti
     // return if your connection to readonly
     return sal_False;
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -264,7 +264,7 @@ void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQ
 
     // if your database doesn't work with catalogs you go to next method otherwise you kjnow what to do
 }
-// --------------------------------------------------------------------------------
+
 ::rtl::OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -274,7 +274,7 @@ void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQ
     // return your current catalog
     return ::rtl::OUString();
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 level ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -283,7 +283,7 @@ void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 level ) throw(SQLE
     // set your isolation level
     // please have a look at @see com.sun.star.sdbc.TransactionIsolation
 }
-// --------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -293,7 +293,7 @@ sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, 
     // please have a look at @see com.sun.star.sdbc.TransactionIsolation
     return TransactionIsolation::NONE;
 }
-// --------------------------------------------------------------------------------
+
 Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getTypeMap(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -303,12 +303,12 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getT
 
     return NULL;
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
 {
     // the other way around
 }
-// --------------------------------------------------------------------------------
+
 // XCloseable
 void SAL_CALL OConnection::close(  ) throw(SQLException, RuntimeException)
 {
@@ -320,19 +320,19 @@ void SAL_CALL OConnection::close(  ) throw(SQLException, RuntimeException)
     }
     dispose();
 }
-// --------------------------------------------------------------------------------
+
 // XWarningsSupplier
 Any SAL_CALL OConnection::getWarnings(  ) throw(SQLException, RuntimeException)
 {
     // when you collected some warnings -> return it
     return Any();
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
     // you should clear your collected warnings here
 }
-//--------------------------------------------------------------------
+
 void OConnection::buildTypeInfo() throw( SQLException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -377,7 +377,7 @@ void OConnection::buildTypeInfo() throw( SQLException)
     Reference< XCloseable> xClose(xRs,UNO_QUERY);
     xClose->close();
 }
-//------------------------------------------------------------------------------
+
 void OConnection::disposing()
 {
     // we noticed that we should be destroied in near future so we have to dispose our statements
@@ -397,7 +397,7 @@ void OConnection::disposing()
     dispose_ChildImpl();
     OConnection_BASE::disposing();
 }
-// -----------------------------------------------------------------------------
+
 
 
 

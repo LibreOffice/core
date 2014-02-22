@@ -268,7 +268,7 @@ void SfxObjectShell::PrintExec_Impl(SfxRequest &rReq)
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxObjectShell::PrintState_Impl(SfxItemSet &rSet)
 {
@@ -282,7 +282,7 @@ void SfxObjectShell::PrintState_Impl(SfxItemSet &rSet)
     rSet.Put( SfxBoolItem( SID_PRINTOUT, bPrinting ) );
 }
 
-//--------------------------------------------------------------------
+
 
 sal_Bool SfxObjectShell::APISaveAs_Impl
 (
@@ -421,7 +421,7 @@ uno::Sequence< document::CmisVersion > SfxObjectShell::GetCmisVersions( )
     }
     return uno::Sequence< document::CmisVersion > ( );
 }
-//--------------------------------------------------------------------
+
 
 void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 {
@@ -926,7 +926,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
     rReq.Done();
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 {
@@ -1148,7 +1148,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxObjectShell::ExecProps_Impl(SfxRequest &rReq)
 {
@@ -1190,7 +1190,7 @@ void SfxObjectShell::ExecProps_Impl(SfxRequest &rReq)
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxObjectShell::StateProps_Impl(SfxItemSet &rSet)
 {
@@ -1269,7 +1269,7 @@ void SfxObjectShell::StateProps_Impl(SfxItemSet &rSet)
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxObjectShell::ExecView_Impl(SfxRequest &rReq)
 {
@@ -1306,7 +1306,7 @@ void SfxObjectShell::ExecView_Impl(SfxRequest &rReq)
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxObjectShell::StateView_Impl(SfxItemSet& /*rSet*/)
 {

@@ -431,7 +431,7 @@ void SAL_CALL OPreparedStatement::setTimestamp(sal_Int32 nIndex, const DateTime&
 
     setValue< ISC_TIMESTAMP >(nIndex, aISCTimestamp, SQL_TIMESTAMP);
 }
-// -------------------------------------------------------------------------
+
 
 // void OPreaparedStatement::set
 void OPreparedStatement::openBlobForWriting(isc_blob_handle& rBlobHandle, ISC_QUAD& rBlobId)
@@ -526,7 +526,7 @@ void SAL_CALL OPreparedStatement::setBlob(sal_Int32 nParameterIndex,
     setValue< ISC_QUAD >(nParameterIndex, aBlobId, SQL_BLOB);
 }
 
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setArray( sal_Int32 parameterIndex, const Reference< XArray >& x ) throw(SQLException, RuntimeException)
 {
@@ -536,7 +536,7 @@ void SAL_CALL OPreparedStatement::setArray( sal_Int32 parameterIndex, const Refe
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setRef( sal_Int32 parameterIndex, const Reference< XRef >& x ) throw(SQLException, RuntimeException)
 {
@@ -546,7 +546,7 @@ void SAL_CALL OPreparedStatement::setRef( sal_Int32 parameterIndex, const Refere
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const Any& x, sal_Int32 sqlType, sal_Int32 scale ) throw(SQLException, RuntimeException)
 {
@@ -558,7 +558,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
     ::osl::MutexGuard aGuard( m_aMutex );
 
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName ) throw(SQLException, RuntimeException)
 {
@@ -569,7 +569,7 @@ void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_I
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x ) throw(SQLException, RuntimeException)
 {
@@ -623,7 +623,7 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
 
     setValue< ISC_QUAD >(nParameterIndex, aBlobId, SQL_BLOB);
 }
-// -------------------------------------------------------------------------
+
 
 
 void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
@@ -635,7 +635,7 @@ void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, 
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
@@ -646,7 +646,7 @@ void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, con
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, RuntimeException)
 {
@@ -671,7 +671,7 @@ Sequence< sal_Int32 > SAL_CALL OPreparedStatement::executeBatch()
     // Unsupported by firebird
     return Sequence< sal_Int32 >();
 }
-// -------------------------------------------------------------------------
+
 void OPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
 {
     switch(nHandle)

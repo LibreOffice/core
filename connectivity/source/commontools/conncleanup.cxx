@@ -42,7 +42,7 @@ namespace dbtools
     //=====================================================================
     //= OAutoConnectionDisposer
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OAutoConnectionDisposer::OAutoConnectionDisposer(const Reference< XRowSet >& _rxRowSet, const Reference< XConnection >& _rxConnection)
         :m_xRowSet( _rxRowSet )
         ,m_bRSListening( sal_False )
@@ -66,7 +66,7 @@ namespace dbtools
         }
     }
 
-    //---------------------------------------------------------------------
+
     void OAutoConnectionDisposer::startPropertyListening( const Reference< XPropertySet >& _rxRowSet )
     {
         try
@@ -80,7 +80,7 @@ namespace dbtools
         }
     }
 
-    //---------------------------------------------------------------------
+
     void OAutoConnectionDisposer::stopPropertyListening( const Reference< XPropertySet >& _rxEventSource )
     {
         // prevent deletion of ourself while we're herein
@@ -101,7 +101,7 @@ namespace dbtools
         }
     }
 
-    //---------------------------------------------------------------------
+
     void OAutoConnectionDisposer::startRowSetListening()
     {
         OSL_ENSURE( !m_bRSListening, "OAutoConnectionDisposer::startRowSetListening: already listening!" );
@@ -117,7 +117,7 @@ namespace dbtools
         m_bRSListening = sal_True;
     }
 
-    //---------------------------------------------------------------------
+
     void OAutoConnectionDisposer::stopRowSetListening()
     {
         OSL_ENSURE( m_bRSListening, "OAutoConnectionDisposer::stopRowSetListening: not listening!" );
@@ -132,7 +132,7 @@ namespace dbtools
         m_bRSListening = sal_False;
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OAutoConnectionDisposer::propertyChange( const PropertyChangeEvent& _rEvent ) throw (RuntimeException)
     {
         if ( _rEvent.PropertyName.equals( getActiveConnectionPropertyName() ) )
@@ -184,7 +184,7 @@ namespace dbtools
         }
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OAutoConnectionDisposer::disposing( const EventObject& _rSource ) throw (RuntimeException)
     {
         // the rowset is beeing disposed, and nobody has set a new ActiveConnection in the meantime
@@ -196,7 +196,7 @@ namespace dbtools
         if ( isPropertyListening() )
             stopPropertyListening( Reference< XPropertySet >( _rSource.Source, UNO_QUERY ) );
     }
-    //---------------------------------------------------------------------
+
     void OAutoConnectionDisposer::clearConnection()
     {
         try
@@ -212,22 +212,22 @@ namespace dbtools
             OSL_FAIL("OAutoConnectionDisposer::clearConnection: caught an exception!");
         }
     }
-    //---------------------------------------------------------------------
+
     void SAL_CALL OAutoConnectionDisposer::cursorMoved( const ::com::sun::star::lang::EventObject& /*event*/ ) throw (::com::sun::star::uno::RuntimeException)
     {
     }
-    //---------------------------------------------------------------------
+
     void SAL_CALL OAutoConnectionDisposer::rowChanged( const ::com::sun::star::lang::EventObject& /*event*/ ) throw (::com::sun::star::uno::RuntimeException)
     {
     }
-    //---------------------------------------------------------------------
+
     void SAL_CALL OAutoConnectionDisposer::rowSetChanged( const ::com::sun::star::lang::EventObject& /*event*/ ) throw (::com::sun::star::uno::RuntimeException)
     {
         stopRowSetListening();
         clearConnection();
 
     }
-    //---------------------------------------------------------------------
+
 
 //.........................................................................
 }   // namespace dbtools

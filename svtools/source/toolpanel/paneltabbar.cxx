@@ -127,13 +127,13 @@ namespace svt
     //==================================================================================================================
     //= VCLItemRenderer - implementation
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     void VCLItemRenderer::renderBackground() const
     {
         getTargetDevice().DrawRect( Rectangle( Point(), getTargetDevice().GetOutputSizePixel() ) );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Rectangle VCLItemRenderer::calculateDecorations( const Rectangle& i_rContentArea, const ItemFlags i_nItemFlags ) const
     {
         (void)i_nItemFlags;
@@ -141,14 +141,14 @@ namespace svt
         return i_rContentArea;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void VCLItemRenderer::preRenderItem( const Rectangle& i_rContentRect, const ItemFlags i_nItemFlags ) const
     {
         (void)i_rContentRect;
         (void)i_nItemFlags;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void VCLItemRenderer::postRenderItem( Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const
     {
         const bool bActive = ( ( i_nItemFlags & ITEM_STATE_ACTIVE ) != 0 );
@@ -202,13 +202,13 @@ namespace svt
     //==================================================================================================================
     //= NWFToolboxItemRenderer - implementation
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     void NWFToolboxItemRenderer::renderBackground() const
     {
         getTargetDevice().DrawRect( Rectangle( Point(), getTargetDevice().GetOutputSizePixel() ) );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Rectangle NWFToolboxItemRenderer::calculateDecorations( const Rectangle& i_rContentArea, const ItemFlags i_nItemFlags ) const
     {
         // don't ask GetNativeControlRegion, this will not deliver proper results in all cases.
@@ -228,7 +228,7 @@ namespace svt
         );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void NWFToolboxItemRenderer::preRenderItem( const Rectangle& i_rContentRect, const ItemFlags i_nItemFlags ) const
     {
         const ControlState nState = lcl_ItemToControlState( i_nItemFlags );
@@ -242,7 +242,7 @@ namespace svt
             // IsNativeControlSupported returned true, previously, otherwise we would not be here ...
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void NWFToolboxItemRenderer::postRenderItem( Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const
     {
         (void)i_rActualWindow;
@@ -279,7 +279,7 @@ namespace svt
     //==================================================================================================================
     //= NWFTabItemRenderer - implementation
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     void NWFTabItemRenderer::renderBackground() const
     {
         Rectangle aBackground( Point(), getTargetDevice().GetOutputSizePixel() );
@@ -290,7 +290,7 @@ namespace svt
             CTRL_STATE_ENABLED, ImplControlValue(), OUString() );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Rectangle NWFTabItemRenderer::calculateDecorations( const Rectangle& i_rContentArea, const ItemFlags i_nItemFlags ) const
     {
         const ControlState nState( lcl_ItemToControlState( i_nItemFlags ) );
@@ -310,7 +310,7 @@ namespace svt
         return aBoundingRegion;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void NWFTabItemRenderer::preRenderItem( const Rectangle& i_rContentRect, const ItemFlags i_nItemFlags ) const
     {
         const ControlState nState = lcl_ItemToControlState( i_nItemFlags );
@@ -328,7 +328,7 @@ namespace svt
             // IsNativeControlSupported returned true, previously, otherwise we would not be here ...
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void NWFTabItemRenderer::postRenderItem( Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const
     {
         (void)i_rActualWindow;
@@ -435,7 +435,7 @@ namespace svt
     //==================================================================================================================
     namespace
     {
-        //--------------------------------------------------------------------------------------------------------------
+
     #if OSL_DEBUG_LEVEL > 0
         static void lcl_checkConsistency( const PanelTabBar_Impl& i_rImpl )
         {
@@ -464,7 +464,7 @@ namespace svt
             (void)data;
     #endif
 
-        //--------------------------------------------------------------------------------------------------------------
+
         class ClipItemRegion
         {
         public:
@@ -491,7 +491,7 @@ namespace svt
     //==================================================================================================================
     //= PanelTabBar_Impl - implementation
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     PanelTabBar_Impl::PanelTabBar_Impl( PanelTabBar& i_rTabBar, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
         :m_rTabBar( i_rTabBar )
         ,m_aGeometry( i_eItemContent )
@@ -539,7 +539,7 @@ namespace svt
         m_aScrollForward.SetAccessibleName( m_aScrollForward.GetAccessibleDescription() );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void PanelTabBar_Impl::impl_calcItemRects()
     {
         m_aItems.resize(0);
@@ -579,7 +579,7 @@ namespace svt
         m_bItemsDirty = false;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Size PanelTabBar_Impl::impl_calculateItemContentSize( const PToolPanel& i_pPanel, const TabItemContent i_eItemContent ) const
     {
         // calculate the size needed for the content
@@ -623,7 +623,7 @@ namespace svt
         return aItemContentSize;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void PanelTabBar_Impl::impl_renderItemContent( const PToolPanel& i_pPanel, const Rectangle& i_rContentArea, const TabItemContent i_eItemContent ) const
     {
         OSL_ENSURE( i_eItemContent != TABITEM_AUTO, "PanelTabBar_Impl::impl_renderItemContent: illegal TabItemContent value!" );
@@ -706,7 +706,7 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void PanelTabBar_Impl::CopyFromRenderDevice( const Rectangle& i_rLogicalRect ) const
     {
         BitmapEx aBitmap( m_aRenderDevice.GetBitmapEx(
@@ -731,7 +731,7 @@ namespace svt
         m_rTabBar.DrawBitmapEx( aActualRect.TopLeft(), aBitmap );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void PanelTabBar_Impl::InvalidateItem( const size_t i_nItemIndex, const ItemFlags i_nAdditionalItemFlags ) const
     {
         const ItemDescriptor& rItem( m_aItems[ i_nItemIndex ] );
@@ -744,7 +744,7 @@ namespace svt
         m_rTabBar.Invalidate( aActualBounds );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     ItemFlags PanelTabBar_Impl::impl_getItemFlags( const size_t i_nItemIndex ) const
     {
         ItemFlags nItemFlags( ITEM_STATE_NORMAL );
@@ -770,7 +770,7 @@ namespace svt
         return nItemFlags;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void PanelTabBar_Impl::DrawItem( const size_t i_nItemIndex, const Rectangle& i_rBoundaries ) const
     {
         const ItemDescriptor& rItem( m_aItems[ i_nItemIndex ] );
@@ -809,7 +809,7 @@ namespace svt
         m_rTabBar.SetUpdateMode( true );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void PanelTabBar_Impl::EnsureItemsCache()
     {
         if ( m_bItemsDirty == false )
@@ -822,7 +822,7 @@ namespace svt
         DBG_CHECK( *this );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void PanelTabBar_Impl::Relayout()
     {
         EnsureItemsCache();
@@ -862,7 +862,7 @@ namespace svt
         UpdateScrollButtons();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     ::boost::optional< size_t > PanelTabBar_Impl::FindItemForPoint( const Point& i_rPoint ) const
     {
         Point aPoint( IsVertical() ? i_rPoint.Y() : i_rPoint.X(), IsVertical() ? i_rPoint.X() : i_rPoint.Y() );
@@ -885,7 +885,7 @@ namespace svt
         return ::boost::optional< size_t >();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Rectangle PanelTabBar_Impl::GetItemScreenRect( const size_t i_nItemPos ) const
     {
         ENSURE_OR_RETURN( i_nItemPos < m_aItems.size(), "PanelTabBar_Impl::GetItemScreenRect: invalid item pos!", Rectangle() );
@@ -901,7 +901,7 @@ namespace svt
         );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void PanelTabBar_Impl::FocusItem( const ::boost::optional< size_t >& i_rItemPos )
     {
         // reset old focus item
@@ -917,7 +917,7 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     IMPL_LINK( PanelTabBar_Impl, OnScroll, const PushButton*, i_pButton )
     {
         if ( i_pButton == &m_aScrollBack )
@@ -938,7 +938,7 @@ namespace svt
         return 0L;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Rectangle PanelTabBar_Impl::GetActualLogicalItemRect( const Rectangle& i_rLogicalItemRect ) const
     {
         // care for the offset imposed by our geometry, i.e. whether or not we have scroll buttons
@@ -960,7 +960,7 @@ namespace svt
     //==================================================================================================================
     //= PanelTabBar_Impl
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     void PanelTabBar_Impl::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive )
     {
         EnsureItemsCache();
@@ -971,14 +971,14 @@ namespace svt
             InvalidateItem( *i_rNewActive );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void PanelTabBar_Impl::LayouterChanged( const PDeckLayouter& i_rNewLayouter )
     {
         // not interested in
         (void)i_rNewLayouter;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void PanelTabBar_Impl::Dying()
     {
         // not interested in - the notifier is a member of this instance here, so we're dying ourself at the moment
@@ -987,7 +987,7 @@ namespace svt
     //==================================================================================================================
     //= PanelTabBar
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     PanelTabBar::PanelTabBar( Window& i_rParentWindow, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
         :Control( &i_rParentWindow, 0 )
         ,m_pImpl( new PanelTabBar_Impl( *this, i_rPanelDeck, i_eAlignment, i_eItemContent ) )
@@ -995,18 +995,18 @@ namespace svt
         DBG_CHECK( *m_pImpl );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     PanelTabBar::~PanelTabBar()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     TabItemContent PanelTabBar::GetTabItemContent() const
     {
         return m_pImpl->m_aGeometry.getItemContent();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void PanelTabBar::SetTabItemContent( const TabItemContent& i_eItemContent )
     {
         m_pImpl->m_aGeometry.setItemContent( i_eItemContent );
@@ -1014,14 +1014,14 @@ namespace svt
         Invalidate();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     IToolPanelDeck& PanelTabBar::GetPanelDeck() const
     {
         DBG_CHECK( *m_pImpl );
         return m_pImpl->m_rPanelDeck;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Size PanelTabBar::GetOptimalSize() const
     {
         m_pImpl->EnsureItemsCache();
@@ -1031,14 +1031,14 @@ namespace svt
         return aOptimalSize;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void PanelTabBar::Resize()
     {
         Control::Resize();
         m_pImpl->Relayout();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void PanelTabBar::Paint( const Rectangle& i_rRect )
     {
         m_pImpl->EnsureItemsCache();
@@ -1089,7 +1089,7 @@ namespace svt
             m_pImpl->DrawItem( *aHoveredPanel, aLogicalPaintRect );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void PanelTabBar::MouseMove( const MouseEvent& i_rMouseEvent )
     {
         m_pImpl->EnsureItemsCache();
@@ -1117,7 +1117,7 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void PanelTabBar::MouseButtonDown( const MouseEvent& i_rMouseEvent )
     {
         Control::MouseButtonDown( i_rMouseEvent );
@@ -1137,7 +1137,7 @@ namespace svt
         m_pImpl->InvalidateItem( *aHitItem );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void PanelTabBar::MouseButtonUp( const MouseEvent& i_rMouseEvent )
     {
         Control::MouseButtonUp( i_rMouseEvent );
@@ -1160,7 +1160,7 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void PanelTabBar::RequestHelp( const HelpEvent& i_rHelpEvent )
     {
         m_pImpl->EnsureItemsCache();
@@ -1181,7 +1181,7 @@ namespace svt
             Help::ShowQuickHelp( this, rItem.GetCurrentRect(), sItemText );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void PanelTabBar::GetFocus()
     {
         Control::GetFocus();
@@ -1189,7 +1189,7 @@ namespace svt
             m_pImpl->FocusItem( m_pImpl->m_rPanelDeck.GetActivePanel() );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void PanelTabBar::LoseFocus()
     {
         Control::LoseFocus();
@@ -1202,7 +1202,7 @@ namespace svt
         m_pImpl->m_aFocusedItem.reset();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     class KeyInputHandler
     {
     public:
@@ -1230,7 +1230,7 @@ namespace svt
         bool            m_bHandled;
     };
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void PanelTabBar::KeyInput( const KeyEvent& i_rKeyEvent )
     {
         KeyInputHandler aKeyInputHandler( *this, i_rKeyEvent );
@@ -1291,7 +1291,7 @@ namespace svt
         aKeyInputHandler.setHandled();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void PanelTabBar::DataChanged( const DataChangedEvent& i_rDataChanedEvent )
     {
         Control::DataChanged( i_rDataChanedEvent );
@@ -1304,25 +1304,25 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool PanelTabBar::IsVertical() const
     {
         return m_pImpl->IsVertical();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     PushButton& PanelTabBar::GetScrollButton( const bool i_bForward )
     {
         return i_bForward ? m_pImpl->m_aScrollForward : m_pImpl->m_aScrollBack;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     ::boost::optional< size_t > PanelTabBar::GetFocusedPanelItem() const
     {
         return m_pImpl->m_aFocusedItem;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void PanelTabBar::FocusPanelItem( const size_t i_nItemPos )
     {
         ENSURE_OR_RETURN_VOID( i_nItemPos < m_pImpl->m_rPanelDeck.GetPanelCount(), "PanelTabBar::FocusPanelItem: illegal item pos!" );
@@ -1337,13 +1337,13 @@ namespace svt
         m_pImpl->m_aFocusedItem.reset( i_nItemPos );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Rectangle PanelTabBar::GetItemScreenRect( const size_t i_nItemPos ) const
     {
         return m_pImpl->GetItemScreenRect( i_nItemPos );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XWindowPeer > PanelTabBar::GetComponentInterface( sal_Bool i_bCreate )
     {
         Reference< XWindowPeer > xWindowPeer( Control::GetComponentInterface( sal_False ) );

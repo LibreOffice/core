@@ -51,9 +51,9 @@ CachedContentResultSetStub::~CachedContentResultSetStub()
     impl_deinit();
 }
 
-//--------------------------------------------------------------------------
+
 // XInterface methods.
-//--------------------------------------------------------------------------
+
 XINTERFACE_COMMON_IMPL( CachedContentResultSetStub )
 
 Any SAL_CALL CachedContentResultSetStub
@@ -76,9 +76,9 @@ Any SAL_CALL CachedContentResultSetStub
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
-//--------------------------------------------------------------------------
+
 // own methods.  ( inherited )
-//--------------------------------------------------------------------------
+
 
 //virtual
 void SAL_CALL CachedContentResultSetStub
@@ -122,9 +122,9 @@ void SAL_CALL CachedContentResultSetStub
     impl_notifyVetoableChangeListeners( aEvt );
 }
 
-//--------------------------------------------------------------------------
+
 // XTypeProvider methods.
-//--------------------------------------------------------------------------
+
 
 XTYPEPROVIDER_COMMON_IMPL( CachedContentResultSetStub )
 //list all interfaces exclusive baseclasses
@@ -157,17 +157,17 @@ Sequence< Type > SAL_CALL CachedContentResultSetStub
     return *pTypes;
 }
 
-//--------------------------------------------------------------------------
+
 // XServiceInfo methods.
-//--------------------------------------------------------------------------
+
 
 XSERVICEINFO_NOFACTORY_IMPL_1( CachedContentResultSetStub,
                         OUString( "com.sun.star.comp.ucb.CachedContentResultSetStub" ),
                         OUString( CACHED_CRS_STUB_SERVICE_NAME ) );
 
-//-----------------------------------------------------------------
+
 // XFetchProvider methods.
-//-----------------------------------------------------------------
+
 
 #define FETCH_XXX( impl_loadRow, loadInterface ) \
 impl_EnsureNotDisposed(); \
@@ -422,9 +422,9 @@ void SAL_CALL CachedContentResultSetStub
     }
 }
 
-//-----------------------------------------------------------------
+
 // XFetchProviderForContentAccess methods.
-//-----------------------------------------------------------------
+
 
 void SAL_CALL CachedContentResultSetStub
     ::impl_getCurrentContentIdentifierString( Any& rAny
@@ -480,11 +480,11 @@ FetchResult SAL_CALL CachedContentResultSetStub
     FETCH_XXX( impl_getCurrentContent, m_xContentAccessOrigin );
 }
 
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 // class CachedContentResultSetStubFactory
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 
 CachedContentResultSetStubFactory::CachedContentResultSetStubFactory(
         const Reference< XMultiServiceFactory > & rSMgr )
@@ -496,41 +496,41 @@ CachedContentResultSetStubFactory::~CachedContentResultSetStubFactory()
 {
 }
 
-//--------------------------------------------------------------------------
+
 // CachedContentResultSetStubFactory XInterface methods.
-//--------------------------------------------------------------------------
+
 
 XINTERFACE_IMPL_3( CachedContentResultSetStubFactory,
                    XTypeProvider,
                    XServiceInfo,
                    XCachedContentResultSetStubFactory );
 
-//--------------------------------------------------------------------------
+
 // CachedContentResultSetStubFactory XTypeProvider methods.
-//--------------------------------------------------------------------------
+
 
 XTYPEPROVIDER_IMPL_3( CachedContentResultSetStubFactory,
                       XTypeProvider,
                          XServiceInfo,
                       XCachedContentResultSetStubFactory );
 
-//--------------------------------------------------------------------------
+
 // CachedContentResultSetStubFactory XServiceInfo methods.
-//--------------------------------------------------------------------------
+
 
 XSERVICEINFO_IMPL_1( CachedContentResultSetStubFactory,
                      OUString( "com.sun.star.comp.ucb.CachedContentResultSetStubFactory" ),
                      OUString( CACHED_CRS_STUB_FACTORY_NAME ) );
 
-//--------------------------------------------------------------------------
+
 // Service factory implementation.
-//--------------------------------------------------------------------------
+
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( CachedContentResultSetStubFactory );
 
-//--------------------------------------------------------------------------
+
 // CachedContentResultSetStubFactory XCachedContentResultSetStubFactory methods.
-//--------------------------------------------------------------------------
+
 
     //virtual
 Reference< XResultSet > SAL_CALL CachedContentResultSetStubFactory

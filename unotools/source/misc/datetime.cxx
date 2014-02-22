@@ -143,7 +143,7 @@ namespace
 //.........................................................................
 namespace utl
 {
-//------------------------------------------------------------------
+
 void typeConvert(const Date& _rDate, starutil::Date& _rOut)
 {
     _rOut.Day = _rDate.GetDay();
@@ -151,13 +151,13 @@ void typeConvert(const Date& _rDate, starutil::Date& _rOut)
     _rOut.Year = _rDate.GetYear();
 }
 
-//------------------------------------------------------------------
+
 void typeConvert(const starutil::Date& _rDate, Date& _rOut)
 {
     _rOut = Date(_rDate.Day, _rDate.Month, _rDate.Year);
 }
 
-//------------------------------------------------------------------
+
 void typeConvert(const DateTime& _rDateTime, starutil::DateTime& _rOut)
 {
     _rOut.Year = _rDateTime.GetYear();
@@ -169,7 +169,7 @@ void typeConvert(const DateTime& _rDateTime, starutil::DateTime& _rOut)
     _rOut.NanoSeconds = _rDateTime.GetNanoSec();
 }
 
-//------------------------------------------------------------------
+
 void typeConvert(const starutil::DateTime& _rDateTime, DateTime& _rOut)
 {
     Date aDate(_rDateTime.Day, _rDateTime.Month, _rDateTime.Year);

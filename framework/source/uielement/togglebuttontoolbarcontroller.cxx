@@ -54,7 +54,7 @@ using namespace ::com::sun::star::util;
 namespace framework
 {
 
-// ------------------------------------------------------------------
+
 
 ToggleButtonToolbarController::ToggleButtonToolbarController(
     const Reference< XComponentContext >&    rxContext,
@@ -72,13 +72,13 @@ ToggleButtonToolbarController::ToggleButtonToolbarController(
         m_pToolbar->SetItemBits( m_nID, TIB_DROPDOWN | m_pToolbar->GetItemBits( m_nID ) );
 }
 
-// ------------------------------------------------------------------
+
 
 ToggleButtonToolbarController::~ToggleButtonToolbarController()
 {
 }
 
-// ------------------------------------------------------------------
+
 
 void SAL_CALL ToggleButtonToolbarController::dispose()
 throw ( RuntimeException )
@@ -87,7 +87,7 @@ throw ( RuntimeException )
     ComplexToolbarController::dispose();
 }
 
-// ------------------------------------------------------------------
+
 Sequence<PropertyValue> ToggleButtonToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
     Sequence<PropertyValue> aArgs( 2 );
@@ -100,7 +100,7 @@ Sequence<PropertyValue> ToggleButtonToolbarController::getExecuteArgs(sal_Int16 
     return aArgs;
 }
 
-// ------------------------------------------------------------------
+
 
 uno::Reference< awt::XWindow > SAL_CALL ToggleButtonToolbarController::createPopupWindow()
 throw (::com::sun::star::uno::RuntimeException)
@@ -133,7 +133,7 @@ throw (::com::sun::star::uno::RuntimeException)
     return xWindow;
 }
 
-// ------------------------------------------------------------------
+
 
 void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {

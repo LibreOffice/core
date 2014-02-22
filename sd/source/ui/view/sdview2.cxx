@@ -70,9 +70,9 @@ namespace sd {
 
 using namespace ::com::sun::star;
 
-// ------------------------
+
 // - SdNavigatorDropEvent -
-// ------------------------
+
 
 struct SdNavigatorDropEvent : public ExecuteDropEvent
 {
@@ -95,7 +95,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     {}
 };
 
-// -----------------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateClipboardDataObject( View*, ::Window& )
 {
@@ -162,7 +162,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     return xRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateDragDataObject( View* pWorkView, ::Window& rWindow, const Point& rDragPos )
 {
@@ -213,7 +213,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     return xRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateSelectionDataObject( View* pWorkView, ::Window& rWindow )
 {
@@ -240,7 +240,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     return xRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void View::UpdateSelectionClipboard( sal_Bool bForceDeselect )
 {
@@ -256,7 +256,7 @@ void View::UpdateSelectionClipboard( sal_Bool bForceDeselect )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void View::DoCut(::Window* )
 {
@@ -275,7 +275,7 @@ void View::DoCut(::Window* )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void View::DoCopy (::Window* pWindow)
 {
@@ -290,7 +290,7 @@ void View::DoCopy (::Window* pWindow)
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void View::DoPaste (::Window* pWindow)
 {
@@ -371,7 +371,7 @@ void View::DoPaste (::Window* pWindow)
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void View::StartDrag( const Point& rStartPos, ::Window* pWindow )
 {
@@ -404,7 +404,7 @@ void View::StartDrag( const Point& rStartPos, ::Window* pWindow )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void View::DragFinished( sal_Int8 nDropAction )
 {
@@ -468,7 +468,7 @@ void View::DragFinished( sal_Int8 nDropAction )
     mpDragSrcMarkList = NULL;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
                              ::sd::Window*, sal_uInt16, sal_uInt16 nLayer )
@@ -649,7 +649,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
     return nRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
                               ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer )
@@ -834,7 +834,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
     return nRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEvent )
 {

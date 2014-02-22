@@ -37,7 +37,7 @@
 #include "drawview.hxx"
 #include <svx/sdrhittesthelper.hxx>
 
-// -----------------------------------------------------------------------
+
 
 inline long Diff( const Point& rP1, const Point& rP2 )
 {

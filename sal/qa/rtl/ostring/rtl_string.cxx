@@ -60,7 +60,7 @@ namespace rtl_string
         CPPUNIT_TEST_SUITE_END();
     }; // class getLength
 
-// -----------------------------------------------------------------------------
+
 
     class newFromString : public CppUnit::TestFixture
     {
@@ -94,7 +94,7 @@ namespace rtl_string
         CPPUNIT_TEST_SUITE_END();
     }; // class newFromString
 
-    // -----------------------------------------------------------------------------
+
 
     class convertUStringToString : public CppUnit::TestFixture
     {
@@ -166,12 +166,12 @@ namespace rtl_string
 
 } // namespace rtl_string
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_string::getLength);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_string::newFromString);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_string::convertUStringToString);
 
-// -----------------------------------------------------------------------------
+
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

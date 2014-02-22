@@ -205,13 +205,13 @@ static void NWCalcArrowRect( const Rectangle& rButton, Rectangle& rArrow );
  *
  */
 
-//---
+
 static Rectangle NWGetButtonArea( SalX11Screen nScreen, ControlType nType, ControlPart nPart, Rectangle aAreaRect, ControlState nState,
                                 const ImplControlValue& aValue, const OUString& rCaption );
 
 static Rectangle NWGetTabItemRect( SalX11Screen nScreen, Rectangle aAreaRect );
 
-//---
+
 static Rectangle NWGetEditBoxPixmapRect( SalX11Screen nScreen, ControlType nType, ControlPart nPart, Rectangle aAreaRect, ControlState nState,
                             const ImplControlValue& aValue, const OUString& rCaption );
 
@@ -226,11 +226,11 @@ static Rectangle NWGetSpinButtonRect( SalX11Screen nScreen, ControlType nType, C
 static void NWPaintOneSpinButton( SalX11Screen nScreen, GdkPixmap * pixmap, ControlType nType, ControlPart nPart, Rectangle aAreaRect,
                             ControlState nState, const ImplControlValue& aValue,
                             const OUString& rCaption );
-//---
+
 static Rectangle NWGetComboBoxButtonRect( SalX11Screen nScreen, ControlType nType, ControlPart nPart, Rectangle aAreaRect, ControlState nState,
                             const ImplControlValue& aValue, const OUString& rCaption );
 
-//---
+
 static Rectangle NWGetListBoxButtonRect( SalX11Screen nScreen, ControlType nType, ControlPart nPart, Rectangle aAreaRect, ControlState nState,
                             const ImplControlValue& aValue, const OUString& rCaption );
 
@@ -246,10 +246,10 @@ static Rectangle NWGetToolbarRect( SalX11Screen nScreen,
                                    const OUString& rCaption );
 
 static int getFrameWidth(GtkWidget* widget);
-//---
+
 
 static Rectangle NWGetScrollButtonRect(    SalX11Screen nScreen, ControlPart nPart, Rectangle aAreaRect );
-//---
+
 
 /*********************************************************
  * PixmapCache
@@ -1622,7 +1622,7 @@ static Rectangle NWGetTabItemRect( SalX11Screen nScreen, Rectangle aAreaRect )
     return Rectangle( Point( x, y ), Size( w, h ) );
 }
 
-//-------------------------------------
+
 
 bool GtkSalGraphics::NWPaintGTKRadio( GdkDrawable* gdkDrawable,
                                       ControlType, ControlPart,
@@ -1680,7 +1680,7 @@ bool GtkSalGraphics::NWPaintGTKRadio( GdkDrawable* gdkDrawable,
     return true;
 }
 
-//-------------------------------------
+
 
 bool GtkSalGraphics::NWPaintGTKCheck( GdkDrawable* gdkDrawable,
                                       ControlType, ControlPart,
@@ -1727,7 +1727,7 @@ bool GtkSalGraphics::NWPaintGTKCheck( GdkDrawable* gdkDrawable,
     return true;
 }
 
-//-------------------------------------
+
 static void NWCalcArrowRect( const Rectangle& rButton, Rectangle& rArrow )
 {
     // Size the arrow appropriately
@@ -2068,7 +2068,7 @@ bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     return true;
 }
 
-//---
+
 
 static Rectangle NWGetScrollButtonRect(    SalX11Screen nScreen, ControlPart nPart, Rectangle aAreaRect )
 {
@@ -2151,7 +2151,7 @@ static Rectangle NWGetScrollButtonRect(    SalX11Screen nScreen, ControlPart nPa
     return( buttonRect );
 }
 
-//-------------------------------------
+
 
 bool GtkSalGraphics::NWPaintGTKEditBox( GdkDrawable* gdkDrawable,
                                         ControlType nType, ControlPart nPart,
@@ -2290,7 +2290,7 @@ static void NWPaintOneEditBox(    SalX11Screen nScreen,
 
 
 
-//-------------------------------------
+
 
 bool GtkSalGraphics::NWPaintGTKSpinBox( ControlType nType, ControlPart nPart,
                                         const Rectangle& rControlRectangle,
@@ -2396,7 +2396,7 @@ bool GtkSalGraphics::NWPaintGTKSpinBox( ControlType nType, ControlPart nPart,
     return true;
 }
 
-//---
+
 
 static Rectangle NWGetSpinButtonRect( SalX11Screen nScreen,
                                       ControlType,
@@ -2488,7 +2488,7 @@ static void NWPaintOneSpinButton( SalX11Screen nScreen,
 }
 
 
-//-------------------------------------
+
 
 bool GtkSalGraphics::NWPaintGTKComboBox( GdkDrawable* gdkDrawable,
                                          ControlType nType, ControlPart nPart,
@@ -2568,7 +2568,7 @@ bool GtkSalGraphics::NWPaintGTKComboBox( GdkDrawable* gdkDrawable,
     return true;
 }
 
-//----
+
 
 static Rectangle NWGetComboBoxButtonRect( SalX11Screen nScreen,
                                           ControlType,
@@ -2626,7 +2626,7 @@ static Rectangle NWGetComboBoxButtonRect( SalX11Screen nScreen,
     return( aButtonRect );
 }
 
-//-------------------------------------
+
 
 
 
@@ -2781,7 +2781,7 @@ bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
     return bSuccess;
 }
 
-//-------------------------------------
+
 
 bool GtkSalGraphics::NWPaintGTKListBox( GdkDrawable* gdkDrawable,
                                         ControlType nType, ControlPart nPart,
@@ -3032,7 +3032,7 @@ bool GtkSalGraphics::NWPaintGTKToolbar(
     return true;
 }
 
-//----
+
 
 bool GtkSalGraphics::NWPaintGTKMenubar(
             GdkDrawable* gdkDrawable,
@@ -3535,7 +3535,7 @@ bool GtkSalGraphics::NWPaintGTKSlider(
     return bRet;
 }
 
-//----
+
 
 static int getFrameWidth(GtkWidget* widget)
 {
@@ -3605,7 +3605,7 @@ static Rectangle NWGetListBoxButtonRect( SalX11Screen nScreen,
     return( aPartRect );
 }
 
-//----
+
 
 static Rectangle NWGetListBoxIndicatorRect( SalX11Screen nScreen,
                                             ControlType,
@@ -4224,7 +4224,7 @@ static void NWSetWidgetState( GtkWidget* widget, ControlState nState, GtkStateTy
  * Widget ensure functions - make sure cached objects are valid
  ************************************************************************/
 
-//-------------------------------------
+
 
 static void NWAddWidgetToCacheWindow( GtkWidget* widget, SalX11Screen nScreen )
 {
@@ -4257,7 +4257,7 @@ static void NWAddWidgetToCacheWindow( GtkWidget* widget, SalX11Screen nScreen )
     gWidgetDefaultFlags[ (long)widget ] = GTK_WIDGET_FLAGS( widget );
 }
 
-//-------------------------------------
+
 
 static void NWEnsureGTKButton( SalX11Screen nScreen )
 {
@@ -4268,7 +4268,7 @@ static void NWEnsureGTKButton( SalX11Screen nScreen )
     }
 }
 
-//-------------------------------------
+
 
 static void NWEnsureGTKRadio( SalX11Screen nScreen )
 {
@@ -4281,7 +4281,7 @@ static void NWEnsureGTKRadio( SalX11Screen nScreen )
     }
 }
 
-//-------------------------------------
+
 
 static void NWEnsureGTKCheck( SalX11Screen nScreen )
 {
@@ -4292,7 +4292,7 @@ static void NWEnsureGTKCheck( SalX11Screen nScreen )
     }
 }
 
-//-------------------------------------
+
 
 static void NWEnsureGTKScrollbars( SalX11Screen nScreen )
 {
@@ -4309,7 +4309,7 @@ static void NWEnsureGTKScrollbars( SalX11Screen nScreen )
     }
 }
 
-//-------------------------------------
+
 
 static void NWEnsureGTKArrow( SalX11Screen nScreen )
 {
@@ -4324,7 +4324,7 @@ static void NWEnsureGTKArrow( SalX11Screen nScreen )
     }
 }
 
-//-------------------------------------
+
 
 static void NWEnsureGTKEditBox( SalX11Screen nScreen )
 {
@@ -4335,7 +4335,7 @@ static void NWEnsureGTKEditBox( SalX11Screen nScreen )
     }
 }
 
-//-------------------------------------
+
 
 static void NWEnsureGTKSpinButton( SalX11Screen nScreen )
 {
@@ -4352,7 +4352,7 @@ static void NWEnsureGTKSpinButton( SalX11Screen nScreen )
     }
 }
 
-//-------------------------------------
+
 
 static void NWEnsureGTKNotebook( SalX11Screen nScreen )
 {
@@ -4363,7 +4363,7 @@ static void NWEnsureGTKNotebook( SalX11Screen nScreen )
     }
 }
 
-//-------------------------------------
+
 
 static void NWEnsureGTKOptionMenu( SalX11Screen nScreen )
 {
@@ -4374,7 +4374,7 @@ static void NWEnsureGTKOptionMenu( SalX11Screen nScreen )
     }
 }
 
-//-------------------------------------
+
 
 static void NWEnsureGTKCombo( SalX11Screen nScreen )
 {
@@ -4394,7 +4394,7 @@ static void NWEnsureGTKCombo( SalX11Screen nScreen )
     }
 }
 
-//-------------------------------------
+
 
 static void NWEnsureGTKScrolledWindow( SalX11Screen nScreen )
 {
@@ -4408,7 +4408,7 @@ static void NWEnsureGTKScrolledWindow( SalX11Screen nScreen )
     }
 }
 
-//-------------------------------------
+
 
 static void NWEnsureGTKToolbar( SalX11Screen nScreen )
 {
@@ -4439,7 +4439,7 @@ static void NWEnsureGTKToolbar( SalX11Screen nScreen )
     }
 }
 
-//-------------------------------------
+
 
 static void NWEnsureGTKMenubar( SalX11Screen nScreen )
 {

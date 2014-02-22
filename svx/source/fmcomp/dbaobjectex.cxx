@@ -46,7 +46,7 @@ namespace svx
     //====================================================================
     //= OComponentTransferable
     //====================================================================
-    //--------------------------------------------------------------------
+
     OComponentTransferable::OComponentTransferable(const OUString& _rDatasourceOrLocation
             ,const Reference< XContent>& _xContent)
     {
@@ -55,7 +55,7 @@ namespace svx
     }
 
 
-    //--------------------------------------------------------------------
+
     sal_uInt32 OComponentTransferable::getDescriptorFormatId(sal_Bool _bExtractForm)
     {
         static sal_uInt32 s_nReportFormat = (sal_uInt32)-1;
@@ -73,7 +73,7 @@ namespace svx
         return _bExtractForm ? s_nFormFormat : s_nReportFormat;
     }
 
-    //--------------------------------------------------------------------
+
     void OComponentTransferable::AddSupportedFormats()
     {
         sal_Bool bForm = sal_True;
@@ -89,7 +89,7 @@ namespace svx
         AddFormat(getDescriptorFormatId(bForm));
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool OComponentTransferable::GetData( const DataFlavor& _rFlavor )
     {
         const sal_uInt32 nFormatId = SotExchange::GetFormat(_rFlavor);
@@ -99,7 +99,7 @@ namespace svx
         return sal_False;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool OComponentTransferable::canExtractComponentDescriptor(const DataFlavorExVector& _rFlavors,sal_Bool _bForm )
     {
         DataFlavorExVector::const_iterator aEnd = _rFlavors.end();
@@ -115,7 +115,7 @@ namespace svx
         return sal_False;
     }
 
-    //--------------------------------------------------------------------
+
     ODataAccessDescriptor OComponentTransferable::extractComponentDescriptor(const TransferableDataHelper& _rData)
     {
         sal_Bool bForm = _rData.HasFormat(getDescriptorFormatId(sal_True));

@@ -42,21 +42,21 @@ namespace abp
         m_aInvokeAdminDialog.SetClickHdl( LINK(this, AdminDialogInvokationPage, OnInvokeAdminDialog) );
     }
 
-    //---------------------------------------------------------------------
+
     void AdminDialogInvokationPage::ActivatePage()
     {
         AddressBookSourcePage::ActivatePage();
         m_aInvokeAdminDialog.GrabFocus();
     }
 
-    //---------------------------------------------------------------------
+
     void AdminDialogInvokationPage::implUpdateErrorMessage()
     {
         const sal_Bool bIsConnected = getDialog()->getDataSource().isConnected();
         m_aErrorMessage.Show( !bIsConnected );
     }
 
-    //---------------------------------------------------------------------
+
     void AdminDialogInvokationPage::initializePage()
     {
         AddressBookSourcePage::initializePage();
@@ -64,7 +64,7 @@ namespace abp
             // if we're entering this page, we assume we had no connection trial with this data source
     }
 
-    //---------------------------------------------------------------------
+
     void AdminDialogInvokationPage::implTryConnect()
     {
         getDialog()->connectToDataSource( sal_True );
@@ -80,13 +80,13 @@ namespace abp
             getDialog()->travelNext();
     }
 
-    //---------------------------------------------------------------------
+
     bool AdminDialogInvokationPage::canAdvance() const
     {
         return AddressBookSourcePage::canAdvance() && getDialog()->getDataSource().isConnected();
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK( AdminDialogInvokationPage, OnInvokeAdminDialog, void*, /*NOTINTERESTEDIN*/ )
     {
         OAdminDialogInvokation aInvokation( getORB(), getDialog()->getDataSource().getDataSource(), getDialog() );

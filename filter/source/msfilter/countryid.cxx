@@ -22,7 +22,7 @@
 #include <algorithm>
 #include <sal/macros.h>
 
-// ----------------------------------------------------------------------------
+
 
 namespace msfilter {
 
@@ -30,7 +30,7 @@ namespace msfilter {
 
 namespace {
 
-// ----------------------------------------------------------------------------
+
 
 /** Table entry for Windows country ID <-> language type conversion.
 
@@ -57,7 +57,7 @@ struct CountryEntry
     bool                        mbUseSubLang;   /// false = Primary only, true = Primary and sub language.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Table for Windows country ID <-> language type conversion.
 

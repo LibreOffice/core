@@ -96,7 +96,7 @@ DockingAreaWindow::~DockingAreaWindow()
     delete mpImplData;
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingAreaWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -109,7 +109,7 @@ void DockingAreaWindow::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplInvalidateMenubar( DockingAreaWindow* pThis )
 {
@@ -138,7 +138,7 @@ void DockingAreaWindow::StateChanged( StateChangedType nType )
         ImplInvalidateMenubar( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool DockingAreaWindow::IsHorizontal() const
 {
@@ -160,7 +160,7 @@ WindowAlign DockingAreaWindow::GetAlign() const
     return mpImplData->meAlign;
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingAreaWindow::Paint( const Rectangle& )
 {
@@ -263,6 +263,6 @@ void DockingAreaWindow::Resize()
         Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

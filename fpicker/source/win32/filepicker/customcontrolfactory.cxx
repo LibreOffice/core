@@ -24,9 +24,9 @@
 #include "dialogcustomcontrols.hxx"
 #include <osl/diagnose.h>
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 CCustomControl* CCustomControlFactory::CreateCustomControl(HWND aControlHandle, HWND aParentHandle)
 {
@@ -66,9 +66,9 @@ CCustomControl* CCustomControlFactory::CreateCustomControl(HWND aControlHandle, 
     return new CDummyCustomControl(aControlHandle,aParentHandle);
 }
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 CCustomControl* CCustomControlFactory::CreateCustomControlContainer()
 {

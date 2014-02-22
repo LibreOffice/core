@@ -413,7 +413,7 @@ bool operator == (const SwFormToken & rToken, FormTokenType eType)
     return rToken.eTokenType == eType;
 }
 
-//-----------------------------------------------------------------------------
+
 void SwForm::AdjustTabStops(SwDoc& rDoc, sal_Bool bInsertNewTapStops) // #i21237#
 {
     for(sal_uInt16 nLevel = 1; nLevel < GetFormMax(); nLevel++)

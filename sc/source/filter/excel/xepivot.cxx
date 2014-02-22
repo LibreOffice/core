@@ -92,7 +92,7 @@ static const sal_uInt16 spnPCItemFlags[] =
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 XclExpPCItem::XclExpPCItem( const OUString& rText ) :
     XclExpRecord( (!rText.isEmpty()) ? EXC_ID_SXSTRING : EXC_ID_SXEMPTY, 0 ),
@@ -133,7 +133,7 @@ XclExpPCItem::XclExpPCItem( bool bValue ) :
     SetBool( bValue );
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool XclExpPCItem::EqualsText( const OUString& rText ) const
 {
@@ -155,7 +155,7 @@ bool XclExpPCItem::EqualsBool( bool bValue ) const
     return GetBool() && (*GetBool() == bValue);
 }
 
-// ----------------------------------------------------------------------------
+
 
 void XclExpPCItem::WriteBody( XclExpStream& rStrm )
 {
@@ -917,7 +917,7 @@ void XclExpPivotCache::WriteSxindexlistList( XclExpStream& rStrm ) const
 
 namespace {
 
-// ----------------------------------------------------------------------------
+
 
 /** Returns a display string for a data field containing the field name and aggregation function. */
 OUString lclGetDataFieldCaption( const OUString& rFieldName, GeneralFunction eFunc )
@@ -947,7 +947,7 @@ OUString lclGetDataFieldCaption( const OUString& rFieldName, GeneralFunction eFu
     return( aCaption );
 }
 
-// ----------------------------------------------------------------------------
+
 
 } // namespace
 
@@ -1836,7 +1836,7 @@ void XclExpPivotRecWrapper::SaveXml( XclExpXmlStream& rStrm )
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 XclExpPivotTableManager::XclExpPivotTableManager( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),

@@ -400,7 +400,7 @@ OUString    OMarkableOutputStreamTest_getImplementationName() throw ()
 
 
 
-//-----------------------------------------------------
+
 // Input stream
 
 

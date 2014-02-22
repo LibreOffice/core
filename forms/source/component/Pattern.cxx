@@ -43,25 +43,25 @@ namespace frm
 //==================================================================
 // OPatternControl
 //==================================================================
-//------------------------------------------------------------------
+
 OPatternControl::OPatternControl(const Reference<XComponentContext>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_PATTERNFIELD)
 {
 }
 
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OPatternControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OPatternControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> OPatternControl::_getTypes()
 {
     return OBoundControl::_getTypes();
 }
 
-//------------------------------------------------------------------------------
+
 StringSequence OPatternControl::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
@@ -75,20 +75,20 @@ StringSequence OPatternControl::getSupportedServiceNames() throw()
 //==================================================================
 // OPatternModel
 //==================================================================
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OPatternModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OPatternModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> OPatternModel::_getTypes()
 {
     return OEditBaseModel::_getTypes();
 }
 
-//------------------------------------------------------------------
-//------------------------------------------------------------------
+
+
 OPatternModel::OPatternModel(const Reference<XComponentContext>& _rxFactory)
     :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_PATTERNFIELD, FRM_SUN_CONTROL_PATTERNFIELD, sal_False, sal_False )
                                     // use the old control name for compytibility reasons
@@ -98,23 +98,23 @@ OPatternModel::OPatternModel(const Reference<XComponentContext>& _rxFactory)
     initValueProperty( PROPERTY_TEXT, PROPERTY_ID_TEXT );
 }
 
-//------------------------------------------------------------------
+
 OPatternModel::OPatternModel( const OPatternModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OEditBaseModel( _pOriginal, _rxFactory )
 {
 }
 
-//------------------------------------------------------------------
+
 OPatternModel::~OPatternModel()
 {
 }
 
 // XCloneable
-//------------------------------------------------------------------------------
+
 IMPLEMENT_DEFAULT_CLONING( OPatternModel )
 
 // XServiceInfo
-//------------------------------------------------------------------------------
+
 StringSequence SAL_CALL OPatternModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
@@ -127,7 +127,7 @@ StringSequence SAL_CALL OPatternModel::getSupportedServiceNames() throw()
 }
 
 
-//------------------------------------------------------------------------------
+
 void OPatternModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 4, OEditBaseModel )
@@ -138,13 +138,13 @@ void OPatternModel::describeFixedProperties( Sequence< Property >& _rProps ) con
     END_DESCRIBE_PROPERTIES();
 }
 
-//------------------------------------------------------------------------------
+
 OUString SAL_CALL OPatternModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return OUString(FRM_COMPONENT_PATTERNFIELD);  // old (non-sun) name for compatibility !
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OPatternModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aNewValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
@@ -178,7 +178,7 @@ sal_Bool OPatternModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     return sal_True;
 }
 
-//------------------------------------------------------------------------------
+
 void OPatternModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 {
     OEditBaseModel::onConnectedDbColumn( _rxForm );
@@ -190,7 +190,7 @@ void OPatternModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm 
     m_pFormattedValue.reset( new ::dbtools::FormattedColumnValue( getContext(), Reference< XRowSet >( _rxForm, UNO_QUERY ), xField ) );
 }
 
-//------------------------------------------------------------------------------
+
 void OPatternModel::onDisconnectedDbColumn()
 {
     OEditBaseModel::onDisconnectedDbColumn();
@@ -198,7 +198,7 @@ void OPatternModel::onDisconnectedDbColumn()
 }
 
 // XPropertyChangeListener
-//------------------------------------------------------------------------------
+
 Any OPatternModel::translateDbColumnToControlValue()
 {
     OSL_PRECOND( m_pFormattedValue.get(), "OPatternModel::translateDbColumnToControlValue: no value helper!" );
@@ -226,13 +226,13 @@ Any OPatternModel::translateDbColumnToControlValue()
 }
 
 // XReset
-//------------------------------------------------------------------------------
+
 Any OPatternModel::getDefaultForReset() const
 {
     return makeAny( m_aDefaultText );
 }
 
-//------------------------------------------------------------------------------
+
 void OPatternModel::resetNoBroadcast()
 {
     OEditBaseModel::resetNoBroadcast();

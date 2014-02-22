@@ -46,7 +46,7 @@ namespace dbp
     //=====================================================================
     //= OGroupBoxWizard
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OGroupBoxWizard::OGroupBoxWizard( Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
         :OControlWizard(_pParent, ModuleRes(RID_DLG_GROUPBOXWIZARD), _rxObjectModel, _rxContext)
@@ -61,13 +61,13 @@ namespace dbp
         m_pFinish->SetHelpId(HID_GROUPWIZARD_FINISH);
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OGroupBoxWizard::approveControl(sal_Int16 _nClassId)
     {
         return FormComponentType::GROUPBOX == _nClassId;
     }
 
-    //---------------------------------------------------------------------
+
     OWizardPage* OGroupBoxWizard::createPage(::svt::WizardTypes::WizardState _nState)
     {
         switch (_nState)
@@ -91,7 +91,7 @@ namespace dbp
         return NULL;
     }
 
-    //---------------------------------------------------------------------
+
     WizardTypes::WizardState OGroupBoxWizard::determineNextState( ::svt::WizardTypes::WizardState _nCurrentState ) const
     {
         switch (_nCurrentState)
@@ -115,7 +115,7 @@ namespace dbp
         return WZS_INVALID_STATE;
     }
 
-    //---------------------------------------------------------------------
+
     void OGroupBoxWizard::enterState(::svt::WizardTypes::WizardState _nState)
     {
         // some stuff to do before calling the base class (modifying our settings)
@@ -155,7 +155,7 @@ namespace dbp
         OControlWizard::enterState(_nState);
     }
 
-    //---------------------------------------------------------------------
+
     void OGroupBoxWizard::createRadios()
     {
         try
@@ -169,7 +169,7 @@ namespace dbp
         }
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OGroupBoxWizard::onFinish()
     {
         // commit the basic control setttings
@@ -184,7 +184,7 @@ namespace dbp
     //=====================================================================
     //= ORadioSelectionPage
     //=====================================================================
-    //---------------------------------------------------------------------
+
     ORadioSelectionPage::ORadioSelectionPage( OControlWizard* _pParent )
         :OGBWPage(_pParent, ModuleRes(RID_PAGE_GROUPRADIOSELECTION))
         ,m_aFrame               (this, ModuleRes(FL_DATA))
@@ -226,14 +226,14 @@ namespace dbp
         m_aExistingRadios.SetAccessibleRelationLabeledBy(&m_aExistingRadiosLabel);
     }
 
-    //---------------------------------------------------------------------
+
     void ORadioSelectionPage::ActivatePage()
     {
         OGBWPage::ActivatePage();
         m_aRadioName.GrabFocus();
     }
 
-    //---------------------------------------------------------------------
+
     void ORadioSelectionPage::initializePage()
     {
         OGBWPage::initializePage();
@@ -247,7 +247,7 @@ namespace dbp
         implCheckMoveButtons();
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool ORadioSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OGBWPage::commitPage(_eReason))
@@ -269,7 +269,7 @@ namespace dbp
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK( ORadioSelectionPage, OnMoveEntry, PushButton*, _pButton )
     {
         sal_Bool bMoveLeft = (&m_aMoveLeft == _pButton);
@@ -294,27 +294,27 @@ namespace dbp
         return 0L;
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK( ORadioSelectionPage, OnEntrySelected, ListBox*, /*_pList*/ )
     {
         implCheckMoveButtons();
         return 0L;
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK( ORadioSelectionPage, OnNameModified, Edit*, /*_pList*/ )
     {
         implCheckMoveButtons();
         return 0L;
     }
 
-    //---------------------------------------------------------------------
+
     bool ORadioSelectionPage::canAdvance() const
     {
         return 0 != m_aExistingRadios.GetEntryCount();
     }
 
-    //---------------------------------------------------------------------
+
     void ORadioSelectionPage::implCheckMoveButtons()
     {
         sal_Bool bHaveSome = (0 != m_aExistingRadios.GetEntryCount());
@@ -341,7 +341,7 @@ namespace dbp
     //=====================================================================
     //= ODefaultFieldSelectionPage
     //=====================================================================
-    //---------------------------------------------------------------------
+
     ODefaultFieldSelectionPage::ODefaultFieldSelectionPage( OControlWizard* _pParent )
         :OMaybeListSelectionPage(_pParent, ModuleRes(RID_PAGE_DEFAULTFIELDSELECTION))
         ,m_aFrame                   (this, ModuleRes(FL_DEFAULTSELECTION))
@@ -358,7 +358,7 @@ namespace dbp
         m_aDefSelection.SetAccessibleRelationMemberOf(&m_aDefaultSelectionLabel);
     }
 
-    //---------------------------------------------------------------------
+
     void ODefaultFieldSelectionPage::initializePage()
     {
         OMaybeListSelectionPage::initializePage();
@@ -377,7 +377,7 @@ namespace dbp
         implInitialize(rSettings.sDefaultField);
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool ODefaultFieldSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OMaybeListSelectionPage::commitPage(_eReason))
@@ -392,7 +392,7 @@ namespace dbp
     //=====================================================================
     //= OOptionValuesPage
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OOptionValuesPage::OOptionValuesPage( OControlWizard* _pParent )
         :OGBWPage(_pParent, ModuleRes(RID_PAGE_OPTIONVALUES))
         ,m_aFrame               (this, ModuleRes(FL_OPTIONVALUES))
@@ -411,21 +411,21 @@ namespace dbp
         m_aOptions.SetAccessibleRelationLabeledBy(&m_aOptionsLabel);
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK( OOptionValuesPage, OnOptionSelected, ListBox*, /*NOTINTERESTEDIN*/ )
     {
         implTraveledOptions();
         return 0L;
     }
 
-    //---------------------------------------------------------------------
+
     void OOptionValuesPage::ActivatePage()
     {
         OGBWPage::ActivatePage();
         m_aValue.GrabFocus();
     }
 
-    //---------------------------------------------------------------------
+
     void OOptionValuesPage::implTraveledOptions()
     {
         if ((::svt::WizardTypes::WizardState)-1 != m_nLastSelection)
@@ -440,7 +440,7 @@ namespace dbp
         m_aValue.SetText(m_aUncommittedValues[m_nLastSelection]);
     }
 
-    //---------------------------------------------------------------------
+
     void OOptionValuesPage::initializePage()
     {
         OGBWPage::initializePage();
@@ -467,7 +467,7 @@ namespace dbp
         implTraveledOptions();
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OOptionValuesPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OGBWPage::commitPage(_eReason))
@@ -486,14 +486,14 @@ namespace dbp
     //=====================================================================
     //= OOptionDBFieldPage
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OOptionDBFieldPage::OOptionDBFieldPage( OControlWizard* _pParent )
         :ODBFieldPage(_pParent)
     {
         setDescriptionText(ModuleRes(RID_STR_GROUPWIZ_DBFIELD).toString());
     }
 
-    //---------------------------------------------------------------------
+
     OUString& OOptionDBFieldPage::getDBFieldSetting()
     {
         return getSettings().sDBField;
@@ -502,7 +502,7 @@ namespace dbp
     //=====================================================================
     //= OFinalizeGBWPage
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OFinalizeGBWPage::OFinalizeGBWPage( OControlWizard* _pParent )
         :OGBWPage(_pParent, ModuleRes(RID_PAGE_OPTIONS_FINAL))
         ,m_aFrame           (this, ModuleRes(FL_NAMEIT))
@@ -513,20 +513,20 @@ namespace dbp
         FreeResource();
     }
 
-    //---------------------------------------------------------------------
+
     void OFinalizeGBWPage::ActivatePage()
     {
         OGBWPage::ActivatePage();
         m_aName.GrabFocus();
     }
 
-    //---------------------------------------------------------------------
+
     bool OFinalizeGBWPage::canAdvance() const
     {
         return false;
     }
 
-    //---------------------------------------------------------------------
+
     void OFinalizeGBWPage::initializePage()
     {
         OGBWPage::initializePage();
@@ -535,7 +535,7 @@ namespace dbp
         m_aName.SetText(rSettings.sControlLabel);
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OFinalizeGBWPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OGBWPage::commitPage(_eReason))

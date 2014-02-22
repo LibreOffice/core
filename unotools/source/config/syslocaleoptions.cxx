@@ -137,7 +137,7 @@ const Sequence< OUString > SvtSysLocaleOptions_Impl::GetPropertyNames()
     return seqPropertyNames;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
     : ConfigItem( ROOTNODE_SYSLOCALE )

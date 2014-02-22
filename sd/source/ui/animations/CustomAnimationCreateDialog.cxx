@@ -65,7 +65,7 @@ const int EXIT = 2;
 const int MOTIONPATH = 3;
 const int MISCEFFECTS = 4;
 
-// --------------------------------------------------------------------
+
 
 extern void fillDurationComboBox( ListBox* pBox );
 
@@ -146,7 +146,7 @@ void CategoryListBox::UserDraw( const UserDrawEvent& rUDEvt )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(CategoryListBox, implDoubleClickHdl)
 {
@@ -154,7 +154,7 @@ IMPL_LINK_NOARG(CategoryListBox, implDoubleClickHdl)
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 void CategoryListBox::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -170,7 +170,7 @@ void CategoryListBox::MouseButtonUp( const MouseEvent& rMEvt )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 class CustomAnimationCreateTabPage : public TabPage
 {
@@ -498,7 +498,7 @@ bool CustomAnimationCreateTabPage::select( const OUString& rsPresetId )
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, CustomAnimationPane* pPane, const std::vector< ::com::sun::star::uno::Any >& rTargets, bool bHasText, const OUString& rsPresetId, double fDuration  )
 :   TabDialog( pParent, "CustomAnimationCreate", "modules/simpress/ui/customanimationcreatedialog.ui" )

@@ -48,19 +48,19 @@ namespace svt
     //==================================================================================================================
     //= ToolPanelDeckPeer
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     ToolPanelDeckPeer::ToolPanelDeckPeer( ToolPanelDeck& i_rDeck )
         :VCLXWindow()
         ,m_pDeck( &i_rDeck )
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     ToolPanelDeckPeer::~ToolPanelDeckPeer()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XAccessibleContext > ToolPanelDeckPeer::CreateAccessibleContext()
     {
         SolarMutexGuard aSolarGuard;
@@ -73,7 +73,7 @@ namespace svt
         return m_aAccessibleFactory.getFactory().createAccessibleToolPanelDeck( xAccessibleParent, *m_pDeck );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL ToolPanelDeckPeer::dispose() throw(RuntimeException)
     {
         {

@@ -304,7 +304,7 @@ void SAL_CALL Configuration::setName (const OUString& rsName)
 
 
 
-// ----------------------------------------------------------------------------
+
 
 void Configuration::PostEvent (
     const Reference<XResourceId>& rxResourceId,

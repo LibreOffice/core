@@ -61,14 +61,14 @@ namespace frm
     //====================================================================
     //= ORichTextUnoWrapper
     //====================================================================
-    //--------------------------------------------------------------------
+
     ORichTextUnoWrapper::ORichTextUnoWrapper( EditEngine& _rEngine, IEngineTextChangeListener* _pTextChangeListener )
         :SvxUnoText( getTextEnginePropertySet() )
     {
         SetEditSource( new RichTextEditSource( _rEngine, _pTextChangeListener ) );
     }
 
-    //--------------------------------------------------------------------
+
     ORichTextUnoWrapper::~ORichTextUnoWrapper() throw()
     {
     }
@@ -76,7 +76,7 @@ namespace frm
     //====================================================================
     //= RichTextEditSource
     //====================================================================
-    //--------------------------------------------------------------------
+
     RichTextEditSource::RichTextEditSource( EditEngine& _rEngine, IEngineTextChangeListener* _pTextChangeListener )
         :m_rEngine              ( _rEngine                               )
         ,m_pTextForwarder       ( new SvxEditEngineForwarder( _rEngine ) )
@@ -84,25 +84,25 @@ namespace frm
     {
     }
 
-    //--------------------------------------------------------------------
+
     RichTextEditSource::~RichTextEditSource()
     {
         delete m_pTextForwarder;
     }
 
-    //--------------------------------------------------------------------
+
     SvxEditSource* RichTextEditSource::Clone() const
     {
         return new RichTextEditSource( m_rEngine, m_pTextChangeListener );
     }
 
-    //--------------------------------------------------------------------
+
     SvxTextForwarder* RichTextEditSource::GetTextForwarder()
     {
         return m_pTextForwarder;
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextEditSource::UpdateData()
     {
         // this means that the content of the EditEngine changed via the UNO API

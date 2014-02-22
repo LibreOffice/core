@@ -106,79 +106,79 @@ namespace svxform
         const Reference< form::runtime::XFormController >   m_xDelegator;
     };
 
-    //--------------------------------------------------------------------
+
     Reference< XControl > SAL_CALL LegacyFormController::getCurrentControl(  ) throw (RuntimeException)
     {
         return m_xDelegator->getCurrentControl();
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL LegacyFormController::addActivateListener( const Reference< form::XFormControllerListener >& _listener ) throw (RuntimeException)
     {
         m_xDelegator->addActivateListener( _listener );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL LegacyFormController::removeActivateListener( const Reference< form::XFormControllerListener >& _listener ) throw (RuntimeException)
     {
         m_xDelegator->removeActivateListener( _listener );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL LegacyFormController::setModel( const Reference< XTabControllerModel >& _model ) throw (RuntimeException)
     {
         m_xDelegator->setModel( _model );
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XTabControllerModel > SAL_CALL LegacyFormController::getModel(  ) throw (RuntimeException)
     {
         return m_xDelegator->getModel();
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL LegacyFormController::setContainer( const Reference< XControlContainer >& _container ) throw (RuntimeException)
     {
         m_xDelegator->setContainer( _container );
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XControlContainer > SAL_CALL LegacyFormController::getContainer(  ) throw (RuntimeException)
     {
         return m_xDelegator->getContainer();
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< Reference< XControl > > SAL_CALL LegacyFormController::getControls(  ) throw (RuntimeException)
     {
         return m_xDelegator->getControls();
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL LegacyFormController::autoTabOrder(  ) throw (RuntimeException)
     {
         m_xDelegator->autoTabOrder();
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL LegacyFormController::activateTabOrder(  ) throw (RuntimeException)
     {
         m_xDelegator->activateTabOrder();
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL LegacyFormController::activateFirst(  ) throw (RuntimeException)
     {
         m_xDelegator->activateFirst();
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL LegacyFormController::activateLast(  ) throw (RuntimeException)
     {
         m_xDelegator->activateLast();
     }
 
-    //--------------------------------------------------------------------
+
     OUString SAL_CALL LegacyFormController::getImplementationName(  ) throw (RuntimeException)
     {
         return OUString( "org.openoffice.comp.svx.LegacyFormController" );

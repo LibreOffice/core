@@ -33,7 +33,7 @@
 #include "osx/salframe.h"
 #include "osx/saldata.hxx"
 
-// ----------------------------------------------------------------------
+
 
 void AquaSalGraphics::SetWindowGraphics( AquaSalFrame* pFrame )
 {
@@ -117,7 +117,7 @@ void AquaSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContex
     SetState();
 }
 
-// ----------------------------------------------------------------------
+
 
 void AquaSalGraphics::InvalidateContext()
 {
@@ -125,7 +125,7 @@ void AquaSalGraphics::InvalidateContext()
     mrContext = 0;
 }
 
-// ----------------------------------------------------------------------
+
 
 void AquaSalGraphics::UnsetState()
 {
@@ -162,7 +162,7 @@ void AquaSalGraphics::SetState()
         CGContextSetBlendMode( mrContext, kCGBlendModeDifference );
 }
 
-// ----------------------------------------------------------------------
+
 
 bool AquaSalGraphics::CheckContext()
 {
@@ -264,7 +264,7 @@ CGPoint* AquaSalGraphics::makeCGptArray(sal_uLong nPoints, const SalPoint*  pPtA
     return CGpoints;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalGraphics::UpdateWindow( NSRect& )
 {
@@ -293,6 +293,6 @@ void AquaSalGraphics::UpdateWindow( NSRect& )
         DBG_ASSERT( mpFrame->mbInitShow, "UpdateWindow called on uneligible graphics" );
 }
 
-// -----------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

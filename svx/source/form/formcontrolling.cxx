@@ -117,7 +117,7 @@ namespace svx
         }
     }
 
-    //--------------------------------------------------------------------
+
     namespace
     {
         //................................................................
@@ -166,7 +166,7 @@ namespace svx
         };
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int32 FeatureSlotTranslation::getControllerFeatureSlotIdForURL( const OUString& _rMainURL )
     {
         const FeatureDescriptions& rDescriptions( getFeatureDescriptions() );
@@ -174,7 +174,7 @@ namespace svx
         return ( pos != rDescriptions.end() ) ? pos->nSlotId : -1;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int16 FeatureSlotTranslation::getFormFeatureForSlotId( sal_Int32 _nSlotId )
     {
         const FeatureDescriptions& rDescriptions( getFeatureDescriptions() );
@@ -183,7 +183,7 @@ namespace svx
         return ( pos != rDescriptions.end() ) ? pos->nFormFeature : -1;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int32 FeatureSlotTranslation::getSlotIdForFormFeature( sal_Int16 _nFormFeature )
     {
         const FeatureDescriptions& rDescriptions( getFeatureDescriptions() );
@@ -195,14 +195,14 @@ namespace svx
     //====================================================================
     //= ControllerFeatures
     //====================================================================
-    //--------------------------------------------------------------------
+
     ControllerFeatures::ControllerFeatures( IControllerFeatureInvalidation* _pInvalidationCallback )
         :m_pInvalidationCallback( _pInvalidationCallback )
         ,m_pImpl( NULL )
     {
     }
 
-    //--------------------------------------------------------------------
+
     ControllerFeatures::ControllerFeatures( const Reference< XFormController >& _rxController, IControllerFeatureInvalidation* _pInvalidationCallback )
         :m_pInvalidationCallback( _pInvalidationCallback )
         ,m_pImpl( NULL )
@@ -210,7 +210,7 @@ namespace svx
         assign( _rxController );
     }
 
-    //--------------------------------------------------------------------
+
     void ControllerFeatures::assign( const Reference< XFormController >& _rxController )
     {
         dispose();
@@ -218,13 +218,13 @@ namespace svx
         m_pImpl->acquire();
     }
 
-    //--------------------------------------------------------------------
+
     ControllerFeatures::~ControllerFeatures()
     {
         dispose();
     }
 
-    //--------------------------------------------------------------------
+
     void ControllerFeatures::dispose()
     {
         if ( m_pImpl )
@@ -238,7 +238,7 @@ namespace svx
     //====================================================================
     //= FormControllerHelper
     //====================================================================
-    //--------------------------------------------------------------------
+
     FormControllerHelper::FormControllerHelper( const Reference< XFormController >& _rxController, IControllerFeatureInvalidation* _pInvalidationCallback )
         :m_pInvalidationCallback( _pInvalidationCallback )
     {
@@ -261,7 +261,7 @@ namespace svx
         osl_atomic_decrement( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
+
     FormControllerHelper::~FormControllerHelper( )
     {
         try
@@ -275,7 +275,7 @@ namespace svx
         }
     }
 
-    //--------------------------------------------------------------------
+
     void FormControllerHelper::dispose()
     {
         if ( m_xFormOperations.is() )
@@ -283,7 +283,7 @@ namespace svx
         m_xFormOperations.clear();
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool FormControllerHelper::isEnabled( sal_Int32 _nSlotId ) const
     {
         if ( !m_xFormOperations.is() )
@@ -291,7 +291,7 @@ namespace svx
         return m_xFormOperations->isEnabled( FeatureSlotTranslation::getFormFeatureForSlotId( _nSlotId ) );
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XRowSet > FormControllerHelper::getCursor() const
     {
         Reference< XRowSet > xCursor;
@@ -300,26 +300,26 @@ namespace svx
         return xCursor;
     }
 
-    //--------------------------------------------------------------------
+
     void FormControllerHelper::getState( sal_Int32 _nSlotId, FeatureState& _rState ) const
     {
         if ( m_xFormOperations.is() )
             _rState = m_xFormOperations->getState( FeatureSlotTranslation::getFormFeatureForSlotId( _nSlotId ) );
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool FormControllerHelper::commitCurrentControl( ) const
     {
         return impl_operateForm_nothrow( COMMIT_CONTROL );
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool FormControllerHelper::commitCurrentRecord() const
     {
         return impl_operateForm_nothrow( COMMIT_RECORD );
     }
 
-    //--------------------------------------------------------------------
+
     void FormControllerHelper::execute( sal_Int32 _nSlotId, const OUString& _rParamName, const Any& _rParamValue ) const
     {
         Sequence< NamedValue > aArguments(1);
@@ -329,7 +329,7 @@ namespace svx
         impl_operateForm_nothrow( EXECUTE_ARGS, FeatureSlotTranslation::getFormFeatureForSlotId( _nSlotId ), aArguments );
     }
 
-    //--------------------------------------------------------------------
+
     bool FormControllerHelper::impl_operateForm_nothrow( const FormOperation _eWhat, const sal_Int16 _nFeature,
             const Sequence< NamedValue >& _rArguments ) const
     {
@@ -390,14 +390,14 @@ namespace svx
         return false;
     }
 
-    //--------------------------------------------------------------------
+
     void FormControllerHelper::execute( sal_Int32 _nSlotId ) const
     {
         impl_operateForm_nothrow( EXECUTE, FeatureSlotTranslation::getFormFeatureForSlotId( _nSlotId ),
             Sequence< NamedValue >() );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FormControllerHelper::invalidateFeatures( const Sequence< ::sal_Int16 >& _Features ) throw (RuntimeException)
     {
         if ( !m_pInvalidationCallback )
@@ -415,7 +415,7 @@ namespace svx
         m_pInvalidationCallback->invalidateFeatures( aFeatures );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FormControllerHelper::invalidateAllFeatures() throw (RuntimeException)
     {
         if ( !m_pInvalidationCallback )
@@ -458,20 +458,20 @@ namespace svx
         m_pInvalidationCallback->invalidateFeatures( aSupportedFeatures );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FormControllerHelper::errorOccured( const SQLErrorEvent& _Event ) throw (RuntimeException)
     {
         OSL_ENSURE( !m_aOperationError.hasValue(), "FormControllerHelper::errorOccurred: two errors during one operation?" );
         m_aOperationError = _Event.Reason;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FormControllerHelper::disposing( const EventObject& /*_Source*/ ) throw (RuntimeException)
     {
         // not interested in
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool FormControllerHelper::isInsertionRow() const
     {
         sal_Bool bIs = sal_False;
@@ -480,7 +480,7 @@ namespace svx
         return bIs;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool FormControllerHelper::isModifiedRow() const
     {
         sal_Bool bIs = sal_False;
@@ -488,7 +488,7 @@ namespace svx
             bIs = m_xFormOperations->isModifiedRow();
         return bIs;
     }
-    //--------------------------------------------------------------------
+
     bool FormControllerHelper::canDoFormFilter() const
     {
         if ( !m_xFormOperations.is() )

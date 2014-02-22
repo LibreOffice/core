@@ -27,7 +27,7 @@ using namespace ::rtl;
 
 namespace unodevtools {
 
-//-------------------------------------------------------------------------------
+
 #if OSL_DEBUG_LEVEL > 1
 static void out( const sal_Char * pText )
 {
@@ -35,7 +35,7 @@ static void out( const sal_Char * pText )
 }
 #endif
 
-//-------------------------------------------------------------------------------
+
 bool readOption( OUString * pValue, const sal_Char * pOpt,
                      sal_uInt32 * pnIndex, const OUString & aArg)
 {
@@ -85,7 +85,7 @@ bool readOption( OUString * pValue, const sal_Char * pOpt,
     return false;
 }
 
-//-------------------------------------------------------------------------------
+
 bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
                      sal_uInt32 * pnIndex, const OUString & aArg)
 {

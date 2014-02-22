@@ -3395,7 +3395,7 @@ void SvImpLBox::ShowFocusRect( const SvTreeListEntry* pEntry )
     }
 }
 
-// -----------------------------------------------------------------------
+
 void SvImpLBox::implInitDefaultNodeImages()
 {
     if ( s_pDefCollapsed )
@@ -3406,28 +3406,28 @@ void SvImpLBox::implInitDefaultNodeImages()
     s_pDefExpanded   = new Image( SvtResId( RID_IMG_TREENODE_EXPANDED ) );
 }
 
-// -----------------------------------------------------------------------
+
 const Image& SvImpLBox::GetDefaultExpandedNodeImage( )
 {
     implInitDefaultNodeImages();
     return *s_pDefExpanded;
 }
 
-// -----------------------------------------------------------------------
+
 const Image& SvImpLBox::GetDefaultCollapsedNodeImage( )
 {
     implInitDefaultNodeImages();
     return *s_pDefCollapsed;
 }
 
-// -----------------------------------------------------------------------
+
 void SvImpLBox::CallEventListeners( sal_uLong nEvent, void* pData )
 {
     if ( pView )
         pView->CallImplEventListeners( nEvent, pData);
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvImpLBox::SetCurrentTabPos( sal_uInt16 _nNewPos )
 {
@@ -3443,7 +3443,7 @@ bool SvImpLBox::SetCurrentTabPos( sal_uInt16 _nNewPos )
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvImpLBox::IsSelectable( const SvTreeListEntry* pEntry )
 {

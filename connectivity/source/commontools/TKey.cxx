@@ -30,13 +30,13 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-// -------------------------------------------------------------------------
+
 OTableKeyHelper::OTableKeyHelper(OTableHelper* _pTable) : connectivity::sdbcx::OKey(sal_True)
     ,m_pTable(_pTable)
 {
     construct();
 }
-// -------------------------------------------------------------------------
+
 OTableKeyHelper::OTableKeyHelper(   OTableHelper* _pTable
             ,const OUString& _Name
             ,const sdbcx::TKeyProperties& _rProps
@@ -46,7 +46,7 @@ OTableKeyHelper::OTableKeyHelper(   OTableHelper* _pTable
     construct();
     refreshColumns();
 }
-// -------------------------------------------------------------------------
+
 void OTableKeyHelper::refreshColumns()
 {
     if ( !m_pTable )
@@ -102,6 +102,6 @@ void OTableKeyHelper::refreshColumns()
     else
         m_pColumns  = new OKeyColumnsHelper(this,m_aMutex,aVector);
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

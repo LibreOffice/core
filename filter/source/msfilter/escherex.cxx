@@ -435,10 +435,10 @@ void EscherPropertyContainer::CreateGradientProperties(
     sal_uInt32  nFillFocus = 0;
     sal_uInt32  nFillLR = 0;
     sal_uInt32  nFillTB = 0;
-    sal_uInt32  nFirstColor = 0;//like the control var nChgColors in import logic
+    sal_uInt32  nFirstColor = 0;// like the control var nChgColors in import logic
     bool        bWriteFillTo = false;
 
-    //Transparency gradient: Means the third setting in transparency page is set
+    // Transparency gradient: Means the third setting in transparency page is set
     if (bTransparentGradient &&  EscherPropertyValueHelper::GetPropertyValue(
         aAny, rXPropSet, OUString( "FillTransparenceGradient" ), sal_False ) )
     {
@@ -452,7 +452,7 @@ void EscherPropertyContainer::CreateGradientProperties(
             ::com::sun::star::drawing::FillStyle eFS;
             if ( ! ( aAnyTemp >>= eFS ) )
                 eFS = ::com::sun::star::drawing::FillStyle_SOLID;
-            //solid and transparency
+            // solid and transparency
             if ( eFS == ::com::sun::star::drawing::FillStyle_SOLID)
             {
                 if ( EscherPropertyValueHelper::GetPropertyValue(
@@ -462,7 +462,7 @@ void EscherPropertyContainer::CreateGradientProperties(
                     pGradient->EndColor = ImplGetColor( *((sal_uInt32*)aAnyTemp.getValue()), sal_False );
                 }
             }
-            //gradient and transparency.
+            // gradient and transparency.
             else if( eFS == ::com::sun::star::drawing::FillStyle_GRADIENT )
             {
                 if ( EscherPropertyValueHelper::GetPropertyValue(
@@ -472,7 +472,7 @@ void EscherPropertyContainer::CreateGradientProperties(
         }
 
     }
-    //Not transparency gradient
+    // Not transparency gradient
     else if ( EscherPropertyValueHelper::GetPropertyValue(
         aAny, rXPropSet, OUString( "FillGradient" ), sal_False ) )
     {
@@ -490,7 +490,7 @@ void EscherPropertyContainer::CreateGradientProperties(
                 nAngle = pGradient->Angle;
                 while ( nAngle > 0 ) nAngle -= 3600;
                 while ( nAngle <= -3600 ) nAngle += 3600;
-                //Value of the real number = Integral + (Fractional / 65536.0)
+                // Value of the real number = Integral + (Fractional / 65536.0)
                 nAngle = ( nAngle * 0x10000) / 10;
 
                 nFillFocus = (pGradient->Style == ::com::sun::star::awt::GradientStyle_LINEAR) ?
@@ -506,7 +506,7 @@ void EscherPropertyContainer::CreateGradientProperties(
         case ::com::sun::star::awt::GradientStyle_SQUARE :
         case ::com::sun::star::awt::GradientStyle_RECT :
             {
-                //according to the import logic and rect type fill** value
+                // according to the import logic and rect type fill** value
                 nFillLR = (pGradient->XOffset * 0x10000) / 100;
                 nFillTB = (pGradient->YOffset * 0x10000) / 100;
                 if ( ((nFillLR > 0) && (nFillLR < 0x10000)) || ((nFillTB > 0) && (nFillTB < 0x10000)) )
@@ -528,7 +528,7 @@ void EscherPropertyContainer::CreateGradientProperties(
     AddOpt( ESCHER_Prop_fillFocus, nFillFocus );
     if ( bWriteFillTo )
     {
-        //according to rect type fillTo** value
+        // according to rect type fillTo** value
         if(nFillLR)
         {
             AddOpt( ESCHER_Prop_fillToLeft, nFillLR );
@@ -541,7 +541,7 @@ void EscherPropertyContainer::CreateGradientProperties(
         }
     }
 
-    //Transparency gradient
+    // Transparency gradient
     if (bTransparentGradient &&  EscherPropertyValueHelper::GetPropertyValue(
         aAny, rXPropSet, OUString( "FillTransparenceGradient" ), sal_False ) )
     {
@@ -566,7 +566,7 @@ void    EscherPropertyContainer::CreateFillProperties(
         if ( pObj )
         {
             SfxItemSet aAttr( pObj->GetMergedItemSet() );
-            //tranparency with gradient. Means the third setting in transparency page is set
+            // tranparency with gradient. Means the third setting in transparency page is set
             sal_Bool bTransparentGradient =  ( aAttr.GetItemState( XATTR_FILLFLOATTRANSPARENCE ) == SFX_ITEM_SET ) &&
                 ( (const XFillFloatTransparenceItem&) aAttr.Get( XATTR_FILLFLOATTRANSPARENCE ) ).IsEnabled();
             CreateFillProperties(  rXPropSet, bEdge, bTransparentGradient );
@@ -880,9 +880,7 @@ sal_Bool EscherPropertyContainer::GetLineArrow( const sal_Bool bLineStart,
                 if ( !aApiName.isEmpty() )
                 {
 
-                    /* todo:
-                    calculate the best option for ArrowLength and ArrowWidth
-                    */
+                    // TODO: calculate the best option for ArrowLength and ArrowWidth
                     if ( aApiName == "Arrow concave" )
                         reLineEnd = ESCHER_LineArrowStealthEnd;
                     else if ( aApiName == "Square 45" )
@@ -1610,7 +1608,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
 
                         if ( nErrCode == ERRCODE_NONE )
                         {
-                            // no.
+                            // no
                             aGraphicObject = aGraphic;
                             aUniqueId = aGraphicObject.GetUniqueID();
                         }
@@ -2195,9 +2193,8 @@ sal_Int32 lcl_GetAdjustValueCount( const XPolygon& rPoly )
     }
     return nRet;
 }
-/*
- Adjust value decide the position which connector should turn a corner
-*/
+
+// Adjust value decide the position which connector should turn a corner
 sal_Int32 lcl_GetConnectorAdjustValue ( const XPolygon& rPoly, sal_uInt16 nIndex )
 {
     sal_uInt16 k =  rPoly.GetSize();
@@ -2212,7 +2209,7 @@ sal_Int32 lcl_GetConnectorAdjustValue ( const XPolygon& rPoly, sal_uInt16 nIndex
         aEnd.X() = aStart.X() +4;
 
     sal_Bool bVertical = ( rPoly[1].X()-aStart.X() ) == 0 ;
-    //vertical and horizon alternate
+    // vertical and horizon alternate
     if ( nIndex%2 == 1 ) bVertical = !bVertical;
     aPt = rPoly[ nIndex + 1];
 
@@ -2306,7 +2303,7 @@ sal_Bool lcl_GetAngle(Polygon &rPoly,sal_uInt16& rShapeFlags,sal_Int32& nAngle )
         // Set angle properties
         nAngle *= 655;
         nAngle += 0x8000;
-        nAngle &=~0xffff;                                  // nAngle auf volle Gradzahl runden
+        nAngle &=~0xffff;                                  // round nAngle to whole number of degrees
         return sal_True;
     }
     return sal_False;
@@ -2348,7 +2345,7 @@ sal_Bool EscherPropertyContainer::CreateConnectorProperties(
                         rShapeFlags = SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT | SHAPEFLAG_CONNECTOR;
                         rGeoRect = ::com::sun::star::awt::Rectangle( aStartPoint.X, aStartPoint.Y,
                                                             ( aEndPoint.X - aStartPoint.X ) + 1, ( aEndPoint.Y - aStartPoint.Y ) + 1 );
-                        //set standard's FLIP in below code
+                        // set standard's FLIP in below code
                         if ( eCt != ::com::sun::star::drawing::ConnectorType_STANDARD)
                         {
                             if ( rGeoRect.Height < 0 )          // justify
@@ -2646,7 +2643,7 @@ sal_Bool EscherPropertyContainer::IsDefaultObject( SdrObjCustomShape* pCustoShap
     sal_Bool bIsDefaultObject = sal_False;
     switch(eShapeType)
     {
-        //if the custom shape is not default shape of ppt, return sal_Fasle;
+        // if the custom shape is not default shape of ppt, return sal_Fasle;
         case mso_sptTearDrop:
             return bIsDefaultObject;
 
@@ -3562,7 +3559,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         nTextPathFlags &=~0x20;
                                 }
                             }
-                            //export gTextAlign attr
+                            // export gTextAlign attr
                             if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "TextHorizontalAdjust", sal_True ) )
                             {
                                 MSO_GeoTextAlign  gTextAlign = mso_alignTextCenter;
@@ -3598,7 +3595,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                 AddOpt(DFF_Prop_gtextAlign,gTextAlign);
                             }
                         }
-                        if((nTextPathFlags & 0x4000) != 0)  //Is Font work
+                        if((nTextPathFlags & 0x4000) != 0)  // Is Font work
                         {
                             OutlinerParaObject* pOutlinerParaObject = pCustoShape->GetOutlinerParaObject();
                             if ( pOutlinerParaObject && pOutlinerParaObject->IsVertical() )
@@ -3917,7 +3914,7 @@ MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawi
     return GetCustomShapeType( rXShape, nMirrorFlags, aShapeType );
 }
 
-//Implement for form control export
+// Implement for form control export
 sal_Bool   EscherPropertyContainer::CreateBlipPropertiesforOLEControl(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape)
 {
     SdrObject* pShape = GetSdrObjectFromXShape( rXShape );
@@ -4581,7 +4578,7 @@ sal_uInt32 EscherConnectorListEntry::GetClosestPoint( const Polygon& rPoly, cons
     return nClosest;
 };
 
-// ---------------------------------------------------------------------------------------------
+
 // for rectangles          for ellipses     for polygons
 //
 // nRule =  0 ->Top         0 ->Top         nRule = Index auf ein (Poly)Polygon Punkt
@@ -5022,11 +5019,11 @@ SvStream* EscherExGlobal::ImplQueryPictureStream()
     return 0;
 }
 
-/// Implementation of an empty stream that silently succeeds, but does nothing.
-///
-/// In fact, this is a hack.  The right solution is to abstract EscherEx to be
-/// able to work without SvStream; but at the moment it is better to live with
-/// this I guess.
+// /Implementation of an empty stream that silently succeeds, but does nothing.
+// /
+// /In fact, this is a hack.  The right solution is to abstract EscherEx to be
+// /able to work without SvStream; but at the moment it is better to live with
+// /this I guess.
 class SvNullStream : public SvStream
 {
 protected:

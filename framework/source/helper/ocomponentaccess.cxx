@@ -186,9 +186,9 @@ css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( cons
     return xComponent;
 }
 
-//_________________________________________________________________________________________________________________
+
 //  debug methods
-//_________________________________________________________________________________________________________________
+
 
 /*-----------------------------------------------------------------------------------------------------------------
     The follow methods checks the parameter for other functions. If a parameter or his value is non valid,

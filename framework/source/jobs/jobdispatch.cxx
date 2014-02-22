@@ -49,7 +49,7 @@ using namespace framework;
 
 namespace {
 
-//_______________________________________
+
 /**
     @short  implements a dispatch object for jobs
     @descr  Such dispatch object will be used by the generic dispatch mechanism if
@@ -78,7 +78,7 @@ private:
     /** name of module (writer, impress etc.) the frame is for */
     OUString m_sModuleIdentifier;
 
-//___________________________________
+
 // native interface methods
 
 public:
@@ -141,7 +141,7 @@ public:
                                                     const css::util::URL&                                     aURL      ) throw(css::uno::RuntimeException);
 };
 
-//________________________________
+
 /**
     @short      standard ctor
     @descr      It initialize this new instance.
@@ -155,7 +155,7 @@ JobDispatch::JobDispatch( /*IN*/ const css::uno::Reference< css::uno::XComponent
 {
 }
 
-//________________________________
+
 /**
     @short  let this instance die
     @descr  We have to release all used resources and free used memory.
@@ -167,7 +167,7 @@ JobDispatch::~JobDispatch()
     m_xFrame.clear();
 }
 
-//________________________________
+
 /**
     @short  implementation of XInitalization
     @descr  A protocol handler can provide this functionality, if it wish to get additional information
@@ -204,7 +204,7 @@ void SAL_CALL JobDispatch::initialize( const css::uno::Sequence< css::uno::Any >
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short  implementation of XDispatchProvider::queryDispatches()
     @descr  Every protocol handler will be asked for his agreement, if an URL was queried
@@ -235,7 +235,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL JobDispatch::queryDispatch
     return xDispatch;
 }
 
-//________________________________
+
 /**
     @short  implementation of XDispatchProvider::queryDispatches()
     @descr  It's an optimized access for remote, so you can ask for
@@ -261,7 +261,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL JobD
     return lDispatches;
 }
 
-//________________________________
+
 /**
     @short  implementation of XNotifyingDispatch::dispatchWithNotification()
     @descr  It creates the job service implementation and call execute on it.
@@ -305,7 +305,7 @@ void SAL_CALL JobDispatch::dispatchWithNotification( /*IN*/ const css::util::URL
     }
 }
 
-//________________________________
+
 /**
     @short  dispatch an event
     @descr  We search all registered jobs for this event and execute it.
@@ -388,7 +388,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                    
     }
 }
 
-//________________________________
+
 /**
     @short  dispatch a service
     @descr  We use the given name only to create and if possible to initialize
@@ -440,7 +440,7 @@ void JobDispatch::impl_dispatchService( /*IN*/ const OUString&                  
     pJob->execute(Converter::convert_seqPropVal2seqNamedVal(lArgs));
 }
 
-//________________________________
+
 /**
     @short  dispatch an alias
     @descr  We use this alias to locate a job inside the configuration
@@ -491,7 +491,7 @@ void JobDispatch::impl_dispatchAlias( /*IN*/ const OUString&                    
     pJob->execute(Converter::convert_seqPropVal2seqNamedVal(lArgs));
 }
 
-//________________________________
+
 /**
     @short  implementation of XDispatch::dispatch()
     @descr  Because the methods dispatch() and dispatchWithNotification() are different in her parameters
@@ -511,7 +511,7 @@ void SAL_CALL JobDispatch::dispatch( /*IN*/ const css::util::URL&               
     dispatchWithNotification(aURL, lArgs, css::uno::Reference< css::frame::XDispatchResultListener >());
 }
 
-//________________________________
+
 /**
     @short  not supported
 */
@@ -520,7 +520,7 @@ void SAL_CALL JobDispatch::addStatusListener( /*IN*/ const css::uno::Reference< 
 {
 }
 
-//________________________________
+
 /**
     @short  not supported
 */

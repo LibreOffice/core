@@ -43,7 +43,7 @@
 #include "svl/sharedstring.hxx"
 
 using namespace formula;
-//------------------------------------------------------------------------
+
 
 ScFormatEntry::ScFormatEntry(ScDocument* pDoc):
     mpDoc(pDoc)
@@ -1541,7 +1541,7 @@ void ScConditionEntry::endRendering()
     mpCache.reset();
 }
 
-//------------------------------------------------------------------------
+
 
 ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
                                         const OUString& rExpr1, const OUString& rExpr2,
@@ -1597,7 +1597,7 @@ ScFormatEntry* ScCondFormatEntry::Clone( ScDocument* pDoc ) const
     return new ScCondFormatEntry( pDoc, *this );
 }
 
-//------------------------------------------------------------------------
+
 
 ScCondDateFormatEntry::ScCondDateFormatEntry( ScDocument* pDoc )
     : ScFormatEntry( pDoc )
@@ -1787,7 +1787,7 @@ void ScCondDateFormatEntry::endRendering()
     mpCache.reset();
 }
 
-//------------------------------------------------------------------------
+
 
 ScConditionalFormat::ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocument) :
     pDoc( pDocument ),
@@ -2091,7 +2091,7 @@ void ScConditionalFormat::endRendering()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 ScConditionalFormatList::ScConditionalFormatList(const ScConditionalFormatList& rList)
 {

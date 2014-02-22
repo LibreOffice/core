@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//------------------------------------------------------------------------
+
 // include files
-//------------------------------------------------------------------------
+
 #include <sal/types.h>
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
@@ -30,9 +30,9 @@
 using namespace osl;
 using namespace rtl;
 
-//------------------------------------------------------------------------
+
 // helper functions
-//------------------------------------------------------------------------
+
 
 /** print a UNI_CODE String.
 */
@@ -76,9 +76,9 @@ namespace ThreadHelper
 }
 
 
-//------------------------------------------------------------------------
+
 // Beginning of the test cases for osl_Mutex class
-//------------------------------------------------------------------------
+
 
 
 /** mutually exclusive data
@@ -263,7 +263,7 @@ protected:
 };
 
 
-//--------------------------------------------------------------
+
 namespace osl_Mutex
 {
 
@@ -548,7 +548,7 @@ namespace osl_Mutex
         CPPUNIT_TEST_SUITE_END();
     }; // class getGlobalMutex
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Mutex::ctor, "osl_Mutex");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Mutex::acquire, "osl_Mutex");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Mutex::tryToAcquire, "osl_Mutex");
@@ -557,9 +557,9 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Mutex::getGlobalMutex, "osl_Mutex");
 } // namespace osl_Mutex
 
 
-//------------------------------------------------------------------------
+
 // Beginning of the test cases for osl_Guard class
-//------------------------------------------------------------------------
+
 
 class GuardThread : public Thread
 {
@@ -636,14 +636,14 @@ namespace osl_Guard
         CPPUNIT_TEST_SUITE_END();
     }; // class ctor
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Guard::ctor, "osl_Guard");
 } // namespace osl_Guard
 
 
-//------------------------------------------------------------------------
+
 // Beginning of the test cases for osl_ClearableGuard class
-//------------------------------------------------------------------------
+
 
 /** Thread for test ClearableGuard
  */
@@ -673,7 +673,7 @@ protected:
     }
 };
 
-// -----------------------------------------------------------------------------
+
 namespace osl_ClearableGuard
 {
 
@@ -777,15 +777,15 @@ namespace osl_ClearableGuard
         CPPUNIT_TEST_SUITE_END( );
     }; // class clear
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_ClearableGuard::ctor, "osl_ClearableGuard" );
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_ClearableGuard::clear, "osl_ClearableGuard" );
 } // namespace osl_ClearableGuard
 
 
-//------------------------------------------------------------------------
+
 // Beginning of the test cases for osl_ResettableGuard class
-//------------------------------------------------------------------------
+
 
 /** Thread for test ResettableGuard
  */
@@ -813,7 +813,7 @@ protected:
     }
 };
 
-// -----------------------------------------------------------------------------
+
 namespace osl_ResettableGuard
 {
     class ctor : public CppUnit::TestFixture
@@ -903,7 +903,7 @@ namespace osl_ResettableGuard
         CPPUNIT_TEST_SUITE_END();
     }; // class reset
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_ResettableGuard::ctor);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_ResettableGuard::reset);
 } // namespace osl_ResettableGuard

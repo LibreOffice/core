@@ -96,7 +96,7 @@ void WinSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraph
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplCalcOutSideRgn( const RECT& rSrcRect,
                          int nLeft, int nTop, int nRight, int nBottom,
@@ -139,7 +139,7 @@ void ImplCalcOutSideRgn( const RECT& rSrcRect,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalGraphics::copyArea( long nDestX, long nDestY,
                             long nSrcX, long nSrcY,
@@ -335,7 +335,7 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
 
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDrawBitmap( HDC hDC,
                      const SalTwoRect& rPosAry, const WinSalBitmap& rSalBitmap,
@@ -443,7 +443,7 @@ void ImplDrawBitmap( HDC hDC,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalGraphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
 {
@@ -472,7 +472,7 @@ void WinSalGraphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSal
         mbXORMode ? SRCINVERT : SRCCOPY );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
                               const SalBitmap& rSSalBitmap,
@@ -528,7 +528,7 @@ void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
     delete pMask;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
                               const SalBitmap& rSSalBitmap,
@@ -623,7 +623,7 @@ void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool WinSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
                                     long nHeight, sal_uInt8 nTransparency )
@@ -652,7 +652,7 @@ bool WinSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalGraphics::drawMask( const SalTwoRect& rPosAry,
                             const SalBitmap& rSSalBitmap,
@@ -686,7 +686,7 @@ void WinSalGraphics::drawMask( const SalTwoRect& rPosAry,
     DeleteBrush( hMaskBrush );
 }
 
-// -----------------------------------------------------------------------
+
 
 SalBitmap* WinSalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
 {
@@ -724,7 +724,7 @@ SalBitmap* WinSalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
     return pSalBitmap;
 }
 
-// -----------------------------------------------------------------------
+
 
 SalColor WinSalGraphics::getPixel( long nX, long nY )
 {
@@ -738,7 +738,7 @@ SalColor WinSalGraphics::getPixel( long nX, long nY )
                               GetBValue( aWinCol ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
 {
@@ -783,7 +783,7 @@ void WinSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalGraphics::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nSalFlags )
 {

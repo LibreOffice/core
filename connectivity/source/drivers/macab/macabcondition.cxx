@@ -25,55 +25,55 @@
 
 using namespace ::connectivity::macab;
 using namespace ::com::sun::star::sdbc;
-// -----------------------------------------------------------------------------
+
 MacabCondition::~MacabCondition()
 {
 }
-// -----------------------------------------------------------------------------
+
 MacabConditionConstant::MacabConditionConstant(const sal_Bool bValue)
     : MacabCondition(),
       m_bValue(bValue)
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool MacabConditionConstant::isAlwaysTrue() const
 {
     return m_bValue;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool MacabConditionConstant::isAlwaysFalse() const
 {
     return !m_bValue;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool MacabConditionConstant::eval(const MacabRecord *) const
 {
     return m_bValue;
 }
-// -----------------------------------------------------------------------------
+
 MacabConditionColumn::MacabConditionColumn(const MacabHeader *header, const OUString &sColumnName) throw(SQLException)
     : MacabCondition(),
       m_nFieldNumber(header->getColumnNumber(sColumnName))
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool MacabConditionColumn::isAlwaysTrue() const
 {
     // Sometimes true, sometimes false
     return sal_False;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool MacabConditionColumn::isAlwaysFalse() const
 {
     // Sometimes true, sometimes false
     return sal_False;
 }
-// -----------------------------------------------------------------------------
+
 MacabConditionNull::MacabConditionNull(const MacabHeader *header, const OUString &sColumnName) throw(SQLException)
     : MacabConditionColumn(header, sColumnName)
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool MacabConditionNull::eval(const MacabRecord *aRecord) const
 {
     macabfield *aValue = aRecord->get(m_nFieldNumber);
@@ -85,12 +85,12 @@ sal_Bool MacabConditionNull::eval(const MacabRecord *aRecord) const
     else
         return sal_False;
 }
-// -----------------------------------------------------------------------------
+
 MacabConditionNotNull::MacabConditionNotNull(const MacabHeader *header, const OUString &sColumnName) throw(SQLException)
     : MacabConditionColumn(header, sColumnName)
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool MacabConditionNotNull::eval(const MacabRecord *aRecord) const
 {
     macabfield *aValue = aRecord->get(m_nFieldNumber);
@@ -102,18 +102,18 @@ sal_Bool MacabConditionNotNull::eval(const MacabRecord *aRecord) const
     else
         return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 MacabConditionCompare::MacabConditionCompare(const MacabHeader *header, const OUString &sColumnName, const OUString &sMatchString) throw(SQLException)
     : MacabConditionColumn(header, sColumnName),
       m_sMatchString(sMatchString)
 {
 }
-// -----------------------------------------------------------------------------
+
 MacabConditionEqual::MacabConditionEqual(const MacabHeader *header, const OUString &sColumnName, const OUString &sMatchString) throw(SQLException)
     : MacabConditionCompare(header, sColumnName, sMatchString)
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool MacabConditionEqual::eval(const MacabRecord *aRecord) const
 {
     macabfield *aValue = aRecord->get(m_nFieldNumber);
@@ -131,12 +131,12 @@ sal_Bool MacabConditionEqual::eval(const MacabRecord *aRecord) const
     delete aValue2;
     return nReturn == 0;
 }
-// -----------------------------------------------------------------------------
+
 MacabConditionDifferent::MacabConditionDifferent(const MacabHeader *header, const OUString &sColumnName, const OUString &sMatchString) throw(SQLException)
     : MacabConditionCompare(header, sColumnName, sMatchString)
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool MacabConditionDifferent::eval(const MacabRecord *aRecord) const
 {
     macabfield *aValue = aRecord->get(m_nFieldNumber);
@@ -154,12 +154,12 @@ sal_Bool MacabConditionDifferent::eval(const MacabRecord *aRecord) const
     delete aValue2;
     return nReturn != 0;
 }
-// -----------------------------------------------------------------------------
+
 MacabConditionSimilar::MacabConditionSimilar(const MacabHeader *header, const OUString &sColumnName, const OUString &sMatchString) throw(SQLException)
     : MacabConditionCompare(header, sColumnName, sMatchString)
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool MacabConditionSimilar::eval(const MacabRecord *aRecord) const
 {
     macabfield *aValue = aRecord->get(m_nFieldNumber);
@@ -171,35 +171,35 @@ sal_Bool MacabConditionSimilar::eval(const MacabRecord *aRecord) const
 
     return match(m_sMatchString, sName, '\0');
 }
-// -----------------------------------------------------------------------------
+
 MacabConditionBoolean::MacabConditionBoolean(MacabCondition *pLeft, MacabCondition *pRight)
     : MacabCondition(),
       m_pLeft(pLeft),
       m_pRight(pRight)
 {
 }
-// -----------------------------------------------------------------------------
+
 MacabConditionBoolean::~MacabConditionBoolean()
 {
     delete m_pLeft;
     delete m_pRight;
 }
-// -----------------------------------------------------------------------------
+
 MacabConditionOr::MacabConditionOr(MacabCondition *pLeft, MacabCondition *pRight)
     : MacabConditionBoolean(pLeft, pRight)
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool MacabConditionOr::isAlwaysTrue() const
 {
     return m_pLeft->isAlwaysTrue() || m_pRight->isAlwaysTrue();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool MacabConditionOr::isAlwaysFalse() const
 {
     return m_pLeft->isAlwaysFalse() && m_pRight->isAlwaysFalse();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool MacabConditionOr::eval(const MacabRecord *aRecord) const
 {
     // We avoid evaluating terms as much as we can
@@ -211,22 +211,22 @@ sal_Bool MacabConditionOr::eval(const MacabRecord *aRecord) const
 
     return sal_False;
 }
-// -----------------------------------------------------------------------------
+
 MacabConditionAnd::MacabConditionAnd(MacabCondition *pLeft, MacabCondition *pRight)
     : MacabConditionBoolean(pLeft, pRight)
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool MacabConditionAnd::isAlwaysTrue() const
 {
     return m_pLeft->isAlwaysTrue() && m_pRight->isAlwaysTrue();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool MacabConditionAnd::isAlwaysFalse() const
 {
     return m_pLeft->isAlwaysFalse() || m_pRight->isAlwaysFalse();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool MacabConditionAnd::eval(const MacabRecord *aRecord) const
 {
     // We avoid evaluating terms as much as we can

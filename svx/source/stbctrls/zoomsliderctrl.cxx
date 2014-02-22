@@ -31,11 +31,11 @@
 
 #include <set>
 
-// -----------------------------------------------------------------------
+
 
 SFX_IMPL_STATUSBAR_CONTROL( SvxZoomSliderControl, SvxZoomSliderItem );
 
-// -----------------------------------------------------------------------
+
 
 struct SvxZoomSliderControl::SvxZoomSliderControl_Impl
 {
@@ -65,13 +65,13 @@ struct SvxZoomSliderControl::SvxZoomSliderControl_Impl
         mbOmitPaint( false ) {}
 };
 
-// -----------------------------------------------------------------------
+
 
 const long nSliderXOffset = 20;
 const long nSnappingEpsilon = 5; // snapping epsilon in pixels
 const long nSnappingPointsMinDist = nSnappingEpsilon; // minimum distance of two adjacent snapping points
 
-// -----------------------------------------------------------------------
+
 
 // nOffset referes to the origin of the control:
 // + ----------- -
@@ -161,7 +161,7 @@ long SvxZoomSliderControl::Zoom2Offset( sal_uInt16 nCurrentZoom ) const
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxZoomSliderControl::SvxZoomSliderControl( sal_uInt16 _nSlotId,  sal_uInt16 _nId, StatusBar& _rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, _rStb ),
@@ -190,14 +190,14 @@ SvxZoomSliderControl::SvxZoomSliderControl( sal_uInt16 _nSlotId,  sal_uInt16 _nI
 #endif
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxZoomSliderControl::~SvxZoomSliderControl()
 {
     delete mpImpl;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
@@ -259,7 +259,7 @@ void SvxZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eStat
         GetStatusBar().SetItemData( GetId(), 0 );    // force repaint
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
 {
@@ -323,7 +323,7 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
     pDev->SetFillColor( aOldFillColor );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxZoomSliderControl::MouseButtonDown( const MouseEvent & rEvt )
 {
@@ -382,7 +382,7 @@ sal_Bool SvxZoomSliderControl::MouseButtonDown( const MouseEvent & rEvt )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxZoomSliderControl::MouseMove( const MouseEvent & rEvt )
 {

@@ -18,7 +18,7 @@
  */
 
 
-//--------------------------------------------------------------------------
+
 //  File:       ooofilt.cxx
 //  Contents:   Filter Implementation for OpenOffice.Org Document using
 //              Indexing Service
@@ -28,13 +28,13 @@
 //              to be filtered.
 //
 //  Platform:   Windows 2000, Windows XP
-//--------------------------------------------------------------------------
+
 #include "internal/contentreader.hxx"
 #include "internal/metainforeader.hxx"
 #include "internal/registry.hxx"
 #include "internal/fileextensions.hxx"
 
-//--------------------------------------------------------------------------
+
 //  Include file    Purpose
 //  windows.h       Win32 declarations
 //  string.h        string wstring declarations
@@ -44,7 +44,7 @@
 //  assert.h        assertion function.
 //  ooofilt.hxx     LibreOffice filter declarations
 //  propspec.hxx    PROPSPEC
-//--------------------------------------------------------------------------
+
 
 #if defined _MSC_VER
 #pragma warning(push, 1)
@@ -72,13 +72,13 @@ using ::std::min;
 //C-------------------------------------------------------------------------
 //  Class:      COooFilter
 //  Summary:    Implements LibreOffice filter class
-//--------------------------------------------------------------------------
+
 //M-------------------------------------------------------------------------
 //  Method:     COooFilter::COooFilter
 //  Summary:    Class constructor
 //  Arguments:  void
 //  Purpose:    Manages global instance count
-//--------------------------------------------------------------------------
+
 COooFilter::COooFilter() :
     m_lRefs(1),
     m_pContentReader(NULL),
@@ -104,7 +104,7 @@ COooFilter::COooFilter() :
 //  Summary:    Class destructor
 //  Arguments:  void
 //  Purpose:    Manages global instance count and file handle
-//--------------------------------------------------------------------------
+
 COooFilter::~COooFilter()
 {
     delete [] m_pAttributes;
@@ -130,7 +130,7 @@ COooFilter::~COooFilter()
 //              Interface is supported
 //              E_NOINTERFACE
 //              Interface is not supported
-//--------------------------------------------------------------------------
+
 SCODE STDMETHODCALLTYPE COooFilter::QueryInterface(
     REFIID riid,
     void  ** ppvObject)
@@ -160,7 +160,7 @@ SCODE STDMETHODCALLTYPE COooFilter::QueryInterface(
 //  Summary:    Increments interface refcount
 //  Arguments:  void
 //  Returns:    Value of incremented interface refcount
-//--------------------------------------------------------------------------
+
 ULONG STDMETHODCALLTYPE COooFilter::AddRef()
 {
     return InterlockedIncrement( &m_lRefs );
@@ -170,7 +170,7 @@ ULONG STDMETHODCALLTYPE COooFilter::AddRef()
 //  Summary:    Decrements interface refcount, deleting if unreferenced
 //  Arguments:  void
 //  Returns:    Value of decremented interface refcount
-//--------------------------------------------------------------------------
+
 ULONG STDMETHODCALLTYPE COooFilter::Release()
 {
     ULONG ulTmp = InterlockedDecrement( &m_lRefs );
@@ -200,7 +200,7 @@ ULONG STDMETHODCALLTYPE COooFilter::Release()
 //                  Unable to access file to be filtered
 //              FILTER_E_PASSWORD
 //                  (not implemented)
-//--------------------------------------------------------------------------
+
 const int COUNT_ATTRIBUTES = 5;
 
 SCODE STDMETHODCALLTYPE COooFilter::Init(
@@ -310,7 +310,7 @@ SCODE STDMETHODCALLTYPE COooFilter::Init(
 //                  (not implemented)
 //              FILTER_E_PASSWORD
 //                  (not implemented)
-//--------------------------------------------------------------------------
+
 SCODE STDMETHODCALLTYPE COooFilter::GetChunk(STAT_CHUNK * pStat)
 {
     for(;;)
@@ -407,7 +407,7 @@ SCODE STDMETHODCALLTYPE COooFilter::GetChunk(STAT_CHUNK * pStat)
 //                  All of the text in the current chunk has been returned
 //              FILTER_S_LAST_TEXT
 //                  Next call to GetText will return FILTER_E_NO_MORE_TEXT
-//--------------------------------------------------------------------------
+
 SCODE STDMETHODCALLTYPE COooFilter::GetText(ULONG * pcwcBuffer, WCHAR * awcBuffer)
 {
     switch ( m_eState )
@@ -446,7 +446,7 @@ SCODE STDMETHODCALLTYPE COooFilter::GetText(ULONG * pcwcBuffer, WCHAR * awcBuffe
 //  Arguments:  ulPropID
 //                  [in] property ID
 //  Returns:    corresponding metainfo names.
-//--------------------------------------------------------------------------
+
 
 ::std::wstring GetMetaInfoNameFromPropertyId( ULONG ulPropID )
 {
@@ -469,7 +469,7 @@ SCODE STDMETHODCALLTYPE COooFilter::GetText(ULONG * pcwcBuffer, WCHAR * awcBuffe
 //                  Always
 //              FILTER_E_NO_MORE_VALUES
 //                  (not implemented)
-//--------------------------------------------------------------------------
+
 
 SCODE STDMETHODCALLTYPE COooFilter::GetValue(PROPVARIANT ** ppPropValue)
 {
@@ -515,7 +515,7 @@ SCODE STDMETHODCALLTYPE COooFilter::GetValue(PROPVARIANT ** ppPropValue)
 //                  Always
 //              FILTER_W_REGION_CLIPPED
 //                  (not implemented)
-//--------------------------------------------------------------------------
+
 
 SCODE STDMETHODCALLTYPE COooFilter::BindRegion(
     FILTERREGION /*origPos*/,
@@ -534,7 +534,7 @@ SCODE STDMETHODCALLTYPE COooFilter::BindRegion(
 //                  Always
 //              E_FAIL
 //                  (not implemented)
-//--------------------------------------------------------------------------
+
 SCODE STDMETHODCALLTYPE COooFilter::GetClassID(CLSID * pClassID)
 {
     *pClassID = CLSID_COooFilter;
@@ -548,7 +548,7 @@ SCODE STDMETHODCALLTYPE COooFilter::GetClassID(CLSID * pClassID)
 //                  Always
 //              S_OK
 //                  (not implemented)
-//--------------------------------------------------------------------------
+
 SCODE STDMETHODCALLTYPE COooFilter::IsDirty()
 {
     // File is opened read-only and never changes
@@ -568,7 +568,7 @@ SCODE STDMETHODCALLTYPE COooFilter::IsDirty()
 //                  File could not be loaded due to insufficient memory
 //              E_FAIL
 //                  (not implemented)
-//--------------------------------------------------------------------------
+
 SCODE STDMETHODCALLTYPE COooFilter::Load(LPCWSTR pszFileName, DWORD /*dwMode*/)
 {
     // Load just sets the filename for GetChunk to read and ignores the mode
@@ -603,7 +603,7 @@ SCODE STDMETHODCALLTYPE COooFilter::Load(LPCWSTR pszFileName, DWORD /*dwMode*/)
 //                  Always
 //              S_OK
 //                  (not implemented)
-//--------------------------------------------------------------------------
+
 SCODE STDMETHODCALLTYPE COooFilter::Save(LPCWSTR /*pszFileName*/, BOOL /*fRemember*/)
 {
     // File is opened read-only; saving it is an error
@@ -617,7 +617,7 @@ SCODE STDMETHODCALLTYPE COooFilter::Save(LPCWSTR /*pszFileName*/, BOOL /*fRememb
 //                       absolute path where file was previously saved
 //  Returns:    S_OK
 //                  Always
-//--------------------------------------------------------------------------
+
 SCODE STDMETHODCALLTYPE COooFilter::SaveCompleted(LPCWSTR /*pszFileName*/)
 {
     // File is opened read-only, so "save" is always finished
@@ -632,7 +632,7 @@ SCODE STDMETHODCALLTYPE COooFilter::SaveCompleted(LPCWSTR /*pszFileName*/)
 //  Returns:    S_OK
 //              E_OUTOFMEMORY
 //              E_FAIL
-//--------------------------------------------------------------------------
+
 SCODE STDMETHODCALLTYPE COooFilter::Load(IStream *pStm)
 {
     m_pStream = new BufferStream(pStm);
@@ -659,7 +659,7 @@ SCODE STDMETHODCALLTYPE COooFilter::Load(IStream *pStm)
 //  Arguments:  pcbSize
 //                  [out] Pointer to a 64 bit unsigned int indicating the size needed
 //  Returns:    E_NOTIMPL
-//--------------------------------------------------------------------------
+
 SCODE STDMETHODCALLTYPE COooFilter::GetSizeMax(ULARGE_INTEGER * /*pcbSize*/)
 {
     return E_NOTIMPL;
@@ -673,7 +673,7 @@ SCODE STDMETHODCALLTYPE COooFilter::GetSizeMax(ULARGE_INTEGER * /*pcbSize*/)
 //              fClearDirty
 //                  [in] Indicates whether to clear dirty flag
 //  Returns:    E_NOTIMPL
-//--------------------------------------------------------------------------
+
 SCODE STDMETHODCALLTYPE COooFilter::Save(IStream * /*pStm*/, BOOL )
 {
     return E_NOTIMPL;
@@ -694,7 +694,7 @@ SCODE STDMETHODCALLTYPE COooFilter::Save(IStream * /*pStm*/, BOOL )
 //              E_FAIL
 //                  Operation failed due to some reason
 //                  other than insufficient memory
-//-------------------------------------------------------------------------
+
 SCODE STDMETHODCALLTYPE COooFilter::GetCurFile(LPWSTR * ppszFileName)
 {
     if ( EMPTY_STRING == m_pwszFileName )
@@ -709,7 +709,7 @@ SCODE STDMETHODCALLTYPE COooFilter::GetCurFile(LPWSTR * ppszFileName)
 //  Summary:    Class factory constructor
 //  Arguments:  void
 //  Purpose:    Manages global instance count
-//--------------------------------------------------------------------------
+
 COooFilterCF::COooFilterCF() :
     m_lRefs(1)
 {
@@ -720,7 +720,7 @@ COooFilterCF::COooFilterCF() :
 //  Summary:    Class factory destructor
 //  Arguments:  void
 //  Purpose:    Manages global instance count
-//--------------------------------------------------------------------------
+
 COooFilterCF::~COooFilterCF()
 {
    InterlockedDecrement( &g_lInstances );
@@ -736,7 +736,7 @@ COooFilterCF::~COooFilterCF()
 //                  Interface is supported
 //              E_NOINTERFACE
 //                  Interface is not supported
-//--------------------------------------------------------------------------
+
 SCODE STDMETHODCALLTYPE COooFilterCF::QueryInterface(REFIID riid, void  ** ppvObject)
 {
     IUnknown *pUnkTemp;
@@ -759,7 +759,7 @@ SCODE STDMETHODCALLTYPE COooFilterCF::QueryInterface(REFIID riid, void  ** ppvOb
 //  Summary:    Increments interface refcount
 //  Arguments:  void
 //  Returns:    Value of incremented interface refcount
-//-------------------------------------------------------------------------
+
 ULONG STDMETHODCALLTYPE COooFilterCF::AddRef()
 {
    return InterlockedIncrement( &m_lRefs );
@@ -769,7 +769,7 @@ ULONG STDMETHODCALLTYPE COooFilterCF::AddRef()
 //  Summary:    Decrements interface refcount, deleting if unreferenced
 //  Arguments:  void
 //  Returns:    Value of decremented refcount
-//--------------------------------------------------------------------------
+
 ULONG STDMETHODCALLTYPE COooFilterCF::Release()
 {
     ULONG ulTmp = InterlockedDecrement( &m_lRefs );
@@ -798,7 +798,7 @@ ULONG STDMETHODCALLTYPE COooFilterCF::Release()
 //                  due to insufficient memory
 //              E_UNEXPECTED
 //                  Unsuccessful due to an unexpected condition
-//--------------------------------------------------------------------------
+
 SCODE STDMETHODCALLTYPE COooFilterCF::CreateInstance(
     IUnknown * pUnkOuter,
     REFIID riid,
@@ -834,7 +834,7 @@ SCODE STDMETHODCALLTYPE COooFilterCF::CreateInstance(
 //                  (not implemented)
 //              E_UNEXPECTED
 //                  (not implemented)
-//--------------------------------------------------------------------------
+
 SCODE STDMETHODCALLTYPE COooFilterCF::LockServer(BOOL fLock)
 {
     if( fLock )
@@ -846,7 +846,7 @@ SCODE STDMETHODCALLTYPE COooFilterCF::LockServer(BOOL fLock)
 //+-------------------------------------------------------------------------
 //  DLL:        ooofilt.dll
 //  Summary:    Implements Dynamic Link Library functions for LibreOffice filter
-//--------------------------------------------------------------------------
+
 //F-------------------------------------------------------------------------
 //  Function:   DllMain
 //  Summary:    Called from C-Runtime on process/thread attach/detach
@@ -858,7 +858,7 @@ SCODE STDMETHODCALLTYPE COooFilterCF::LockServer(BOOL fLock)
 //                  [in] Details of DLL initialization and cleanup
 //  Returns:    TRUE
 //                  Always
-//--------------------------------------------------------------------------
+
 extern "C" BOOL WINAPI DllMain(
     HINSTANCE hInstance,
     DWORD     fdwReason,
@@ -888,7 +888,7 @@ extern "C" BOOL WINAPI DllMain(
 //                  Insufficient memory to create the class factory object
 //              E_UNEXPECTED
 //                  Unsuccessful due to an unexpected condition
-//-------------------------------------------------------------------------
+
 extern "C" SCODE STDMETHODCALLTYPE DllGetClassObject(
     REFCLSID   cid,
     REFIID     iid,
@@ -923,7 +923,7 @@ extern "C" SCODE STDMETHODCALLTYPE DllGetClassObject(
 //                  DLL can be unloaded now
 //              S_FALSE
 //                  DLL must remain loaded
-//--------------------------------------------------------------------------
+
 extern "C" SCODE STDMETHODCALLTYPE DllCanUnloadNow()
 {
     if ( 0 >= g_lInstances )
@@ -960,12 +960,12 @@ extern "C" SCODE STDMETHODCALLTYPE DllCanUnloadNow()
 //                      (not implemented)
 //                  E_UNEXPECTED
 //                      (not implemented)
-//--------------------------------------------------------------------------
+
 
 
 //F-------------------------------------------------------------------------
 //  helper functions to register the Indexing Service.
-//--------------------------------------------------------------------------
+
 
 namespace /* private */
 {
@@ -981,10 +981,10 @@ namespace /* private */
 
     const char* INDEXING_FILTER_DLLSTOREGISTER      = "SYSTEM\\CurrentControlSet\\Control\\ContentIndex";
 
-    //---------------------------
+
     // "String Placeholder" ->
     // "String Replacement"
-    //---------------------------
+
 
     void SubstitutePlaceholder(std::string& String, const std::string& Placeholder, const std::string& Replacement)
     {
@@ -998,12 +998,12 @@ namespace /* private */
         }
     }
 
-    //----------------------------------------------
+
     // Make the registry entry and set Filter Handler
     // HKCR\CLSID\{7BC0E710-5703-45be-A29D-5D46D8B39262} = LibreOffice Filter
     //                   InProcServer32  (Default)       = Path\ooofilt.dll
     //                                   ThreadingModel  = Both
-    //----------------------------------------------
+
 
     HRESULT RegisterFilterHandler(const char* FilePath, const CLSID& FilterGuid)
     {
@@ -1025,12 +1025,12 @@ namespace /* private */
         return S_OK;
     }
 
-    //----------------------------------------------
+
     // Make the registry entry and set Persistent Handler
     // HKCR\CLSID\{7BC0E713-5703-45be-A29D-5D46D8B39262}  = LibreOffice Persistent Handler
     //      PersistentAddinsRegistered
     //          {89BCB740-6119-101A-BCB7-00DD010655AF} = {7BC0E710-5703-45be-A29D-5D46D8B39262}
-    //----------------------------------------------
+
 
     HRESULT RegisterPersistentHandler(const CLSID& FilterGuid, const CLSID& PersistentGuid)
     {
@@ -1064,9 +1064,9 @@ namespace /* private */
         return S_OK;
     }
 
-    //---------------------------
+
     // Unregister Filter Handler or persistent handler
-    //---------------------------
+
 
     HRESULT UnregisterHandler(const CLSID& Guid)
     {
@@ -1075,11 +1075,11 @@ namespace /* private */
         return DeleteRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str()) ? S_OK : E_FAIL;
     }
 
-    //---------------------------
+
     // Register Indexing Service ext and class.
     // HKCR\{EXT}\PersistentHandler = {7BC0E713-5703-45be-A29D-5D46D8B39262}
     // HKCR\{GUID\PersistentHandler = {7BC0E713-5703-45be-A29D-5D46D8B39262}
-    //---------------------------
+
 
     HRESULT RegisterSearchHandler(const char* ModuleFileName)
     {
@@ -1164,11 +1164,11 @@ namespace /* private */
         return ((UnregisterHandler(CLSID_FILTER_HANDLER)==S_OK) && (UnregisterHandler(CLSID_PERSISTENT_HANDLER)==S_OK))?S_OK:E_FAIL;
     }
 
-    //---------------------------
+
     //    add or remove an entry to DllsToRegister entry of Indexing
     //    Filter to let Indexing Service register our filter automatically
     //    each time.
-    //---------------------------
+
     HRESULT AddOrRemoveDllsToRegisterList( const ::std::string & DllPath, bool isAdd )
     {
         char DllsToRegisterList[4096];
@@ -1240,7 +1240,7 @@ STDAPI DllRegisterServer()
     return S_OK;
 }
 
-//---------------------------
+
 
 STDAPI DllUnregisterServer()
 {

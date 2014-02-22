@@ -71,19 +71,19 @@ void RegisterInterfaces(SfxModule* pMod)
     TableObjectBar::RegisterInterface(pMod);
 }
 
-// ------------------
+
 // - TableObjectBar -
-// ------------------
+
 
 TYPEINIT1( TableObjectBar, SfxShell );
 
-// -----------------------------------------------------------------------------
+
 
 SFX_IMPL_INTERFACE( TableObjectBar, SfxShell, SdResId( STR_TABLEOBJECTBARSHELL ) )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 TableObjectBar::TableObjectBar( ViewShell* pSdViewShell, ::sd::View* pSdView )
 :   SfxShell( pSdViewShell->GetViewShell() )
@@ -102,14 +102,14 @@ TableObjectBar::TableObjectBar( ViewShell* pSdViewShell, ::sd::View* pSdView )
     SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Table));
 }
 
-// -----------------------------------------------------------------------------
+
 
 TableObjectBar::~TableObjectBar()
 {
     SetRepeatTarget( NULL );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableObjectBar::GetState( SfxItemSet& rSet )
 {
@@ -130,7 +130,7 @@ void TableObjectBar::GetState( SfxItemSet& rSet )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableObjectBar::GetAttrState( SfxItemSet& rSet )
 {
@@ -139,7 +139,7 @@ void TableObjectBar::GetAttrState( SfxItemSet& rSet )
         pDrawViewShell->GetAttrState( rSet );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableObjectBar::Execute( SfxRequest& rReq )
 {

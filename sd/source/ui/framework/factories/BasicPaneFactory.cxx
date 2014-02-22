@@ -413,7 +413,7 @@ void SAL_CALL BasicPaneFactory::disposing (
 
 
 
-//-----------------------------------------------------------------------------
+
 
 Reference<XResource> BasicPaneFactory::CreateFrameWindowPane (
     const Reference<XResourceId>& rxPaneId)

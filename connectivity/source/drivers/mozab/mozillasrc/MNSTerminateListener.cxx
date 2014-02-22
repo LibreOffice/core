@@ -28,33 +28,33 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTerminateListener>          MNSTerminateListener::mxTerminateListener = new MNSTerminateListener();
 
-// -----------------------------------------
+
 // - MNSTerminateListener -
-// -----------------------------------------
+
 
 MNSTerminateListener::MNSTerminateListener(  )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 MNSTerminateListener::~MNSTerminateListener()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL MNSTerminateListener::disposing( const EventObject& /*Source*/ ) throw( RuntimeException )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL MNSTerminateListener::queryTermination( const EventObject& /*aEvent*/ ) throw( TerminationVetoException, RuntimeException )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL MNSTerminateListener::notifyTermination( const EventObject& /*aEvent*/ ) throw( RuntimeException )
 {

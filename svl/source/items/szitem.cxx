@@ -30,18 +30,18 @@
 
 DBG_NAME(SfxSizeItem)
 
-// -----------------------------------------------------------------------
+
 
 TYPEINIT1_AUTOFACTORY(SfxSizeItem, SfxPoolItem);
 
-// -----------------------------------------------------------------------
+
 
 SfxSizeItem::SfxSizeItem()
 {
     DBG_CTOR(SfxSizeItem, 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxSizeItem::SfxSizeItem( sal_uInt16 nW, const Size& rVal ) :
     SfxPoolItem( nW ),
@@ -50,7 +50,7 @@ SfxSizeItem::SfxSizeItem( sal_uInt16 nW, const Size& rVal ) :
     DBG_CTOR(SfxSizeItem, 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxSizeItem::SfxSizeItem( const SfxSizeItem& rItem ) :
     SfxPoolItem( rItem ),
@@ -59,7 +59,7 @@ SfxSizeItem::SfxSizeItem( const SfxSizeItem& rItem ) :
     DBG_CTOR(SfxSizeItem, 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxItemPresentation SfxSizeItem::GetPresentation
 (
@@ -75,7 +75,7 @@ SfxItemPresentation SfxSizeItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxSizeItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -84,7 +84,7 @@ bool SfxSizeItem::operator==( const SfxPoolItem& rItem ) const
     return ((SfxSizeItem&)rItem).aVal == aVal;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SfxSizeItem::Clone(SfxItemPool *) const
 {
@@ -92,7 +92,7 @@ SfxPoolItem* SfxSizeItem::Clone(SfxItemPool *) const
     return new SfxSizeItem( *this );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SfxSizeItem::Create(SvStream &rStream, sal_uInt16 ) const
 {
@@ -102,7 +102,7 @@ SfxPoolItem* SfxSizeItem::Create(SvStream &rStream, sal_uInt16 ) const
     return new SfxSizeItem(Which(), aStr);
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SfxSizeItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
@@ -111,7 +111,7 @@ SvStream& SfxSizeItem::Store(SvStream &rStream, sal_uInt16 ) const
     return rStream;
 }
 
-// -----------------------------------------------------------------------
+
 bool  SfxSizeItem::QueryValue( com::sun::star::uno::Any& rVal,
                                sal_uInt8 nMemberId ) const
 {
@@ -142,7 +142,7 @@ bool  SfxSizeItem::QueryValue( com::sun::star::uno::Any& rVal,
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 bool SfxSizeItem::PutValue( const com::sun::star::uno::Any& rVal,
                             sal_uInt8 nMemberId )
 {

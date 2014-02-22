@@ -286,9 +286,9 @@ void XFlatXml::setDocumentLocator(const Reference<XLocator>& doclocator)
     m_rDocumentHandler->setDocumentLocator(doclocator);
 }
 
-// --------------------------------------
+
 // Component management
-// --------------------------------------
+
 Reference< XInterface > SAL_CALL CreateInstance( const Reference< XMultiServiceFactory > &r)
 {
     return Reference< XInterface >(( OWeakObject *)new XFlatXml(r));

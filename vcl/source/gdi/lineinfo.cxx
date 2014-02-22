@@ -27,9 +27,9 @@
 #include <numeric>
 
 
-// ----------------
+
 // - ImplLineInfo -
-// ----------------
+
 
 ImplLineInfo::ImplLineInfo() :
     mnRefCount  ( 1 ),
@@ -45,7 +45,7 @@ ImplLineInfo::ImplLineInfo() :
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplLineInfo::ImplLineInfo( const ImplLineInfo& rImplLineInfo ) :
     mnRefCount  ( 1 ),
@@ -61,7 +61,7 @@ ImplLineInfo::ImplLineInfo( const ImplLineInfo& rImplLineInfo ) :
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 inline bool ImplLineInfo::operator==( const ImplLineInfo& rB ) const
 {
@@ -76,9 +76,9 @@ inline bool ImplLineInfo::operator==( const ImplLineInfo& rB ) const
         && meLineCap == rB.meLineCap);
 }
 
-// ------------
+
 // - LineInfo -
-// ------------
+
 
 LineInfo::LineInfo( LineStyle eStyle, long nWidth )
 {
@@ -87,7 +87,7 @@ LineInfo::LineInfo( LineStyle eStyle, long nWidth )
     mpImplLineInfo->mnWidth = nWidth;
 }
 
-// -----------------------------------------------------------------------
+
 
 LineInfo::LineInfo( const LineInfo& rLineInfo )
 {
@@ -95,7 +95,7 @@ LineInfo::LineInfo( const LineInfo& rLineInfo )
     mpImplLineInfo->mnRefCount++;
 }
 
-// -----------------------------------------------------------------------
+
 
 LineInfo::~LineInfo()
 {
@@ -103,7 +103,7 @@ LineInfo::~LineInfo()
         delete mpImplLineInfo;
 }
 
-// -----------------------------------------------------------------------
+
 
 LineInfo& LineInfo::operator=( const LineInfo& rLineInfo )
 {
@@ -117,7 +117,7 @@ LineInfo& LineInfo::operator=( const LineInfo& rLineInfo )
     return *this;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool LineInfo::operator==( const LineInfo& rLineInfo ) const
 {
@@ -126,7 +126,7 @@ bool LineInfo::operator==( const LineInfo& rLineInfo ) const
            *mpImplLineInfo == *rLineInfo.mpImplLineInfo );
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineInfo::ImplMakeUnique()
 {
@@ -139,7 +139,7 @@ void LineInfo::ImplMakeUnique()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineInfo::SetStyle( LineStyle eStyle )
 {
@@ -147,7 +147,7 @@ void LineInfo::SetStyle( LineStyle eStyle )
     mpImplLineInfo->meStyle = eStyle;
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineInfo::SetWidth( long nWidth )
 {
@@ -155,7 +155,7 @@ void LineInfo::SetWidth( long nWidth )
     mpImplLineInfo->mnWidth = nWidth;
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineInfo::SetDashCount( sal_uInt16 nDashCount )
 {
@@ -163,7 +163,7 @@ void LineInfo::SetDashCount( sal_uInt16 nDashCount )
     mpImplLineInfo->mnDashCount = nDashCount;
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineInfo::SetDashLen( long nDashLen )
 {
@@ -171,7 +171,7 @@ void LineInfo::SetDashLen( long nDashLen )
     mpImplLineInfo->mnDashLen = nDashLen;
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineInfo::SetDotCount( sal_uInt16 nDotCount )
 {
@@ -179,7 +179,7 @@ void LineInfo::SetDotCount( sal_uInt16 nDotCount )
     mpImplLineInfo->mnDotCount = nDotCount;
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineInfo::SetDotLen( long nDotLen )
 {
@@ -187,7 +187,7 @@ void LineInfo::SetDotLen( long nDotLen )
     mpImplLineInfo->mnDotLen = nDotLen;
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineInfo::SetDistance( long nDistance )
 {
@@ -195,7 +195,7 @@ void LineInfo::SetDistance( long nDistance )
     mpImplLineInfo->mnDistance = nDistance;
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineInfo::SetLineJoin(basegfx::B2DLineJoin eLineJoin)
 {
@@ -207,7 +207,7 @@ void LineInfo::SetLineJoin(basegfx::B2DLineJoin eLineJoin)
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineInfo::SetLineCap(com::sun::star::drawing::LineCap eLineCap)
 {
@@ -218,7 +218,7 @@ void LineInfo::SetLineCap(com::sun::star::drawing::LineCap eLineCap)
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool LineInfo::IsDefault() const
 {
@@ -227,7 +227,7 @@ bool LineInfo::IsDefault() const
         && ( com::sun::star::drawing::LineCap_BUTT == mpImplLineInfo->meLineCap));
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& ReadImplLineInfo( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
 {
@@ -266,7 +266,7 @@ SvStream& ReadImplLineInfo( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
     return rIStm;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& WriteImplLineInfo( SvStream& rOStm, const ImplLineInfo& rImplLineInfo )
 {
@@ -290,7 +290,7 @@ SvStream& WriteImplLineInfo( SvStream& rOStm, const ImplLineInfo& rImplLineInfo 
     return rOStm;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& ReadLineInfo( SvStream& rIStm, LineInfo& rLineInfo )
 {
@@ -298,14 +298,14 @@ SvStream& ReadLineInfo( SvStream& rIStm, LineInfo& rLineInfo )
     return ReadImplLineInfo( rIStm, *rLineInfo.mpImplLineInfo );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& WriteLineInfo( SvStream& rOStm, const LineInfo& rLineInfo )
 {
     return WriteImplLineInfo( rOStm, *rLineInfo.mpImplLineInfo );
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineInfo::applyToB2DPolyPolygon(
     basegfx::B2DPolyPolygon& io_rLinePolyPolygon,

@@ -36,9 +36,9 @@
 
 #include <osl/file.hxx>
 
-//--------------------------------------------------------------
+
 //  namesapces
-//--------------------------------------------------------------
+
 
 using namespace ::rtl                   ;
 using namespace ::cppu                  ;
@@ -49,24 +49,24 @@ using namespace com::sun::star::system;
 
 #define RDB_SYSPATH "D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\applicat.rdb"
 
-//--------------------------------------------------------------
+
 //  global variables
-//--------------------------------------------------------------
+
 
 Reference< XMultiServiceFactory >   g_xFactory;
 
-//--------------------------------------------------------------
+
 //  main
-//--------------------------------------------------------------
+
 
 
 // int SAL_CALL main(int nArgc, char* Argv[], char* pEnv[]  )
 // make Warning free, leave out typename
 int SAL_CALL main(int , char*, char* )
 {
-    //-------------------------------------------------
+
     // get the global service-manager
-    //-------------------------------------------------
+
 
     // Get global factory for uno services.
     OUString rdbName = OUString( RDB_SYSPATH  );
@@ -81,9 +81,9 @@ int SAL_CALL main(int , char*, char* )
 
     printf("Creating RegistryServiceFactory successful\n");
 
-    //-------------------------------------------------
+
     // try to get an Interface to a XFilePicker Service
-    //-------------------------------------------------
+
 
     try
     {
@@ -144,9 +144,9 @@ int SAL_CALL main(int , char*, char* )
     {
     }
 
-    //--------------------------------------------------
+
     // shutdown
-    //--------------------------------------------------
+
 
     // Cast factory to XComponent
     Reference< XComponent > xComponent( g_xFactory, UNO_QUERY );

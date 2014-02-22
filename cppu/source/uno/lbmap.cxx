@@ -71,27 +71,27 @@ public:
     inline bool SAL_CALL is() const SAL_THROW(())
         { return (_pMapping != 0); }
 };
-//__________________________________________________________________________________________________
+
 inline Mapping::Mapping( uno_Mapping * pMapping ) SAL_THROW(())
     : _pMapping( pMapping )
 {
     if (_pMapping)
         (*_pMapping->acquire)( _pMapping );
 }
-//__________________________________________________________________________________________________
+
 inline Mapping::Mapping( const Mapping & rMapping ) SAL_THROW(())
     : _pMapping( rMapping._pMapping )
 {
     if (_pMapping)
         (*_pMapping->acquire)( _pMapping );
 }
-//__________________________________________________________________________________________________
+
 inline Mapping::~Mapping() SAL_THROW(())
 {
     if (_pMapping)
         (*_pMapping->release)( _pMapping );
 }
-//__________________________________________________________________________________________________
+
 inline Mapping & Mapping::operator = ( uno_Mapping * pMapping ) SAL_THROW(())
 {
     if (pMapping)
@@ -120,13 +120,13 @@ struct MappingEntry
         , aMappingName( rMappingName_ )
         {}
 };
-//--------------------------------------------------------------------------------------------------
+
 struct FctOUStringHash : public std::unary_function< const OUString &, size_t >
 {
     size_t operator()( const OUString & rKey ) const SAL_THROW(())
         { return (size_t)rKey.hashCode(); }
 };
-//--------------------------------------------------------------------------------------------------
+
 struct FctPtrHash : public std::unary_function< uno_Mapping *, size_t >
 {
     size_t operator()( uno_Mapping * pKey ) const SAL_THROW(())
@@ -154,7 +154,7 @@ struct MappingsData
     Mutex               aNegativeLibsMutex;
     t_OUStringSet       aNegativeLibs;
 };
-//--------------------------------------------------------------------------------------------------
+
 static MappingsData & getMappingsData() SAL_THROW(())
 {
     static MappingsData * s_p = 0;
@@ -195,13 +195,13 @@ struct uno_Mediate_Mapping : public uno_Mapping
 };
 extern "C"
 {
-//--------------------------------------------------------------------------------------------------
+
 static void SAL_CALL mediate_free( uno_Mapping * pMapping )
     SAL_THROW(())
 {
     delete static_cast< uno_Mediate_Mapping * >( pMapping );
 }
-//--------------------------------------------------------------------------------------------------
+
 static void SAL_CALL mediate_acquire( uno_Mapping * pMapping )
     SAL_THROW(())
 {
@@ -215,7 +215,7 @@ static void SAL_CALL mediate_acquire( uno_Mapping * pMapping )
             static_cast< uno_Mediate_Mapping * >( pMapping )->aAddPurpose.pData );
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 static void SAL_CALL mediate_release( uno_Mapping * pMapping )
     SAL_THROW(())
 {
@@ -225,7 +225,7 @@ static void SAL_CALL mediate_release( uno_Mapping * pMapping )
         uno_revokeMapping( pMapping );
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 static void SAL_CALL mediate_mapInterface(
     uno_Mapping * pMapping,
     void ** ppOut, void * pInterface,
@@ -261,7 +261,7 @@ static void SAL_CALL mediate_mapInterface(
     }
 }
 }
-//__________________________________________________________________________________________________
+
 uno_Mediate_Mapping::uno_Mediate_Mapping(
     const Environment & rFrom_, const Environment & rTo_,
     const Mapping & rFrom2Uno_, const Mapping & rUno2To_,
@@ -487,7 +487,7 @@ static Mapping getDirectMapping(
     return Mapping();
 }
 
-//--------------------------------------------------------------------------------------------------
+
 static inline Mapping createMediateMapping(
     const Environment & rFrom, const Environment & rTo,
     const Mapping & rFrom2Uno, const Mapping & rUno2To,

@@ -31,14 +31,14 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::cppu;
 
-// -------------------------------------------------------------------------
+
 MacabCatalog::MacabCatalog(MacabConnection* _pCon)
         : connectivity::sdbcx::OCatalog(_pCon),
           m_pConnection(_pCon),
           m_xMetaData(m_pConnection->getMetaData())
 {
 }
-// -------------------------------------------------------------------------
+
 void MacabCatalog::refreshTables()
 {
     TStringVector aVector;
@@ -69,25 +69,25 @@ void MacabCatalog::refreshTables()
     else
         m_pTables = new MacabTables(m_xMetaData,*this,m_aMutex,aVector);
 }
-// -------------------------------------------------------------------------
+
 void MacabCatalog::refreshViews()
 {
 }
-// -------------------------------------------------------------------------
+
 void MacabCatalog::refreshGroups()
 {
 }
-// -------------------------------------------------------------------------
+
 void MacabCatalog::refreshUsers()
 {
 }
-// -------------------------------------------------------------------------
+
 const OUString& MacabCatalog::getDot()
 {
     static const OUString sDot = ".";
     return sDot;
 }
-// -----------------------------------------------------------------------------
+
 
 // XTablesSupplier
 Reference< XNameAccess > SAL_CALL MacabCatalog::getTables(  ) throw(RuntimeException)

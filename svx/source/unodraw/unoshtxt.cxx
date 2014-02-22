@@ -53,9 +53,9 @@ using namespace ::rtl;
 
 using ::com::sun::star::uno::XInterface;
 
-//------------------------------------------------------------------------
+
 // SvxTextEditSourceImpl
-//------------------------------------------------------------------------
+
 
 /** @descr
     <p>This class essentially provides the text and view forwarders. If
@@ -158,7 +158,7 @@ public:
     void                    UpdateOutliner();
 };
 
-//------------------------------------------------------------------------
+
 
 SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText, XInterface* pOwner )
   : maRefCount      ( 0 ),
@@ -196,7 +196,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText
         mpObject->AddObjectUser( *this );
 }
 
-//------------------------------------------------------------------------
+
 
 SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText, SdrView& rView, const Window& rWindow )
   : maRefCount      ( 0 ),
@@ -236,7 +236,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText
     mbShapeIsEditMode = IsEditMode();
 }
 
-//------------------------------------------------------------------------
+
 
 SvxTextEditSourceImpl::~SvxTextEditSourceImpl()
 {
@@ -247,7 +247,7 @@ SvxTextEditSourceImpl::~SvxTextEditSourceImpl()
     dispose();
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxTextEditSourceImpl::addRange( SvxUnoTextRangeBase* pNewRange )
 {
@@ -256,7 +256,7 @@ void SvxTextEditSourceImpl::addRange( SvxUnoTextRangeBase* pNewRange )
             maTextRanges.push_back( pNewRange );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxTextEditSourceImpl::removeRange( SvxUnoTextRangeBase* pOldRange )
 {
@@ -264,21 +264,21 @@ void SvxTextEditSourceImpl::removeRange( SvxUnoTextRangeBase* pOldRange )
         maTextRanges.remove( pOldRange );
 }
 
-//------------------------------------------------------------------------
+
 
 const SvxUnoTextRangeBaseList& SvxTextEditSourceImpl::getRanges() const
 {
     return maTextRanges;
 }
 
-//------------------------------------------------------------------------
+
 
 void SAL_CALL SvxTextEditSourceImpl::acquire()
 {
     osl_atomic_increment( &maRefCount );
 }
 
-//------------------------------------------------------------------------
+
 
 void SAL_CALL SvxTextEditSourceImpl::release()
 {
@@ -331,7 +331,7 @@ void SvxTextEditSourceImpl::ChangeModel( SdrModel* pNewModel )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
@@ -529,7 +529,7 @@ void SvxTextEditSourceImpl::dispose()
     mpWindow = 0;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxTextEditSourceImpl::SetupOutliner()
 {
@@ -552,7 +552,7 @@ void SvxTextEditSourceImpl::SetupOutliner()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxTextEditSourceImpl::UpdateOutliner()
 {
@@ -575,7 +575,7 @@ void SvxTextEditSourceImpl::UpdateOutliner()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 
 
@@ -713,7 +713,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
     return mpTextForwarder;
 }
 
-//------------------------------------------------------------------------
+
 
 SvxTextForwarder* SvxTextEditSourceImpl::GetEditModeTextForwarder()
 {
@@ -731,7 +731,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetEditModeTextForwarder()
     return mpTextForwarder;
 }
 
-//------------------------------------------------------------------------
+
 
 SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
 {
@@ -765,7 +765,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
         return GetBackgroundTextForwarder();
 }
 
-//------------------------------------------------------------------------
+
 
 SvxDrawOutlinerViewForwarder* SvxTextEditSourceImpl::CreateViewForwarder()
 {
@@ -849,7 +849,7 @@ SvxEditViewForwarder* SvxTextEditSourceImpl::GetEditViewForwarder( sal_Bool bCre
     return mpViewForwarder;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxTextEditSourceImpl::UpdateData()
 {
@@ -1039,11 +1039,11 @@ IMPL_LINK(SvxTextEditSourceImpl, NotifyHdl, EENotify*, aNotify)
     return 0;
 }
 
-//------------------------------------------------------------------------
 
-// --------------------------------------------------------------------
+
+
 // SvxTextEditSource
-// --------------------------------------------------------------------
+
 
 SvxTextEditSource::SvxTextEditSource( SdrObject* pObject, SdrText* pText, XInterface* pOwner )
 {
@@ -1051,14 +1051,14 @@ SvxTextEditSource::SvxTextEditSource( SdrObject* pObject, SdrText* pText, XInter
     mpImpl->acquire();
 }
 
-// --------------------------------------------------------------------
+
 SvxTextEditSource::SvxTextEditSource( SdrObject& rObj, SdrText* pText, SdrView& rView, const Window& rWindow )
 {
     mpImpl = new SvxTextEditSourceImpl( rObj, pText, rView, rWindow );
     mpImpl->acquire();
 }
 
-// --------------------------------------------------------------------
+
 
 SvxTextEditSource::SvxTextEditSource( SvxTextEditSourceImpl* pImpl )
 {
@@ -1066,7 +1066,7 @@ SvxTextEditSource::SvxTextEditSource( SvxTextEditSourceImpl* pImpl )
     mpImpl->acquire();
 }
 
-//------------------------------------------------------------------------
+
 SvxTextEditSource::~SvxTextEditSource()
 {
     ::SolarMutexGuard aGuard;
@@ -1074,31 +1074,31 @@ SvxTextEditSource::~SvxTextEditSource()
     mpImpl->release();
 }
 
-//------------------------------------------------------------------------
+
 SvxEditSource* SvxTextEditSource::Clone() const
 {
     return new SvxTextEditSource( mpImpl );
 }
 
-//------------------------------------------------------------------------
+
 SvxTextForwarder* SvxTextEditSource::GetTextForwarder()
 {
     return mpImpl->GetTextForwarder();
 }
 
-//------------------------------------------------------------------------
+
 SvxEditViewForwarder* SvxTextEditSource::GetEditViewForwarder( bool bCreate )
 {
     return mpImpl->GetEditViewForwarder( bCreate );
 }
 
-//------------------------------------------------------------------------
+
 SvxViewForwarder* SvxTextEditSource::GetViewForwarder()
 {
     return this;
 }
 
-//------------------------------------------------------------------------
+
 void SvxTextEditSource::UpdateData()
 {
     mpImpl->UpdateData();

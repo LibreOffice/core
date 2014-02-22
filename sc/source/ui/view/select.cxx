@@ -44,7 +44,7 @@ using namespace com::sun::star;
 static Point aSwitchPos;                //! Member
 static bool bDidSwitch = false;
 
-// -----------------------------------------------------------------------
+
 
 // View (Gridwin / keyboard)
 ScViewFunctionSet::ScViewFunctionSet( ScViewData* pNewViewData ) :

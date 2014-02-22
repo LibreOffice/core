@@ -47,6 +47,6 @@ sdbcx::ObjectType OFlatTables::createObject(const OUString& _rName)
     pRet->construct();
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

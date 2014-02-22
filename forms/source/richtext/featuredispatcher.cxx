@@ -32,7 +32,7 @@ namespace frm
     //====================================================================
     //= ORichTextFeatureDispatcher
     //====================================================================
-    //--------------------------------------------------------------------
+
     ORichTextFeatureDispatcher::ORichTextFeatureDispatcher( EditView& _rView, const URL&  _rURL )
         :m_aFeatureURL( _rURL )
         ,m_aStatusListeners( m_aMutex )
@@ -41,7 +41,7 @@ namespace frm
     {
     }
 
-    //--------------------------------------------------------------------
+
     ORichTextFeatureDispatcher::~ORichTextFeatureDispatcher( )
     {
         if ( !m_bDisposed )
@@ -51,7 +51,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     void ORichTextFeatureDispatcher::dispose()
     {
         EventObject aEvent( *this );
@@ -62,13 +62,13 @@ namespace frm
         disposing( aGuard );
     }
 
-    //--------------------------------------------------------------------
+
     void ORichTextFeatureDispatcher::disposing( ::osl::ClearableMutexGuard& /*_rClearBeforeNotify*/ )
     {
         m_pEditView = NULL;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ORichTextFeatureDispatcher::addStatusListener( const Reference< XStatusListener >& _rxControl, const URL& _rURL ) throw (RuntimeException)
     {
         OSL_ENSURE( !m_bDisposed, "ORichTextFeatureDispatcher::addStatusListener: already disposed!" );
@@ -84,19 +84,19 @@ namespace frm
             }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ORichTextFeatureDispatcher::removeStatusListener( const Reference< XStatusListener >& _rxControl, const URL& /*_rURL*/ ) throw (RuntimeException)
     {
         m_aStatusListeners.removeInterface( _rxControl );
     }
 
-    //--------------------------------------------------------------------
+
     void ORichTextFeatureDispatcher::invalidate()
     {
         invalidateFeatureState_Broadcast();
     }
 
-    //--------------------------------------------------------------------
+
     FeatureStateEvent ORichTextFeatureDispatcher::buildStatusEvent() const
     {
         FeatureStateEvent aEvent;
@@ -107,7 +107,7 @@ namespace frm
         return aEvent;
     }
 
-    //--------------------------------------------------------------------
+
     void ORichTextFeatureDispatcher::invalidateFeatureState_Broadcast()
     {
         FeatureStateEvent aEvent( buildStatusEvent() );
@@ -116,13 +116,13 @@ namespace frm
             doNotify( static_cast< XStatusListener* >( aIter.next() ), aEvent );
     }
 
-    //--------------------------------------------------------------------
+
     void ORichTextFeatureDispatcher::newStatusListener( const Reference< XStatusListener >& _rxListener )
     {
         doNotify( _rxListener, buildStatusEvent() );
     }
 
-    //--------------------------------------------------------------------
+
     void ORichTextFeatureDispatcher::doNotify( const Reference< XStatusListener >& _rxListener, const FeatureStateEvent& _rEvent ) const SAL_THROW(())
     {
         OSL_PRECOND( _rxListener.is(), "ORichTextFeatureDispatcher::doNotify: invalid listener!" );

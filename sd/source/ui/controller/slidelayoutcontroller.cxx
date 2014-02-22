@@ -65,7 +65,7 @@ namespace sd
 
 extern OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const OUString& aCmdURL );
 
-// -----------------------------------------------------------------------
+
 
 class LayoutToolbarMenu : public svtools::ToolbarMenu
 {
@@ -84,7 +84,7 @@ private:
     ValueSet* mpLayoutSet2;
 };
 
-// -----------------------------------------------------------------------
+
 
 struct snewfoil_value_info
 {
@@ -138,7 +138,7 @@ static const snewfoil_value_info v_standard[] =
     {0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE}
 };
 
-// -----------------------------------------------------------------------
+
 
 static void fillLayoutValueSet( ValueSet* pValue, const snewfoil_value_info* pInfo )
 {
@@ -159,7 +159,7 @@ static void fillLayoutValueSet( ValueSet* pValue, const snewfoil_value_info* pIn
     pValue->SetSizePixel( pValue->CalcWindowSizePixel( aLayoutItemSize ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const Reference< XFrame >& xFrame, ::Window* pParent, const bool bInsertPage )
 : svtools::ToolbarMenu(xFrame, pParent, WB_CLIPCHILDREN )
@@ -265,13 +265,13 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
     SetOutputSizePixel( getMenuSize() );
 }
 
-// -----------------------------------------------------------------------
+
 
 LayoutToolbarMenu::~LayoutToolbarMenu()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( LayoutToolbarMenu, SelectHdl, void *, pControl )
 {
@@ -316,7 +316,7 @@ OUString SlideLayoutController_getImplementationName()
     return OUString( "com.sun.star.comp.sd.SlideLayoutController" );
 }
 
-// --------------------------------------------------------------------
+
 
 Sequence< OUString >  SlideLayoutController_getSupportedServiceNames() throw( RuntimeException )
 {
@@ -325,7 +325,7 @@ Sequence< OUString >  SlideLayoutController_getSupportedServiceNames() throw( Ru
     return aSNS;
 }
 
-// --------------------------------------------------------------------
+
 
 Reference< XInterface > SAL_CALL SlideLayoutController_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
 {
@@ -333,14 +333,14 @@ Reference< XInterface > SAL_CALL SlideLayoutController_createInstance( const Ref
         new SlideLayoutController( comphelper::getComponentContext(rSMgr), ".uno:AssignLayout", false ));
 }
 
-// --------------------------------------------------------------------
+
 
 OUString InsertSlideController_getImplementationName()
 {
     return OUString( "com.sun.star.comp.sd.InsertSlideController" );
 }
 
-// --------------------------------------------------------------------
+
 
 Sequence< OUString >  InsertSlideController_getSupportedServiceNames() throw( RuntimeException )
 {
@@ -349,7 +349,7 @@ Sequence< OUString >  InsertSlideController_getSupportedServiceNames() throw( Ru
     return aSNS;
 }
 
-// --------------------------------------------------------------------
+
 
 Reference< XInterface > SAL_CALL InsertSlideController_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
 {
@@ -367,16 +367,16 @@ SlideLayoutController::SlideLayoutController( const Reference< uno::XComponentCo
 {
 }
 
-// --------------------------------------------------------------------
+
 
 ::Window* SlideLayoutController::createPopupWindow( ::Window* pParent )
 {
     return new sd::LayoutToolbarMenu( *this, m_xFrame, pParent, mbInsertPage );
 }
 
-// --------------------------------------------------------------------
+
 // XServiceInfo
-// --------------------------------------------------------------------
+
 
 OUString SAL_CALL SlideLayoutController::getImplementationName() throw( RuntimeException )
 {
@@ -386,7 +386,7 @@ OUString SAL_CALL SlideLayoutController::getImplementationName() throw( RuntimeE
         return SlideLayoutController_getImplementationName();
 }
 
-// --------------------------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL SlideLayoutController::getSupportedServiceNames(  ) throw( RuntimeException )
 {

@@ -48,7 +48,7 @@ ScMenuFloatingWindow::MenuItemData::MenuItemData() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScMenuFloatingWindow::SubMenuItemData::SubMenuItemData(ScMenuFloatingWindow* pParent) :
     mpSubMenu(NULL),
@@ -72,7 +72,7 @@ IMPL_LINK_NOARG(ScMenuFloatingWindow::SubMenuItemData, TimeoutHdl)
     return 0;
 }
 
-// ----------------------------------------------------------------------------
+
 
 size_t ScMenuFloatingWindow::MENU_NOT_SELECTED = 999;
 
@@ -872,7 +872,7 @@ ScCheckListMenuWindow::Member::Member() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScCheckListMenuWindow::CancelButton::CancelButton(ScCheckListMenuWindow* pParent) :
     ::CancelButton(pParent), mpParent(pParent) {}
@@ -883,7 +883,7 @@ void ScCheckListMenuWindow::CancelButton::Click()
     ::CancelButton::Click();
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScCheckListMenuWindow::ScCheckListMenuWindow(Window* pParent, ScDocument* pDoc) :
     ScMenuFloatingWindow(pParent, pDoc),

@@ -67,13 +67,13 @@ SdDisplay::SdDisplay( Window* pWin, SdResId Id ) :
     SetBackground( Wallpaper( Color( rStyles.GetFieldColor() ) ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 SdDisplay::~SdDisplay()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdDisplay::SetBitmapEx( BitmapEx* pBmpEx )
 {
@@ -89,7 +89,7 @@ void SdDisplay::SetBitmapEx( BitmapEx* pBmpEx )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdDisplay::Paint( const Rectangle& )
 {
@@ -107,7 +107,7 @@ void SdDisplay::Paint( const Rectangle& )
     aBitmapEx.Draw( this, aPt, aBmpSize );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdDisplay::SetScale( const Fraction& rFrac )
 {
@@ -217,7 +217,7 @@ AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
     aBtnRemoveAll.SetAccessibleRelationMemberOf( &aGrpBitmap );
 }
 
-// -----------------------------------------------------------------------
+
 
 AnimationWindow::~AnimationWindow()
 {
@@ -235,7 +235,7 @@ AnimationWindow::~AnimationWindow()
     delete pMyDoc;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(AnimationWindow, ClickFirstHdl)
 {
@@ -245,7 +245,7 @@ IMPL_LINK_NOARG(AnimationWindow, ClickFirstHdl)
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(AnimationWindow, ClickStopHdl)
 {
@@ -253,7 +253,7 @@ IMPL_LINK_NOARG(AnimationWindow, ClickStopHdl)
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
 {
@@ -374,7 +374,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(AnimationWindow, ClickLastHdl)
 {
@@ -385,7 +385,7 @@ IMPL_LINK_NOARG(AnimationWindow, ClickLastHdl)
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( AnimationWindow, ClickRbtHdl, void *, p )
 {
@@ -411,7 +411,7 @@ IMPL_LINK( AnimationWindow, ClickRbtHdl, void *, p )
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( AnimationWindow, ClickGetObjectHdl, void *, pBtn )
 {
@@ -425,7 +425,7 @@ IMPL_LINK( AnimationWindow, ClickGetObjectHdl, void *, pBtn )
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
 {
@@ -502,7 +502,7 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(AnimationWindow, ClickCreateGroupHdl)
 {
@@ -514,7 +514,7 @@ IMPL_LINK_NOARG(AnimationWindow, ClickCreateGroupHdl)
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(AnimationWindow, ModifyBitmapHdl)
 {
@@ -532,7 +532,7 @@ IMPL_LINK_NOARG(AnimationWindow, ModifyBitmapHdl)
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(AnimationWindow, ModifyTimeHdl)
 {
@@ -545,7 +545,7 @@ IMPL_LINK_NOARG(AnimationWindow, ModifyTimeHdl)
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 
 void AnimationWindow::UpdateControl(bool const bDisableCtrls)
 {
@@ -649,7 +649,7 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
     ClickRbtHdl( NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 void AnimationWindow::ResetAttrs()
 {
@@ -661,7 +661,7 @@ void AnimationWindow::ResetAttrs()
     UpdateControl();
 }
 
-// -----------------------------------------------------------------------
+
 
 void AnimationWindow::WaitInEffect( sal_uLong nMilliSeconds, sal_uLong nTime,
                                     SfxProgress* pProgress ) const
@@ -682,7 +682,7 @@ void AnimationWindow::WaitInEffect( sal_uLong nMilliSeconds, sal_uLong nTime,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 Fraction AnimationWindow::GetScale()
 {
@@ -709,7 +709,7 @@ Fraction AnimationWindow::GetScale()
     return( aFrac );
 }
 
-// -----------------------------------------------------------------------
+
 
 void AnimationWindow::Resize()
 {
@@ -809,7 +809,7 @@ void AnimationWindow::Resize()
     SfxDockingWindow::Resize();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AnimationWindow::Close()
 {
@@ -830,14 +830,14 @@ bool AnimationWindow::Close()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void AnimationWindow::FillInfo( SfxChildWinInfo& rInfo ) const
 {
     SfxDockingWindow::FillInfo( rInfo ) ;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AnimationWindow::AddObj (::sd::View& rView )
 {
@@ -1020,7 +1020,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void AnimationWindow::CreateAnimObj (::sd::View& rView )
 {
@@ -1269,7 +1269,7 @@ AnimationControllerItem::AnimationControllerItem(
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void AnimationControllerItem::StateChanged( sal_uInt16 nSId,
                         SfxItemState eState, const SfxPoolItem* pItem )

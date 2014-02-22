@@ -46,7 +46,7 @@ using namespace ::com::sun::star::util;
 namespace framework
 {
 
-// ------------------------------------------------------------------
+
 
 // Wrapper class to notify controller about events from ListBox.
 // Unfortunaltly the events are notifed through virtual methods instead
@@ -118,7 +118,7 @@ bool ListBoxControl::PreNotify( NotifyEvent& rNEvt )
     return nRet;
 }
 
-// ------------------------------------------------------------------
+
 
 DropdownToolbarController::DropdownToolbarController(
     const Reference< XComponentContext >&    rxContext,
@@ -143,13 +143,13 @@ DropdownToolbarController::DropdownToolbarController(
     m_pListBoxControl->SetDropDownLineCount( 5 );
 }
 
-// ------------------------------------------------------------------
+
 
 DropdownToolbarController::~DropdownToolbarController()
 {
 }
 
-// ------------------------------------------------------------------
+
 
 void SAL_CALL DropdownToolbarController::dispose()
 throw ( RuntimeException )
@@ -164,7 +164,7 @@ throw ( RuntimeException )
     m_pListBoxControl = 0;
 }
 
-// ------------------------------------------------------------------
+
 Sequence<PropertyValue> DropdownToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
     Sequence<PropertyValue> aArgs( 2 );
@@ -178,7 +178,7 @@ Sequence<PropertyValue> DropdownToolbarController::getExecuteArgs(sal_Int16 KeyM
     return aArgs;
 }
 
-// ------------------------------------------------------------------
+
 
 void DropdownToolbarController::Select()
 {
@@ -210,7 +210,7 @@ bool DropdownToolbarController::PreNotify( NotifyEvent& /*rNEvt*/ )
     return false;
 }
 
-// --------------------------------------------------------
+
 
 void DropdownToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {

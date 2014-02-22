@@ -108,13 +108,13 @@ public:
     inline ThreadKey( oslThreadKeyCallbackFunction pCallback ) SAL_THROW(());
     inline ~ThreadKey() SAL_THROW(());
 };
-//__________________________________________________________________________________________________
+
 inline ThreadKey::ThreadKey( oslThreadKeyCallbackFunction pCallback ) SAL_THROW(())
     : _bInit( false )
     , _pCallback( pCallback )
 {
 }
-//__________________________________________________________________________________________________
+
 inline ThreadKey::~ThreadKey() SAL_THROW(())
 {
     if (_bInit)
@@ -122,7 +122,7 @@ inline ThreadKey::~ThreadKey() SAL_THROW(())
         ::osl_destroyThreadKey( _hThreadKey );
     }
 }
-//__________________________________________________________________________________________________
+
 inline oslThreadKey ThreadKey::getThreadKey() SAL_THROW(())
 {
     if (! _bInit)

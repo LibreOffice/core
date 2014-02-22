@@ -20,7 +20,7 @@
 
 #include <mcvmath.hxx>
 
-// ---------------------------------------------------------------------
+
 // die folgenden Tabellen enthalten     sin(phi) * 2**14
 // fuer phi= 360Grad*2**-32 bis 360 Grad
 // def. fuer x: phi=360Grad * 2**(x-16)

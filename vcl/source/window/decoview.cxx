@@ -830,7 +830,7 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void DecorationView::DrawSymbol( const Rectangle& rRect, SymbolType eType,
                                  const Color& rColor, sal_uInt16 nStyle )
@@ -1056,7 +1056,7 @@ Rectangle DecorationView::DrawButton( const Rectangle& rRect, sal_uInt16 nStyle 
     return aRect;
 }
 
-// -----------------------------------------------------------------------
+
 
 void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, bool bVertical )
 {

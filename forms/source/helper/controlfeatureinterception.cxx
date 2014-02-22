@@ -33,13 +33,13 @@ namespace frm
     //====================================================================
     //= ControlFeatureInterception
     //====================================================================
-    //--------------------------------------------------------------------
+
     ControlFeatureInterception::ControlFeatureInterception( const Reference< XComponentContext >& _rxORB )
         :m_pUrlTransformer( new UrlTransformer( _rxORB ) )
     {
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ControlFeatureInterception::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException )
     {
         if ( !_rxInterceptor.is() )
@@ -62,7 +62,7 @@ namespace frm
             // it's the first of the interceptor chain
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ControlFeatureInterception::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException )
     {
         if ( !_rxInterceptor.is() )
@@ -109,7 +109,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     void ControlFeatureInterception::dispose()
     {
         // release all interceptors
@@ -129,7 +129,7 @@ namespace frm
             xInterceptor = xInterceptor.query( xSlave );
         }
     }
-    //--------------------------------------------------------------------
+
     Reference< XDispatch > ControlFeatureInterception::queryDispatch( const URL& _rURL, const OUString& _rTargetFrameName, ::sal_Int32 _nSearchFlags ) SAL_THROW((RuntimeException))
     {
         Reference< XDispatch > xDispatcher;
@@ -138,13 +138,13 @@ namespace frm
         return xDispatcher;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XDispatch > ControlFeatureInterception::queryDispatch( const URL& _rURL ) SAL_THROW((RuntimeException))
     {
         return queryDispatch( _rURL, OUString(), 0 );
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XDispatch > ControlFeatureInterception::queryDispatch( const sal_Char* _pAsciiURL ) SAL_THROW((RuntimeException))
     {
         return queryDispatch( m_pUrlTransformer->getStrictURLFromAscii( _pAsciiURL ) );

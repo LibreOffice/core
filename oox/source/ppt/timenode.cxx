@@ -110,7 +110,7 @@ namespace oox { namespace ppt {
     }
 
 // BEGIN CUT&PASTE from sd/source/filter/ppt/pptinanimations.hxx
-// --------------------------------------------------------------------
+
     static void fixMainSequenceTiming( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
     {
         try
@@ -176,7 +176,7 @@ namespace oox { namespace ppt {
         }
     }
 
-// --------------------------------------------------------------------
+
 
     static void fixInteractiveSequenceTiming( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
     {

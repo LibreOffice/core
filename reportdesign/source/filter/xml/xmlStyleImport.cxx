@@ -47,7 +47,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace xmloff::token;
 
-// -----------------------------------------------------------------------------
+
 
 class OSpecialHanldeXMLImportPropertyMapper : public SvXMLImportPropertyMapper
 {
@@ -85,13 +85,13 @@ OControlStyleContext::OControlStyleContext( ORptFilter& rImport,
 {
 
 }
-// -----------------------------------------------------------------------------
+
 
 OControlStyleContext::~OControlStyleContext()
 {
 
 }
-// -----------------------------------------------------------------------------
+
 
 void OControlStyleContext::FillPropertySet(const Reference< XPropertySet > & rPropSet )
 {
@@ -123,11 +123,11 @@ void OControlStyleContext::FillPropertySet(const Reference< XPropertySet > & rPr
     }
     XMLPropStyleContext::FillPropertySet(rPropSet);
 }
-// -----------------------------------------------------------------------------
+
 void OControlStyleContext::SetDefaults()
 {
 }
-// -----------------------------------------------------------------------------
+
 
 void OControlStyleContext::AddProperty(const sal_Int16 nContextID, const uno::Any& rValue)
 {
@@ -136,7 +136,7 @@ void OControlStyleContext::AddProperty(const sal_Int16 nContextID, const uno::An
     XMLPropertyState aPropState(nIndex, rValue);
     GetProperties().push_back(aPropState); // has to be insertes in a sort order later
 }
-// -----------------------------------------------------------------------------
+
 void OControlStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                                         const OUString& rLocalName,
                                         const OUString& rValue )
@@ -149,12 +149,12 @@ void OControlStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
     else
         XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
 }
-// -----------------------------------------------------------------------------
+
 ORptFilter& OControlStyleContext::GetOwnImport() const
 {
     return m_rImport;
 }
-// -----------------------------------------------------------------------------
+
 
 OReportStylesContext::OReportStylesContext( ORptFilter& rImport,
         sal_uInt16 nPrfx ,
@@ -172,13 +172,13 @@ OReportStylesContext::OReportStylesContext( ORptFilter& rImport,
 {
 
 }
-// -----------------------------------------------------------------------------
+
 
 OReportStylesContext::~OReportStylesContext()
 {
 
 }
-// -----------------------------------------------------------------------------
+
 
 void OReportStylesContext::EndElement()
 {
@@ -188,7 +188,7 @@ void OReportStylesContext::EndElement()
     else
         GetImport().GetStyles()->CopyStylesToDoc(sal_True);
 }
-// -----------------------------------------------------------------------------
+
 
 UniReference < SvXMLImportPropertyMapper >
     OReportStylesContext::GetImportPropertyMapper(
@@ -246,7 +246,7 @@ UniReference < SvXMLImportPropertyMapper >
 
     return xMapper;
 }
-// -----------------------------------------------------------------------------
+
 SvXMLStyleContext *OReportStylesContext::CreateDefaultStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
@@ -269,7 +269,7 @@ SvXMLStyleContext *OReportStylesContext::CreateDefaultStyleStyleChildContext(
     }
     return pStyle;
 }
-// ----------------------------------------------------------------------------
+
 SvXMLStyleContext *OReportStylesContext::CreateStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
@@ -296,7 +296,7 @@ SvXMLStyleContext *OReportStylesContext::CreateStyleStyleChildContext(
 
     return pStyle;
 }
-// -----------------------------------------------------------------------------
+
 Reference < XNameContainer >
         OReportStylesContext::GetStylesContainer( sal_uInt16 nFamily ) const
 {
@@ -381,7 +381,7 @@ Reference < XNameContainer >
 
     return xStyles;
 }
-// -----------------------------------------------------------------------------
+
 
 OUString OReportStylesContext::GetServiceName( sal_uInt16 nFamily ) const
 {
@@ -408,7 +408,7 @@ OUString OReportStylesContext::GetServiceName( sal_uInt16 nFamily ) const
     }
     return sServiceName;
 }
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 OReportStylesContext::GetIndex(const sal_Int16 nContextID)
 {
@@ -421,19 +421,19 @@ sal_Int32 OReportStylesContext::GetIndex(const sal_Int16 nContextID)
     }
     return -1;
 }
-// -----------------------------------------------------------------------------
+
 ORptFilter& OReportStylesContext::GetOwnImport() const
 {
     return m_rImport;
 }
-// -----------------------------------------------------------------------------
+
 sal_uInt16 OReportStylesContext::GetFamily( const OUString& rFamily ) const
 {
     sal_uInt16 nFamily = SvXMLStylesContext::GetFamily(rFamily);
     return nFamily;
 }
-// -----------------------------------------------------------------------------
+
 } // rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

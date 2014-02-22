@@ -67,7 +67,7 @@ AccessibleGridControlHeaderCell::AccessibleGridControlHeaderCell(sal_Int32 _nCol
 
     return pStateSetHelper;
 }
-// -----------------------------------------------------------------------------
+
 /** @return
         The count of visible children.
 */
@@ -76,7 +76,7 @@ sal_Int32 SAL_CALL AccessibleGridControlHeaderCell::getAccessibleChildCount()
 {
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 
 /** @return
         The XAccessible interface of the specified child.
@@ -115,14 +115,14 @@ Reference<XAccessible > SAL_CALL AccessibleGridControlHeaderCell::getAccessibleC
         return this;
     }
 
-// -----------------------------------------------------------------------------
+
 
 /** Grabs the focus to the column header. */
 void SAL_CALL AccessibleGridControlHeaderCell::grabFocus()
     throw ( ::com::sun::star::uno::RuntimeException )
 {
 }
-// -----------------------------------------------------------------------------
+
 /** @return
         The name of this class.
 */
@@ -131,7 +131,7 @@ OUString SAL_CALL AccessibleGridControlHeaderCell::getImplementationName()
 {
     return OUString( "com.sun.star.accessibility.AccessibleGridControlHeaderCell" );
 }
-// -----------------------------------------------------------------------------
+
 Rectangle AccessibleGridControlHeaderCell::implGetBoundingBox()
 {
     Window* pParent = m_aTable.GetAccessibleParentWindow();
@@ -144,7 +144,7 @@ Rectangle AccessibleGridControlHeaderCell::implGetBoundingBox()
         aCellRect = m_aTable.calcHeaderCellRect(false, nIndex);
     return Rectangle(Point(aGridRect.Left()+aCellRect.Left(),aGridRect.Top()+aCellRect.Top()), aCellRect.GetSize());
 }
-// -----------------------------------------------------------------------------
+
 
 Rectangle AccessibleGridControlHeaderCell::implGetBoundingBoxOnScreen()
 {
@@ -157,7 +157,7 @@ Rectangle AccessibleGridControlHeaderCell::implGetBoundingBoxOnScreen()
         aCellRect = m_aTable.calcHeaderCellRect(false, nIndex);
     return Rectangle(Point(aGridRect.Left()+aCellRect.Left(),aGridRect.Top()+aCellRect.Top()), aCellRect.GetSize());
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL AccessibleGridControlHeaderCell::getAccessibleIndexInParent()
     throw ( RuntimeException )
 {
@@ -167,9 +167,9 @@ sal_Int32 SAL_CALL AccessibleGridControlHeaderCell::getAccessibleIndexInParent()
     sal_Int32 nIndex = m_nColumnRowId;
     return nIndex;
 }
-// -----------------------------------------------------------------------------
+
 } // namespace accessibility
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

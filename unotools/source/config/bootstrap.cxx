@@ -23,19 +23,19 @@
 
 #include "unotools/bootstrap.hxx"
 
-// ---------------------------------------------------------------------------------------
+
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
-// ---------------------------------------------------------------------------------------
+
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
 #include <osl/process.h>
 #include "tools/getprocessworkingdir.hxx"
 
-// ---------------------------------------------------------------------------------------
+
 // #define this to true, if remembering defaults is not supported properly
 #define RTL_BOOTSTRAP_DEFAULTS_BROKEN true
 
@@ -53,17 +53,17 @@
 
 #define BOOTSTRAP_DIRNAME_USERDIR           "user"
 
-// ---------------------------------------------------------------------------------------
+
 typedef char const * AsciiString;
-// ---------------------------------------------------------------------------------------
+
 
 namespace utl
 {
-// ---------------------------------------------------------------------------------------
 
-// ---------------------------------------------------------------------------------------
+
+
 // Implementation class: Bootstrap::Impl
-// ---------------------------------------------------------------------------------------
+
 
     namespace
     {
@@ -137,15 +137,15 @@ namespace utl
         theImpl::get().initialize();
     }
 
-// ---------------------------------------------------------------------------------------
+
 // helper
-// ---------------------------------------------------------------------------------------
+
 
 typedef Bootstrap::PathStatus PathStatus;
 
 sal_Unicode const cURLSeparator = '/';
 
-// ---------------------------------------------------------------------------------------
+
 // path status utility function
 static
 PathStatus implCheckStatusOfURL(OUString const& _sURL, osl::DirectoryItem& aDirItem)
@@ -186,7 +186,7 @@ PathStatus implCheckStatusOfURL(OUString const& _sURL, osl::DirectoryItem& aDirI
 
     return eStatus;
 }
-// ---------------------------------------------------------------------------------------
+
 
 static
 bool implNormalizeURL(OUString & _sURL, osl::DirectoryItem& aDirItem)
@@ -216,7 +216,7 @@ bool implNormalizeURL(OUString & _sURL, osl::DirectoryItem& aDirItem)
 
     return true;
 }
-// ---------------------------------------------------------------------------------------
+
 static
 bool implEnsureAbsolute(OUString & _rsURL) // also strips embedded dots !!
 {
@@ -238,7 +238,7 @@ bool implEnsureAbsolute(OUString & _rsURL) // also strips embedded dots !!
     }
 }
 
-// ---------------------------------------------------------------------------------------
+
 
 static
 bool implMakeAbsoluteURL(OUString & _rsPathOrURL)
@@ -264,7 +264,7 @@ bool implMakeAbsoluteURL(OUString & _rsPathOrURL)
 
     return bURL && implEnsureAbsolute(_rsPathOrURL);
 }
-// ---------------------------------------------------------------------------------------
+
 #if OSL_DEBUG_LEVEL > 0
 static
 PathStatus dbgCheckStatusOfURL(OUString const& _sURL)
@@ -275,7 +275,7 @@ PathStatus dbgCheckStatusOfURL(OUString const& _sURL)
 
     return implCheckStatusOfURL(_sURL,aDirItem);
 }
-// ---------------------------------------------------------------------------------------
+
 #endif
 
 static
@@ -307,7 +307,7 @@ PathStatus checkStatusAndNormalizeURL(OUString & _sURL)
 }
 
 
-// ----------------------------------------------------------------------------------
+
 // helpers to build and check a nested URL
 static
 PathStatus getDerivedPath(
@@ -356,7 +356,7 @@ PathStatus getDerivedPath(
     return aStatus;
 }
 
-// ----------------------------------------------------------------------------------
+
 static
 inline
 PathStatus getDerivedPath(
@@ -369,7 +369,7 @@ PathStatus getDerivedPath(
     return getDerivedPath(_rURL,_aBaseData.path,_aBaseData.status,_sRelativeURL,_rData,_sBootstrapParameter);
 }
 
-// ---------------------------------------------------------------------------------------
+
 
 static
 OUString getExecutableBaseName()
@@ -397,7 +397,7 @@ OUString getExecutableBaseName()
     return sExecutable;
 }
 
-// ----------------------------------------------------------------------------------
+
 
 static
 inline
@@ -405,7 +405,7 @@ Bootstrap::PathStatus updateStatus(Bootstrap::Impl::PathData & _rResult)
 {
     return _rResult.status = checkStatusAndNormalizeURL(_rResult.path);
 }
-// ---------------------------------------------------------------------------------------
+
 
 static
 Bootstrap::PathStatus implGetBootstrapFile(rtl::Bootstrap& _rData, Bootstrap::Impl::PathData & _rBootstrapFile)
@@ -414,7 +414,7 @@ Bootstrap::PathStatus implGetBootstrapFile(rtl::Bootstrap& _rData, Bootstrap::Im
 
     return updateStatus(_rBootstrapFile);
 }
-// ---------------------------------------------------------------------------------------
+
 
 static
 Bootstrap::PathStatus implGetVersionFile(rtl::Bootstrap& _rData, Bootstrap::Impl::PathData & _rVersionFile)
@@ -425,14 +425,14 @@ Bootstrap::PathStatus implGetVersionFile(rtl::Bootstrap& _rData, Bootstrap::Impl
 
     return updateStatus(_rVersionFile);
 }
-// ---------------------------------------------------------------------------------------
+
 // Error reporting
 
 static char const IS_MISSING[] = "is missing";
 static char const IS_INVALID[] = "is corrupt";
 static char const PERIOD[] = ". ";
 
-// ---------------------------------------------------------------------------------------
+
 static void addFileError(OUStringBuffer& _rBuf, OUString const& _aPath, AsciiString _sWhat)
 {
     OUString sSimpleFileName = _aPath.copy(1 +_aPath.lastIndexOf(cURLSeparator));
@@ -441,7 +441,7 @@ static void addFileError(OUStringBuffer& _rBuf, OUString const& _aPath, AsciiStr
     _rBuf.appendAscii(" '").append(sSimpleFileName).appendAscii("' ");
     _rBuf.appendAscii(_sWhat).appendAscii(PERIOD);
 }
-// ---------------------------------------------------------------------------------------
+
 
 static void addMissingDirectoryError(OUStringBuffer& _rBuf, OUString const& _aPath)
 {
@@ -449,7 +449,7 @@ static void addMissingDirectoryError(OUStringBuffer& _rBuf, OUString const& _aPa
     _rBuf.appendAscii(" '").append(_aPath).appendAscii("' ");
     _rBuf.appendAscii(IS_MISSING).appendAscii(PERIOD);
 }
-// ---------------------------------------------------------------------------------------
+
 
 static void addUnexpectedError(OUStringBuffer& _rBuf, AsciiString _sExtraInfo = NULL)
 {
@@ -458,7 +458,7 @@ static void addUnexpectedError(OUStringBuffer& _rBuf, AsciiString _sExtraInfo = 
 
     _rBuf.appendAscii(_sExtraInfo).appendAscii(PERIOD);
 }
-// ---------------------------------------------------------------------------------------
+
 
 static Bootstrap::FailureCode describeError(OUStringBuffer& _rBuf, Bootstrap::Impl const& _rData)
 {
@@ -555,10 +555,10 @@ static Bootstrap::FailureCode describeError(OUStringBuffer& _rBuf, Bootstrap::Im
 
     return eErrCode;
 }
-// ---------------------------------------------------------------------------------------
-// ---------------------------------------------------------------------------------------
+
+
 // class Bootstrap
-// ---------------------------------------------------------------------------------------
+
 
 OUString Bootstrap::getProductKey()
 {
@@ -568,7 +568,7 @@ OUString Bootstrap::getProductKey()
 
     return data().getBootstrapValue( csProductKeyItem, sDefaultProductKey );
 }
-// ---------------------------------------------------------------------------------------
+
 
 OUString Bootstrap::getProductKey(OUString const& _sDefault)
 {
@@ -576,7 +576,7 @@ OUString Bootstrap::getProductKey(OUString const& _sDefault)
 
     return data().getBootstrapValue( csProductKeyItem, _sDefault );
 }
-// ---------------------------------------------------------------------------------------
+
 
 OUString Bootstrap::getBuildVersion(OUString const& _sDefault)
 {
@@ -587,7 +587,7 @@ OUString Bootstrap::getBuildVersion(OUString const& _sDefault)
     data().getVersionValue( csBuildVersionItem, sBuildVersion, _sDefault );
     return sBuildVersion;
 }
-// ---------------------------------------------------------------------------------------
+
 
 OUString Bootstrap::getBuildIdData(OUString const& _sDefault)
 {
@@ -602,7 +602,7 @@ OUString Bootstrap::getBuildIdData(OUString const& _sDefault)
     return sBuildId;
 }
 
-// ---------------------------------------------------------------------------------------
+
 
 Bootstrap::PathStatus Bootstrap::locateBaseInstallation(OUString& _rURL)
 {
@@ -611,7 +611,7 @@ Bootstrap::PathStatus Bootstrap::locateBaseInstallation(OUString& _rURL)
     _rURL = aPathData.path;
     return aPathData.status;
 }
-// ---------------------------------------------------------------------------------------
+
 
 PathStatus Bootstrap::locateUserInstallation(OUString& _rURL)
 {
@@ -621,7 +621,7 @@ PathStatus Bootstrap::locateUserInstallation(OUString& _rURL)
     return aPathData.status;
 }
 
-// ---------------------------------------------------------------------------------------
+
 
 PathStatus Bootstrap::locateUserData(OUString& _rURL)
 {
@@ -639,7 +639,7 @@ PathStatus Bootstrap::locateUserData(OUString& _rURL)
         return getDerivedPath(_rURL, data().aUserInstall_ ,csUserDir, aData, csUserDirItem);
     }
 }
-// ---------------------------------------------------------------------------------------
+
 
 PathStatus Bootstrap::locateBootstrapFile(OUString& _rURL)
 {
@@ -648,7 +648,7 @@ PathStatus Bootstrap::locateBootstrapFile(OUString& _rURL)
     _rURL = aPathData.path;
     return aPathData.status;
 }
-// ---------------------------------------------------------------------------------------
+
 
 PathStatus Bootstrap::locateVersionFile(OUString& _rURL)
 {
@@ -657,7 +657,7 @@ PathStatus Bootstrap::locateVersionFile(OUString& _rURL)
     _rURL = aPathData.path;
     return aPathData.status;
 }
-// ---------------------------------------------------------------------------------------
+
 
 Bootstrap::Status Bootstrap::checkBootstrapStatus(OUString& _rDiagnosticMessage, FailureCode& _rErrCode)
 {
@@ -679,9 +679,9 @@ Bootstrap::Status Bootstrap::checkBootstrapStatus(OUString& _rDiagnosticMessage,
     return result;
 }
 
-// ---------------------------------------------------------------------------------------
+
 // class Bootstrap::Impl
-// ---------------------------------------------------------------------------------------
+
 
 bool Bootstrap::Impl::initBaseInstallationData(rtl::Bootstrap& _rData)
 {
@@ -696,7 +696,7 @@ bool Bootstrap::Impl::initBaseInstallationData(rtl::Bootstrap& _rData)
 
     return bResult;
 }
-// ---------------------------------------------------------------------------------------
+
 
 bool Bootstrap::Impl::initUserInstallationData(rtl::Bootstrap& _rData)
 {
@@ -730,7 +730,7 @@ bool Bootstrap::Impl::initUserInstallationData(rtl::Bootstrap& _rData)
 
     return bResult;
 }
-// ---------------------------------------------------------------------------------------
+
 
 void Bootstrap::Impl::initialize()
 {
@@ -767,7 +767,7 @@ void Bootstrap::Impl::initialize()
         status_ = DATA_OK;
     }
 }
-// ---------------------------------------------------------------------------------------
+
 
 OUString Bootstrap::Impl::getBootstrapValue(OUString const& _sName, OUString const& _sDefault) const
 {
@@ -777,7 +777,7 @@ OUString Bootstrap::Impl::getBootstrapValue(OUString const& _sName, OUString con
     aData.getFrom(_sName,sResult,_sDefault);
     return sResult;
 }
-// ---------------------------------------------------------------------------------------
+
 
 bool Bootstrap::Impl::getVersionValue(OUString const& _sName, OUString& _rValue, OUString const& _sDefault) const
 {
@@ -793,7 +793,7 @@ bool Bootstrap::Impl::getVersionValue(OUString const& _sName, OUString& _rValue,
     aData.getFrom(_sName,_rValue,_sDefault);
     return true;
 }
-// ---------------------------------------------------------------------------------------
+
 
 } // namespace utl
 

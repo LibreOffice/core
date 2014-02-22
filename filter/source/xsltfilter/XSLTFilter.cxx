@@ -545,9 +545,9 @@ namespace XSLT
     }
 
 
-    // --------------------------------------
+
     // Component management
-    // --------------------------------------
+
 #define FILTER_SERVICE_NAME "com.sun.star.documentconversion.XSLTFilter"
 #define FILTER_IMPL_NAME "com.sun.star.comp.documentconversion.XSLTFilter"
 #define TRANSFORMER_SERVICE_NAME "com.sun.star.xml.xslt.XSLTTransformer"

@@ -471,7 +471,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
 
     return bInsert;
 }
-// ---------------------------------------------------------------------
+
 
 class SwXMLTableInfo_Impl
 {
@@ -504,7 +504,7 @@ inline void SwXMLTableInfo_Impl::SetBaseSection(
     bBaseSectionValid = true;
 }
 
-// ---------------------------------------------------------------------
+
 
 
 void SwXMLExport::ExportTableColumnStyle( const SwXMLTableColumn_Impl& rCol )

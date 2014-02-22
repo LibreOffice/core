@@ -61,7 +61,7 @@ namespace slideshow
             // maBackgroundRect.transform( aMatrix );
 
             // extract modification info from maTransitionInfo
-            // -----------------------------------------------
+
 
             // perform general transformations _before_ the reverse
             // mode changes. This allows the Transition table to be

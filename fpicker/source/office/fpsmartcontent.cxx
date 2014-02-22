@@ -44,7 +44,7 @@ namespace svt
     //====================================================================
     //= SmartContent
     //====================================================================
-    //--------------------------------------------------------------------
+
     SmartContent::SmartContent()
         :m_pContent( NULL )
         ,m_eState( NOT_BOUND )
@@ -52,7 +52,7 @@ namespace svt
     {
     }
 
-    //--------------------------------------------------------------------
+
     SmartContent::SmartContent( const OUString& _rInitialURL )
         :m_pContent( NULL )
         ,m_eState( NOT_BOUND )
@@ -61,7 +61,7 @@ namespace svt
         bindTo( _rInitialURL );
     }
 
-    //--------------------------------------------------------------------
+
     SmartContent::~SmartContent()
     {
         /* This destructor originally contained the following blurb: "Do
@@ -78,7 +78,7 @@ namespace svt
         delete m_pContent;
     }
 
-    //--------------------------------------------------------------------
+
     void SmartContent::enableOwnInteractionHandler(::svt::OFilePickerInteractionHandler::EInterceptedInteractions eInterceptions)
     {
         Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
@@ -92,7 +92,7 @@ namespace svt
         m_xCmdEnv = new ::ucbhelper::CommandEnvironment( m_xOwnInteraction, Reference< XProgressHandler >() );
     }
 
-    //--------------------------------------------------------------------
+
     void SmartContent::enableDefaultInteractionHandler()
     {
         // Don't free the memory here! It will be done by the next
@@ -106,7 +106,7 @@ namespace svt
         m_xCmdEnv = new ucbhelper::CommandEnvironment( xGlobalInteractionHandler, Reference< XProgressHandler >() );
     }
 
-    //--------------------------------------------------------------------
+
     ::svt::OFilePickerInteractionHandler* SmartContent::getOwnInteractionHandler() const
     {
         if (!m_xOwnInteraction.is())
@@ -114,7 +114,7 @@ namespace svt
         return m_pOwnInteraction;
     }
 
-    //--------------------------------------------------------------------
+
     SmartContent::InteractionHandlerType SmartContent::queryCurrentInteractionHandler() const
     {
         if (m_xOwnInteraction.is())
@@ -126,7 +126,7 @@ namespace svt
         return IHT_DEFAULT;
     }
 
-    //--------------------------------------------------------------------
+
     void SmartContent::disableInteractionHandler()
     {
         // Don't free the memory here! It will be done by the next
@@ -137,7 +137,7 @@ namespace svt
         m_xCmdEnv.clear();
     }
 
-    //--------------------------------------------------------------------
+
     void SmartContent::bindTo( const OUString& _rURL )
     {
         if ( getURL() == _rURL )
@@ -182,7 +182,7 @@ namespace svt
         }
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool SmartContent::implIs( const OUString& _rURL, Type _eType )
     {
         // bind to this content
@@ -215,7 +215,7 @@ namespace svt
         return bIs;
     }
 
-    //--------------------------------------------------------------------
+
     void SmartContent::getTitle( OUString& /* [out] */ _rTitle )
     {
         if ( !isBound() || isInvalid() )
@@ -237,7 +237,7 @@ namespace svt
         }
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool SmartContent::hasParentFolder( )
     {
         if ( !isBound() || isInvalid() )
@@ -268,7 +268,7 @@ namespace svt
         return bRet;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool SmartContent::canCreateFolder( )
     {
         if ( !isBound() || isInvalid() )

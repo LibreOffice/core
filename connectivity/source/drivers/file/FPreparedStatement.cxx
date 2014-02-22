@@ -52,7 +52,7 @@ using namespace com::sun::star;
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbc.driver.file.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
 DBG_NAME( file_OPreparedStatement )
-// -------------------------------------------------------------------------
+
 OPreparedStatement::OPreparedStatement( OConnection* _pConnection)
     : OStatement_BASE2( _pConnection )
 {
@@ -60,14 +60,14 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection)
     DBG_CTOR( file_OPreparedStatement, NULL );
 }
 
-// -------------------------------------------------------------------------
+
 OPreparedStatement::~OPreparedStatement()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::~OPreparedStatement" );
     DBG_DTOR( file_OPreparedStatement, NULL );
 }
 
-// -------------------------------------------------------------------------
+
 void OPreparedStatement::disposing()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::disposing" );
@@ -83,7 +83,7 @@ void OPreparedStatement::disposing()
         m_aParameterRow = NULL;
     }
 }
-// -------------------------------------------------------------------------
+
 void OPreparedStatement::construct(const OUString& sql)  throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::construct" );
@@ -116,7 +116,7 @@ Reference<XResultSet> OPreparedStatement::makeResultSet()
     return xRS;
 }
 
-// -------------------------------------------------------------------------
+
 
 Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
@@ -126,7 +126,7 @@ Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(Runt
                                         static_cast< XParameters*>(this),
                                         static_cast< XResultSetMetaDataSupplier*>(this));
 }
-// -------------------------------------------------------------------------
+
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL OPreparedStatement::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
 {
         ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< XPreparedStatement > *)0 ),
@@ -135,7 +135,7 @@ Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(Runt
 
     return ::comphelper::concatSequences(aTypes.getTypes(),OStatement_BASE2::getTypes());
 }
-// -------------------------------------------------------------------------
+
 
 Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) throw(SQLException, RuntimeException)
 {
@@ -148,7 +148,7 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) thr
         m_xMetaData = new OResultSetMetaData(m_aSQLIterator.getSelectColumns(),m_aSQLIterator.getTables().begin()->first,m_pTable);
     return m_xMetaData;
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::close(  ) throw(SQLException, RuntimeException)
 {
@@ -156,7 +156,7 @@ void SAL_CALL OPreparedStatement::close(  ) throw(SQLException, RuntimeException
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeException)
 {
@@ -173,7 +173,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
 
     return m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, RuntimeException)
 {
@@ -196,14 +196,14 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, Run
     else
         return 0;
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const OUString& x ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::setString" );
     setParameter(parameterIndex,x);
 }
-// -------------------------------------------------------------------------
+
 
 Reference< XConnection > SAL_CALL OPreparedStatement::getConnection(  ) throw(SQLException, RuntimeException)
 {
@@ -213,7 +213,7 @@ Reference< XConnection > SAL_CALL OPreparedStatement::getConnection(  ) throw(SQ
 
     return (Reference< XConnection >)m_pConnection;
 }
-// -------------------------------------------------------------------------
+
 
 Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLException, RuntimeException)
 {
@@ -223,40 +223,40 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
 
     return makeResultSet();
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool x ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::setBoolean" );
     setParameter(parameterIndex,static_cast<bool>(x));
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OPreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::setByte" );
     setParameter(parameterIndex,x);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const util::Date& aData ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::setDate" );
     setParameter(parameterIndex,DBTypeConversion::toDouble(aData));
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const util::Time& aVal ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::setTime" );
     setParameter(parameterIndex,DBTypeConversion::toDouble(aVal));
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const util::DateTime& aVal ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::setTimestamp" );
     setParameter(parameterIndex,DBTypeConversion::toDouble(aVal));
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x ) throw(SQLException, RuntimeException)
 {
@@ -264,28 +264,28 @@ void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x 
     setParameter(parameterIndex,x);
 }
 
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::setFloat" );
     setParameter(parameterIndex,x);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::setInt" );
     setParameter(parameterIndex,x);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setLong( sal_Int32 /*parameterIndex*/, sal_Int64 /*aVal*/ ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::setLong" );
     throwFeatureNotImplementedException( "XParameters::setLong", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 /*sqlType*/ ) throw(SQLException, RuntimeException)
 {
@@ -298,35 +298,35 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 /
     else
         (m_aParameterRow->get())[parameterIndex]->setNull();
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setClob( sal_Int32 /*parameterIndex*/, const Reference< XClob >& /*x*/ ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::setClob" );
     throwFeatureNotImplementedException( "XParameters::setClob", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setBlob( sal_Int32 /*parameterIndex*/, const Reference< XBlob >& /*x*/ ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::setBlob" );
     throwFeatureNotImplementedException( "XParameters::setBlob", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setArray( sal_Int32 /*parameterIndex*/, const Reference< XArray >& /*x*/ ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::setArray" );
     throwFeatureNotImplementedException( "XParameters::setArray", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setRef( sal_Int32 /*parameterIndex*/, const Reference< XRef >& /*x*/ ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::setRef" );
     throwFeatureNotImplementedException( "XParameters::setRef", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const Any& x, sal_Int32 sqlType, sal_Int32 scale ) throw(SQLException, RuntimeException)
 {
@@ -342,14 +342,14 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
             break;
     }
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& /*typeName*/ ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::setObjectNull" );
     setNull(parameterIndex,sqlType);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x ) throw(SQLException, RuntimeException)
 {
@@ -364,21 +364,21 @@ void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any
     }
     //  setObject (parameterIndex, x, sqlType, 0);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 x ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::setShort" );
     setParameter(parameterIndex,x);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequence< sal_Int8 >& x ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::setBytes" );
     setParameter(parameterIndex,x);
 }
-// -------------------------------------------------------------------------
+
 
 
 void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
@@ -386,7 +386,7 @@ void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, 
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::setCharacterStream" );
     setBinaryStream(parameterIndex,x,length );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
@@ -398,7 +398,7 @@ void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, con
     x->readBytes(aSeq,length);
     setParameter(parameterIndex,aSeq);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, RuntimeException)
 {
@@ -409,13 +409,13 @@ void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, Runtim
     m_aParameterRow->get().clear();
     m_aParameterRow->get().push_back(new ORowSetValueDecorator(sal_Int32(0)) );
 }
-// -------------------------------------------------------------------------
+
 OResultSet* OPreparedStatement::createResultSet()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::createResultSet" );
     return new OResultSet(this,m_aSQLIterator);
 }
-// -----------------------------------------------------------------------------
+
 void OPreparedStatement::initResultSet(OResultSet *pResultSet)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::initResultSet" );
@@ -428,17 +428,17 @@ void OPreparedStatement::initResultSet(OResultSet *pResultSet)
     pResultSet->OpenImpl();
     pResultSet->setMetaData(getMetaData());
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OPreparedStatement::acquire() throw()
 {
     OStatement_BASE2::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OPreparedStatement::release() throw()
 {
     OStatement_BASE2::release();
 }
-// -----------------------------------------------------------------------------
+
 void OPreparedStatement::checkAndResizeParameters(sal_Int32 parameterIndex)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::checkAndResizeParameters" );
@@ -456,7 +456,7 @@ void OPreparedStatement::checkAndResizeParameters(sal_Int32 parameterIndex)
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const ORowSetValue& x)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::setParameter" );
@@ -468,7 +468,7 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const ORowSetVal
     else
         *((m_aParameterRow->get())[parameterIndex]) = x;
 }
-// -----------------------------------------------------------------------------
+
 sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Reference<XPropertySet>& _xCol)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::AddParameter" );
@@ -516,7 +516,7 @@ sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Re
     m_xParamColumns->get().push_back(xParaColumn);
     return m_xParamColumns->get().size();
 }
-// -----------------------------------------------------------------------------
+
 void OPreparedStatement::describeColumn(OSQLParseNode* _pParameter,OSQLParseNode* _pNode,const OSQLTable& _xTable)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::describeColumn" );
@@ -536,7 +536,7 @@ void OPreparedStatement::describeColumn(OSQLParseNode* _pParameter,OSQLParseNode
     //  else
         //  AddParameter(_pParameter,xProp);
 }
-// -------------------------------------------------------------------------
+
 void OPreparedStatement::describeParameter()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::describeParameter" );
@@ -557,7 +557,7 @@ void OPreparedStatement::describeParameter()
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void OPreparedStatement::initializeResultSet(OResultSet* pRS)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::initializeResultSet" );
@@ -598,7 +598,7 @@ void OPreparedStatement::initializeResultSet(OResultSet* pRS)
             m_pSQLAnalyzer->bindParameterRow(m_aParameterRow);
     }
 }
-// -----------------------------------------------------------------------------
+
 void OPreparedStatement::parseParamterElem(const OUString& _sColumnName, OSQLParseNode* pRow_Value_Constructor_Elem)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::parseParamterElem" );
@@ -616,7 +616,7 @@ void OPreparedStatement::parseParamterElem(const OUString& _sColumnName, OSQLPar
     // Save number of parameter in the variable:
     SetAssignValue(_sColumnName, OUString(), sal_True, nParameter);
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

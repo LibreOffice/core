@@ -285,7 +285,7 @@ public:
     }
 };
 
-//______________________________________________________________________________
+
 BackendImpl::BackendImpl(
     Sequence<Any> const & args,
     Reference<XComponentContext> const & xComponentContext,
@@ -316,7 +316,7 @@ BackendImpl::BackendImpl(
    }
 }
 
-//______________________________________________________________________________
+
 void BackendImpl::disposing()
 {
     m_xRootRegistry.clear();
@@ -343,7 +343,7 @@ Sequence<OUString> BackendImpl::getSupportedServiceNames()
 }
 
 // XPackageRegistry
-//______________________________________________________________________________
+
 Sequence< Reference<deployment::XPackageTypeInfo> >
 BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 {
@@ -368,7 +368,7 @@ void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaT
 
 
 // PackageRegistryBackend
-//______________________________________________________________________________
+
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString const & url, OUString const & mediaType_,
     sal_Bool bRemoved, OUString const & identifier,
@@ -498,7 +498,7 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
     }
     return pBackend;
 }
-//______________________________________________________________________________
+
 void BackendImpl::PackageImpl::disposing()
 {
     sal_Int32 len = m_bundle.getLength();
@@ -511,7 +511,7 @@ void BackendImpl::PackageImpl::disposing()
 }
 
 // Package
-//______________________________________________________________________________
+
 beans::Optional< beans::Ambiguous<sal_Bool> >
 BackendImpl::PackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard &,
@@ -683,7 +683,7 @@ bool BackendImpl::PackageImpl::checkDependencies(
         //Only use interaction if there is no version of this extension already installed
         //and the suppress-on-update flag is not set for the new extension
         // alreadyInstalled | bSuppressOnUpdate | show license
-        //----------------------------------------
+
         //      0     |      0            |     1
         //      0     |      1            |     1
         //      1     |      0            |     1
@@ -808,7 +808,7 @@ beans::StringPair BackendImpl::PackageImpl::getPublisherInfo()
     return aStrPair;
 }
 
-//______________________________________________________________________________
+
 uno::Reference< graphic::XGraphic > BackendImpl::PackageImpl::getIcon( sal_Bool bHighContrast )
     throw (deployment::ExtensionRemovedException, RuntimeException )
 {
@@ -835,7 +835,7 @@ uno::Reference< graphic::XGraphic > BackendImpl::PackageImpl::getIcon( sal_Bool 
     return xGraphic;
 }
 
-//______________________________________________________________________________
+
 void BackendImpl::PackageImpl::processPackage_(
     ::osl::ResettableMutexGuard &,
     bool doRegisterPackage,
@@ -968,7 +968,7 @@ void BackendImpl::PackageImpl::processPackage_(
     }
 }
 
-//______________________________________________________________________________
+
 OUString BackendImpl::PackageImpl::getDescription()
     throw (deployment::ExtensionRemovedException, RuntimeException)
 {
@@ -996,7 +996,7 @@ OUString BackendImpl::PackageImpl::getDescription()
     return m_oldDescription;
 }
 
-//______________________________________________________________________________
+
 OUString BackendImpl::PackageImpl::getLicenseText()
     throw (deployment::ExtensionRemovedException, RuntimeException)
 {
@@ -1021,7 +1021,7 @@ OUString BackendImpl::PackageImpl::getLicenseText()
      return sLicense;
 }
 
-//______________________________________________________________________________
+
 void BackendImpl::PackageImpl::exportTo(
     OUString const & destFolderURL, OUString const & newTitle,
     sal_Int32 nameClashAction, Reference<ucb::XCommandEnvironment> const & xCmdEnv )
@@ -1209,13 +1209,13 @@ void BackendImpl::PackageImpl::exportTo(
     }
 }
 
-//______________________________________________________________________________
+
 sal_Bool BackendImpl::PackageImpl::isBundle() throw (RuntimeException)
 {
     return true;
 }
 
-//______________________________________________________________________________
+
 Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
@@ -1344,7 +1344,7 @@ inline bool isBundle_( OUString const & mediaType )
          mediaType.matchIgnoreAsciiCase( "application/vnd.sun.star.legacy-package-bundle"));
 }
 
-//______________________________________________________________________________
+
 Reference<deployment::XPackage> BackendImpl::PackageImpl::bindBundleItem(
     OUString const & url, OUString const & mediaType,
     sal_Bool bRemoved, OUString const & identifier,
@@ -1398,7 +1398,7 @@ Reference<deployment::XPackage> BackendImpl::PackageImpl::bindBundleItem(
     return xPackage;
 }
 
-//______________________________________________________________________________
+
 void BackendImpl::PackageImpl::scanBundle(
     t_packagevec & bundle,
     ::rtl::Reference<AbortChannel> const & abortChannel,
@@ -1543,7 +1543,7 @@ void BackendImpl::PackageImpl::scanBundle(
     }
 }
 
-//______________________________________________________________________________
+
 void BackendImpl::PackageImpl::scanLegacyBundle(
     t_packagevec & bundle,
     OUString const & url,

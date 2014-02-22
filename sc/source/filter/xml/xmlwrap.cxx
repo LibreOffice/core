@@ -74,7 +74,7 @@
 using namespace com::sun::star;
 
 
-// -----------------------------------------------------------------------
+
 
 ScXMLImportWrapper::ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, const uno::Reference < embed::XStorage >& xStor ) :
     rDoc(rD),
@@ -367,7 +367,7 @@ bool ScXMLImportWrapper::Import(bool bStylesOnly, ErrCode& nError)
             }
         }
 
-        // -------------------------------------
+
 
         uno::Reference<task::XStatusIndicator> xStatusIndicator(GetStatusIndicator());
         if (xStatusIndicator.is())

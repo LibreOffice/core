@@ -300,7 +300,7 @@ void FilterConfigCache::ImplInitSmart()
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 FilterConfigCache::FilterConfigCache( bool bConfig ) :
     bUseConfig ( bConfig )
@@ -442,7 +442,7 @@ bool FilterConfigCache::IsImportPixelFormat( sal_uInt16 nFormat )
     return (nFormat < aImport.size()) && aImport[ nFormat ].bIsPixelFormat;
 }
 
-// ------------------------------------------------------------------------
+
 
 OUString FilterConfigCache::GetExportFilterName( sal_uInt16 nFormat )
 {
@@ -556,6 +556,6 @@ bool FilterConfigCache::IsExportPixelFormat( sal_uInt16 nFormat )
     return (nFormat < aExport.size()) && aExport[ nFormat ].bIsPixelFormat;
 }
 
-// ------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

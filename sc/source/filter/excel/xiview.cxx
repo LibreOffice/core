@@ -83,7 +83,7 @@ long lclGetScZoom( sal_uInt16 nXclZoom, sal_uInt16 nDefZoom )
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 XclImpTabViewSettings::XclImpTabViewSettings( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )

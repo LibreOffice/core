@@ -66,7 +66,7 @@ using ::com::sun::star::drawing::XControlShape;
 using namespace ::svxform;
 
 DBG_NAME(FmFormPageImpl)
-//------------------------------------------------------------------------------
+
 FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage )
                :m_rPage( _rPage )
                ,m_bFirstActivation( sal_True )
@@ -76,7 +76,7 @@ FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage )
     DBG_CTOR(FmFormPageImpl,NULL);
 }
 
-//------------------------------------------------------------------------------
+
 namespace
 {
     typedef Reference< XInterface > FormComponent;
@@ -154,7 +154,7 @@ namespace
     };
 }
 
-//------------------------------------------------------------------------------
+
 void FmFormPageImpl::initFrom( FmFormPageImpl& i_foreignImpl )
 {
     // clone the Forms collection
@@ -229,7 +229,7 @@ void FmFormPageImpl::initFrom( FmFormPageImpl& i_foreignImpl )
     }
 }
 
-//------------------------------------------------------------------------------
+
 Reference< XMap > FmFormPageImpl::getControlToShapeMap()
 {
     Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );
@@ -241,7 +241,7 @@ Reference< XMap > FmFormPageImpl::getControlToShapeMap()
     return xControlShapeMap;
 }
 
-//------------------------------------------------------------------------------
+
 namespace
 {
     static void lcl_insertFormObject_throw( const FmFormObj& _object, const Reference< XMap >& _map )
@@ -284,7 +284,7 @@ namespace
     }
 }
 
-//------------------------------------------------------------------------------
+
 Reference< XMap > FmFormPageImpl::impl_createControlShapeMap_nothrow()
 {
     Reference< XMap > xMap;
@@ -314,7 +314,7 @@ Reference< XMap > FmFormPageImpl::impl_createControlShapeMap_nothrow()
     return xMap;
 }
 
-//------------------------------------------------------------------------------
+
 const Reference< css::form::XForms >& FmFormPageImpl::getForms( bool _bForceCreate )
 {
     if ( m_xForms.is() || !_bForceCreate )
@@ -346,7 +346,7 @@ const Reference< css::form::XForms >& FmFormPageImpl::getForms( bool _bForceCrea
     return m_xForms;
 }
 
-//------------------------------------------------------------------------------
+
 FmFormPageImpl::~FmFormPageImpl()
 {
     xCurrentForm = NULL;
@@ -355,7 +355,7 @@ FmFormPageImpl::~FmFormPageImpl()
     DBG_DTOR(FmFormPageImpl,NULL);
 }
 
-//------------------------------------------------------------------------------
+
 bool FmFormPageImpl::validateCurForm()
 {
     if ( !xCurrentForm.is() )
@@ -369,13 +369,13 @@ bool FmFormPageImpl::validateCurForm()
     return xCurrentForm.is();
 }
 
-//------------------------------------------------------------------------------
+
 void FmFormPageImpl::setCurForm(Reference< ::com::sun::star::form::XForm >  xForm)
 {
     xCurrentForm = xForm;
 }
 
-//------------------------------------------------------------------------------
+
 Reference< XForm >  FmFormPageImpl::getDefaultForm()
 {
     Reference< XForm > xForm;
@@ -459,7 +459,7 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
     return xForm;
 }
 
-//------------------------------------------------------------------------------
+
 Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormComponentHierarchy(
     const Reference< XFormComponent > & rContent, const Reference< XDataSource > & rDatabase,
     const OUString& rDBTitle, const OUString& rCursorSource, sal_Int32 nCommandType )
@@ -553,7 +553,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
     return xForm;
 }
 
-//------------------------------------------------------------------------------
+
 Reference< XForm >  FmFormPageImpl::findFormForDataSource(
         const Reference< XForm > & rForm, const Reference< XDataSource > & _rxDatabase,
         const OUString& _rCursorSource, sal_Int32 nCommandType)
@@ -635,7 +635,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
     return xResultForm;
 }
 
-//------------------------------------------------------------------------------
+
 OUString FmFormPageImpl::setUniqueName(const Reference< XFormComponent > & xFormComponent, const Reference< XForm > & xControls)
 {
 #if OSL_DEBUG_LEVEL > 0
@@ -676,7 +676,7 @@ OUString FmFormPageImpl::setUniqueName(const Reference< XFormComponent > & xForm
     return sName;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 void FmFormPageImpl::formModelAssigned( const FmFormObj& _object )
 {
     Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );
@@ -695,7 +695,7 @@ void FmFormPageImpl::formModelAssigned( const FmFormObj& _object )
     }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 void FmFormPageImpl::formObjectInserted( const FmFormObj& _object )
 {
     Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );
@@ -713,7 +713,7 @@ void FmFormPageImpl::formObjectInserted( const FmFormObj& _object )
     }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 void FmFormPageImpl::formObjectRemoved( const FmFormObj& _object )
 {
     Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );

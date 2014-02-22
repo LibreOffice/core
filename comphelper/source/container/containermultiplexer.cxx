@@ -32,14 +32,14 @@ namespace comphelper
     //=====================================================================
     //= OContainerListener
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OContainerListener::OContainerListener(::osl::Mutex& _rMutex)
         :m_pAdapter(NULL)
         ,m_rMutex(_rMutex)
     {
     }
 
-    //---------------------------------------------------------------------
+
     OContainerListener::~OContainerListener()
     {
         if (m_pAdapter)
@@ -49,27 +49,27 @@ namespace comphelper
         }
     }
 
-    //---------------------------------------------------------------------
+
     void OContainerListener::_elementInserted( const ContainerEvent& /*_rEvent*/ ) throw(RuntimeException)
     {
     }
 
-    //---------------------------------------------------------------------
+
     void OContainerListener::_elementRemoved( const ContainerEvent& ) throw(RuntimeException)
     {
     }
 
-    //---------------------------------------------------------------------
+
     void OContainerListener::_elementReplaced( const ContainerEvent& /*_rEvent*/ ) throw(RuntimeException)
     {
     }
 
-    //---------------------------------------------------------------------
+
     void OContainerListener::_disposing(const EventObject& ) throw( RuntimeException)
     {
     }
 
-    //------------------------------------------------------------------
+
     void OContainerListener::setAdapter(OContainerListenerAdapter* pAdapter)
     {
         if (m_pAdapter)
@@ -90,7 +90,7 @@ namespace comphelper
     //=====================================================================
     //= OContainerListenerAdapter
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OContainerListenerAdapter::OContainerListenerAdapter(OContainerListener* _pListener,
             const  Reference< XContainer >& _rxContainer)
         :m_xContainer(_rxContainer)
@@ -112,12 +112,12 @@ namespace comphelper
         ::comphelper::decrement(m_refCount);
     }
 
-    //---------------------------------------------------------------------
+
     OContainerListenerAdapter::~OContainerListenerAdapter()
     {
     }
 
-    //------------------------------------------------------------------
+
     void OContainerListenerAdapter::dispose()
     {
         if (m_xContainer.is())
@@ -137,7 +137,7 @@ namespace comphelper
         }
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL OContainerListenerAdapter::disposing( const  EventObject& _rSource) throw(RuntimeException)
     {
         if (m_pListener)
@@ -154,21 +154,21 @@ namespace comphelper
         m_pListener = NULL;
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL OContainerListenerAdapter::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException)
     {
         if (m_pListener && !locked())
             m_pListener->_elementInserted(_rEvent);
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL OContainerListenerAdapter::elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException)
     {
         if (m_pListener && !locked())
             m_pListener->_elementRemoved(_rEvent);
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL OContainerListenerAdapter::elementReplaced( const ContainerEvent& _rEvent ) throw(RuntimeException)
     {
         if (m_pListener && !locked())

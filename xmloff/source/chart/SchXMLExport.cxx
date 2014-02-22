@@ -2453,7 +2453,7 @@ void SchXMLExportHelper_Impl::exportAxes(
     Reference< chart::XAxisSupplier > xAxisSupp( xDiagram, uno::UNO_QUERY );
 
     // x axis
-    // -------
+
     Reference< ::com::sun::star::chart2::XAxis > xNewAxis = lcl_getAxis( xCooSys, XML_X );
     if( xNewAxis.is() )
     {
@@ -2477,7 +2477,7 @@ void SchXMLExportHelper_Impl::exportAxes(
     }
 
     // secondary x axis
-    // -------
+
     Reference< chart::XSecondAxisTitleSupplier > xSecondTitleSupp( xDiagram, uno::UNO_QUERY );
     xNewAxis = lcl_getAxis( xCooSys, XML_X, false );
     if( xNewAxis.is() )
@@ -2487,7 +2487,7 @@ void SchXMLExportHelper_Impl::exportAxes(
     }
 
     // y axis
-    // -------
+
     xNewAxis = lcl_getAxis( xCooSys, XML_Y );
     if( xNewAxis.is() )
     {
@@ -2496,7 +2496,7 @@ void SchXMLExportHelper_Impl::exportAxes(
     }
 
     // secondary y axis
-    // -------
+
     xNewAxis = lcl_getAxis( xCooSys, XML_Y, false );
     if( xNewAxis.is() )
     {
@@ -2505,7 +2505,7 @@ void SchXMLExportHelper_Impl::exportAxes(
     }
 
     // z axis
-    // -------
+
     xNewAxis = lcl_getAxis( xCooSys, XML_Z );
     if( xNewAxis.is() )
     {
@@ -3207,7 +3207,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     sal_Bool bExportContent )
 {
     // data-points
-    // -----------
+
     // write data-points only if they contain autostyles
     // objects with equal autostyles are grouped using the attribute
     // repeat="number"

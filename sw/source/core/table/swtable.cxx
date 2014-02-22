@@ -79,7 +79,7 @@ SV_IMPL_REF( SwServerObject )
 
 void ChgTextToNum( SwTableBox& rBox, const OUString& rTxt, const Color* pCol,
                     sal_Bool bChgAlign,sal_uLong nNdPos );
-//----------------------------------
+
 
 class SwTableBox_Impl
 {

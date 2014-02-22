@@ -62,7 +62,7 @@ namespace svx
         }
     }
 
-    //--------------------------------------------------------------------
+
     void ToolboxAccess::toggleToolbox() const
     {
         try
@@ -94,7 +94,7 @@ namespace svx
         }
     }
 
-    //--------------------------------------------------------------------
+
     bool ToolboxAccess::isToolboxVisible() const
     {
         return ( m_xLayouter.is() && m_xLayouter->isElementVisible( m_sToolboxResName ) );

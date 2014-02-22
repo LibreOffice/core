@@ -51,7 +51,7 @@ namespace svxform
     //========================================================================
 
     DBG_NAME(DispatchInterceptionMultiplexer)
-    //------------------------------------------------------------------------
+
     DispatchInterceptionMultiplexer::DispatchInterceptionMultiplexer(
                 const Reference< XDispatchProviderInterception >& _rxToIntercept, DispatchInterceptor* _pMaster )
         :DispatchInterceptionMultiplexer_BASE(_pMaster && _pMaster->getInterceptorMutex() ? *_pMaster->getInterceptorMutex() : m_aFallback)
@@ -80,7 +80,7 @@ namespace svxform
         ::comphelper::decrement(m_refCount);
     }
 
-    //------------------------------------------------------------------------
+
     DispatchInterceptionMultiplexer::~DispatchInterceptionMultiplexer()
     {
         if (!rBHelper.bDisposed)
@@ -89,7 +89,7 @@ namespace svxform
         DBG_DTOR(DispatchInterceptionMultiplexer,NULL);
     }
 
-    //------------------------------------------------------------------------------
+
     Reference< XDispatch > SAL_CALL DispatchInterceptionMultiplexer::queryDispatch( const URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw(RuntimeException)
     {
         ::osl::MutexGuard aGuard( *m_pMutex );
@@ -105,7 +105,7 @@ namespace svxform
         return xResult;
     }
 
-    //------------------------------------------------------------------------------
+
     Sequence< Reference< XDispatch > > SAL_CALL
     DispatchInterceptionMultiplexer::queryDispatches( const Sequence< DispatchDescriptor >& aDescripts ) throw(RuntimeException)
     {
@@ -120,35 +120,35 @@ namespace svxform
         return aReturn;
     }
 
-    //------------------------------------------------------------------------------
+
     Reference< XDispatchProvider > SAL_CALL DispatchInterceptionMultiplexer::getSlaveDispatchProvider(  ) throw(RuntimeException)
     {
         ::osl::MutexGuard aGuard( *m_pMutex );
         return m_xSlaveDispatcher;
     }
 
-    //------------------------------------------------------------------------------
+
     void SAL_CALL DispatchInterceptionMultiplexer::setSlaveDispatchProvider(const Reference< XDispatchProvider>& xNewDispatchProvider) throw( RuntimeException )
     {
         ::osl::MutexGuard aGuard( *m_pMutex );
         m_xSlaveDispatcher = xNewDispatchProvider;
     }
 
-    //------------------------------------------------------------------------------
+
     Reference< XDispatchProvider> SAL_CALL DispatchInterceptionMultiplexer::getMasterDispatchProvider(void) throw( RuntimeException )
     {
         ::osl::MutexGuard aGuard( *m_pMutex );
         return m_xMasterDispatcher;
     }
 
-    //------------------------------------------------------------------------------
+
     void SAL_CALL DispatchInterceptionMultiplexer::setMasterDispatchProvider(const Reference< XDispatchProvider>& xNewSupplier) throw( RuntimeException )
     {
         ::osl::MutexGuard aGuard( *m_pMutex );
         m_xMasterDispatcher = xNewSupplier;
     }
 
-    //------------------------------------------------------------------------------
+
     void SAL_CALL DispatchInterceptionMultiplexer::disposing(const EventObject& Source) throw( RuntimeException )
     {
         if (m_bListening)
@@ -159,7 +159,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------------
+
     void DispatchInterceptionMultiplexer::ImplDetach()
     {
         ::osl::MutexGuard aGuard( *m_pMutex );
@@ -179,7 +179,7 @@ namespace svxform
         m_bListening = sal_False;
     }
 
-    //------------------------------------------------------------------------------
+
     void DispatchInterceptionMultiplexer::disposing()
     {
         // remove ourself as event listener from the interception component

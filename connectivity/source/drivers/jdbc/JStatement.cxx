@@ -43,21 +43,21 @@
 using namespace ::comphelper;
 using namespace connectivity;
 using namespace ::cppu;
-//------------------------------------------------------------------------------
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-//------------------------------------------------------------------------------
+
 //**************************************************************
 //************ Class: java.sql.Statement
 //**************************************************************
 
 jclass java_sql_Statement_Base::theClass = 0;
 
-// -------------------------------------------------------------------------
+
 java_sql_Statement_Base::java_sql_Statement_Base( JNIEnv * pEnv, java_sql_Connection& _rCon )
     :java_sql_Statement_BASE(m_aMutex)
     ,java_lang_Object( pEnv, NULL )
@@ -72,12 +72,12 @@ java_sql_Statement_Base::java_sql_Statement_Base( JNIEnv * pEnv, java_sql_Connec
     m_pConnection->acquire();
 }
 
-//------------------------------------------------------------------------------
+
 java_sql_Statement_Base::~java_sql_Statement_Base()
 {
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OStatement_BASE2::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -96,7 +96,7 @@ void SAL_CALL OStatement_BASE2::disposing()
     dispose_ChildImpl();
     java_sql_Statement_Base::disposing();
 }
-// -------------------------------------------------------------------------
+
 jclass java_sql_Statement_Base::getMyClass() const
 {
     // the class must be fetched only once, therefore static
@@ -104,21 +104,21 @@ jclass java_sql_Statement_Base::getMyClass() const
         theClass = findMyClass("java/sql/Statement");
     return theClass;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Statement_Base::disposing(void)
 {
     m_aLogger.log( LogLevel::FINE, STR_LOG_CLOSING_STATEMENT );
     java_sql_Statement_BASE::disposing();
     clearObject();
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OStatement_BASE2::release() throw()
 {
     relase_ChildImpl();
 }
 
-// -------------------------------------------------------------------------
+
 Any SAL_CALL java_sql_Statement_Base::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     if ( m_pConnection && !m_pConnection->isAutoRetrievingEnabled() && rType == ::getCppuType( (const Reference< XGeneratedResultSet > *)0 ) )
@@ -126,7 +126,7 @@ Any SAL_CALL java_sql_Statement_Base::queryInterface( const Type & rType ) throw
     Any aRet( java_sql_Statement_BASE::queryInterface(rType) );
     return aRet.hasValue() ? aRet : OPropertySetHelper::queryInterface(rType);
 }
-// -------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL java_sql_Statement_Base::getTypes(  ) throw(RuntimeException)
 {
     ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
@@ -143,7 +143,7 @@ Sequence< Type > SAL_CALL java_sql_Statement_Base::getTypes(  ) throw(RuntimeExc
 
     return ::comphelper::concatSequences(aTypes.getTypes(),aOldTypes);
 }
-// -----------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL java_sql_Statement_Base::getGeneratedValues(  ) throw (SQLException, RuntimeException)
 {
     m_aLogger.log( LogLevel::FINE, STR_LOG_GENERATED_VALUES );
@@ -185,7 +185,7 @@ Reference< XResultSet > SAL_CALL java_sql_Statement_Base::getGeneratedValues(  )
     return xRes;
 }
 
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_Statement_Base::cancel(  ) throw(RuntimeException)
 {
@@ -194,7 +194,7 @@ void SAL_CALL java_sql_Statement_Base::cancel(  ) throw(RuntimeException)
     static jmethodID mID(NULL);
     callVoidMethod("cancel",mID);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_Statement_Base::close(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
@@ -205,7 +205,7 @@ void SAL_CALL java_sql_Statement_Base::close(  ) throw(::com::sun::star::sdbc::S
     }
     dispose();
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_Statement::clearBatch(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
@@ -217,7 +217,7 @@ void SAL_CALL java_sql_Statement::clearBatch(  ) throw(::com::sun::star::sdbc::S
         callVoidMethod("clearBatch",mID);
     } //t.pEnv
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL java_sql_Statement_Base::execute( const OUString& sql ) throw(SQLException, RuntimeException)
 {
@@ -251,7 +251,7 @@ sal_Bool SAL_CALL java_sql_Statement_Base::execute( const OUString& sql ) throw(
     } //t.pEnv
     return out;
 }
-// -------------------------------------------------------------------------
+
 
 Reference< XResultSet > SAL_CALL java_sql_Statement_Base::executeQuery( const OUString& sql ) throw(SQLException, RuntimeException)
 {
@@ -287,21 +287,21 @@ Reference< XResultSet > SAL_CALL java_sql_Statement_Base::executeQuery( const OU
     // WARNING: the caller becomes the owner of the returned pointer
     return out==0 ? 0 : new java_sql_ResultSet( t.pEnv, out, m_aLogger, *m_pConnection,this );
 }
-// -------------------------------------------------------------------------
+
 Reference< XConnection > SAL_CALL java_sql_Statement_Base::getConnection(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     return (Reference< XConnection >)m_pConnection;
 }
-// -------------------------------------------------------------------------
+
 
 Any SAL_CALL java_sql_Statement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = ::cppu::queryInterface(rType,static_cast< XBatchExecution*> (this));
     return aRet.hasValue() ? aRet : java_sql_Statement_Base::queryInterface(rType);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_Statement::addBatch( const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
@@ -314,7 +314,7 @@ void SAL_CALL java_sql_Statement::addBatch( const OUString& sql ) throw(::com::s
         callVoidMethodWithStringArg("addBatch",mID,sql);
     } //t.pEnv
 }
-// -------------------------------------------------------------------------
+
 
 Sequence< sal_Int32 > SAL_CALL java_sql_Statement::executeBatch(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
@@ -334,7 +334,7 @@ Sequence< sal_Int32 > SAL_CALL java_sql_Statement::executeBatch(  ) throw(::com:
     }
     return aSeq;
 }
-// -------------------------------------------------------------------------
+
 
 
 sal_Int32 SAL_CALL java_sql_Statement_Base::executeUpdate( const OUString& sql ) throw(SQLException, RuntimeException)
@@ -349,7 +349,7 @@ sal_Int32 SAL_CALL java_sql_Statement_Base::executeUpdate( const OUString& sql )
     static jmethodID mID(NULL);
     return callIntMethodWithStringArg("executeUpdate",mID,sql);
 }
-// -------------------------------------------------------------------------
+
 
 Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL java_sql_Statement_Base::getResultSet(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
@@ -361,7 +361,7 @@ Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL java_sql_Statement_Base
     // WARNING: the caller becomes the owner of the returned pointer
     return out==0 ? 0 : new java_sql_ResultSet( t.pEnv, out, m_aLogger, *m_pConnection,this );
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL java_sql_Statement_Base::getUpdateCount(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
@@ -372,16 +372,16 @@ sal_Int32 SAL_CALL java_sql_Statement_Base::getUpdateCount(  ) throw(::com::sun:
     m_aLogger.log( LogLevel::FINER, STR_LOG_UPDATE_COUNT, (sal_Int32)out );
     return out;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL java_sql_Statement_Base::getMoreResults(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return callBooleanMethod( "getMoreResults", mID );
 }
-// -------------------------------------------------------------------------
 
-// -------------------------------------------------------------------------
+
+
 Any SAL_CALL java_sql_Statement_Base::getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     SDBThreadAttach t;
@@ -399,7 +399,7 @@ Any SAL_CALL java_sql_Statement_Base::getWarnings(  ) throw(::com::sun::star::sd
 
     return Any();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Statement_Base::clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -412,32 +412,32 @@ void SAL_CALL java_sql_Statement_Base::clearWarnings(  ) throw(::com::sun::star:
         callVoidMethod("clearWarnings",mID);
     }
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 java_sql_Statement_Base::getQueryTimeOut()  throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_getProperty("getQueryTimeOut",mID);
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 java_sql_Statement_Base::getMaxRows() throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_getProperty("getMaxRows",mID);
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 java_sql_Statement_Base::getResultSetConcurrency() throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_getProperty("getResultSetConcurrency",mID,m_nResultSetConcurrency);
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int32 java_sql_Statement_Base::getResultSetType() throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_getProperty("getResultSetType",mID,m_nResultSetType);
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 java_sql_Statement_Base::impl_getProperty(const char* _pMethodName, jmethodID& _inout_MethodID,sal_Int32 _nDefault)
 {
     sal_Int32 out = _nDefault;
@@ -446,7 +446,7 @@ sal_Int32 java_sql_Statement_Base::impl_getProperty(const char* _pMethodName, jm
 
     return out;
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 java_sql_Statement_Base::impl_getProperty(const char* _pMethodName, jmethodID& _inout_MethodID)
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
@@ -454,25 +454,25 @@ sal_Int32 java_sql_Statement_Base::impl_getProperty(const char* _pMethodName, jm
     return callIntMethod(_pMethodName,_inout_MethodID,true);
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int32 java_sql_Statement_Base::getFetchDirection() throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_getProperty("getFetchDirection",mID);
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 java_sql_Statement_Base::getFetchSize() throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_getProperty("getFetchSize",mID);
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 java_sql_Statement_Base::getMaxFieldSize() throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_getProperty("getMaxFieldSize",mID);
 }
-//------------------------------------------------------------------------------
+
 OUString java_sql_Statement_Base::getCursorName() throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -489,7 +489,7 @@ OUString java_sql_Statement_Base::getCursorName() throw(SQLException, RuntimeExc
     }
     return OUString();
 }
-//------------------------------------------------------------------------------
+
 void java_sql_Statement_Base::setQueryTimeOut(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -500,7 +500,7 @@ void java_sql_Statement_Base::setQueryTimeOut(sal_Int32 _par0) throw(SQLExceptio
     callVoidMethodWithIntArg("setQueryTimeOut",mID,_par0,true);
 }
 
-//------------------------------------------------------------------------------
+
 void java_sql_Statement_Base::setEscapeProcessing(bool _par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -514,7 +514,7 @@ void java_sql_Statement_Base::setEscapeProcessing(bool _par0) throw(SQLException
     callVoidMethodWithBoolArg("setEscapeProcessing",mID,_par0,true);
 }
 
-//------------------------------------------------------------------------------
+
 void java_sql_Statement_Base::setMaxRows(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -524,7 +524,7 @@ void java_sql_Statement_Base::setMaxRows(sal_Int32 _par0) throw(SQLException, Ru
     static jmethodID mID(NULL);
     callVoidMethodWithIntArg("setMaxRows",mID,_par0,true);
 }
-//------------------------------------------------------------------------------
+
 void java_sql_Statement_Base::setResultSetConcurrency(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -534,7 +534,7 @@ void java_sql_Statement_Base::setResultSetConcurrency(sal_Int32 _par0) throw(SQL
 
     clearObject();
 }
-//------------------------------------------------------------------------------
+
 void java_sql_Statement_Base::setResultSetType(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -544,7 +544,7 @@ void java_sql_Statement_Base::setResultSetType(sal_Int32 _par0) throw(SQLExcepti
 
     clearObject();
 }
-//------------------------------------------------------------------------------
+
 void java_sql_Statement_Base::setFetchDirection(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -555,7 +555,7 @@ void java_sql_Statement_Base::setFetchDirection(sal_Int32 _par0) throw(SQLExcept
     static jmethodID mID(NULL);
     callVoidMethodWithIntArg("setFetchDirection",mID,_par0,true);
 }
-//------------------------------------------------------------------------------
+
 void java_sql_Statement_Base::setFetchSize(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -567,7 +567,7 @@ void java_sql_Statement_Base::setFetchSize(sal_Int32 _par0) throw(SQLException, 
     static jmethodID mID(NULL);
     callVoidMethodWithIntArg("setFetchSize",mID,_par0,true);
 }
-//------------------------------------------------------------------------------
+
 void java_sql_Statement_Base::setMaxFieldSize(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -577,7 +577,7 @@ void java_sql_Statement_Base::setMaxFieldSize(sal_Int32 _par0) throw(SQLExceptio
     static jmethodID mID(NULL);
     callVoidMethodWithIntArg("setMaxFieldSize",mID,_par0,true);
 }
-//------------------------------------------------------------------------------
+
 void java_sql_Statement_Base::setCursorName(const OUString &_par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -590,7 +590,7 @@ void java_sql_Statement_Base::setCursorName(const OUString &_par0) throw(SQLExce
     } //t.pEnv
 }
 
-// -------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* java_sql_Statement_Base::createArrayHelper( ) const
 {
     Sequence< Property > aProps(10);
@@ -610,13 +610,13 @@ void java_sql_Statement_Base::setCursorName(const OUString &_par0) throw(SQLExce
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-// -------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper & java_sql_Statement_Base::getInfoHelper()
 
 {
     return *const_cast<java_sql_Statement_Base*>(this)->getArrayHelper();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool java_sql_Statement_Base::convertFastPropertyValue(
                             Any & rConvertedValue,
                             Any & rOldValue,
@@ -662,7 +662,7 @@ sal_Bool java_sql_Statement_Base::convertFastPropertyValue(
     }
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 void java_sql_Statement_Base::setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
                                 const Any& rValue
@@ -704,7 +704,7 @@ void java_sql_Statement_Base::setFastPropertyValue_NoBroadcast(
             ;
     }
 }
-// -------------------------------------------------------------------------
+
 void java_sql_Statement_Base::getFastPropertyValue(
                                 Any& rValue,
                                 sal_Int32 nHandle
@@ -751,7 +751,7 @@ void java_sql_Statement_Base::getFastPropertyValue(
     {
     }
 }
-// -------------------------------------------------------------------------
+
 jclass java_sql_Statement::theClass = 0;
 
 java_sql_Statement::~java_sql_Statement()
@@ -765,7 +765,7 @@ jclass java_sql_Statement::getMyClass() const
     return theClass;
 }
 
-// -----------------------------------------------------------------------------
+
 void java_sql_Statement::createStatement(JNIEnv* _pEnv)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -797,36 +797,36 @@ void java_sql_Statement::createStatement(JNIEnv* _pEnv)
             object = _pEnv->NewGlobalRef( out );
     } //_pEnv
 }
-// -----------------------------------------------------------------------------
+
 
 
 IMPLEMENT_SERVICE_INFO(java_sql_Statement,"com.sun.star.sdbcx.JStatement","com.sun.star.sdbc.Statement");
-// -----------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Statement_Base::acquire() throw()
 {
     java_sql_Statement_BASE::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Statement_Base::release() throw()
 {
     java_sql_Statement_BASE::release();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Statement::acquire() throw()
 {
     OStatement_BASE2::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Statement::release() throw()
 {
     OStatement_BASE2::release();
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL java_sql_Statement_Base::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

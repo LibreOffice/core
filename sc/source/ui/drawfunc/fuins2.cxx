@@ -21,7 +21,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-//------------------------------------------------------------------------
+
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sot/exchange.hxx>
@@ -439,7 +439,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
 
     if( SvtModuleOptions().IsChart() )
     {
-        // ----------------------------------------
+
         // BM/IHA --
 
         // get range
@@ -487,7 +487,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                 pViewSh->GetViewData()->GetView()->Unmark();
         }
 
-        // ----------------------------------------
+
         // adapted old code
         pView->UnmarkAll();
 

@@ -50,12 +50,12 @@ using namespace ::com::sun::star::ucb;
 namespace dp_registry {
 namespace backend {
 
-//______________________________________________________________________________
+
 PackageRegistryBackend::~PackageRegistryBackend()
 {
 }
 
-//______________________________________________________________________________
+
 void PackageRegistryBackend::disposing( lang::EventObject const & event )
     throw (RuntimeException)
 {
@@ -69,7 +69,7 @@ void PackageRegistryBackend::disposing( lang::EventObject const & event )
     }
 }
 
-//______________________________________________________________________________
+
 PackageRegistryBackend::PackageRegistryBackend(
     Sequence<Any> const & args,
     Reference<XComponentContext> const & xContext )
@@ -101,7 +101,7 @@ PackageRegistryBackend::PackageRegistryBackend(
         m_eContext = CONTEXT_UNKNOWN;
 }
 
-//______________________________________________________________________________
+
 void PackageRegistryBackend::check()
 {
     ::osl::MutexGuard guard( getMutex() );
@@ -112,7 +112,7 @@ void PackageRegistryBackend::check()
     }
 }
 
-//______________________________________________________________________________
+
 void PackageRegistryBackend::disposing()
 {
     try {
@@ -134,7 +134,7 @@ void PackageRegistryBackend::disposing()
 }
 
 // XPackageRegistry
-//______________________________________________________________________________
+
 Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
     OUString const & url, OUString const & mediaType, sal_Bool  bRemoved,
     OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
@@ -301,12 +301,12 @@ void PackageRegistryBackend::deleteUnusedFolders(
 }
 
 
-//______________________________________________________________________________
+
 Package::~Package()
 {
 }
 
-//______________________________________________________________________________
+
 Package::Package( ::rtl::Reference<PackageRegistryBackend> const & myBackend,
                   OUString const & url,
                   OUString const & rName,
@@ -336,14 +336,14 @@ Package::Package( ::rtl::Reference<PackageRegistryBackend> const & myBackend,
     }
 }
 
-//______________________________________________________________________________
+
 void Package::disposing()
 {
     m_myBackend.clear();
     WeakComponentImplHelperBase::disposing();
 }
 
-//______________________________________________________________________________
+
 void Package::check() const
 {
     ::osl::MutexGuard guard( getMutex() );
@@ -355,7 +355,7 @@ void Package::check() const
 }
 
 // XComponent
-//______________________________________________________________________________
+
 void Package::dispose() throw (RuntimeException)
 {
     //Do not call check here. We must not throw an exception here if the object
@@ -363,7 +363,7 @@ void Package::dispose() throw (RuntimeException)
     WeakComponentImplHelperBase::dispose();
 }
 
-//______________________________________________________________________________
+
 void Package::addEventListener(
     Reference<lang::XEventListener> const & xListener ) throw (RuntimeException)
 {
@@ -372,7 +372,7 @@ void Package::addEventListener(
     WeakComponentImplHelperBase::addEventListener( xListener );
 }
 
-//______________________________________________________________________________
+
 void Package::removeEventListener(
     Reference<lang::XEventListener> const & xListener ) throw (RuntimeException)
 {
@@ -382,7 +382,7 @@ void Package::removeEventListener(
 }
 
 // XModifyBroadcaster
-//______________________________________________________________________________
+
 void Package::addModifyListener(
     Reference<util::XModifyListener> const & xListener )
     throw (RuntimeException)
@@ -391,7 +391,7 @@ void Package::addModifyListener(
     rBHelper.addListener( ::getCppuType( &xListener ), xListener );
 }
 
-//______________________________________________________________________________
+
 void Package::removeModifyListener(
     Reference<util::XModifyListener> const & xListener )
     throw (RuntimeException)
@@ -400,7 +400,7 @@ void Package::removeModifyListener(
     rBHelper.removeListener( ::getCppuType( &xListener ), xListener );
 }
 
-//______________________________________________________________________________
+
 void Package::checkAborted(
     ::rtl::Reference<AbortChannel> const & abortChannel )
 {
@@ -411,7 +411,7 @@ void Package::checkAborted(
 }
 
 // XPackage
-//______________________________________________________________________________
+
 Reference<task::XAbortChannel> Package::createAbortChannel()
     throw (RuntimeException)
 {
@@ -419,13 +419,13 @@ Reference<task::XAbortChannel> Package::createAbortChannel()
     return new AbortChannel;
 }
 
-//______________________________________________________________________________
+
 sal_Bool Package::isBundle() throw (RuntimeException)
 {
     return false; // default
 }
 
-//______________________________________________________________________________
+
 ::sal_Int32 Package::checkPrerequisites(
         const css::uno::Reference< css::task::XAbortChannel >&,
         const css::uno::Reference< css::ucb::XCommandEnvironment >&,
@@ -441,7 +441,7 @@ sal_Bool Package::isBundle() throw (RuntimeException)
     return 0;
 }
 
-//______________________________________________________________________________
+
 ::sal_Bool Package::checkDependencies(
         const css::uno::Reference< css::ucb::XCommandEnvironment >& )
         throw (css::deployment::DeploymentException,
@@ -455,7 +455,7 @@ sal_Bool Package::isBundle() throw (RuntimeException)
 }
 
 
-//______________________________________________________________________________
+
 Sequence< Reference<deployment::XPackage> > Package::getBundle(
     Reference<task::XAbortChannel> const &,
     Reference<XCommandEnvironment> const & )
@@ -466,7 +466,7 @@ Sequence< Reference<deployment::XPackage> > Package::getBundle(
     return Sequence< Reference<deployment::XPackage> >();
 }
 
-//______________________________________________________________________________
+
 OUString Package::getName() throw (RuntimeException)
 {
     return m_name;
@@ -480,7 +480,7 @@ beans::Optional<OUString> Package::getIdentifier() throw (RuntimeException)
     return beans::Optional<OUString>();
 }
 
-//______________________________________________________________________________
+
 OUString Package::getVersion() throw (
     deployment::ExtensionRemovedException,
     RuntimeException)
@@ -490,13 +490,13 @@ OUString Package::getVersion() throw (
     return OUString();
 }
 
-//______________________________________________________________________________
+
 OUString Package::getURL() throw (RuntimeException)
 {
     return m_url;
 }
 
-//______________________________________________________________________________
+
 OUString Package::getDisplayName() throw (
     deployment::ExtensionRemovedException, RuntimeException)
 {
@@ -505,7 +505,7 @@ OUString Package::getDisplayName() throw (
     return m_displayName;
 }
 
-//______________________________________________________________________________
+
 OUString Package::getDescription() throw (
     deployment::ExtensionRemovedException,RuntimeException)
 {
@@ -514,7 +514,7 @@ OUString Package::getDescription() throw (
     return OUString();
 }
 
-//______________________________________________________________________________
+
 OUString Package::getLicenseText() throw (
     deployment::ExtensionRemovedException,RuntimeException)
 {
@@ -523,7 +523,7 @@ OUString Package::getLicenseText() throw (
     return OUString();
 }
 
-//______________________________________________________________________________
+
 Sequence<OUString> Package::getUpdateInformationURLs() throw (
     deployment::ExtensionRemovedException, RuntimeException)
 {
@@ -532,7 +532,7 @@ Sequence<OUString> Package::getUpdateInformationURLs() throw (
     return Sequence<OUString>();
 }
 
-//______________________________________________________________________________
+
 css::beans::StringPair Package::getPublisherInfo() throw (
     deployment::ExtensionRemovedException, RuntimeException)
 {
@@ -542,7 +542,7 @@ css::beans::StringPair Package::getPublisherInfo() throw (
     return aEmptyPair;
 }
 
-//______________________________________________________________________________
+
 uno::Reference< css::graphic::XGraphic > Package::getIcon( sal_Bool /*bHighContrast*/ )
     throw (deployment::ExtensionRemovedException, RuntimeException )
 {
@@ -553,14 +553,14 @@ uno::Reference< css::graphic::XGraphic > Package::getIcon( sal_Bool /*bHighContr
     return aEmpty;
 }
 
-//______________________________________________________________________________
+
 Reference<deployment::XPackageTypeInfo> Package::getPackageType()
     throw (RuntimeException)
 {
     return m_xPackageType;
 }
 
-//______________________________________________________________________________
+
 void Package::exportTo(
     OUString const & destFolderURL, OUString const & newTitle,
     sal_Int32 nameClashAction, Reference<XCommandEnvironment> const & xCmdEnv )
@@ -578,7 +578,7 @@ void Package::exportTo(
         throw RuntimeException( "UCB transferContent() failed!", 0 );
 }
 
-//______________________________________________________________________________
+
 void Package::fireModified()
 {
     ::cppu::OInterfaceContainerHelper * container = rBHelper.getContainer(
@@ -599,7 +599,7 @@ void Package::fireModified()
 }
 
 // XPackage
-//______________________________________________________________________________
+
 beans::Optional< beans::Ambiguous<sal_Bool> > Package::isRegistered(
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
@@ -632,7 +632,7 @@ beans::Optional< beans::Ambiguous<sal_Bool> > Package::isRegistered(
     }
 }
 
-//______________________________________________________________________________
+
 void Package::processPackage_impl(
     bool doRegisterPackage,
     bool startup,
@@ -710,7 +710,7 @@ void Package::processPackage_impl(
         fireModified();
 }
 
-//______________________________________________________________________________
+
 void Package::registerPackage(
     sal_Bool startup,
     Reference<task::XAbortChannel> const & xAbortChannel,
@@ -725,7 +725,7 @@ void Package::registerPackage(
     processPackage_impl( true /* register */, startup, xAbortChannel, xCmdEnv );
 }
 
-//______________________________________________________________________________
+
 void Package::revokePackage(
     sal_Bool startup,
     Reference<task::XAbortChannel> const & xAbortChannel,
@@ -775,39 +775,39 @@ sal_Bool Package::isRemoved()
 }
 
 
-//______________________________________________________________________________
+
 Package::TypeInfo::~TypeInfo()
 {
 }
 
 // XPackageTypeInfo
-//______________________________________________________________________________
+
 OUString Package::TypeInfo::getMediaType() throw (RuntimeException)
 {
     return m_mediaType;
 }
 
-//______________________________________________________________________________
+
 OUString Package::TypeInfo::getDescription()
     throw (deployment::ExtensionRemovedException, RuntimeException)
 {
     return getShortDescription();
 }
 
-//______________________________________________________________________________
+
 OUString Package::TypeInfo::getShortDescription()
     throw (deployment::ExtensionRemovedException, RuntimeException)
 {
     return m_shortDescr;
 }
 
-//______________________________________________________________________________
+
 OUString Package::TypeInfo::getFileFilter() throw (RuntimeException)
 {
     return m_fileFilter;
 }
 
-//______________________________________________________________________________
+
 /**************************
  * Get Icon
  *

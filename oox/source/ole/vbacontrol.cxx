@@ -77,7 +77,7 @@ const sal_uInt32 VBA_SITE_DEFFLAGS              = 0x00000033;
 const sal_uInt8 VBA_SITEINFO_COUNT              = 0x80;
 const sal_uInt8 VBA_SITEINFO_MASK               = 0x7F;
 
-// ----------------------------------------------------------------------------
+
 
 /** Collects names of all controls in a user form or container control. Allows
     to generate unused names for dummy controls separating option groups.
@@ -124,7 +124,7 @@ OUString VbaControlNamesSet::generateDummyName()
     return aCtrlName;
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** Functor that inserts the name of a control into a VbaControlNamesSet. */
 struct VbaControlNameInserter
@@ -135,7 +135,7 @@ public:
     inline void         operator()( const VbaFormControl& rControl ) { mrCtrlNames.insertName( rControl ); }
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A dummy invisible form control (fixed label without text) that is used to
     separate two groups of option buttons.
@@ -776,7 +776,7 @@ bool lclEatKeyword( OUString& rCodeLine, const OUString& rKeyword )
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 VbaUserForm::VbaUserForm( const Reference< XComponentContext >& rxContext,
         const Reference< XModel >& rxDocModel, const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr ) :

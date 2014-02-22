@@ -75,12 +75,12 @@ OXMLRowColumn::OXMLRowColumn( ORptFilter& rImport
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 
 OXMLRowColumn::~OXMLRowColumn()
 {
 }
-// -----------------------------------------------------------------------------
+
 SvXMLImportContext* OXMLRowColumn::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -119,7 +119,7 @@ SvXMLImportContext* OXMLRowColumn::CreateChildContext(
 
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 void OXMLRowColumn::fillStyle(const OUString& _sStyleName)
 {
     if ( !_sStyleName.isEmpty() )
@@ -158,17 +158,17 @@ void OXMLRowColumn::fillStyle(const OUString& _sStyleName)
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 ORptFilter& OXMLRowColumn::GetOwnImport()
 {
     return static_cast<ORptFilter&>(GetImport());
 }
-// -----------------------------------------------------------------------------
+
 void OXMLRowColumn::EndElement()
 {
 }
-//----------------------------------------------------------------------------
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

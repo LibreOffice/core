@@ -180,7 +180,7 @@ private:
     bool                mbDisposed;
 };
 
-// ----------------------------------------------------------------------------
+
 
 ScVbaEventListener::ScVbaEventListener( ScVbaEventsHelper& rVbaEvents, const uno::Reference< frame::XModel >& rxModel, ScDocShell* pDocShell ) :
     mrVbaEvents( rVbaEvents ),

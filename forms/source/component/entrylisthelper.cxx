@@ -38,14 +38,14 @@ namespace frm
     //=====================================================================
     //= OEntryListHelper
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OEntryListHelper::OEntryListHelper( OControlModel& _rControlModel )
         :m_rControlModel( _rControlModel )
         ,m_aRefreshListeners( _rControlModel.getInstanceMutex() )
     {
     }
 
-    //---------------------------------------------------------------------
+
     OEntryListHelper::OEntryListHelper( const OEntryListHelper& _rSource, OControlModel& _rControlModel )
         :m_rControlModel( _rControlModel )
         ,m_xListSource ( _rSource.m_xListSource  )
@@ -54,12 +54,12 @@ namespace frm
     {
     }
 
-    //---------------------------------------------------------------------
+
     OEntryListHelper::~OEntryListHelper( )
     {
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OEntryListHelper::setListEntrySource( const Reference< XListEntrySource >& _rxSource ) throw (RuntimeException)
     {
         ControlModelLock aLock( m_rControlModel );
@@ -72,14 +72,14 @@ namespace frm
             connectExternalListSource( _rxSource, aLock );
     }
 
-    //---------------------------------------------------------------------
+
     Reference< XListEntrySource > SAL_CALL OEntryListHelper::getListEntrySource(  ) throw (RuntimeException)
     {
         return m_xListSource;
     }
 
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OEntryListHelper::entryChanged( const ListEntryEvent& _rEvent ) throw (RuntimeException)
     {
         ControlModelLock aLock( m_rControlModel );
@@ -101,7 +101,7 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OEntryListHelper::entryRangeInserted( const ListEntryEvent& _rEvent ) throw (RuntimeException)
     {
         ControlModelLock aLock( m_rControlModel );
@@ -138,7 +138,7 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OEntryListHelper::entryRangeRemoved( const ListEntryEvent& _rEvent ) throw (RuntimeException)
     {
         ControlModelLock aLock( m_rControlModel );
@@ -166,7 +166,7 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OEntryListHelper::allEntriesChanged( const EventObject& _rEvent ) throw (RuntimeException)
     {
         ControlModelLock aLock( m_rControlModel );
@@ -182,21 +182,21 @@ namespace frm
     }
 
     // XRefreshable
-    //------------------------------------------------------------------------------
+
     void SAL_CALL OEntryListHelper::addRefreshListener(const Reference<XRefreshListener>& _rxListener) throw(RuntimeException)
     {
         if ( _rxListener.is() )
             m_aRefreshListeners.addInterface( _rxListener );
     }
 
-    //------------------------------------------------------------------------------
+
     void SAL_CALL OEntryListHelper::removeRefreshListener(const Reference<XRefreshListener>& _rxListener) throw(RuntimeException)
     {
         if ( _rxListener.is() )
             m_aRefreshListeners.removeInterface( _rxListener );
     }
 
-    //------------------------------------------------------------------------------
+
     void SAL_CALL OEntryListHelper::refresh() throw(RuntimeException)
     {
         {
@@ -208,7 +208,7 @@ namespace frm
         m_aRefreshListeners.notifyEach( &XRefreshListener::refreshed, aEvt );
     }
 
-    //---------------------------------------------------------------------
+
     void OEntryListHelper::impl_lock_refreshList( ControlModelLock& _rInstanceLock )
     {
         if ( hasExternalListSource() )
@@ -220,7 +220,7 @@ namespace frm
             refreshInternalEntryList();
     }
 
-    //---------------------------------------------------------------------
+
     bool OEntryListHelper::handleDisposing( const EventObject& _rEvent )
     {
         if ( m_xListSource .is() && ( _rEvent.Source == m_xListSource ) )
@@ -231,7 +231,7 @@ namespace frm
         return false;
     }
 
-    //---------------------------------------------------------------------
+
     void OEntryListHelper::disposing( )
     {
         EventObject aEvt( static_cast< XRefreshable* >( this ) );
@@ -241,7 +241,7 @@ namespace frm
             disconnectExternalListSource( );
     }
 
-    //---------------------------------------------------------------------
+
     void OEntryListHelper::disconnectExternalListSource( )
     {
         if ( m_xListSource.is() )
@@ -252,19 +252,19 @@ namespace frm
         disconnectedExternalListSource();
     }
 
-    //---------------------------------------------------------------------
+
     void OEntryListHelper::connectedExternalListSource( )
     {
         // nothing to do here
     }
 
-    //---------------------------------------------------------------------
+
     void OEntryListHelper::disconnectedExternalListSource( )
     {
         // nothing to do here
     }
 
-    //---------------------------------------------------------------------
+
     void OEntryListHelper::connectExternalListSource( const Reference< XListEntrySource >& _rxSource, ControlModelLock& _rInstanceLock )
     {
         OSL_ENSURE( !hasExternalListSource(), "OEntryListHelper::connectExternalListSource: only to be called if no external source is active!" );
@@ -287,7 +287,7 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OEntryListHelper::convertNewListSourceProperty( Any& _rConvertedValue,
         Any& _rOldValue, const Any& _rValue ) SAL_THROW( ( IllegalArgumentException ) )
     {
@@ -298,7 +298,7 @@ namespace frm
         return ::comphelper::tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, m_aStringItems );
     }
 
-    //---------------------------------------------------------------------
+
     void OEntryListHelper::setNewStringItemList( const ::com::sun::star::uno::Any& _rValue, ControlModelLock& _rInstanceLock )
     {
         OSL_PRECOND( !hasExternalListSource(), "OEntryListHelper::setNewStringItemList: this should never have survived convertNewListSourceProperty!" );

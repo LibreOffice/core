@@ -2035,7 +2035,7 @@ sal_Bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
     return sal_True;
 }
 
-// -------------------------------------------------------------------
+
 // These Classes copy the current table selections (rBoxes),
 // into a new structure, retaining the table structure
 // new: SS for targeted erasing/restoring of the layout

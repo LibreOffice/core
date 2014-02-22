@@ -42,9 +42,9 @@
 #define ResolutionUnit              296
 #define ColorMap                    320
 
-// -------------
+
 // - TIFFWriter -
-// -------------
+
 
 struct TIFFLZWCTreeNode
 {
@@ -113,7 +113,7 @@ public:
     sal_Bool WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
-// ------------------------------------------------------------------------
+
 
 TIFFWriter::TIFFWriter(SvStream &rStream)
     : m_rOStm(rStream)
@@ -129,13 +129,13 @@ TIFFWriter::TIFFWriter(SvStream &rStream)
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 TIFFWriter::~TIFFWriter()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
 {
@@ -228,7 +228,7 @@ sal_Bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilt
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 void TIFFWriter::ImplCallback( sal_uInt32 nPercent )
 {
@@ -244,7 +244,7 @@ void TIFFWriter::ImplCallback( sal_uInt32 nPercent )
 }
 
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool TIFFWriter::ImplWriteHeader( sal_Bool bMultiPage )
 {
@@ -319,7 +319,7 @@ sal_Bool TIFFWriter::ImplWriteHeader( sal_Bool bMultiPage )
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 void TIFFWriter::ImplWritePalette()
 {
@@ -346,7 +346,7 @@ void TIFFWriter::ImplWritePalette()
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool TIFFWriter::ImplWriteBody()
 {
@@ -454,7 +454,7 @@ sal_Bool TIFFWriter::ImplWriteBody()
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 void TIFFWriter::ImplWriteResolution( sal_uLong nStreamPos, sal_uInt32 nResolutionUnit )
 {
@@ -466,7 +466,7 @@ void TIFFWriter::ImplWriteResolution( sal_uLong nStreamPos, sal_uInt32 nResoluti
     m_rOStm.WriteUInt32( nResolutionUnit );
 }
 
-// ------------------------------------------------------------------------
+
 
 void TIFFWriter::ImplWriteTag( sal_uInt16 nTagID, sal_uInt16 nDataType, sal_uInt32 nNumberOfItems, sal_uInt32 nValue)
 {
@@ -480,7 +480,7 @@ void TIFFWriter::ImplWriteTag( sal_uInt16 nTagID, sal_uInt16 nDataType, sal_uInt
         m_rOStm.WriteUInt32( nValue );
 }
 
-// ------------------------------------------------------------------------
+
 
 inline void TIFFWriter::WriteBits( sal_uInt16 nCode, sal_uInt16 nCodeLen )
 {
@@ -498,7 +498,7 @@ inline void TIFFWriter::WriteBits( sal_uInt16 nCode, sal_uInt16 nCodeLen )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void TIFFWriter::StartCompression()
 {
@@ -525,7 +525,7 @@ void TIFFWriter::StartCompression()
     WriteBits( nClearCode, nCodeSize );
 }
 
-// ------------------------------------------------------------------------
+
 
 void TIFFWriter::Compress( sal_uInt8 nCompThis )
 {
@@ -579,7 +579,7 @@ void TIFFWriter::Compress( sal_uInt8 nCompThis )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void TIFFWriter::EndCompression()
 {
@@ -590,7 +590,7 @@ void TIFFWriter::EndCompression()
     delete[] pTable;
 }
 
-// ------------------------------------------------------------------------
+
 
 // this needs to be kept in sync with
 // ImpFilterLibCacheEntry::GetImportFunction() from

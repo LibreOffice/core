@@ -28,7 +28,7 @@
 #include <rtl/instance.hxx>
 #include <list>
 
-// -----------------------------------------------------------------------
+
 #define HTMLCFG_UNKNOWN_TAGS            0x01
 //#define HTMLCFG_STYLE_SHEETS          0x02
 //#define HTMLCFG_NETSCAPE3             0x04
@@ -100,7 +100,7 @@ const Sequence<OUString>& SvxHtmlOptions::GetPropertyNames()
     }
     return aNames;
 }
-// -----------------------------------------------------------------------
+
 SvxHtmlOptions::SvxHtmlOptions() :
     ConfigItem("Office.Common/Filter/HTML")
 {
@@ -108,7 +108,7 @@ SvxHtmlOptions::SvxHtmlOptions() :
     Load( GetPropertyNames() );
 }
 
-// -----------------------------------------------------------------------
+
 SvxHtmlOptions::~SvxHtmlOptions()
 {
     delete pImp;
@@ -189,7 +189,7 @@ void SvxHtmlOptions::Load( const Sequence< OUString >& aNames )
     }
 }
 
-// -----------------------------------------------------------------------
+
 void    SvxHtmlOptions::Commit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
@@ -255,14 +255,14 @@ void SvxHtmlOptions::Notify( const com::sun::star::uno::Sequence< OUString >& )
     CallListeners();
 }
 
-// -----------------------------------------------------------------------
+
 sal_uInt16  SvxHtmlOptions::GetFontSize(sal_uInt16 nPos) const
 {
     if(nPos < HTML_FONT_COUNT)
         return (sal_uInt16)pImp->aFontSizeArr[nPos];
     return 0;
 }
-// -----------------------------------------------------------------------
+
 void SvxHtmlOptions::SetFontSize(sal_uInt16 nPos, sal_uInt16 nSize)
 {
     if(nPos < HTML_FONT_COUNT)
@@ -272,9 +272,9 @@ void SvxHtmlOptions::SetFontSize(sal_uInt16 nPos, sal_uInt16 nSize)
     }
 }
 
-// -----------------------------------------------------------------------
 
-// -----------------------------------------------------------------------
+
+
 
 
 sal_Bool SvxHtmlOptions::IsImportUnknown() const
@@ -282,7 +282,7 @@ sal_Bool SvxHtmlOptions::IsImportUnknown() const
     return 0 != (pImp->nFlags & HTMLCFG_UNKNOWN_TAGS) ;
 }
 
-// -----------------------------------------------------------------------
+
 
 
 void SvxHtmlOptions::SetImportUnknown(sal_Bool bSet)
@@ -294,7 +294,7 @@ void SvxHtmlOptions::SetImportUnknown(sal_Bool bSet)
     SetModified();
 }
 
-// -----------------------------------------------------------------------
+
 
 
 sal_uInt16  SvxHtmlOptions::GetExportMode() const
@@ -302,7 +302,7 @@ sal_uInt16  SvxHtmlOptions::GetExportMode() const
     return (sal_uInt16)pImp->nExportMode;
 }
 
-// -----------------------------------------------------------------------
+
 
 
 void SvxHtmlOptions::SetExportMode(sal_uInt16 nSet)
@@ -315,7 +315,7 @@ void SvxHtmlOptions::SetExportMode(sal_uInt16 nSet)
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 
 sal_Bool SvxHtmlOptions::IsStarBasic() const
@@ -323,7 +323,7 @@ sal_Bool SvxHtmlOptions::IsStarBasic() const
     return 0 != (pImp->nFlags & HTMLCFG_STAR_BASIC) ;
 }
 
-// -----------------------------------------------------------------------
+
 
 
 void SvxHtmlOptions::SetStarBasic(sal_Bool bSet)

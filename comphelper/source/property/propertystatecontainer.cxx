@@ -48,13 +48,13 @@ namespace comphelper
     //=====================================================================
     //= OPropertyStateContainer
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OPropertyStateContainer::OPropertyStateContainer( ::cppu::OBroadcastHelper& _rBHelper )
         :OPropertyContainer( _rBHelper )
     {
     }
 
-    //--------------------------------------------------------------------
+
     Any SAL_CALL OPropertyStateContainer::queryInterface( const Type& _rType ) throw (RuntimeException)
     {
         Any aReturn = OPropertyContainer::queryInterface( _rType );
@@ -63,10 +63,10 @@ namespace comphelper
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OPropertyStateContainer, OPropertyContainer, OPropertyStateContainer_TBase )
 
-    //--------------------------------------------------------------------
+
     sal_Int32 OPropertyStateContainer::getHandleForName( const OUString& _rPropertyName ) SAL_THROW( ( UnknownPropertyException ) )
     {
         // look up the handle for the name
@@ -79,13 +79,13 @@ namespace comphelper
         return nHandle;
     }
 
-    //--------------------------------------------------------------------
+
     PropertyState SAL_CALL OPropertyStateContainer::getPropertyState( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         return getPropertyStateByHandle( getHandleForName( _rPropertyName ) );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< PropertyState > SAL_CALL OPropertyStateContainer::getPropertyStates( const Sequence< OUString >& _rPropertyNames ) throw (UnknownPropertyException, RuntimeException)
     {
         sal_Int32 nProperties = _rPropertyNames.getLength();
@@ -138,13 +138,13 @@ namespace comphelper
         return aStates;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OPropertyStateContainer::setPropertyToDefault( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         setPropertyToDefaultByHandle( getHandleForName( _rPropertyName ) );
     }
 
-    //--------------------------------------------------------------------
+
     Any SAL_CALL OPropertyStateContainer::getPropertyDefault( const OUString& _rPropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
         Any aDefault;
@@ -152,7 +152,7 @@ namespace comphelper
         return aDefault;
     }
 
-    //--------------------------------------------------------------------
+
     PropertyState OPropertyStateContainer::getPropertyStateByHandle( sal_Int32 _nHandle )
     {
         // simply compare the current and the default value
@@ -171,7 +171,7 @@ namespace comphelper
             return PropertyState_DIRECT_VALUE;
     }
 
-    //--------------------------------------------------------------------
+
     void OPropertyStateContainer::setPropertyToDefaultByHandle( sal_Int32 _nHandle )
     {
         Any aDefault;

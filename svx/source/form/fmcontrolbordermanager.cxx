@@ -39,7 +39,7 @@ namespace svxform
     //====================================================================
     //= helper
     //====================================================================
-    //--------------------------------------------------------------------
+
     static void setUnderline( const Reference< XVclWindowPeer >& _rxPeer, const UnderlineDescriptor& _rUnderline )
     {
         OSL_ENSURE( _rxPeer.is(), "setUnderline: invalid peer!" );
@@ -53,7 +53,7 @@ namespace svxform
         _rxPeer->setProperty( FM_PROP_TEXTLINECOLOR, makeAny( _rUnderline.nUnderlineColor ) );
     }
 
-    //--------------------------------------------------------------------
+
     static void getUnderline( const Reference< XVclWindowPeer >& _rxPeer, UnderlineDescriptor& _rUnderline )
     {
         OSL_ENSURE( _rxPeer.is(), "getUnderline: invalid peer!" );
@@ -65,7 +65,7 @@ namespace svxform
         OSL_VERIFY( _rxPeer->getProperty( FM_PROP_TEXTLINECOLOR ) >>= _rUnderline.nUnderlineColor );
     }
 
-    //--------------------------------------------------------------------
+
     static void getBorder( const Reference< XVclWindowPeer >& _rxPeer, BorderDescriptor& _rBoder )
     {
         OSL_ENSURE( _rxPeer.is(), "getBorder: invalid peer!" );
@@ -74,7 +74,7 @@ namespace svxform
         OSL_VERIFY( _rxPeer->getProperty( FM_PROP_BORDERCOLOR ) >>= _rBoder.nBorderColor );
     }
 
-    //--------------------------------------------------------------------
+
     static void setBorder( const Reference< XVclWindowPeer >& _rxPeer, const BorderDescriptor& _rBoder )
     {
         OSL_ENSURE( _rxPeer.is(), "setBorder: invalid peer!" );
@@ -86,7 +86,7 @@ namespace svxform
     //====================================================================
     //= ControlBorderManager
     //====================================================================
-    //--------------------------------------------------------------------
+
     ControlBorderManager::ControlBorderManager()
         :m_nFocusColor    ( 0x000000FF )
         ,m_nMouseHoveColor( 0x007098BE )
@@ -95,12 +95,12 @@ namespace svxform
     {
     }
 
-    //--------------------------------------------------------------------
+
     ControlBorderManager::~ControlBorderManager()
     {
     }
 
-    //--------------------------------------------------------------------
+
     bool ControlBorderManager::canColorBorder( const Reference< XVclWindowPeer >& _rxPeer )
     {
         OSL_PRECOND( _rxPeer.is(), "ControlBorderManager::canColorBorder: invalid peer!" );
@@ -135,7 +135,7 @@ namespace svxform
         return false;
     }
 
-    //--------------------------------------------------------------------
+
     ControlStatus ControlBorderManager::getControlStatus( const Reference< XControl >& _rxControl ) SAL_THROW(())
     {
         ControlStatus nStatus = CONTROL_STATUS_NONE;
@@ -152,7 +152,7 @@ namespace svxform
         return nStatus;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int32 ControlBorderManager::getControlColorByStatus( ControlStatus _nStatus )
     {
         // "invalid" is ranked highest
@@ -171,7 +171,7 @@ namespace svxform
         return 0x00000000;
     }
 
-    //--------------------------------------------------------------------
+
     void ControlBorderManager::updateBorderStyle( const Reference< XControl >& _rxControl, const Reference< XVclWindowPeer >& _rxPeer, const BorderDescriptor& _rFallback ) SAL_THROW(())
     {
         OSL_PRECOND( _rxControl.is() && _rxPeer.is(), "ControlBorderManager::updateBorderStyle: invalid parameters!" );
@@ -187,7 +187,7 @@ namespace svxform
         setBorder( _rxPeer, aBorder );
     }
 
-    //--------------------------------------------------------------------
+
     void ControlBorderManager::determineOriginalBorderStyle( const Reference< XControl >& _rxControl, BorderDescriptor& _rData ) const
     {
         _rData = ControlData();
@@ -214,7 +214,7 @@ namespace svxform
         }
     }
 
-    //--------------------------------------------------------------------
+
     void ControlBorderManager::controlStatusGained( const Reference< XInterface >& _rxControl, ControlData& _rControlData ) SAL_THROW(())
     {
         if ( _rxControl == _rControlData.xControl )
@@ -247,7 +247,7 @@ namespace svxform
         }
     }
 
-    //--------------------------------------------------------------------
+
     void ControlBorderManager::controlStatusLost( const Reference< XInterface >& _rxControl, ControlData& _rControlData ) SAL_THROW(())
     {
         if ( _rxControl != _rControlData.xControl )
@@ -271,20 +271,20 @@ namespace svxform
         }
     }
 
-    //--------------------------------------------------------------------
+
     void ControlBorderManager::enableDynamicBorderColor( )
     {
         m_bDynamicBorderColors = true;
     }
 
-    //--------------------------------------------------------------------
+
     void ControlBorderManager::disableDynamicBorderColor( )
     {
         m_bDynamicBorderColors = false;
         restoreAll();
     }
 
-    //--------------------------------------------------------------------
+
     void ControlBorderManager::setStatusColor( ControlStatus _nStatus, sal_Int32 _nColor )
     {
         switch ( _nStatus )
@@ -303,7 +303,7 @@ namespace svxform
         }
     }
 
-    //--------------------------------------------------------------------
+
     void ControlBorderManager::restoreAll()
     {
         if ( m_aFocusControl.xControl.is() )
@@ -329,35 +329,35 @@ namespace svxform
         }
     }
 
-    //--------------------------------------------------------------------
+
     void ControlBorderManager::focusGained( const Reference< XInterface >& _rxControl ) SAL_THROW(())
     {
         if ( m_bDynamicBorderColors )
             controlStatusGained( _rxControl, m_aFocusControl );
     }
 
-    //--------------------------------------------------------------------
+
     void ControlBorderManager::focusLost( const Reference< XInterface >& _rxControl ) SAL_THROW(())
     {
         if ( m_bDynamicBorderColors )
             controlStatusLost( _rxControl, m_aFocusControl );
     }
 
-    //--------------------------------------------------------------------
+
     void ControlBorderManager::mouseEntered( const Reference< XInterface >& _rxControl ) SAL_THROW(())
     {
         if ( m_bDynamicBorderColors )
             controlStatusGained( _rxControl, m_aMouseHoverControl );
     }
 
-    //--------------------------------------------------------------------
+
     void ControlBorderManager::mouseExited( const Reference< XInterface >& _rxControl ) SAL_THROW(())
     {
         if ( m_bDynamicBorderColors )
             controlStatusLost( _rxControl, m_aMouseHoverControl );
     }
 
-    //--------------------------------------------------------------------
+
     void ControlBorderManager::validityChanged( const Reference< XControl >& _rxControl, const Reference< XValidatableFormComponent >& _rxValidatable ) SAL_THROW(())
     {
         try

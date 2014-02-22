@@ -42,7 +42,7 @@
 #define STATUSBAR_PRGS_COUNT    100
 #define STATUSBAR_PRGS_MIN      5
 
-// -----------------------------------------------------------------------
+
 
 class StatusBar::ImplData
 {
@@ -91,7 +91,7 @@ inline long ImplCalcProgessWidth( sal_uInt16 nMax, long nSize )
     return ((nMax*(nSize+(nSize/2)))-(nSize/2)+(STATUSBAR_PRGS_OFFSET*2));
 }
 
-// -----------------------------------------------------------------------
+
 
 static Point ImplGetItemTextPos( const Size& rRectSize, const Size& rTextSize,
                                  sal_uInt16 nStyle )
@@ -112,7 +112,7 @@ static Point ImplGetItemTextPos( const Size& rRectSize, const Size& rTextSize,
     return Point( nX, nY );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool StatusBar::ImplIsItemUpdate()
 {
@@ -122,7 +122,7 @@ bool StatusBar::ImplIsItemUpdate()
         return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -155,7 +155,7 @@ void StatusBar::ImplInit( Window* pParent, WinBits nStyle )
     SetOutputSizePixel( CalcWindowSizePixel() );
 }
 
-// -----------------------------------------------------------------------
+
 
 StatusBar::StatusBar( Window* pParent, WinBits nStyle ) :
     Window( WINDOW_STATUSBAR )
@@ -163,7 +163,7 @@ StatusBar::StatusBar( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-// -----------------------------------------------------------------------
+
 
 StatusBar::~StatusBar()
 {
@@ -178,7 +178,7 @@ StatusBar::~StatusBar()
     delete mpImplData;
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::ImplInitSettings( bool bFont,
                                   bool bForeground, bool bBackground )
@@ -233,7 +233,7 @@ void StatusBar::ImplInitSettings( bool bFont,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::ImplFormat()
 {
@@ -309,7 +309,7 @@ void StatusBar::ImplFormat()
     mbFormat = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle StatusBar::ImplGetItemRectPos( sal_uInt16 nPos ) const
 {
@@ -330,7 +330,7 @@ Rectangle StatusBar::ImplGetItemRectPos( sal_uInt16 nPos ) const
     return aRect;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 StatusBar::ImplGetFirstVisiblePos() const
 {
@@ -349,7 +349,7 @@ sal_uInt16 StatusBar::ImplGetFirstVisiblePos() const
     return ~0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::ImplDrawText( bool bOffScreen, long nOldTextWidth )
 {
@@ -386,7 +386,7 @@ void StatusBar::ImplDrawText( bool bOffScreen, long nOldTextWidth )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::ImplDrawItem( bool bOffScreen, sal_uInt16 nPos, bool bDrawText, bool bDrawFrame )
 {
@@ -487,7 +487,7 @@ void StatusBar::ImplDrawItem( bool bOffScreen, sal_uInt16 nPos, bool bDrawText, 
         ImplCallEventListeners( VCLEVENT_STATUSBAR_DRAWITEM, (void*) sal_IntPtr(pItem->mnId) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void DrawProgress( Window* pWindow, const Point& rPos,
                    long nOffset, long nPrgsWidth, long nPrgsHeight,
@@ -605,7 +605,7 @@ void DrawProgress( Window* pWindow, const Point& rPos,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::ImplDrawProgress( bool bPaint,
                                   sal_uInt16 nPercent1, sal_uInt16 nPercent2 )
@@ -634,7 +634,7 @@ void StatusBar::ImplDrawProgress( bool bPaint,
                   nPercent1*100, nPercent2*100, mnPercentCount, maPrgsFrameRect );
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::ImplCalcProgressRect()
 {
@@ -688,7 +688,7 @@ void StatusBar::ImplCalcProgressRect()
         maPrgsTxtPos.Y()    = mnTextY;
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -727,7 +727,7 @@ void StatusBar::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::Paint( const Rectangle& )
 {
@@ -759,14 +759,14 @@ void StatusBar::Paint( const Rectangle& )
     DrawLine( Point( 0, 0 ), Point( mnDX-1, 0 ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::Move()
 {
     Window::Move();
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::Resize()
 {
@@ -788,7 +788,7 @@ void StatusBar::Resize()
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::RequestHelp( const HelpEvent& rHEvt )
 {
@@ -855,7 +855,7 @@ void StatusBar::RequestHelp( const HelpEvent& rHEvt )
     Window::RequestHelp( rHEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::StateChanged( StateChangedType nType )
 {
@@ -884,7 +884,7 @@ void StatusBar::StateChanged( StateChangedType nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -917,7 +917,7 @@ void StatusBar::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::Click()
 {
@@ -925,7 +925,7 @@ void StatusBar::Click()
     maClickHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::DoubleClick()
 {
@@ -933,13 +933,13 @@ void StatusBar::DoubleClick()
     maDoubleClickHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::UserDraw( const UserDrawEvent& )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::InsertItem( sal_uInt16 nItemId, sal_uLong nWidth,
                             StatusBarItemBits nBits,
@@ -979,7 +979,7 @@ void StatusBar::InsertItem( sal_uInt16 nItemId, sal_uLong nWidth,
     ImplCallEventListeners( VCLEVENT_STATUSBAR_ITEMADDED, (void*) sal_IntPtr(nItemId) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::RemoveItem( sal_uInt16 nItemId )
 {
@@ -997,7 +997,7 @@ void StatusBar::RemoveItem( sal_uInt16 nItemId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::ShowItem( sal_uInt16 nItemId )
 {
@@ -1019,7 +1019,7 @@ void StatusBar::ShowItem( sal_uInt16 nItemId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::HideItem( sal_uInt16 nItemId )
 {
@@ -1041,7 +1041,7 @@ void StatusBar::HideItem( sal_uInt16 nItemId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool StatusBar::IsItemVisible( sal_uInt16 nItemId ) const
 {
@@ -1068,14 +1068,14 @@ void StatusBar::Clear()
     ImplCallEventListeners( VCLEVENT_STATUSBAR_ALLITEMSREMOVED );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 StatusBar::GetItemCount() const
 {
     return (sal_uInt16)mpItemList->size();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 StatusBar::GetItemId( sal_uInt16 nPos ) const
 {
@@ -1084,7 +1084,7 @@ sal_uInt16 StatusBar::GetItemId( sal_uInt16 nPos ) const
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 StatusBar::GetItemPos( sal_uInt16 nItemId ) const
 {
@@ -1097,7 +1097,7 @@ sal_uInt16 StatusBar::GetItemPos( sal_uInt16 nItemId ) const
     return STATUSBAR_ITEM_NOTFOUND;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 StatusBar::GetItemId( const Point& rPos ) const
 {
@@ -1117,7 +1117,7 @@ sal_uInt16 StatusBar::GetItemId( const Point& rPos ) const
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle StatusBar::GetItemRect( sal_uInt16 nItemId ) const
 {
@@ -1142,7 +1142,7 @@ Rectangle StatusBar::GetItemRect( sal_uInt16 nItemId ) const
     return aRect;
 }
 
-// -----------------------------------------------------------------------
+
 
 Point StatusBar::GetItemTextPos( sal_uInt16 nItemId ) const
 {
@@ -1172,7 +1172,7 @@ Point StatusBar::GetItemTextPos( sal_uInt16 nItemId ) const
     return Point();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uLong StatusBar::GetItemWidth( sal_uInt16 nItemId ) const
 {
@@ -1184,7 +1184,7 @@ sal_uLong StatusBar::GetItemWidth( sal_uInt16 nItemId ) const
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 StatusBarItemBits StatusBar::GetItemBits( sal_uInt16 nItemId ) const
 {
@@ -1196,7 +1196,7 @@ StatusBarItemBits StatusBar::GetItemBits( sal_uInt16 nItemId ) const
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 long StatusBar::GetItemOffset( sal_uInt16 nItemId ) const
 {
@@ -1208,7 +1208,7 @@ long StatusBar::GetItemOffset( sal_uInt16 nItemId ) const
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText )
 {
@@ -1244,7 +1244,7 @@ void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 const OUString& StatusBar::GetItemText( sal_uInt16 nItemId ) const
 {
@@ -1255,7 +1255,7 @@ const OUString& StatusBar::GetItemText( sal_uInt16 nItemId ) const
     return (*mpItemList)[ nPos ]->maText;
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::SetItemCommand( sal_uInt16 nItemId, const OUString& rCommand )
 {
@@ -1270,7 +1270,7 @@ void StatusBar::SetItemCommand( sal_uInt16 nItemId, const OUString& rCommand )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 const OUString StatusBar::GetItemCommand( sal_uInt16 nItemId )
 {
@@ -1282,7 +1282,7 @@ const OUString StatusBar::GetItemCommand( sal_uInt16 nItemId )
     return OUString();
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::SetItemData( sal_uInt16 nItemId, void* pNewData )
 {
@@ -1333,7 +1333,7 @@ void StatusBar::RedrawItem( sal_uInt16 nItemId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::SetHelpText( sal_uInt16 nItemId, const OUString& rText )
 {
@@ -1343,7 +1343,7 @@ void StatusBar::SetHelpText( sal_uInt16 nItemId, const OUString& rText )
         (*mpItemList)[ nPos ]->maHelpText = rText;
 }
 
-// -----------------------------------------------------------------------
+
 
 const OUString& StatusBar::GetHelpText( sal_uInt16 nItemId ) const
 {
@@ -1367,7 +1367,7 @@ const OUString& StatusBar::GetHelpText( sal_uInt16 nItemId ) const
     return pItem->maHelpText;
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::SetQuickHelpText( sal_uInt16 nItemId, const OUString& rText )
 {
@@ -1377,7 +1377,7 @@ void StatusBar::SetQuickHelpText( sal_uInt16 nItemId, const OUString& rText )
         (*mpItemList)[ nPos ]->maQuickHelpText = rText;
 }
 
-// -----------------------------------------------------------------------
+
 
 const OUString& StatusBar::GetQuickHelpText( sal_uInt16 nItemId ) const
 {
@@ -1389,7 +1389,7 @@ const OUString& StatusBar::GetQuickHelpText( sal_uInt16 nItemId ) const
     return pItem->maQuickHelpText;
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::SetHelpId( sal_uInt16 nItemId, const OString& rHelpId )
 {
@@ -1399,7 +1399,7 @@ void StatusBar::SetHelpId( sal_uInt16 nItemId, const OString& rHelpId )
         (*mpItemList)[ nPos ]->maHelpId = rHelpId;
 }
 
-// -----------------------------------------------------------------------
+
 
 OString StatusBar::GetHelpId( sal_uInt16 nItemId ) const
 {
@@ -1444,7 +1444,7 @@ void StatusBar::StartProgressMode( const OUString& rText )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::SetProgressValue( sal_uInt16 nNewPercent )
 {
@@ -1463,7 +1463,7 @@ void StatusBar::SetProgressValue( sal_uInt16 nNewPercent )
     mnPercent = nNewPercent;
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::EndProgressMode()
 {
@@ -1482,7 +1482,7 @@ void StatusBar::EndProgressMode()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::SetText( const OUString& rText )
 {
@@ -1517,7 +1517,7 @@ void StatusBar::SetText( const OUString& rText )
         Window::SetText( rText );
 }
 
-// -----------------------------------------------------------------------
+
 
 Size StatusBar::CalcWindowSizePixel() const
 {
@@ -1574,7 +1574,7 @@ Size StatusBar::CalcWindowSizePixel() const
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void StatusBar::SetAccessibleName( sal_uInt16 nItemId, const OUString& rName )
 {
@@ -1592,7 +1592,7 @@ void StatusBar::SetAccessibleName( sal_uInt16 nItemId, const OUString& rName )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 const OUString& StatusBar::GetAccessibleName( sal_uInt16 nItemId ) const
 {
@@ -1603,6 +1603,6 @@ const OUString& StatusBar::GetAccessibleName( sal_uInt16 nItemId ) const
     return (*mpItemList)[ nPos ]->maAccessibleName;
 }
 
-// -----------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

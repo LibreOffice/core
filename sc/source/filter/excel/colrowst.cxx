@@ -286,7 +286,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
         nPrevFlags = nFlags;
     }
 
-    // ------------------------------------------------------------------------
+
 
     mbDirty = false;
 }

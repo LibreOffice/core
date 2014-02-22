@@ -68,7 +68,7 @@ namespace frm
     //==================================================================
     // OClickableImageBaseControl
     //==================================================================
-    //------------------------------------------------------------------------------
+
     Sequence<Type> OClickableImageBaseControl::_getTypes()
     {
         static Sequence<Type> aTypes;
@@ -77,7 +77,7 @@ namespace frm
         return aTypes;
     }
 
-    //------------------------------------------------------------------------------
+
     OClickableImageBaseControl::OClickableImageBaseControl(const Reference<XComponentContext>& _rxFactory, const OUString& _aService)
         :OControl(_rxFactory, _aService)
         ,m_pThread(NULL)
@@ -88,7 +88,7 @@ namespace frm
         m_pFeatureInterception.reset( new ControlFeatureInterception( _rxFactory ) );
     }
 
-    //------------------------------------------------------------------------------
+
     OClickableImageBaseControl::~OClickableImageBaseControl()
     {
         if (!OComponentHelper::rBHelper.bDisposed)
@@ -99,7 +99,7 @@ namespace frm
     }
 
     // UNO Anbindung
-    //------------------------------------------------------------------------------
+
     Any SAL_CALL OClickableImageBaseControl::queryAggregation(const Type& _rType) throw (RuntimeException)
     {
         Any aReturn = OControl::queryAggregation(_rType);
@@ -109,34 +109,34 @@ namespace frm
     }
 
     // XApproveActionBroadcaster
-    //------------------------------------------------------------------------------
+
     void OClickableImageBaseControl::addApproveActionListener(
             const Reference<XApproveActionListener>& l) throw( RuntimeException )
     {
         m_aApproveActionListeners.addInterface(l);
     }
 
-    //------------------------------------------------------------------------------
+
     void OClickableImageBaseControl::removeApproveActionListener(
             const Reference<XApproveActionListener>& l) throw( RuntimeException )
     {
         m_aApproveActionListeners.removeInterface(l);
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OClickableImageBaseControl::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException)
     {
         m_pFeatureInterception->registerDispatchProviderInterceptor( _rxInterceptor  );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OClickableImageBaseControl::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException)
     {
         m_pFeatureInterception->releaseDispatchProviderInterceptor( _rxInterceptor  );
     }
 
     // OComponentHelper
-    //------------------------------------------------------------------------------
+
     void OClickableImageBaseControl::disposing()
     {
         EventObject aEvent( static_cast< XWeak* >( this ) );
@@ -157,7 +157,7 @@ namespace frm
         OControl::disposing();
     }
 
-    //------------------------------------------------------------------------------
+
     OImageProducerThread_Impl* OClickableImageBaseControl::getImageProducerThread()
     {
         if ( !m_pThread )
@@ -169,7 +169,7 @@ namespace frm
         return m_pThread;
     }
 
-    //------------------------------------------------------------------------------
+
     bool OClickableImageBaseControl::approveAction( )
     {
         sal_Bool bCancelled = sal_False;
@@ -186,7 +186,7 @@ namespace frm
         return !bCancelled;
     }
 
-    //------------------------------------------------------------------------------
+
     // Diese Methode wird auch aus einem Thread gerufen und muss deshalb
     // thread-safe sein.
     void OClickableImageBaseControl::actionPerformed_Impl(sal_Bool bNotifyListener, const MouseEvent& rEvt)
@@ -344,31 +344,31 @@ namespace frm
     }
 
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OClickableImageBaseControl::addSubmissionVetoListener( const Reference< submission::XSubmissionVetoListener >& listener ) throw (NoSupportException, RuntimeException)
     {
         m_aSubmissionVetoListeners.addInterface( listener );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OClickableImageBaseControl::removeSubmissionVetoListener( const Reference< submission::XSubmissionVetoListener >& listener ) throw (NoSupportException, RuntimeException)
     {
         m_aSubmissionVetoListeners.removeInterface( listener );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OClickableImageBaseControl::submitWithInteraction( const Reference< XInteractionHandler >& _rxHandler ) throw (VetoException, WrappedTargetException, RuntimeException)
     {
         implSubmit( MouseEvent(), _rxHandler );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OClickableImageBaseControl::submit(  ) throw (VetoException, WrappedTargetException, RuntimeException)
     {
         implSubmit( MouseEvent(), NULL );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL OClickableImageBaseControl::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSupported = OControl::getSupportedServiceNames();
@@ -380,7 +380,7 @@ namespace frm
         return aSupported;
     }
 
-    //--------------------------------------------------------------------
+
     void OClickableImageBaseControl::implSubmit( const MouseEvent& _rEvent, const Reference< XInteractionHandler >& _rxHandler ) SAL_THROW((VetoException, WrappedTargetException, RuntimeException))
     {
         try
@@ -437,7 +437,7 @@ namespace frm
     //==================================================================
     // OClickableImageBaseModel
     //==================================================================
-    //------------------------------------------------------------------------------
+
     Sequence<Type> OClickableImageBaseModel::_getTypes()
     {
         return concatSequences(
@@ -446,8 +446,8 @@ namespace frm
         );
     }
 
-    //------------------------------------------------------------------
-    //------------------------------------------------------------------
+
+
     OClickableImageBaseModel::OClickableImageBaseModel( const Reference< XComponentContext >& _rxFactory, const OUString& _rUnoControlModelTypeName,
             const OUString& rDefault )
         :OControlModel( _rxFactory, _rUnoControlModelTypeName, rDefault )
@@ -462,7 +462,7 @@ namespace frm
         m_eButtonType = FormButtonType_PUSH;
     }
 
-    //------------------------------------------------------------------
+
     OClickableImageBaseModel::OClickableImageBaseModel( const OClickableImageBaseModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
         :OControlModel( _pOriginal, _rxFactory )
         ,OPropertyChangeListener( m_aMutex )
@@ -481,7 +481,7 @@ namespace frm
         m_bDispatchUrlInternal  = _pOriginal->m_bDispatchUrlInternal;
     }
 
-    //------------------------------------------------------------------------------
+
     void OClickableImageBaseModel::implInitializeImageURL( )
     {
         osl_atomic_increment( &m_refCount );
@@ -494,7 +494,7 @@ namespace frm
         osl_atomic_decrement( &m_refCount );
     }
 
-    //------------------------------------------------------------------------------
+
     void OClickableImageBaseModel::implConstruct()
     {
         m_pProducer = new ImageProducer;
@@ -511,7 +511,7 @@ namespace frm
         decrement(m_refCount);
     }
 
-    //------------------------------------------------------------------------------
+
     OClickableImageBaseModel::~OClickableImageBaseModel()
     {
         if (!OComponentHelper::rBHelper.bDisposed)
@@ -525,40 +525,40 @@ namespace frm
     }
 
     // XImageProducer
-    //--------------------------------------------------------------------
+
     void SAL_CALL OClickableImageBaseModel::addConsumer( const Reference< XImageConsumer >& _rxConsumer ) throw (RuntimeException)
     {
         ImageModelMethodGuard aGuard( *this );
         GetImageProducer()->addConsumer( _rxConsumer );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OClickableImageBaseModel::removeConsumer( const Reference< XImageConsumer >& _rxConsumer ) throw (RuntimeException)
     {
         ImageModelMethodGuard aGuard( *this );
         GetImageProducer()->removeConsumer( _rxConsumer );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OClickableImageBaseModel::startProduction(  ) throw (RuntimeException)
     {
         ImageModelMethodGuard aGuard( *this );
         GetImageProducer()->startProduction();
     }
 
-    //--------------------------------------------------------------------
+
     Reference< submission::XSubmission > SAL_CALL OClickableImageBaseModel::getSubmission() throw (RuntimeException)
     {
         return m_xSubmissionDelegate;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OClickableImageBaseModel::setSubmission( const Reference< submission::XSubmission >& _submission ) throw (RuntimeException)
     {
         m_xSubmissionDelegate = _submission;
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL OClickableImageBaseModel::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSupported = OControlModel::getSupportedServiceNames();
@@ -571,7 +571,7 @@ namespace frm
     }
 
     // OComponentHelper
-    //------------------------------------------------------------------------------
+
     void OClickableImageBaseModel::disposing()
     {
         OControlModel::disposing();
@@ -585,7 +585,7 @@ namespace frm
         m_pProducer = NULL;
     }
 
-    //------------------------------------------------------------------------------
+
     Any SAL_CALL OClickableImageBaseModel::queryAggregation(const Type& _rType) throw (RuntimeException)
     {
         // order matters:
@@ -603,7 +603,7 @@ namespace frm
         return aReturn;
     }
 
-    //------------------------------------------------------------------------------
+
     void OClickableImageBaseModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const
     {
         switch (nHandle)
@@ -617,7 +617,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+
     void OClickableImageBaseModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) throw ( Exception)
     {
         switch (nHandle)
@@ -647,7 +647,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+
     sal_Bool OClickableImageBaseModel::convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue)
                                 throw( IllegalArgumentException )
     {
@@ -670,7 +670,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+
     void OClickableImageBaseModel::StartProduction()
     {
         ImageProducer *pImgProd = GetImageProducer();
@@ -704,7 +704,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+
     void OClickableImageBaseModel::SetURL( const OUString& rURL )
     {
         if (m_pMedium || rURL.isEmpty())
@@ -809,7 +809,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+
     void OClickableImageBaseModel::DataAvailable()
     {
         if (!m_bProdStarted)
@@ -818,14 +818,14 @@ namespace frm
         GetImageProducer()->NewDataAvailable();
     }
 
-    //------------------------------------------------------------------------------
+
     void OClickableImageBaseModel::DownloadDone()
     {
         DataAvailable();
         m_bDownloading = sal_False;
     }
 
-    //------------------------------------------------------------------------------
+
     IMPL_STATIC_LINK( OClickableImageBaseModel, DownloadDoneLink, void*, EMPTYARG )
     {
         ::osl::MutexGuard aGuard( pThis->m_aMutex );
@@ -833,7 +833,7 @@ namespace frm
         return 0;
     }
 
-    //------------------------------------------------------------------------------
+
     void OClickableImageBaseModel::_propertyChanged( const PropertyChangeEvent& rEvt )
         throw( RuntimeException )
     {
@@ -843,7 +843,7 @@ namespace frm
         SetURL( getString(rEvt.NewValue) );
     }
 
-    // -----------------------------------------------------------------------------
+
     Any OClickableImageBaseModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
     {
         switch (nHandle)
@@ -860,13 +860,13 @@ namespace frm
     //==================================================================
     // OImageProducerThread_Impl
     //==================================================================
-    //------------------------------------------------------------------
+
     EventObject* OImageProducerThread_Impl::cloneEvent( const EventObject* _pEvt ) const
     {
         return new EventObject( *_pEvt );
     }
 
-    //------------------------------------------------------------------
+
     void OImageProducerThread_Impl::processEvent( ::cppu::OComponentHelper *pCompImpl,
                                                 const EventObject* pEvt,
                                                 const Reference<XControl>&,

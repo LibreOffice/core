@@ -93,17 +93,17 @@ OXMLFunction::OXMLFunction( ORptFilter& _rImport
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 
 OXMLFunction::~OXMLFunction()
 {
 }
-// -----------------------------------------------------------------------------
+
 ORptFilter& OXMLFunction::GetOwnImport()
 {
     return static_cast<ORptFilter&>(GetImport());
 }
-// -----------------------------------------------------------------------------
+
 void OXMLFunction::EndElement()
 {
     if ( m_bAddToReport )
@@ -123,9 +123,9 @@ void OXMLFunction::EndElement()
         }
     }
 }
-// -----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
+
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

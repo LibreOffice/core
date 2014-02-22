@@ -93,7 +93,7 @@ void APChooseDevicePage::fill( PrinterInfo& rInfo )
         rInfo.m_aFeatures = "";
 }
 
-//--------------------------------------------------------------------
+
 
 APChooseDriverPage::APChooseDriverPage( AddPrinterDialog* pParent )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_CHOOSEDRIVER ) ),
@@ -304,7 +304,7 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 
 APNamePage::APNamePage( AddPrinterDialog* pParent, const OUString& rInitName, DeviceKind::type eKind )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_NAME ) ),
@@ -352,7 +352,7 @@ void APNamePage::fill( PrinterInfo& rInfo )
     rInfo.m_aPrinterName = m_aNameEdt.GetText();
 }
 
-//--------------------------------------------------------------------
+
 
 APCommandPage::APCommandPage( AddPrinterDialog* pParent, DeviceKind::type eKind )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_COMMAND ) ),
@@ -468,7 +468,7 @@ void APCommandPage::fill( PrinterInfo& rInfo )
     rInfo.m_aCommand = m_aCommandBox.GetText();
 }
 
-//--------------------------------------------------------------------
+
 
 APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_OLDPRINTERS ) ),
@@ -656,7 +656,7 @@ void APOldPrinterPage::fill( PrinterInfo& )
 {
 }
 
-//--------------------------------------------------------------------
+
 
 APFaxDriverPage::APFaxDriverPage( AddPrinterDialog* pParent )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_FAXDRIVER ) ),
@@ -688,7 +688,7 @@ void APFaxDriverPage::fill( PrinterInfo& rInfo )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 APPdfDriverPage::APPdfDriverPage( AddPrinterDialog* pParent )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_PDFDRIVER ) ),
@@ -722,7 +722,7 @@ void APPdfDriverPage::fill( PrinterInfo& rInfo )
         rInfo.m_aDriverName = "ADISTILL";
 }
 
-//--------------------------------------------------------------------
+
 
 AddPrinterDialog::AddPrinterDialog( Window* pParent )
         : ModalDialog( pParent, PaResId( RID_ADD_PRINTER_DIALOG ) ),

@@ -89,7 +89,7 @@ namespace dp_gui {
 #define SHARED_PACKAGE_MANAGER  "shared"
 #define BUNDLED_PACKAGE_MANAGER "bundled"
 
-//------------------------------------------------------------------------------
+
 struct StrAllFiles : public rtl::StaticWithInit< OUString, StrAllFiles >
 {
     const OUString operator () () {
@@ -100,9 +100,9 @@ struct StrAllFiles : public rtl::StaticWithInit< OUString, StrAllFiles >
     }
 };
 
-//------------------------------------------------------------------------------
+
 //                            ExtBoxWithBtns_Impl
-//------------------------------------------------------------------------------
+
 
 enum MENU_COMMAND
 {
@@ -130,7 +130,7 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
     bool            HandleTabKey( bool bReverse );
     MENU_COMMAND    ShowPopupMenu( const Point &rPos, const long nPos );
 
-    //-----------------
+
     DECL_DLLPRIVATE_LINK( ScrollHdl, ScrollBar * );
 
     DECL_DLLPRIVATE_LINK( HandleOptionsBtn, void * );
@@ -151,7 +151,7 @@ public:
 
     virtual void    RecalcAll();
     virtual void    selectEntry( const long nPos );
-    //-----------------
+
     void            enableButtons( bool bEnable );
 };
 
@@ -170,7 +170,7 @@ Size ExtBoxWithBtns_Impl::GetOptimalSize() const
     return LogicToPixel(Size(250, 150), MAP_APPFONT);
 }
 
-//------------------------------------------------------------------------------
+
 void ExtBoxWithBtns_Impl::InitFromDialog(ExtMgrDialog *pParentDialog)
 {
     setExtensionManager(pParentDialog->getExtensionManager());
@@ -211,7 +211,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeExtBoxWithBtns(Window *pPar
     return new ExtBoxWithBtns_Impl(pParent);
 }
 
-//------------------------------------------------------------------------------
+
 ExtBoxWithBtns_Impl::~ExtBoxWithBtns_Impl()
 {
     delete m_pOptionsBtn;
@@ -219,7 +219,7 @@ ExtBoxWithBtns_Impl::~ExtBoxWithBtns_Impl()
     delete m_pRemoveBtn;
 }
 
-// -----------------------------------------------------------------------
+
 void ExtBoxWithBtns_Impl::RecalcAll()
 {
     const sal_Int32 nActive = getSelIndex();
@@ -242,7 +242,7 @@ void ExtBoxWithBtns_Impl::RecalcAll()
 }
 
 
-//------------------------------------------------------------------------------
+
 //This function may be called with nPos < 0
 void ExtBoxWithBtns_Impl::selectEntry( const long nPos )
 {
@@ -252,7 +252,7 @@ void ExtBoxWithBtns_Impl::selectEntry( const long nPos )
     ExtensionBox_Impl::selectEntry( nPos );
 }
 
-// -----------------------------------------------------------------------
+
 void ExtBoxWithBtns_Impl::SetButtonPos( const Rectangle& rRect )
 {
     Size  aBtnSize( m_pOptionsBtn->GetSizePixel() );
@@ -266,7 +266,7 @@ void ExtBoxWithBtns_Impl::SetButtonPos( const Rectangle& rRect )
     m_pEnableBtn->SetPosPixel( aBtnPos );
 }
 
-// -----------------------------------------------------------------------
+
 void ExtBoxWithBtns_Impl::SetButtonStatus( const TEntry_Impl pEntry )
 {
     bool bShowOptionBtn = true;
@@ -313,7 +313,7 @@ void ExtBoxWithBtns_Impl::SetButtonStatus( const TEntry_Impl pEntry )
         m_pRemoveBtn->Hide();
 }
 
-// -----------------------------------------------------------------------
+
 bool ExtBoxWithBtns_Impl::HandleTabKey( bool bReverse )
 {
     sal_Int32 nIndex = getSelIndex();
@@ -360,7 +360,7 @@ bool ExtBoxWithBtns_Impl::HandleTabKey( bool bReverse )
         return false;
 }
 
-// -----------------------------------------------------------------------
+
 MENU_COMMAND ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long nPos )
 {
     if ( nPos >= (long) getItemCount() )
@@ -388,7 +388,7 @@ MENU_COMMAND ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long 
     return (MENU_COMMAND) aPopup.Execute( this, rPos );
 }
 
-//------------------------------------------------------------------------------
+
 void ExtBoxWithBtns_Impl::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( m_bInterfaceLocked )
@@ -429,7 +429,7 @@ void ExtBoxWithBtns_Impl::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-//------------------------------------------------------------------------------
+
 bool ExtBoxWithBtns_Impl::Notify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
@@ -450,7 +450,7 @@ bool ExtBoxWithBtns_Impl::Notify( NotifyEvent& rNEvt )
         return true;
 }
 
-//------------------------------------------------------------------------------
+
 void ExtBoxWithBtns_Impl::enableButtons( bool bEnable )
 {
     m_bInterfaceLocked = ! bEnable;
@@ -469,7 +469,7 @@ void ExtBoxWithBtns_Impl::enableButtons( bool bEnable )
     }
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK( ExtBoxWithBtns_Impl, ScrollHdl, ScrollBar*, pScrBar )
 {
     long nDelta = pScrBar->GetDelta();
@@ -487,7 +487,7 @@ IMPL_LINK( ExtBoxWithBtns_Impl, ScrollHdl, ScrollBar*, pScrBar )
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleOptionsBtn)
 {
     const sal_Int32 nActive = getSelIndex();
@@ -510,7 +510,7 @@ IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleOptionsBtn)
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleEnableBtn)
 {
     const sal_Int32 nActive = getSelIndex();
@@ -531,7 +531,7 @@ IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleEnableBtn)
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleRemoveBtn)
 {
     const sal_Int32 nActive = getSelIndex();
@@ -545,9 +545,9 @@ IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleRemoveBtn)
     return 1;
 }
 
-//------------------------------------------------------------------------------
+
 //                             DialogHelper
-//------------------------------------------------------------------------------
+
 DialogHelper::DialogHelper( const uno::Reference< uno::XComponentContext > &xContext,
                             Dialog *pWindow ) :
     m_pVCLWindow( pWindow ),
@@ -557,21 +557,21 @@ DialogHelper::DialogHelper( const uno::Reference< uno::XComponentContext > &xCon
     m_xContext = xContext;
 }
 
-//------------------------------------------------------------------------------
+
 DialogHelper::~DialogHelper()
 {
     if ( m_nEventID )
         Application::RemoveUserEvent( m_nEventID );
 }
 
-//------------------------------------------------------------------------------
+
 ResId DialogHelper::getResId( sal_uInt16 nId )
 {
     const SolarMutexGuard guard;
     return ResId( nId, *DeploymentGuiResMgr::get() );
 }
 
-//------------------------------------------------------------------------------
+
 OUString DialogHelper::getResourceString(sal_uInt16 id)
 {
     const SolarMutexGuard guard;
@@ -583,7 +583,7 @@ OUString DialogHelper::getResourceString(sal_uInt16 id)
     return ret;
 }
 
-//------------------------------------------------------------------------------
+
 bool DialogHelper::IsSharedPkgMgr( const uno::Reference< deployment::XPackage > &xPackage )
 {
     if ( xPackage->getRepositoryName() == SHARED_PACKAGE_MANAGER )
@@ -592,7 +592,7 @@ bool DialogHelper::IsSharedPkgMgr( const uno::Reference< deployment::XPackage > 
         return false;
 }
 
-//------------------------------------------------------------------------------
+
 bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::XPackage > &xPackage,
                                               Window *pParent,
                                               const sal_uInt16 nResID,
@@ -618,7 +618,7 @@ bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::
         return true;
 }
 
-//------------------------------------------------------------------------------
+
 void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle ) const
 {
     if ( sURL.isEmpty() ) // Nothing to do, when the URL is empty
@@ -642,7 +642,7 @@ void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle
     }
 }
 
-//------------------------------------------------------------------------------
+
 bool DialogHelper::installExtensionWarn( const OUString &rExtensionName ) const
 {
     const SolarMutexGuard guard;
@@ -655,7 +655,7 @@ bool DialogHelper::installExtensionWarn( const OUString &rExtensionName ) const
     return ( RET_OK == aInfo.Execute() );
 }
 
-//------------------------------------------------------------------------------
+
 bool DialogHelper::installForAllUsers( bool &bInstallForAll ) const
 {
     const SolarMutexGuard guard;
@@ -683,7 +683,7 @@ bool DialogHelper::installForAllUsers( bool &bInstallForAll ) const
     return true;
 }
 
-//------------------------------------------------------------------------------
+
 void DialogHelper::PostUserEvent( const Link& rLink, void* pCaller )
 {
     if ( m_nEventID )
@@ -692,9 +692,9 @@ void DialogHelper::PostUserEvent( const Link& rLink, void* pCaller )
     m_nEventID = Application::PostUserEvent( rLink, pCaller );
 }
 
-//------------------------------------------------------------------------------
+
 //                             ExtMgrDialog
-//------------------------------------------------------------------------------
+
 ExtMgrDialog::ExtMgrDialog(Window *pParent, TheExtensionManager *pManager)
     : ModelessDialog(pParent, "ExtensionManagerDialog", "desktop/ui/extensionmanager.ui")
     , DialogHelper(pManager->getContext(), (Dialog*) this)
@@ -747,19 +747,19 @@ ExtMgrDialog::ExtMgrDialog(Window *pParent, TheExtensionManager *pManager)
     m_aTimeoutTimer.SetTimeoutHdl( LINK( this, ExtMgrDialog, TimeOutHdl ) );
 }
 
-//------------------------------------------------------------------------------
+
 ExtMgrDialog::~ExtMgrDialog()
 {
     m_aTimeoutTimer.Stop();
 }
 
-//------------------------------------------------------------------------------
+
 void ExtMgrDialog::setGetExtensionsURL( const OUString &rURL )
 {
     m_pGetExtensions->SetURL( rURL );
 }
 
-//------------------------------------------------------------------------------
+
 long ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,
                                      bool bLicenseMissing )
 {
@@ -788,20 +788,20 @@ long ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage 
     }
 }
 
-//------------------------------------------------------------------------------
+
 void ExtMgrDialog::prepareChecking()
 {
     m_pExtensionBox->prepareChecking();
 }
 
-//------------------------------------------------------------------------------
+
 void ExtMgrDialog::checkEntries()
 {
     const SolarMutexGuard guard;
     m_pExtensionBox->checkEntries();
 }
 
-//------------------------------------------------------------------------------
+
 bool ExtMgrDialog::removeExtensionWarn( const OUString &rExtensionName ) const
 {
     const SolarMutexGuard guard;
@@ -814,7 +814,7 @@ bool ExtMgrDialog::removeExtensionWarn( const OUString &rExtensionName ) const
     return ( RET_OK == aInfo.Execute() );
 }
 
-//------------------------------------------------------------------------------
+
 bool ExtMgrDialog::enablePackage( const uno::Reference< deployment::XPackage > &xPackage,
                                   bool bEnable )
 {
@@ -837,7 +837,7 @@ bool ExtMgrDialog::enablePackage( const uno::Reference< deployment::XPackage > &
     return true;
 }
 
-//------------------------------------------------------------------------------
+
 bool ExtMgrDialog::removePackage( const uno::Reference< deployment::XPackage > &xPackage )
 {
     if ( !xPackage.is() )
@@ -857,7 +857,7 @@ bool ExtMgrDialog::removePackage( const uno::Reference< deployment::XPackage > &
     return true;
 }
 
-//------------------------------------------------------------------------------
+
 bool ExtMgrDialog::updatePackage( const uno::Reference< deployment::XPackage > &xPackage )
 {
     if ( !xPackage.is() )
@@ -878,7 +878,7 @@ bool ExtMgrDialog::updatePackage( const uno::Reference< deployment::XPackage > &
     return true;
 }
 
-//------------------------------------------------------------------------------
+
 bool ExtMgrDialog::acceptLicense( const uno::Reference< deployment::XPackage > &xPackage )
 {
     if ( !xPackage.is() )
@@ -889,7 +889,7 @@ bool ExtMgrDialog::acceptLicense( const uno::Reference< deployment::XPackage > &
     return true;
 }
 
-//------------------------------------------------------------------------------
+
 uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
 {
     const uno::Reference< uno::XComponentContext > xContext( m_pManager->getContext() );
@@ -956,7 +956,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
     return files;
 }
 
-//------------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(ExtMgrDialog, HandleCancelBtn)
 {
     if ( m_xAbortChannel.is() )
@@ -980,7 +980,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleCloseBtn)
 }
 
 
-// ------------------------------------------------------------------------------
+
 IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1012,7 +1012,7 @@ IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface )
     return 0;
 }
 
-// ------------------------------------------------------------------------------
+
 void ExtMgrDialog::showProgress( bool _bStart )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1035,7 +1035,7 @@ void ExtMgrDialog::showProgress( bool _bStart )
     DialogHelper::PostUserEvent( LINK( this, ExtMgrDialog, startProgress ), (void*) bStart );
 }
 
-// -----------------------------------------------------------------------
+
 void ExtMgrDialog::updateProgress( const long nProgress )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1043,7 +1043,7 @@ void ExtMgrDialog::updateProgress( const long nProgress )
     m_nProgress = nProgress;
 }
 
-// -----------------------------------------------------------------------
+
 void ExtMgrDialog::updateProgress( const OUString &rText,
                                    const uno::Reference< task::XAbortChannel > &xAbortChannel)
 {
@@ -1054,14 +1054,14 @@ void ExtMgrDialog::updateProgress( const OUString &rText,
     m_bProgressChanged = true;
 }
 
-//------------------------------------------------------------------------------
+
 void ExtMgrDialog::updatePackageInfo( const uno::Reference< deployment::XPackage > &xPackage )
 {
     const SolarMutexGuard aGuard;
     m_pExtensionBox->updateEntry( xPackage );
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(ExtMgrDialog, HandleAddBtn)
 {
     setBusy( true );
@@ -1077,14 +1077,14 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleAddBtn)
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(ExtMgrDialog, HandleExtTypeCbx)
 {
     // re-creates the list of packages with addEntry selecting the packages
     m_pManager->createPackageList();
     return 1;
 }
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(ExtMgrDialog, HandleUpdateBtn)
 {
     m_pManager->checkUpdates( false, true );
@@ -1092,7 +1092,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleUpdateBtn)
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK( ExtMgrDialog, HandleHyperlink, FixedHyperlink*, pHyperlink )
 {
     openWebBrowser( pHyperlink->GetURL(), GetText() );
@@ -1100,7 +1100,7 @@ IMPL_LINK( ExtMgrDialog, HandleHyperlink, FixedHyperlink*, pHyperlink )
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(ExtMgrDialog, TimeOutHdl)
 {
     if ( m_bStopProgress )
@@ -1138,7 +1138,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, TimeOutHdl)
     return 1;
 }
 
-//------------------------------------------------------------------------------
+
 // VCL::Window / Dialog
 
 bool ExtMgrDialog::Notify( NotifyEvent& rNEvt )
@@ -1175,7 +1175,7 @@ bool ExtMgrDialog::Notify( NotifyEvent& rNEvt )
         return true;
 }
 
-//------------------------------------------------------------------------------
+
 bool ExtMgrDialog::Close()
 {
     bool bRet = m_pManager->queryTermination();
@@ -1187,9 +1187,9 @@ bool ExtMgrDialog::Close()
     return bRet;
 }
 
-//------------------------------------------------------------------------------
+
 //                             UpdateRequiredDialog
-//------------------------------------------------------------------------------
+
 UpdateRequiredDialog::UpdateRequiredDialog( Window *pParent, TheExtensionManager *pManager ) :
     ModalDialog( pParent,   getResId( RID_DLG_UPDATE_REQUIRED ) ),
     DialogHelper( pManager->getContext(), (Dialog*) this ),
@@ -1264,7 +1264,7 @@ UpdateRequiredDialog::UpdateRequiredDialog( Window *pParent, TheExtensionManager
     m_aTimeoutTimer.SetTimeoutHdl( LINK( this, UpdateRequiredDialog, TimeOutHdl ) );
 }
 
-//------------------------------------------------------------------------------
+
 UpdateRequiredDialog::~UpdateRequiredDialog()
 {
     m_aTimeoutTimer.Stop();
@@ -1272,7 +1272,7 @@ UpdateRequiredDialog::~UpdateRequiredDialog()
     delete m_pExtensionBox;
 }
 
-//------------------------------------------------------------------------------
+
 long UpdateRequiredDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,
                                              bool bLicenseMissing )
 {
@@ -1287,13 +1287,13 @@ long UpdateRequiredDialog::addPackageToList( const uno::Reference< deployment::X
     return 0;
 }
 
-//------------------------------------------------------------------------------
+
 void UpdateRequiredDialog::prepareChecking()
 {
     m_pExtensionBox->prepareChecking();
 }
 
-//------------------------------------------------------------------------------
+
 void UpdateRequiredDialog::checkEntries()
 {
     const SolarMutexGuard guard;
@@ -1306,7 +1306,7 @@ void UpdateRequiredDialog::checkEntries()
     }
 }
 
-//------------------------------------------------------------------------------
+
 bool UpdateRequiredDialog::enablePackage( const uno::Reference< deployment::XPackage > &xPackage,
                                           bool bEnable )
 {
@@ -1315,7 +1315,7 @@ bool UpdateRequiredDialog::enablePackage( const uno::Reference< deployment::XPac
     return true;
 }
 
-//------------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCancelBtn)
 {
     if ( m_xAbortChannel.is() )
@@ -1332,7 +1332,7 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCancelBtn)
     return 1;
 }
 
-// ------------------------------------------------------------------------------
+
 IMPL_LINK( UpdateRequiredDialog, startProgress, void*, _bLockInterface )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1360,7 +1360,7 @@ IMPL_LINK( UpdateRequiredDialog, startProgress, void*, _bLockInterface )
     return 0;
 }
 
-// ------------------------------------------------------------------------------
+
 void UpdateRequiredDialog::showProgress( bool _bStart )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1383,7 +1383,7 @@ void UpdateRequiredDialog::showProgress( bool _bStart )
     DialogHelper::PostUserEvent( LINK( this, UpdateRequiredDialog, startProgress ), (void*) bStart );
 }
 
-// -----------------------------------------------------------------------
+
 void UpdateRequiredDialog::updateProgress( const long nProgress )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1391,7 +1391,7 @@ void UpdateRequiredDialog::updateProgress( const long nProgress )
     m_nProgress = nProgress;
 }
 
-// -----------------------------------------------------------------------
+
 void UpdateRequiredDialog::updateProgress( const OUString &rText,
                                            const uno::Reference< task::XAbortChannel > &xAbortChannel)
 {
@@ -1402,7 +1402,7 @@ void UpdateRequiredDialog::updateProgress( const OUString &rText,
     m_bProgressChanged = true;
 }
 
-//------------------------------------------------------------------------------
+
 void UpdateRequiredDialog::updatePackageInfo( const uno::Reference< deployment::XPackage > &xPackage )
 {
     // We will remove all updated packages with satisfied dependencies, but
@@ -1421,7 +1421,7 @@ void UpdateRequiredDialog::updatePackageInfo( const uno::Reference< deployment::
     }
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(UpdateRequiredDialog, HandleUpdateBtn)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
@@ -1442,7 +1442,7 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, HandleUpdateBtn)
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCloseBtn)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1460,7 +1460,7 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCloseBtn)
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK( UpdateRequiredDialog, HandleHyperlink, FixedHyperlink*, pHyperlink )
 {
     openWebBrowser( pHyperlink->GetURL(), GetText() );
@@ -1468,7 +1468,7 @@ IMPL_LINK( UpdateRequiredDialog, HandleHyperlink, FixedHyperlink*, pHyperlink )
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(UpdateRequiredDialog, TimeOutHdl)
 {
     if ( m_bStopProgress )
@@ -1506,7 +1506,7 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, TimeOutHdl)
     return 1;
 }
 
-//------------------------------------------------------------------------------
+
 // VCL::Window / Dialog
 void UpdateRequiredDialog::Resize()
 {
@@ -1575,7 +1575,7 @@ void UpdateRequiredDialog::Resize()
     m_aProgressText.SetPosSizePixel( aPos, aFTSize );
 }
 
-//------------------------------------------------------------------------------
+
 // VCL::Dialog
 short UpdateRequiredDialog::Execute()
 {
@@ -1599,7 +1599,7 @@ short UpdateRequiredDialog::Execute()
     return Dialog::Execute();
 }
 
-//------------------------------------------------------------------------------
+
 // VCL::Dialog
 bool UpdateRequiredDialog::Close()
 {
@@ -1618,9 +1618,9 @@ bool UpdateRequiredDialog::Close()
     return false;
 }
 
-//------------------------------------------------------------------------------
+
 // Check dependencies of all packages
-//------------------------------------------------------------------------------
+
 bool UpdateRequiredDialog::isEnabled( const uno::Reference< deployment::XPackage > &xPackage ) const
 {
     bool bRegistered = false;
@@ -1659,7 +1659,7 @@ bool UpdateRequiredDialog::checkDependencies( const uno::Reference< deployment::
     return bDependenciesValid;
 }
 
-//------------------------------------------------------------------------------
+
 bool UpdateRequiredDialog::hasActiveEntries()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1680,7 +1680,7 @@ bool UpdateRequiredDialog::hasActiveEntries()
     return bRet;
 }
 
-//------------------------------------------------------------------------------
+
 void UpdateRequiredDialog::disableAllEntries()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1700,9 +1700,9 @@ void UpdateRequiredDialog::disableAllEntries()
         m_aCloseBtn.SetText( m_sCloseText );
 }
 
-//------------------------------------------------------------------------------
+
 //                             ShowLicenseDialog
-//------------------------------------------------------------------------------
+
 ShowLicenseDialog::ShowLicenseDialog( Window * pParent,
                                       const uno::Reference< deployment::XPackage > &xPackage )
     : ModalDialog(pParent, "ShowLicenseDialog", "desktop/ui/showlicensedialog.ui")
@@ -1723,14 +1723,14 @@ UpdateRequiredDialogService::UpdateRequiredDialogService( uno::Sequence< uno::An
 {
 }
 
-//------------------------------------------------------------------------------
+
 // XExecutableDialog
-//------------------------------------------------------------------------------
+
 void UpdateRequiredDialogService::setTitle( OUString const & ) throw ( uno::RuntimeException )
 {
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int16 UpdateRequiredDialogService::execute() throw ( uno::RuntimeException )
 {
     ::rtl::Reference< ::dp_gui::TheExtensionManager > xManager( TheExtensionManager::get(
@@ -1743,7 +1743,7 @@ sal_Int16 UpdateRequiredDialogService::execute() throw ( uno::RuntimeException )
     return nRet;
 }
 
-//------------------------------------------------------------------------------
+
 SelectedPackage::~SelectedPackage() {}
 
 } //namespace dp_gui

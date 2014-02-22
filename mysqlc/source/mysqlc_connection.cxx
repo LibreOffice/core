@@ -48,7 +48,7 @@ using namespace connectivity::mysqlc;
 
 #include <stdio.h>
 
-//------------------------------------------------------------------------------
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
@@ -729,7 +729,7 @@ sal_Int32 OConnection::getMysqlVersion()
 //  }
 //  return 0;
 //}
-// -----------------------------------------------------------------------------
+
 OUString OConnection::transFormPreparedStatement(const OUString& _sSQL)
 {
     OUString sSqlStatement = _sSQL;

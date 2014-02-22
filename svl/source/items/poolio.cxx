@@ -461,7 +461,7 @@ void SfxItemPool_Impl::readTheItems (
     delete pOldArr;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream &SfxItemPool::Load(SvStream &rStream)
 {
@@ -988,7 +988,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
     return rStream;
 }
 
-// -----------------------------------------------------------------------
+
 
 const SfxPoolItem* SfxItemPool::LoadSurrogate
 (
@@ -1155,7 +1155,7 @@ bool SfxItemPool::StoreSurrogate
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt32 SfxItemPool::GetSurrogate(const SfxPoolItem *pItem) const
 {
@@ -1188,7 +1188,7 @@ sal_uInt32 SfxItemPool::GetSurrogate(const SfxPoolItem *pItem) const
     return SFX_ITEMS_NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxItemPool::IsInStoringRange( sal_uInt16 nWhich ) const
 {
@@ -1220,7 +1220,7 @@ void SfxItemPool::SetStoringRange( sal_uInt16 nFrom, sal_uInt16 nTo )
     pImp->nStoringEnd = nTo;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxItemPool::SetVersionMap
 (
@@ -1310,7 +1310,7 @@ void SfxItemPool::SetVersionMap
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 SfxItemPool::GetNewWhich
 (
@@ -1401,7 +1401,7 @@ sal_uInt16 SfxItemPool::GetNewWhich
     return nFileWhich;
 }
 
-// -----------------------------------------------------------------------
+
 
 
 bool SfxItemPool::IsInVersionsRange( sal_uInt16 nWhich ) const
@@ -1409,7 +1409,7 @@ bool SfxItemPool::IsInVersionsRange( sal_uInt16 nWhich ) const
     return nWhich >= pImp->nVerStart && nWhich <= pImp->nVerEnd;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxItemPool::IsCurrentVersionLoading() const
 

@@ -161,7 +161,7 @@ void SvxNumberPreview::Paint( const Rectangle& )
     DrawText( aPosText, aTmpStr );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberPreview::InitSettings( sal_Bool bForeground, sal_Bool bBackground )
 {
@@ -187,7 +187,7 @@ void SvxNumberPreview::InitSettings( sal_Bool bForeground, sal_Bool bBackground 
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberPreview::StateChanged( StateChangedType nType )
 {
@@ -199,7 +199,7 @@ void SvxNumberPreview::StateChanged( StateChangedType nType )
     Window::StateChanged( nType );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberPreview::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -712,9 +712,9 @@ sal_Bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
             pNumFmtShell->FindEntry(aFormat, &nCurKey);
         }
 
-        //---------------------------------------------------------------
+
         // Chosen format:
-        // --------------
+
         if ( bDataChanged )
         {
             bDataChanged = ( nInitFormat != nCurKey );
@@ -729,9 +729,9 @@ sal_Bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
             }
         }
 
-        // --------------------------------------------------------------
+
         // List of changed user defined formats:
-        // -------------------------------------
+
         const size_t nDelCount = pNumFmtShell->GetUpdateDataCount();
 
         if ( nDelCount > 0 )
@@ -758,9 +758,9 @@ sal_Bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
             delete [] pDelArr;
         }
 
-        //---------------------------------------------------------------
+
         // Whether source format is to be taken or not:
-        // --------------------------------------------
+
         if ( m_pCbSourceFormat->IsEnabled() )
         {
             sal_uInt16 _nWhich = GetWhich( SID_ATTR_NUMBERFORMAT_SOURCE );
@@ -1170,7 +1170,7 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
         pNumFmtShell->SetCurrencySymbol(nCurrencyPos);
     }
 
-    //--------------------------------------------------------------------
+
     // Format-ListBox ----------------------------------------------------
     if (pLb == m_pLbFormat)
     {
@@ -1220,7 +1220,7 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
         return 0;
     }
 
-    //--------------------------------------------------------------------
+
     // category-ListBox -------------------------------------------------
     if (pLb == m_pLbCategory || pLb == m_pLbCurrency)
     {
@@ -1231,7 +1231,7 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
         return 0;
     }
 
-    //--------------------------------------------------------------------
+
     // language/country-ListBox ----------------------------------------------
     if (pLb == m_pLbLanguage)
     {

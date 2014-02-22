@@ -103,13 +103,13 @@ SvxLineTabDialog::SvxLineTabDialog
     rBtnCancel.SetClickHdl( LINK( this, SvxLineTabDialog, CancelHdlImpl ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxLineTabDialog::~SvxLineTabDialog()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineTabDialog::SavePalettes()
 {
@@ -171,7 +171,7 @@ void SvxLineTabDialog::SavePalettes()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 short SvxLineTabDialog::Ok()
 {
@@ -182,7 +182,7 @@ short SvxLineTabDialog::Ok()
     return( SfxTabDialog::Ok() );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(SvxLineTabDialog, CancelHdlImpl)
 {
@@ -193,7 +193,7 @@ IMPL_LINK_NOARG_INLINE_START(SvxLineTabDialog, CancelHdlImpl)
 }
 IMPL_LINK_NOARG_INLINE_END(SvxLineTabDialog, CancelHdlImpl)
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {

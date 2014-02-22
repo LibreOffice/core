@@ -48,7 +48,7 @@ sal_uInt16 SvxZoomDialog::GetFactor() const
         return SPECIAL_FACTOR;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxZoomDialog::SetFactor( sal_uInt16 nNewFactor, sal_uInt16 nBtnId )
 {
@@ -91,7 +91,7 @@ void SvxZoomDialog::SetFactor( sal_uInt16 nNewFactor, sal_uInt16 nBtnId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxZoomDialog::HideButton( sal_uInt16 nBtnId )
 {
@@ -114,7 +114,7 @@ void SvxZoomDialog::HideButton( sal_uInt16 nBtnId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxZoomDialog::SetLimits( sal_uInt16 nMin, sal_uInt16 nMax )
 {
@@ -125,7 +125,7 @@ void SvxZoomDialog::SetLimits( sal_uInt16 nMin, sal_uInt16 nMax )
     m_pUserEdit->SetLast( nMax );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet )
     : SfxModalDialog(pParent, "ZoomDialog", "cui/ui/zoomdialog.ui")
@@ -285,7 +285,7 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxZoomDialog::~SvxZoomDialog()
 {
@@ -293,7 +293,7 @@ SvxZoomDialog::~SvxZoomDialog()
     pOutSet = 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxZoomDialog, UserHdl, RadioButton *, pBtn )
 {
@@ -309,7 +309,7 @@ IMPL_LINK( SvxZoomDialog, UserHdl, RadioButton *, pBtn )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxZoomDialog, SpinHdl)
 {
@@ -319,7 +319,7 @@ IMPL_LINK_NOARG(SvxZoomDialog, SpinHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxZoomDialog, ViewLayoutUserHdl, RadioButton *, pBtn )
 {
@@ -351,7 +351,7 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutUserHdl, RadioButton *, pBtn )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxZoomDialog, ViewLayoutSpinHdl, NumericField *, pEdt )
 {
@@ -371,7 +371,7 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutSpinHdl, NumericField *, pEdt )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxZoomDialog, ViewLayoutCheckHdl, CheckBox *, pChk )
 {
@@ -383,7 +383,7 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutCheckHdl, CheckBox *, pChk )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxZoomDialog, OKHdl, Button *, pBtn )
 {

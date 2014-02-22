@@ -49,43 +49,43 @@ static const ::sal_Int32 ID_CORRUPT_UICONFIG_GENERAL = 3;
 namespace framework
 {
 
-//-----------------------------------------------
+
 OUString PresetHandler::PRESET_DEFAULT()
 {
     return OUString("default");
 }
 
-//-----------------------------------------------
+
 OUString PresetHandler::TARGET_CURRENT()
 {
     return OUString("current");
 }
 
-//-----------------------------------------------
+
 OUString PresetHandler::RESOURCETYPE_MENUBAR()
 {
     return OUString("menubar");
 }
 
-//-----------------------------------------------
+
 OUString PresetHandler::RESOURCETYPE_TOOLBAR()
 {
     return OUString("toolbar");
 }
 
-//-----------------------------------------------
+
 OUString PresetHandler::RESOURCETYPE_ACCELERATOR()
 {
     return OUString("accelerator");
 }
 
-//-----------------------------------------------
+
 OUString PresetHandler::RESOURCETYPE_STATUSBAR()
 {
     return OUString("statusbar");
 }
 
-//-----------------------------------------------
+
 PresetHandler::PresetHandler(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase     (&Application::GetSolarMutex()        )
     , m_xContext         (xContext                                )
@@ -95,7 +95,7 @@ PresetHandler::PresetHandler(const css::uno::Reference< css::uno::XComponentCont
 {
 }
 
-//-----------------------------------------------
+
 PresetHandler::PresetHandler(const PresetHandler& rCopy)
     : ThreadHelpBase     (&Application::GetSolarMutex()        )
     , m_aLanguageTag( rCopy.m_aLanguageTag)
@@ -116,7 +116,7 @@ PresetHandler::PresetHandler(const PresetHandler& rCopy)
     m_sRelPathUser          = rCopy.m_sRelPathUser;
 }
 
-//-----------------------------------------------
+
 PresetHandler::~PresetHandler()
 {
     m_xWorkingStorageShare.clear();
@@ -143,7 +143,7 @@ PresetHandler::~PresetHandler()
     m_lDocumentStorages.forgetCachedStorages();
 }
 
-//-----------------------------------------------
+
 void PresetHandler::forgetCachedStorages()
 {
     // SAFE -> ----------------------------------
@@ -260,7 +260,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     return xStorage;
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorageUser()
 {
     css::uno::Reference< css::embed::XStorage > xRoot = m_aSharedStorages->m_lStoragesUser.getRootStorage();
@@ -308,7 +308,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     return xStorage;
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::embed::XStorage > PresetHandler::getWorkingStorageShare()
 {
     // SAFE -> ----------------------------------
@@ -317,7 +317,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getWorkingStorageShar
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::embed::XStorage > PresetHandler::getWorkingStorageUser()
 {
     // SAFE -> ----------------------------------
@@ -326,7 +326,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getWorkingStorageUser
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageShare(const css::uno::Reference< css::embed::XStorage >& /*xChild*/)
 {
     // SAFE -> ----------------------------------
@@ -338,7 +338,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageShare
     return m_aSharedStorages->m_lStoragesShare.getParentStorage(xWorking);
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageUser(const css::uno::Reference< css::embed::XStorage >& /*xChild*/)
 {
     // SAFE -> ----------------------------------
@@ -350,7 +350,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageUser(
     return m_aSharedStorages->m_lStoragesUser.getParentStorage(xWorking);
 }
 
-//-----------------------------------------------
+
 void PresetHandler::connectToResource(      PresetHandler::EConfigType                   eConfigType  ,
                                       const OUString&                             sResource    ,
                                       const OUString&                             sModule      ,
@@ -557,7 +557,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     }
 }
 
-//-----------------------------------------------
+
 void PresetHandler::copyPresetToTarget(const OUString& sPreset,
                                        const OUString& sTarget)
 {
@@ -600,7 +600,7 @@ void PresetHandler::copyPresetToTarget(const OUString& sPreset,
     commitUserChanges();
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::io::XStream > PresetHandler::openPreset(const OUString& sPreset,
                                                                   sal_Bool bUseNoLangGlobal)
 {
@@ -622,7 +622,7 @@ css::uno::Reference< css::io::XStream > PresetHandler::openPreset(const OUString
     return xStream;
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::io::XStream > PresetHandler::openTarget(const OUString& sTarget         ,
                                                                         sal_Bool         bCreateIfMissing)
 {
@@ -663,7 +663,7 @@ css::uno::Reference< css::io::XStream > PresetHandler::openTarget(const OUString
     return xStream;
 }
 
-//-----------------------------------------------
+
 void PresetHandler::commitUserChanges()
 {
     // SAFE -> ----------------------------------
@@ -700,7 +700,7 @@ void PresetHandler::commitUserChanges()
     }
 }
 
-//-----------------------------------------------
+
 void PresetHandler::addStorageListener(IStorageListener* pListener)
 {
     // SAFE -> ----------------------------------
@@ -730,7 +730,7 @@ void PresetHandler::addStorageListener(IStorageListener* pListener)
     }
 }
 
-//-----------------------------------------------
+
 void PresetHandler::removeStorageListener(IStorageListener* pListener)
 {
     // SAFE -> ----------------------------------
@@ -760,7 +760,7 @@ void PresetHandler::removeStorageListener(IStorageListener* pListener)
     }
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoringErrors(const OUString& sPath ,
                                                                                              sal_Int32        eMode ,
                                                                                              sal_Bool         bShare)
@@ -780,7 +780,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
     return xPath;
 }
 
-//-----------------------------------------------
+
 ::std::vector< OUString >::const_iterator PresetHandler::impl_findMatchingLocalizedValue(
         const ::std::vector< OUString >& lLocalizedValues,
         OUString& rLanguageTag,
@@ -811,7 +811,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
     return pFound;
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPathIgnoringErrors(
         OUString&      sPath         ,
         sal_Int32             eMode         ,
@@ -851,7 +851,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
     return xLocalePath;
 }
 
-//-----------------------------------------------
+
 ::std::vector< OUString > PresetHandler::impl_getSubFolderNames(const css::uno::Reference< css::embed::XStorage >& xFolder)
 {
     css::uno::Reference< css::container::XNameAccess > xAccess(xFolder, css::uno::UNO_QUERY);
@@ -880,7 +880,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
     return lSubFolders;
 }
 
-//-----------------------------------------------
+
 } // namespace framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

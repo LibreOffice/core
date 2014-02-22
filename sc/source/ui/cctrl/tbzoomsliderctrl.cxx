@@ -39,11 +39,11 @@
 // class ScZoomSliderControl ---------------------------------------
 //========================================================================
 
-// -----------------------------------------------------------------------
+
 
 SFX_IMPL_TOOLBOX_CONTROL( ScZoomSliderControl, SvxZoomSliderItem );
 
-// -----------------------------------------------------------------------
+
 
 ScZoomSliderControl::ScZoomSliderControl(
     sal_uInt16     nSlotId,
@@ -54,14 +54,14 @@ ScZoomSliderControl::ScZoomSliderControl(
     rTbx.Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 ScZoomSliderControl::~ScZoomSliderControl()
 {
 
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState,
                                        const SfxPoolItem* pState )
@@ -89,7 +89,7 @@ void ScZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 Window* ScZoomSliderControl::CreateItemWindow( Window *pParent )
 {
@@ -101,7 +101,7 @@ Window* ScZoomSliderControl::CreateItemWindow( Window *pParent )
     return  pSlider;
 }
 
-// -----------------------------------------------------------------------
+
 
 struct ScZoomSliderWnd::ScZoomSliderWnd_Impl
 {
@@ -134,7 +134,7 @@ struct ScZoomSliderWnd::ScZoomSliderWnd_Impl
         }
 };
 
-// -----------------------------------------------------------------------
+
 
 const long nButtonWidth     = 10;
 const long nButtonHeight    = 10;
@@ -148,7 +148,7 @@ const long nSnappingEpsilon = 5; // snapping epsilon in pixels
 const long nSnappingPointsMinDist = nSnappingEpsilon; // minimum distance of two adjacent snapping points
 
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ScZoomSliderWnd::Offset2Zoom( long nOffset ) const
 {
@@ -209,7 +209,7 @@ sal_uInt16 ScZoomSliderWnd::Offset2Zoom( long nOffset ) const
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long ScZoomSliderWnd::Zoom2Offset( sal_uInt16 nCurrentZoom ) const
 {
@@ -237,7 +237,7 @@ long ScZoomSliderWnd::Zoom2Offset( sal_uInt16 nCurrentZoom ) const
     return nRect;
 }
 
-// -----------------------------------------------------------------------
+
 
 
 ScZoomSliderWnd::ScZoomSliderWnd( Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider,
@@ -255,14 +255,14 @@ ScZoomSliderWnd::ScZoomSliderWnd( Window* pParent, const ::com::sun::star::uno::
     SetSizePixel( Size( aSliderSize.Width() * nSliderWidth-1, aSliderSize.Height() + nSliderHeight ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 ScZoomSliderWnd::~ScZoomSliderWnd()
 {
     delete mpImpl;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScZoomSliderWnd::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -320,7 +320,7 @@ void ScZoomSliderWnd::MouseButtonDown( const MouseEvent& rMEvt )
     mpImpl->mbOmitPaint = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScZoomSliderWnd::MouseMove( const MouseEvent& rMEvt )
 {
@@ -362,7 +362,7 @@ void ScZoomSliderWnd::MouseMove( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScZoomSliderWnd::UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem )
 {
@@ -414,14 +414,14 @@ void ScZoomSliderWnd::UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem )
        Paint(aRect);
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScZoomSliderWnd::Paint( const Rectangle& rRect )
 {
     DoPaint( rRect );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScZoomSliderWnd::DoPaint( const Rectangle& /*rRect*/ )
 {
@@ -519,6 +519,6 @@ void ScZoomSliderWnd::DoPaint( const Rectangle& /*rRect*/ )
 
 }
 
-// -----------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

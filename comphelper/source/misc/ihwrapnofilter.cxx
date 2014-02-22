@@ -29,7 +29,7 @@ namespace comphelper
 
     using namespace ::com::sun::star;
 
-    //----------------------------------------------------------------------------------------------------
+
     OIHWrapNoFilterDialog::OIHWrapNoFilterDialog( uno::Reference< task::XInteractionHandler > xInteraction )
         :m_xInter( xInteraction )
     {
@@ -39,7 +39,7 @@ namespace comphelper
     {
     }
 
-    //----------------------------------------------------------------------------------------------------
+
     uno::Sequence< OUString > SAL_CALL OIHWrapNoFilterDialog::impl_staticGetSupportedServiceNames()
     {
         uno::Sequence< OUString > aRet(1);
@@ -52,9 +52,9 @@ namespace comphelper
         return OUString("com.sun.star.comp.task.InteractionHandlerWrapper");
     }
 
-    //----------------------------------------------------------------------------------------------------
+
     // XInteractionHandler
-    //----------------------------------------------------------------------------------------------------
+
     void SAL_CALL OIHWrapNoFilterDialog::handle( const uno::Reference< task::XInteractionRequest >& xRequest)
             throw( com::sun::star::uno::RuntimeException )
     {
@@ -69,9 +69,9 @@ namespace comphelper
             m_xInter->handle( xRequest );
     }
 
-    //----------------------------------------------------------------------------------------------------
+
     // XInteractionHandler2
-    //----------------------------------------------------------------------------------------------------
+
     sal_Bool SAL_CALL OIHWrapNoFilterDialog::handleInteractionRequest( const uno::Reference< task::XInteractionRequest >& xRequest)
             throw( com::sun::star::uno::RuntimeException )
     {
@@ -89,9 +89,9 @@ namespace comphelper
         }
     }
 
-    //----------------------------------------------------------------------------------------------------
+
     // XInitialization
-    //----------------------------------------------------------------------------------------------------
+
     void SAL_CALL OIHWrapNoFilterDialog::initialize( const uno::Sequence< uno::Any >& )
         throw ( uno::Exception,
         uno::RuntimeException,

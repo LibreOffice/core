@@ -30,11 +30,11 @@ using namespace ::com::sun::star;
 DBG_NAMEEX(SvxB3DVectorItem)
 DBG_NAME(SvxB3DVectorItem)
 
-// -----------------------------------------------------------------------
+
 
 TYPEINIT1_FACTORY(SvxB3DVectorItem, SfxPoolItem, new SvxB3DVectorItem);
 
-// -----------------------------------------------------------------------
+
 
 SvxB3DVectorItem::SvxB3DVectorItem()
 {
@@ -46,7 +46,7 @@ SvxB3DVectorItem::~SvxB3DVectorItem()
     DBG_DTOR(SvxB3DVectorItem, 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxB3DVectorItem::SvxB3DVectorItem( sal_uInt16 _nWhich, const basegfx::B3DVector& rVal ) :
     SfxPoolItem( _nWhich ),
@@ -55,7 +55,7 @@ SvxB3DVectorItem::SvxB3DVectorItem( sal_uInt16 _nWhich, const basegfx::B3DVector
     DBG_CTOR(SvxB3DVectorItem, 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxB3DVectorItem::SvxB3DVectorItem( const SvxB3DVectorItem& rItem ) :
     SfxPoolItem( rItem ),
@@ -64,7 +64,7 @@ SvxB3DVectorItem::SvxB3DVectorItem( const SvxB3DVectorItem& rItem ) :
     DBG_CTOR(SvxB3DVectorItem, 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxB3DVectorItem::operator==( const SfxPoolItem &rItem ) const
 {
@@ -73,7 +73,7 @@ bool SvxB3DVectorItem::operator==( const SfxPoolItem &rItem ) const
     return ((SvxB3DVectorItem&)rItem).aVal == aVal;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxB3DVectorItem::Clone( SfxItemPool* /*pPool*/ ) const
 {
@@ -81,7 +81,7 @@ SfxPoolItem* SvxB3DVectorItem::Clone( SfxItemPool* /*pPool*/ ) const
     return new SvxB3DVectorItem( *this );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxB3DVectorItem::Create(SvStream &rStream, sal_uInt16 /*nVersion*/) const
 {
@@ -94,7 +94,7 @@ SfxPoolItem* SvxB3DVectorItem::Create(SvStream &rStream, sal_uInt16 /*nVersion*/
     return new SvxB3DVectorItem(Which(), aStr);
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SvxB3DVectorItem::Store(SvStream &rStream, sal_uInt16 /*nItemVersion*/) const
 {
@@ -109,7 +109,7 @@ SvStream& SvxB3DVectorItem::Store(SvStream &rStream, sal_uInt16 /*nItemVersion*/
     return rStream;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
@@ -124,7 +124,7 @@ bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) con
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxB3DVectorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
@@ -138,7 +138,7 @@ bool SvxB3DVectorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 SvxB3DVectorItem::GetVersion (sal_uInt16 nFileFormatVersion) const
 {

@@ -539,15 +539,15 @@ void LwpCellLayout::RegisterDefaultCell()
                 pBorders->SetWidth(enumXFBorderBottom, 0);
                 break;
             case enumWholeBorder:
-                //--
+
                 //||
-                //--
+
                 // nothing to remove
                 break;
             case enumNoLeftBorder:
                 //
                 //| |
-                //--
+
                 // remove left line
                 pBorders->SetWidth(enumXFBorderLeft, 0);
                 break;

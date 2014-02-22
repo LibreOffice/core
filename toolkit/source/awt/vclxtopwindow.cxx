@@ -161,7 +161,7 @@ void VCLXTopWindow_Base::setMenuBar( const ::com::sun::star::uno::Reference< ::c
     mxMenuBar = rxMenu;
 }
 
-//--------------------------------------------------------------------
+
 ::sal_Bool SAL_CALL VCLXTopWindow_Base::getIsMaximized() throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -173,7 +173,7 @@ void VCLXTopWindow_Base::setMenuBar( const ::com::sun::star::uno::Reference< ::c
     return pWindow->IsMaximized();
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL VCLXTopWindow_Base::setIsMaximized( ::sal_Bool _ismaximized ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -185,7 +185,7 @@ void SAL_CALL VCLXTopWindow_Base::setIsMaximized( ::sal_Bool _ismaximized ) thro
     pWindow->Maximize( _ismaximized );
 }
 
-//--------------------------------------------------------------------
+
 ::sal_Bool SAL_CALL VCLXTopWindow_Base::getIsMinimized() throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -197,7 +197,7 @@ void SAL_CALL VCLXTopWindow_Base::setIsMaximized( ::sal_Bool _ismaximized ) thro
     return pWindow->IsMinimized();
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL VCLXTopWindow_Base::setIsMinimized( ::sal_Bool _isMinimized ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -209,7 +209,7 @@ void SAL_CALL VCLXTopWindow_Base::setIsMinimized( ::sal_Bool _isMinimized ) thro
     _isMinimized ? pWindow->Minimize() : pWindow->Restore();
 }
 
-//--------------------------------------------------------------------
+
 ::sal_Int32 SAL_CALL VCLXTopWindow_Base::getDisplay() throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -221,7 +221,7 @@ void SAL_CALL VCLXTopWindow_Base::setIsMinimized( ::sal_Bool _isMinimized ) thro
     return pWindow->GetScreenNumber();
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL VCLXTopWindow_Base::setDisplay( ::sal_Int32 _display ) throw (RuntimeException, IndexOutOfBoundsException)
 {
     SolarMutexGuard aGuard;

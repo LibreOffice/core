@@ -784,7 +784,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(sal_Bool bDontDeleteReally )
     return(eKind);
 }
 
-// --------------------------------------------------------------------
+
 
 /** restores the default text if the given text object is currently in edit mode and
     no text has been entered already. Is only useful just before text edit ends. */

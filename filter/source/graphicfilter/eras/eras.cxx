@@ -65,13 +65,13 @@ RASWriter::RASWriter(SvStream &rStream)
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 RASWriter::~RASWriter()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void RASWriter::ImplCallback( sal_uLong nYPos )
 {
@@ -132,7 +132,7 @@ sal_Bool RASWriter::WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilter
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool RASWriter::ImplWriteHeader()
 {
@@ -164,7 +164,7 @@ sal_Bool RASWriter::ImplWriteHeader()
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 void RASWriter::ImplWritePalette()
 {
@@ -175,7 +175,7 @@ void RASWriter::ImplWritePalette()
     for ( i = 0; i < mnColors; m_rOStm.WriteUChar( mpAcc->GetPaletteColor( i++ ).GetBlue() ) ) ;
 }
 
-// ------------------------------------------------------------------------
+
 
 void RASWriter::ImplWriteBody()
 {
@@ -230,7 +230,7 @@ void RASWriter::ImplWriteBody()
     ImplPutByte( mnRepVal + 1 );    // end of RLE decoding
 }
 
-// ------------------------------------------------------------------------
+
 
 void RASWriter::ImplPutByte( sal_uInt8 nPutThis )
 {
@@ -263,11 +263,11 @@ void RASWriter::ImplPutByte( sal_uInt8 nPutThis )
     }
 }
 
-// ------------------------------------------------------------------------
 
-// ---------------------
+
+
 // - exported function -
-// ---------------------
+
 
 // this needs to be kept in sync with
 // ImpFilterLibCacheEntry::GetImportFunction() from

@@ -54,13 +54,13 @@ using namespace com::sun::star;
 using namespace http_dav_ucp;
 
 
-// -------------------------------------------------------------------
+
 // static members!
 //SerfLockStore SerfSession::m_aSerfLockStore;
 
-// -------------------------------------------------------------------
+
 // Constructor
-// -------------------------------------------------------------------
+
 SerfSession::SerfSession(
         const rtl::Reference< DAVSessionFactory > & rSessionFactory,
         const OUString& inUri,
@@ -84,9 +84,9 @@ SerfSession::SerfSession(
     m_pSerfBucket_Alloc = serf_bucket_allocator_create( getAprPool(), NULL, NULL );
 }
 
-// -------------------------------------------------------------------
+
 // Destructor
-// -------------------------------------------------------------------
+
 SerfSession::~SerfSession( )
 {
     if ( m_pSerfConnection )
@@ -96,7 +96,7 @@ SerfSession::~SerfSession( )
     }
 }
 
-// -------------------------------------------------------------------
+
 void SerfSession::Init( const DAVRequestEnvironment & rEnv )
   throw ( DAVException )
 {
@@ -105,7 +105,7 @@ void SerfSession::Init( const DAVRequestEnvironment & rEnv )
     Init();
 }
 
-// -------------------------------------------------------------------
+
 void SerfSession::Init()
     throw ( DAVException )
 {
@@ -220,7 +220,7 @@ char* SerfSession::getHostinfo()
 }
 
 
-// -------------------------------------------------------------------
+
 // virtual
 sal_Bool SerfSession::CanUse( const OUString & inUri )
 {
@@ -241,7 +241,7 @@ sal_Bool SerfSession::CanUse( const OUString & inUri )
     return sal_False;
 }
 
-// -------------------------------------------------------------------
+
 // virtual
 sal_Bool SerfSession::UsesProxy()
 {
@@ -346,7 +346,7 @@ apr_status_t SerfSession::provideSerfCredentials( bool bGiveProvidedCredentialsA
 }
 
 namespace {
-    // -------------------------------------------------------------------
+
     // Helper function
     OUString GetHostnamePart( const OUString& _rRawString )
     {
@@ -601,9 +601,9 @@ SerfRequestProcessor* SerfSession::createReqProc( const OUString & inPath )
                                      m_bUseChunkedEncoding );
 }
 
-// -------------------------------------------------------------------
+
 // PROPFIND - allprop & named
-// -------------------------------------------------------------------
+
 void SerfSession::PROPFIND( const OUString & inPath,
                             const Depth inDepth,
                             const std::vector< OUString > & inPropNames,
@@ -632,9 +632,9 @@ void SerfSession::PROPFIND( const OUString & inPath,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
+
 // PROPFIND - propnames
-// -------------------------------------------------------------------
+
 void SerfSession::PROPFIND( const OUString & inPath,
                             const Depth inDepth,
                             std::vector< DAVResourceInfo > & ioResInfo,
@@ -661,9 +661,9 @@ void SerfSession::PROPFIND( const OUString & inPath,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
+
 // PROPPATCH
-// -------------------------------------------------------------------
+
 void SerfSession::PROPPATCH( const OUString & inPath,
                              const std::vector< ProppatchValue > & inValues,
                              const DAVRequestEnvironment & rEnv )
@@ -681,9 +681,9 @@ void SerfSession::PROPPATCH( const OUString & inPath,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
+
 // HEAD
-// -------------------------------------------------------------------
+
 void SerfSession::HEAD( const OUString & inPath,
                         const std::vector< OUString > & inHeaderNames,
                         DAVResource & ioResource,
@@ -709,9 +709,9 @@ void SerfSession::HEAD( const OUString & inPath,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
+
 // GET
-// -------------------------------------------------------------------
+
 uno::Reference< io::XInputStream >
 SerfSession::GET( const OUString & inPath,
                   const DAVRequestEnvironment & rEnv )
@@ -732,9 +732,9 @@ SerfSession::GET( const OUString & inPath,
     return uno::Reference< io::XInputStream >( xInputStream.get() );
 }
 
-// -------------------------------------------------------------------
+
 // GET
-// -------------------------------------------------------------------
+
 void SerfSession::GET( const OUString & inPath,
                        uno::Reference< io::XOutputStream > & ioOutputStream,
                        const DAVRequestEnvironment & rEnv )
@@ -752,9 +752,9 @@ void SerfSession::GET( const OUString & inPath,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
+
 // GET
-// -------------------------------------------------------------------
+
 uno::Reference< io::XInputStream >
 SerfSession::GET( const OUString & inPath,
                   const std::vector< OUString > & inHeaderNames,
@@ -782,9 +782,9 @@ SerfSession::GET( const OUString & inPath,
 }
 
 
-// -------------------------------------------------------------------
+
 // GET
-// -------------------------------------------------------------------
+
 void SerfSession::GET( const OUString & inPath,
                        uno::Reference< io::XOutputStream > & ioOutputStream,
                        const std::vector< OUString > & inHeaderNames,
@@ -808,9 +808,9 @@ void SerfSession::GET( const OUString & inPath,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
+
 // PUT
-// -------------------------------------------------------------------
+
 void SerfSession::PUT( const OUString & inPath,
                        const uno::Reference< io::XInputStream > & inInputStream,
                        const DAVRequestEnvironment & rEnv )
@@ -832,9 +832,9 @@ void SerfSession::PUT( const OUString & inPath,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
+
 // POST
-// -------------------------------------------------------------------
+
 uno::Reference< io::XInputStream >
 SerfSession::POST( const OUString & inPath,
                    const OUString & rContentType,
@@ -867,9 +867,9 @@ SerfSession::POST( const OUString & inPath,
     return uno::Reference< io::XInputStream >( xInputStream.get() );
 }
 
-// -------------------------------------------------------------------
+
 // POST
-// -------------------------------------------------------------------
+
 void SerfSession::POST( const OUString & inPath,
                         const OUString & rContentType,
                         const OUString & rReferer,
@@ -900,9 +900,9 @@ void SerfSession::POST( const OUString & inPath,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
+
 // MKCOL
-// -------------------------------------------------------------------
+
 void SerfSession::MKCOL( const OUString & inPath,
                          const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
@@ -918,9 +918,9 @@ void SerfSession::MKCOL( const OUString & inPath,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
+
 // COPY
-// -------------------------------------------------------------------
+
 void SerfSession::COPY( const OUString & inSourceURL,
                         const OUString & inDestinationURL,
                         const DAVRequestEnvironment & rEnv,
@@ -941,9 +941,9 @@ void SerfSession::COPY( const OUString & inSourceURL,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
+
 // MOVE
-// -------------------------------------------------------------------
+
 void SerfSession::MOVE( const OUString & inSourceURL,
                         const OUString & inDestinationURL,
                         const DAVRequestEnvironment & rEnv,
@@ -964,9 +964,9 @@ void SerfSession::MOVE( const OUString & inSourceURL,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
+
 // DESTROY
-// -------------------------------------------------------------------
+
 void SerfSession::DESTROY( const OUString & inPath,
                            const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
@@ -982,7 +982,7 @@ void SerfSession::DESTROY( const OUString & inPath,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
+
 /*
 namespace
 {
@@ -1013,9 +1013,9 @@ namespace
 
 } // namespace
 */
-// -------------------------------------------------------------------
+
 // LOCK (set new lock)
-// -------------------------------------------------------------------
+
 void SerfSession::LOCK( const OUString & inPath,
                         ucb::Lock & /*rLock*/,
                         const DAVRequestEnvironment & rEnv )
@@ -1112,9 +1112,9 @@ void SerfSession::LOCK( const OUString & inPath,
     */
 }
 
-// -------------------------------------------------------------------
+
 // LOCK (refresh existing lock)
-// -------------------------------------------------------------------
+
 sal_Int64 SerfSession::LOCK( const OUString & /*inPath*/,
                              sal_Int64 nTimeout,
                              const DAVRequestEnvironment & /*rEnv*/ )
@@ -1153,9 +1153,9 @@ sal_Int64 SerfSession::LOCK( const OUString & /*inPath*/,
     */
 }
 
-// -------------------------------------------------------------------
+
 // LOCK (refresh existing lock)
-// -------------------------------------------------------------------
+
 bool SerfSession::LOCK( SerfLock * /*pLock*/,
                         sal_Int32 & /*rlastChanceToSendRefreshRequest*/ )
 {
@@ -1184,9 +1184,9 @@ bool SerfSession::LOCK( SerfLock * /*pLock*/,
     */
 }
 
-// -------------------------------------------------------------------
+
 // UNLOCK
-// -------------------------------------------------------------------
+
 void SerfSession::UNLOCK( const OUString & /*inPath*/,
                           const DAVRequestEnvironment & /*rEnv*/ )
     throw ( DAVException )
@@ -1220,9 +1220,9 @@ void SerfSession::UNLOCK( const OUString & /*inPath*/,
     */
 }
 
-// -------------------------------------------------------------------
+
 // UNLOCK
-// -------------------------------------------------------------------
+
 bool SerfSession::UNLOCK( SerfLock * /*pLock*/ )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
@@ -1242,7 +1242,7 @@ bool SerfSession::UNLOCK( SerfLock * /*pLock*/ )
     */
 }
 
-// -------------------------------------------------------------------
+
 void SerfSession::abort()
     throw ( DAVException )
 {
@@ -1254,7 +1254,7 @@ void SerfSession::abort()
     //    ne_close_connection( m_pHttpSession );
 }
 
-// -------------------------------------------------------------------
+
 const ucbhelper::InternetProxyServer & SerfSession::getProxySettings() const
 {
     if ( m_aUri.GetScheme() == "http" || m_aUri.GetScheme() == "https" )
@@ -1273,7 +1273,7 @@ const ucbhelper::InternetProxyServer & SerfSession::getProxySettings() const
 }
 
 /*
-// -------------------------------------------------------------------
+
 namespace {
 
 bool containsLocktoken( const uno::Sequence< ucb::Lock > & rLocks,
@@ -1295,7 +1295,7 @@ bool containsLocktoken( const uno::Sequence< ucb::Lock > & rLocks,
 } // namespace
 */
 
-// -------------------------------------------------------------------
+
 bool SerfSession::removeExpiredLocktoken( const OUString & /*inURL*/,
                                           const DAVRequestEnvironment & /*rEnv*/ )
 {
@@ -1363,10 +1363,10 @@ bool SerfSession::removeExpiredLocktoken( const OUString & /*inURL*/,
     */
 }
 
-// -------------------------------------------------------------------
+
 // HandleError
 // Common Error Handler
-// -------------------------------------------------------------------
+
 void SerfSession::HandleError( boost::shared_ptr<SerfRequestProcessor> rReqProc )
     throw ( DAVException )
 {
@@ -1483,7 +1483,7 @@ void SerfSession::HandleError( boost::shared_ptr<SerfRequestProcessor> rReqProc 
     */
 }
 
-// -------------------------------------------------------------------
+
 // static
 bool
 SerfSession::getDataFromInputStream(
@@ -1573,7 +1573,7 @@ SerfSession::getDataFromInputStream(
     return false;
 }
 
-// ---------------------------------------------------------------------
+
 sal_Bool
 SerfSession::isDomainMatch( OUString certHostName )
 {
@@ -1595,7 +1595,7 @@ SerfSession::isDomainMatch( OUString certHostName )
 }
 
 /*
-// ---------------------------------------------------------------------
+
 OUString SerfSession::makeAbsoluteURL( OUString const & rURL ) const
 {
     try

@@ -111,7 +111,7 @@ private:
     XMLFilterSettingsDialog* mpDialog;
 };
 
-//-------------------------------------------------------------------------
+
 
 namespace
 {
@@ -133,13 +133,13 @@ XMLFilterDialogComponent::XMLFilterDialogComponent( const com::sun::star::uno::R
     xDesktop->addTerminateListener( xListener );
 }
 
-//-------------------------------------------------------------------------
+
 
 XMLFilterDialogComponent::~XMLFilterDialogComponent()
 {
 }
 
-//-------------------------------------------------------------------------
+
 
 // XInterface
 Any SAL_CALL XMLFilterDialogComponent::queryInterface( const Type& aType ) throw (RuntimeException)
@@ -147,7 +147,7 @@ Any SAL_CALL XMLFilterDialogComponent::queryInterface( const Type& aType ) throw
     return OComponentHelper::queryInterface( aType );
 }
 
-//-------------------------------------------------------------------------
+
 
 Any SAL_CALL XMLFilterDialogComponent::queryAggregation( Type const & rType ) throw (RuntimeException)
 {
@@ -174,21 +174,21 @@ Any SAL_CALL XMLFilterDialogComponent::queryAggregation( Type const & rType ) th
     return OComponentHelper::queryAggregation( rType );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SAL_CALL XMLFilterDialogComponent::acquire() throw ()
 {
     OComponentHelper::acquire();
 }
 
-//-------------------------------------------------------------------------
+
 
 void SAL_CALL XMLFilterDialogComponent::release() throw ()
 {
     OComponentHelper::release();
 }
 
-//-------------------------------------------------------------------------
+
 
 OUString XMLFilterDialogComponent_getImplementationName() throw ( RuntimeException )
 {
@@ -220,7 +220,7 @@ Sequence< sal_Int8 > SAL_CALL XMLFilterDialogComponent::getImplementationId( voi
     return rID.getImplementationId();
 }
 
-//-------------------------------------------------------------------------
+
 
 namespace
 {
@@ -281,7 +281,7 @@ void SAL_CALL XMLFilterDialogComponent::disposing()
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 // XTerminateListener
 void SAL_CALL XMLFilterDialogComponent::queryTermination( const EventObject& /* Event */ ) throw (TerminationVetoException, RuntimeException)
@@ -303,7 +303,7 @@ void SAL_CALL XMLFilterDialogComponent::queryTermination( const EventObject& /* 
         mpDialog->Close();
 }
 
-//-------------------------------------------------------------------------
+
 
 void SAL_CALL XMLFilterDialogComponent::notifyTermination( const EventObject& /* Event */ ) throw (RuntimeException)
 {
@@ -315,12 +315,12 @@ void SAL_CALL XMLFilterDialogComponent::disposing( const EventObject& /* Source 
 {
 }
 
-//-------------------------------------------------------------------------
+
 void SAL_CALL XMLFilterDialogComponent::setTitle( const OUString& /* _rTitle */ ) throw(RuntimeException)
 {
 }
 
-//-------------------------------------------------------------------------
+
 sal_Int16 SAL_CALL XMLFilterDialogComponent::execute(  ) throw(RuntimeException)
 {
     ::SolarMutexGuard aGuard;
@@ -349,7 +349,7 @@ sal_Int16 SAL_CALL XMLFilterDialogComponent::execute(  ) throw(RuntimeException)
     return 0;
 }
 
-//-------------------------------------------------------------------------
+
 void SAL_CALL XMLFilterDialogComponent::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
 {
     const Any* pArguments = aArguments.getConstArray();

@@ -38,22 +38,22 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
-// -------------------------------------------------------------------------
+
 sdbcx::ObjectType OGroups::createObject(const OUString& _rName)
 {
     return new OAdoGroup(m_pCatalog,isCaseSensitive(),_rName);
 }
-// -------------------------------------------------------------------------
+
 void OGroups::impl_refresh() throw(RuntimeException)
 {
     m_aCollection.Refresh();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OGroups::createDescriptor()
 {
     return new OAdoGroup(m_pCatalog,isCaseSensitive());
 }
-// -------------------------------------------------------------------------
+
 // XAppend
 sdbcx::ObjectType OGroups::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
@@ -64,13 +64,13 @@ sdbcx::ObjectType OGroups::appendObject( const OUString& _rForName, const Refere
     m_aCollection.Append( pGroup->getImpl() );
     return createObject( _rForName );
 }
-// -------------------------------------------------------------------------
+
 // XDrop
 void OGroups::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
 {
     m_aCollection.Delete(_sElementName);
 }
-// -----------------------------------------------------------------------------
+
 
 
 

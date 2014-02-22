@@ -20,7 +20,7 @@
 
 #include "main.hxx"
 
-// ---------------------------------------------------------------
+
 
 CGMBitmap::CGMBitmap( CGM& rCGM ) :
     mpCGM                           ( &rCGM ),
@@ -29,14 +29,14 @@ CGMBitmap::CGMBitmap( CGM& rCGM ) :
     ImplGetBitmap( *pCGMBitmapDescriptor );
 };
 
-// ---------------------------------------------------------------
+
 
 CGMBitmap::~CGMBitmap()
 {
     delete pCGMBitmapDescriptor;
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
 {
@@ -220,7 +220,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
     }
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMBitmap::ImplSetCurrentPalette( CGMBitmapDescriptor& rDesc )
 {
@@ -233,7 +233,7 @@ void CGMBitmap::ImplSetCurrentPalette( CGMBitmapDescriptor& rDesc )
     }
 }
 
-// ---------------------------------------------------------------
+
 
 sal_Bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
 {
@@ -325,7 +325,7 @@ sal_Bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
     return rDesc.mbStatus;
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMBitmap::ImplInsert( CGMBitmapDescriptor& rSource, CGMBitmapDescriptor& rDest )
 {
@@ -358,7 +358,7 @@ void CGMBitmap::ImplInsert( CGMBitmapDescriptor& rSource, CGMBitmapDescriptor& r
     rDest.mndy += rSource.mndy;
 };
 
-// ---------------------------------------------------------------
+
 
 CGMBitmap* CGMBitmap::GetNext()
 {
@@ -391,7 +391,7 @@ CGMBitmap* CGMBitmap::GetNext()
         return NULL;
 }
 
-// ---------------------------------------------------------------
+
 
 CGMBitmapDescriptor* CGMBitmap::GetBitmap()
 {

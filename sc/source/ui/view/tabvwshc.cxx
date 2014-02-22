@@ -73,7 +73,7 @@
 
 #include <config_orcus.h>
 
-//------------------------------------------------------------------
+
 
 void ScTabViewShell::SetCurRefDlgId( sal_uInt16 nNew )
 {

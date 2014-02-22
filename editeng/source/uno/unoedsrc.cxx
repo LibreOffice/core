@@ -22,19 +22,19 @@
 #include <editeng/unoedsrc.hxx>
 
 
-//------------------------------------------------------------------------
+
 
 void SvxEditSource::addRange( SvxUnoTextRangeBase* )
 {
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxEditSource::removeRange( SvxUnoTextRangeBase* )
 {
 }
 
-//------------------------------------------------------------------------
+
 
 const SvxUnoTextRangeBaseList& SvxEditSource::getRanges() const
 {
@@ -42,19 +42,19 @@ const SvxUnoTextRangeBaseList& SvxEditSource::getRanges() const
     return gList;
 }
 
-//------------------------------------------------------------------------
+
 
 SvxTextForwarder::~SvxTextForwarder()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SvxViewForwarder::~SvxViewForwarder()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SvxEditSource::~SvxEditSource()
 {

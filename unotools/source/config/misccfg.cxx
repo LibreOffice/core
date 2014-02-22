@@ -173,7 +173,7 @@ void SfxMiscCfg::Commit()
     }
     PutProperties(rNames, aValues);
 }
-// -----------------------------------------------------------------------
+
 namespace
 {
     class LocalSingleton : public rtl::Static< osl::Mutex, LocalSingleton >

@@ -47,7 +47,7 @@ const OUString DAVProperties::SUPPORTEDLOCK =
 const OUString DAVProperties::EXECUTABLE =
                 OUString( "http://apache.org/dav/props/executable" );
 
-// -------------------------------------------------------------------
+
 // static
 void DAVProperties::createSerfPropName( const OUString & rFullName,
                                         SerfPropName & rName )
@@ -107,7 +107,7 @@ void DAVProperties::createSerfPropName( const OUString & rFullName,
     }
 }
 
-// -------------------------------------------------------------------
+
 // static
 void DAVProperties::createUCBPropName( const char * nspace,
                                        const char * name,
@@ -170,7 +170,7 @@ void DAVProperties::createUCBPropName( const char * nspace,
     }
 }
 
-// -------------------------------------------------------------------
+
 // static
 bool DAVProperties::isUCBDeadProperty( const SerfPropName & rName )
 {

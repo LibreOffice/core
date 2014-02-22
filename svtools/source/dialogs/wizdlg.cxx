@@ -37,7 +37,7 @@ struct ImplWizPageData
     TabPage*            mpPage;
 };
 
-// -----------------------------------------------------------------------
+
 
 struct ImplWizButtonData
 {
@@ -66,20 +66,20 @@ void WizardDialog::ImplInitData()
     maWizardLayoutTimer.SetTimeoutHdl( LINK( this, WizardDialog, ImplHandleWizardLayoutTimerHdl ) );
 }
 
-// -----------------------------------------------------------------------
+
 void WizardDialog::SetLeftAlignedButtonCount( sal_Int16 _nCount )
 {
     mnLeftAlignCount = _nCount;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WizardDialog::SetEmptyViewMargin()
 {
     mbEmptyViewMargin = true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WizardDialog::ImplCalcSize( Size& rSize )
 {
@@ -258,7 +258,7 @@ long WizardDialog::LogicalCoordinateToPixel(int iCoordinate){
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void WizardDialog::ImplPosTabPage()
 {
@@ -316,7 +316,7 @@ void WizardDialog::ImplPosTabPage()
     mpCurTabPage->SetPosSizePixel( aPos, aDlgSize );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WizardDialog::ImplShowTabPage( TabPage* pTabPage )
 {
@@ -339,7 +339,7 @@ void WizardDialog::ImplShowTabPage( TabPage* pTabPage )
         pOldTabPage->Hide();
 }
 
-// -----------------------------------------------------------------------
+
 
 TabPage* WizardDialog::ImplGetPage( sal_uInt16 nLevel ) const
 {
@@ -367,7 +367,7 @@ WizardDialog::WizardDialog( Window* pParent, WinBits nStyle ) :
     ImplInitData();
 }
 
-// -----------------------------------------------------------------------
+
 
 WizardDialog::WizardDialog( Window* pParent, const ResId& rResId ) :
     ModalDialog( pParent, rResId )
@@ -375,7 +375,7 @@ WizardDialog::WizardDialog( Window* pParent, const ResId& rResId ) :
     ImplInitData();
 }
 
-// -----------------------------------------------------------------------
+
 
 WizardDialog::~WizardDialog()
 {
@@ -392,7 +392,7 @@ WizardDialog::~WizardDialog()
         RemovePage( mpFirstPage->mpPage );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WizardDialog::Resize()
 {
@@ -405,7 +405,7 @@ void WizardDialog::Resize()
     Dialog::Resize();
 }
 
-// -----------------------------------------------------------------------
+
 
 void WizardDialog::StateChanged( StateChangedType nType )
 {
@@ -443,7 +443,7 @@ void WizardDialog::StateChanged( StateChangedType nType )
     Dialog::StateChanged( nType );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool WizardDialog::Notify( NotifyEvent& rNEvt )
 {
@@ -489,14 +489,14 @@ bool WizardDialog::Notify( NotifyEvent& rNEvt )
     return Dialog::Notify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WizardDialog::ActivatePage()
 {
     maActivateHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 long WizardDialog::DeactivatePage()
 {
@@ -506,14 +506,14 @@ long WizardDialog::DeactivatePage()
         return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool WizardDialog::ShowNextPage()
 {
     return ShowPage( mnCurLevel+1 );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool WizardDialog::ShowPrevPage()
 {
@@ -522,7 +522,7 @@ sal_Bool WizardDialog::ShowPrevPage()
     return ShowPage( mnCurLevel-1 );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool WizardDialog::ShowPage( sal_uInt16 nLevel )
 {
@@ -537,7 +537,7 @@ sal_Bool WizardDialog::ShowPage( sal_uInt16 nLevel )
         return sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool WizardDialog::Finnish( long nResult )
 {
@@ -556,7 +556,7 @@ sal_Bool WizardDialog::Finnish( long nResult )
         return sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WizardDialog::AddPage( TabPage* pPage )
 {
@@ -575,7 +575,7 @@ void WizardDialog::AddPage( TabPage* pPage )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WizardDialog::RemovePage( TabPage* pPage )
 {
@@ -602,7 +602,7 @@ void WizardDialog::RemovePage( TabPage* pPage )
     OSL_FAIL( "WizardDialog::RemovePage() - Page not in list" );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WizardDialog::SetPage( sal_uInt16 nLevel, TabPage* pPage )
 {
@@ -625,7 +625,7 @@ void WizardDialog::SetPage( sal_uInt16 nLevel, TabPage* pPage )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 TabPage* WizardDialog::GetPage( sal_uInt16 nLevel ) const
 {
@@ -643,7 +643,7 @@ TabPage* WizardDialog::GetPage( sal_uInt16 nLevel ) const
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WizardDialog::AddButton( Button* pButton, long nOffset )
 {
@@ -663,7 +663,7 @@ void WizardDialog::AddButton( Button* pButton, long nOffset )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WizardDialog::RemoveButton( Button* pButton )
 {
@@ -688,7 +688,7 @@ void WizardDialog::RemoveButton( Button* pButton )
     OSL_FAIL( "WizardDialog::RemoveButton() - Button not in list" );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WizardDialog::ShowButtonFixedLine( sal_Bool bVisible )
 {

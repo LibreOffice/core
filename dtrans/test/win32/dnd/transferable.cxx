@@ -19,9 +19,9 @@
 
 #include "transferable.hxx"
 
-//----------------------------------------------------------------
+
 //  ctor
-//----------------------------------------------------------------
+
 
 CTransferable::CTransferable( wchar_t* dataString ) :
     m_seqDFlv( 1 ),
@@ -44,9 +44,9 @@ CTransferable::CTransferable( wchar_t* dataString ) :
     m_seqDFlv[0] = df;
 }
 
-//----------------------------------------------------------------
+
 //  getTransferData
-//----------------------------------------------------------------
+
 
 Any SAL_CALL CTransferable::getTransferData( const DataFlavor& aFlavor )
     throw(UnsupportedFlavorException, IOException, RuntimeException)
@@ -72,9 +72,9 @@ Any SAL_CALL CTransferable::getTransferData( const DataFlavor& aFlavor )
     return anyData;
 }
 
-//----------------------------------------------------------------
+
 //  getTransferDataFlavors
-//----------------------------------------------------------------
+
 
 Sequence< DataFlavor > SAL_CALL CTransferable::getTransferDataFlavors(  )
     throw(RuntimeException)
@@ -82,9 +82,9 @@ Sequence< DataFlavor > SAL_CALL CTransferable::getTransferDataFlavors(  )
     return m_seqDFlv;
 }
 
-//----------------------------------------------------------------
+
 //  isDataFlavorSupported
-//----------------------------------------------------------------
+
 
 sal_Bool SAL_CALL CTransferable::isDataFlavorSupported( const DataFlavor& aFlavor )
     throw(RuntimeException)
@@ -104,9 +104,9 @@ sal_Bool SAL_CALL CTransferable::isDataFlavorSupported( const DataFlavor& aFlavo
     return bRet;
 }
 
-//----------------------------------------------------------------
+
 //  lostOwnership
-//----------------------------------------------------------------
+
 
 void SAL_CALL CTransferable::lostOwnership( const Reference< XClipboard >& xClipboard, const Reference< XTransferable >& xTrans )
     throw(RuntimeException)

@@ -26,7 +26,7 @@ OReportVisitor::OReportVisitor(ITraverseReport* _pTraverseReport)
 {
     OSL_ENSURE(m_pTraverseReport,"ReportDefintion must be not NULL!");
 }
-// -----------------------------------------------------------------------------
+
 void OReportVisitor::start(const uno::Reference< report::XReportDefinition>& _xReportDefinition)
 {
     OSL_ENSURE(_xReportDefinition.is(),"ReportDefinition is NULL!");
@@ -67,7 +67,7 @@ void OReportVisitor::start(const uno::Reference< report::XReportDefinition>& _xR
     if ( _xReportDefinition->getReportFooterOn() )
         m_pTraverseReport->traverseReportFooter(_xReportDefinition->getReportFooter());
 }
-// -----------------------------------------------------------------------------
+
 void OReportVisitor::start(const uno::Reference< report::XGroup>& _xGroup)
 {
     OSL_ENSURE(_xGroup.is(),"Group is NULL!");

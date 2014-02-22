@@ -31,9 +31,9 @@
 #include "drawdoc.hxx"
 #include <tools/urlobj.hxx>
 
-// --------------
+
 // - Namespaces -
-// --------------
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -62,9 +62,9 @@ extern "C" sal_Bool SaveVBA( SfxObjectShell&, SvMemoryStream*& );
 
 #endif
 
-// ---------------
+
 // - SdPPTFilter -
-// ---------------
+
 
 SdPPTFilter::SdPPTFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress ) :
     SdFilter( rMedium, rDocShell, bShowProgress ),
@@ -72,14 +72,14 @@ SdPPTFilter::SdPPTFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 SdPPTFilter::~SdPPTFilter()
 {
     delete pBas;    // deleting the compressed basic storage
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SdPPTFilter::Import()
 {
@@ -131,7 +131,7 @@ sal_Bool SdPPTFilter::Import()
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SdPPTFilter::Export()
 {

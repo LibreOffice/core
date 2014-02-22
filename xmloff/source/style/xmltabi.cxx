@@ -53,7 +53,7 @@ static SvXMLTokenMapEntry aTabsAttributesAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-// ---
+
 
 class SvxXMLTabStopContext_Impl : public SvXMLImportContext
 {
@@ -175,7 +175,7 @@ SvXMLImportContext *SvxXMLTabStopContext_Impl::CreateChildContext(
 class SvxXMLTabStopArray_Impl : public std::vector<SvxXMLTabStopContext_Impl *> {};
 
 
-// ---
+
 
 TYPEINIT1( SvxXMLTabStopImportContext, XMLElementPropertyContext );
 

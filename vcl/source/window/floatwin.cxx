@@ -138,7 +138,7 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
     ImplInitSettings();
 }
 
-// -----------------------------------------------------------------------
+
 
 void FloatingWindow::ImplInitSettings()
 {
@@ -162,7 +162,7 @@ FloatingWindow::FloatingWindow( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-// -----------------------------------------------------------------------
+
 
 FloatingWindow::FloatingWindow( Window* pParent, const ResId& rResId ) :
     SystemWindow( WINDOW_FLOATINGWINDOW )
@@ -176,7 +176,7 @@ FloatingWindow::FloatingWindow( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 void FloatingWindow::ImplLoadRes( const ResId& rResId )
 {
@@ -208,7 +208,7 @@ void FloatingWindow::ImplLoadRes( const ResId& rResId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 FloatingWindow::~FloatingWindow()
 {
@@ -226,14 +226,14 @@ FloatingWindow::~FloatingWindow()
     delete mpImplData;
 }
 
-// -----------------------------------------------------------------------
+
 
 Point FloatingWindow::CalcFloatingPosition( Window* pWindow, const Rectangle& rRect, sal_uLong nFlags, sal_uInt16& rArrangeIndex )
 {
     return ImplCalcPos( pWindow, rRect, nFlags, rArrangeIndex );
 }
 
-// -----------------------------------------------------------------------
+
 
 Point FloatingWindow::ImplCalcPos( Window* pWindow,
                                    const Rectangle& rRect, sal_uLong nFlags,
@@ -447,7 +447,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
     return pW->OutputToScreenPixel( aPos );
 }
 
-// -----------------------------------------------------------------------
+
 
 FloatingWindow* FloatingWindow::ImplFloatHitTest( Window* pReference, const Point& rPos, sal_uInt16& rHitTest )
 {
@@ -505,7 +505,7 @@ FloatingWindow* FloatingWindow::ImplFloatHitTest( Window* pReference, const Poin
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 FloatingWindow* FloatingWindow::ImplFindLastLevelFloat()
 {
@@ -524,7 +524,7 @@ FloatingWindow* FloatingWindow::ImplFindLastLevelFloat()
     return pLastFoundWin;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool FloatingWindow::ImplIsFloatPopupModeWindow( const Window* pWindow )
 {
@@ -542,7 +542,7 @@ bool FloatingWindow::ImplIsFloatPopupModeWindow( const Window* pWindow )
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(FloatingWindow, ImplEndPopupModeHdl)
 {
@@ -553,7 +553,7 @@ IMPL_LINK_NOARG(FloatingWindow, ImplEndPopupModeHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool FloatingWindow::Notify( NotifyEvent& rNEvt )
 {
@@ -578,7 +578,7 @@ bool FloatingWindow::Notify( NotifyEvent& rNEvt )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void FloatingWindow::StateChanged( StateChangedType nType )
 {
@@ -591,7 +591,7 @@ void FloatingWindow::StateChanged( StateChangedType nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void FloatingWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -605,7 +605,7 @@ void FloatingWindow::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void FloatingWindow::ImplCallPopupModeEnd()
 {
@@ -617,14 +617,14 @@ void FloatingWindow::ImplCallPopupModeEnd()
         Application::PostUserEvent( mnPostId, LINK( this, FloatingWindow, ImplEndPopupModeHdl ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void FloatingWindow::PopupModeEnd()
 {
     maPopupModeEndHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void FloatingWindow::SetTitleType( sal_uInt16 nTitle )
 {
@@ -646,7 +646,7 @@ void FloatingWindow::SetTitleType( sal_uInt16 nTitle )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void FloatingWindow::StartPopupMode( const Rectangle& rRect, sal_uLong nFlags )
 {
@@ -729,7 +729,7 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, sal_uLong nFlags )
     Show( true, SHOW_NOACTIVATE );
 }
 
-// -----------------------------------------------------------------------
+
 
 void FloatingWindow::StartPopupMode( ToolBox* pBox, sal_uLong nFlags )
 {
@@ -776,7 +776,7 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, sal_uLong nFlags )
     StartPopupMode( aRect, nFlags );
 }
 
-// -----------------------------------------------------------------------
+
 
 void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uLong nFocusId )
 {
@@ -852,14 +852,14 @@ void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uLong nFocusId )
     mbInCleanUp = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void FloatingWindow::EndPopupMode( sal_uInt16 nFlags )
 {
     ImplEndPopupMode( nFlags );
 }
 
-// -----------------------------------------------------------------------
+
 
 void FloatingWindow::AddPopupModeWindow( Window* pWindow )
 {

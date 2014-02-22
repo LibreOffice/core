@@ -59,7 +59,7 @@ namespace ucb { namespace ucp { namespace ext
 
 extern "C"
 {
-    //------------------------------------------------------------------------------------------------------------------
+
     SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpext_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
     {
         return ::cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , ::ucb::ucp::ext::s_aServiceEntries );

@@ -41,9 +41,9 @@
 #include <errno.h>
 #include <unistd.h>
 
-//------------------------------------------------------------------------
+
 // namespace directives
-//------------------------------------------------------------------------
+
 
 using com::sun::star::system::XSystemShellExecute;
 using com::sun::star::system::SystemShellExecuteException;
@@ -57,9 +57,9 @@ using namespace cppu;
 
 #define SHELLEXEC_IMPL_NAME  "com.sun.star.comp.system.SystemShellExecute2"
 
-//------------------------------------------------------------------------
+
 // helper functions
-//------------------------------------------------------------------------
+
 
 namespace // private
 {
@@ -85,7 +85,7 @@ void escapeForShell( OStringBuffer & rBuffer, const OString & rURL)
     }
 }
 
-//-----------------------------------------------------------------------------------------
+
 
 ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
     WeakImplHelper2< XSystemShellExecute, XServiceInfo >(),
@@ -109,7 +109,7 @@ ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
     }
 }
 
-//-------------------------------------------------
+
 
 void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
     throw (IllegalArgumentException, SystemShellExecuteException, RuntimeException)

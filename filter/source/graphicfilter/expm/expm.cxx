@@ -63,13 +63,13 @@ XPMWriter::XPMWriter(SvStream& rOStm)
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 XPMWriter::~XPMWriter()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void XPMWriter::ImplCallback( sal_uInt16 nPercent )
 {
@@ -141,7 +141,7 @@ sal_Bool XPMWriter::WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilter
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool XPMWriter::ImplWriteHeader()
 {
@@ -163,7 +163,7 @@ sal_Bool XPMWriter::ImplWriteHeader()
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 void XPMWriter::ImplWritePalette()
 {
@@ -186,7 +186,7 @@ void XPMWriter::ImplWritePalette()
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void XPMWriter::ImplWriteBody()
 {
@@ -202,7 +202,7 @@ void XPMWriter::ImplWriteBody()
     }
 }
 
-// ------------------------------------------------------------------------
+
 // write a decimal number in ascii format into the stream
 
 void XPMWriter::ImplWriteNumber(sal_Int32 nNumber)
@@ -211,7 +211,7 @@ void XPMWriter::ImplWriteNumber(sal_Int32 nNumber)
     m_rOStm.WriteCharPtr( aNum.getStr() );
 }
 
-// ------------------------------------------------------------------------
+
 
 void XPMWriter::ImplWritePixel( sal_uLong nCol ) const
 {
@@ -225,7 +225,7 @@ void XPMWriter::ImplWritePixel( sal_uLong nCol ) const
         m_rOStm.WriteUChar( (sal_uInt8)( nCol + 'A' ) );
 }
 
-// ------------------------------------------------------------------------
+
 // write a color value in hex format into the stream
 void XPMWriter::ImplWriteColor( sal_uInt16 nNumber )
 {
@@ -245,7 +245,7 @@ void XPMWriter::ImplWriteColor( sal_uInt16 nNumber )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 // this needs to be kept in sync with
 // ImpFilterLibCacheEntry::GetImportFunction() from

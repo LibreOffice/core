@@ -87,7 +87,7 @@ namespace connectivity
 
 extern sal_Bool MNS_Init(sal_Bool& aProfileExists);
 
-// -------------------------------------------------------------------------
+
 MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()
     :m_bProfileExists(sal_False)
 {
@@ -96,7 +96,7 @@ MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()
     OSL_TRACE( "\tOUT MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()" );
 
 }
-// -------------------------------------------------------------------------
+
 MDatabaseMetaDataHelper::~MDatabaseMetaDataHelper()
 {
     m_aTableNames.clear();
@@ -198,7 +198,7 @@ static nsresult insertPABDescription()
     {0xa2, 0xda, 0x0, 0x10, 0x83, 0x0, 0x3d, 0xc}   \
 }
 
-// -------------------------------------------------------------------------
+
 // Case where we get a parent uri, and need to list its children.
 static nsresult getSubsFromParent(const OString& aParent, nsIEnumerator **aSubs)
 {

@@ -124,7 +124,7 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxMultiFileDialog, DelHdl_Impl)
 {
@@ -143,7 +143,7 @@ IMPL_LINK_NOARG(SvxMultiFileDialog, DelHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxMultiFileDialog::SvxMultiFileDialog( Window* pParent, sal_Bool bEmptyAllowed ) :
 
@@ -157,7 +157,7 @@ SvxMultiFileDialog::SvxMultiFileDialog( Window* pParent, sal_Bool bEmptyAllowed 
     aDelBtn.Enable();
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxMultiFileDialog::~SvxMultiFileDialog()
 {

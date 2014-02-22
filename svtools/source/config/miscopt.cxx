@@ -133,9 +133,9 @@ class SvtMiscOptions_Impl : public ConfigItem
 
         virtual void Commit();
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  public interface
-        //---------------------------------------------------------------------------------------------------------
+
 
         inline sal_Bool UseSystemFileDialog() const
         { return m_bUseSystemFileDialog; }
@@ -243,9 +243,9 @@ class SvtMiscOptions_Impl : public ConfigItem
         void RemoveListenerLink( const Link& rLink );
         void CallListeners();
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 

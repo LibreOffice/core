@@ -46,9 +46,9 @@ using namespace com::sun::star::configuration;
 using namespace com::sun::star::container;
 using namespace ::com::sun::star::frame;
 
-//_________________________________________________________________________________________________________________
+
 //  Namespace
-//_________________________________________________________________________________________________________________
+
 
 struct ModuleToCommands
 {

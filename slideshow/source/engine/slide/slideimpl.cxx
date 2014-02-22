@@ -74,7 +74,7 @@
 
 using namespace ::com::sun::star;
 
-// -----------------------------------------------------------------------------
+
 
 namespace slideshow
 {
@@ -113,13 +113,13 @@ public:
 
 
     // Disposable interface
-    // -------------------------------------------------------------------
+
 
     virtual void dispose();
 
 
     // Slide interface
-    // -------------------------------------------------------------------
+
 
     virtual bool prefetch();
     virtual bool show( bool );
@@ -464,7 +464,7 @@ bool SlideImpl::prefetch()
 
 bool SlideImpl::show( bool bSlideBackgoundPainted )
 {
-    // ---------------------------------------------------------------
+
 
     if( mbActive )
         return true; // already active
@@ -472,14 +472,14 @@ bool SlideImpl::show( bool bSlideBackgoundPainted )
     if( !mpShapeManager || !mpLayerManager )
         return false; // disposed
 
-    // ---------------------------------------------------------------
+
 
     // set initial shape attributes (e.g. hide shapes that have
     // 'appear' effect set)
     if( !applyInitialShapeAttributes(mxRootNode) )
         return false;
 
-    // ---------------------------------------------------------------
+
 
     // activate and take over view - clears view, if necessary
     mbActive = true;
@@ -491,7 +491,7 @@ bool SlideImpl::show( bool bSlideBackgoundPainted )
     // buffered slide bitmaps instead.
     mpShapeManager->activate( true );
 
-    // ---------------------------------------------------------------
+
 
     // render slide to screen, if requested
     if( !bSlideBackgoundPainted )
@@ -506,7 +506,7 @@ bool SlideImpl::show( bool bSlideBackgoundPainted )
         maContext.mrScreenUpdater.notifyUpdate();
     }
 
-    // ---------------------------------------------------------------
+
 
     // fire up animations
     const bool bIsAnimated( isAnimated() );
@@ -534,12 +534,12 @@ bool SlideImpl::show( bool bSlideBackgoundPainted )
     if( mbIntrinsicAnimationsAllowed )
         startIntrinsicAnimations();
 
-    // ---------------------------------------------------------------
+
 
     // enable paint overlay, if maUserPaintColor is valid
     activatePaintOverlay();
 
-    // ---------------------------------------------------------------
+
 
     // from now on, animations might be showing
     meAnimationState = SHOWING_STATE;
@@ -552,18 +552,18 @@ void SlideImpl::hide()
     if( !mbActive || !mpShapeManager )
         return; // already hidden/disposed
 
-    // ---------------------------------------------------------------
+
 
     // from now on, all animations are stopped
     meAnimationState = FINAL_STATE;
 
-    // ---------------------------------------------------------------
+
 
     // disable user paint overlay under all circumstances,
     // this slide now ceases to be active.
     deactivatePaintOverlay();
 
-    // ---------------------------------------------------------------
+
 
     // switch off all shape-intrinsic animations.
     endIntrinsicAnimations();
@@ -571,7 +571,7 @@ void SlideImpl::hide()
     // force-end all SMIL animations, too
     maAnimations.end();
 
-    // ---------------------------------------------------------------
+
 
     // disable shape management & event broadcasting for shapes of this
     // slide. Also disables LayerManager.
@@ -581,7 +581,7 @@ void SlideImpl::hide()
     resetCursor();
     mbActive = false;
 
-    // ---------------------------------------------------------------
+
 }
 
 basegfx::B2ISize SlideImpl::getSlideSize() const
@@ -666,7 +666,7 @@ SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& r
 
 
 // private methods
-//--------------------------------------------------------------------------------------------------------------
+
 
 
 void SlideImpl::viewAdded( const UnoViewSharedPtr& rView )
@@ -1135,7 +1135,7 @@ bool SlideImpl::loadShapes()
             try
             {
                 // load the masterpage shapes
-                // -------------------------------------------------------------------------
+
                 ShapeImporter aMPShapesFunctor( xMasterPage,
                                                 mxDrawPage,
                                                 mxDrawPagesSupplier,
@@ -1182,7 +1182,7 @@ bool SlideImpl::loadShapes()
     try
     {
         // load the normal page shapes
-        // -------------------------------------------------------------------------
+
 
         ShapeImporter aShapesFunctor( mxDrawPage,
                                       mxDrawPage,

@@ -2317,7 +2317,7 @@ sal_Int64 SAL_CALL SvxUnoTextBase::getSomething( const uno::Sequence< sal_Int8 >
     }
 }
 
-// --------------------------------------------------------------------
+
 
 SvxUnoText::SvxUnoText( ) throw()
 {
@@ -2413,7 +2413,7 @@ sal_Int64 SAL_CALL SvxUnoText::getSomething( const uno::Sequence< sal_Int8 >& rI
 }
 
 
-// --------------------------------------------------------------------
+
 
 SvxDummyTextSource::~SvxDummyTextSource()
 {

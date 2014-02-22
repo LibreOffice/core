@@ -36,7 +36,7 @@
 
 namespace framework{
 
-//________________________________
+
 /**
     @short      standard ctor
     @descr      It initialize this new instance. But it set some generic parameters here only.
@@ -65,7 +65,7 @@ Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xCont
 {
 }
 
-//________________________________
+
 /**
     @short      standard ctor
     @descr      It initialize this new instance. But it set some generic parameters here only.
@@ -94,7 +94,7 @@ Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xCont
 {
 }
 
-//________________________________
+
 /**
     @short  superflous!
     @descr  Releasing of memory and reference must be done inside die() call.
@@ -104,7 +104,7 @@ Job::~Job()
 {
 }
 
-//________________________________
+
 /**
     @short  set (or delete) a listener for sending dispatch result events
     @descr  Because this object is used in a wrapped mode ... the original listener
@@ -154,7 +154,7 @@ void Job::setJobData( const JobData& aData )
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short  runs the job
     @descr  It doesn't matter, if the job is an asynchronous or
@@ -281,7 +281,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
     die();
 }
 
-//________________________________
+
 /**
     @short  kill this job
     @descr  It doesn't matter if this request is called from inside or
@@ -327,7 +327,7 @@ void Job::die()
     /* SAFE { */
 }
 
-//________________________________
+
 /**
     @short  generates list of arguments for job execute
     @descr  There exist a set of information, which can be needed by a job.
@@ -428,7 +428,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
     return lAllArgs;
 }
 
-//________________________________
+
 /**
     @short  analyze the given job result and change the job configuration
     @descr  Note: Some results can be handled only, if this job has a valid configuration!
@@ -494,7 +494,7 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
     /* SAFE { */
 }
 
-//________________________________
+
 /**
     @short  starts listening for office shutdown and closing of our
             given target frame (if it's a valid reference)
@@ -574,7 +574,7 @@ void Job::impl_startListening()
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short  release listener connection for office shutdown
     @descr  see description of impl_startListening()
@@ -639,7 +639,7 @@ void Job::impl_stopListening()
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short  callback from any asynchronous executed job
 
@@ -683,7 +683,7 @@ void SAL_CALL Job::jobFinished( /*IN*/ const css::uno::Reference< css::task::XAs
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short  prevent internal wrapped job against office termination
     @descr  This event is broadcasted by the desktop instance and ask for an office termination.
@@ -728,7 +728,7 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& ) thro
 }
 
 
-//________________________________
+
 /**
     @short  inform us about office termination
     @descr  Instead of the method queryTermination(), here is no chance to disagree with that.
@@ -748,7 +748,7 @@ void SAL_CALL Job::notifyTermination( /*IN*/ const css::lang::EventObject& ) thr
     // Do nothing else here. Our internal resources was released ...
 }
 
-//________________________________
+
 /**
     @short  prevent internal wrapped job against frame closing
     @descr  This event is broadcasted by the frame instance and ask for closing.
@@ -833,7 +833,7 @@ void SAL_CALL Job::queryClosing( const css::lang::EventObject& aEvent         ,
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short  inform us about frame closing
     @descr  Instead of the method queryClosing(), here is no chance to disagree with that.
@@ -848,7 +848,7 @@ void SAL_CALL Job::notifyClosing( const css::lang::EventObject& ) throw(css::uno
     // Do nothing else here. Our internal resources was released ...
 }
 
-//________________________________
+
 /**
     @short      shouldn't be called normaly
     @descr      But it doesn't matter, who called it. We have to kill our internal

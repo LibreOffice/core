@@ -86,7 +86,7 @@ namespace svxform
             MapModelToShape;
     typedef MapModelToShape::value_type ModelShapePair;
 
-    //------------------------------------------------------------------------
+
     void    collectShapeModelMapping( SdrPage* _pPage, MapModelToShape& _rMapping )
     {
         OSL_ENSURE( _pPage, "collectShapeModelMapping: invalid arg!" );
@@ -117,7 +117,7 @@ namespace svxform
     // class NavigatorTree
     //========================================================================
 
-    //------------------------------------------------------------------------
+
     NavigatorTree::NavigatorTree( Window* pParent )
         :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HSCROLL ) // #100258# OJ WB_HSCROLL added
         ,m_aControlExchange(this)
@@ -165,7 +165,7 @@ namespace svxform
         SetDeselectHdl(LINK(this, NavigatorTree, OnEntrySelDesel));
     }
 
-    //------------------------------------------------------------------------
+
     NavigatorTree::~NavigatorTree()
     {
         if( nEditEvent )
@@ -180,13 +180,13 @@ namespace svxform
         delete m_pNavModel;
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTree::Clear()
     {
         m_pNavModel->Clear();
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTree::UpdateContent( FmFormShell* pFormShell )
     {
         if (m_bInitialUpdate)
@@ -221,7 +221,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------------
+
     sal_Bool NavigatorTree::implAllowExchange( sal_Int8 _nAction, sal_Bool* _pHasNonHidden )
     {
         SvTreeListEntry* pCurEntry = GetCurEntry();
@@ -257,7 +257,7 @@ namespace svxform
         return sal_True;
     }
 
-    //------------------------------------------------------------------------------
+
     sal_Bool NavigatorTree::implPrepareExchange( sal_Int8 _nAction )
     {
         EndSelection();
@@ -293,7 +293,7 @@ namespace svxform
         return sal_True;
     }
 
-    //------------------------------------------------------------------------------
+
     void NavigatorTree::StartDrag( sal_Int8 /*nAction*/, const ::Point& /*rPosPixel*/ )
     {
         EndSelection();
@@ -306,7 +306,7 @@ namespace svxform
         m_aControlExchange.startDrag( DND_ACTION_COPYMOVE );
     }
 
-    //------------------------------------------------------------------------------
+
     void NavigatorTree::Command( const CommandEvent& rEvt )
     {
         sal_Bool bHandled = sal_False;
@@ -534,7 +534,7 @@ namespace svxform
             SvTreeListBox::Command( rEvt );
     }
 
-    //------------------------------------------------------------------------
+
     SvTreeListEntry* NavigatorTree::FindEntry( FmEntryData* pEntryData )
     {
         if( !pEntryData ) return NULL;
@@ -552,7 +552,7 @@ namespace svxform
         return NULL;
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTree::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
         if( rHint.ISA(FmNavRemovedHint) )
@@ -612,7 +612,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------
+
     SvTreeListEntry* NavigatorTree::Insert( FmEntryData* pEntryData, sal_uIntPtr nRelPos )
     {
         //////////////////////////////////////////////////////////////////////
@@ -649,7 +649,7 @@ namespace svxform
         return pNewEntry;
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTree::Remove( FmEntryData* pEntryData )
     {
         if( !pEntryData )
@@ -685,21 +685,21 @@ namespace svxform
         UnlockSelectionHandling();
     }
 
-    //------------------------------------------------------------------------
+
     sal_Bool NavigatorTree::IsFormEntry( SvTreeListEntry* pEntry )
     {
         FmEntryData* pEntryData = (FmEntryData*)pEntry->GetUserData();
         return !pEntryData || pEntryData->ISA(FmFormData);
     }
 
-    //------------------------------------------------------------------------
+
     sal_Bool NavigatorTree::IsFormComponentEntry( SvTreeListEntry* pEntry )
     {
         FmEntryData* pEntryData = (FmEntryData*)pEntry->GetUserData();
         return pEntryData && pEntryData->ISA(FmControlData);
     }
 
-    //------------------------------------------------------------------------
+
     sal_Bool NavigatorTree::implAcceptPaste( )
     {
         SvTreeListEntry* pFirstSelected = FirstSelected();
@@ -714,13 +714,13 @@ namespace svxform
         return ( nAction == implAcceptDataTransfer( aClipboardContent.GetDataFlavorExVector(), nAction, pFirstSelected, sal_False ) );
     }
 
-    //------------------------------------------------------------------------
+
     sal_Int8 NavigatorTree::implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, const ::Point& _rDropPos, sal_Bool _bDnD )
     {
         return implAcceptDataTransfer( _rFlavors, _nAction, GetEntry( _rDropPos ), _bDnD );
     }
 
-    //------------------------------------------------------------------------
+
     sal_Int8 NavigatorTree::implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, SvTreeListEntry* _pTargetEntry, sal_Bool _bDnD )
     {
         // no target -> no drop
@@ -858,7 +858,7 @@ namespace svxform
         return DND_ACTION_MOVE;
     }
 
-    //------------------------------------------------------------------------
+
     sal_Int8 NavigatorTree::AcceptDrop( const AcceptDropEvent& rEvt )
     {
         ::Point aDropPos = rEvt.maPosPixel;
@@ -913,13 +913,13 @@ namespace svxform
         return implAcceptDataTransfer( GetDataFlavorExVector(), rEvt.mnAction, aDropPos, sal_True );
     }
 
-    //------------------------------------------------------------------------
+
     sal_Int8 NavigatorTree::implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, const ::Point& _rDropPos, sal_Bool _bDnD )
     {
         return implExecuteDataTransfer( _rData, _nAction, GetEntry( _rDropPos ), _bDnD );
     }
 
-    //------------------------------------------------------------------------
+
     sal_Int8 NavigatorTree::implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, SvTreeListEntry* _pTargetEntry, sal_Bool _bDnD )
     {
         const DataFlavorExVector& rDataFlavors = _rData.GetDataFlavorExVector();
@@ -1181,7 +1181,7 @@ namespace svxform
         return _nAction;
     }
 
-    //------------------------------------------------------------------------
+
     sal_Int8 NavigatorTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
     {
         sal_Int8 nResult( DND_ACTION_NONE );
@@ -1197,7 +1197,7 @@ namespace svxform
         return nResult;
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTree::doPaste()
     {
            try
@@ -1224,7 +1224,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTree::doCopy()
     {
         if ( implPrepareExchange( DND_ACTION_COPY ) )
@@ -1234,7 +1234,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTree::ModelHasRemoved( SvTreeListEntry* _pEntry )
     {
         SvTreeListEntry* pTypedEntry = static_cast< SvTreeListEntry* >( _pEntry );
@@ -1252,7 +1252,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTree::doCut()
     {
         if ( implPrepareExchange( DND_ACTION_MOVE ) )
@@ -1276,7 +1276,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTree::KeyInput(const ::KeyEvent& rKEvt)
     {
         const KeyCode& rCode = rKEvt.GetKeyCode();
@@ -1311,7 +1311,7 @@ namespace svxform
         SvTreeListBox::KeyInput(rKEvt);
     }
 
-    //------------------------------------------------------------------------
+
     sal_Bool NavigatorTree::EditingEntry( SvTreeListEntry* pEntry, Selection& rSelection )
     {
         if (!SvTreeListBox::EditingEntry( pEntry, rSelection ))
@@ -1321,7 +1321,7 @@ namespace svxform
             // die Wurzel, die ich nicht umbenennen darf, hat als UserData NULL
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTree::NewForm( SvTreeListEntry* pParentEntry )
     {
         //////////////////////////////////////////////////////////////////////
@@ -1383,7 +1383,7 @@ namespace svxform
         EditEntry( pNewEntry );
     }
 
-    //------------------------------------------------------------------------
+
     FmControlData* NavigatorTree::NewControl( const OUString& rServiceName, SvTreeListEntry* pParentEntry, sal_Bool bEditName )
     {
         //////////////////////////////////////////////////////////////////////
@@ -1432,7 +1432,7 @@ namespace svxform
         return pNewFormControlData;
     }
 
-    //------------------------------------------------------------------------
+
     OUString NavigatorTree::GenerateName( FmEntryData* pEntryData )
     {
         const sal_uInt16 nMaxCount = 99;
@@ -1466,7 +1466,7 @@ namespace svxform
         return aNewName;
     }
 
-    //------------------------------------------------------------------------
+
     sal_Bool NavigatorTree::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
     {
         if (EditingCanceled())
@@ -1485,7 +1485,7 @@ namespace svxform
         return bRes;
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(NavigatorTree, OnEdit)
     {
         nEditEvent = 0;
@@ -1495,7 +1495,7 @@ namespace svxform
         return 0L;
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(NavigatorTree, OnDropActionTimer)
     {
         if (--m_aTimerCounter > 0)
@@ -1532,7 +1532,7 @@ namespace svxform
         return 0L;
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK(NavigatorTree, OnEntrySelDesel, NavigatorTree*, /*pThis*/)
     {
         m_sdiState = SDI_DIRTY;
@@ -1549,7 +1549,7 @@ namespace svxform
         return 0L;
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(NavigatorTree, OnSynchronizeTimer)
     {
         SynchronizeMarkList();
@@ -1557,7 +1557,7 @@ namespace svxform
     }
 
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(NavigatorTree, OnClipboardAction)
     {
         if ( !m_aControlExchange.isClipboardOwner() )
@@ -1585,7 +1585,7 @@ namespace svxform
         return 0L;
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTree::ShowSelectionProperties(sal_Bool bForce)
     {
         // zuerst brauche ich die FormShell
@@ -1673,7 +1673,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTree::DeleteSelection()
     {
         // die Root darf ich natuerlich nicht mitloeschen
@@ -1769,7 +1769,7 @@ namespace svxform
         // this ... :(
         // #i31038#
         {
-            // ---------------
+
             // initialize UNDO
             OUString aUndoStr;
             if ( m_arrCurrentSelection.size() == 1 )
@@ -1814,7 +1814,7 @@ namespace svxform
         pFormModel->EndUndo();
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTree::CollectSelectionData(SELDATA_ITEMS sdiHow)
     {
         DBG_ASSERT(sdiHow != SDI_DIRTY, "NavigatorTree::CollectSelectionData : ever thought about your parameter ? DIRTY ?");
@@ -1888,7 +1888,7 @@ namespace svxform
         m_sdiState = sdiHow;
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTree::SynchronizeSelection(FmEntryDataArray& arredToSelect)
     {
         LockSelectionHandling();
@@ -1951,7 +1951,7 @@ namespace svxform
         UnlockSelectionHandling();
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTree::SynchronizeSelection()
     {
         // Shell und View
@@ -1964,7 +1964,7 @@ namespace svxform
         GetNavModel()->BroadcastMarkedObjects(pFormView->GetMarkedObjectList());
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTree::SynchronizeMarkList()
     {
         // die Shell werde ich brauchen ...
@@ -2033,7 +2033,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------
+
     sal_Bool NavigatorTree::IsHiddenControl(FmEntryData* pEntryData)
     {
         if (pEntryData == NULL) return sal_False;
@@ -2047,7 +2047,7 @@ namespace svxform
         return sal_False;
     }
 
-    //------------------------------------------------------------------------
+
     sal_Bool NavigatorTree::Select( SvTreeListEntry* pEntry, sal_Bool bSelect )
     {
         if (bSelect == IsSelected(pEntry))  // das passiert manchmal, ich glaube, die Basisklasse geht zu sehr auf Nummer sicher ;)
@@ -2056,7 +2056,7 @@ namespace svxform
         return SvTreeListBox::Select(pEntry, bSelect );
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTree::UnmarkAllViewObj()
     {
         FmFormShell* pFormShell = GetNavModel()->GetFormShell();
@@ -2065,7 +2065,7 @@ namespace svxform
         FmFormView* pFormView = pFormShell->GetFormView();
         pFormView->UnMarkAll();
     }
-    //------------------------------------------------------------------------
+
     void NavigatorTree::MarkViewObj(FmFormData* pFormData, sal_Bool bMark, sal_Bool bDeep )
     {
         FmFormShell* pFormShell = GetNavModel()->GetFormShell();
@@ -2113,7 +2113,7 @@ namespace svxform
             } // for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
         }
     }
-    //------------------------------------------------------------------------
+
     void NavigatorTree::CollectObjects(FmFormData* pFormData, sal_Bool bDeep, ::std::set< Reference< XFormComponent > >& _rObjects)
     {
         FmEntryDataList* pChildList = pFormData->GetChildList();
@@ -2131,7 +2131,7 @@ namespace svxform
                 CollectObjects((FmFormData*)pEntryData,bDeep,_rObjects);
         } // for( sal_uInt32 i=0; i<pChildList->Count(); i++ )
     }
-    //------------------------------------------------------------------------
+
     void NavigatorTree::MarkViewObj( FmControlData* pControlData, sal_Bool bMarkHandles, sal_Bool bMark)
     {
         if( !pControlData )

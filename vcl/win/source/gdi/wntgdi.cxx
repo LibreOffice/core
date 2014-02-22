@@ -26,7 +26,7 @@
 #pragma warning(pop)
 #endif
 
-// -----------------------------------------------------------------------
+
 
 extern "C"
 {
@@ -36,7 +36,7 @@ BOOL WINAPI WIN_Rectangle( HDC hDC, int X1, int Y1, int X2, int Y2 )
 }
 }
 
-// -----------------------------------------------------------------------
+
 
 extern "C"
 {
@@ -46,7 +46,7 @@ BOOL WINAPI WIN_Polygon( HDC hDC, CONST POINT * ppt, int ncnt )
 }
 }
 
-// -----------------------------------------------------------------------
+
 
 extern "C"
 {

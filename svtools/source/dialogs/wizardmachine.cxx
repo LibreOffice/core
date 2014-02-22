@@ -56,25 +56,25 @@ namespace svt
     {
     }
 
-    //---------------------------------------------------------------------
+
     OWizardPage::~OWizardPage()
     {
         delete m_pImpl;
     }
 
-    //---------------------------------------------------------------------
+
     void OWizardPage::initializePage()
     {
     }
 
-    //---------------------------------------------------------------------
+
     void OWizardPage::ActivatePage()
     {
         TabPage::ActivatePage();
         updateDialogTravelUI();
     }
 
-    //---------------------------------------------------------------------
+
     void OWizardPage::updateDialogTravelUI()
     {
         OWizardMachine* pWizardMachine = dynamic_cast< OWizardMachine* >( GetParent() );
@@ -82,13 +82,13 @@ namespace svt
             pWizardMachine->updateTravelUI();
     }
 
-    //---------------------------------------------------------------------
+
     bool OWizardPage::canAdvance() const
     {
         return true;
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OWizardPage::commitPage( WizardTypes::CommitPageReason )
     {
         return sal_True;
@@ -121,7 +121,7 @@ namespace svt
     //=====================================================================
     //= OWizardMachine
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OWizardMachine::OWizardMachine(Window* _pParent, const ResId& _rRes, sal_uInt32 _nButtonFlags )
         :WizardDialog( _pParent, _rRes )
         ,m_pFinish(NULL)
@@ -134,7 +134,7 @@ namespace svt
         implConstruct( _nButtonFlags );
     }
 
-    //---------------------------------------------------------------------
+
     OWizardMachine::OWizardMachine(Window* _pParent, const WinBits i_nStyle, sal_uInt32 _nButtonFlags )
         :WizardDialog( _pParent, i_nStyle )
         ,m_pFinish(NULL)
@@ -147,7 +147,7 @@ namespace svt
         implConstruct( _nButtonFlags );
     }
 
-    //---------------------------------------------------------------------
+
     void OWizardMachine::implConstruct( const sal_uInt32 _nButtonFlags )
     {
         m_pImpl->sTitleBase = GetText();
@@ -216,7 +216,7 @@ namespace svt
         }
     }
 
-    //---------------------------------------------------------------------
+
     OWizardMachine::~OWizardMachine()
     {
         delete m_pFinish;
@@ -231,7 +231,7 @@ namespace svt
         delete m_pImpl;
     }
 
-    //---------------------------------------------------------------------
+
     void OWizardMachine::implUpdateTitle()
     {
         OUString sCompleteTitle(m_pImpl->sTitleBase);
@@ -246,14 +246,14 @@ namespace svt
         SetText(sCompleteTitle);
     }
 
-    //---------------------------------------------------------------------
+
     void OWizardMachine::setTitleBase(const OUString& _rTitleBase)
     {
         m_pImpl->sTitleBase = _rTitleBase;
         implUpdateTitle();
     }
 
-    //---------------------------------------------------------------------
+
     TabPage* OWizardMachine::GetOrCreatePage( const WizardState i_nState )
     {
         if ( NULL == GetPage( i_nState ) )
@@ -281,7 +281,7 @@ namespace svt
         return GetPage( i_nState );
     }
 
-    //---------------------------------------------------------------------
+
     void OWizardMachine::ActivatePage()
     {
         WizardDialog::ActivatePage();
@@ -292,7 +292,7 @@ namespace svt
         enterState( nCurrentLevel );
     }
 
-    //---------------------------------------------------------------------
+
     long OWizardMachine::DeactivatePage()
     {
         WizardState nCurrentState = getCurrentState();
@@ -301,7 +301,7 @@ namespace svt
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+
     void OWizardMachine::defaultButton(sal_uInt32 _nWizardButtonFlags)
     {
         // the new default button
@@ -323,7 +323,7 @@ namespace svt
             implResetDefault( this );
     }
 
-    //---------------------------------------------------------------------
+
     void OWizardMachine::implResetDefault(Window* _pWindow)
     {
         Window* pChildLoop = _pWindow->GetWindow(WINDOW_FIRSTCHILD);
@@ -353,7 +353,7 @@ namespace svt
         }
     }
 
-    //---------------------------------------------------------------------
+
     void OWizardMachine::defaultButton(PushButton* _pNewDefButton)
     {
         // loop through all (direct and indirect) descendants which participate in our tabbing order, and
@@ -365,7 +365,7 @@ namespace svt
             _pNewDefButton->SetStyle(_pNewDefButton->GetStyle() | WB_DEFBUTTON);
     }
 
-    //---------------------------------------------------------------------
+
     void OWizardMachine::enableButtons(sal_uInt32 _nWizardButtonFlags, sal_Bool _bEnable)
     {
         if (m_pFinish && (_nWizardButtonFlags & WZB_FINISH))
@@ -380,7 +380,7 @@ namespace svt
             m_pCancel->Enable(_bEnable);
     }
 
-    //---------------------------------------------------------------------
+
     void OWizardMachine::enterState(WizardState _nState)
     {
         // tell the page
@@ -398,7 +398,7 @@ namespace svt
         implUpdateTitle();
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OWizardMachine::leaveState(WizardState)
     {
         // no need to ask the page here.
@@ -408,13 +408,13 @@ namespace svt
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OWizardMachine::onFinish()
     {
         return Finnish( RET_OK );
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK_NOARG(OWizardMachine, OnFinish)
     {
         if ( isTravelingSuspended() )
@@ -427,13 +427,13 @@ namespace svt
         return onFinish() ? 1L : 0L;
     }
 
-    //---------------------------------------------------------------------
+
     OWizardMachine::WizardState OWizardMachine::determineNextState( WizardState _nCurrentState ) const
     {
         return _nCurrentState + 1;
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OWizardMachine::prepareLeaveCurrentState( CommitPageReason _eReason )
     {
         IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
@@ -441,7 +441,7 @@ namespace svt
         return pController->commitPage( _eReason );
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OWizardMachine::skipBackwardUntil( WizardState _nTargetState )
     {
         // alowed to leave the current page?
@@ -468,7 +468,7 @@ namespace svt
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OWizardMachine::skipUntil( WizardState _nTargetState )
     {
         WizardState nCurrentState = getCurrentState();
@@ -508,7 +508,7 @@ namespace svt
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OWizardMachine::skip(sal_Int32 _nSteps)
     {
         DBG_ASSERT(_nSteps > 0, "OWizardMachine::skip: invalid number of steps!");
@@ -548,7 +548,7 @@ namespace svt
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OWizardMachine::travelNext()
     {
         // allowed to leave the current page?
@@ -573,7 +573,7 @@ namespace svt
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OWizardMachine::travelPrevious()
     {
         DBG_ASSERT(m_pImpl->aStateHistory.size() > 0, "OWizardMachine::travelPrevious: have no previous page!");
@@ -598,7 +598,7 @@ namespace svt
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+
     void  OWizardMachine::removePageFromHistory( WizardState nToRemove )
     {
 
@@ -619,19 +619,19 @@ namespace svt
         }
     }
 
-    //---------------------------------------------------------------------
+
     void OWizardMachine::enableAutomaticNextButtonState( bool _bEnable )
     {
         m_pImpl->m_bAutoNextButtonState = _bEnable;
     }
 
-    //---------------------------------------------------------------------
+
     bool OWizardMachine::isAutomaticNextButtonStateEnabled() const
     {
         return m_pImpl->m_bAutoNextButtonState;
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK_NOARG(OWizardMachine, OnPrevPage)
     {
         if ( isTravelingSuspended() )
@@ -641,7 +641,7 @@ namespace svt
         return nRet;
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK_NOARG(OWizardMachine, OnNextPage)
     {
         if ( isTravelingSuspended() )
@@ -651,14 +651,14 @@ namespace svt
         return nRet;
     }
 
-    //---------------------------------------------------------------------
+
     IWizardPageController* OWizardMachine::getPageController( TabPage* _pCurrentPage ) const
     {
         IWizardPageController* pController = dynamic_cast< IWizardPageController* >( _pCurrentPage );
         return pController;
     }
 
-    //---------------------------------------------------------------------
+
     void OWizardMachine::getStateHistory( ::std::vector< WizardState >& _out_rHistory )
     {
         ::std::stack< WizardState > aHistoryCopy( m_pImpl->aStateHistory );
@@ -669,13 +669,13 @@ namespace svt
         }
     }
 
-    //---------------------------------------------------------------------
+
     bool OWizardMachine::canAdvance() const
     {
         return WZS_INVALID_STATE != determineNextState( getCurrentState() );
     }
 
-    //---------------------------------------------------------------------
+
     void OWizardMachine::updateTravelUI()
     {
         const IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
@@ -687,20 +687,20 @@ namespace svt
         enableButtons( WZB_NEXT, bCanAdvance );
     }
 
-    //---------------------------------------------------------------------
+
     bool OWizardMachine::isTravelingSuspended() const
     {
         return m_pImpl->m_bTravelingSuspended;
     }
 
-    //---------------------------------------------------------------------
+
     void OWizardMachine::suspendTraveling( AccessGuard )
     {
         DBG_ASSERT( !m_pImpl->m_bTravelingSuspended, "OWizardMachine::suspendTraveling: already suspended!" );
        m_pImpl->m_bTravelingSuspended = true;
     }
 
-    //---------------------------------------------------------------------
+
     void OWizardMachine::resumeTraveling( AccessGuard )
     {
         DBG_ASSERT( m_pImpl->m_bTravelingSuspended, "OWizardMachine::resumeTraveling: nothing to resume!" );

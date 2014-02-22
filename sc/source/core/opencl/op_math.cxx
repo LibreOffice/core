@@ -348,7 +348,7 @@ void OpCombina::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    arg0 = trunc(arg0);\n";
     ss << "    arg1 = trunc(arg1);\n";
     ss << "    if(arg0 >= arg1 && arg0 > 0 && arg1 > 0)\n";
-    ss << "        tem = bik(arg0+arg1-1,arg1);\n"; 
+    ss << "        tem = bik(arg0+arg1-1,arg1);\n";
     ss << "    else if(arg0 == 0 && arg1 == 0)\n";
     ss << "        tem = 0;\n";
     ss << "    else if(arg0 > 0 && arg1 == 0)\n";
@@ -1409,14 +1409,14 @@ void OpArcCotHyp::GenSlidingWindowFunction(std::stringstream &ss,
                 <const formula::SingleVectorRefToken *>(tmpCur);
             ss << "    arg0 = ";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-            ss << ";\n";   
+            ss << ";\n";
 #ifdef ISNAN
             ss << "    if(isNan(";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ")||(gid0>=";
             ss << tmpCurDVR->GetArrayLength();
             ss << "))\n";
-            ss << "    { arg0 = 0.0f; }\n"; 
+            ss << "    { arg0 = 0.0f; }\n";
 #endif
         }
         else if(tmpCur->GetType() == formula::svDouble)
@@ -2994,12 +2994,12 @@ void OpAverageIf::GenSlidingWindowFunction(std::stringstream &ss,
         if(paraOneWidth > 1)
         {
             throw Unhandled();
-        } 
+        }
     }
 
     if(vSubArguments[paraOneWidth]->GetFormulaToken()->GetType() ==
      formula::svDoubleVectorRef)
- 
+
     {
         FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
         const formula::DoubleVectorRefToken*pCurDVR1= static_cast<const
@@ -3108,7 +3108,7 @@ void OpAverageIf::GenSlidingWindowFunction(std::stringstream &ss,
         ss << "            count+=1.0;\n";
         ss << "        }\n";
     }
-  
+
     ss << "    if(count!=0)\n";
     ss << "        tmp=tmp/count;\n";
     ss << "    else\n";

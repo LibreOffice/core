@@ -22,7 +22,7 @@
 #include <chart.hxx>
 #include <outact.hxx>
 
-// ---------------------------------------------------------------
+
 
 void CGM::ImplDoClass7()
 {

@@ -50,7 +50,7 @@ const double MM100_PER_POINT        = MM100_PER_INCH / 72.0;
 const double MM100_PER_TWIP         = MM100_PER_POINT / 20.0;
 const double MM100_PER_EMU          = 1.0 / 360.0;
 
-// ----------------------------------------------------------------------------
+
 
 /** Returns true, if the passed year is a leap year. */
 inline bool lclIsLeapYear( sal_Int32 nYear )
@@ -93,7 +93,7 @@ sal_Int32 lclGetDays( const util::Date& rDate )
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 UnitConverter::UnitConverter( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),

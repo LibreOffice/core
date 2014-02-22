@@ -360,7 +360,7 @@ public:
 
 }; // class LayerManagerTest
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(LayerManagerTest);
 } // namespace
 

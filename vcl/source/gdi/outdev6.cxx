@@ -175,7 +175,7 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLon
         mpAlphaVDev->DrawGrid( rRect, rDist, nFlags );
 }
 
-// ------------------------------------------------------------------------
+
 // Caution: This method is nearly the same as
 // void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly )
 // so when changes are made here do not forget to make change sthere, too
@@ -240,7 +240,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
     DrawTransparent(toPolyPolygon(rB2DPolyPoly), static_cast<sal_uInt16>(fTransparency * 100.0));
 }
 
-// ------------------------------------------------------------------------
+
 
 void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
                                     sal_uInt16 nTransparencePercent )
@@ -635,7 +635,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                                     const Size& rSize, const Gradient& rTransparenceGradient )
@@ -796,7 +796,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void OutputDevice::ImplDrawColorWallpaper( long nX, long nY,
                                            long nWidth, long nHeight,
@@ -815,7 +815,7 @@ void OutputDevice::ImplDrawColorWallpaper( long nX, long nY,
     EnableMapMode( bMap );
 }
 
-// -----------------------------------------------------------------------
+
 
 void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
                                             long nWidth, long nHeight,
@@ -1058,7 +1058,7 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
     mpMetaFile = pOldMetaFile;
 }
 
-// -----------------------------------------------------------------------
+
 
 void OutputDevice::ImplDrawGradientWallpaper( long nX, long nY,
                                               long nWidth, long nHeight,
@@ -1103,7 +1103,7 @@ void OutputDevice::ImplDrawGradientWallpaper( long nX, long nY,
     mpMetaFile = pOldMetaFile;
 }
 
-// -----------------------------------------------------------------------
+
 
 void OutputDevice::ImplDrawWallpaper( long nX, long nY,
                                       long nWidth, long nHeight,
@@ -1117,7 +1117,7 @@ void OutputDevice::ImplDrawWallpaper( long nX, long nY,
         ImplDrawColorWallpaper(  nX, nY, nWidth, nHeight, rWallpaper );
 }
 
-// -----------------------------------------------------------------------
+
 
 void OutputDevice::DrawWallpaper( const Rectangle& rRect,
                                   const Wallpaper& rWallpaper )
@@ -1144,7 +1144,7 @@ void OutputDevice::DrawWallpaper( const Rectangle& rRect,
         mpAlphaVDev->DrawWallpaper( rRect, rWallpaper );
 }
 
-// -----------------------------------------------------------------------
+
 
 void OutputDevice::Erase()
 {
@@ -1184,7 +1184,7 @@ void OutputDevice::Erase()
         mpAlphaVDev->Erase();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
                             const GfxLink& rGfxLink, GDIMetaFile* pSubst )
@@ -1242,7 +1242,7 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
     return bDrawn;
 }
 
-// -----------------------------------------------------------------------
+
 
 void OutputDevice::DrawCheckered(const Point& rPos, const Size& rSize, sal_uInt32 nLen, Color aStart, Color aEnd)
 {

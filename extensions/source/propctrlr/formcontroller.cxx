@@ -30,7 +30,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-//------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_FormController()
 {
     ::pcr::OAutoRegistration< ::pcr::FormController > aFormControllerRegistration;
@@ -72,7 +72,7 @@ namespace pcr
     //====================================================================
     //= FormController
     //====================================================================
-    //--------------------------------------------------------------------
+
     FormController::FormController( const Reference< XComponentContext >& _rxContext, ServiceDescriptor _aServiceDescriptor,
             bool _bUseFormFormComponentHandlers )
         :OPropertyBrowserController( _rxContext )
@@ -90,15 +90,15 @@ namespace pcr
         osl_atomic_decrement( &m_refCount );
     }
 
-    //------------------------------------------------------------------------
+
     FormController::~FormController()
     {
     }
 
-    //------------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XINTERFACE2( FormController, OPropertyBrowserController, FormController_PropertyBase1 )
 
-    //------------------------------------------------------------------------
+
     Sequence< Type > SAL_CALL FormController::getTypes(  ) throw(RuntimeException)
     {
         ::cppu::OTypeCollection aTypes(
@@ -109,16 +109,16 @@ namespace pcr
         return aTypes.getTypes();
     }
 
-    //------------------------------------------------------------------------
+
     IMPLEMENT_GET_IMPLEMENTATION_ID( FormController )
 
-    //------------------------------------------------------------------------
+
     OUString SAL_CALL FormController::getImplementationName(  ) throw(RuntimeException)
     {
         return m_aServiceDescriptor.GetImplementationName();
     }
 
-    //------------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL FormController::getSupportedServiceNames(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported( m_aServiceDescriptor.GetSupportedServiceNames() );
@@ -127,13 +127,13 @@ namespace pcr
         return aSupported;
     }
 
-    //------------------------------------------------------------------------
+
     OUString FormController::getImplementationName_static(  ) throw(RuntimeException)
     {
         return OUString("org.openoffice.comp.extensions.FormController");
     }
 
-    //------------------------------------------------------------------------
+
     Sequence< OUString > FormController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported(1);
@@ -141,7 +141,7 @@ namespace pcr
         return aSupported;
     }
 
-    //------------------------------------------------------------------------
+
     Reference< XInterface > SAL_CALL FormController::Create(const Reference< XComponentContext >& _rxContext )
     {
         ServiceDescriptor aService;
@@ -150,19 +150,19 @@ namespace pcr
         return *(new FormController( _rxContext, aService, true ) );
     }
 
-    //------------------------------------------------------------------------
+
     Reference< XPropertySetInfo > SAL_CALL FormController::getPropertySetInfo(  ) throw(RuntimeException)
     {
         return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
     }
 
-    //------------------------------------------------------------------------
+
     ::cppu::IPropertyArrayHelper& SAL_CALL FormController::getInfoHelper()
     {
         return *getArrayHelper();
     }
 
-    //------------------------------------------------------------------------
+
     ::cppu::IPropertyArrayHelper* FormController::createArrayHelper( ) const
     {
         Sequence< Property > aProps( 2 );
@@ -181,7 +181,7 @@ namespace pcr
         return new ::cppu::OPropertyArrayHelper( aProps );
     }
 
-    //------------------------------------------------------------------------
+
     sal_Bool SAL_CALL FormController::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue ) throw (IllegalArgumentException)
     {
         switch ( nHandle )
@@ -201,7 +201,7 @@ namespace pcr
         return sal_True;
     }
 
-    //------------------------------------------------------------------------
+
     void SAL_CALL FormController::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw (Exception)
     {
         switch ( _nHandle )
@@ -237,7 +237,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     void SAL_CALL FormController::getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const
     {
         switch ( nHandle )
@@ -255,13 +255,13 @@ namespace pcr
     //====================================================================
     //= DialogController
     //====================================================================
-    //------------------------------------------------------------------------
+
     OUString DialogController::getImplementationName_static(  ) throw(RuntimeException)
     {
         return OUString("org.openoffice.comp.extensions.DialogController");
     }
 
-    //------------------------------------------------------------------------
+
     Sequence< OUString > DialogController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported(1);
@@ -269,7 +269,7 @@ namespace pcr
         return aSupported;
     }
 
-    //------------------------------------------------------------------------
+
     Reference< XInterface > SAL_CALL DialogController::Create(const Reference< XComponentContext >& _rxContext)
     {
         ServiceDescriptor aService;

@@ -56,7 +56,7 @@ void ImplSalStartTimer( sal_uLong nMS, sal_Bool bMutex )
     pSalData->mnNextTimerTime = pSalData->mnLastEventTime + nMS;
 }
 
-// -----------------------------------------------------------------------
+
 
 WinSalTimer::~WinSalTimer()
 {
@@ -90,7 +90,7 @@ void WinSalTimer::Stop()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void CALLBACK SalTimerProc( HWND, UINT, UINT_PTR nId, DWORD )
 {

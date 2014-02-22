@@ -46,7 +46,7 @@ using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::datatransfer::dnd;
 
-// -----------------------------------------------------------------------
+
 
 class MyWin : public WorkWindow
 {
@@ -62,7 +62,7 @@ public:
     void        Resize();
 };
 
-// -----------------------------------------------------------------------
+
 
 class MyDragAndDropListener: public ::cppu::WeakImplHelper3 < XDropTargetListener, XDragGestureListener, XDragSourceListener >
 {
@@ -86,7 +86,7 @@ public:
     virtual void SAL_CALL disposing( const EventObject& eo ) throw(RuntimeException);
 };
 
-// -----------------------------------------------------------------------
+
 
 class MyInfoBox : public InfoBox
 {
@@ -96,7 +96,7 @@ public:
     MyInfoBox( Window* pParent );
 };
 
-// -----------------------------------------------------------------------
+
 
 class MyListBox : public ListBox
 {
@@ -106,7 +106,7 @@ public:
     MyListBox( Window* pParent );
 };
 
-// -----------------------------------------------------------------------
+
 
 class StringTransferable : public ::cppu::WeakImplHelper1< XTransferable >
 {
@@ -130,7 +130,7 @@ public:
 };
 
 
-// -----------------------------------------------------------------------
+
 
 class VclDnDTest : public test::BootstrapFixture
 {
@@ -145,7 +145,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-// -----------------------------------------------------------------------
+
 
 void VclDnDTest::testDnD()
 {
@@ -167,7 +167,7 @@ void VclDnDTest::testDnD()
     aListBox.Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     WorkWindow( pParent, nWinStyle )
@@ -186,56 +186,56 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
         xRecognizer->addDragGestureListener( Reference< XDragGestureListener > ( xListener, UNO_QUERY ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void MyWin::MouseMove( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseMove( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseButtonDown( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void MyWin::MouseButtonUp( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseButtonUp( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void MyWin::KeyInput( const KeyEvent& rKEvt )
 {
     WorkWindow::KeyInput( rKEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void MyWin::KeyUp( const KeyEvent& rKEvt )
 {
     WorkWindow::KeyUp( rKEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void MyWin::Paint( const Rectangle& rRect )
 {
     WorkWindow::Paint( rRect );
 }
 
-// -----------------------------------------------------------------------
+
 
 void MyWin::Resize()
 {
     WorkWindow::Resize();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL MyDragAndDropListener::dragGestureRecognized( const DragGestureEvent& dge ) throw(RuntimeException)
 {
@@ -243,77 +243,77 @@ void SAL_CALL MyDragAndDropListener::dragGestureRecognized( const DragGestureEve
     xDragSource->startDrag( dge, -1, 0, 0, new StringTransferable( OUString("TestString") ), this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL MyDragAndDropListener::drop( const DropTargetDropEvent& dtde ) throw(RuntimeException)
 {
     dtde.Context->dropComplete( sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL MyDragAndDropListener::dragEnter( const DropTargetDragEnterEvent& dtdee ) throw(RuntimeException)
 {
     dtdee.Context->acceptDrag( dtdee.DropAction );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL MyDragAndDropListener::dragExit( const DropTargetEvent& ) throw(RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL MyDragAndDropListener::dragOver( const DropTargetDragEvent& dtde ) throw(RuntimeException)
 {
     dtde.Context->acceptDrag( dtde.DropAction );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL MyDragAndDropListener::dropActionChanged( const DropTargetDragEvent& dtde ) throw(RuntimeException)
 {
     dtde.Context->acceptDrag( dtde.DropAction );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL MyDragAndDropListener::dragDropEnd( const DragSourceDropEvent& ) throw(RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL MyDragAndDropListener::dragEnter( const DragSourceDragEvent& ) throw(RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL MyDragAndDropListener::dragExit( const DragSourceEvent& ) throw(RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL MyDragAndDropListener::dragOver( const DragSourceDragEvent& ) throw(RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL MyDragAndDropListener::dropActionChanged( const DragSourceDragEvent& ) throw(RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL MyDragAndDropListener::disposing( const EventObject& ) throw(RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 MyInfoBox::MyInfoBox( Window* pParent ) : InfoBox( pParent,
     OUString("dragging over this box should result in another window id in the drag log.") )
@@ -332,7 +332,7 @@ MyInfoBox::MyInfoBox( Window* pParent ) : InfoBox( pParent,
         xRecognizer->addDragGestureListener( Reference< XDragGestureListener > ( xListener, UNO_QUERY ) );
 };
 
-// -----------------------------------------------------------------------
+
 
 MyListBox::MyListBox( Window* pParent ) : ListBox( pParent )
 {
@@ -350,7 +350,7 @@ MyListBox::MyListBox( Window* pParent ) : ListBox( pParent )
         xRecognizer->addDragGestureListener( Reference< XDragGestureListener > ( xListener, UNO_QUERY ) );
 };
 
-// -----------------------------------------------------------------------
+
 
 Any SAL_CALL StringTransferable::getTransferData( const DataFlavor& )
     throw(UnsupportedFlavorException, IOException, RuntimeException)
@@ -358,7 +358,7 @@ Any SAL_CALL StringTransferable::getTransferData( const DataFlavor& )
     return makeAny( m_aData );
 }
 
-// -----------------------------------------------------------------------
+
 
 Sequence< DataFlavor > SAL_CALL StringTransferable::getTransferDataFlavors(  )
     throw(RuntimeException)
@@ -366,7 +366,7 @@ Sequence< DataFlavor > SAL_CALL StringTransferable::getTransferDataFlavors(  )
     return m_aFlavorList;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL StringTransferable::isDataFlavorSupported( const DataFlavor& )
     throw(RuntimeException)

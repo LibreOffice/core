@@ -423,13 +423,13 @@ SfxPopupWindow* SvxLineEndWindow::Clone() const
     return new SvxLineEndWindow( GetId(), mxFrame, GetText() );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxLineEndWindow::~SvxLineEndWindow()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl)
 {
@@ -490,7 +490,7 @@ IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineEndWindow::FillValueSet()
 {
@@ -541,7 +541,7 @@ void SvxLineEndWindow::FillValueSet()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineEndWindow::Resize()
 {
@@ -567,7 +567,7 @@ void SvxLineEndWindow::Resize()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineEndWindow::Resizing( Size& rNewSize )
 {
@@ -614,21 +614,21 @@ void SvxLineEndWindow::Resizing( Size& rNewSize )
     rNewSize.Width() = nW;
     rNewSize.Height() = nH;
 }
-// -----------------------------------------------------------------------
+
 
 void SvxLineEndWindow::StartSelection()
 {
     aLineEndSet.StartSelection();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxLineEndWindow::Close()
 {
     return SfxPopupWindow::Close();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineEndWindow::StateChanged(
     sal_uInt16 nSID, SfxItemState, const SfxPoolItem* pState )
@@ -651,7 +651,7 @@ void SvxLineEndWindow::StateChanged(
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineEndWindow::PopupModeEnd()
 {
@@ -663,7 +663,7 @@ void SvxLineEndWindow::PopupModeEnd()
     SfxPopupWindow::PopupModeEnd();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineEndWindow::SetSize()
 {
@@ -716,20 +716,20 @@ SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( sal_uInt16 nSlotId, sal_uInt
     rTbx.Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxLineEndToolBoxControl::~SvxLineEndToolBoxControl()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindowType SvxLineEndToolBoxControl::GetPopupWindowType() const
 {
     return SFX_POPUPWINDOW_ONCLICK;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindow* SvxLineEndToolBoxControl::CreatePopupWindow()
 {
@@ -744,7 +744,7 @@ SfxPopupWindow* SvxLineEndToolBoxControl::CreatePopupWindow()
     return pLineEndWin;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineEndToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* )
 {

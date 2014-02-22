@@ -27,7 +27,7 @@
 namespace framework
 {
 
-//_______________________________________________
+
 // helper
 
 KeyMapping::KeyIdentifierInfo KeyMapping::KeyIdentifierMap[] =
@@ -140,7 +140,7 @@ KeyMapping::KeyIdentifierInfo KeyMapping::KeyIdentifierMap[] =
     {0                            , ""               } // mark the end of this array!
 };
 
-//-----------------------------------------------
+
 KeyMapping::KeyMapping()
 {
     sal_Int32 i = 0;
@@ -156,12 +156,12 @@ KeyMapping::KeyMapping()
     }
 }
 
-//-----------------------------------------------
+
 KeyMapping::~KeyMapping()
 {
 }
 
-//-----------------------------------------------
+
 sal_uInt16 KeyMapping::mapIdentifierToCode(const OUString& sIdentifier)
     throw(css::lang::IllegalArgumentException)
 {
@@ -181,7 +181,7 @@ sal_uInt16 KeyMapping::mapIdentifierToCode(const OUString& sIdentifier)
     return (sal_uInt16)nCode;
 }
 
-//-----------------------------------------------
+
 OUString KeyMapping::mapCodeToIdentifier(sal_uInt16 nCode)
 {
     Code2IdentifierHash::const_iterator pIt = m_lCodeHash.find(nCode);
@@ -192,7 +192,7 @@ OUString KeyMapping::mapCodeToIdentifier(sal_uInt16 nCode)
     return OUString::number(nCode);
 }
 
-//-----------------------------------------------
+
 sal_Bool KeyMapping::impl_st_interpretIdentifierAsPureKeyCode(const OUString& sIdentifier,
                                                                     sal_uInt16&      rCode      )
 {

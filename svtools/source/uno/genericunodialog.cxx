@@ -45,7 +45,7 @@ namespace svt
 {
 //.........................................................................
 
-//-------------------------------------------------------------------------
+
 OGenericUnoDialog::OGenericUnoDialog(const Reference< XComponentContext >& _rxContext)
         :OPropertyContainer(GetBroadcastHelper())
         ,m_pDialog(NULL)
@@ -62,7 +62,7 @@ OGenericUnoDialog::OGenericUnoDialog(const Reference< XComponentContext >& _rxCo
         &m_xParent, getCppuType(&m_xParent));
 }
 
-//-------------------------------------------------------------------------
+
 OGenericUnoDialog::~OGenericUnoDialog()
 {
     if ( m_pDialog )
@@ -74,7 +74,7 @@ OGenericUnoDialog::~OGenericUnoDialog()
     }
 }
 
-//-------------------------------------------------------------------------
+
 Any SAL_CALL OGenericUnoDialog::queryInterface(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn = OGenericUnoDialogBase::queryInterface(_rType);
@@ -89,7 +89,7 @@ Any SAL_CALL OGenericUnoDialog::queryInterface(const Type& _rType) throw (Runtim
     return aReturn;
 }
 
-//-------------------------------------------------------------------------
+
 Sequence<Type> SAL_CALL OGenericUnoDialog::getTypes(  ) throw(RuntimeException)
 {
     return ::comphelper::concatSequences(
@@ -103,7 +103,7 @@ sal_Bool SAL_CALL OGenericUnoDialog::supportsService(const OUString& ServiceName
     return cppu::supportsService(this, ServiceName);
 }
 
-//-------------------------------------------------------------------------
+
 void OGenericUnoDialog::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw(Exception)
 {
     // TODO : need some handling if we're currently executing ...
@@ -120,7 +120,7 @@ void OGenericUnoDialog::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, con
     }
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool OGenericUnoDialog::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue) throw(IllegalArgumentException)
 {
     switch (nHandle)
@@ -141,7 +141,7 @@ sal_Bool OGenericUnoDialog::convertFastPropertyValue( Any& rConvertedValue, Any&
     return OPropertyContainer::convertFastPropertyValue(rConvertedValue, rOldValue, nHandle, rValue);
 }
 
-//-------------------------------------------------------------------------
+
 void SAL_CALL OGenericUnoDialog::setTitle( const OUString& _rTitle ) throw(RuntimeException)
 {
     UnoDialogEntryGuard aGuard( *this );
@@ -162,7 +162,7 @@ void SAL_CALL OGenericUnoDialog::setTitle( const OUString& _rTitle ) throw(Runti
     }
 }
 
-//-------------------------------------------------------------------------
+
 bool OGenericUnoDialog::impl_ensureDialog_lck()
 {
     if ( m_pDialog )
@@ -197,7 +197,7 @@ bool OGenericUnoDialog::impl_ensureDialog_lck()
     return true;
 }
 
-//-------------------------------------------------------------------------
+
 sal_Int16 SAL_CALL OGenericUnoDialog::execute(  ) throw(RuntimeException)
 {
     // both creation and execution of the dialog must be guarded with the SolarMutex, so be generous here
@@ -248,7 +248,7 @@ sal_Int16 SAL_CALL OGenericUnoDialog::execute(  ) throw(RuntimeException)
 }
 
 #ifdef AWT_DIALOG
-//-------------------------------------------------------------------------
+
 void SAL_CALL OGenericUnoDialog::endExecute(  ) throw(RuntimeException)
 {
     UnoDialogEntryGuard aGuard( *this );
@@ -275,7 +275,7 @@ void SAL_CALL OGenericUnoDialog::endExecute(  ) throw(RuntimeException)
 }
 #endif
 
-//-------------------------------------------------------------------------
+
 void OGenericUnoDialog::implInitialize(const Any& _rValue)
 {
     try
@@ -297,7 +297,7 @@ void OGenericUnoDialog::implInitialize(const Any& _rValue)
     }
 }
 
-//-------------------------------------------------------------------------
+
 void SAL_CALL OGenericUnoDialog::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -311,14 +311,14 @@ void SAL_CALL OGenericUnoDialog::initialize( const Sequence< Any >& aArguments )
     m_bInitialized = true;
 }
 
-//-------------------------------------------------------------------------
+
 void OGenericUnoDialog::destroyDialog()
 {
     delete m_pDialog;
     m_pDialog = NULL;
 }
 
-//-------------------------------------------------------------------------
+
 IMPL_LINK( OGenericUnoDialog, OnDialogDying, VclWindowEvent*, _pEvent )
 {
     OSL_ENSURE( _pEvent->GetWindow() == m_pDialog, "OGenericUnoDialog::OnDialogDying: where does this come from?" );

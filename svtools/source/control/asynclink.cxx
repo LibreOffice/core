@@ -24,7 +24,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/svapp.hxx>
 
-//--------------------------------------------------------------------
+
 namespace svtools {
 
 void AsynchronLink::CreateMutex()

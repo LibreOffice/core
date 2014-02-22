@@ -58,19 +58,19 @@ public:
 };
 
 // XInterface
-//______________________________________________________________________________
+
 void InteractionContinuationImpl::acquire() throw ()
 {
     OWeakObject::acquire();
 }
 
-//______________________________________________________________________________
+
 void InteractionContinuationImpl::release() throw ()
 {
     OWeakObject::release();
 }
 
-//______________________________________________________________________________
+
 Any InteractionContinuationImpl::queryInterface( Type const & type )
     throw (RuntimeException)
 {
@@ -83,7 +83,7 @@ Any InteractionContinuationImpl::queryInterface( Type const & type )
 }
 
 // XInteractionContinuation
-//______________________________________________________________________________
+
 void InteractionContinuationImpl::select() throw (RuntimeException)
 {
     *m_pselect = true;
@@ -112,13 +112,13 @@ public:
 };
 
 // XInteractionRequest
-//______________________________________________________________________________
+
 Any InteractionRequest::getRequest() throw (RuntimeException)
 {
     return m_request;
 }
 
-//______________________________________________________________________________
+
 Sequence< Reference< task::XInteractionContinuation > >
 InteractionRequest::getContinuations() throw (RuntimeException)
 {
@@ -162,7 +162,7 @@ bool interactContinuation( Any const & request,
 }
 
 // XAbortChannel
-//______________________________________________________________________________
+
 void AbortChannel::sendAbort() throw (RuntimeException)
 {
     m_aborted = true;

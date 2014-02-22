@@ -60,9 +60,9 @@ using ::rtl::OUString;
 const char * pTestString1 = "test socket";
 const char * pTestString2 = " Passed#OK";
 
-//------------------------------------------------------------------------
+
 // helper functions
-//------------------------------------------------------------------------
+
 
 class CloseSocketThread : public Thread
 {
@@ -88,9 +88,9 @@ public:
     }
 };
 
-//------------------------------------------------------------------------
+
 // tests cases begins here
-//------------------------------------------------------------------------
+
 
 namespace osl_DatagramSocket
 {
@@ -293,14 +293,14 @@ public:
 
     }; // class sendTo_recvFrom
 
-// -----------------------------------------------------------------------------
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_DatagramSocket::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_DatagramSocket::sendTo_recvFrom);
 
 } // namespace osl_DatagramSocket
 
-// -----------------------------------------------------------------------------
+
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

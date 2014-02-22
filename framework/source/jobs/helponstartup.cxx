@@ -18,14 +18,14 @@
  */
 
 
-//_______________________________________________
+
 // include own header
 #include <jobs/helponstartup.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <loadenv/targethelper.hxx>
 #include <services.h>
 
-//_______________________________________________
+
 // include others
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -34,7 +34,7 @@
 #include <vcl/help.hxx>
 #include <rtl/ustrbuf.hxx>
 
-//_______________________________________________
+
 // include interfaces
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
@@ -99,19 +99,19 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
                     }
                    )
 
-//-----------------------------------------------
+
 HelpOnStartup::HelpOnStartup(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase(     )
     , m_xContext    (xContext)
 {
 }
 
-//-----------------------------------------------
+
 HelpOnStartup::~HelpOnStartup()
 {
 }
 
-//-----------------------------------------------
+
 // css.task.XJob
 css::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
     throw(css::lang::IllegalArgumentException,
@@ -159,7 +159,7 @@ css::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::bea
     return css::uno::Any();
 }
 
-//-----------------------------------------------
+
 void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
     throw(css::uno::RuntimeException)
 {
@@ -177,7 +177,7 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
     // <- SAFE
 }
 
-//-----------------------------------------------
+
 OUString HelpOnStartup::its_getModuleIdFromEnv(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
 {
     ::comphelper::SequenceAsHashMap lArgs        (lArguments);
@@ -229,7 +229,7 @@ OUString HelpOnStartup::its_getModuleIdFromEnv(const css::uno::Sequence< css::be
     return sModuleId;
 }
 
-//-----------------------------------------------
+
 OUString HelpOnStartup::its_getCurrentHelpURL()
 {
     // SAFE ->
@@ -271,7 +271,7 @@ OUString HelpOnStartup::its_getCurrentHelpURL()
     return sCurrentHelpURL;
 }
 
-//-----------------------------------------------
+
 ::sal_Bool HelpOnStartup::its_isHelpUrlADefaultOne(const OUString& sHelpURL)
 {
     if (sHelpURL.isEmpty())
@@ -318,7 +318,7 @@ OUString HelpOnStartup::its_getCurrentHelpURL()
     return sal_False;
 }
 
-//-----------------------------------------------
+
 OUString HelpOnStartup::its_checkIfHelpEnabledAndGetURL(const OUString& sModule)
 {
     // SAFE ->
@@ -356,7 +356,7 @@ OUString HelpOnStartup::its_checkIfHelpEnabledAndGetURL(const OUString& sModule)
     return sHelpURL;
 }
 
-//-----------------------------------------------
+
 OUString HelpOnStartup::ist_createHelpURL(const OUString& sBaseURL,
                                                  const OUString& sLocale ,
                                                  const OUString& sSystem )

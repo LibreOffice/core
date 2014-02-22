@@ -30,9 +30,9 @@
 
 static const sal_Int32 nFontEM = 2048;
 
-// -----------------
+
 // - SVGFontExport -
-// -----------------
+
 
 SVGFontExport::SVGFontExport( SVGExport& rExport, const ::std::vector< ObjectRepresentation >& rObjects ) :
     mrExport( rExport ),
@@ -41,13 +41,13 @@ SVGFontExport::SVGFontExport( SVGExport& rExport, const ::std::vector< ObjectRep
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 SVGFontExport::~SVGFontExport()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 SVGFontExport::GlyphSet& SVGFontExport::implGetGlyphSet( const Font& rFont )
 {
@@ -74,7 +74,7 @@ SVGFontExport::GlyphSet& SVGFontExport::implGetGlyphSet( const Font& rFont )
     return( maGlyphTree[ aFontName.getToken( 0, ';', nNextTokenPos ) ][ eWeight ][ eItalic ] );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SVGFontExport::implCollectGlyphs()
 {
@@ -172,7 +172,7 @@ void SVGFontExport::implCollectGlyphs()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SVGFontExport::implEmbedFont( const Font& rFont )
 {
@@ -254,7 +254,7 @@ void SVGFontExport::implEmbedFont( const Font& rFont )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const OUString& rCellStr )
 {
@@ -289,7 +289,7 @@ void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const OUString& rCellStr
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SVGFontExport::EmbedFonts()
 {
@@ -327,7 +327,7 @@ void SVGFontExport::EmbedFonts()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString SVGFontExport::GetMappedFontName( const OUString& rFontName ) const
 {

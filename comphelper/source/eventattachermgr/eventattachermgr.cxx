@@ -59,7 +59,7 @@ using namespace osl;
 namespace comphelper
 {
 
-//-----------------------------------------------------------------------------
+
 struct AttachedObject_Impl
 {
     Reference< XInterface >                 xTarget;
@@ -79,7 +79,7 @@ struct AttacherIndex_Impl
     bool    operator==( const AttacherIndex_Impl & ) const;
 };
 
-//-----------------------------------------------------------------------------
+
 class ImplEventAttacherManager
     : public WeakImplHelper2< XEventAttacherManager, XPersistObject >
 {
@@ -355,7 +355,7 @@ Reference< XEventAttacherManager > createEventAttacherManager( const Reference< 
     return new ImplEventAttacherManager( xIntrospection, rxContext );
 }
 
-//-----------------------------------------------------------------------------
+
 ImplEventAttacherManager::ImplEventAttacherManager( const Reference< XIntrospection > & rIntrospection,
                                                     const Reference< XComponentContext > xContext )
     : aScriptListeners( aLock )
@@ -383,7 +383,7 @@ ImplEventAttacherManager::ImplEventAttacherManager( const Reference< XIntrospect
     }
 }
 
-//-----------------------------------------------------------------------------
+
 ImplEventAttacherManager::~ImplEventAttacherManager()
 {
 }
@@ -400,7 +400,7 @@ Reference< XIdlReflection > ImplEventAttacherManager::getReflection() throw( Exc
 }
 
 
-//-----------------------------------------------------------------------------
+
 ::std::deque<AttacherIndex_Impl>::iterator ImplEventAttacherManager::implCheckIndex( sal_Int32 _nIndex ) SAL_THROW ( ( IllegalArgumentException ) )
 {
     if (_nIndex < 0)
@@ -448,7 +448,7 @@ public:
 
 }
 
-//-----------------------------------------------------------------------------
+
 // Methods of XEventAttacherManager
 void SAL_CALL ImplEventAttacherManager::registerScriptEvent
 (
@@ -496,7 +496,7 @@ void SAL_CALL ImplEventAttacherManager::registerScriptEvent
     }
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL ImplEventAttacherManager::registerScriptEvents
 (
     sal_Int32 nIndex,
@@ -520,7 +520,7 @@ void SAL_CALL ImplEventAttacherManager::registerScriptEvents
     ::std::for_each(aList.begin(), aList.end(), AttachObject(*this, nIndex));
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
 (
     sal_Int32 nIndex,
@@ -559,7 +559,7 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
     ::std::for_each(aList.begin(), aList.end(), AttachObject(*this, nIndex));
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL ImplEventAttacherManager::revokeScriptEvents(sal_Int32 nIndex )
     throw( IllegalArgumentException, RuntimeException )
 {
@@ -572,7 +572,7 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvents(sal_Int32 nIndex )
     ::std::for_each(aList.begin(), aList.end(), AttachObject(*this, nIndex));
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL ImplEventAttacherManager::insertEntry(sal_Int32 nIndex)
     throw( IllegalArgumentException, RuntimeException )
 {
@@ -587,7 +587,7 @@ void SAL_CALL ImplEventAttacherManager::insertEntry(sal_Int32 nIndex)
     aIndex.insert( aIndex.begin() + nIndex, aTmp );
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL ImplEventAttacherManager::removeEntry(sal_Int32 nIndex)
     throw( IllegalArgumentException, RuntimeException )
 {
@@ -599,7 +599,7 @@ void SAL_CALL ImplEventAttacherManager::removeEntry(sal_Int32 nIndex)
     aIndex.erase( aIt );
 }
 
-//-----------------------------------------------------------------------------
+
 Sequence< ScriptEventDescriptor > SAL_CALL ImplEventAttacherManager::getScriptEvents(sal_Int32 nIndex)
     throw( IllegalArgumentException, RuntimeException )
 {
@@ -620,7 +620,7 @@ Sequence< ScriptEventDescriptor > SAL_CALL ImplEventAttacherManager::getScriptEv
     return aSeq;
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference< XInterface >& xObject, const Any & Helper)
     throw( IllegalArgumentException, ServiceNotRegisteredException, RuntimeException )
 {
@@ -683,7 +683,7 @@ void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference
     }
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL ImplEventAttacherManager::detach(sal_Int32 nIndex, const Reference< XInterface >& xObject)
     throw( IllegalArgumentException, RuntimeException )
 {

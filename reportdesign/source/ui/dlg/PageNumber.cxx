@@ -60,11 +60,11 @@ OPageNumberDialog::OPageNumberDialog( Window* _pParent
 
 }
 
-//------------------------------------------------------------------------
+
 OPageNumberDialog::~OPageNumberDialog()
 {
 }
-// -----------------------------------------------------------------------------
+
 short OPageNumberDialog::Execute()
 {
     short nRet = ModalDialog::Execute();

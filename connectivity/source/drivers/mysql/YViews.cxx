@@ -66,32 +66,32 @@ sdbcx::ObjectType OViews::createObject(const OUString& _rName)
                             sCatalog
                             );
 }
-// -------------------------------------------------------------------------
+
 void OViews::impl_refresh(  ) throw(RuntimeException)
 {
     static_cast<OMySQLCatalog&>(m_rParent).refreshTables();
 }
-// -------------------------------------------------------------------------
+
 void OViews::disposing(void)
 {
 m_xMetaData.clear();
     OCollection::disposing();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OViews::createDescriptor()
 {
     Reference<XConnection> xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
     connectivity::sdbcx::OView* pNew = new connectivity::sdbcx::OView(sal_True,xConnection->getMetaData());
     return pNew;
 }
-// -------------------------------------------------------------------------
+
 // XAppend
 sdbcx::ObjectType OViews::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     createView(descriptor);
     return createObject( _rForName );
 }
-// -------------------------------------------------------------------------
+
 // XDrop
 void OViews::dropObject(sal_Int32 _nPos,const OUString /*_sElementName*/)
 {
@@ -113,14 +113,14 @@ void OViews::dropObject(sal_Int32 _nPos,const OUString /*_sElementName*/)
         ::comphelper::disposeComponent(xStmt);
     }
 }
-// -----------------------------------------------------------------------------
+
 void OViews::dropByNameImpl(const OUString& elementName)
 {
     m_bInDrop = sal_True;
     OCollection_TYPE::dropByName(elementName);
     m_bInDrop = sal_False;
 }
-// -----------------------------------------------------------------------------
+
 void OViews::createView( const Reference< XPropertySet >& descriptor )
 {
     Reference<XConnection> xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();

@@ -400,14 +400,14 @@ void FilterConfigItem::WriteInt32( const OUString& rKey, sal_Int32 nNewValue )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 Sequence< PropertyValue > FilterConfigItem::GetFilterData() const
 {
     return aFilterData;
 }
 
-// ------------------------------------------------------------------------
+
 
 Reference< XStatusIndicator > FilterConfigItem::GetStatusIndicator() const
 {

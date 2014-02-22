@@ -26,16 +26,16 @@
 #include <memory>
 #include "SolarMutex.hxx"
 
-//------------------------------------------------
+
 //
-//------------------------------------------------
+
 
 using namespace com::sun::star;
 using ::com::sun::star::ui::dialogs::XFilePickerListener;
 
-//------------------------------------------------
+
 //
-//------------------------------------------------
+
 
 CAsyncEventNotifier::CAsyncEventNotifier(cppu::OBroadcastHelper& rBroadcastHelper) :
     m_hThread(0),
@@ -58,9 +58,9 @@ CAsyncEventNotifier::CAsyncEventNotifier(cppu::OBroadcastHelper& rBroadcastHelpe
                                0);      /* automatic name */
 }
 
-//------------------------------------------------
+
 //
-//------------------------------------------------
+
 
 CAsyncEventNotifier::~CAsyncEventNotifier()
 {
@@ -70,9 +70,9 @@ CAsyncEventNotifier::~CAsyncEventNotifier()
     CloseHandle(m_hEvents[1]);
 }
 
-//------------------------------------------------
+
 //
-//------------------------------------------------
+
 
 void SAL_CALL CAsyncEventNotifier::addListener(const uno::Type&                         aType    ,
                                                const uno::Reference< uno::XInterface >& xListener)
@@ -90,9 +90,9 @@ void SAL_CALL CAsyncEventNotifier::addListener(const uno::Type&                 
     m_rBroadcastHelper.aLC.addInterface( aType, xListener );
 }
 
-//------------------------------------------------
+
 //
-//------------------------------------------------
+
 
 void SAL_CALL CAsyncEventNotifier::removeListener(const uno::Type&                         aType    ,
                                                   const uno::Reference< uno::XInterface >& xListener)
@@ -105,9 +105,9 @@ void SAL_CALL CAsyncEventNotifier::removeListener(const uno::Type&              
     m_rBroadcastHelper.aLC.removeInterface( aType, xListener );
 }
 
-//------------------------------------------------
+
 //
-//------------------------------------------------
+
 
 bool SAL_CALL CAsyncEventNotifier::startup(bool bCreateSuspended)
 {
@@ -137,9 +137,9 @@ bool SAL_CALL CAsyncEventNotifier::startup(bool bCreateSuspended)
     return m_bRun;
 }
 
-//------------------------------------------------
+
 //
-//------------------------------------------------
+
 
 void SAL_CALL CAsyncEventNotifier::shutdown()
 {
@@ -175,27 +175,27 @@ void SAL_CALL CAsyncEventNotifier::shutdown()
     m_hThread = 0;
 }
 
-//------------------------------------------------
+
 //
-//------------------------------------------------
+
 
 void CAsyncEventNotifier::suspend()
 {
     ResetEvent(m_ResumeNotifying);
 }
 
-//------------------------------------------------
+
 //
-//------------------------------------------------
+
 
 void CAsyncEventNotifier::resume()
 {
     SetEvent(m_ResumeNotifying);
 }
 
-//------------------------------------------------
+
 //
-//------------------------------------------------
+
 
 void SAL_CALL CAsyncEventNotifier::notifyEvent(CEventNotification* EventNotification)
 {
@@ -210,9 +210,9 @@ void SAL_CALL CAsyncEventNotifier::notifyEvent(CEventNotification* EventNotifica
     }
 }
 
-//------------------------------------------------
+
 //
-//------------------------------------------------
+
 
 size_t SAL_CALL CAsyncEventNotifier::getEventListSize()
 {
@@ -220,9 +220,9 @@ size_t SAL_CALL CAsyncEventNotifier::getEventListSize()
     return m_EventList.size();
 }
 
-//------------------------------------------------
+
 //
-//------------------------------------------------
+
 
 void SAL_CALL CAsyncEventNotifier::resetNotifyEvent()
 {
@@ -231,9 +231,9 @@ void SAL_CALL CAsyncEventNotifier::resetNotifyEvent()
         ResetEvent(m_NotifyEvent);
 }
 
-//------------------------------------------------
+
 //
-//------------------------------------------------
+
 
 CEventNotification* SAL_CALL CAsyncEventNotifier::getNextEventRecord()
 {
@@ -241,9 +241,9 @@ CEventNotification* SAL_CALL CAsyncEventNotifier::getNextEventRecord()
     return m_EventList.front();
 }
 
-//------------------------------------------------
+
 //
-//------------------------------------------------
+
 
 void SAL_CALL CAsyncEventNotifier::removeNextEventRecord()
 {
@@ -251,9 +251,9 @@ void SAL_CALL CAsyncEventNotifier::removeNextEventRecord()
     m_EventList.pop_front();
 }
 
-//------------------------------------------------
+
 //
-//------------------------------------------------
+
 
 void SAL_CALL CAsyncEventNotifier::run()
 {
@@ -297,9 +297,9 @@ void SAL_CALL CAsyncEventNotifier::run()
     } // while(m_bRun)
 }
 
-//------------------------------------------------
+
 //
-//------------------------------------------------
+
 
 unsigned int WINAPI CAsyncEventNotifier::ThreadProc(LPVOID pParam)
 {

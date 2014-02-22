@@ -63,7 +63,7 @@ struct XclExpScToken
     inline OpCode       GetOpCode() const { return mpScToken ? mpScToken->GetOpCode() : static_cast< OpCode >( ocNone ); }
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Effective token class conversion types. */
 enum XclExpClassConv
@@ -73,7 +73,7 @@ enum XclExpClassConv
     EXC_CLASSCONV_ARR           /// Convert VAL tokens to ARR class (REF remains uncahnged).
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Token class conversion and position of a token in the token array. */
 struct XclExpTokenConvInfo
@@ -103,7 +103,7 @@ void XclExpOperandList::AppendOperand( sal_uInt16 nTokPos, XclFuncParamConv eCon
 typedef boost::shared_ptr< XclExpOperandList > XclExpOperandListRef;
 typedef ::std::vector< XclExpOperandListRef > XclExpOperandListVector;
 
-// ----------------------------------------------------------------------------
+
 
 /** Encapsulates all data needed for a call to an external function (macro, add-in). */
 struct XclExpExtFuncData
@@ -123,7 +123,7 @@ void XclExpExtFuncData::Set( const OUString& rFuncName, bool bVBasic, bool bHidd
     mbHidden = bHidden;
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** Encapsulates all data needed to process an entire function. */
 class XclExpFuncData
@@ -261,7 +261,7 @@ static const XclExpCompConfig spConfigTable[] =
     { EXC_FMLATYPE_LISTVAL, EXC_CLASSTYPE_NAME,  true,  false, false, false }
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Working data of the formula compiler. Used to push onto a stack for recursive calls. */
 struct XclExpCompData
@@ -300,7 +300,7 @@ XclExpCompData::XclExpCompData( const XclExpCompConfig* pCfg ) :
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 /** Implementation class of the export formula compiler. */
 class XclExpFmlaCompImpl : protected XclExpRoot, protected XclTokenArrayHelper
@@ -325,7 +325,7 @@ public:
     bool IsRef2D( const ScSingleRefData& rRefData, bool bCheck3DFlag ) const;
     bool IsRef2D( const ScComplexRefData& rRefData, bool bCheck3DFlag ) const;
 
-    // ------------------------------------------------------------------------
+
 private:
     const XclExpCompConfig* GetConfigForType( XclFormulaType eType ) const;
     inline sal_uInt16   GetSize() const { return static_cast< sal_uInt16 >( mxData->maTokVec.size() ); }
@@ -461,7 +461,7 @@ private:
     void                AppendExt( double fData );
     void                AppendExt( const OUString& rString );
 
-    // ------------------------------------------------------------------------
+
 private:
     typedef ::std::map< XclFormulaType, XclExpCompConfig >  XclExpCompConfigMap;
     typedef boost::shared_ptr< XclExpCompData >             XclExpCompDataRef;
@@ -480,7 +480,7 @@ private:
     const sal_uInt32    mnMaxRowMask;   /// Mask to delete invalid bits in row fields.
 };
 
-// ----------------------------------------------------------------------------
+
 
 XclExpFmlaCompImpl::XclExpFmlaCompImpl( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
@@ -2595,7 +2595,7 @@ void lclPutRangeToTokenArray( ScTokenArray& rScTokArr, const ScRange& rScRange, 
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 XclExpFormulaCompiler::XclExpFormulaCompiler( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),

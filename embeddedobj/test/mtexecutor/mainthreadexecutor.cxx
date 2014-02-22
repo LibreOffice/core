@@ -24,7 +24,7 @@
 
 using namespace ::com::sun::star;
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL MainThreadExecutor::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
@@ -33,20 +33,20 @@ uno::Sequence< OUString > SAL_CALL MainThreadExecutor::impl_staticGetSupportedSe
     return aRet;
 }
 
-//-------------------------------------------------------------------------
+
 OUString SAL_CALL MainThreadExecutor::impl_staticGetImplementationName()
 {
     return OUString("com.sun.star.comp.thread.MainThreadExecutor");
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL MainThreadExecutor::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
     return uno::Reference< uno::XInterface >( *new MainThreadExecutor( xServiceManager ) );
 }
 
-//-------------------------------------------------------------------------
+
 uno::Any SAL_CALL MainThreadExecutor::execute( const uno::Sequence< beans::NamedValue >& aArguments )
     throw ( lang::IllegalArgumentException,
             uno::Exception,
@@ -76,7 +76,7 @@ uno::Any SAL_CALL MainThreadExecutor::execute( const uno::Sequence< beans::Named
     return uno::Any();
 }
 
-//-------------------------------------------------------------------------
+
 IMPL_STATIC_LINK( MainThreadExecutor, worker, MainThreadExecutorRequest*, pThreadExecutorRequest )
 {
     pThreadExecutorRequest->doIt();
@@ -85,7 +85,7 @@ IMPL_STATIC_LINK( MainThreadExecutor, worker, MainThreadExecutorRequest*, pThrea
     return 0;
 }
 
-//-------------------------------------------------------------------------
+
 OUString SAL_CALL MainThreadExecutor::getImplementationName()
         throw ( uno::RuntimeException )
 {
@@ -98,14 +98,14 @@ sal_Bool SAL_CALL MainThreadExecutor::supportsService( const OUString& ServiceNa
     return cppu::supportsService(this, ServiceName);
 }
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL MainThreadExecutor::getSupportedServiceNames()
         throw ( uno::RuntimeException )
 {
     return impl_staticGetSupportedServiceNames();
 }
 
-//-------------------------------------------------------------------------
+
 MainThreadExecutorRequest::MainThreadExecutorRequest( const uno::Reference< task::XJob >& xJob,
                                                     const uno::Sequence< beans::NamedValue >& aValues )
 : m_xJob( xJob )
@@ -113,7 +113,7 @@ MainThreadExecutorRequest::MainThreadExecutorRequest( const uno::Reference< task
 {
 }
 
-//-------------------------------------------------------------------------
+
 void MainThreadExecutorRequest::doIt()
 {
     if ( m_xJob.is() )

@@ -1878,7 +1878,7 @@ private:
                             { if( pTable ) mpCurrTable = pTable; }
 };
 
-// ----------------------------------------------------------------------------
+
 
 ScHTMLTableMap::ScHTMLTableMap( ScHTMLTable& rParentTable ) :
     mrParentTable(rParentTable),
@@ -1919,7 +1919,7 @@ ScHTMLTable* ScHTMLTableMap::CreateTable( const ImportInfo& rInfo, bool bPreForm
     return pTable;
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** Simplified forward iterator for convenience.
 
@@ -1964,7 +1964,7 @@ ScHTMLTableAutoId::ScHTMLTableAutoId( ScHTMLTableId& rnUnusedId ) :
     ++mrnUnusedId;
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScHTMLTable::ScHTMLTable( ScHTMLTable& rParentTable, const ImportInfo& rInfo, bool bPreFormText ) :
     mpParentTable( &rParentTable ),
@@ -2423,7 +2423,7 @@ SvNumberFormatter* ScHTMLTable::GetFormatTable()
     return mpParser->GetDoc().GetFormatTable();
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool ScHTMLTable::IsEmptyCell() const
 {
@@ -2715,7 +2715,7 @@ void ScHTMLTable::CalcNeededDocSize(
     SetDocSize( eOrient, nCellPos, nRealDocSize );
 }
 
-// ----------------------------------------------------------------------------
+
 
 void ScHTMLTable::FillEmptyCells()
 {
@@ -3279,7 +3279,7 @@ void ScHTMLQueryParser::ParseStyle(const OUString&) {}
 
 #endif
 
-// ----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScHTMLQueryParser, HTMLImportHdl, const ImportInfo*, pInfo )
 {

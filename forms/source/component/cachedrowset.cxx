@@ -77,19 +77,19 @@ namespace frm
     //====================================================================
     //= CachedRowSet
     //====================================================================
-    //--------------------------------------------------------------------
+
     CachedRowSet::CachedRowSet()
         :m_pData( new CachedRowSet_Data )
     {
     }
 
-    //--------------------------------------------------------------------
+
     CachedRowSet::~CachedRowSet()
     {
         dispose();
     }
 
-    //--------------------------------------------------------------------
+
     void CachedRowSet::setCommand( const OUString& _rCommand )
     {
         if ( m_pData->sCommand == _rCommand )
@@ -99,7 +99,7 @@ namespace frm
         m_pData->bStatementDirty = true;
     }
 
-    //--------------------------------------------------------------------
+
     void CachedRowSet::setCommandFromQuery( const OUString& _rQueryName )
     {
         Reference< XQueriesSupplier > xSupplyQueries( m_pData->xConnection, UNO_QUERY_THROW );
@@ -115,7 +115,7 @@ namespace frm
         setCommand( sCommand );
     }
 
-    //--------------------------------------------------------------------
+
     void CachedRowSet::setEscapeProcessing ( const sal_Bool _bEscapeProcessing )
     {
         if ( m_pData->bEscapeProcessing == _bEscapeProcessing )
@@ -125,7 +125,7 @@ namespace frm
         m_pData->bStatementDirty = true;
     }
 
-    //--------------------------------------------------------------------
+
     void CachedRowSet::setConnection( const Reference< XConnection >& _rxConnection )
     {
         if ( m_pData->xConnection == _rxConnection )
@@ -135,7 +135,7 @@ namespace frm
         m_pData->bStatementDirty = true;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XResultSet > CachedRowSet::execute()
     {
         Reference< XResultSet > xResult;
@@ -164,13 +164,13 @@ namespace frm
         return xResult;
     }
 
-    //--------------------------------------------------------------------
+
     bool CachedRowSet::isDirty() const
     {
         return m_pData->bStatementDirty;
     }
 
-    //--------------------------------------------------------------------
+
     void CachedRowSet::dispose()
     {
         try

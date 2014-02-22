@@ -1029,7 +1029,7 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
     }
 
     // spawn separate process to keep LGPL/GPL code apart.
-    // ---------------------------------------------------
+
     rtl_uString** ppEnv = NULL;
     sal_uInt32 nEnv = 0;
 

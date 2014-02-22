@@ -68,23 +68,23 @@ namespace
         {
             m_aElements.reserve(nLength);
         }
-        // -----------------------------------------------------------------------------
+
         virtual bool exists(const OUString& _sName )
         {
             return m_aNameMap.find(_sName) != m_aNameMap.end();
         }
-        // -----------------------------------------------------------------------------
+
         virtual bool empty()
         {
             return m_aNameMap.empty();
         }
-        // -----------------------------------------------------------------------------
+
         virtual void swapAll()
         {
             ::std::vector< ObjectIter >(m_aElements).swap(m_aElements);
             ObjectMap(m_aNameMap).swap(m_aNameMap);
         }
-        // -----------------------------------------------------------------------------
+
         virtual void swap()
         {
             ::std::vector< ObjectIter >().swap(m_aElements);
@@ -97,18 +97,18 @@ namespace
                 // default constructed (instead of being constructed from the same instance in m_aNameMap), and
                 // it's case-sensitive flag would have an unpredictable value.
         }
-        // -----------------------------------------------------------------------------
+
         virtual void clear()
         {
             m_aElements.clear();
             m_aNameMap.clear();
         }
-        // -----------------------------------------------------------------------------
+
         virtual void insert(const OUString& _sName,const ObjectType& _xObject)
         {
             m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectEntry(_sName,_xObject)));
         }
-        // -----------------------------------------------------------------------------
+
         virtual void reFill(const TStringVector &_rVector)
         {
             OSL_ENSURE(!m_aNameMap.size(),"OCollection::reFill: collection isn't empty");
@@ -117,7 +117,7 @@ namespace
             for(TStringVector::const_iterator i=_rVector.begin(); i != _rVector.end();++i)
                 m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectEntry(*i,ObjectType())));
         }
-        // -----------------------------------------------------------------------------
+
         virtual bool rename(const OUString _sOldName,const OUString _sNewName)
         {
             bool bRet = false;
@@ -135,12 +135,12 @@ namespace
             }
             return bRet;
         }
-        // -----------------------------------------------------------------------------
+
         virtual sal_Int32 size()
         {
             return static_cast<sal_Int32>(m_aNameMap.size());
         }
-        // -----------------------------------------------------------------------------
+
         virtual Sequence< OUString > getElementNames()
         {
             Sequence< OUString > aNameList(m_aElements.size());
@@ -152,12 +152,12 @@ namespace
 
             return aNameList;
         }
-        // -----------------------------------------------------------------------------
+
         virtual OUString getName(sal_Int32 _nIndex)
         {
             return m_aElements[_nIndex]->first;
         }
-        // -----------------------------------------------------------------------------
+
         virtual void disposeAndErase(sal_Int32 _nIndex)
         {
             OSL_ENSURE(_nIndex >= 0 && _nIndex < static_cast<sal_Int32>(m_aElements.size()),"Illegal argument!");
@@ -169,7 +169,7 @@ namespace
             m_aElements.erase(m_aElements.begin()+_nIndex);
             m_aNameMap.erase(sName);
         }
-        // -----------------------------------------------------------------------------
+
         virtual void disposeElements()
         {
             for( ObjectIter aIter = m_aNameMap.begin(); aIter != m_aNameMap.end(); ++aIter)
@@ -184,42 +184,42 @@ namespace
             m_aElements.clear();
             m_aNameMap.clear();
         }
-        // -----------------------------------------------------------------------------
+
         virtual sal_Int32 findColumn( const OUString& columnName )
         {
             ObjectIter aIter = m_aNameMap.find(columnName);
             OSL_ENSURE(aIter != m_aNameMap.end(),"findColumn:: Illegal name!");
             return m_aElements.size() - (m_aElements.end() - ::std::find(m_aElements.begin(),m_aElements.end(),aIter));
         }
-        // -----------------------------------------------------------------------------
+
         virtual OUString findColumnAtIndex(  sal_Int32 _nIndex)
         {
             OSL_ENSURE(_nIndex >= 0 && _nIndex < static_cast<sal_Int32>(m_aElements.size()),"Illegal argument!");
             return m_aElements[_nIndex]->first;
         }
-        // -----------------------------------------------------------------------------
+
         virtual ObjectType getObject(sal_Int32 _nIndex)
         {
             OSL_ENSURE(_nIndex >= 0 && _nIndex < static_cast<sal_Int32>(m_aElements.size()),"Illegal argument!");
             return m_aElements[_nIndex]->second;
         }
-        // -----------------------------------------------------------------------------
+
         virtual ObjectType getObject(const OUString& columnName)
         {
             return m_aNameMap.find(columnName)->second;
         }
-        // -----------------------------------------------------------------------------
+
         virtual void setObject(sal_Int32 _nIndex,const ObjectType& _xObject)
         {
             OSL_ENSURE(_nIndex >= 0 && _nIndex < static_cast<sal_Int32>(m_aElements.size()),"Illegal argument!");
             m_aElements[_nIndex]->second = _xObject;
         }
-        // -----------------------------------------------------------------------------
+
         sal_Bool isCaseSensitive() const
         {
             return m_aNameMap.key_comp().isCaseSensitive();
         }
-        // -----------------------------------------------------------------------------
+
     };
 }
 
@@ -249,11 +249,11 @@ OCollection::OCollection(::cppu::OWeakObject& _rParent
     }
     m_pElements->reFill(_rVector);
 }
-// -------------------------------------------------------------------------
+
 OCollection::~OCollection()
 {
 }
-// -----------------------------------------------------------------------------
+
 Any SAL_CALL OCollection::queryInterface( const Type & rType ) throw (RuntimeException)
 {
     if ( m_bUseIndexOnly && rType == ::getCppuType(static_cast< Reference< XNameAccess > *> (NULL)) )
@@ -262,7 +262,7 @@ Any SAL_CALL OCollection::queryInterface( const Type & rType ) throw (RuntimeExc
     }
     return OCollectionBase::queryInterface( rType );
 }
-// -----------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OCollection::getTypes() throw (RuntimeException)
 {
     if ( m_bUseIndexOnly )
@@ -284,7 +284,7 @@ Sequence< Type > SAL_CALL OCollection::getTypes() throw (RuntimeException)
     }
     return OCollectionBase::getTypes( );
 }
-// -------------------------------------------------------------------------
+
 void OCollection::clear_NoDispose()
 {
     ::osl::MutexGuard aGuard(m_rMutex);
@@ -293,7 +293,7 @@ void OCollection::clear_NoDispose()
     m_pElements->swapAll();
 }
 
-// -------------------------------------------------------------------------
+
 void OCollection::disposing(void)
 {
     m_aContainerListeners.disposeAndClear(EventObject(static_cast<XTypeProvider*>(this)));
@@ -305,7 +305,7 @@ void OCollection::disposing(void)
 
     m_pElements->swap();
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OCollection::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
@@ -314,7 +314,7 @@ Any SAL_CALL OCollection::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsEx
 
     return makeAny(getObject(Index));
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OCollection::getByName( const OUString& aName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
@@ -331,13 +331,13 @@ Any SAL_CALL OCollection::getByName( const OUString& aName ) throw(NoSuchElement
 
     return makeAny(getObject(m_pElements->findColumn(aName)));
 }
-// -------------------------------------------------------------------------
+
 Sequence< OUString > SAL_CALL OCollection::getElementNames(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     return m_pElements->getElementNames();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OCollection::refresh(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
@@ -348,12 +348,12 @@ void SAL_CALL OCollection::refresh(  ) throw(RuntimeException)
     EventObject aEvt(static_cast<XTypeProvider*>(this));
     m_aRefreshListeners.notifyEach( &XRefreshListener::refreshed, aEvt );
 }
-// -----------------------------------------------------------------------------
+
 void OCollection::reFill(const TStringVector &_rVector)
 {
     m_pElements->reFill(_rVector);
 }
-// -------------------------------------------------------------------------
+
 // XDataDescriptorFactory
 Reference< XPropertySet > SAL_CALL OCollection::createDataDescriptor(  ) throw(RuntimeException)
 {
@@ -361,7 +361,7 @@ Reference< XPropertySet > SAL_CALL OCollection::createDataDescriptor(  ) throw(R
 
     return createDescriptor();
 }
-// -----------------------------------------------------------------------------
+
 OUString OCollection::getNameForObject(const ObjectType& _xObject)
 {
     OSL_ENSURE(_xObject.is(),"OCollection::getNameForObject: Object is NULL!");
@@ -369,7 +369,7 @@ OUString OCollection::getNameForObject(const ObjectType& _xObject)
     _xObject->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sName;
     return sName;
 }
-// -------------------------------------------------------------------------
+
 // XAppend
 void SAL_CALL OCollection::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
 {
@@ -397,7 +397,7 @@ void SAL_CALL OCollection::appendByDescriptor( const Reference< XPropertySet >& 
     aGuard.clear();
     m_aContainerListeners.notifyEach( &XContainerListener::elementInserted, aEvent );
 }
-// -------------------------------------------------------------------------
+
 // XDrop
 void SAL_CALL OCollection::dropByName( const OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
@@ -408,7 +408,7 @@ void SAL_CALL OCollection::dropByName( const OUString& elementName ) throw(SQLEx
 
     dropImpl(m_pElements->findColumn(elementName));
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OCollection::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
@@ -417,7 +417,7 @@ void SAL_CALL OCollection::dropByIndex( sal_Int32 index ) throw(SQLException, In
 
     dropImpl(index);
 }
-// -----------------------------------------------------------------------------
+
 void OCollection::dropImpl(sal_Int32 _nIndex,sal_Bool _bReallyDrop)
 {
     OUString elementName = m_pElements->getName(_nIndex);
@@ -430,7 +430,7 @@ void OCollection::dropImpl(sal_Int32 _nIndex,sal_Bool _bReallyDrop)
     // notify our container listeners
     notifyElementRemoved(elementName);
 }
-// -----------------------------------------------------------------------------
+
 void OCollection::notifyElementRemoved(const OUString& _sName)
 {
     ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_sName), Any(), Any());
@@ -439,7 +439,7 @@ void OCollection::notifyElementRemoved(const OUString& _sName)
     while (aListenerLoop.hasMoreElements())
         static_cast<XContainerListener*>(aListenerLoop.next())->elementRemoved(aEvent);
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OCollection::findColumn( const OUString& columnName ) throw(SQLException, RuntimeException)
 {
     if ( !m_pElements->exists(columnName) )
@@ -450,74 +450,74 @@ sal_Int32 SAL_CALL OCollection::findColumn( const OUString& columnName ) throw(S
 
     return m_pElements->findColumn(columnName) + 1; // because columns start at one
 }
-// -------------------------------------------------------------------------
+
 Reference< XEnumeration > SAL_CALL OCollection::createEnumeration(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     return new OEnumerationByIndex( static_cast< XIndexAccess*>(this));
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OCollection::addContainerListener( const Reference< XContainerListener >& _rxListener ) throw(RuntimeException)
 {
     m_aContainerListeners.addInterface(_rxListener);
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OCollection::removeContainerListener( const Reference< XContainerListener >& _rxListener ) throw(RuntimeException)
 {
     m_aContainerListeners.removeInterface(_rxListener);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OCollection::acquire() throw()
 {
     m_rParent.acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OCollection::release() throw()
 {
     m_rParent.release();
 }
-// -----------------------------------------------------------------------------
+
 Type SAL_CALL OCollection::getElementType(  ) throw(RuntimeException)
 {
     return::getCppuType(static_cast< Reference< XPropertySet>*>(NULL));
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OCollection::hasElements(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     return !m_pElements->empty();
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OCollection::getCount(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     return m_pElements->size();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OCollection::hasByName( const OUString& aName ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     return m_pElements->exists(aName);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OCollection::addRefreshListener( const Reference< XRefreshListener >& l ) throw(RuntimeException)
 {
     m_aRefreshListeners.addInterface(l);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OCollection::removeRefreshListener( const Reference< XRefreshListener >& l ) throw(RuntimeException)
 {
     m_aRefreshListeners.removeInterface(l);
 }
-// -----------------------------------------------------------------------------
+
 void OCollection::insertElement(const OUString& _sElementName,const ObjectType& _xElement)
 {
     OSL_ENSURE(!m_pElements->exists(_sElementName),"Element already exists");
     if ( !m_pElements->exists(_sElementName) )
         m_pElements->insert(_sElementName,_xElement);
 }
-// -----------------------------------------------------------------------------
+
 void OCollection::renameObject(const OUString _sOldName,const OUString _sNewName)
 {
     OSL_ENSURE(m_pElements->exists(_sOldName),"Element doesn't exist");
@@ -534,7 +534,7 @@ void OCollection::renameObject(const OUString _sOldName,const OUString _sNewName
             static_cast<XContainerListener*>(aListenerLoop.next())->elementReplaced(aEvent);
     }
 }
-// -----------------------------------------------------------------------------
+
 ObjectType OCollection::getObject(sal_Int32 _nIndex)
 {
     ObjectType xName = m_pElements->getObject(_nIndex);
@@ -559,33 +559,33 @@ ObjectType OCollection::getObject(sal_Int32 _nIndex)
     }
     return xName;
 }
-// -----------------------------------------------------------------------------
+
 void OCollection::disposeElements()
 {
     m_pElements->disposeElements();
 }
-// -----------------------------------------------------------------------------
+
 Reference< XPropertySet > OCollection::createDescriptor()
 {
     OSL_FAIL("Need to be overloaded when used!");
     throw SQLException();
 }
-// -----------------------------------------------------------------------------
+
 ObjectType OCollection::cloneDescriptor( const ObjectType& _descriptor )
 {
     ObjectType xNewDescriptor( createDescriptor() );
     ::comphelper::copyProperties( _descriptor, xNewDescriptor );
     return xNewDescriptor;
 }
-// -----------------------------------------------------------------------------
+
 ObjectType OCollection::appendObject( const OUString& /*_rForName*/, const Reference< XPropertySet >& descriptor )
 {
     return cloneDescriptor( descriptor );
 }
-// -----------------------------------------------------------------------------
+
 void OCollection::dropObject(sal_Int32 /*_nPos*/,const OUString /*_sElementName*/)
 {
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

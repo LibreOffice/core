@@ -1530,20 +1530,20 @@ PPDKey::PPDKey( const OUString& rKey ) :
 {
 }
 
-// -------------------------------------------------------------------
+
 
 PPDKey::~PPDKey()
 {
 }
 
-// -------------------------------------------------------------------
+
 
 const PPDValue* PPDKey::getValue( int n ) const
 {
     return ((unsigned int)n < m_aOrderedValues.size() && n >= 0) ? m_aOrderedValues[n] : NULL;
 }
 
-// -------------------------------------------------------------------
+
 
 const PPDValue* PPDKey::getValue( const OUString& rOption ) const
 {
@@ -1551,7 +1551,7 @@ const PPDValue* PPDKey::getValue( const OUString& rOption ) const
     return it != m_aValues.end() ? &it->second : NULL;
 }
 
-// -------------------------------------------------------------------
+
 
 const PPDValue* PPDKey::getValueCaseInsensitive( const OUString& rOption ) const
 {
@@ -1566,7 +1566,7 @@ const PPDValue* PPDKey::getValueCaseInsensitive( const OUString& rOption ) const
     return pValue;
 }
 
-// -------------------------------------------------------------------
+
 
 void PPDKey::eraseValue( const OUString& rOption )
 {
@@ -1585,7 +1585,7 @@ void PPDKey::eraseValue( const OUString& rOption )
     m_aValues.erase( it );
 }
 
-// -------------------------------------------------------------------
+
 
 PPDValue* PPDKey::insertValue( const OUString& rOption, PPDValueType eType )
 {
@@ -1601,7 +1601,7 @@ PPDValue* PPDKey::insertValue( const OUString& rOption, PPDValueType eType )
     return pValue;
 }
 
-// -------------------------------------------------------------------
+
 
 /*
  * PPDContext
@@ -1612,7 +1612,7 @@ PPDContext::PPDContext( const PPDParser* pParser ) :
 {
 }
 
-// -------------------------------------------------------------------
+
 
 PPDContext& PPDContext::operator=( const PPDContext& rCopy )
 {
@@ -1621,13 +1621,13 @@ PPDContext& PPDContext::operator=( const PPDContext& rCopy )
     return *this;
 }
 
-// -------------------------------------------------------------------
+
 
 PPDContext::~PPDContext()
 {
 }
 
-// -------------------------------------------------------------------
+
 
 const PPDKey* PPDContext::getModifiedKey( int n ) const
 {
@@ -1637,7 +1637,7 @@ const PPDKey* PPDContext::getModifiedKey( int n ) const
     return it != m_aCurrentValues.end() ? it->first : NULL;
 }
 
-// -------------------------------------------------------------------
+
 
 void PPDContext::setParser( const PPDParser* pParser )
 {
@@ -1648,7 +1648,7 @@ void PPDContext::setParser( const PPDParser* pParser )
     }
 }
 
-// -------------------------------------------------------------------
+
 
 const PPDValue* PPDContext::getValue( const PPDKey* pKey ) const
 {
@@ -1670,7 +1670,7 @@ const PPDValue* PPDContext::getValue( const PPDKey* pKey ) const
     return pValue;
 }
 
-// -------------------------------------------------------------------
+
 
 const PPDValue* PPDContext::setValue( const PPDKey* pKey, const PPDValue* pValue, bool bDontCareForConstraints )
 {
@@ -1720,7 +1720,7 @@ const PPDValue* PPDContext::setValue( const PPDKey* pKey, const PPDValue* pValue
     return pValue;
 }
 
-// -------------------------------------------------------------------
+
 
 bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pValue )
 {
@@ -1744,7 +1744,7 @@ bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pValue )
     return bRet;
 }
 
-// -------------------------------------------------------------------
+
 
 bool PPDContext::resetValue( const PPDKey* pKey, bool bDefaultable )
 {
@@ -1762,7 +1762,7 @@ bool PPDContext::resetValue( const PPDKey* pKey, bool bDefaultable )
     return bRet;
 }
 
-// -------------------------------------------------------------------
+
 
 bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pNewValue, bool bDoReset )
 {
@@ -1850,7 +1850,7 @@ bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pNewValue
     return true;
 }
 
-// -------------------------------------------------------------------
+
 
 char* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
 {
@@ -1896,7 +1896,7 @@ char* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
     return pBuffer;
 }
 
-// -------------------------------------------------------------------
+
 
 void PPDContext::rebuildFromStreamBuffer( char* pBuffer, sal_uLong nBytes )
 {
@@ -1932,7 +1932,7 @@ void PPDContext::rebuildFromStreamBuffer( char* pBuffer, sal_uLong nBytes )
     }
 }
 
-// -------------------------------------------------------------------
+
 
 int PPDContext::getRenderResolution() const
 {
@@ -1958,7 +1958,7 @@ int PPDContext::getRenderResolution() const
     return  nDPI;
 }
 
-// -------------------------------------------------------------------
+
 
 void PPDContext::getPageSize( OUString& rPaper, int& rWidth, int& rHeight ) const
 {

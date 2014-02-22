@@ -176,7 +176,7 @@ namespace vclcanvas
 
             // fill initial strip (extending two times the bound rect's
             // diagonal to the 'left'
-            // ------------------------------------------------------
+
 
             // calculate left edge, by moving left edge of the
             // gradient rect two times the bound rect's diagonal to
@@ -193,7 +193,7 @@ namespace vclcanvas
 
 
             // iteratively render all other strips
-            // -----------------------------------
+
 
             // ensure that nStepCount matches color stop parity, to
             // have a well-defined middle color e.g. for axial
@@ -245,7 +245,7 @@ namespace vclcanvas
 
             // fill final strip (extending two times the bound rect's
             // diagonal to the 'right'
-            // ------------------------------------------------------
+
 
             // copy right egde of polygon to left edge (and also
             // copy the closing point)
@@ -306,7 +306,7 @@ namespace vclcanvas
 
 
             // apply scaling (possibly anisotrophic) to inner polygon
-            // ------------------------------------------------------
+
 
             // scale inner polygon according to aspect ratio: for
             // wider-than-tall bounds (nAspectRatio > 1.0), the inner
@@ -552,7 +552,7 @@ namespace vclcanvas
             // mutex.
 
             // calc step size
-            // --------------
+
             int nColorSteps = 0;
             for( size_t i=0; i<rColors.size()-1; ++i )
                 nColorSteps += numColorSteps(rColors[i],rColors[i+1]);
@@ -575,7 +575,7 @@ namespace vclcanvas
             if( tools::isRectangle( rPoly ) )
             {
                 // use optimized output path
-                // -------------------------
+
 
                 // this distinction really looks like a
                 // micro-optimisation, but in fact greatly speeds up
@@ -960,7 +960,7 @@ namespace vclcanvas
                     if( bRectangularPolygon )
                     {
                         // use optimized output path
-                        // -------------------------
+
 
                         // this distinction really looks like a
                         // micro-optimisation, but in fact greatly speeds up

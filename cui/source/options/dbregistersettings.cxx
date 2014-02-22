@@ -30,14 +30,14 @@ namespace svx
     //= DatabaseMapItem
     //====================================================================
     TYPEINIT1( DatabaseMapItem, SfxPoolItem )
-    //--------------------------------------------------------------------
+
     DatabaseMapItem::DatabaseMapItem( sal_uInt16 _nId, const DatabaseRegistrations& _rRegistrations )
         :SfxPoolItem( _nId )
         ,m_aRegistrations( _rRegistrations )
     {
     }
 
-    //--------------------------------------------------------------------
+
     bool DatabaseMapItem::operator==( const SfxPoolItem& _rCompare ) const
     {
         const DatabaseMapItem* pItem = PTR_CAST(DatabaseMapItem, &_rCompare);
@@ -50,13 +50,13 @@ namespace svx
         return m_aRegistrations == pItem->m_aRegistrations;
     }
 
-    //--------------------------------------------------------------------
+
     SfxPoolItem* DatabaseMapItem::Clone( SfxItemPool* ) const
     {
         return new DatabaseMapItem( Which(), m_aRegistrations );
     }
 
-    //--------------------------------------------------------------------
+
 
 //........................................................................
 }   // namespace svx

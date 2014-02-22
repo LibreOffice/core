@@ -39,11 +39,8 @@ class StarBASIC;
 
 namespace basctl
 {
-//----------------------------------------------------------------------------
 
 const sal_uLong BASICIDE_UI_FEATURE_SHOW_BROWSER = 0x00000001;
-
-//----------------------------------------------------------------------------
 
 class Layout;
 class ModulWindow;

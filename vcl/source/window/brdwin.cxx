@@ -79,7 +79,7 @@ static void ImplGetPinImage( sal_uInt16 nStyle, bool bPinIn, Image& rImage )
     rImage = pSVData->maCtrlData.mpPinImgList->GetImage( nId );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::ImplCalcSymbolRect( Rectangle& rRect )
 {
@@ -99,7 +99,7 @@ void Window::ImplCalcSymbolRect( Rectangle& rRect )
     rRect.Bottom()  -= nExtraHeight;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplDrawBrdWinSymbol( OutputDevice* pDev,
                                   const Rectangle& rRect, SymbolType eSymbol )
@@ -112,7 +112,7 @@ static void ImplDrawBrdWinSymbol( OutputDevice* pDev,
                           pDev->GetSettings().GetStyleSettings().GetButtonTextColor(), 0 );
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplDrawBrdWinSymbolButton( OutputDevice* pDev,
                                         const Rectangle& rRect,
@@ -151,50 +151,50 @@ static void ImplDrawBrdWinSymbolButton( OutputDevice* pDev,
 
 // =======================================================================
 
-// ------------------------
+
 // - ImplBorderWindowView -
-// ------------------------
+
 
 ImplBorderWindowView::~ImplBorderWindowView()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplBorderWindowView::MouseMove( const MouseEvent& )
 {
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplBorderWindowView::MouseButtonDown( const MouseEvent& )
 {
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplBorderWindowView::Tracking( const TrackingEvent& )
 {
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString ImplBorderWindowView::RequestHelp( const Point&, Rectangle& )
 {
     return OUString();
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle ImplBorderWindowView::GetMenuRect() const
 {
     return Rectangle();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindowView::ImplInitTitle( ImplBorderFrameData* pData )
 {
@@ -230,7 +230,7 @@ void ImplBorderWindowView::ImplInitTitle( ImplBorderFrameData* pData )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ImplBorderWindowView::ImplHitTest( ImplBorderFrameData* pData, const Point& rPos )
 {
@@ -309,7 +309,7 @@ sal_uInt16 ImplBorderWindowView::ImplHitTest( ImplBorderFrameData* pData, const 
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplBorderWindowView::ImplMouseMove( ImplBorderFrameData* pData, const MouseEvent& rMEvt )
 {
@@ -351,7 +351,7 @@ bool ImplBorderWindowView::ImplMouseMove( ImplBorderFrameData* pData, const Mous
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplBorderWindowView::ImplMouseButtonDown( ImplBorderFrameData* pData, const MouseEvent& rMEvt )
 {
@@ -471,7 +471,7 @@ bool ImplBorderWindowView::ImplMouseButtonDown( ImplBorderFrameData* pData, cons
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const TrackingEvent& rTEvt )
 {
@@ -924,7 +924,7 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData* pData,
                                               const Point& rPos,
@@ -995,7 +995,7 @@ OUString ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData* pData,
     return aHelpStr;
 }
 
-// -----------------------------------------------------------------------
+
 
 long ImplBorderWindowView::ImplCalcTitleWidth( const ImplBorderFrameData* pData ) const
 {
@@ -1018,21 +1018,21 @@ long ImplBorderWindowView::ImplCalcTitleWidth( const ImplBorderFrameData* pData 
 
 // =======================================================================
 
-// --------------------------
+
 // - ImplNoBorderWindowView -
-// --------------------------
+
 
 ImplNoBorderWindowView::ImplNoBorderWindowView( ImplBorderWindow* )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplNoBorderWindowView::Init( OutputDevice*, long, long )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplNoBorderWindowView::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                         sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const
@@ -1043,14 +1043,14 @@ void ImplNoBorderWindowView::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopB
     rBottomBorder   = 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 long ImplNoBorderWindowView::CalcTitleWidth() const
 {
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplNoBorderWindowView::DrawWindow( sal_uInt16, OutputDevice*, const Point* )
 {
@@ -1058,9 +1058,9 @@ void ImplNoBorderWindowView::DrawWindow( sal_uInt16, OutputDevice*, const Point*
 
 // =======================================================================
 
-// -----------------------------
+
 // - ImplSmallBorderWindowView -
-// -----------------------------
+
 
 // =======================================================================
 
@@ -1073,7 +1073,7 @@ ImplSmallBorderWindowView::ImplSmallBorderWindowView( ImplBorderWindow* pBorderW
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeight )
 {
@@ -1234,7 +1234,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplSmallBorderWindowView::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                            sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const
@@ -1245,14 +1245,14 @@ void ImplSmallBorderWindowView::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rT
     rBottomBorder   = mnBottomBorder;
 }
 
-// -----------------------------------------------------------------------
+
 
 long ImplSmallBorderWindowView::CalcTitleWidth() const
 {
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*, const Point* )
 {
@@ -1416,9 +1416,9 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
 
 // =======================================================================
 
-// ---------------------------
+
 // - ImplStdBorderWindowView -
-// ---------------------------
+
 
 ImplStdBorderWindowView::ImplStdBorderWindowView( ImplBorderWindow* pBorderWindow )
 {
@@ -1438,7 +1438,7 @@ ImplStdBorderWindowView::ImplStdBorderWindowView( ImplBorderWindow* pBorderWindo
     mpDTitleVirDev              = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplStdBorderWindowView::~ImplStdBorderWindowView()
 {
@@ -1446,42 +1446,42 @@ ImplStdBorderWindowView::~ImplStdBorderWindowView()
     delete mpDTitleVirDev;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplStdBorderWindowView::MouseMove( const MouseEvent& rMEvt )
 {
     return ImplMouseMove( &maFrameData, rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplStdBorderWindowView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     return ImplMouseButtonDown( &maFrameData, rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
 {
     return ImplTracking( &maFrameData, rTEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString ImplStdBorderWindowView::RequestHelp( const Point& rPos, Rectangle& rHelpRect )
 {
     return ImplRequestHelp( &maFrameData, rPos, rHelpRect );
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle ImplStdBorderWindowView::GetMenuRect() const
 {
     return maFrameData.maMenuRect;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeight )
 {
@@ -1629,7 +1629,7 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplStdBorderWindowView::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                          sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const
@@ -1640,14 +1640,14 @@ void ImplStdBorderWindowView::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTop
     rBottomBorder   = maFrameData.mnBottomBorder;
 }
 
-// -----------------------------------------------------------------------
+
 
 long ImplStdBorderWindowView::CalcTitleWidth() const
 {
     return ImplCalcTitleWidth( &maFrameData );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplStdBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* pOutDev, const Point* pOffset )
 {
@@ -1943,7 +1943,7 @@ ImplBorderWindow::ImplBorderWindow( Window* pParent,
     ImplInit( pParent, nStyle, nTypeStyle, pSystemParentData );
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplBorderWindow::ImplBorderWindow( Window* pParent, WinBits nStyle ,
                                     sal_uInt16 nTypeStyle ) :
@@ -1952,35 +1952,35 @@ ImplBorderWindow::ImplBorderWindow( Window* pParent, WinBits nStyle ,
     ImplInit( pParent, nStyle, nTypeStyle, ::com::sun::star::uno::Any() );
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplBorderWindow::~ImplBorderWindow()
 {
     delete mpBorderView;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::MouseMove( const MouseEvent& rMEvt )
 {
     mpBorderView->MouseMove( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     mpBorderView->MouseButtonDown( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::Tracking( const TrackingEvent& rTEvt )
 {
     mpBorderView->Tracking( rTEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::Paint( const Rectangle& )
 {
@@ -1992,7 +1992,7 @@ void ImplBorderWindow::Draw( const Rectangle&, OutputDevice* pOutDev, const Poin
     mpBorderView->DrawWindow( BORDERWINDOW_DRAW_ALL, pOutDev, &rPos );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::Activate()
 {
@@ -2000,7 +2000,7 @@ void ImplBorderWindow::Activate()
     Window::Activate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::Deactivate()
 {
@@ -2011,7 +2011,7 @@ void ImplBorderWindow::Deactivate()
     Window::Deactivate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::RequestHelp( const HelpEvent& rHEvt )
 {
@@ -2037,7 +2037,7 @@ void ImplBorderWindow::RequestHelp( const HelpEvent& rHEvt )
     Window::RequestHelp( rHEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::Resize()
 {
@@ -2091,7 +2091,7 @@ void ImplBorderWindow::Resize()
     Window::Resize();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::StateChanged( StateChangedType nType )
 {
@@ -2111,7 +2111,7 @@ void ImplBorderWindow::StateChanged( StateChangedType nType )
     Window::StateChanged( nType );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -2127,7 +2127,7 @@ void ImplBorderWindow::DataChanged( const DataChangedEvent& rDCEvt )
     Window::DataChanged( rDCEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::InitView()
 {
@@ -2148,7 +2148,7 @@ void ImplBorderWindow::InitView()
     mpBorderView->Init( this, aSize.Width(), aSize.Height() );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::UpdateView( bool bNewView, const Size& rNewOutSize )
 {
@@ -2191,7 +2191,7 @@ void ImplBorderWindow::UpdateView( bool bNewView, const Size& rNewOutSize )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::InvalidateBorder()
 {
@@ -2224,7 +2224,7 @@ void ImplBorderWindow::InvalidateBorder()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::SetDisplayActive( bool bActive )
 {
@@ -2236,7 +2236,7 @@ void ImplBorderWindow::SetDisplayActive( bool bActive )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::SetTitleType( sal_uInt16 nTitleType, const Size& rSize )
 {
@@ -2244,7 +2244,7 @@ void ImplBorderWindow::SetTitleType( sal_uInt16 nTitleType, const Size& rSize )
     UpdateView( false, rSize );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::SetBorderStyle( sal_uInt16 nStyle )
 {
@@ -2255,7 +2255,7 @@ void ImplBorderWindow::SetBorderStyle( sal_uInt16 nStyle )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::SetPin( bool bPin )
 {
@@ -2263,7 +2263,7 @@ void ImplBorderWindow::SetPin( bool bPin )
     InvalidateBorder();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::SetRollUp( bool bRollUp, const Size& rSize )
 {
@@ -2272,7 +2272,7 @@ void ImplBorderWindow::SetRollUp( bool bRollUp, const Size& rSize )
     UpdateView( false, rSize );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::SetCloser()
 {
@@ -2282,7 +2282,7 @@ void ImplBorderWindow::SetCloser()
     InvalidateBorder();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::SetDockButton( bool bDockButton )
 {
@@ -2292,7 +2292,7 @@ void ImplBorderWindow::SetDockButton( bool bDockButton )
     InvalidateBorder();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::SetHideButton( bool bHideButton )
 {
@@ -2302,7 +2302,7 @@ void ImplBorderWindow::SetHideButton( bool bHideButton )
     InvalidateBorder();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::SetMenuButton( bool bMenuButton )
 {
@@ -2312,14 +2312,14 @@ void ImplBorderWindow::SetMenuButton( bool bMenuButton )
     InvalidateBorder();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::UpdateMenuHeight()
 {
     Resize();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::SetMenuBarWindow( Window* pWindow )
 {
@@ -2329,7 +2329,7 @@ void ImplBorderWindow::SetMenuBarWindow( Window* pWindow )
         pWindow->Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::SetMenuBarMode( bool bHide )
 {
@@ -2337,7 +2337,7 @@ void ImplBorderWindow::SetMenuBarMode( bool bHide )
     UpdateMenuHeight();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBorderWindow::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                   sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const
@@ -2347,7 +2347,7 @@ void ImplBorderWindow::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
         rTopBorder += mpMenuBarWindow->GetSizePixel().Height();
 }
 
-// -----------------------------------------------------------------------
+
 
 long ImplBorderWindow::CalcTitleWidth() const
 {

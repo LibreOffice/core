@@ -267,7 +267,7 @@ void XclImpName::InsertName(const ScTokenArray* pArray)
         mpScData = pData;               // cache for later use
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpNameManager::XclImpNameManager( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )

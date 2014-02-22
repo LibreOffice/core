@@ -91,11 +91,11 @@ OXMLCell::OXMLCell( ORptFilter& rImport
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 OXMLCell::~OXMLCell()
 {
 }
-// -----------------------------------------------------------------------------
+
 SvXMLImportContext* OXMLCell::CreateChildContext(
         sal_uInt16 _nPrefix,
         const OUString& _rLocalName,
@@ -182,7 +182,7 @@ SvXMLImportContext* OXMLCell::CreateChildContext(
 
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 void OXMLCell::EndElement()
 {
     if ( m_bContainsShape )
@@ -241,18 +241,18 @@ void OXMLCell::EndElement()
     else
         OXMLHelper::copyStyleElements(GetOwnImport().isOldFormat(),m_sStyleName,GetImport().GetAutoStyles(),m_xComponent.get());
 }
-// -----------------------------------------------------------------------------
+
 ORptFilter& OXMLCell::GetOwnImport()
 {
     return static_cast<ORptFilter&>(GetImport());
 }
-// -----------------------------------------------------------------------------
+
 void OXMLCell::setComponent(const uno::Reference< report::XReportComponent >& _xComponent)
 {
     m_pCell->m_xComponent = _xComponent;
     m_xComponent = _xComponent;
 }
-// -----------------------------------------------------------------------------
+
 void OXMLCell::Characters( const OUString& rChars )
 {
     if ( !rChars.isEmpty() )
@@ -273,8 +273,8 @@ void OXMLCell::setContainsShape(bool _bContainsShape)
     m_bContainsShape = _bContainsShape;
 }
 
-//----------------------------------------------------------------------------
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

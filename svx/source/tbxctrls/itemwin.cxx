@@ -73,13 +73,13 @@ SvxLineBox::SvxLineBox( Window* pParent, const Reference< XFrame >& rFrame, WinB
     aDelayTimer.Start();
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxLineBox::~SvxLineBox()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineBox, DelayHdl_Impl)
 {
@@ -91,7 +91,7 @@ IMPL_LINK_NOARG(SvxLineBox, DelayHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineBox::Select()
 {
@@ -156,7 +156,7 @@ void SvxLineBox::Select()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxLineBox::PreNotify( NotifyEvent& rNEvt )
 {
@@ -185,7 +185,7 @@ bool SvxLineBox::PreNotify( NotifyEvent& rNEvt )
     return LineLB::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxLineBox::Notify( NotifyEvent& rNEvt )
 {
@@ -212,7 +212,7 @@ bool SvxLineBox::Notify( NotifyEvent& rNEvt )
     return nHandled;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineBox::ReleaseFocus_Impl()
 {
@@ -288,13 +288,13 @@ SvxColorBox::SvxColorBox(
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxColorBox::~SvxColorBox()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxColorBox::Update( const XLineColorItem* pItem )
 {
@@ -335,7 +335,7 @@ void SvxColorBox::Update( const XLineColorItem* pItem )
         SetNoSelection();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxColorBox::Select()
 {
@@ -361,7 +361,7 @@ void SvxColorBox::Select()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxColorBox::PreNotify( NotifyEvent& rNEvt )
 {
@@ -391,7 +391,7 @@ bool SvxColorBox::PreNotify( NotifyEvent& rNEvt )
     return ColorLB::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxColorBox::Notify( NotifyEvent& rNEvt )
 {
@@ -430,7 +430,7 @@ void SvxColorBox::DataChanged( const DataChangedEvent& rDCEvt )
 
     ColorLB::DataChanged( rDCEvt );
 }
-// -----------------------------------------------------------------------
+
 
 void SvxColorBox::ReleaseFocus_Impl()
 {
@@ -477,13 +477,13 @@ SvxMetricField::SvxMetricField(
     Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxMetricField::~SvxMetricField()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxMetricField::Update( const XLineWidthItem* pItem )
 {
@@ -496,7 +496,7 @@ void SvxMetricField::Update( const XLineWidthItem* pItem )
         SetText( "" );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxMetricField::Modify()
 {
@@ -514,7 +514,7 @@ void SvxMetricField::Modify()
                                  aArgs );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxMetricField::ReleaseFocus_Impl()
 {
@@ -526,7 +526,7 @@ void SvxMetricField::ReleaseFocus_Impl()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxMetricField::Down()
 {
@@ -538,21 +538,21 @@ void SvxMetricField::Down()
         MetricField::Down();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxMetricField::Up()
 {
     MetricField::Up();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxMetricField::SetCoreUnit( SfxMapUnit eUnit )
 {
     ePoolUnit = eUnit;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxMetricField::RefreshDlgUnit()
 {
@@ -564,7 +564,7 @@ void SvxMetricField::RefreshDlgUnit()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxMetricField::PreNotify( NotifyEvent& rNEvt )
 {
@@ -576,7 +576,7 @@ bool SvxMetricField::PreNotify( NotifyEvent& rNEvt )
     return MetricField::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxMetricField::Notify( NotifyEvent& rNEvt )
 {
@@ -650,13 +650,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFillTypeBox(Window *pPar
     return new SvxFillTypeBox(pParent);
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxFillTypeBox::~SvxFillTypeBox()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxFillTypeBox::PreNotify( NotifyEvent& rNEvt )
 {
@@ -677,7 +677,7 @@ bool SvxFillTypeBox::PreNotify( NotifyEvent& rNEvt )
     return FillTypeLB::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxFillTypeBox::Notify( NotifyEvent& rNEvt )
 {
@@ -708,7 +708,7 @@ bool SvxFillTypeBox::Notify( NotifyEvent& rNEvt )
     return nHandled;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFillTypeBox::ReleaseFocus_Impl()
 {
@@ -743,13 +743,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFillAttrBox(Window *pPar
     return new SvxFillAttrBox(pParent);
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxFillAttrBox::~SvxFillAttrBox()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxFillAttrBox::PreNotify( NotifyEvent& rNEvt )
 {
@@ -761,7 +761,7 @@ bool SvxFillAttrBox::PreNotify( NotifyEvent& rNEvt )
     return FillAttrLB::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
 {
@@ -792,14 +792,14 @@ bool SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
     return nHandled;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFillAttrBox::Select()
 {
     FillAttrLB::Select();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFillAttrBox::ReleaseFocus_Impl()
 {

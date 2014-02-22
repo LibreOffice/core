@@ -84,7 +84,7 @@ namespace svx
         bool                                    m_bNeedExistenceCheck;
     };
 
-    //--------------------------------------------------------------------
+
     DatabaseLocationInputController_Impl::DatabaseLocationInputController_Impl( const Reference<XComponentContext>& _rContext,
             ::svt::OFileURLControl& _rLocationInput, PushButton& _rBrowseButton )
         :m_xContext( _rContext )
@@ -112,14 +112,14 @@ namespace svx
         m_rLocationInput.AddEventListener( LINK( this, DatabaseLocationInputController_Impl, OnControlAction ) );
     }
 
-    //--------------------------------------------------------------------
+
     DatabaseLocationInputController_Impl::~DatabaseLocationInputController_Impl()
     {
         m_rBrowseButton.RemoveEventListener( LINK( this, DatabaseLocationInputController_Impl, OnControlAction ) );
         m_rLocationInput.RemoveEventListener( LINK( this, DatabaseLocationInputController_Impl, OnControlAction ) );
     }
 
-    //--------------------------------------------------------------------
+
     bool DatabaseLocationInputController_Impl::prepareCommit()
     {
         OUString sURL( impl_getCurrentURL() );
@@ -140,20 +140,20 @@ namespace svx
         return true;
     }
 
-    //--------------------------------------------------------------------
+
     void DatabaseLocationInputController_Impl::setURL( const OUString& _rURL )
     {
         ::svt::OFileNotation aTransformer( _rURL );
         m_rLocationInput.SetText( aTransformer.get( ::svt::OFileNotation::N_SYSTEM ) );
     }
 
-    //--------------------------------------------------------------------
+
     OUString DatabaseLocationInputController_Impl::getURL() const
     {
         return impl_getCurrentURL();
     }
 
-    //--------------------------------------------------------------------
+
     void DatabaseLocationInputController_Impl::impl_initFilterProperties_nothrow()
     {
         try
@@ -198,7 +198,7 @@ namespace svx
         }
     }
 
-    // -----------------------------------------------------------------------------
+
     IMPL_LINK( DatabaseLocationInputController_Impl, OnControlAction, VclWindowEvent*, _pEvent )
     {
         if  (   ( _pEvent->GetWindow() == &m_rBrowseButton )
@@ -218,7 +218,7 @@ namespace svx
         return 0L;
     }
 
-    // -----------------------------------------------------------------------------
+
     OUString DatabaseLocationInputController_Impl::impl_getCurrentURL() const
     {
         OUString sCurrentFile( m_rLocationInput.GetText() );
@@ -230,7 +230,7 @@ namespace svx
         return sCurrentFile;
     }
 
-    // -----------------------------------------------------------------------------
+
     void DatabaseLocationInputController_Impl::impl_onBrowseButtonClicked()
     {
         ::sfx2::FileDialogHelper aFileDlg(
@@ -257,7 +257,7 @@ namespace svx
         }
     }
 
-    // -----------------------------------------------------------------------------
+
     void DatabaseLocationInputController_Impl::impl_onLocationModified()
     {
         m_bNeedExistenceCheck = true;
@@ -266,31 +266,31 @@ namespace svx
     //====================================================================
     //= DatabaseLocationInputController
     //====================================================================
-    //--------------------------------------------------------------------
+
     DatabaseLocationInputController::DatabaseLocationInputController( const Reference<XComponentContext>& _rContext,
             ::svt::OFileURLControl& _rLocationInput, PushButton& _rBrowseButton )
         :m_pImpl( new DatabaseLocationInputController_Impl( _rContext, _rLocationInput, _rBrowseButton ) )
     {
     }
 
-    //--------------------------------------------------------------------
+
     DatabaseLocationInputController::~DatabaseLocationInputController()
     {
     }
 
-    //--------------------------------------------------------------------
+
     bool DatabaseLocationInputController::prepareCommit()
     {
         return m_pImpl->prepareCommit();
     }
 
-    //--------------------------------------------------------------------
+
     void DatabaseLocationInputController::setURL( const OUString& _rURL )
     {
         m_pImpl->setURL( _rURL );
     }
 
-    //--------------------------------------------------------------------
+
     OUString DatabaseLocationInputController::getURL() const
     {
         return m_pImpl->getURL();

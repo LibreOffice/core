@@ -53,13 +53,13 @@ namespace dbp
     //=====================================================================
     //= OOptionGroupLayouter
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OOptionGroupLayouter::OOptionGroupLayouter(const Reference< XComponentContext >& _rxContext)
         :mxContext(_rxContext)
     {
     }
 
-    //---------------------------------------------------------------------
+
     void OOptionGroupLayouter::doLayout(const OControlWizardContext& _rContext, const OOptionGroupSettings& _rSettings)
     {
         Reference< XShapes > xPageShapes(_rContext.xDrawPage, UNO_QUERY);
@@ -185,7 +185,7 @@ namespace dbp
         }
     }
 
-    //---------------------------------------------------------------------
+
     void OOptionGroupLayouter::implAnchorShape(const Reference< XPropertySet >& _rxShapeProps)
     {
         static const OUString s_sAnchorPropertyName("AnchorType");

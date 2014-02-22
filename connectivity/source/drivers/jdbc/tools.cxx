@@ -74,7 +74,7 @@ jclass java_util_Properties::getMyClass() const
     return theClass;
 }
 
-//--------------------------------------------------------------------------
+
 java_util_Properties::java_util_Properties( ): java_lang_Object( NULL, (jobject)NULL )
 {
     SDBThreadAttach t;
@@ -91,7 +91,7 @@ java_util_Properties::java_util_Properties( ): java_lang_Object( NULL, (jobject)
     t.pEnv->DeleteLocalRef( tempObj );
 }
 
-// --------------------------------------------------------------------------------
+
 jstring connectivity::convertwchar_tToJavaString(JNIEnv *pEnv,const OUString& _rTemp)
 {
     OSL_ENSURE(pEnv,"Environment is NULL!");
@@ -101,7 +101,7 @@ jstring connectivity::convertwchar_tToJavaString(JNIEnv *pEnv,const OUString& _r
     return pStr;
 }
 
-// --------------------------------------------------------------------------------
+
 java_util_Properties* connectivity::createStringPropertyArray(const Sequence< PropertyValue >& info )  throw(SQLException, RuntimeException)
 {
     java_util_Properties* pProps = new java_util_Properties();
@@ -152,7 +152,7 @@ java_util_Properties* connectivity::createStringPropertyArray(const Sequence< Pr
     }
     return pProps;
 }
-// --------------------------------------------------------------------------------
+
 OUString connectivity::JavaString2String(JNIEnv *pEnv,jstring _Str)
 {
     OUString aStr;
@@ -169,7 +169,7 @@ OUString connectivity::JavaString2String(JNIEnv *pEnv,jstring _Str)
     }
     return aStr;
 }
-// --------------------------------------------------------------------------------
+
 jobject connectivity::convertTypeMapToJavaMap(JNIEnv* /*pEnv*/,const Reference< ::com::sun::star::container::XNameAccess > & _rMap)
 {
     if ( _rMap.is() )
@@ -180,7 +180,7 @@ jobject connectivity::convertTypeMapToJavaMap(JNIEnv* /*pEnv*/,const Reference< 
     }
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool connectivity::isExceptionOccurred(JNIEnv *pEnv,sal_Bool _bClear)
 {
     if ( !pEnv )
@@ -208,7 +208,7 @@ sal_Bool connectivity::isExceptionOccurred(JNIEnv *pEnv,sal_Bool _bClear)
 
     return bRet;
 }
-// -----------------------------------------------------------------------------
+
 jobject connectivity::createByteInputStream(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x,sal_Int32 length)
 {
     SDBThreadAttach t;
@@ -235,7 +235,7 @@ jobject connectivity::createByteInputStream(const ::com::sun::star::uno::Referen
     t.pEnv->DeleteLocalRef((jbyteArray)pByteArray);
     return out;
 }
-// -----------------------------------------------------------------------------
+
 jobject connectivity::createCharArrayReader(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x,sal_Int32 length)
 {
     SDBThreadAttach t;
@@ -262,6 +262,6 @@ jobject connectivity::createCharArrayReader(const ::com::sun::star::uno::Referen
     t.pEnv->DeleteLocalRef((jcharArray)pCharArray);
     return out;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

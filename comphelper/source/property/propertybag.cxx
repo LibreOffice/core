@@ -58,7 +58,7 @@ namespace comphelper
     //====================================================================
     //= PropertyBag
     //====================================================================
-    //--------------------------------------------------------------------
+
     PropertyBag::PropertyBag()
         :m_pImpl( new PropertyBag_Impl )
     {
@@ -68,13 +68,13 @@ namespace comphelper
     {
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyBag::setAllowEmptyPropertyName( bool i_isAllowed )
     {
         m_pImpl->m_bAllowEmptyPropertyName = i_isAllowed;
     }
 
-    //--------------------------------------------------------------------
+
     namespace
     {
         void    lcl_checkForEmptyName( const bool _allowEmpty, const OUString& _name )
@@ -99,7 +99,7 @@ namespace comphelper
         }
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyBag::addVoidProperty( const OUString& _rName, const Type& _rType, sal_Int32 _nHandle, sal_Int32 _nAttributes )
     {
         if ( _rType.getTypeClass() == TypeClass_VOID )
@@ -122,7 +122,7 @@ namespace comphelper
         m_pImpl->aDefaults.insert( MapInt2Any::value_type( _nHandle, Any() ) );
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyBag::addProperty( const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, const Any& _rInitialValue )
     {
         // check type sanity
@@ -145,7 +145,7 @@ namespace comphelper
         m_pImpl->aDefaults.insert( MapInt2Any::value_type( _nHandle, _rInitialValue ) );
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyBag::removeProperty( const OUString& _rName )
     {
         const Property& rProp = getProperty( _rName );
@@ -159,7 +159,7 @@ namespace comphelper
         m_pImpl->aDefaults.erase( nHandle );
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyBag::getFastPropertyValue( sal_Int32 _nHandle, Any& _out_rValue ) const
     {
         if ( !hasPropertyByHandle( _nHandle ) )
@@ -168,7 +168,7 @@ namespace comphelper
         OPropertyContainerHelper::getFastPropertyValue( _out_rValue, _nHandle );
     }
 
-    //--------------------------------------------------------------------
+
     bool PropertyBag::convertFastPropertyValue( sal_Int32 _nHandle, const Any& _rNewValue, Any& _out_rConvertedValue, Any& _out_rCurrentValue ) const
     {
         if ( !hasPropertyByHandle( _nHandle ) )
@@ -178,7 +178,7 @@ namespace comphelper
             _out_rConvertedValue, _out_rCurrentValue, _nHandle, _rNewValue );
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyBag::setFastPropertyValue( sal_Int32 _nHandle, const Any& _rValue )
     {
         if ( !hasPropertyByHandle( _nHandle ) )
@@ -187,7 +187,7 @@ namespace comphelper
         OPropertyContainerHelper::setFastPropertyValue( _nHandle, _rValue );
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyBag::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _out_rValue ) const
     {
         if ( !hasPropertyByHandle( _nHandle ) )

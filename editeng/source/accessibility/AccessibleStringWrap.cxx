@@ -25,11 +25,11 @@
 #include <editeng/svxfont.hxx>
 #include <editeng/AccessibleStringWrap.hxx>
 
-//------------------------------------------------------------------------
+
 //
 // AccessibleStringWrap implementation
 //
-//------------------------------------------------------------------------
+
 
 AccessibleStringWrap::AccessibleStringWrap( OutputDevice& rDev, SvxFont& rFont, const OUString& rText ) :
     mrDev( rDev ),

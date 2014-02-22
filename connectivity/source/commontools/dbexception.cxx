@@ -42,34 +42,34 @@ namespace dbtools
 //==============================================================================
 //= SQLExceptionInfo - encapsulating the type info of an SQLException-derived class
 //==============================================================================
-//------------------------------------------------------------------------------
+
 SQLExceptionInfo::SQLExceptionInfo()
     :m_eType(UNDEFINED)
 {
 }
 
-//------------------------------------------------------------------------------
+
 SQLExceptionInfo::SQLExceptionInfo(const ::com::sun::star::sdbc::SQLException& _rError)
 {
     m_aContent <<= _rError;
     implDetermineType();
 }
 
-//------------------------------------------------------------------------------
+
 SQLExceptionInfo::SQLExceptionInfo(const ::com::sun::star::sdbc::SQLWarning& _rError)
 {
     m_aContent <<= _rError;
     implDetermineType();
 }
 
-//------------------------------------------------------------------------------
+
 SQLExceptionInfo::SQLExceptionInfo(const ::com::sun::star::sdb::SQLContext& _rError)
 {
     m_aContent <<= _rError;
     implDetermineType();
 }
 
-//------------------------------------------------------------------------------
+
 SQLExceptionInfo::SQLExceptionInfo( const OUString& _rSimpleErrorMessage )
 {
     SQLException aError;
@@ -78,14 +78,14 @@ SQLExceptionInfo::SQLExceptionInfo( const OUString& _rSimpleErrorMessage )
     implDetermineType();
 }
 
-//------------------------------------------------------------------------------
+
 SQLExceptionInfo::SQLExceptionInfo(const SQLExceptionInfo& _rCopySource)
     :m_aContent(_rCopySource.m_aContent)
     ,m_eType(_rCopySource.m_eType)
 {
 }
 
-//------------------------------------------------------------------------------
+
 const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdbc::SQLException& _rError)
 {
     m_aContent <<= _rError;
@@ -93,7 +93,7 @@ const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdbc
     return *this;
 }
 
-//------------------------------------------------------------------------------
+
 const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdbc::SQLWarning& _rError)
 {
     m_aContent <<= _rError;
@@ -101,7 +101,7 @@ const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdbc
     return *this;
 }
 
-//------------------------------------------------------------------------------
+
 const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdb::SQLContext& _rError)
 {
     m_aContent <<= _rError;
@@ -109,7 +109,7 @@ const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdb:
     return *this;
 }
 
-//------------------------------------------------------------------------------
+
 const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdb::SQLErrorEvent& _rErrorEvent)
 {
     m_aContent = _rErrorEvent.Reason;
@@ -117,7 +117,7 @@ const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdb:
     return *this;
 }
 
-//------------------------------------------------------------------------------
+
 const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::uno::Any& _rCaughtSQLException)
 {
     m_aContent = _rCaughtSQLException;
@@ -125,7 +125,7 @@ const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::uno:
     return *this;
 }
 
-//------------------------------------------------------------------------------
+
 SQLExceptionInfo::SQLExceptionInfo(const staruno::Any& _rError)
 {
     const staruno::Type& aSQLExceptionType = ::getCppuType(static_cast< ::com::sun::star::sdbc::SQLException*>(0));
@@ -137,7 +137,7 @@ SQLExceptionInfo::SQLExceptionInfo(const staruno::Any& _rError)
     implDetermineType();
 }
 
-//------------------------------------------------------------------------------
+
 void SQLExceptionInfo::implDetermineType()
 {
     const Type& aSQLExceptionType = ::getCppuType( static_cast< SQLException* >( 0 ) );
@@ -157,7 +157,7 @@ void SQLExceptionInfo::implDetermineType()
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool SQLExceptionInfo::isKindOf(TYPE _eType) const
 {
     switch (_eType)
@@ -174,28 +174,28 @@ sal_Bool SQLExceptionInfo::isKindOf(TYPE _eType) const
     return sal_False;
 }
 
-//------------------------------------------------------------------------------
+
 SQLExceptionInfo::operator const ::com::sun::star::sdbc::SQLException*() const
 {
     OSL_ENSURE(isKindOf(SQL_EXCEPTION), "SQLExceptionInfo::operator SQLException* : invalid call !");
     return reinterpret_cast<const ::com::sun::star::sdbc::SQLException*>(m_aContent.getValue());
 }
 
-//------------------------------------------------------------------------------
+
 SQLExceptionInfo::operator const ::com::sun::star::sdbc::SQLWarning*() const
 {
     OSL_ENSURE(isKindOf(SQL_WARNING), "SQLExceptionInfo::operator SQLException* : invalid call !");
     return reinterpret_cast<const ::com::sun::star::sdbc::SQLWarning*>(m_aContent.getValue());
 }
 
-//------------------------------------------------------------------------------
+
 SQLExceptionInfo::operator const ::com::sun::star::sdb::SQLContext*() const
 {
     OSL_ENSURE(isKindOf(SQL_CONTEXT), "SQLExceptionInfo::operator SQLException* : invalid call !");
     return reinterpret_cast<const ::com::sun::star::sdb::SQLContext*>(m_aContent.getValue());
 }
 
-//------------------------------------------------------------------------------
+
 void SQLExceptionInfo::prepend( const OUString& _rErrorMessage, const OUString& _rSQLState, const sal_Int32 _nErrorCode )
 {
     SQLException aException;
@@ -208,7 +208,7 @@ void SQLExceptionInfo::prepend( const OUString& _rErrorMessage, const OUString& 
     m_eType = SQL_EXCEPTION;
 }
 
-//------------------------------------------------------------------------------
+
 void SQLExceptionInfo::append( TYPE _eType, const OUString& _rErrorMessage, const OUString& _rSQLState, const sal_Int32 _nErrorCode )
 {
     // create the to-be-appended exception
@@ -254,7 +254,7 @@ void SQLExceptionInfo::append( TYPE _eType, const OUString& _rErrorMessage, cons
     }
 }
 
-//------------------------------------------------------------------------------
+
 void SQLExceptionInfo::doThrow()
 {
     if ( m_aContent.getValueTypeClass() == TypeClass_EXCEPTION )
@@ -266,7 +266,7 @@ void SQLExceptionInfo::doThrow()
 //= SQLExceptionIteratorHelper
 //==============================================================================
 
-//------------------------------------------------------------------------------
+
 SQLExceptionIteratorHelper::SQLExceptionIteratorHelper( const SQLExceptionInfo& _rChainStart )
     :m_pCurrent( NULL )
     ,m_eCurrentType( SQLExceptionInfo::UNDEFINED )
@@ -278,14 +278,14 @@ SQLExceptionIteratorHelper::SQLExceptionIteratorHelper( const SQLExceptionInfo& 
     }
 }
 
-//------------------------------------------------------------------------------
+
 SQLExceptionIteratorHelper::SQLExceptionIteratorHelper( const ::com::sun::star::sdbc::SQLException& _rChainStart )
     :m_pCurrent( &_rChainStart )
     ,m_eCurrentType( SQLExceptionInfo::SQL_EXCEPTION )
 {
 }
 
-//------------------------------------------------------------------------------
+
 void SQLExceptionIteratorHelper::current( SQLExceptionInfo& _out_rInfo ) const
 {
     switch ( m_eCurrentType )
@@ -308,7 +308,7 @@ void SQLExceptionIteratorHelper::current( SQLExceptionInfo& _out_rInfo ) const
     }
 }
 
-//------------------------------------------------------------------------------
+
 const ::com::sun::star::sdbc::SQLException* SQLExceptionIteratorHelper::next()
 {
     OSL_ENSURE( hasMoreElements(), "SQLExceptionIteratorHelper::next : invalid call (please use hasMoreElements)!" );
@@ -351,14 +351,14 @@ const ::com::sun::star::sdbc::SQLException* SQLExceptionIteratorHelper::next()
     return pReturn;
 }
 
-//------------------------------------------------------------------------------
+
 void SQLExceptionIteratorHelper::next( SQLExceptionInfo& _out_rInfo )
 {
     current( _out_rInfo );
     next();
 }
 
-//------------------------------------------------------------
+
 void throwFunctionSequenceException(const Reference< XInterface >& _Context, const Any& _Next)  throw ( ::com::sun::star::sdbc::SQLException )
 {
     ::connectivity::SharedResources aResources;
@@ -370,7 +370,7 @@ void throwFunctionSequenceException(const Reference< XInterface >& _Context, con
         _Next
     );
 }
-// -----------------------------------------------------------------------------
+
 void throwInvalidIndexException(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
         const ::com::sun::star::uno::Any& _Next)  throw ( ::com::sun::star::sdbc::SQLException )
 {
@@ -383,7 +383,7 @@ void throwInvalidIndexException(const ::com::sun::star::uno::Reference< ::com::s
         _Next
     );
 }
-// -----------------------------------------------------------------------------
+
 void throwFunctionNotSupportedException( const OUString& _rFunctionName, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
         const ::com::sun::star::uno::Any& _rNextException ) throw ( ::com::sun::star::sdbc::SQLException )
 {
@@ -400,21 +400,21 @@ void throwFunctionNotSupportedException( const OUString& _rFunctionName, const :
         _rNextException
     );
 }
-// -----------------------------------------------------------------------------
+
 void throwGenericSQLException(const OUString& _rMsg, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSource)
     throw (::com::sun::star::sdbc::SQLException)
 {
     throwGenericSQLException(_rMsg, _rxSource, Any());
 }
 
-// -----------------------------------------------------------------------------
+
 void throwGenericSQLException(const OUString& _rMsg, const Reference< XInterface >& _rxSource, const Any& _rNextException)
     throw (SQLException)
 {
     throw SQLException( _rMsg, _rxSource, getStandardSQLState( SQL_GENERAL_ERROR ), 0, _rNextException);
 }
 
-// -----------------------------------------------------------------------------
+
 void throwFeatureNotImplementedException( const OUString& _rFeatureName, const Reference< XInterface >& _rxContext, const Any* _pNextException )
     throw (SQLException)
 {
@@ -442,7 +442,7 @@ void throwInvalidColumnException( const OUString& _rColumnName, const Reference<
                                 "$columnname$",_rColumnName) );
     throwSQLException( sErrorMessage, SQL_COLUMN_NOT_FOUND, _rxContext );
 }
-// -----------------------------------------------------------------------------
+
 void throwSQLException( const OUString& _rMessage, const OUString& _rSQLState,
         const Reference< XInterface >& _rxContext, const sal_Int32 _nErrorCode, const Any* _pNextException ) throw (SQLException)
 {
@@ -455,7 +455,7 @@ void throwSQLException( const OUString& _rMessage, const OUString& _rSQLState,
     );
 }
 
-// -----------------------------------------------------------------------------
+
 void throwSQLException( const OUString& _rMessage, StandardSQLState _eSQLState,
         const Reference< XInterface >& _rxContext, const sal_Int32 _nErrorCode,
         const Any* _pNextException ) throw (SQLException)
@@ -463,7 +463,7 @@ void throwSQLException( const OUString& _rMessage, StandardSQLState _eSQLState,
     throwSQLException( _rMessage, getStandardSQLState( _eSQLState ), _rxContext, _nErrorCode, _pNextException );
 }
 
-// -----------------------------------------------------------------------------
+
 OUString getStandardSQLState( StandardSQLState _eState )
 {
     switch ( _eState )
@@ -495,7 +495,7 @@ OUString getStandardSQLState( StandardSQLState _eState )
     throw RuntimeException();
 }
 
-// -----------------------------------------------------------------------------
+
 //.........................................................................
 }   // namespace dbtools
 //.........................................................................

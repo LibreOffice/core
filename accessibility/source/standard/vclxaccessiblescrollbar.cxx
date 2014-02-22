@@ -39,22 +39,22 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
-// -----------------------------------------------------------------------------
+
 // VCLXAccessibleScrollBar
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleScrollBar::VCLXAccessibleScrollBar( VCLXWindow* pVCLWindow )
     :VCLXAccessibleComponent( pVCLWindow )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleScrollBar::~VCLXAccessibleScrollBar()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
@@ -70,7 +70,7 @@ void VCLXAccessibleScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
    }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleScrollBar::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
@@ -88,28 +88,28 @@ void VCLXAccessibleScrollBar::FillAccessibleStateSet( utl::AccessibleStateSetHel
     }
 }
 
-// -----------------------------------------------------------------------------
+
 // XInterface
-// -----------------------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleScrollBar, VCLXAccessibleComponent, VCLXAccessibleScrollBar_BASE )
 
-// -----------------------------------------------------------------------------
+
 // XTypeProvider
-// -----------------------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleScrollBar, VCLXAccessibleComponent, VCLXAccessibleScrollBar_BASE )
 
-// -----------------------------------------------------------------------------
+
 // XServiceInfo
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleScrollBar::getImplementationName() throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleScrollBar" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > VCLXAccessibleScrollBar::getSupportedServiceNames() throw (RuntimeException)
 {
@@ -118,9 +118,9 @@ Sequence< OUString > VCLXAccessibleScrollBar::getSupportedServiceNames() throw (
     return aNames;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleAction
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleScrollBar::getAccessibleActionCount( ) throw (RuntimeException)
 {
@@ -129,7 +129,7 @@ sal_Int32 VCLXAccessibleScrollBar::getAccessibleActionCount( ) throw (RuntimeExc
     return 4;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleScrollBar::doAccessibleAction ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -158,7 +158,7 @@ sal_Bool VCLXAccessibleScrollBar::doAccessibleAction ( sal_Int32 nIndex ) throw 
     return bReturn;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleScrollBar::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -181,7 +181,7 @@ OUString VCLXAccessibleScrollBar::getAccessibleActionDescription ( sal_Int32 nIn
     return sDescription;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessibleKeyBinding > VCLXAccessibleScrollBar::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -193,9 +193,9 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleScrollBar::getAccessibleActionK
     return Reference< XAccessibleKeyBinding >();
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleValue
-// -----------------------------------------------------------------------------
+
 
 Any VCLXAccessibleScrollBar::getCurrentValue(  ) throw (RuntimeException)
 {
@@ -210,7 +210,7 @@ Any VCLXAccessibleScrollBar::getCurrentValue(  ) throw (RuntimeException)
     return aValue;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleScrollBar::setCurrentValue( const Any& aNumber ) throw (RuntimeException)
 {
@@ -238,7 +238,7 @@ sal_Bool VCLXAccessibleScrollBar::setCurrentValue( const Any& aNumber ) throw (R
     return bReturn;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Any VCLXAccessibleScrollBar::getMaximumValue(  ) throw (RuntimeException)
 {
@@ -253,7 +253,7 @@ Any VCLXAccessibleScrollBar::getMaximumValue(  ) throw (RuntimeException)
     return aValue;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Any VCLXAccessibleScrollBar::getMinimumValue(  ) throw (RuntimeException)
 {
@@ -265,7 +265,7 @@ Any VCLXAccessibleScrollBar::getMinimumValue(  ) throw (RuntimeException)
     return aValue;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleScrollBar::getAccessibleName(  ) throw (uno::RuntimeException)
 {

@@ -50,9 +50,9 @@ using namespace ::comphelper;
 DBG_NAME( AccessibleDialogWindow )
 
 
-// -----------------------------------------------------------------------------
+
 // class ChildDescriptor
-// -----------------------------------------------------------------------------
+
 
 AccessibleDialogWindow::ChildDescriptor::ChildDescriptor( DlgEdObj* _pDlgEdObj )
     :pDlgEdObj( _pDlgEdObj )
@@ -60,13 +60,13 @@ AccessibleDialogWindow::ChildDescriptor::ChildDescriptor( DlgEdObj* _pDlgEdObj )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 AccessibleDialogWindow::ChildDescriptor::~ChildDescriptor()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 AccessibleDialogWindow::ChildDescriptor::ChildDescriptor( const ChildDescriptor& rDesc )
     :pDlgEdObj( rDesc.pDlgEdObj )
@@ -74,7 +74,7 @@ AccessibleDialogWindow::ChildDescriptor::ChildDescriptor( const ChildDescriptor&
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 AccessibleDialogWindow::ChildDescriptor& AccessibleDialogWindow::ChildDescriptor::operator=( const ChildDescriptor& rDesc )
 {
@@ -84,7 +84,7 @@ AccessibleDialogWindow::ChildDescriptor& AccessibleDialogWindow::ChildDescriptor
     return *this;
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool AccessibleDialogWindow::ChildDescriptor::operator==( const ChildDescriptor& rDesc )
 {
@@ -95,7 +95,7 @@ bool AccessibleDialogWindow::ChildDescriptor::operator==( const ChildDescriptor&
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool AccessibleDialogWindow::ChildDescriptor::operator<( const ChildDescriptor& rDesc ) const
 {
@@ -106,9 +106,9 @@ bool AccessibleDialogWindow::ChildDescriptor::operator<( const ChildDescriptor& 
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 // class AccessibleDialogWindow
-// -----------------------------------------------------------------------------
+
 
 AccessibleDialogWindow::AccessibleDialogWindow (basctl::DialogWindow* pDialogWindow)
     : AccessibleExtendedComponentHelper_BASE( new VCLExternalSolarLock() )
@@ -143,7 +143,7 @@ AccessibleDialogWindow::AccessibleDialogWindow (basctl::DialogWindow* pDialogWin
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 AccessibleDialogWindow::~AccessibleDialogWindow()
 {
@@ -161,7 +161,7 @@ AccessibleDialogWindow::~AccessibleDialogWindow()
     m_pExternalLock = NULL;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void AccessibleDialogWindow::UpdateFocused()
 {
@@ -177,7 +177,7 @@ void AccessibleDialogWindow::UpdateFocused()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void AccessibleDialogWindow::UpdateSelected()
 {
@@ -195,7 +195,7 @@ void AccessibleDialogWindow::UpdateSelected()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void AccessibleDialogWindow::UpdateBounds()
 {
@@ -211,7 +211,7 @@ void AccessibleDialogWindow::UpdateBounds()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool AccessibleDialogWindow::IsChildVisible( const ChildDescriptor& rDesc )
 {
@@ -255,7 +255,7 @@ bool AccessibleDialogWindow::IsChildVisible( const ChildDescriptor& rDesc )
     return bVisible;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void AccessibleDialogWindow::InsertChild( const ChildDescriptor& rDesc )
 {
@@ -284,7 +284,7 @@ void AccessibleDialogWindow::InsertChild( const ChildDescriptor& rDesc )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void AccessibleDialogWindow::RemoveChild( const ChildDescriptor& rDesc )
 {
@@ -314,7 +314,7 @@ void AccessibleDialogWindow::RemoveChild( const ChildDescriptor& rDesc )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void AccessibleDialogWindow::UpdateChild( const ChildDescriptor& rDesc )
 {
@@ -330,7 +330,7 @@ void AccessibleDialogWindow::UpdateChild( const ChildDescriptor& rDesc )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void AccessibleDialogWindow::UpdateChildren()
 {
@@ -343,7 +343,7 @@ void AccessibleDialogWindow::UpdateChildren()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void AccessibleDialogWindow::SortChildren()
 {
@@ -351,7 +351,7 @@ void AccessibleDialogWindow::SortChildren()
     ::std::sort( m_aAccessibleChildren.begin(), m_aAccessibleChildren.end() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 IMPL_LINK( AccessibleDialogWindow, WindowEventListener, VclSimpleEvent*, pEvent )
 {
@@ -368,7 +368,7 @@ IMPL_LINK( AccessibleDialogWindow, WindowEventListener, VclSimpleEvent*, pEvent 
     return 0;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void AccessibleDialogWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
@@ -464,7 +464,7 @@ void AccessibleDialogWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindo
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void AccessibleDialogWindow::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
@@ -489,9 +489,9 @@ void AccessibleDialogWindow::FillAccessibleStateSet( utl::AccessibleStateSetHelp
     }
 }
 
-// -----------------------------------------------------------------------------
+
 // OCommonAccessibleComponent
-// -----------------------------------------------------------------------------
+
 
 awt::Rectangle AccessibleDialogWindow::implGetBounds() throw (RuntimeException)
 {
@@ -502,9 +502,9 @@ awt::Rectangle AccessibleDialogWindow::implGetBounds() throw (RuntimeException)
     return aBounds;
 }
 
-// -----------------------------------------------------------------------------
+
 // SfxListener
-// -----------------------------------------------------------------------------
+
 
 void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
@@ -563,21 +563,21 @@ void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 // XInterface
-// -----------------------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XINTERFACE2( AccessibleDialogWindow, AccessibleExtendedComponentHelper_BASE, AccessibleDialogWindow_BASE )
 
-// -----------------------------------------------------------------------------
+
 // XTypeProvider
-// -----------------------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccessibleDialogWindow, AccessibleExtendedComponentHelper_BASE, AccessibleDialogWindow_BASE )
 
-// -----------------------------------------------------------------------------
+
 // XComponent
-// -----------------------------------------------------------------------------
+
 
 void AccessibleDialogWindow::disposing()
 {
@@ -641,7 +641,7 @@ sal_Int32 AccessibleDialogWindow::getAccessibleChildCount() throw (RuntimeExcept
     return m_aAccessibleChildren.size();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > AccessibleDialogWindow::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -669,7 +669,7 @@ Reference< XAccessible > AccessibleDialogWindow::getAccessibleChild( sal_Int32 i
     return xChild;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > AccessibleDialogWindow::getAccessibleParent(  ) throw (RuntimeException)
 {
@@ -686,7 +686,7 @@ Reference< XAccessible > AccessibleDialogWindow::getAccessibleParent(  ) throw (
     return xParent;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 AccessibleDialogWindow::getAccessibleIndexInParent(  ) throw (RuntimeException)
 {
@@ -713,7 +713,7 @@ sal_Int32 AccessibleDialogWindow::getAccessibleIndexInParent(  ) throw (RuntimeE
     return nIndexInParent;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int16 AccessibleDialogWindow::getAccessibleRole(  ) throw (RuntimeException)
 {
@@ -722,7 +722,7 @@ sal_Int16 AccessibleDialogWindow::getAccessibleRole(  ) throw (RuntimeException)
     return AccessibleRole::PANEL;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString AccessibleDialogWindow::getAccessibleDescription(  ) throw (RuntimeException)
 {
@@ -735,7 +735,7 @@ OUString AccessibleDialogWindow::getAccessibleDescription(  ) throw (RuntimeExce
     return sDescription;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString AccessibleDialogWindow::getAccessibleName(  ) throw (RuntimeException)
 {
@@ -748,7 +748,7 @@ OUString AccessibleDialogWindow::getAccessibleName(  ) throw (RuntimeException)
     return sName;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessibleRelationSet > AccessibleDialogWindow::getAccessibleRelationSet(  ) throw (RuntimeException)
 {
@@ -759,7 +759,7 @@ Reference< XAccessibleRelationSet > AccessibleDialogWindow::getAccessibleRelatio
     return xSet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessibleStateSet > AccessibleDialogWindow::getAccessibleStateSet(  ) throw (RuntimeException)
 {
@@ -780,7 +780,7 @@ Reference< XAccessibleStateSet > AccessibleDialogWindow::getAccessibleStateSet( 
     return xSet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Locale AccessibleDialogWindow::getLocale(  ) throw (IllegalAccessibleComponentStateException, RuntimeException)
 {
@@ -789,9 +789,9 @@ Locale AccessibleDialogWindow::getLocale(  ) throw (IllegalAccessibleComponentSt
     return Application::GetSettings().GetLanguageTag().getLocale();
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleComponent
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > AccessibleDialogWindow::getAccessibleAtPoint( const awt::Point& rPoint ) throw (RuntimeException)
 {
@@ -820,7 +820,7 @@ Reference< XAccessible > AccessibleDialogWindow::getAccessibleAtPoint( const awt
     return xChild;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void AccessibleDialogWindow::grabFocus(  ) throw (RuntimeException)
 {
@@ -830,7 +830,7 @@ void AccessibleDialogWindow::grabFocus(  ) throw (RuntimeException)
         m_pDialogWindow->GrabFocus();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 AccessibleDialogWindow::getForeground(  ) throw (RuntimeException)
 {
@@ -855,7 +855,7 @@ sal_Int32 AccessibleDialogWindow::getForeground(  ) throw (RuntimeException)
     return nColor;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 AccessibleDialogWindow::getBackground(  ) throw (RuntimeException)
 {
@@ -873,9 +873,9 @@ sal_Int32 AccessibleDialogWindow::getBackground(  ) throw (RuntimeException)
     return nColor;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleExtendedComponent
-// -----------------------------------------------------------------------------
+
 
 Reference< awt::XFont > AccessibleDialogWindow::getFont(  ) throw (RuntimeException)
 {
@@ -901,7 +901,7 @@ Reference< awt::XFont > AccessibleDialogWindow::getFont(  ) throw (RuntimeExcept
     return xFont;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString AccessibleDialogWindow::getTitledBorderText(  ) throw (RuntimeException)
 {
@@ -910,7 +910,7 @@ OUString AccessibleDialogWindow::getTitledBorderText(  ) throw (RuntimeException
     return OUString();
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString AccessibleDialogWindow::getToolTipText(  ) throw (RuntimeException)
 {
@@ -923,9 +923,9 @@ OUString AccessibleDialogWindow::getToolTipText(  ) throw (RuntimeException)
     return sText;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleSelection
-// -----------------------------------------------------------------------------
+
 
 void AccessibleDialogWindow::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -945,7 +945,7 @@ void AccessibleDialogWindow::selectAccessibleChild( sal_Int32 nChildIndex ) thro
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool AccessibleDialogWindow::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -960,7 +960,7 @@ sal_Bool AccessibleDialogWindow::isAccessibleChildSelected( sal_Int32 nChildInde
     return false;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void AccessibleDialogWindow::clearAccessibleSelection()
     throw (RuntimeException, std::exception)
@@ -971,7 +971,7 @@ void AccessibleDialogWindow::clearAccessibleSelection()
         m_pDialogWindow->GetView().UnmarkAll();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void AccessibleDialogWindow::selectAllAccessibleChildren(  ) throw (RuntimeException)
 {
@@ -981,7 +981,7 @@ void AccessibleDialogWindow::selectAllAccessibleChildren(  ) throw (RuntimeExcep
         m_pDialogWindow->GetView().MarkAll();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 AccessibleDialogWindow::getSelectedAccessibleChildCount(  ) throw (RuntimeException)
 {
@@ -998,7 +998,7 @@ sal_Int32 AccessibleDialogWindow::getSelectedAccessibleChildCount(  ) throw (Run
     return nRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > AccessibleDialogWindow::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -1021,7 +1021,7 @@ Reference< XAccessible > AccessibleDialogWindow::getSelectedAccessibleChild( sal
     return xChild;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void AccessibleDialogWindow::deselectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -1042,7 +1042,7 @@ void AccessibleDialogWindow::deselectAccessibleChild( sal_Int32 nChildIndex ) th
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 } // namespace basctl
 

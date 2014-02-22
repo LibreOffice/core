@@ -27,7 +27,7 @@ DBG_NAME(SfxAllEnumItem)
 
 TYPEINIT1_AUTOFACTORY(SfxAllEnumItem, SfxEnumItem)
 
-// -----------------------------------------------------------------------
+
 
 struct SfxAllEnumValue_Impl
 {
@@ -45,7 +45,7 @@ public:
     }
 };
 
-// -----------------------------------------------------------------------
+
 
 SfxAllEnumItem::SfxAllEnumItem() :
     SfxEnumItem(),
@@ -54,7 +54,7 @@ SfxAllEnumItem::SfxAllEnumItem() :
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which, sal_uInt16 nVal):
     SfxEnumItem(which, nVal),
@@ -65,7 +65,7 @@ SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which, sal_uInt16 nVal):
     InsertValue( nVal );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxAllEnumItem::SfxAllEnumItem( sal_uInt16 which, SvStream &rStream ):
     SfxEnumItem(which, rStream),
@@ -76,7 +76,7 @@ SfxAllEnumItem::SfxAllEnumItem( sal_uInt16 which, SvStream &rStream ):
     InsertValue( GetValue() );
 }
 
-// -----------------------------------------------------------------------
+
 
 
 SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which):
@@ -88,7 +88,7 @@ SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which):
 }
 
 
-// -----------------------------------------------------------------------
+
 
 SfxAllEnumItem::SfxAllEnumItem(const SfxAllEnumItem &rCopy):
     SfxEnumItem(rCopy),
@@ -115,7 +115,7 @@ SfxAllEnumItem::SfxAllEnumItem(const SfxAllEnumItem &rCopy):
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxAllEnumItem::~SfxAllEnumItem()
 {
@@ -124,7 +124,7 @@ SfxAllEnumItem::~SfxAllEnumItem()
     delete pDisabledValues;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 SfxAllEnumItem::GetValueCount() const
 {
@@ -132,7 +132,7 @@ sal_uInt16 SfxAllEnumItem::GetValueCount() const
     return pValues ? pValues->size() : 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString SfxAllEnumItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
@@ -141,7 +141,7 @@ OUString SfxAllEnumItem::GetValueTextByPos( sal_uInt16 nPos ) const
     return (*pValues)[nPos]->aText;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 SfxAllEnumItem::GetValueByPos( sal_uInt16 nPos ) const
 {
@@ -150,7 +150,7 @@ sal_uInt16 SfxAllEnumItem::GetValueByPos( sal_uInt16 nPos ) const
     return (*pValues)[nPos]->nValue;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SfxAllEnumItem::Clone( SfxItemPool * ) const
 {
@@ -158,7 +158,7 @@ SfxPoolItem* SfxAllEnumItem::Clone( SfxItemPool * ) const
     return new SfxAllEnumItem(*this);
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SfxAllEnumItem::Create( SvStream & rStream, sal_uInt16 ) const
 {
@@ -167,7 +167,7 @@ SfxPoolItem* SfxAllEnumItem::Create( SvStream & rStream, sal_uInt16 ) const
 }
 
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 SfxAllEnumItem::_GetPosByValue( sal_uInt16 nVal ) const
 
@@ -192,7 +192,7 @@ sal_uInt16 SfxAllEnumItem::_GetPosByValue( sal_uInt16 nVal ) const
     return nPos;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 SfxAllEnumItem::GetPosByValue( sal_uInt16 nValue ) const
 
@@ -212,7 +212,7 @@ sal_uInt16 SfxAllEnumItem::GetPosByValue( sal_uInt16 nValue ) const
     return SfxEnumItem::GetPosByValue( nValue );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxAllEnumItem::InsertValue( sal_uInt16 nValue, const OUString &rValue )
 {
@@ -229,7 +229,7 @@ void SfxAllEnumItem::InsertValue( sal_uInt16 nValue, const OUString &rValue )
     pValues->insert( pValues->begin() + _GetPosByValue(nValue), pVal ); //! doppelte?!
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxAllEnumItem::InsertValue( sal_uInt16 nValue )
 {
@@ -264,7 +264,7 @@ bool SfxAllEnumItem::IsEnabled( sal_uInt16 nValue ) const
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxAllEnumItem::RemoveValue( sal_uInt16 nValue )
 {

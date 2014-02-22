@@ -41,16 +41,16 @@ using namespace cli_uno;
 
 extern "C"
 {
-//------------------------------------------------------------------------------
+
 void SAL_CALL cli_proxy_free( uno_ExtEnvironment * env, void * proxy )
     SAL_THROW_EXTERN_C();
-//------------------------------------------------------------------------------
+
 void SAL_CALL cli_proxy_acquire( uno_Interface * pUnoI )
     SAL_THROW_EXTERN_C();
-//------------------------------------------------------------------------------
+
 void SAL_CALL cli_proxy_release( uno_Interface * pUnoI )
     SAL_THROW_EXTERN_C();
-//------------------------------------------------------------------------------
+
 void SAL_CALL cli_proxy_dispatch(
     uno_Interface * pUnoI, typelib_TypeDescription const * member_td,
     void * uno_ret, void * uno_args[], uno_Any ** uno_exc )
@@ -911,7 +911,7 @@ inline void CliProxy::acquire() const
 #endif
     }
 }
-//---------------------------------------------------------------------------
+
 inline void CliProxy::release() const
 {
     if (0 == osl_atomic_decrement( &m_ref ))
@@ -947,7 +947,7 @@ void SAL_CALL cli_proxy_acquire( uno_Interface * pUnoI )
     CliProxy const * cliProxy = static_cast< CliProxy const * >( pUnoI );
     cliProxy->acquire();
 }
-//-----------------------------------------------------------------------------
+
 extern "C"
 void SAL_CALL cli_proxy_release( uno_Interface * pUnoI )
     SAL_THROW_EXTERN_C()
@@ -956,7 +956,7 @@ void SAL_CALL cli_proxy_release( uno_Interface * pUnoI )
     cliProxy->release();
 }
 
-//------------------------------------------------------------------------------
+
 extern "C"
 
 void SAL_CALL cli_proxy_dispatch(

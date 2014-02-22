@@ -782,7 +782,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
     return bTest && !bSomethingTested;
 }
 
-//--------------------------------------------------------------------------
+
 
 sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const OUString& rPath, SvStream& rStream, sal_uInt16& rFormat )
 {
@@ -828,7 +828,7 @@ sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const OUString& rPath, SvStream& 
     return GRFILTER_OK;
 }
 
-//--------------------------------------------------------------------------
+
 
 #ifndef DISABLE_EXPORT
 
@@ -1343,7 +1343,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
     return ImportGraphic( rGraphic, rPath, rIStream, nFormat, pDeterminedFormat, nImportFlags, NULL, pExtHeader );
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, SvStream& rIStream,
                                      sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, sal_uInt32 nImportFlags,

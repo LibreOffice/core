@@ -32,7 +32,7 @@
 // --- needed because of the solar mutex
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-// ---
+
 
 namespace dbaui
 {

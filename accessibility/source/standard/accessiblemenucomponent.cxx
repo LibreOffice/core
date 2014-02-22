@@ -43,29 +43,29 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 
-// -----------------------------------------------------------------------------
+
 // class OAccessibleMenuComponent
-// -----------------------------------------------------------------------------
+
 
 OAccessibleMenuComponent::OAccessibleMenuComponent( Menu* pMenu )
     :OAccessibleMenuBaseComponent( pMenu )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 OAccessibleMenuComponent::~OAccessibleMenuComponent()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool OAccessibleMenuComponent::IsEnabled()
 {
     return sal_True;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool OAccessibleMenuComponent::IsVisible()
 {
@@ -77,7 +77,7 @@ sal_Bool OAccessibleMenuComponent::IsVisible()
     return bVisible;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OAccessibleMenuComponent::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
@@ -101,9 +101,9 @@ void OAccessibleMenuComponent::FillAccessibleStateSet( utl::AccessibleStateSetHe
     rStateSet.AddState( AccessibleStateType::OPAQUE );
 }
 
-// -----------------------------------------------------------------------------
+
 // OCommonAccessibleComponent
-// -----------------------------------------------------------------------------
+
 
 awt::Rectangle OAccessibleMenuComponent::implGetBounds() throw (RuntimeException)
 {
@@ -138,21 +138,21 @@ awt::Rectangle OAccessibleMenuComponent::implGetBounds() throw (RuntimeException
     return aBounds;
 }
 
-// -----------------------------------------------------------------------------
+
 // XInterface
-// -----------------------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XINTERFACE2( OAccessibleMenuComponent, OAccessibleMenuBaseComponent, OAccessibleMenuComponent_BASE )
 
-// -----------------------------------------------------------------------------
+
 // XTypeProvider
-// -----------------------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleMenuComponent, OAccessibleMenuBaseComponent, OAccessibleMenuComponent_BASE )
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleContext
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 OAccessibleMenuComponent::getAccessibleChildCount() throw (RuntimeException)
 {
@@ -161,7 +161,7 @@ sal_Int32 OAccessibleMenuComponent::getAccessibleChildCount() throw (RuntimeExce
     return GetChildCount();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > OAccessibleMenuComponent::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -173,7 +173,7 @@ Reference< XAccessible > OAccessibleMenuComponent::getAccessibleChild( sal_Int32
     return GetChild( i );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > OAccessibleMenuComponent::getAccessibleParent(  ) throw (RuntimeException)
 {
@@ -195,7 +195,7 @@ Reference< XAccessible > OAccessibleMenuComponent::getAccessibleParent(  ) throw
     return xParent;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int16 OAccessibleMenuComponent::getAccessibleRole(  ) throw (RuntimeException)
 {
@@ -204,7 +204,7 @@ sal_Int16 OAccessibleMenuComponent::getAccessibleRole(  ) throw (RuntimeExceptio
     return AccessibleRole::UNKNOWN;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString OAccessibleMenuComponent::getAccessibleDescription( ) throw (RuntimeException)
 {
@@ -221,7 +221,7 @@ OUString OAccessibleMenuComponent::getAccessibleDescription( ) throw (RuntimeExc
     return sDescription;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString OAccessibleMenuComponent::getAccessibleName(  ) throw (RuntimeException)
 {
@@ -230,7 +230,7 @@ OUString OAccessibleMenuComponent::getAccessibleName(  ) throw (RuntimeException
     return OUString();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessibleRelationSet > OAccessibleMenuComponent::getAccessibleRelationSet(  ) throw (RuntimeException)
 {
@@ -241,7 +241,7 @@ Reference< XAccessibleRelationSet > OAccessibleMenuComponent::getAccessibleRelat
     return xSet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Locale OAccessibleMenuComponent::getLocale(  ) throw (IllegalAccessibleComponentStateException, RuntimeException)
 {
@@ -250,9 +250,9 @@ Locale OAccessibleMenuComponent::getLocale(  ) throw (IllegalAccessibleComponent
     return Application::GetSettings().GetLanguageTag().getLocale();
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleComponent
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > OAccessibleMenuComponent::getAccessibleAtPoint( const awt::Point& rPoint ) throw (RuntimeException)
 {
@@ -261,7 +261,7 @@ Reference< XAccessible > OAccessibleMenuComponent::getAccessibleAtPoint( const a
     return GetChildAt( rPoint );
 }
 
-// -----------------------------------------------------------------------------
+
 
 awt::Point OAccessibleMenuComponent::getLocationOnScreen(  ) throw (RuntimeException)
 {
@@ -282,7 +282,7 @@ awt::Point OAccessibleMenuComponent::getLocationOnScreen(  ) throw (RuntimeExcep
     return aPos;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OAccessibleMenuComponent::grabFocus(  ) throw (RuntimeException)
 {
@@ -296,7 +296,7 @@ void OAccessibleMenuComponent::grabFocus(  ) throw (RuntimeException)
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 OAccessibleMenuComponent::getForeground(  ) throw (RuntimeException)
 {
@@ -308,7 +308,7 @@ sal_Int32 OAccessibleMenuComponent::getForeground(  ) throw (RuntimeException)
     return nColor;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 OAccessibleMenuComponent::getBackground(  ) throw (RuntimeException)
 {
@@ -317,9 +317,9 @@ sal_Int32 OAccessibleMenuComponent::getBackground(  ) throw (RuntimeException)
     return 0;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleExtendedComponent
-// -----------------------------------------------------------------------------
+
 
 Reference< awt::XFont > OAccessibleMenuComponent::getFont(  ) throw (RuntimeException)
 {
@@ -346,7 +346,7 @@ Reference< awt::XFont > OAccessibleMenuComponent::getFont(  ) throw (RuntimeExce
     return xFont;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString OAccessibleMenuComponent::getTitledBorderText(  ) throw (RuntimeException)
 {
@@ -355,7 +355,7 @@ OUString OAccessibleMenuComponent::getTitledBorderText(  ) throw (RuntimeExcepti
     return OUString();
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString OAccessibleMenuComponent::getToolTipText(  ) throw (RuntimeException)
 {
@@ -364,9 +364,9 @@ OUString OAccessibleMenuComponent::getToolTipText(  ) throw (RuntimeException)
     return OUString();
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleSelection
-// -----------------------------------------------------------------------------
+
 
 void OAccessibleMenuComponent::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -378,7 +378,7 @@ void OAccessibleMenuComponent::selectAccessibleChild( sal_Int32 nChildIndex ) th
     SelectChild( nChildIndex );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool OAccessibleMenuComponent::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -390,7 +390,7 @@ sal_Bool OAccessibleMenuComponent::isAccessibleChildSelected( sal_Int32 nChildIn
     return IsChildSelected( nChildIndex );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OAccessibleMenuComponent::clearAccessibleSelection(  ) throw (RuntimeException)
 {
@@ -399,14 +399,14 @@ void OAccessibleMenuComponent::clearAccessibleSelection(  ) throw (RuntimeExcept
     DeSelectAll();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OAccessibleMenuComponent::selectAllAccessibleChildren(  ) throw (RuntimeException)
 {
     // This method makes no sense in a menu, and so does nothing.
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 OAccessibleMenuComponent::getSelectedAccessibleChildCount(  ) throw (RuntimeException)
 {
@@ -423,7 +423,7 @@ sal_Int32 OAccessibleMenuComponent::getSelectedAccessibleChildCount(  ) throw (R
     return nRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > OAccessibleMenuComponent::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -446,7 +446,7 @@ Reference< XAccessible > OAccessibleMenuComponent::getSelectedAccessibleChild( s
     return xChild;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OAccessibleMenuComponent::deselectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -458,6 +458,6 @@ void OAccessibleMenuComponent::deselectAccessibleChild( sal_Int32 nChildIndex ) 
     DeSelectAll();
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

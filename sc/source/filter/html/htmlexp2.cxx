@@ -40,7 +40,7 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 void ScHTMLExport::PrepareGraphics( ScDrawLayer* pDrawLayer, SCTAB nTab,
         SCCOL nStartCol, SCROW nStartRow,   SCCOL nEndCol, SCROW nEndRow )

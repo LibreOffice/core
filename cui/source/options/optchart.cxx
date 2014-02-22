@@ -159,12 +159,12 @@ long SvxDefaultColorOptPage::GetColorIndex( const Color& rCol )
 
 
 
-// --------------------
+
 // event handlers
-// --------------------
+
 
 // ResetToDefaults
-// ---------------
+
 
 IMPL_LINK_NOARG(SvxDefaultColorOptPage, ResetToDefaults)
 {
@@ -183,7 +183,7 @@ IMPL_LINK_NOARG(SvxDefaultColorOptPage, ResetToDefaults)
 }
 
 // AddChartColor
-// ------------
+
 
 IMPL_LINK_NOARG(SvxDefaultColorOptPage, AddChartColor)
 {
@@ -204,7 +204,7 @@ IMPL_LINK_NOARG(SvxDefaultColorOptPage, AddChartColor)
 }
 
 // RemoveChartColor
-// ----------------
+
 
 IMPL_LINK( SvxDefaultColorOptPage, RemoveChartColor, PushButton*, pButton )
 {

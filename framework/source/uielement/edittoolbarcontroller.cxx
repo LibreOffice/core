@@ -45,7 +45,7 @@ using namespace ::com::sun::star::util;
 namespace framework
 {
 
-// ------------------------------------------------------------------
+
 
 // Wrapper class to notify controller about events from edit.
 // Unfortunaltly the events are notifed through virtual methods instead
@@ -117,7 +117,7 @@ bool EditControl::PreNotify( NotifyEvent& rNEvt )
     return nRet;
 }
 
-// ------------------------------------------------------------------
+
 
 EditToolbarController::EditToolbarController(
     const Reference< XComponentContext >&    rxContext,
@@ -140,13 +140,13 @@ EditToolbarController::EditToolbarController(
     m_pToolbar->SetItemWindow( m_nID, m_pEditControl );
 }
 
-// ------------------------------------------------------------------
+
 
 EditToolbarController::~EditToolbarController()
 {
 }
 
-// ------------------------------------------------------------------
+
 
 void SAL_CALL EditToolbarController::dispose()
 throw ( RuntimeException )
@@ -161,7 +161,7 @@ throw ( RuntimeException )
     m_pEditControl = 0;
 }
 
-// ------------------------------------------------------------------
+
 Sequence<PropertyValue> EditToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
     Sequence<PropertyValue> aArgs( 2 );
@@ -175,7 +175,7 @@ Sequence<PropertyValue> EditToolbarController::getExecuteArgs(sal_Int16 KeyModif
     return aArgs;
 }
 
-// ------------------------------------------------------------------
+
 
 void EditToolbarController::Modify()
 {
@@ -214,7 +214,7 @@ bool EditToolbarController::PreNotify( NotifyEvent& rNEvt )
     return false;
 }
 
-// --------------------------------------------------------
+
 
 void EditToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {

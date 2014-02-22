@@ -38,11 +38,11 @@
 #include "unx/i18n_im.hxx"
 #include "salframe.hxx"
 
-// -------------------------------------------------------------------------
+
 //
 // i. preedit start callback
 //
-// -------------------------------------------------------------------------
+
 
 int
 PreeditStartCallback ( XIC, XPointer client_data, XPointer )
@@ -58,11 +58,11 @@ PreeditStartCallback ( XIC, XPointer client_data, XPointer )
     return -1;
 }
 
-// -------------------------------------------------------------------------
+
 //
 // ii. preedit done callback
 //
-// -------------------------------------------------------------------------
+
 
 void
 PreeditDoneCallback ( XIC, XPointer client_data, XPointer )
@@ -76,11 +76,11 @@ PreeditDoneCallback ( XIC, XPointer client_data, XPointer )
     pPreeditData->eState = ePreeditStatusStartPending;
 }
 
-// -------------------------------------------------------------------------
+
 //
 // iii. preedit draw callback
 //
-// -------------------------------------------------------------------------
+
 
 //
 // Handle deletion of text in a preedit_draw_callback
@@ -423,11 +423,11 @@ GetPreeditSpotLocation(XIC ic, XPointer client_data)
     return;
 }
 
-// -------------------------------------------------------------------------
+
 //
 // iv. preedit caret callback
 //
-// -------------------------------------------------------------------------
+
 
 #if OSL_DEBUG_LEVEL > 1
 void
@@ -472,12 +472,12 @@ PreeditCaretCallback ( XIC, XPointer,XIMPreeditCaretCallbackStruct* )
     #endif
 }
 
-// -----------------------------------------------------------------------
+
 //
 // v. commit string callback: convert an extended text input (iiimp ... )
 //     into an ordinary key-event
 //
-// -----------------------------------------------------------------------
+
 
 Bool
 IsControlCode(sal_Unicode nChar)
@@ -488,11 +488,11 @@ IsControlCode(sal_Unicode nChar)
         return False;
 }
 
-// ----------------------------------------------------------------------------------
+
 //
 // vi. status callbacks: for now these are empty, they are just needed for turbo linux
 //
-// ----------------------------------------------------------------------------------
+
 
 void
 StatusStartCallback (XIC, XPointer, XPointer)
@@ -557,11 +557,11 @@ SwitchIMCallback (XIC, XPointer, XPointer call_data)
     ::vcl::I18NStatus::get().changeIM( OStringToOUString(pCallData->to->name, RTL_TEXTENCODING_UTF8) );
 }
 
-// ----------------------------------------------------------------------------------
+
 //
 // vii. destroy callbacks: internally disable all IC/IM calls
 //
-// ----------------------------------------------------------------------------------
+
 
 void
 IC_IMDestroyCallback (XIM, XPointer client_data, XPointer)

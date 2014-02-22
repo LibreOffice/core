@@ -615,7 +615,7 @@ void ListBox::AdaptDropDownLineCountToMaximum()
     SetDropDownLineCount(GetSettings().GetStyleSettings().GetListBoxMaximumLineCount());
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ListBox::GetDropDownLineCount() const
 {
@@ -1536,7 +1536,7 @@ bool ListBox::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ListBox::SetEdgeBlending(bool bNew)
 {

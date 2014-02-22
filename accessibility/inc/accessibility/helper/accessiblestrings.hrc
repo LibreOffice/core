@@ -20,14 +20,10 @@
 #ifndef ACCESSIBILITY_HELPER_ACCESSIBLESTRINGS_HRC_
 #define ACCESSIBILITY_HELPER_ACCESSIBLESTRINGS_HRC_
 
-
-//------------------------------------------------------------------------------
-
 #define RID_TK_ACC_START        1000
 
 
-// Accessible Action Id's ------------------------------------------------------
-
+// Accessible Action Id's
 #define RID_STR_ACC_ACTION_CLICK            ( RID_TK_ACC_START +    0 )
 #define RID_STR_ACC_ACTION_TOGGLEPOPUP      ( RID_TK_ACC_START +    1 )
 #define RID_STR_ACC_ACTION_SELECT           ( RID_TK_ACC_START +    2 )
@@ -50,8 +46,6 @@
 
 #define RID_STR_ACC_NAME_BROWSEBUTTON       ( RID_TK_ACC_START + 100 )
 #define RID_STR_ACC_DESC_PANELDECL_TABBAR   ( RID_TK_ACC_START + 101 )
-
-// -----------------------------------------------------------------------------
 
 #endif          // ACCESSIBILITY_HELPER_ACCESSIBLESTRINGS_HRC_
 

@@ -51,7 +51,7 @@ namespace dbp
     //=====================================================================
     //= OGridWizard
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OGridWizard::OGridWizard( Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
         :OControlWizard(_pParent, ModuleRes(RID_DLG_GRIDWIZARD), _rxObjectModel, _rxContext)
@@ -72,7 +72,7 @@ namespace dbp
         }
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OGridWizard::approveControl(sal_Int16 _nClassId)
     {
         if (FormComponentType::GRIDCONTROL != _nClassId)
@@ -85,7 +85,7 @@ namespace dbp
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+
     void OGridWizard::implApplySettings()
     {
         const OControlWizardContext& rContext = getContext();
@@ -225,7 +225,7 @@ namespace dbp
         }
     }
 
-    //---------------------------------------------------------------------
+
     OWizardPage* OGridWizard::createPage(WizardState _nState)
     {
         switch (_nState)
@@ -239,7 +239,7 @@ namespace dbp
         return NULL;
     }
 
-    //---------------------------------------------------------------------
+
     WizardTypes::WizardState OGridWizard::determineNextState( WizardState _nCurrentState ) const
     {
         switch (_nCurrentState)
@@ -253,7 +253,7 @@ namespace dbp
         return WZS_INVALID_STATE;
     }
 
-    //---------------------------------------------------------------------
+
     void OGridWizard::enterState(WizardState _nState)
     {
         OControlWizard::enterState(_nState);
@@ -267,7 +267,7 @@ namespace dbp
             defaultButton(WZB_FINISH);
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OGridWizard::leaveState(WizardState _nState)
     {
         if (!OControlWizard::leaveState(_nState))
@@ -279,7 +279,7 @@ namespace dbp
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OGridWizard::onFinish()
     {
         if ( !OControlWizard::onFinish() )
@@ -293,7 +293,7 @@ namespace dbp
     //=====================================================================
     //= OGridFieldsSelection
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OGridFieldsSelection::OGridFieldsSelection( OGridWizard* _pParent )
         :OGridPage(_pParent, ModuleRes(RID_PAGE_GW_FIELDSELECTION))
         ,m_aFrame               (this, ModuleRes(FL_FRAME))
@@ -321,21 +321,21 @@ namespace dbp
         m_aSelFields.SetDoubleClickHdl(LINK(this, OGridFieldsSelection, OnEntryDoubleClicked));
     }
 
-    //---------------------------------------------------------------------
+
     void OGridFieldsSelection::ActivatePage()
     {
         OGridPage::ActivatePage();
         m_aExistFields.GrabFocus();
     }
 
-    //---------------------------------------------------------------------
+
     bool OGridFieldsSelection::canAdvance() const
     {
         return false;
             // we're the last page in our wizard
     }
 
-    //---------------------------------------------------------------------
+
     void OGridFieldsSelection::initializePage()
     {
         OGridPage::initializePage();
@@ -356,7 +356,7 @@ namespace dbp
         implCheckButtons();
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OGridFieldsSelection::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OGridPage::commitPage(_eReason))
@@ -374,7 +374,7 @@ namespace dbp
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+
     void OGridFieldsSelection::implCheckButtons()
     {
         m_aSelectOne.Enable(m_aExistFields.GetSelectEntryCount() != 0);
@@ -386,7 +386,7 @@ namespace dbp
         getDialog()->enableButtons(WZB_FINISH, 0 != m_aSelFields.GetEntryCount());
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK(OGridFieldsSelection, OnEntryDoubleClicked, ListBox*, _pList)
     {
         PushButton* pSimulateButton = &m_aExistFields == _pList ? &m_aSelectOne : &m_aDeselectOne;
@@ -396,14 +396,14 @@ namespace dbp
             return 1L;
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK(OGridFieldsSelection, OnEntrySelected, ListBox*, /*NOTINTERESTEDIN*/)
     {
         implCheckButtons();
         return 0L;
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK(OGridFieldsSelection, OnMoveOneEntry, PushButton*, _pButton)
     {
         sal_Bool bMoveRight = (&m_aSelectOne == _pButton);
@@ -458,7 +458,7 @@ namespace dbp
         return 0;
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK(OGridFieldsSelection, OnMoveAllEntries, PushButton*, _pButton)
     {
         sal_Bool bMoveRight = (&m_aSelectAll == _pButton);

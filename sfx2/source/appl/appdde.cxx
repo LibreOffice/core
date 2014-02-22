@@ -74,7 +74,7 @@ public:
     virtual bool SysTopicExecute( const OUString* pStr );
 };
 
-//--------------------------------------------------------------------
+
 namespace
 {
     sal_Bool lcl_IsDocument( const OUString& rContent )
@@ -363,7 +363,7 @@ long SfxObjectShell::DdeExecute( const OUString&   rCmd )  // Expressed in our B
     return 1;
 }
 
-//--------------------------------------------------------------------
+
 
 /*  [Description]
 
@@ -379,7 +379,7 @@ bool SfxObjectShell::DdeGetData( const OUString&,              // the Item to be
     return false;
 }
 
-//--------------------------------------------------------------------
+
 
 /*  [Description]
 
@@ -582,14 +582,14 @@ DdeService* SfxApplication::GetDdeService()
     return pAppData_Impl->pDdeService;
 }
 
-//--------------------------------------------------------------------
+
 
 bool SfxDdeTriggerTopic_Impl::Execute( const OUString* )
 {
     return true;
 }
 
-//--------------------------------------------------------------------
+
 DdeData* SfxDdeDocTopic_Impl::Get( sal_uIntPtr nFormat )
 {
     OUString sMimeType( SotExchange::GetFormatMimeType( nFormat ));

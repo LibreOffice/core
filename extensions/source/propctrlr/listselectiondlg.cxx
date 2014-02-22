@@ -36,7 +36,7 @@ namespace pcr
     //====================================================================
     //= ListSelectionDialog
     //====================================================================
-    //--------------------------------------------------------------------
+
     ListSelectionDialog::ListSelectionDialog( Window* _pParent, const Reference< XPropertySet >& _rxListBox,
             const OUString& _rPropertyName, const OUString& _rPropertyUIName )
         :ModalDialog( _pParent, PcrRes( RID_DLG_SELECTION ) )
@@ -58,7 +58,7 @@ namespace pcr
         initialize( );
     }
 
-    //------------------------------------------------------------------------
+
     short ListSelectionDialog::Execute()
     {
         short nResult = ModalDialog::Execute();
@@ -69,7 +69,7 @@ namespace pcr
         return nResult;
     }
 
-    //--------------------------------------------------------------------
+
     void ListSelectionDialog::initialize( )
     {
         if ( !m_xListBox.is() )
@@ -100,7 +100,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     void ListSelectionDialog::commitSelection()
     {
         if ( !m_xListBox.is() )
@@ -119,7 +119,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     void ListSelectionDialog::fillEntryList( const Sequence< OUString >& _rListEntries )
     {
         m_aEntries.Clear();
@@ -129,7 +129,7 @@ namespace pcr
             m_aEntries.InsertEntry( *_pListEntries );
     }
 
-    //--------------------------------------------------------------------
+
     void ListSelectionDialog::collectSelection( Sequence< sal_Int16 >& /* [out] */ _rSelection )
     {
         sal_uInt16 nSelectedCount = m_aEntries.GetSelectEntryCount( );
@@ -139,7 +139,7 @@ namespace pcr
             *pSelection = static_cast< sal_Int16 >( m_aEntries.GetSelectEntryPos( selected ) );
     }
 
-    //--------------------------------------------------------------------
+
     void ListSelectionDialog::selectEntries( const Sequence< sal_Int16 >& /* [in ] */ _rSelection )
     {
         m_aEntries.SetNoSelection();

@@ -41,9 +41,9 @@ using namespace ::com::sun::star;
 TYPEINIT1_FACTORY(SvxRotateModeItem, SfxEnumItem, new SvxRotateModeItem(SVX_ROTATE_MODE_STANDARD, 0));
 
 
-//-----------------------------------------------------------------------
+
 //  SvxRotateModeItem - Ausrichtung bei gedrehtem Text
-//-----------------------------------------------------------------------
+
 
 SvxRotateModeItem::SvxRotateModeItem( SvxRotateMode eMode, sal_uInt16 _nWhich )
     : SfxEnumItem( _nWhich, (sal_uInt16)eMode )

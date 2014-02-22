@@ -66,14 +66,14 @@ QuartzSalBitmap::QuartzSalBitmap()
 {
 }
 
-// ------------------------------------------------------------------
+
 
 QuartzSalBitmap::~QuartzSalBitmap()
 {
     Destroy();
 }
 
-// ------------------------------------------------------------------
+
 
 bool QuartzSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
     int nX, int nY, int nWidth, int nHeight )
@@ -108,7 +108,7 @@ bool QuartzSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
     return true;
 }
 
-// ------------------------------------------------------------------
+
 
 bool QuartzSalBitmap::Create( CGImageRef xImage, int nBitmapBits,
                              int nX, int nY, int nWidth, int nHeight )
@@ -177,7 +177,7 @@ bool QuartzSalBitmap::Create( BitmapBuffer& buffer)
     return true;
 }
 
-// ------------------------------------------------------------------
+
 
 bool QuartzSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapPalette& rBitmapPalette )
 {
@@ -190,21 +190,21 @@ bool QuartzSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapP
     return AllocateUserData();
 }
 
-// ------------------------------------------------------------------
+
 
 bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp )
 {
     return Create( rSalBmp, rSalBmp.GetBitCount() );
 }
 
-// ------------------------------------------------------------------
+
 
 bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics )
 {
     return Create( rSalBmp, pGraphics ? pGraphics->GetBitCount() : rSalBmp.GetBitCount() );
 }
 
-// ------------------------------------------------------------------
+
 
 bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount )
 {
@@ -226,14 +226,14 @@ bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount 
     return false;
 }
 
-// ------------------------------------------------------------------
+
 
 bool QuartzSalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > /*xBitmapCanvas*/, Size& /*rSize*/, bool /*bMask*/ )
 {
     return false;
 }
 
-// ------------------------------------------------------------------
+
 
 void QuartzSalBitmap::Destroy()
 {
@@ -242,7 +242,7 @@ void QuartzSalBitmap::Destroy()
     maExternalData = NULL;
 }
 
-// ------------------------------------------------------------------
+
 
 void QuartzSalBitmap::DestroyContext()
 {
@@ -257,7 +257,7 @@ void QuartzSalBitmap::DestroyContext()
     }
 }
 
-// ------------------------------------------------------------------
+
 
 bool QuartzSalBitmap::CreateContext()
 {
@@ -344,7 +344,7 @@ bool QuartzSalBitmap::CreateContext()
     return mxGraphicContext != NULL;
 }
 
-// ------------------------------------------------------------------
+
 
 bool QuartzSalBitmap::AllocateUserData()
 {
@@ -382,7 +382,7 @@ bool QuartzSalBitmap::AllocateUserData()
     return maUserBuffer.get() != 0;
 }
 
-// ------------------------------------------------------------------
+
 
 class ImplPixelFormat
 {
@@ -658,21 +658,21 @@ void QuartzSalBitmap::ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
     }
 }
 
-// ------------------------------------------------------------------
+
 
 Size QuartzSalBitmap::GetSize() const
 {
     return Size( mnWidth, mnHeight );
 }
 
-// ------------------------------------------------------------------
+
 
 sal_uInt16 QuartzSalBitmap::GetBitCount() const
 {
     return mnBits;
 }
 
-// ------------------------------------------------------------------
+
 
 static struct pal_entry
 {
@@ -801,7 +801,7 @@ BitmapBuffer* QuartzSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
     return pBuffer;
 }
 
-// ------------------------------------------------------------------
+
 
 void QuartzSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
 {
@@ -816,7 +816,7 @@ void QuartzSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
     delete pBuffer;
 }
 
-// ------------------------------------------------------------------
+
 
 CGImageRef QuartzSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, int nNewHeight ) const
 {
@@ -846,7 +846,7 @@ CGImageRef QuartzSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, i
     return xCroppedImage;
 }
 
-// ------------------------------------------------------------------
+
 
 static void CFRTLFree(void* /*info*/, const void* data, size_t /*size*/)
 {
@@ -896,7 +896,7 @@ CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
     return xMaskedImage;
 }
 
-// ------------------------------------------------------------------
+
 
 /** creates an image from the given rectangle, replacing all black pixels with nMaskColor and make all other full transparent */
 CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth, int nHeight, SalColor nMaskColor ) const

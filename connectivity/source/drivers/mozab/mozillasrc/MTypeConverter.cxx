@@ -24,7 +24,7 @@
 
 using namespace connectivity::mozab;
 
-// -------------------------------------------------------------------------
+
 void MTypeConverter::ouStringToNsString(OUString const &ous, nsString &nss)
 {
     // Convert to OString (utf-8 encoding).
@@ -37,20 +37,20 @@ void MTypeConverter::ouStringToNsString(OUString const &ous, nsString &nss)
     //const PRUnichar* uniMozString = (const PRUnichar*) mozString;
     nss = mozString; // temp.
 }
-// -------------------------------------------------------------------------
+
 OString MTypeConverter::nsACStringToOString( const nsACString& _source )
 {
     const char* buffer = _source.BeginReading();
     const char* bufferEnd = _source.EndReading();
     return OString( buffer, static_cast<sal_Int32>(bufferEnd - buffer) );
 }
-// -------------------------------------------------------------------------
+
 void MTypeConverter::asciiToNsACString( const sal_Char* _asciiString, nsACString& _dest )
 {
     _dest.Truncate();
     _dest.AppendASCII( _asciiString );
 }
-// -------------------------------------------------------------------------
+
 void MTypeConverter::nsStringToOUString(nsString const &nss, OUString &ous)
 {
     // Get clone of buffer.
@@ -64,7 +64,7 @@ void MTypeConverter::nsStringToOUString(nsString const &nss, OUString &ous)
 
     nsMemory::Free(uc);
 }
-// -------------------------------------------------------------------------
+
 void MTypeConverter::prUnicharToOUString(PRUnichar const *pru, OUString &ous)
 {
     // TODO, specify length.
@@ -72,7 +72,7 @@ void MTypeConverter::prUnicharToOUString(PRUnichar const *pru, OUString &ous)
     OUString _ous(reinterpret_cast_mingw_only<const sal_Unicode *>(pru));
     ous = _ous;
 }
-// -------------------------------------------------------------------------
+
 char *MTypeConverter::ouStringToCCharStringAscii(OUString const &ous)
 {
     // Convert OUString to OString,
@@ -80,6 +80,6 @@ char *MTypeConverter::ouStringToCCharStringAscii(OUString const &ous)
 
     return(strdup(os.getStr()));
 }
-// -------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

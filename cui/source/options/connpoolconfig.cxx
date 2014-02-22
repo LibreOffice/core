@@ -36,42 +36,42 @@ namespace offapp
     using namespace ::utl;
     using namespace ::com::sun::star::uno;
 
-    //--------------------------------------------------------------------
+
     static const OUString& getConnectionPoolNodeName()
     {
         static OUString s_sNodeName("org.openoffice.Office.DataAccess/ConnectionPool" );
         return s_sNodeName;
     }
 
-    //--------------------------------------------------------------------
+
     static const OUString& getEnablePoolingNodeName()
     {
         static OUString s_sNodeName("EnablePooling");
         return s_sNodeName;
     }
 
-    //--------------------------------------------------------------------
+
     static const OUString& getDriverSettingsNodeName()
     {
         static OUString s_sNodeName("DriverSettings");
         return s_sNodeName;
     }
 
-    //--------------------------------------------------------------------
+
     static const OUString& getDriverNameNodeName()
     {
         static OUString s_sNodeName("DriverName");
         return s_sNodeName;
     }
 
-    //--------------------------------------------------------------------
+
     static const OUString& getEnableNodeName()
     {
         static OUString s_sNodeName("Enable");
         return s_sNodeName;
     }
 
-    //--------------------------------------------------------------------
+
     static const OUString& getTimeoutNodeName()
     {
         static OUString s_sNodeName("Timeout");
@@ -81,7 +81,7 @@ namespace offapp
     //====================================================================
     //= ConnectionPoolConfig
     //====================================================================
-    //--------------------------------------------------------------------
+
     void ConnectionPoolConfig::GetOptions(SfxItemSet& _rFillItems)
     {
         // the config node where all pooling relevant info are stored under
@@ -146,7 +146,7 @@ namespace offapp
         _rFillItems.Put(DriverPoolingSettingsItem(SID_SB_DRIVER_TIMEOUTS, aSettings));
     }
 
-    //--------------------------------------------------------------------
+
     void ConnectionPoolConfig::SetOptions(const SfxItemSet& _rSourceItems)
     {
         // the config node where all pooling relevant info are stored under

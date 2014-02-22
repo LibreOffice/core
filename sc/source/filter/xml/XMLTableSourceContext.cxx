@@ -31,7 +31,7 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-//------------------------------------------------------------------
+
 
 ScXMLTableSourceContext::ScXMLTableSourceContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,

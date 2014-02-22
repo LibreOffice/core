@@ -81,14 +81,14 @@ ScAutoFmtPreview::ScAutoFmtPreview( Window* pParent, const ResId& rRes, ScDocume
     Init();
 }
 
-//------------------------------------------------------------------------
+
 
 ScAutoFmtPreview::~ScAutoFmtPreview()
 {
     delete pNumFmt;
 }
 
-//------------------------------------------------------------------------
+
 
 static void lcl_SetFontProperties(
         Font& rFont,
@@ -152,7 +152,7 @@ rFont.MethodName( Value ); rCJKFont.MethodName( Value ); rCTLFont.MethodName( Va
     }
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 ScAutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
 {
@@ -179,15 +179,15 @@ const SvxLineItem& ScAutoFmtPreview::GetDiagItem( size_t nCol, size_t nRow, bool
     return *static_cast< const SvxLineItem* >( pCurData->GetItem( GetFormatIndex( nCol, nRow ), bTLBR ? ATTR_BORDER_TLBR : ATTR_BORDER_BLTR ) );
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
 {
     if ( pCurData )
     {
-        //------------------------
+
         // Ausgabe des Zelltextes:
-        //------------------------
+
 
         OUString  cellString;
         sal_Bool    bNumFormat  = pCurData->GetIncludeValueFormat();
@@ -253,9 +253,9 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
             SvxHorJustifyItem    aHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY );
             SvxCellHorJustify      eJustification;
 
-            //-------------
+
             // Ausrichtung:
-            //-------------
+
             eJustification  = mbRTL ? SVX_HOR_JUSTIFY_RIGHT : bJustify ?
                 (SvxCellHorJustify)(((const SvxHorJustifyItem*)pCurData->GetItem( nFmtIndex, ATTR_HOR_JUSTIFY ))->GetValue()) :
                 SVX_HOR_JUSTIFY_STANDARD;
@@ -306,14 +306,14 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
                                   - aStrSize.Width()
                                   - FRAME_OFFSET );
 
-            //-----------------------------
+
             // vertikal (immer zentrieren):
-            //-----------------------------
+
             aPos.Y() += (mnRowHeight - (sal_uInt16)aStrSize.Height()) / 2;
 
-            //-----------
+
             // horizontal
-            //-----------
+
             if ( eJustification != SVX_HOR_JUSTIFY_STANDARD )
             {
                 sal_uInt16 nHorPos = (sal_uInt16)
@@ -340,9 +340,9 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
             }
             else
             {
-                //---------------------
+
                 // Standardausrichtung:
-                //---------------------
+
                 if ( (nCol == 0) || (nRow == 0) )
                 {
                     // Text-Label links oder Summe linksbuendig
@@ -355,16 +355,16 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
                 }
             }
 
-            //-------------------------------
+
             aScriptedText.DrawText( aPos );
-            //-------------------------------
+
         }
     }
 }
 
 #undef FRAME_OFFSET
 
-//------------------------------------------------------------------------
+
 
 void ScAutoFmtPreview::DrawStrings()
 {
@@ -373,7 +373,7 @@ void ScAutoFmtPreview::DrawStrings()
             DrawString( nCol, nRow );
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAutoFmtPreview::DrawBackground()
 {
@@ -396,7 +396,7 @@ void ScAutoFmtPreview::DrawBackground()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAutoFmtPreview::PaintCells()
 {
@@ -415,7 +415,7 @@ void ScAutoFmtPreview::PaintCells()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAutoFmtPreview::Init()
 {
@@ -436,7 +436,7 @@ void ScAutoFmtPreview::Init()
     mbRTL = pDoc->IsLayoutRTL( nCurrentTab );
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAutoFmtPreview::CalcCellArray( bool bFitWidthP )
 {
@@ -452,7 +452,7 @@ void ScAutoFmtPreview::CalcCellArray( bool bFitWidthP )
     aPrvSize.Height() = maArray.GetHeight() + 4;
 }
 
-//------------------------------------------------------------------------
+
 
 inline void lclSetStyleFromBorder( svx::frame::Style& rStyle, const ::editeng::SvxBorderLine* pBorder )
 {
@@ -488,7 +488,7 @@ void ScAutoFmtPreview::CalcLineMap()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAutoFmtPreview::NotifyChange( ScAutoFormatData* pNewData )
 {
@@ -508,7 +508,7 @@ void ScAutoFmtPreview::NotifyChange( ScAutoFormatData* pNewData )
     DoPaint( Rectangle( Point(0,0), GetSizePixel() ) );
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAutoFmtPreview::DoPaint( const Rectangle& /* rRect */ )
 {
@@ -540,7 +540,7 @@ void ScAutoFmtPreview::DoPaint( const Rectangle& /* rRect */ )
     aVD.SetDrawMode( nOldDrawMode );
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAutoFmtPreview::Paint( const Rectangle& rRect )
 {

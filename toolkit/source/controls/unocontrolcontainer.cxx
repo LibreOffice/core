@@ -166,23 +166,23 @@ private:
     OUString impl_getFreeName_throw();
 };
 
-//------------------------------------------------------------------------
+
 UnoControlHolderList::UnoControlHolderList()
 {
 }
 
-//------------------------------------------------------------------------
+
 UnoControlHolderList::~UnoControlHolderList()
 {
 }
 
-//------------------------------------------------------------------------
+
 UnoControlHolderList::ControlIdentifier UnoControlHolderList::addControl( const uno::Reference< awt::XControl >& _rxControl, const OUString* _pName )
 {
     return impl_addControl( _rxControl, _pName );
 }
 
-//------------------------------------------------------------------------
+
 size_t UnoControlHolderList::getControls( uno::Sequence< uno::Reference< awt::XControl > >& _out_rControls ) const
 {
     _out_rControls.realloc( maControls.size() );
@@ -195,7 +195,7 @@ size_t UnoControlHolderList::getControls( uno::Sequence< uno::Reference< awt::XC
     return maControls.size();
 }
 
-//------------------------------------------------------------------------
+
 size_t UnoControlHolderList::getIdentifiers( uno::Sequence< sal_Int32 >& _out_rIdentifiers ) const
 {
     _out_rIdentifiers.realloc( maControls.size() );
@@ -208,7 +208,7 @@ size_t UnoControlHolderList::getIdentifiers( uno::Sequence< sal_Int32 >& _out_rI
     return maControls.size();
 }
 
-//------------------------------------------------------------------------
+
 uno::Reference< awt::XControl > UnoControlHolderList::getControlForName( const OUString& _rName ) const
 {
     for (   ControlMap::const_iterator loop = maControls.begin();
@@ -220,7 +220,7 @@ uno::Reference< awt::XControl > UnoControlHolderList::getControlForName( const O
     return uno::Reference< awt::XControl >();
 }
 
-//------------------------------------------------------------------------
+
 UnoControlHolderList::ControlIdentifier UnoControlHolderList::getControlIdentifier( const uno::Reference< awt::XControl >& _rxControl )
 {
     for (   ControlMap::iterator loop = maControls.begin();
@@ -234,7 +234,7 @@ UnoControlHolderList::ControlIdentifier UnoControlHolderList::getControlIdentifi
     return -1;
 }
 
-//------------------------------------------------------------------------
+
 bool UnoControlHolderList::getControlForIdentifier( UnoControlHolderList::ControlIdentifier _nIdentifier, uno::Reference< awt::XControl >& _out_rxControl ) const
 {
     ControlMap::const_iterator pos = maControls.find( _nIdentifier );
@@ -244,7 +244,7 @@ bool UnoControlHolderList::getControlForIdentifier( UnoControlHolderList::Contro
     return true;
 }
 
-//------------------------------------------------------------------------
+
 void UnoControlHolderList::removeControlById( UnoControlHolderList::ControlIdentifier _nId )
 {
     ControlMap::iterator pos = maControls.find( _nId );
@@ -255,7 +255,7 @@ void UnoControlHolderList::removeControlById( UnoControlHolderList::ControlIdent
     maControls.erase( pos );
 }
 
-//------------------------------------------------------------------------
+
 void UnoControlHolderList::replaceControlById( ControlIdentifier _nId, const uno::Reference< awt::XControl >& _rxNewControl )
 {
     DBG_ASSERT( _rxNewControl.is(), "UnoControlHolderList::replaceControlById: invalid new control!" );
@@ -268,7 +268,7 @@ void UnoControlHolderList::replaceControlById( ControlIdentifier _nId, const uno
     pos->second.reset( new UnoControlHolder( pos->second->getName(), _rxNewControl ) );
 }
 
-//------------------------------------------------------------------------
+
 UnoControlHolderList::ControlIdentifier UnoControlHolderList::impl_addControl( const uno::Reference< awt::XControl >& _rxControl, const OUString* _pName )
 {
     DBG_ASSERT( _rxControl.is(), "UnoControlHolderList::impl_addControl: invalid control!" );
@@ -280,7 +280,7 @@ UnoControlHolderList::ControlIdentifier UnoControlHolderList::impl_addControl( c
     return nId;
 }
 
-//------------------------------------------------------------------------
+
 UnoControlHolderList::ControlIdentifier UnoControlHolderList::impl_getFreeIdentifier_throw()
 {
     for ( ControlIdentifier candidateId = 0; candidateId < ::std::numeric_limits< ControlIdentifier >::max(); ++candidateId )
@@ -292,7 +292,7 @@ UnoControlHolderList::ControlIdentifier UnoControlHolderList::impl_getFreeIdenti
     throw uno::RuntimeException("out of identifiers", NULL );
 }
 
-//------------------------------------------------------------------------
+
 OUString UnoControlHolderList::impl_getFreeName_throw()
 {
     OUString name( "control_" );

@@ -47,7 +47,7 @@ namespace {
 class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo        ,
                                                    css::frame::XSynchronousDispatch > // => XDispatch!
 {
-    //-------------------------------------------
+
     // const, types, etcpp.
     private:
 
@@ -59,7 +59,7 @@ class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo      
             E_DO_RECOVERY,
         };
 
-    //-------------------------------------------
+
     // member
     private:
 
@@ -75,19 +75,19 @@ class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo      
         /** @short TODO */
         css::uno::Reference< css::task::XStatusIndicatorFactory > m_xProgressFactory;
 
-    //-------------------------------------------
+
     // interface
     public:
 
-        //---------------------------------------
+
         /** @short  TODO */
         RecoveryUI(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
-        //---------------------------------------
+
         /** @short  TODO */
         virtual ~RecoveryUI();
 
-        //---------------------------------------
+
         // css.lang.XServiceInfo
 
         virtual OUString SAL_CALL getImplementationName()
@@ -99,12 +99,12 @@ class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo      
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw(css::uno::RuntimeException);
 
-        //---------------------------------------
+
         virtual com::sun::star::uno::Any SAL_CALL dispatchWithReturnValue(const css::util::URL& aURL,
                                             const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
             throw(css::uno::RuntimeException);
 
-        //---------------------------------------
+
         // css.frame.XDispatch
 
         virtual void SAL_CALL dispatch(const css::util::URL&                                  aURL      ,
@@ -118,7 +118,7 @@ class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo      
                                                    const css::util::URL&                                     aURL     )
             throw(css::uno::RuntimeException);
 
-    //-------------------------------------------
+
     // helper
     private:
 

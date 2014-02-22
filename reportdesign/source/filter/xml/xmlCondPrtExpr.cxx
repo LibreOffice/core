@@ -71,19 +71,19 @@ OXMLCondPrtExpr::OXMLCondPrtExpr( ORptFilter& _rImport,
         OSL_FAIL("Exception catched while putting Function props!");
     }
 }
-// -----------------------------------------------------------------------------
+
 
 OXMLCondPrtExpr::~OXMLCondPrtExpr()
 {
 }
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+
+
 void OXMLCondPrtExpr::Characters( const OUString& rChars )
 {
     m_xComponent->setPropertyValue(PROPERTY_CONDITIONALPRINTEXPRESSION,makeAny(rChars));
 }
-//----------------------------------------------------------------------------
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

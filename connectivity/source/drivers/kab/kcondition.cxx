@@ -24,55 +24,55 @@
 
 using namespace ::connectivity::kab;
 using namespace ::com::sun::star::sdbc;
-// -----------------------------------------------------------------------------
+
 KabCondition::~KabCondition()
 {
 }
-// -----------------------------------------------------------------------------
+
 KabConditionConstant::KabConditionConstant(const sal_Bool bValue)
     : KabCondition(),
       m_bValue(bValue)
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool KabConditionConstant::isAlwaysTrue() const
 {
     return m_bValue;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool KabConditionConstant::isAlwaysFalse() const
 {
     return !m_bValue;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool KabConditionConstant::eval(const ::KABC::Addressee &) const
 {
     return m_bValue;
 }
-// -----------------------------------------------------------------------------
+
 KabConditionColumn::KabConditionColumn(const OUString &sColumnName) throw(SQLException)
     : KabCondition(),
       m_nFieldNumber(findKabField(sColumnName))
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool KabConditionColumn::isAlwaysTrue() const
 {
     // Sometimes true, sometimes false
     return sal_False;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool KabConditionColumn::isAlwaysFalse() const
 {
     // Sometimes true, sometimes false
     return sal_False;
 }
-// -----------------------------------------------------------------------------
+
 KabConditionNull::KabConditionNull(const OUString &sColumnName) throw(SQLException)
     : KabConditionColumn(sColumnName)
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool KabConditionNull::eval(const ::KABC::Addressee &aAddressee) const
 {
     QString aQtName = valueOfKabField(aAddressee, m_nFieldNumber);
@@ -81,12 +81,12 @@ sal_Bool KabConditionNull::eval(const ::KABC::Addressee &aAddressee) const
 // KDE address book currently does not use NULL values.
 // But it might do it someday
 }
-// -----------------------------------------------------------------------------
+
 KabConditionNotNull::KabConditionNotNull(const OUString &sColumnName) throw(SQLException)
     : KabConditionColumn(sColumnName)
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool KabConditionNotNull::eval(const ::KABC::Addressee &aAddressee) const
 {
     QString aQtName = valueOfKabField(aAddressee, m_nFieldNumber);
@@ -95,18 +95,18 @@ sal_Bool KabConditionNotNull::eval(const ::KABC::Addressee &aAddressee) const
 // KDE address book currently does not use NULL values.
 // But it might do it someday
 }
-// -----------------------------------------------------------------------------
+
 KabConditionCompare::KabConditionCompare(const OUString &sColumnName, const OUString &sMatchString) throw(SQLException)
     : KabConditionColumn(sColumnName),
       m_sMatchString(sMatchString)
 {
 }
-// -----------------------------------------------------------------------------
+
 KabConditionEqual::KabConditionEqual(const OUString &sColumnName, const OUString &sMatchString) throw(SQLException)
     : KabConditionCompare(sColumnName, sMatchString)
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool KabConditionEqual::eval(const ::KABC::Addressee &aAddressee) const
 {
     QString aQtName = valueOfKabField(aAddressee, m_nFieldNumber);
@@ -120,12 +120,12 @@ sal_Bool KabConditionEqual::eval(const ::KABC::Addressee &aAddressee) const
     OUString sValue((const sal_Unicode *) aQtName.ucs2());
     return sValue == m_sMatchString;
 }
-// -----------------------------------------------------------------------------
+
 KabConditionDifferent::KabConditionDifferent(const OUString &sColumnName, const OUString &sMatchString) throw(SQLException)
     : KabConditionCompare(sColumnName, sMatchString)
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool KabConditionDifferent::eval(const ::KABC::Addressee &aAddressee) const
 {
     QString aQtName = valueOfKabField(aAddressee, m_nFieldNumber);
@@ -135,12 +135,12 @@ sal_Bool KabConditionDifferent::eval(const ::KABC::Addressee &aAddressee) const
     OUString sValue((const sal_Unicode *) aQtName.ucs2());
     return sValue != m_sMatchString;
 }
-// -----------------------------------------------------------------------------
+
 KabConditionSimilar::KabConditionSimilar(const OUString &sColumnName, const OUString &sMatchString) throw(SQLException)
     : KabConditionCompare(sColumnName, sMatchString)
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool KabConditionSimilar::eval(const ::KABC::Addressee &aAddressee) const
 {
     QString aQtName = valueOfKabField(aAddressee, m_nFieldNumber);
@@ -150,35 +150,35 @@ sal_Bool KabConditionSimilar::eval(const ::KABC::Addressee &aAddressee) const
     OUString sValue((const sal_Unicode *) aQtName.ucs2());
     return match(m_sMatchString, sValue, '\0');
 }
-// -----------------------------------------------------------------------------
+
 KabConditionBoolean::KabConditionBoolean(KabCondition *pLeft, KabCondition *pRight)
     : KabCondition(),
       m_pLeft(pLeft),
       m_pRight(pRight)
 {
 }
-// -----------------------------------------------------------------------------
+
 KabConditionBoolean::~KabConditionBoolean()
 {
     delete m_pLeft;
     delete m_pRight;
 }
-// -----------------------------------------------------------------------------
+
 KabConditionOr::KabConditionOr(KabCondition *pLeft, KabCondition *pRight)
     : KabConditionBoolean(pLeft, pRight)
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool KabConditionOr::isAlwaysTrue() const
 {
     return m_pLeft->isAlwaysTrue() || m_pRight->isAlwaysTrue();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool KabConditionOr::isAlwaysFalse() const
 {
     return m_pLeft->isAlwaysFalse() && m_pRight->isAlwaysFalse();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool KabConditionOr::eval(const ::KABC::Addressee &aAddressee) const
 {
     // We avoid evaluating terms as much as we can
@@ -190,22 +190,22 @@ sal_Bool KabConditionOr::eval(const ::KABC::Addressee &aAddressee) const
 
     return sal_False;
 }
-// -----------------------------------------------------------------------------
+
 KabConditionAnd::KabConditionAnd(KabCondition *pLeft, KabCondition *pRight)
     : KabConditionBoolean(pLeft, pRight)
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool KabConditionAnd::isAlwaysTrue() const
 {
     return m_pLeft->isAlwaysTrue() && m_pRight->isAlwaysTrue();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool KabConditionAnd::isAlwaysFalse() const
 {
     return m_pLeft->isAlwaysFalse() || m_pRight->isAlwaysFalse();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool KabConditionAnd::eval(const ::KABC::Addressee &aAddressee) const
 {
     // We avoid evaluating terms as much as we can

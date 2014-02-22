@@ -147,7 +147,7 @@ void SAL_CALL ToolBarModule::notifyConfigurationChange (
 
 
 
-//-----------------------------------------------------------------------------
+
 
 
 void ToolBarModule::HandleUpdateStart (void)

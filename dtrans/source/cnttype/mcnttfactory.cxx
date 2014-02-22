@@ -24,9 +24,9 @@
 
 #define MIMECONTENTTYPEFACTORY_IMPL_NAME  "com.sun.star.datatransfer.MimeCntTypeFactory"
 
-//------------------------------------------------------------------------
+
 // namespace directives
-//------------------------------------------------------------------------
+
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -35,9 +35,9 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::datatransfer;
 
-//------------------------------------------------------------------------
+
 // helper functions
-//------------------------------------------------------------------------
+
 
 namespace
 {
@@ -49,17 +49,17 @@ namespace
     }
 }
 
-//------------------------------------------------------------------------
+
 // ctor
-//------------------------------------------------------------------------
+
 
 CMimeContentTypeFactory::CMimeContentTypeFactory()
 {
 }
 
-//------------------------------------------------------------------------
+
 // createMimeContentType
-//------------------------------------------------------------------------
+
 
 Reference< XMimeContentType > CMimeContentTypeFactory::createMimeContentType( const OUString& aContentType )
     throw( IllegalArgumentException, RuntimeException )
@@ -68,9 +68,9 @@ Reference< XMimeContentType > CMimeContentTypeFactory::createMimeContentType( co
     return Reference< XMimeContentType >( new CMimeContentType( aContentType ) );
 }
 
-// -------------------------------------------------
+
 // XServiceInfo
-// -------------------------------------------------
+
 
 OUString SAL_CALL CMimeContentTypeFactory::getImplementationName(  )
     throw( RuntimeException )
@@ -85,9 +85,9 @@ sal_Bool SAL_CALL CMimeContentTypeFactory::supportsService( const OUString& Serv
     return cppu::supportsService(this, ServiceName);
 }
 
-// -------------------------------------------------
+
 //  XServiceInfo
-// -------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL CMimeContentTypeFactory::getSupportedServiceNames( )
     throw( RuntimeException )

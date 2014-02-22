@@ -79,17 +79,17 @@ namespace logging
     //====================================================================
     //= PlainTextFormatter - implementation
     //====================================================================
-    //--------------------------------------------------------------------
+
     PlainTextFormatter::PlainTextFormatter()
     {
     }
 
-    //--------------------------------------------------------------------
+
     PlainTextFormatter::~PlainTextFormatter()
     {
     }
 
-    //--------------------------------------------------------------------
+
     OUString SAL_CALL PlainTextFormatter::getHead(  ) throw (RuntimeException)
     {
         OUStringBuffer aHeader;
@@ -106,7 +106,7 @@ namespace logging
         return aHeader.makeStringAndClear();
     }
 
-    //--------------------------------------------------------------------
+
     OUString SAL_CALL PlainTextFormatter::format( const LogRecord& _rRecord ) throw (RuntimeException)
     {
         char buffer[ 30 ];
@@ -144,7 +144,7 @@ namespace logging
         return aLogEntry.makeStringAndClear();
     }
 
-    //--------------------------------------------------------------------
+
     OUString SAL_CALL PlainTextFormatter::getTail(  ) throw (RuntimeException)
     {
         // no tail
@@ -156,25 +156,25 @@ namespace logging
         return cppu::supportsService(this, _rServiceName);
     }
 
-    //--------------------------------------------------------------------
+
     OUString SAL_CALL PlainTextFormatter::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_static();
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL PlainTextFormatter::getSupportedServiceNames() throw(RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
-    //--------------------------------------------------------------------
+
     OUString SAL_CALL PlainTextFormatter::getImplementationName_static()
     {
         return OUString( "com.sun.star.comp.extensions.PlainTextFormatter" );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL PlainTextFormatter::getSupportedServiceNames_static()
     {
         Sequence< OUString > aServiceNames(1);
@@ -182,13 +182,13 @@ namespace logging
         return aServiceNames;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XInterface > PlainTextFormatter::Create( const Reference< XComponentContext >& )
     {
         return *( new PlainTextFormatter );
     }
 
-    //--------------------------------------------------------------------
+
     void createRegistryInfo_PlainTextFormatter()
     {
         static OAutoRegistration< PlainTextFormatter > aAutoRegistration;

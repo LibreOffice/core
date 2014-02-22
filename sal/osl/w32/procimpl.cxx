@@ -97,10 +97,10 @@ namespace /* private */
     class sum_of_string_lengths
     {
     public:
-        //--------------------------------
+
         sum_of_string_lengths() : sum_(0) {}
 
-        //--------------------------------
+
         void operator() (const rtl::OUString& string)
         {
             OSL_ASSERT(string.getLength());
@@ -110,7 +110,7 @@ namespace /* private */
                 sum_ += string.getLength() + 1;
         }
 
-        //--------------------------------
+
         operator size_t () const
         {
             return sum_;

@@ -84,7 +84,7 @@ WebPrModel::WebPrModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ConnectionModel::ConnectionModel() :
     mnId( -1 ),
@@ -110,7 +110,7 @@ WebPrModel& ConnectionModel::createWebPr()
     return *mxWebPr;
 }
 
-// ----------------------------------------------------------------------------
+
 
 Connection::Connection( const WorkbookHelper& rHelper, sal_Int32 nConnId ) :
     WorkbookHelper( rHelper )

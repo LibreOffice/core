@@ -25,7 +25,7 @@
 #include "rolbck.hxx"
 #include "docary.hxx"
 
-//--------------------------------------------------
+
 
 SwUndoFmtColl::SwUndoFmtColl( const SwPaM& rRange,
                               SwFmtColl* pColl,

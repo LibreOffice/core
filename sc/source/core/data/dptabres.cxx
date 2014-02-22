@@ -385,7 +385,7 @@ void ScDPRunningTotalState::RemoveRowIndex()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 ScDPRelativePos::ScDPRelativePos( long nBase, long nDir ) :
     nBasePos( nBase ),
@@ -393,7 +393,7 @@ ScDPRelativePos::ScDPRelativePos( long nBase, long nDir ) :
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScDPAggData::Update( const ScDPValue& rNext, ScSubTotalFunc eFunc, const ScDPSubTotalState& rSubState )
 {
@@ -682,7 +682,7 @@ void ScDPAggData::Dump(int nIndent) const
 }
 #endif
 
-// -----------------------------------------------------------------------
+
 
 ScDPRowTotals::ScDPRowTotals() :
     bIsInColRoot( false )
@@ -725,7 +725,7 @@ ScDPAggData* ScDPRowTotals::GetGrandTotal( long nMeasure )
     return lcl_GetChildTotal( &aGrandTotal, nMeasure );
 }
 
-// -----------------------------------------------------------------------
+
 
 static ScSubTotalFunc lcl_GetForceFunc( const ScDPLevel* pLevel, long nFuncNo )
 {
@@ -755,7 +755,7 @@ static ScSubTotalFunc lcl_GetForceFunc( const ScDPLevel* pLevel, long nFuncNo )
     return eRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 ScDPResultData::ScDPResultData( ScDPSource& rSrc ) :
     mrSource(rSrc),
@@ -950,7 +950,7 @@ ResultMembers* ScDPResultData::GetDimResultMembers(long nDim, ScDPDimension* pDi
     return maDimMembers[nDim];
 }
 
-// -----------------------------------------------------------------------
+
 
 
 ScDPResultMember::ScDPResultMember(
@@ -1836,7 +1836,7 @@ void ScDPResultMember::FillVisibilityData(ScDPResultVisibilityData& rData) const
         pChildDimension->FillVisibilityData(rData);
 }
 
-// -----------------------------------------------------------------------
+
 
 ScDPDataMember::ScDPDataMember( const ScDPResultData* pData, const ScDPResultMember* pRes ) :
     pResultData( pData ),
@@ -2688,7 +2688,7 @@ void ScDPDataMember::Dump(int nIndent) const
 }
 #endif
 
-// -----------------------------------------------------------------------
+
 
 //  Helper class to select the members to include in
 //  ScDPResultDimension::InitFrom or LateInitFrom if groups are used
@@ -2768,7 +2768,7 @@ bool ScDPGroupCompare::TestIncluded( const ScDPMember& rMember )
     return bInclude;
 }
 
-// -----------------------------------------------------------------------
+
 
 ScDPResultDimension::ScDPResultDimension( const ScDPResultData* pData ) :
     pResultData( pData ),
@@ -3559,7 +3559,7 @@ void ScDPResultDimension::FillVisibilityData(ScDPResultVisibilityData& rData) co
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 ScDPDataDimension::ScDPDataDimension( const ScDPResultData* pData ) :
     pResultData( pData ),
@@ -3914,7 +3914,7 @@ ScDPDataMember* ScDPDataDimension::GetMember(long n)
     return maMembers[n];
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScDPResultVisibilityData::ScDPResultVisibilityData(
  ScDPSource* pSource) :
@@ -4105,7 +4105,7 @@ ResultMembers::~ResultMembers()
     for ( DimMemberHash::const_iterator iter = maMemberHash.begin(); iter != maMemberHash.end(); ++iter )
         delete iter->second;
 }
-// -----------------------------------------------------------------------
+
 LateInitParams::LateInitParams(
     const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLev, bool bRow, bool bInitChild, bool bAllChildren ) :
     mppDim( ppDim ),

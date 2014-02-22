@@ -934,9 +934,9 @@ void ScHeaderControl::RequestHelp( const HelpEvent& rHEvt )
         Window::RequestHelp(rHEvt);
 }
 
-// -----------------------------------------------------------------------
+
 //                  Dummys fuer virtuelle Methoden
-// -----------------------------------------------------------------------
+
 
 SCCOLROW ScHeaderControl::GetHiddenCount( SCCOLROW nEntryNo ) const
 {

@@ -73,7 +73,7 @@ FormulaDialog::FormulaDialog(Window* pParent
 void FormulaDialog::notifyChange()
 {
 }
-// -----------------------------------------------------------------------------
+
 void FormulaDialog::fill()
 {
     SetMeText(m_sFormula);
@@ -172,19 +172,19 @@ IFunctionManager* FormulaDialog::getFunctionManager()
 {
     return m_aFunctionManager.get();
 }
-// -----------------------------------------------------------------------------
+
 void FormulaDialog::ShowReference(const OUString& /*_sRef*/)
 {
 }
-// -----------------------------------------------------------------------------
+
 void FormulaDialog::HideReference( bool /*bDoneRefMode*/)
 {
 }
-// -----------------------------------------------------------------------------
+
 void FormulaDialog::ReleaseFocus( RefEdit* /*pEdit*/, RefButton* /*pButton*/)
 {
 }
-// -----------------------------------------------------------------------------
+
 void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
 {
     ::std::pair<RefButton*,RefEdit*> aPair = RefInputStartBefore( _pEdit, _pButton );
@@ -211,7 +211,7 @@ void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
     m_pAddField->Show();
 
 }
-// -----------------------------------------------------------------------------
+
 IMPL_LINK( FormulaDialog, OnClickHdl, OAddFieldWindow* ,_pAddFieldDlg)
 {
     const uno::Sequence< beans::PropertyValue > aArgs = _pAddFieldDlg->getSelectedFieldDescriptors();
@@ -235,22 +235,22 @@ IMPL_LINK( FormulaDialog, OnClickHdl, OAddFieldWindow* ,_pAddFieldDlg)
 
     return 0L;
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< sheet::XFormulaParser> FormulaDialog::getFormulaParser() const
 {
     return m_xParser.get();
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< sheet::XFormulaOpCodeMapper> FormulaDialog::getFormulaOpCodeMapper() const
 {
     return m_xOpCodeMapper;
 }
-// -----------------------------------------------------------------------------
+
 table::CellAddress FormulaDialog::getReferencePosition() const
 {
     return table::CellAddress();
 }
-// -----------------------------------------------------------------------------
+
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr<formula::FormulaTokenArray> FormulaDialog::convertToTokenArray(const uno::Sequence< sheet::FormulaToken >& _aTokenList)
 {

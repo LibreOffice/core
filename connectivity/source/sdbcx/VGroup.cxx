@@ -26,7 +26,7 @@
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbexception.hxx>
 
-// -------------------------------------------------------------------------
+
 using namespace ::connectivity::sdbcx;
 using namespace ::connectivity;
 using namespace ::dbtools;
@@ -37,36 +37,36 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
 IMPLEMENT_SERVICE_INFO(OGroup,"com.sun.star.sdbcx.VGroup","com.sun.star.sdbcx.Group");
-// -------------------------------------------------------------------------
+
 OGroup::OGroup(sal_Bool _bCase) :   OGroup_BASE(m_aMutex)
                 ,   ODescriptor(OGroup_BASE::rBHelper,_bCase)
                 ,   m_pUsers(NULL)
 {
 }
-// -------------------------------------------------------------------------
+
 OGroup::OGroup(const OUString& _Name,sal_Bool _bCase) :  OGroup_BASE(m_aMutex)
                         ,ODescriptor(OGroup_BASE::rBHelper,_bCase)
                         ,m_pUsers(NULL)
 {
     m_Name = _Name;
 }
-// -------------------------------------------------------------------------
+
 OGroup::~OGroup()
 {
     delete m_pUsers;
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OGroup::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = ODescriptor::queryInterface( rType);
     return aRet.hasValue() ? aRet : OGroup_BASE::queryInterface( rType);
 }
-// -------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OGroup::getTypes(  ) throw(RuntimeException)
 {
     return ::comphelper::concatSequences(ODescriptor::getTypes(),OGroup_BASE::getTypes());
 }
-// -------------------------------------------------------------------------
+
 void OGroup::disposing(void)
 {
     OPropertySetHelper::disposing();
@@ -76,19 +76,19 @@ void OGroup::disposing(void)
     if(m_pUsers)
         m_pUsers->disposing();
 }
-// -------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* OGroup::createArrayHelper( ) const
 {
     Sequence< Property > aProps;
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
-// -------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper & OGroup::getInfoHelper()
 {
     return *const_cast<OGroup*>(this)->getArrayHelper();
 }
-// -------------------------------------------------------------------------
+
 Reference< XNameAccess > SAL_CALL OGroup::getUsers(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -111,7 +111,7 @@ Reference< XNameAccess > SAL_CALL OGroup::getUsers(  ) throw(RuntimeException)
 
     return const_cast<OGroup*>(this)->m_pUsers;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL OGroup::getPrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/ ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
@@ -120,7 +120,7 @@ sal_Int32 SAL_CALL OGroup::getPrivileges( const OUString& /*objName*/, sal_Int32
 
     return 0;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OGroup::getGrantablePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/ ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -128,47 +128,47 @@ sal_Int32 SAL_CALL OGroup::getGrantablePrivileges( const OUString& /*objName*/, 
 
     return 0;
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OGroup::grantPrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OGroup_BASE::rBHelper.bDisposed);
     throwFeatureNotImplementedException( "XAuthorizable::grantPrivileges", *this );
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OGroup::revokePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OGroup_BASE::rBHelper.bDisposed);
     throwFeatureNotImplementedException( "XAuthorizable::revokePrivileges", *this );
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OGroup::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL OGroup::getName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return m_Name;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OGroup::setName( const OUString& /*aName*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
     throwFeatureNotImplementedException( "XNamed::setName", *this );
 }
-// -----------------------------------------------------------------------------
+
 // XInterface
 void SAL_CALL OGroup::acquire() throw()
 {
     OGroup_BASE::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OGroup::release() throw()
 {
     OGroup_BASE::release();
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

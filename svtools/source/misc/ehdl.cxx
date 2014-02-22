@@ -142,7 +142,7 @@ static sal_uInt16 aWndFunc(
     return nRet;
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxErrorHandler::SfxErrorHandler(sal_uInt16 nIdP, sal_uLong lStartP, sal_uLong lEndP, ResMgr *pMgrP) :
 
@@ -156,14 +156,14 @@ SfxErrorHandler::SfxErrorHandler(sal_uInt16 nIdP, sal_uLong lStartP, sal_uLong l
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxErrorHandler::~SfxErrorHandler()
 {
     delete pFreeMgr;
 }
 
-//-------------------------------------------------------------------------
+
 
 bool SfxErrorHandler::CreateString(
     const ErrorInfo *pErr, OUString &rStr, sal_uInt16& nFlags) const
@@ -210,7 +210,7 @@ bool SfxErrorHandler::CreateString(
     return false;
 }
 
-//-------------------------------------------------------------------------
+
 
 class ResString: public OUString
 
@@ -229,7 +229,7 @@ class ResString: public OUString
     ResString( ResId &rId);
 };
 
-//-------------------------------------------------------------------------
+
 
 ResString::ResString(ResId & rId):
     OUString(rId.SetAutoRelease(false).toString()),
@@ -243,7 +243,7 @@ ResString::ResString(ResId & rId):
     pResMgr->PopContext();
 }
 
-//-------------------------------------------------------------------------
+
 
 struct ErrorResource_Impl : private Resource
 
@@ -293,7 +293,7 @@ sal_Bool SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr) con
     return bRet;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxErrorHandler::GetMessageString(
     sal_uLong lErrId, OUString &rStr, sal_uInt16 &nFlags) const
@@ -323,7 +323,7 @@ sal_Bool SfxErrorHandler::GetMessageString(
     return bRet;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxErrorHandler::GetErrorString(
     sal_uLong lErrId, OUString &rStr, sal_uInt16 &nFlags) const
@@ -371,7 +371,7 @@ sal_Bool SfxErrorHandler::GetErrorString(
     return bRet;
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxErrorContext::SfxErrorContext(
     sal_uInt16 nCtxIdP, Window *pWindow, sal_uInt16 nResIdP, ResMgr *pMgrP)
@@ -381,7 +381,7 @@ SfxErrorContext::SfxErrorContext(
         nResId=RID_ERRCTX;
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxErrorContext::SfxErrorContext(
     sal_uInt16 nCtxIdP, const OUString &aArg1P, Window *pWindow,
@@ -393,7 +393,7 @@ SfxErrorContext::SfxErrorContext(
         nResId=RID_ERRCTX;
 }
 
-//-------------------------------------------------------------------------
+
 
 bool SfxErrorContext::GetString(sal_uLong nErrId, OUString &rStr)
 

@@ -93,9 +93,9 @@ struct ImplTabBarItem
 
 // =======================================================================
 
-// -----------------
+
 // - ImplTabButton -
-// -----------------
+
 
 class ImplTabButton : public PushButton
 {
@@ -146,9 +146,9 @@ bool ImplTabButton::PreNotify( NotifyEvent& rNEvt )
 
 // =======================================================================
 
-// ----------------
+
 // - ImplTabSizer -
-// ----------------
+
 
 class ImplTabSizer : public Window
 {
@@ -168,7 +168,7 @@ private:
     long            mnStartWidth;
 };
 
-// -----------------------------------------------------------------------
+
 
 ImplTabSizer::ImplTabSizer( TabBar* pParent, WinBits nWinStyle )
     : Window( pParent, nWinStyle & WB_3DLOOK )
@@ -178,7 +178,7 @@ ImplTabSizer::ImplTabSizer( TabBar* pParent, WinBits nWinStyle )
     SetSizePixel( Size( 7, 0 ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplTabSizer::ImplTrack( const Point& rScreenPos )
 {
@@ -191,7 +191,7 @@ void ImplTabSizer::ImplTrack( const Point& rScreenPos )
     pParent->Update();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplTabSizer::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -209,7 +209,7 @@ void ImplTabSizer::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplTabSizer::Tracking( const TrackingEvent& rTEvt )
 {
@@ -223,7 +223,7 @@ void ImplTabSizer::Tracking( const TrackingEvent& rTEvt )
         ImplTrack( OutputToScreenPixel( rTEvt.GetMouseEvent().GetPosPixel() ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplTabSizer::Paint( const Rectangle& )
 {
@@ -246,9 +246,9 @@ void ImplTabSizer::Paint( const Rectangle& )
 
 // Is not named Impl. as it may be called or overloaded
 
-// --------------
+
 // - TabBarEdit -
-// --------------
+
 
 class TabBarEdit : public Edit
 {
@@ -271,7 +271,7 @@ public:
     virtual void    LoseFocus();
 };
 
-// -----------------------------------------------------------------------
+
 
 TabBarEdit::TabBarEdit( TabBar* pParent, WinBits nWinStyle ) :
     Edit( pParent, nWinStyle )
@@ -279,7 +279,7 @@ TabBarEdit::TabBarEdit( TabBar* pParent, WinBits nWinStyle ) :
     mbPostEvt = sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool TabBarEdit::PreNotify( NotifyEvent& rNEvt )
 {
@@ -312,7 +312,7 @@ bool TabBarEdit::PreNotify( NotifyEvent& rNEvt )
     return Edit::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBarEdit::LoseFocus()
 {
@@ -325,7 +325,7 @@ void TabBarEdit::LoseFocus()
     Edit::LoseFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( TabBarEdit, ImplEndEditHdl, void*, pCancel )
 {
@@ -346,7 +346,7 @@ IMPL_LINK( TabBarEdit, ImplEndEditHdl, void*, pCancel )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(TabBarEdit, ImplEndTimerHdl)
 {
@@ -440,7 +440,7 @@ void TabBar::ImplInit( WinBits nWinStyle )
     ImplInitSettings( sal_True, sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 
 TabBar::TabBar( Window* pParent, WinBits nWinStyle ) :
     Window( pParent, (nWinStyle & WB_3DLOOK) | WB_CLIPCHILDREN )
@@ -449,7 +449,7 @@ TabBar::TabBar( Window* pParent, WinBits nWinStyle ) :
     maCurrentItemList = 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 TabBar::~TabBar()
 {
@@ -472,7 +472,7 @@ TabBar::~TabBar()
     delete mpItemList;
 }
 
-// -----------------------------------------------------------------------
+
 ImplTabBarItem* TabBar::seek( size_t i )
 {
     if ( i < mpItemList->size() )
@@ -499,7 +499,7 @@ ImplTabBarItem* TabBar::next()
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::ImplInitSettings( sal_Bool bFont, sal_Bool bBackground )
 {
@@ -536,7 +536,7 @@ void TabBar::ImplInitSettings( sal_Bool bFont, sal_Bool bBackground )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::ImplGetColors( Color& rFaceColor, Color& rFaceTextColor,
                             Color& rSelectColor, Color& rSelectTextColor )
@@ -573,7 +573,7 @@ void TabBar::ImplGetColors( Color& rFaceColor, Color& rFaceTextColor,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool TabBar::ImplCalcWidth()
 {
@@ -627,7 +627,7 @@ sal_Bool TabBar::ImplCalcWidth()
     return bChanged;
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::ImplFormat()
 {
@@ -675,7 +675,7 @@ void TabBar::ImplFormat()
     ImplEnableControls();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 TabBar::ImplGetLastFirstPos()
 {
@@ -697,7 +697,7 @@ sal_uInt16 TabBar::ImplGetLastFirstPos()
     return nLastFirstPos;
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::ImplInitControls()
 {
@@ -765,7 +765,7 @@ void TabBar::ImplInitControls()
     mbHasInsertTab  = (mnWinStyle & WB_INSERTTAB);
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::ImplEnableControls()
 {
@@ -792,7 +792,7 @@ void TabBar::SetScrollAlwaysEnabled(bool bScrollAlwaysEnabled)
     ImplEnableControls();
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::ImplShowPage( sal_uInt16 nPos )
 {
@@ -816,7 +816,7 @@ void TabBar::ImplShowPage( sal_uInt16 nPos )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( TabBar, ImplClickHdl, ImplTabButton*, pBtn )
 {
@@ -849,7 +849,7 @@ IMPL_LINK( TabBar, ImplClickHdl, ImplTabButton*, pBtn )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::MouseMove( const MouseEvent& rMEvt )
 {
@@ -859,7 +859,7 @@ void TabBar::MouseMove( const MouseEvent& rMEvt )
     Window::MouseMove( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -1063,7 +1063,7 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
     Window::MouseButtonDown( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -1072,7 +1072,7 @@ void TabBar::MouseButtonUp( const MouseEvent& rMEvt )
 }
 
 
-// -----------------------------------------------------------------------
+
 
 namespace {
 
@@ -1464,7 +1464,7 @@ void TabBar::Paint( const Rectangle& rect )
     }
 }
 
-// -----------------------------------------------------------------------
+
 void TabBar::Resize()
 {
     Size aNewSize = GetOutputSizePixel();
@@ -1557,7 +1557,7 @@ void TabBar::Resize()
     ImplEnableControls();
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::RequestHelp( const HelpEvent& rHEvt )
 {
@@ -1625,7 +1625,7 @@ void TabBar::RequestHelp( const HelpEvent& rHEvt )
     Window::RequestHelp( rHEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::StateChanged( StateChangedType nType )
 {
@@ -1661,7 +1661,7 @@ void TabBar::StateChanged( StateChangedType nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -1677,7 +1677,7 @@ void TabBar::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::ImplSelect()
 {
@@ -1686,28 +1686,28 @@ void TabBar::ImplSelect()
     CallEventListeners( VCLEVENT_TABBAR_PAGESELECTED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(mnCurPageId)) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::Select()
 {
     maSelectHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::DoubleClick()
 {
     maDoubleClickHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::Split()
 {
     maSplitHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::ImplActivatePage()
 {
@@ -1716,14 +1716,14 @@ void TabBar::ImplActivatePage()
     CallEventListeners( VCLEVENT_TABBAR_PAGEACTIVATED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(mnCurPageId)) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::ActivatePage()
 {
     maActivatePageHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 long TabBar::ImplDeactivatePage()
 {
@@ -1810,7 +1810,7 @@ Rectangle TabBar::ImplGetInsertTabRect(ImplTabBarItem* pItem) const
     return Rectangle();
 }
 
-// -----------------------------------------------------------------------
+
 
 long TabBar::DeactivatePage()
 {
@@ -1820,7 +1820,7 @@ long TabBar::DeactivatePage()
         return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 long TabBar::StartRenaming()
 {
@@ -1830,7 +1830,7 @@ long TabBar::StartRenaming()
         return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 long TabBar::AllowRenaming()
 {
@@ -1840,21 +1840,21 @@ long TabBar::AllowRenaming()
         return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::EndRenaming()
 {
     maEndRenamingHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::Mirror()
 {
 
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::InsertPage( sal_uInt16 nPageId, const OUString& rText,
                          TabBarPageBits nBits, sal_uInt16 nPos )
@@ -1886,7 +1886,7 @@ void TabBar::InsertPage( sal_uInt16 nPageId, const OUString& rText,
     CallEventListeners( VCLEVENT_TABBAR_PAGEINSERTED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(nPageId)) );
 }
 
-// -----------------------------------------------------------------------
+
 
 Color TabBar::GetTabBgColor( sal_uInt16 nPageId ) const
 {
@@ -1921,7 +1921,7 @@ void TabBar::SetTabBgColor( sal_uInt16 nPageId, const Color& aTabBgColor )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::RemovePage( sal_uInt16 nPageId )
 {
@@ -1951,7 +1951,7 @@ void TabBar::RemovePage( sal_uInt16 nPageId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::MovePage( sal_uInt16 nPageId, sal_uInt16 nNewPos )
 {
@@ -1988,7 +1988,7 @@ void TabBar::MovePage( sal_uInt16 nPageId, sal_uInt16 nNewPos )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::Clear()
 {
@@ -2011,7 +2011,7 @@ void TabBar::Clear()
     CallEventListeners( VCLEVENT_TABBAR_PAGEREMOVED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(PAGE_NOT_FOUND)) );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool TabBar::IsPageEnabled( sal_uInt16 nPageId ) const
 {
@@ -2023,7 +2023,7 @@ sal_Bool TabBar::IsPageEnabled( sal_uInt16 nPageId ) const
         return sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::SetPageBits( sal_uInt16 nPageId, TabBarPageBits nBits )
 {
@@ -2044,7 +2044,7 @@ void TabBar::SetPageBits( sal_uInt16 nPageId, TabBarPageBits nBits )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 TabBarPageBits TabBar::GetPageBits( sal_uInt16 nPageId ) const
 {
@@ -2056,21 +2056,21 @@ TabBarPageBits TabBar::GetPageBits( sal_uInt16 nPageId ) const
         return sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 TabBar::GetPageCount() const
 {
     return (sal_uInt16)mpItemList->size();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 TabBar::GetPageId( sal_uInt16 nPos ) const
 {
     return ( nPos < mpItemList->size() ) ? (*mpItemList)[ nPos ]->mnId : 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 TabBar::GetPagePos( sal_uInt16 nPageId ) const
 {
@@ -2082,7 +2082,7 @@ sal_uInt16 TabBar::GetPagePos( sal_uInt16 nPageId ) const
     return PAGE_NOT_FOUND;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 TabBar::GetPageId( const Point& rPos, bool bCheckInsTab ) const
 {
@@ -2103,7 +2103,7 @@ sal_uInt16 TabBar::GetPageId( const Point& rPos, bool bCheckInsTab ) const
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle TabBar::GetPageRect( sal_uInt16 nPageId ) const
 {
@@ -2115,7 +2115,7 @@ Rectangle TabBar::GetPageRect( sal_uInt16 nPageId ) const
         return Rectangle();
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::SetCurPageId( sal_uInt16 nPageId )
 {
@@ -2201,7 +2201,7 @@ void TabBar::SetCurPageId( sal_uInt16 nPageId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::MakeVisible( sal_uInt16 nPageId )
 {
@@ -2251,7 +2251,7 @@ void TabBar::MakeVisible( sal_uInt16 nPageId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::SetFirstPageId( sal_uInt16 nPageId )
 {
@@ -2285,7 +2285,7 @@ void TabBar::SetFirstPageId( sal_uInt16 nPageId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::SelectPage( sal_uInt16 nPageId, sal_Bool bSelect )
 {
@@ -2306,7 +2306,7 @@ void TabBar::SelectPage( sal_uInt16 nPageId, sal_Bool bSelect )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 TabBar::GetSelectPageCount() const
 {
@@ -2321,7 +2321,7 @@ sal_uInt16 TabBar::GetSelectPageCount() const
     return nSelected;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool TabBar::IsPageSelected( sal_uInt16 nPageId ) const
 {
@@ -2332,7 +2332,7 @@ sal_Bool TabBar::IsPageSelected( sal_uInt16 nPageId ) const
         return sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool TabBar::StartEditMode( sal_uInt16 nPageId )
 {
@@ -2399,7 +2399,7 @@ sal_Bool TabBar::StartEditMode( sal_uInt16 nPageId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::EndEditMode( sal_Bool bCancel )
 {
@@ -2442,7 +2442,7 @@ void TabBar::EndEditMode( sal_Bool bCancel )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::SetMirrored(bool bMirrored)
 {
@@ -2466,7 +2466,7 @@ bool TabBar::IsEffectiveRTL() const
     return IsMirrored() != Application::GetSettings().GetLayoutRTL();
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::SetMaxPageWidth( long nMaxWidth )
 {
@@ -2481,7 +2481,7 @@ void TabBar::SetMaxPageWidth( long nMaxWidth )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::SetPageText( sal_uInt16 nPageId, const OUString& rText )
 {
@@ -2499,7 +2499,7 @@ void TabBar::SetPageText( sal_uInt16 nPageId, const OUString& rText )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString TabBar::GetPageText( sal_uInt16 nPageId ) const
 {
@@ -2509,7 +2509,7 @@ OUString TabBar::GetPageText( sal_uInt16 nPageId ) const
     return OUString();
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString TabBar::GetHelpText( sal_uInt16 nPageId ) const
 {
@@ -2529,7 +2529,7 @@ OUString TabBar::GetHelpText( sal_uInt16 nPageId ) const
     return OUString();
 }
 
-// -----------------------------------------------------------------------
+
 
 OString TabBar::GetHelpId( sal_uInt16 nPageId ) const
 {
@@ -2540,7 +2540,7 @@ OString TabBar::GetHelpId( sal_uInt16 nPageId ) const
     return aRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool TabBar::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
 {
@@ -2585,7 +2585,7 @@ sal_Bool TabBar::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 TabBar::ShowDropPos( const Point& rPos )
 {
@@ -2691,7 +2691,7 @@ sal_uInt16 TabBar::ShowDropPos( const Point& rPos )
     return mnDropPos;
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::HideDropPos()
 {
@@ -2731,7 +2731,7 @@ void TabBar::HideDropPos()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool TabBar::SwitchPage( const Point& rPos )
 {
@@ -2771,7 +2771,7 @@ sal_Bool TabBar::SwitchPage( const Point& rPos )
     return bSwitch;
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::EndSwitchPage()
 {
@@ -2779,7 +2779,7 @@ void TabBar::EndSwitchPage()
     mnSwitchId      = 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabBar::SetStyle( WinBits nStyle )
 {
@@ -2790,7 +2790,7 @@ void TabBar::SetStyle( WinBits nStyle )
         Resize();
 }
 
-// -----------------------------------------------------------------------
+
 
 Size TabBar::CalcWindowSizePixel() const
 {
@@ -2809,20 +2809,20 @@ Size TabBar::CalcWindowSizePixel() const
 
     return Size( nWidth, GetSettings().GetStyleSettings().GetScrollBarSize() );
 }
-// -----------------------------------------------------------------------
+
 
 Rectangle TabBar::GetPageArea() const
 {
     return Rectangle( Point( mnOffX, mnOffY ), Size( mnLastOffX-mnOffX+1, GetSizePixel().Height()-mnOffY ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > TabBar::CreateAccessible()
 {
     return mpImpl->maAccessibleFactory.getFactory().createAccessibleTabBar( *this );
 }
 
-// -----------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

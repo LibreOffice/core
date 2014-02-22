@@ -27,18 +27,18 @@ namespace connectivity
     //================================================================
     //= ORefBase
     //================================================================
-    //----------------------------------------------------------------
+
     ORefBase::~ORefBase()
     {
     }
 
-    //----------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL ORefBase::acquire()
     {
         return osl_atomic_increment(&m_refCount);
     }
 
-    //----------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL ORefBase::release()
     {
         oslInterlockedCount nNewRefCount = osl_atomic_decrement(&m_refCount);

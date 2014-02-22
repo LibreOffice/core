@@ -22,7 +22,7 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #include "delcldlg.hxx"
 #include "scresid.hxx"
@@ -65,7 +65,7 @@ ScDeleteCellDlg::ScDeleteCellDlg(Window* pParent, bool bDisallowCellMove)
     }
 }
 
-//------------------------------------------------------------------------
+
 
 DelCellCmd ScDeleteCellDlg::GetDelCellCmd() const
 {

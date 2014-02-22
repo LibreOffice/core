@@ -128,7 +128,7 @@ CommandLineArgs::CommandLineArgs( Supplier& supplier )
     ParseCommandLine_Impl( supplier );
 }
 
-// ----------------------------------------------------------------------------
+
 
 void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
 {

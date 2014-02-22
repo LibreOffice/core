@@ -126,7 +126,7 @@ SfxPopupWindow* SvxTbxCtlCustomShapes::CreatePopupWindow()
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxTbxCtlCustomShapes::Select( sal_Bool /*bMod1*/ )
 {

@@ -56,7 +56,7 @@ namespace svxform
     //========================================================================
     // class OFormComponentObserver
     //========================================================================
-    //------------------------------------------------------------------------
+
     OFormComponentObserver::OFormComponentObserver(NavigatorTreeModel* _pModel)
         :m_pNavModel(_pModel)
         ,m_nLocks(0)
@@ -65,13 +65,13 @@ namespace svxform
     }
 
     // XPropertyChangeListener
-    //------------------------------------------------------------------------
+
     void SAL_CALL OFormComponentObserver::disposing(const EventObject& Source) throw( RuntimeException )
     {
         Remove( Source.Source );
     }
 
-    //------------------------------------------------------------------------
+
     void SAL_CALL OFormComponentObserver::propertyChange(const PropertyChangeEvent& evt) throw(RuntimeException)
     {
         if( !m_pNavModel ) return;
@@ -96,7 +96,7 @@ namespace svxform
     }
 
     // XContainerListener
-    //------------------------------------------------------------------------------
+
     void SAL_CALL OFormComponentObserver::elementInserted(const ContainerEvent& evt) throw(RuntimeException)
     {
         if (IsLocked() || !m_pNavModel)
@@ -112,7 +112,7 @@ namespace svxform
         m_bCanUndo = sal_True;
     }
 
-    //------------------------------------------------------------------------------
+
     void OFormComponentObserver::Insert(const Reference< XInterface > & xIface, sal_Int32 nIndex)
     {
         Reference< XForm >  xForm(xIface, UNO_QUERY);
@@ -135,7 +135,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------------
+
     void SAL_CALL OFormComponentObserver::elementReplaced(const ContainerEvent& evt) throw(RuntimeException)
     {
         if (IsLocked() || !m_pNavModel)
@@ -166,7 +166,7 @@ namespace svxform
         m_bCanUndo = sal_True;
     }
 
-    //------------------------------------------------------------------------------
+
     void OFormComponentObserver::Remove( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement )
     {
         if (IsLocked() || !m_pNavModel)
@@ -183,7 +183,7 @@ namespace svxform
         m_bCanUndo = sal_True;
     }
 
-    //------------------------------------------------------------------------------
+
     void SAL_CALL OFormComponentObserver::elementRemoved(const ContainerEvent& evt) throw(RuntimeException)
     {
         Reference< XInterface > xElement;
@@ -195,7 +195,7 @@ namespace svxform
     // class NavigatorTreeModel
     //========================================================================
 
-    //------------------------------------------------------------------------
+
     NavigatorTreeModel::NavigatorTreeModel( const ImageList& _rNormalImages )
                     :m_pFormShell(NULL)
                     ,m_pFormPage(NULL)
@@ -207,7 +207,7 @@ namespace svxform
         m_pRootList = new FmEntryDataList();
     }
 
-    //------------------------------------------------------------------------
+
     NavigatorTreeModel::~NavigatorTreeModel()
     {
         //////////////////////////////////////////////////////////////////////
@@ -229,7 +229,7 @@ namespace svxform
     }
 
 
-    //------------------------------------------------------------------------
+
     void NavigatorTreeModel::SetModified( sal_Bool bMod )
     {
         if( !m_pFormShell ) return;
@@ -238,7 +238,7 @@ namespace svxform
         pObjShell->SetModified( bMod );
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTreeModel::Clear()
     {
         Reference< css::form::XForms >  xForms( GetForms());
@@ -255,7 +255,7 @@ namespace svxform
         Broadcast( aClearedHint );
     }
 
-    //------------------------------------------------------------------------
+
     Reference< css::form::XForms >  NavigatorTreeModel::GetForms() const
     {
         if( !m_pFormShell || !m_pFormShell->GetCurPage())
@@ -264,7 +264,7 @@ namespace svxform
             return m_pFormShell->GetCurPage()->GetForms();
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTreeModel::Insert(FmEntryData* pEntry, sal_uLong nRelPos, sal_Bool bAlterModel)
     {
         if (IsListening(*m_pFormModel))
@@ -363,7 +363,7 @@ namespace svxform
             StartListening(*m_pFormModel);
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTreeModel::Remove(FmEntryData* pEntry, sal_Bool bAlterModel)
     {
         //////////////////////////////////////////////////////////////////////
@@ -453,7 +453,7 @@ namespace svxform
         StartListening(*m_pFormModel);
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTreeModel::RemoveForm(FmFormData* pFormData)
     {
         //////////////////////////////////////////////////////////////////////
@@ -485,7 +485,7 @@ namespace svxform
             xContainer->removeContainerListener((XContainerListener*)m_pPropChangeList);
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTreeModel::RemoveFormComponent(FmControlData* pControlData)
     {
         //////////////////////////////////////////////////////////////////////
@@ -500,7 +500,7 @@ namespace svxform
             xSet->removePropertyChangeListener( FM_PROP_NAME, m_pPropChangeList);
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTreeModel::ClearBranch( FmFormData* pParentData )
     {
         //////////////////////////////////////////////////////////////////////
@@ -517,7 +517,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTreeModel::FillBranch( FmFormData* pFormData )
     {
         //////////////////////////////////////////////////////////////
@@ -581,7 +581,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTreeModel::InsertForm(const Reference< XForm > & xForm, sal_uInt32 nRelPos)
     {
         FmFormData* pFormData = (FmFormData*)FindData( xForm, GetRootList() );
@@ -600,7 +600,7 @@ namespace svxform
         Insert( pFormData, nRelPos );
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTreeModel::InsertFormComponent(const Reference< XFormComponent > & xComp, sal_uInt32 nRelPos)
     {
         //////////////////////////////////////////////////////////
@@ -629,7 +629,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTreeModel::ReplaceFormComponent(
         const Reference< XFormComponent > & xOld,
         const Reference< XFormComponent > & xNew
@@ -643,7 +643,7 @@ namespace svxform
         Broadcast( aReplacedHint );
     }
 
-    //------------------------------------------------------------------------
+
     FmEntryData* NavigatorTreeModel::FindData(const Reference< XInterface > & xElement, FmEntryDataList* pDataList, sal_Bool bRecurs)
     {
         // normalize
@@ -664,7 +664,7 @@ namespace svxform
         return NULL;
     }
 
-    //------------------------------------------------------------------------
+
     FmEntryData* NavigatorTreeModel::FindData( const OUString& rText, FmFormData* pParentData, sal_Bool bRecurs )
     {
         FmEntryDataList* pDataList;
@@ -696,7 +696,7 @@ namespace svxform
         return NULL;
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTreeModel::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
         if( rHint.ISA(SdrHint) )
@@ -726,7 +726,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTreeModel::InsertSdrObj( const SdrObject* pObj )
     {
         const FmFormObj* pFormObject = FmFormObj::GetFormObject( pObj );
@@ -753,7 +753,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTreeModel::RemoveSdrObj( const SdrObject* pObj )
     {
         const FmFormObj* pFormObject = FmFormObj::GetFormObject( pObj );
@@ -838,7 +838,7 @@ namespace svxform
             // eine leere Liste interpretiert der NavigatorTree so, dass er seine Selektion komplett rausnimmt
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTreeModel::UpdateContent( const Reference< css::form::XForms > & xForms )
     {
         //////////////////////////////////////////////////////////////////////
@@ -860,7 +860,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorTreeModel::UpdateContent( FmFormShell* pShell )
     {
         //////////////////////////////////////////////////////////////////////
@@ -901,7 +901,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------
+
     Reference< XIndexContainer >  NavigatorTreeModel::GetFormComponents( FmFormData* pFormData )
     {
         //////////////////////////////////////////////////////////////////////
@@ -912,7 +912,7 @@ namespace svxform
         return Reference< XIndexContainer > ();
     }
 
-    //------------------------------------------------------------------------
+
     sal_Bool NavigatorTreeModel::Rename( FmEntryData* pEntryData, const OUString& rNewText )
     {
         //////////////////////////////////////////////////////////////////////
@@ -947,7 +947,7 @@ namespace svxform
         return sal_True;
     }
 
-    //------------------------------------------------------------------
+
     SdrObject* NavigatorTreeModel::Search(SdrObjListIter& rIter, const Reference< XFormComponent > & xComp)
     {
         while (rIter.IsMore())

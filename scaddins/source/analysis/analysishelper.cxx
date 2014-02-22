@@ -1262,11 +1262,11 @@ double GetZw( double fZins, double fZzr, double fRmz, double fBw, sal_Int32 nF )
 }
 
 
-//-----------------------------------------------------------------------------
+
 // financial functions COUP***
 
 
-//-------
+
 // COUPPCD: find last coupon date before settlement (can be equal to settlement)
 static void lcl_GetCouppcd( ScaDate& rDate, const ScaDate& rSettle, const ScaDate& rMat, sal_Int32 nFreq )
     throw( lang::IllegalArgumentException )
@@ -1291,7 +1291,7 @@ double GetCouppcd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_I
 }
 
 
-//-------
+
 // COUPNCD: find first coupon date after settlement (is never equal to settlement)
 static void lcl_GetCoupncd( ScaDate& rDate, const ScaDate& rSettle, const ScaDate& rMat, sal_Int32 nFreq )
     throw( lang::IllegalArgumentException )
@@ -1316,7 +1316,7 @@ double GetCoupncd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_I
 }
 
 
-//-------
+
 // COUPDAYBS: get day count: coupon date before settlement <-> settlement
 double GetCoupdaybs( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
     throw( uno::RuntimeException, lang::IllegalArgumentException )
@@ -1331,7 +1331,7 @@ double GetCoupdaybs( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal
 }
 
 
-//-------
+
 // COUPDAYSNC: get day count: settlement <-> coupon date after settlement
 double GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
     throw( uno::RuntimeException, lang::IllegalArgumentException )
@@ -1350,7 +1350,7 @@ double GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sa
 }
 
 
-//-------
+
 // COUPDAYS: get day count: coupon date before settlement <-> coupon date after settlement
 double GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
     throw( uno::RuntimeException, lang::IllegalArgumentException )
@@ -1370,7 +1370,7 @@ double GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_
 }
 
 
-//-------
+
 // COUPNUM: get count of coupon dates
 double GetCoupnum( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
     throw( uno::RuntimeException, lang::IllegalArgumentException )
@@ -1608,7 +1608,7 @@ void SortedIndividualInt32List::InsertHolidayList(
 
 
 
-//-----------------------------------------------------------------------------
+
 
 void ScaDoubleList::Append(
         const uno::Sequence< uno::Sequence< double > >& rValueSeq ) throw( uno::RuntimeException, lang::IllegalArgumentException )
@@ -1698,7 +1698,7 @@ sal_Bool ScaDoubleList::CheckInsert( double ) const throw( uno::RuntimeException
 
 
 
-//-----------------------------------------------------------------------------
+
 
 sal_Bool ScaDoubleListGT0::CheckInsert( double fValue ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
@@ -1709,7 +1709,7 @@ sal_Bool ScaDoubleListGT0::CheckInsert( double fValue ) const throw( uno::Runtim
 
 
 
-//-----------------------------------------------------------------------------
+
 
 sal_Bool ScaDoubleListGE0::CheckInsert( double fValue ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
@@ -1720,7 +1720,7 @@ sal_Bool ScaDoubleListGE0::CheckInsert( double fValue ) const throw( uno::Runtim
 
 
 
-//-----------------------------------------------------------------------------
+
 
 Complex::Complex( const OUString& rStr ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
@@ -2673,7 +2673,7 @@ double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUStr
 
 
 
-//-----------------------------------------------------------------------------
+
 
 ScaDate::ScaDate() :
     nOrigDay( 1 ),
@@ -2872,7 +2872,7 @@ sal_Bool ScaDate::operator<( const ScaDate& rCmp ) const
 
 
 
-//-----------------------------------------------------------------------------
+
 
 ScaAnyConverter::ScaAnyConverter( const uno::Reference< uno::XComponentContext >& xContext ) :
     bHasValidFormat( sal_False )
@@ -3009,7 +3009,7 @@ sal_Int32 ScaAnyConverter::getInt32(
 
 
 
-//-----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

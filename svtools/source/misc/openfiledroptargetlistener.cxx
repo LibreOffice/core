@@ -45,7 +45,7 @@ OpenFileDropTargetListener::OpenFileDropTargetListener( const css::uno::Referenc
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 OpenFileDropTargetListener::~OpenFileDropTargetListener()
 {
@@ -55,7 +55,7 @@ OpenFileDropTargetListener::~OpenFileDropTargetListener()
     m_pFormats = NULL;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL OpenFileDropTargetListener::disposing( const css::lang::EventObject& ) throw( css::uno::RuntimeException )
 {
@@ -63,7 +63,7 @@ void SAL_CALL OpenFileDropTargetListener::disposing( const css::lang::EventObjec
     m_xContext.clear();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL OpenFileDropTargetListener::drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde ) throw( css::uno::RuntimeException )
 {
@@ -98,7 +98,7 @@ void SAL_CALL OpenFileDropTargetListener::drop( const css::datatransfer::dnd::Dr
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL OpenFileDropTargetListener::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw( css::uno::RuntimeException )
 {
@@ -113,7 +113,7 @@ void SAL_CALL OpenFileDropTargetListener::dragEnter( const css::datatransfer::dn
     dragOver( dtdee );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL OpenFileDropTargetListener::dragExit( const css::datatransfer::dnd::DropTargetEvent& ) throw( css::uno::RuntimeException )
 {
@@ -126,7 +126,7 @@ void SAL_CALL OpenFileDropTargetListener::dragExit( const css::datatransfer::dnd
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL OpenFileDropTargetListener::dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) throw( css::uno::RuntimeException )
 {
@@ -145,7 +145,7 @@ void SAL_CALL OpenFileDropTargetListener::dragOver( const css::datatransfer::dnd
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL OpenFileDropTargetListener::dropActionChanged( const css::datatransfer::dnd::DropTargetDragEvent& ) throw( css::uno::RuntimeException )
 {
