@@ -430,7 +430,7 @@ bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(void * block)
     return static_cast< Slot * >(block) + 1;
 }
 
-sal_Size bridges::cpp_uno::shared::VtableFactory::getBlockSize(
+size_t bridges::cpp_uno::shared::VtableFactory::getBlockSize(
     sal_Int32 slotCount)
 {
     return (slotCount + 1) * sizeof (Slot) + slotCount * codeSnippetSize;

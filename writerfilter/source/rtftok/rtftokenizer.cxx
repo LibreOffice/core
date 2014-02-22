@@ -339,7 +339,7 @@ OUString RTFTokenizer::getPosition()
     return aRet.makeStringAndClear();
 }
 
-sal_Size RTFTokenizer::getGroupStart()
+size_t RTFTokenizer::getGroupStart()
 {
     return m_nGroupStart;
 }

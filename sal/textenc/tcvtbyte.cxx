@@ -25,12 +25,12 @@
 #include "tcvtbyte.hxx"
 #include "tenchelp.hxx"
 
-sal_Size ImplSymbolToUnicode( SAL_UNUSED_PARAMETER const void*,
+size_t ImplSymbolToUnicode( SAL_UNUSED_PARAMETER const void*,
                               SAL_UNUSED_PARAMETER void*,
-                              const char* pSrcBuf, sal_Size nSrcBytes,
-                              sal_Unicode* pDestBuf, sal_Size nDestChars,
+                              const char* pSrcBuf, size_t nSrcBytes,
+                              sal_Unicode* pDestBuf, size_t nDestChars,
                               SAL_UNUSED_PARAMETER sal_uInt32,
-                              sal_uInt32* pInfo, sal_Size* pSrcCvtBytes )
+                              sal_uInt32* pInfo, size_t* pSrcCvtBytes )
 {
     unsigned char               c;
     sal_Unicode*            pEndDestBuf;
@@ -61,12 +61,12 @@ sal_Size ImplSymbolToUnicode( SAL_UNUSED_PARAMETER const void*,
     return (nDestChars - (pEndDestBuf-pDestBuf));
 }
 
-sal_Size ImplUnicodeToSymbol( SAL_UNUSED_PARAMETER const void*,
+size_t ImplUnicodeToSymbol( SAL_UNUSED_PARAMETER const void*,
                               SAL_UNUSED_PARAMETER void*,
-                              const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                              char* pDestBuf, sal_Size nDestBytes,
+                              const sal_Unicode* pSrcBuf, size_t nSrcChars,
+                              char* pDestBuf, size_t nDestBytes,
                               sal_uInt32 nFlags, sal_uInt32* pInfo,
-                              sal_Size* pSrcCvtChars )
+                              size_t* pSrcCvtChars )
 {
     sal_Unicode             c;
     char*               pEndDestBuf;
@@ -120,12 +120,12 @@ sal_Size ImplUnicodeToSymbol( SAL_UNUSED_PARAMETER const void*,
     return (nDestBytes - (pEndDestBuf-pDestBuf));
 }
 
-sal_Size ImplUpperCharToUnicode( const void* pData,
+size_t ImplUpperCharToUnicode( const void* pData,
                             SAL_UNUSED_PARAMETER void*,
-                            const char* pSrcBuf, sal_Size nSrcBytes,
-                            sal_Unicode* pDestBuf, sal_Size nDestChars,
+                            const char* pSrcBuf, size_t nSrcBytes,
+                            sal_Unicode* pDestBuf, size_t nDestChars,
                             SAL_UNUSED_PARAMETER sal_uInt32, sal_uInt32* pInfo,
-                            sal_Size* pSrcCvtBytes )
+                            size_t* pSrcCvtBytes )
 {
     unsigned char                   c;
     sal_Unicode                 cConv;

@@ -48,20 +48,20 @@ struct LockMutex : public rtl::Static< osl::Mutex, LockMutex > {};
 
 struct InternalStreamLock
 {
-    sal_Size           m_nStartPos;
-    sal_Size           m_nEndPos;
+    size_t           m_nStartPos;
+    size_t           m_nEndPos;
     SvFileStream*      m_pStream;
     osl::DirectoryItem m_aItem;
 
-    InternalStreamLock( sal_Size, sal_Size, SvFileStream* );
+    InternalStreamLock( size_t, sal_Size, SvFileStream* );
     ~InternalStreamLock();
 };
 
 struct LockList : public rtl::Static< std::vector<InternalStreamLock>, LockList > {};
 
 InternalStreamLock::InternalStreamLock(
-    sal_Size nStart,
-    sal_Size nEnd,
+    size_t nStart,
+    size_t nEnd,
     SvFileStream* pStream ) :
         m_nStartPos( nStart ),
         m_nEndPos( nEnd ),
@@ -90,7 +90,7 @@ InternalStreamLock::~InternalStreamLock()
 #endif
 }
 
-bool lockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* pStream )
+bool lockFile( size_t nStart, sal_Size nEnd, SvFileStream* pStream )
 {
     osl::DirectoryItem aItem;
     if (osl::DirectoryItem::get( pStream->GetFileName(), aItem) != osl::FileBase::E_None )
@@ -145,7 +145,7 @@ bool lockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* pStream )
     return true;
 }
 
-void unlockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* pStream )
+void unlockFile( size_t nStart, sal_Size nEnd, SvFileStream* pStream )
 {
     osl::MutexGuard aGuard( LockMutex::get() );
     std::vector<InternalStreamLock> &rLockList = LockList::get();
@@ -311,7 +311,7 @@ sal_uInt16 SvFileStream::IsA() const
     return ID_FILESTREAM;
 }
 
-sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )
+size_t SvFileStream::GetData( void* pData, sal_Size nSize )
 {
 #ifdef DBG_UTIL
     OStringBuffer aTraceStr("SvFileStream::GetData(): ");
@@ -332,10 +332,10 @@ sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )
             return -1;
         }
     }
-    return (sal_Size)nRead;
+    return (size_t)nRead;
 }
 
-sal_Size SvFileStream::PutData( const void* pData, sal_Size nSize )
+size_t SvFileStream::PutData( const void* pData, sal_Size nSize )
 {
 #ifdef DBG_UTIL
     OStringBuffer aTraceStr("SvFileStream::PutData(): ");
@@ -358,10 +358,10 @@ sal_Size SvFileStream::PutData( const void* pData, sal_Size nSize )
         else if( !nWrite )
             SetError( SVSTREAM_DISK_FULL );
     }
-    return (sal_Size)nWrite;
+    return (size_t)nWrite;
 }
 
-sal_Size SvFileStream::SeekPos( sal_Size nPos )
+size_t SvFileStream::SeekPos( sal_Size nPos )
 {
     if ( IsOpen() )
     {
@@ -378,7 +378,7 @@ sal_Size SvFileStream::SeekPos( sal_Size nPos )
             return 0L;
         }
         rc = osl_getFilePos( pInstanceData->rHandle, &nNewPos );
-        return (sal_Size) nNewPos;
+        return (size_t) nNewPos;
     }
     SetError( SVSTREAM_GENERALERROR );
     return 0L;
@@ -389,7 +389,7 @@ void SvFileStream::FlushData()
     // does not exist locally
 }
 
-bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
+bool SvFileStream::LockRange( size_t nByteOffset, sal_Size nBytes )
 {
     int nLockMode = 0;
 
@@ -438,7 +438,7 @@ bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
     return true;
 }
 
-bool SvFileStream::UnlockRange( sal_Size nByteOffset, sal_Size nBytes )
+bool SvFileStream::UnlockRange( size_t nByteOffset, sal_Size nBytes )
 {
     if ( ! IsOpen() )
         return false;
@@ -593,7 +593,7 @@ void SvFileStream::ResetError()
     SvStream::ClearError();
 }
 
-void SvFileStream::SetSize (sal_Size nSize)
+void SvFileStream::SetSize (size_t nSize)
 {
     if (IsOpen())
     {

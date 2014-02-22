@@ -76,7 +76,7 @@ namespace slideshow
                          double                                     nPrio,
                          const OUString&                     rServiceName,
                          const char**                               pPropCopyTable,
-                         sal_Size                                   nNumPropEntries,
+                         size_t                                   nNumPropEntries,
                          const SlideShowContext&                    rContext ); // throw ShapeLoadFailedException;
 
         private:
@@ -104,7 +104,7 @@ namespace slideshow
 
             const OUString                           maServiceName;
             const char**                                    mpPropCopyTable;
-            const sal_Size                                  mnNumPropEntries;
+            const size_t                                  mnNumPropEntries;
 
             /// the list of active view shapes (one for each registered view layer)
             typedef ::std::vector< ViewAppletShapeSharedPtr > ViewAppletShapeVector;
@@ -116,7 +116,7 @@ namespace slideshow
                                   double                                   nPrio,
                                   const OUString&                   rServiceName,
                                   const char**                             pPropCopyTable,
-                                  sal_Size                                 nNumPropEntries,
+                                  size_t                                 nNumPropEntries,
                                   const SlideShowContext&                  rContext ) :
             ExternalShapeBase( xShape, nPrio, rContext ),
             maServiceName( rServiceName ),
@@ -303,7 +303,7 @@ namespace slideshow
             double                                   nPrio,
             const OUString&                   rServiceName,
             const char**                             pPropCopyTable,
-            sal_Size                                 nNumPropEntries,
+            size_t                                 nNumPropEntries,
             const SlideShowContext&                  rContext )
         {
             boost::shared_ptr< AppletShape > pAppletShape(

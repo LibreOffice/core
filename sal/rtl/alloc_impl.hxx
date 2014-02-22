@@ -66,7 +66,7 @@
  *  (complexity O(1))
  */
 static inline int
-highbit(sal_Size n)
+highbit(size_t n)
 {
   int k = 1;
 
@@ -94,7 +94,7 @@ highbit(sal_Size n)
  *  (complexity O(1))
  */
 static inline int
-lowbit(sal_Size n)
+lowbit(size_t n)
 {
   int k = 1;
 

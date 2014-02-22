@@ -393,8 +393,8 @@ bool BinaryCodec_RCF::startBlock( sal_Int32 nCounter )
 bool BinaryCodec_RCF::decode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcData, sal_Int32 nBytes )
 {
     rtlCipherError eResult = rtl_cipher_decode( mhCipher,
-        pnSrcData, static_cast< sal_Size >( nBytes ),
-        pnDestData, static_cast< sal_Size >( nBytes ) );
+        pnSrcData, static_cast< size_t >( nBytes ),
+        pnDestData, static_cast< size_t >( nBytes ) );
     return eResult == rtl_Cipher_E_None;
 }
 

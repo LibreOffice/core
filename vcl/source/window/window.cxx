@@ -8324,7 +8324,7 @@ uno::Reference< XDragSource > Window::GetDragSource()
 
                     aDragSourceAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
                     aDropTargetAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                    aDropTargetAL[ 1 ] = makeAny( (sal_Size)(pEnvData->aShellWindow) );
+                    aDropTargetAL[ 1 ] = makeAny( (size_t)(pEnvData->aShellWindow) );
 #endif
                     if( !aDragSourceSN.isEmpty() )
                         mpWindowImpl->mpFrameData->mxDragSource.set(

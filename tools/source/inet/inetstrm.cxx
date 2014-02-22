@@ -427,8 +427,8 @@ int INetMessageOStream::PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize)
         if (pLB == NULL)
             return INETSTREAM_STATUS_WOULDBLOCK;
 
-        sal_Size nDocSiz = pTargetMsg->GetDocumentSize();
-        sal_Size nWrite  = 0;
+        size_t nDocSiz = pTargetMsg->GetDocumentSize();
+        size_t nWrite  = 0;
 
         pLB->FillAppend((sal_Char*)pData, nSize, &nWrite);
         pTargetMsg->SetDocumentSize(nDocSiz + nWrite);
@@ -749,12 +749,12 @@ int INetMessageDecodeQPStream_Impl::PutMsgLine( const sal_Char* pData,
 
         if (eState == INETMSG_EOL_BEGIN)
         {
-            sal_Size nRead = pMsgBuffer->Tell();
+            size_t nRead = pMsgBuffer->Tell();
             if (nRead > 0)
             {
                 // Emit buffer.
-                sal_Size nDocSiz = pMsg->GetDocumentSize();
-                sal_Size nWrite  = 0;
+                size_t nDocSiz = pMsg->GetDocumentSize();
+                size_t nWrite  = 0;
 
                 pLB->FillAppend((sal_Char*)(pMsgBuffer->GetData()), nRead, &nWrite);
                 pMsg->SetDocumentSize(nDocSiz + nWrite);
@@ -1009,9 +1009,9 @@ int INetMessageDecode64Stream_Impl::PutMsgLine(const sal_Char* pData,
             if (*pData == '=')
             {
                 // Final pad character -> Done.
-                sal_Size nDocSiz = pMsg->GetDocumentSize();
-                sal_Size nRead   = pMsgWrite - pMsgBuffer;
-                sal_Size nWrite  = 0;
+                size_t nDocSiz = pMsg->GetDocumentSize();
+                size_t nRead   = pMsgWrite - pMsgBuffer;
+                size_t nWrite  = 0;
 
                 pLB->FillAppend(pMsgBuffer, nRead, &nWrite);
                 pMsg->SetDocumentSize(nDocSiz + nWrite);
@@ -1027,9 +1027,9 @@ int INetMessageDecode64Stream_Impl::PutMsgLine(const sal_Char* pData,
                 if ((*pData == '\r') || (*pData == '\n')) pData++;
 
                 // Store decoded message buffer contents.
-                sal_Size nDocSiz = pMsg->GetDocumentSize();
-                sal_Size nRead   = pMsgWrite - pMsgBuffer;
-                sal_Size nWrite  = 0;
+                size_t nDocSiz = pMsg->GetDocumentSize();
+                size_t nRead   = pMsgWrite - pMsgBuffer;
+                size_t nWrite  = 0;
 
                 pLB->FillAppend(pMsgBuffer, nRead, &nWrite);
                 pMsg->SetDocumentSize(nDocSiz + nWrite);

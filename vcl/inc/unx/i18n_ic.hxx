@@ -66,8 +66,8 @@ public:
 
     int  HandleKeyEvent( XKeyEvent *pEvent, SalFrame *pFrame ); // unused
     void EndExtTextInput( sal_uInt16 nFlags );                      // unused
-    int  CommitStringCallback( sal_Unicode* pText, sal_Size nLength );
-    int  CommitKeyEvent( sal_Unicode* pText, sal_Size nLength );
+    int  CommitStringCallback( sal_Unicode* pText, size_t nLength );
+    int  CommitKeyEvent( sal_Unicode* pText, size_t nLength );
     int  UpdateSpotLocation();
 
     void Map( SalFrame *pFrame );

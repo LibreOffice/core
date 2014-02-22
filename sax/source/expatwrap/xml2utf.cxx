@@ -385,9 +385,9 @@ void Text2UnicodeConverter::init( rtl_TextEncoding encoding )
 Sequence<sal_Unicode> Text2UnicodeConverter::convert( const Sequence<sal_Int8> &seqText )
 {
     sal_uInt32 uiInfo;
-    sal_Size nSrcCvtBytes   = 0;
-    sal_Size nTargetCount   = 0;
-    sal_Size nSourceCount   = 0;
+    size_t nSrcCvtBytes   = 0;
+    size_t nTargetCount   = 0;
+    size_t nSourceCount   = 0;
 
     // the whole source size
     sal_Int32   nSourceSize = seqText.getLength() + m_seqSource.getLength();
@@ -494,11 +494,11 @@ Sequence<sal_Int8> Unicode2TextConverter::convert(const sal_Unicode *puSource , 
     }
 
 
-    sal_Size nTargetCount = 0;
-    sal_Size nSourceCount = 0;
+    size_t nTargetCount = 0;
+    size_t nSourceCount = 0;
 
     sal_uInt32 uiInfo;
-    sal_Size nSrcCvtChars;
+    size_t nSrcCvtChars;
 
     // take nSourceSize * 3 as preference
     // this is an upper boundary for converting to utf8,

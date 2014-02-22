@@ -143,7 +143,7 @@ OUString SAL_CALL HtmlFilterDetect::detect(Sequence<PropertyValue>& lDescriptor)
             return OUString();
 
         pInStream->StartReadingUnicodeText( RTL_TEXTENCODING_DONTKNOW );
-        sal_Size nUniPos = pInStream->Tell();
+        size_t nUniPos = pInStream->Tell();
 
         const sal_uInt16 nSize = 4096;
 

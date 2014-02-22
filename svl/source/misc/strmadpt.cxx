@@ -292,8 +292,8 @@ SvLockBytesInputStream::readBytes(uno::Sequence< sal_Int8 > & rData,
     sal_Int32 nSize = 0;
     while (nSize < nBytesToRead)
     {
-        sal_Size nCount;
-        ErrCode nError = m_xLockBytes->ReadAt(static_cast<sal_Size>(
+        size_t nCount;
+        ErrCode nError = m_xLockBytes->ReadAt(static_cast<size_t>(
                                                   m_nPosition),
                                               rData.getArray() + nSize,
                                               nBytesToRead - nSize, &nCount);
@@ -321,13 +321,13 @@ SvLockBytesInputStream::readSomeBytes(uno::Sequence< sal_Int8 > & rData,
         && nMaxBytesToRead > 0)
         throw io::IOException();
     rData.realloc(nMaxBytesToRead);
-    sal_Size nCount = 0;
+    size_t nCount = 0;
     if (nMaxBytesToRead > 0)
     {
         ErrCode nError;
         do
         {
-            nError = m_xLockBytes->ReadAt(static_cast<sal_Size>(m_nPosition),
+            nError = m_xLockBytes->ReadAt(static_cast<size_t>(m_nPosition),
                                           rData.getArray(),
                                           nMaxBytesToRead < 0 ?
                                               0 : nMaxBytesToRead,
@@ -367,7 +367,7 @@ sal_Int32 SAL_CALL SvLockBytesInputStream::available()
         throw io::IOException();
     return aStat.nSize <= static_cast<sal_uInt64>(m_nPosition) ?
                0 :
-           static_cast<sal_Size>(aStat.nSize - m_nPosition) <=
+           static_cast<size_t>(aStat.nSize - m_nPosition) <=
                    static_cast<sal_uInt32>(SAL_MAX_INT32) ?
                static_cast<sal_Int32>(aStat.nSize - m_nPosition) :
                SAL_MAX_INT32;
@@ -412,7 +412,7 @@ sal_Int64 SAL_CALL SvLockBytesInputStream::getLength()
     SvLockBytesStat aStat;
     if (m_xLockBytes->Stat(&aStat, SVSTATFLAG_DEFAULT) != ERRCODE_NONE)
         throw io::IOException();
-#if SAL_TYPES_SIZEOFPOINTER > 4 // avoid warnings if sal_Size < sal_Int64
+#if SAL_TYPES_SIZEOFPOINTER > 4 // avoid warnings if size_t < sal_Int64
     if (aStat.nSize > static_cast<sal_uInt64>(SAL_MAX_INT64))
         throw io::IOException();
 #endif

@@ -75,7 +75,7 @@ public:
     virtual bool        Commit();
     virtual bool        Revert();
     bool                SetProperty( const OUString& rName, const ::com::sun::star::uno::Any& rValue );
-    virtual sal_Size remainingSize();
+    virtual size_t remainingSize();
 };
 
 #ifndef SOT_DECL_SOTSTORAGESTREAM_DEFINED

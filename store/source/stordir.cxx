@@ -44,13 +44,13 @@ using namespace store;
 /*
  * __store_convertTextToUnicode.
  */
-inline sal_Size __store_convertTextToUnicode (
+inline size_t __store_convertTextToUnicode (
     rtl_TextToUnicodeConverter  hConverter,
-    const sal_Char *pSrcBuffer, sal_Size nSrcLength,
-    sal_Unicode    *pDstBuffer, sal_Size nDstLength)
+    const sal_Char *pSrcBuffer, size_t nSrcLength,
+    sal_Unicode    *pDstBuffer, size_t nDstLength)
 {
     sal_uInt32 nCvtInfo = 0;
-    sal_Size nCvtBytes = 0;
+    size_t nCvtBytes = 0;
     return rtl_convertTextToUnicode (
         hConverter, 0,
         pSrcBuffer, nSrcLength,
@@ -180,8 +180,8 @@ storeError OStoreDirectory_Impl::iterate (storeFindData &rFindData)
 
                 // Setup FindData.
                 sal_Char *p = xNode->m_aNameBlock.m_pData;
-                sal_Size  n = rtl_str_getLength (p);
-                sal_Size  k = rFindData.m_nLength;
+                size_t  n = rtl_str_getLength (p);
+                size_t  k = rFindData.m_nLength;
 
                 n = __store_convertTextToUnicode (
                     m_hTextCvt, p, n,

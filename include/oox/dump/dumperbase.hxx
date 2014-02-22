@@ -1036,7 +1036,7 @@ public:
     void                writeChar( sal_Unicode cChar, sal_Int32 nCount = 1 );
     void                writeAscii( const sal_Char* pcStr );
     void                writeString( const OUString& rStr );
-    void                writeArray( const sal_uInt8* pnData, sal_Size nSize, sal_Unicode cSep = OOX_DUMP_LISTSEP );
+    void                writeArray( const sal_uInt8* pnData, size_t nSize, sal_Unicode cSep = OOX_DUMP_LISTSEP );
     void                writeBool( bool bData );
     void                writeDateTime( const ::com::sun::star::util::DateTime& rDateTime );
 
@@ -1308,7 +1308,7 @@ protected:
     void                writeInfoItem( const String& rName, const String& rData );
     void                writeCharItem( const String& rName, sal_Unicode cData );
     void                writeStringItem( const String& rName, const OUString& rData );
-    void                writeArrayItem( const String& rName, const sal_uInt8* pnData, sal_Size nSize, sal_Unicode cSep = OOX_DUMP_LISTSEP );
+    void                writeArrayItem( const String& rName, const sal_uInt8* pnData, size_t nSize, sal_Unicode cSep = OOX_DUMP_LISTSEP );
     void                writeDateTimeItem( const String& rName, const ::com::sun::star::util::DateTime& rDateTime );
     void                writeGuidItem( const String& rName, const OUString& rGuid );
 

@@ -134,23 +134,23 @@ public:
         @param nRecSize  The predicted record size. May be set later with SetRecSize(). */
     explicit            XclExpRecord(
                             sal_uInt16 nRecId = EXC_ID_UNKNOWN,
-                            sal_Size nRecSize = 0 );
+                            size_t nRecSize = 0 );
 
     virtual             ~XclExpRecord();
 
     /** Returns the current record ID. */
     inline sal_uInt16   GetRecId() const { return mnRecId; }
     /** Returns the current record size prediction. */
-    inline sal_Size     GetRecSize() const { return mnRecSize; }
+    inline size_t     GetRecSize() const { return mnRecSize; }
 
     /** Sets a new record ID. */
     inline void         SetRecId( sal_uInt16 nRecId ) { mnRecId = nRecId; }
     /** Sets a new record size prediction. */
-    inline void         SetRecSize( sal_Size nRecSize ) { mnRecSize = nRecSize; }
+    inline void         SetRecSize( size_t nRecSize ) { mnRecSize = nRecSize; }
     /** Adds a size value to the record size prediction. */
-    inline void         AddRecSize( sal_Size nRecSize ) { mnRecSize += nRecSize; }
+    inline void         AddRecSize( size_t nRecSize ) { mnRecSize += nRecSize; }
     /** Sets record ID and size with one call. */
-    void                SetRecHeader( sal_uInt16 nRecId, sal_Size nRecSize );
+    void                SetRecHeader( sal_uInt16 nRecId, size_t nRecSize );
 
     /** Writes the record header and calls WriteBody(). */
     virtual void        Save( XclExpStream& rStrm );
@@ -161,7 +161,7 @@ protected:
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    sal_Size            mnRecSize;      /// The predicted record size.
+    size_t            mnRecSize;      /// The predicted record size.
     sal_uInt16          mnRecId;        /// The record ID.
 };
 
@@ -191,7 +191,7 @@ public:
     /** @param nRecId  The record ID of this record.
         @param rValue  The value for the record body.
         @param nSize  Record size. Uses sizeof( Type ), if this parameter is omitted. */
-    inline explicit     XclExpValueRecord( sal_uInt16 nRecId, const Type& rValue, sal_Size nSize = sizeof( Type ) ) :
+    inline explicit     XclExpValueRecord( sal_uInt16 nRecId, const Type& rValue, size_t nSize = sizeof( Type ) ) :
                             XclExpRecord( nRecId, nSize ), maValue( rValue ), mnAttribute( -1 ) {}
 
     /** Returns the value of the record. */
@@ -284,10 +284,10 @@ public:
         @param pRecData  Pointer to the data array representing the record body.
         @param nRecSize  Size of the data array. */
     explicit            XclExpDummyRecord(
-                            sal_uInt16 nRecId, const void* pRecData, sal_Size nRecSize );
+                            sal_uInt16 nRecId, const void* pRecData, size_t nRecSize );
 
     /** Sets a data array. */
-    void                SetData( const void* pRecData, sal_Size nRecSize );
+    void                SetData( const void* pRecData, size_t nRecSize );
 
 private:
     /** Writes the body of the record. */
@@ -303,7 +303,7 @@ class XclExpFutureRecord : public XclExpRecord
 {
 public:
     explicit            XclExpFutureRecord( XclFutureRecType eRecType,
-                            sal_uInt16 nRecId, sal_Size nRecSize = 0 );
+                            sal_uInt16 nRecId, size_t nRecSize = 0 );
 
     /** Writes the extended record header and calls WriteBody(). */
     virtual void        Save( XclExpStream& rStrm );

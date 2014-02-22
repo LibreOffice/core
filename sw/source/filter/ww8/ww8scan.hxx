@@ -499,7 +499,7 @@ public:
         wwSprmParser maSprmParser;
 
         //Fill in an Entry with sanity testing
-        void FillEntry(Entry &rEntry, sal_Size nDataOffset, sal_uInt16 nLen);
+        void FillEntry(Entry &rEntry, size_t nDataOffset, sal_uInt16 nLen);
 
     public:
         WW8Fkp (ww::WordVersion eVersion, SvStream* pFKPStrm,
@@ -1745,7 +1745,7 @@ public:
 
 void SwapQuotesInField(OUString &rFmt);
 
-Word2CHPX ReadWord2Chpx(SvStream &rSt, sal_Size nOffset, sal_uInt8 nSize);
+Word2CHPX ReadWord2Chpx(SvStream &rSt, size_t nOffset, sal_uInt8 nSize);
 std::vector<sal_uInt8> ChpxToSprms(const Word2CHPX &rChpx);
 
 bool checkSeek(SvStream &rSt, sal_uInt32 nOffset)

@@ -72,7 +72,7 @@ OUString Ww1PlainText::GetText( sal_uLong ulOffset, sal_uLong nLen ) const
 {
     OSL_ENSURE(ulOffset+nLen<Count(), "Ww1PlainText");
 
-    sal_Size nPos = ulFilePos+ulOffset;
+    size_t nPos = ulFilePos+ulOffset;
 
     bool bSeekOk = rFib.GetStream().Seek(nPos) == nPos;
     return bSeekOk ?

@@ -36,16 +36,16 @@ public:
     ElementConfig( const OUString& rName ) : maName( rName ) {}
     ElementConfig( ElementConfigType rType ) : mnType( rType ) {}
 
-    virtual OUString format( SvStream& rStream, sal_Size& nLength ) const;
+    virtual OUString format( SvStream& rStream, size_t& nLength ) const;
 
     const OUString& getName() const { return maName; }
     ElementConfigType getType() const { return mnType; }
 
-    static OUString dump_hex( SvStream& rStream, sal_Size& nLength );
-    static OUString dump_byte( SvStream& rStream, sal_Size& nLength );
-    static OUString dump_uint( SvStream& rStream, sal_Size& nLength );
-    static OUString dump_unistring( SvStream& rStream, sal_Size& nLength );
-    static OUString dump_float( SvStream& rStream, sal_Size& nLength );
+    static OUString dump_hex( SvStream& rStream, size_t& nLength );
+    static OUString dump_byte( SvStream& rStream, size_t& nLength );
+    static OUString dump_uint( SvStream& rStream, size_t& nLength );
+    static OUString dump_unistring( SvStream& rStream, size_t& nLength );
+    static OUString dump_float( SvStream& rStream, size_t& nLength );
 private:
     OUString maName;
     ElementConfigType mnType;
@@ -76,7 +76,7 @@ public:
     ElementConfigContainer( const OUString& rName ) : ElementConfig( rName, ETC_CONTAINER ) {}
     ElementConfigContainer( ElementConfigType rType ) : ElementConfig( rType ) {}
 
-    virtual OUString format( SvStream& rStream, sal_Size& nLength ) const;
+    virtual OUString format( SvStream& rStream, size_t& nLength ) const;
 
     void addElementConfig( ElementConfigPtr p ) { maElementConfigList.push_back( p ); }
 
@@ -104,7 +104,7 @@ class SwitchElementConfig : public ElementConfigContainer
 public:
     SwitchElementConfig( ElementConfigType rType ) : ElementConfigContainer( rType ) {}
 
-    virtual OUString format( SvStream& rStream, sal_Size& nLength ) const;
+    virtual OUString format( SvStream& rStream, size_t& nLength ) const;
 };
 
 ///////////////////////////////////////////////////////////////////////

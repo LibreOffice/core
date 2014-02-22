@@ -220,7 +220,7 @@ void EntryCache::destroy (Entry * entry)
  * highbit():= log2() + 1 (complexity O(1))
  *
  *======================================================================*/
-static int highbit(sal_Size n)
+static int highbit(size_t n)
 {
     int k = 1;
 
@@ -281,7 +281,7 @@ class PageCache_Impl :
     }
 
     Entry * lookup_Impl (Entry * entry, sal_uInt32 nOffset);
-    void rescale_Impl (sal_Size new_size);
+    void rescale_Impl (size_t new_size);
 
     /** PageCache Implementation.
      */
@@ -340,7 +340,7 @@ PageCache_Impl::PageCache_Impl (sal_uInt16 nPageSize)
 PageCache_Impl::~PageCache_Impl()
 {
     double s_x = 0.0;
-    sal_Size i, n = m_hash_size;
+    size_t i, n = m_hash_size;
     for (i = 0; i < n; i++)
     {
         int x = 0;
@@ -378,15 +378,15 @@ oslInterlockedCount PageCache_Impl::release()
     return OStoreObject::release();
 }
 
-void PageCache_Impl::rescale_Impl (sal_Size new_size)
+void PageCache_Impl::rescale_Impl (size_t new_size)
 {
-    sal_Size new_bytes = new_size * sizeof(Entry*);
+    size_t new_bytes = new_size * sizeof(Entry*);
     Entry ** new_table = (Entry**)(rtl_allocateMemory(new_bytes));
 
     if (new_table != 0)
     {
         Entry ** old_table = m_hash_table;
-        sal_Size old_size  = m_hash_size;
+        size_t old_size  = m_hash_size;
 
         OSL_TRACE("ave chain length: %zu, total entries: %zu [old_size: %zu new_size: %zu]",
                   m_hash_entries >> m_hash_shift, m_hash_entries, old_size, new_size);
@@ -397,7 +397,7 @@ void PageCache_Impl::rescale_Impl (sal_Size new_size)
         m_hash_size  = new_size;
         m_hash_shift = highbit(m_hash_size) - 1;
 
-        sal_Size i;
+        size_t i;
         for (i = 0; i < old_size; i++)
         {
             Entry * curr = old_table[i];
@@ -431,7 +431,7 @@ Entry * PageCache_Impl::lookup_Impl (Entry * entry, sal_uInt32 nOffset)
     }
     if (lookups > 2)
     {
-        sal_Size new_size = m_hash_size, ave = m_hash_entries >> m_hash_shift;
+        size_t new_size = m_hash_size, ave = m_hash_entries >> m_hash_shift;
         for (; ave > 4; new_size *= 2, ave /= 2)
             continue;
         if (new_size != m_hash_size)

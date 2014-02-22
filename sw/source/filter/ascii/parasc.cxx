@@ -321,7 +321,7 @@ sal_uLong SwASCIIParser::ReadChars()
             if( hConverter )
             {
                 sal_uInt32 nInfo;
-                sal_Size nNewLen = lGCount, nCntBytes;
+                size_t nNewLen = lGCount, nCntBytes;
                 aWork.reset(new sal_Unicode[nNewLen + 1]); // add 1 for '\0'
                 sal_Unicode* pBuf = aWork.get();
 

@@ -129,11 +129,11 @@ xmlDocPtr Test::parseExport(const OUString& rStreamName)
     uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(rStreamName), uno::UNO_QUERY);
     boost::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
     pStream->Seek(STREAM_SEEK_TO_END);
-    sal_Size nSize = pStream->Tell();
+    size_t nSize = pStream->Tell();
     pStream->Seek(0);
     OStringBuffer aDocument(nSize);
     char ch;
-    for (sal_Size i = 0; i < nSize; ++i)
+    for (size_t i = 0; i < nSize; ++i)
     {
         pStream->ReadChar( ch );
         aDocument.append(ch);

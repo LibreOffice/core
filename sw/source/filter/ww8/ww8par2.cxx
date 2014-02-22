@@ -3579,7 +3579,7 @@ void WW8RStyle::ImportSprms(sal_uInt8 *pSprms, short nLen, bool bPap)
     nSprmsLen = 0;
 }
 
-void WW8RStyle::ImportSprms(sal_Size nPosFc, short nLen, bool bPap)
+void WW8RStyle::ImportSprms(size_t nPosFc, short nLen, bool bPap)
 {
     if (!nLen)
         return;
@@ -3643,7 +3643,7 @@ short WW8RStyle::ImportUPX(short nLen, bool bPAP, bool bOdd)
 
             if( 0 < cbUPX )
             {
-                sal_Size nPos = pStStrm->Tell(); // if something is interpreted wrong,
+                size_t nPos = pStStrm->Tell(); // if something is interpreted wrong,
                                                  // this should make it work again
                 ImportSprms( nPos, cbUPX, bPAP );
 
@@ -4063,7 +4063,7 @@ std::vector<sal_uInt8> ChpxToSprms(const Word2CHPX &rChpx)
     return aRet;
 }
 
-Word2CHPX ReadWord2Chpx(SvStream &rSt, sal_Size nOffset, sal_uInt8 nSize)
+Word2CHPX ReadWord2Chpx(SvStream &rSt, size_t nOffset, sal_uInt8 nSize)
 {
     Word2CHPX aChpx;
 
@@ -4183,7 +4183,7 @@ Word2CHPX ReadWord2Chpx(SvStream &rSt, sal_Size nOffset, sal_uInt8 nSize)
 
 namespace
 {
-    struct pxoffset { sal_Size mnOffset; sal_uInt8 mnSize; };
+    struct pxoffset { size_t mnOffset; sal_uInt8 mnSize; };
 }
 
 void WW8RStyle::ImportOldFormatStyles()

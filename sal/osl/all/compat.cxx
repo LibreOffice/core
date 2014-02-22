@@ -50,29 +50,29 @@ SAL_DLLPUBLIC_EXPORT sal_Int32 SAL_CALL rtl_addUnloadingListener(
 }
 
 SAL_DLLPUBLIC_EXPORT sal_Int32 SAL_CALL rtl_compareMemory(
-    void const *, void const *, sal_Size)
+    void const *, void const *, size_t)
 {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
 SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_copyMemory(
-    void *, void const *, sal_Size)
+    void *, void const *, size_t)
 {
     std::abort();
 }
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_fillMemory(void *, sal_Size, sal_uInt8) {
+SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_fillMemory(void *, size_t, sal_uInt8) {
     std::abort();
 }
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL rtl_findInMemory(
-    void const *, sal_uInt8, sal_Size)
+    void const *, sal_uInt8, size_t)
 {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
 SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_moveMemory(
-    void *, void const *, sal_Size)
+    void *, void const *, size_t)
 {
     std::abort();
 }
@@ -94,7 +94,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_unregisterModuleForUnloading(oslModule) {
     std::abort();
 }
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_zeroMemory(void *, sal_Size) {
+SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_zeroMemory(void *, size_t) {
     std::abort();
 }
 

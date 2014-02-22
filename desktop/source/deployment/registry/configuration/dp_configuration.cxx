@@ -612,7 +612,7 @@ OUString replaceOrigin(
     OString origin;
     sal_Char const * pBytes = reinterpret_cast<sal_Char const *>(
         bytes.getConstArray());
-    sal_Size nBytes = bytes.getLength();
+    size_t nBytes = bytes.getLength();
     sal_Int32 write_pos = 0;
     while (nBytes > 0)
     {

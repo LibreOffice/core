@@ -174,11 +174,11 @@ GlyphSet::GetAnsiMapping (sal_Unicode nUnicodeChar)
 
     sal_Char            nAnsiChar;
     sal_uInt32          nCvtInfo;
-    sal_Size            nCvtChars;
+    size_t            nCvtChars;
        const sal_uInt32    nCvtFlags =  RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
                                    | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR;
 
-    sal_Size nSize = rtl_convertUnicodeToText( aConverter, aContext,
+    size_t nSize = rtl_convertUnicodeToText( aConverter, aContext,
                 &nUnicodeChar, 1, &nAnsiChar, 1,
                 nCvtFlags, &nCvtInfo, &nCvtChars );
 

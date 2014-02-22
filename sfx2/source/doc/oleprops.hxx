@@ -344,13 +344,13 @@ private:
 
     bool                SeekToPropertyPos( SvStream& rStrm, sal_uInt32 nPropPos ) const;
     void                LoadProperty( SvStream& rStrm, sal_Int32 nPropId );
-    void                SaveProperty( SvStream& rStrm, SfxOlePropertyBase& rProp, sal_Size& rnPropPosPos );
+    void                SaveProperty( SvStream& rStrm, SfxOlePropertyBase& rProp, size_t& rnPropPosPos );
 
 private:
     SfxOlePropMap       maPropMap;              /// All properties in this section, by identifier.
     SfxOleCodePageProperty maCodePageProp;      /// The codepage property.
     SfxOleDictionaryProperty maDictProp;        /// The dictionary property.
-    sal_Size            mnStartPos;             /// Start stream position of the section.
+    size_t            mnStartPos;             /// Start stream position of the section.
     bool                mbSupportsDict;         /// true = section supports dictionary.
 };
 

@@ -42,8 +42,8 @@ class XclImpName : protected XclImpRoot, public boost::noncopyable
     {
         XclImpStream& mrStrm;
         XclImpStreamPos maStrmPos;
-        sal_Size mnStrmPos;
-        sal_Size mnStrmSize;
+        size_t mnStrmPos;
+        size_t mnStrmSize;
 
         TokenStrmData( XclImpStream& rStrm );
     };

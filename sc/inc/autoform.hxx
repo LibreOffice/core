@@ -73,7 +73,7 @@ blobs to avoid needlessly complicating the Calc logic.
 struct AutoFormatSwBlob : ::boost::noncopyable
 {
     sal_uInt8 *pData;
-    sal_Size size;
+    size_t size;
 
     AutoFormatSwBlob() : pData(0), size(0)
     {

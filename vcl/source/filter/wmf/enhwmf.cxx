@@ -257,7 +257,7 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
     }
     bEMFPlus = true;
 
-    sal_Size pos = pWMF->Tell();
+    size_t pos = pWMF->Tell();
     void *buffer = malloc( length );
     pOut->PassEMFPlus( buffer, pWMF->Read( buffer, length ) );
     free( buffer );

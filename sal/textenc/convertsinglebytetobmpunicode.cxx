@@ -30,16 +30,16 @@
 #include "convertsinglebytetobmpunicode.hxx"
 #include "unichars.hxx"
 
-sal_Size rtl_textenc_convertSingleByteToBmpUnicode(
+size_t rtl_textenc_convertSingleByteToBmpUnicode(
     void const * data, SAL_UNUSED_PARAMETER void *, sal_Char const * srcBuf,
-    sal_Size srcBytes, sal_Unicode * destBuf, sal_Size destChars,
-    sal_uInt32 flags, sal_uInt32 * info, sal_Size * srcCvtBytes)
+    size_t srcBytes, sal_Unicode * destBuf, sal_Size destChars,
+    sal_uInt32 flags, sal_uInt32 * info, size_t * srcCvtBytes)
 {
     sal_Unicode const * map = static_cast<
         rtl::textenc::BmpUnicodeToSingleByteConverterData const * >(
             data)->byteToUnicode;
     sal_uInt32 infoFlags = 0;
-    sal_Size converted = 0;
+    size_t converted = 0;
     sal_Unicode * destBufPtr = destBuf;
     sal_Unicode * destBufEnd = destBuf + destChars;
     for (; converted < srcBytes; ++converted) {
@@ -83,11 +83,11 @@ sal_Size rtl_textenc_convertSingleByteToBmpUnicode(
     return destBufPtr - destBuf;
 }
 
-sal_Size rtl_textenc_convertBmpUnicodeToSingleByte(
+size_t rtl_textenc_convertBmpUnicodeToSingleByte(
     void const * data, void * context,
-    sal_Unicode const * srcBuf, sal_Size srcChars, sal_Char * destBuf,
-    sal_Size destBytes, sal_uInt32 flags, sal_uInt32 * info,
-    sal_Size * srcCvtChars)
+    sal_Unicode const * srcBuf, size_t srcChars, sal_Char * destBuf,
+    size_t destBytes, sal_uInt32 flags, sal_uInt32 * info,
+    size_t * srcCvtChars)
 {
     std::size_t entries = static_cast<
         rtl::textenc::BmpUnicodeToSingleByteConverterData const * >(
@@ -97,7 +97,7 @@ sal_Size rtl_textenc_convertBmpUnicodeToSingleByte(
             data)->unicodeToByte;
     sal_Unicode highSurrogate = 0;
     sal_uInt32 infoFlags = 0;
-    sal_Size converted = 0;
+    size_t converted = 0;
     sal_Char * destBufPtr = destBuf;
     sal_Char * destBufEnd = destBuf + destBytes;
     if (context != 0) {

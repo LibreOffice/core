@@ -46,14 +46,14 @@ const sal_uInt8 ExcDummy8_00a::pMyData[] = {
     0x42, 0x00, 0x02, 0x00, 0xb0, 0x04,                     // CODEPAGE
     0x61, 0x01, 0x02, 0x00, 0x00, 0x00                      // DSF (8+)
 };
-const sal_Size ExcDummy8_00a::nMyLen = sizeof(ExcDummy8_00a::pMyData);
+const size_t ExcDummy8_00a::nMyLen = sizeof(ExcDummy8_00a::pMyData);
 
                                                             // TABID (8+): ExcTabid
 
 const sal_uInt8 ExcDummy8_00b::pMyData[] = {
     0x9c, 0x00, 0x02, 0x00, 0x0e, 0x00                      // FNGROUPCOUNT
 };
-const sal_Size ExcDummy8_00b::nMyLen = sizeof(ExcDummy8_00b::pMyData);
+const size_t ExcDummy8_00b::nMyLen = sizeof(ExcDummy8_00b::pMyData);
 
 
 const sal_uInt8 ExcDummy8_040::pMyData[] = {
@@ -65,26 +65,26 @@ const sal_uInt8 ExcDummy8_040::pMyData[] = {
     0x40, 0x00, 0x02, 0x00, 0x00, 0x00,                     // BACKUP
     0x8d, 0x00, 0x02, 0x00, 0x00, 0x00                      // HIDEOBJ
 };
-const sal_Size ExcDummy8_040::nMyLen = sizeof(ExcDummy8_040::pMyData);
+const size_t ExcDummy8_040::nMyLen = sizeof(ExcDummy8_040::pMyData);
 
 
 const sal_uInt8 ExcDummy8_041::pMyData[] = {
     0xb7, 0x01, 0x02, 0x00, 0x00, 0x00,                     // REFRESHALL (8+)
     0xda, 0x00, 0x02, 0x00, 0x00, 0x00                      // BOOKBOOL
 };
-const sal_Size ExcDummy8_041::nMyLen = sizeof(ExcDummy8_041::pMyData);
+const size_t ExcDummy8_041::nMyLen = sizeof(ExcDummy8_041::pMyData);
 
 
 
 const sal_uInt8 ExcDummy8_02::pMyData[] = {
     0x5f, 0x00, 0x02, 0x00, 0x01, 0x00                      // SAVERECALC
     };
-const sal_Size ExcDummy8_02::nMyLen = sizeof(ExcDummy8_02::pMyData);
+const size_t ExcDummy8_02::nMyLen = sizeof(ExcDummy8_02::pMyData);
 
 
 // --- class ExcDummy8_xx --------------------------------------------
 
-sal_Size ExcDummy8_00a::GetLen() const
+size_t ExcDummy8_00a::GetLen() const
 {
     return nMyLen;
 }
@@ -97,7 +97,7 @@ const sal_uInt8* ExcDummy8_00a::GetData() const
 
 
 
-sal_Size ExcDummy8_00b::GetLen() const
+size_t ExcDummy8_00b::GetLen() const
 {
     return nMyLen;
 }
@@ -110,7 +110,7 @@ const sal_uInt8* ExcDummy8_00b::GetData() const
 
 
 
-sal_Size ExcDummy8_040::GetLen() const
+size_t ExcDummy8_040::GetLen() const
 {
     return nMyLen;
 }
@@ -123,7 +123,7 @@ const sal_uInt8* ExcDummy8_040::GetData() const
 
 
 
-sal_Size ExcDummy8_041::GetLen() const
+size_t ExcDummy8_041::GetLen() const
 {
     return nMyLen;
 }
@@ -136,7 +136,7 @@ const sal_uInt8* ExcDummy8_041::GetData() const
 
 
 
-sal_Size ExcDummy8_02::GetLen() const
+size_t ExcDummy8_02::GetLen() const
 {
     return nMyLen;
 }

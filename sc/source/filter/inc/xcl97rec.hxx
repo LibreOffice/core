@@ -216,7 +216,7 @@ public:
     virtual void                Save( XclExpStream& rStrm );
 
     virtual sal_uInt16              GetNum() const;
-    virtual sal_Size            GetLen() const;
+    virtual size_t            GetLen() const;
 
 private:
     virtual void                SaveCont( XclExpStream& rStrm );
@@ -289,7 +289,7 @@ public:
                                 ExcBof8_Base();
 
     virtual sal_uInt16              GetNum() const;
-    virtual sal_Size            GetLen() const;
+    virtual size_t            GetLen() const;
 };
 
 
@@ -327,7 +327,7 @@ public:
                                 ExcBundlesheet8( RootData& rRootData, SCTAB nTab );
                                 ExcBundlesheet8( const OUString& rString );
 
-    virtual sal_Size            GetLen() const;
+    virtual size_t            GetLen() const;
 
     virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
@@ -339,7 +339,7 @@ class XclObproj : public ExcRecord
 {
 public:
     virtual sal_uInt16              GetNum() const;
-    virtual sal_Size            GetLen() const;
+    virtual size_t            GetLen() const;
 };
 
 
@@ -354,7 +354,7 @@ public:
                                 XclCodename( const OUString& );
 
     virtual sal_uInt16              GetNum() const;
-    virtual sal_Size            GetLen() const;
+    virtual size_t            GetLen() const;
 };
 
 
@@ -374,7 +374,7 @@ protected:
 public:
                                 ExcEScenarioCell( sal_uInt16 nC, sal_uInt16 nR, const OUString& rTxt );
 
-    inline sal_Size             GetStringBytes() const
+    inline size_t             GetStringBytes() const
                                     { return sText.GetSize(); }
 
     void                        WriteAddress( XclExpStream& rStrm ) const ;
@@ -388,7 +388,7 @@ public:
 class ExcEScenario : public ExcRecord
 {
 private:
-    sal_Size                    nRecLen;
+    size_t                    nRecLen;
     XclExpString                sName;
     XclExpString                sComment;
     XclExpString                sUserName;
@@ -406,7 +406,7 @@ public:
     virtual                     ~ExcEScenario();
 
     virtual sal_uInt16              GetNum() const;
-    virtual sal_Size            GetLen() const;
+    virtual size_t            GetLen() const;
 
     virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
@@ -430,7 +430,7 @@ public:
     virtual void                SaveXml( XclExpXmlStream& rStrm );
 
     virtual sal_uInt16              GetNum() const;
-    virtual sal_Size            GetLen() const;
+    virtual size_t            GetLen() const;
 };
 
 // ============================================================================
@@ -462,7 +462,7 @@ public:
                                 XclCalccount( const ScDocument& );
 
     virtual sal_uInt16              GetNum() const;
-    virtual sal_Size            GetLen() const;
+    virtual size_t            GetLen() const;
 
     virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
@@ -480,7 +480,7 @@ public:
                                 XclIteration( const ScDocument& );
 
     virtual sal_uInt16              GetNum() const;
-    virtual sal_Size            GetLen() const;
+    virtual size_t            GetLen() const;
 
     virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
@@ -498,7 +498,7 @@ public:
                                 XclDelta( const ScDocument& );
 
     virtual sal_uInt16              GetNum() const;
-    virtual sal_Size            GetLen() const;
+    virtual size_t            GetLen() const;
 
     virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
