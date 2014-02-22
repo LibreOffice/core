@@ -125,14 +125,14 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt1
     OSL_FAIL( "No ChildWindow for this Context!" );
 }
 
-//--------------------------------------------------------------------
+
 
 SfxChildWinFactArr_Impl& SfxApplication::GetChildWinFactories_Impl() const
 {
     return ( *(pAppData_Impl->pFactArr));
 }
 
-//--------------------------------------------------------------------
+
 
 SfxTemplateDialog* SfxApplication::GetTemplateDialog()
 {
@@ -145,7 +145,7 @@ SfxTemplateDialog* SfxApplication::GetTemplateDialog()
     return NULL;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxWorkWindow* SfxApplication::GetWorkWindow_Impl(const SfxViewFrame *pFrame) const
 {

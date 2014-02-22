@@ -59,12 +59,12 @@ OUString SAL_CALL OToolboxController::getImplementationName() throw( RuntimeExce
     return getImplementationName_Static();
 }
 
-//------------------------------------------------------------------------------
+
 OUString OToolboxController::getImplementationName_Static() throw( RuntimeException )
 {
     return OUString("com.sun.star.report.comp.ReportToolboxController");
 }
-//------------------------------------------------------------------------------
+
 Sequence< OUString> OToolboxController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< OUString> aSupported(1);
@@ -76,7 +76,7 @@ Sequence< OUString> OToolboxController::getSupportedServiceNames_Static(void) th
 {
     return cppu::supportsService(this, ServiceName);
 }
-//-------------------------------------------------------------------------
+
 Sequence< OUString> SAL_CALL OToolboxController::getSupportedServiceNames() throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();

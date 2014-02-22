@@ -303,7 +303,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
     }
 }
 
-//------------------------------------------------------------------------------
+
 void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                                 const Date& rNullDate,
                                 const double& rValue,
@@ -349,7 +349,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
     }
 }
 
-//------------------------------------------------------------------------------
+
 double DBTypeConversion::getValue( const Reference< XColumn >& i_column, const Date& i_relativeToNullDate )
 {
     try
@@ -396,7 +396,7 @@ double DBTypeConversion::getValue( const Reference< XColumn >& i_column, const D
         return 0.0;
     }
 }
-//------------------------------------------------------------------------------
+
 OUString DBTypeConversion::getFormattedValue(const Reference< XPropertySet>& _xColumn,
                                            const Reference<XNumberFormatter>& _xFormatter,
                                            const ::com::sun::star::lang::Locale& _rLocale,
@@ -432,7 +432,7 @@ OUString DBTypeConversion::getFormattedValue(const Reference< XPropertySet>& _xC
     return DBTypeConversion::getFormattedValue(Reference< XColumn > (_xColumn, UNO_QUERY), _xFormatter, _rNullDate, nKey, nKeyType);
 }
 
-//------------------------------------------------------------------------------
+
 OUString DBTypeConversion::getFormattedValue(const Reference<XColumn>& xVariant,
                                    const Reference<XNumberFormatter>& xFormatter,
                                    const Date& rNullDate,
@@ -502,6 +502,6 @@ OUString DBTypeConversion::getFormattedValue(const Reference<XColumn>& xVariant,
     }
     return aString;
 }
-//------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

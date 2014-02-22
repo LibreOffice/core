@@ -390,9 +390,9 @@ public:
     DocTemplates_EntryData_Impl*    getEntry( size_t nPos ) { return maEntries[ nPos ]; }
 };
 
-//-----------------------------------------------------------------------------
+
 // private SfxDocTplService_Impl
-//-----------------------------------------------------------------------------
+
 void SfxDocTplService_Impl::init_Impl()
 {
     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
@@ -485,7 +485,7 @@ void SfxDocTplService_Impl::init_Impl()
     mbIsInitialized = bIsInitialized;
 }
 
-//-----------------------------------------------------------------------------
+
 void SfxDocTplService_Impl::getDefaultLocale()
 {
     if ( !mbLocaleSet )
@@ -542,7 +542,7 @@ OUString SfxDocTplService_Impl::getLongName( const OUString& rShortName )
     return aRet;
 }
 
-//-----------------------------------------------------------------------------
+
 void SfxDocTplService_Impl::getDirList()
 {
     OUString aPropName( PROPERTY_DIRLIST  );
@@ -582,7 +582,7 @@ void SfxDocTplService_Impl::getDirList()
     setProperty( maRootContent, aPropName, aValue );
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool SfxDocTplService_Impl::needsUpdate()
 {
     OUString aPropName( PROPERTY_NEEDSUPDATE  );
@@ -1089,7 +1089,7 @@ SfxDocTplService_Impl::SfxDocTplService_Impl( const uno::Reference< XComponentCo
     mbLocaleSet     = sal_False;
 }
 
-//-----------------------------------------------------------------------------
+
 SfxDocTplService_Impl::~SfxDocTplService_Impl()
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -1106,7 +1106,7 @@ SfxDocTplService_Impl::~SfxDocTplService_Impl()
     maNames.clear();
 }
 
-//-----------------------------------------------------------------------------
+
 Locale SfxDocTplService_Impl::getLocale()
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -1117,7 +1117,7 @@ Locale SfxDocTplService_Impl::getLocale()
     return maLocale;
 }
 
-//-----------------------------------------------------------------------------
+
 void SfxDocTplService_Impl::setLocale( const Locale &rLocale )
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -1132,7 +1132,7 @@ void SfxDocTplService_Impl::setLocale( const Locale &rLocale )
     mbLocaleSet = sal_True;
 }
 
-//-----------------------------------------------------------------------------
+
 void SfxDocTplService_Impl::update( sal_Bool bUpdateNow )
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -1146,7 +1146,7 @@ void SfxDocTplService_Impl::update( sal_Bool bUpdateNow )
     }
 }
 
-//-----------------------------------------------------------------------------
+
 void SfxDocTplService_Impl::doUpdate()
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -1232,7 +1232,7 @@ void SfxDocTplService_Impl::doUpdate()
     setProperty( maRootContent, aPropName, aValue );
 }
 
-//-----------------------------------------------------------------------------
+
 uno::Sequence< beans::StringPair > SfxDocTplService_Impl::ReadUINamesForTemplateDir_Impl( const OUString& aUserPath )
 {
     INetURLObject aLocObj( aUserPath );
@@ -1258,7 +1258,7 @@ uno::Sequence< beans::StringPair > SfxDocTplService_Impl::ReadUINamesForTemplate
     return aUINames;
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool SfxDocTplService_Impl::UpdateUINamesForTemplateDir_Impl( const OUString& aUserPath,
                                                                   const OUString& aGroupName,
                                                                   const OUString& aNewFolderName )
@@ -1278,7 +1278,7 @@ sal_Bool SfxDocTplService_Impl::UpdateUINamesForTemplateDir_Impl( const OUString
     return WriteUINamesForTemplateDir_Impl( aUserPath, aUINames );
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool SfxDocTplService_Impl::ReplaceUINamesForTemplateDir_Impl( const OUString& aUserPath,
                                                                   const OUString& aDefaultFsysGroupName,
                                                                   const OUString& aOldGroupName,
@@ -1304,7 +1304,7 @@ sal_Bool SfxDocTplService_Impl::ReplaceUINamesForTemplateDir_Impl( const OUStrin
     return WriteUINamesForTemplateDir_Impl( aUserPath, aUINames );
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool SfxDocTplService_Impl::RemoveUINamesForTemplateDir_Impl( const OUString& aUserPath,
                                                                   const OUString& aGroupName )
 {
@@ -1330,7 +1330,7 @@ sal_Bool SfxDocTplService_Impl::RemoveUINamesForTemplateDir_Impl( const OUString
 }
 
 
-//-----------------------------------------------------------------------------
+
 sal_Bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const OUString& aUserPath,
                                                                 const uno::Sequence< beans::StringPair >& aUINames )
 {
@@ -1372,7 +1372,7 @@ sal_Bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const OUString&
     return bResult;
 }
 
-//-----------------------------------------------------------------------------
+
 OUString SfxDocTplService_Impl::CreateNewGroupFsys( const OUString& rGroupName, Content& aGroup )
 {
     OUString aResultURL;
@@ -1421,7 +1421,7 @@ OUString SfxDocTplService_Impl::CreateNewGroupFsys( const OUString& rGroupName, 
     return aResultURL;
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool SfxDocTplService_Impl::addGroup( const OUString& rGroupName )
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -1504,7 +1504,7 @@ sal_Bool SfxDocTplService_Impl::addGroup( const OUString& rGroupName )
     return sal_True;
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
 {
     // remove all the elements that have the prefix aTargetURL
@@ -1610,7 +1610,7 @@ sal_Bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
     return bResult;
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
                                              const OUString& rNewName )
 {
@@ -1713,7 +1713,7 @@ sal_Bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
     return sal_False;
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
                                                const OUString& rTemplateName,
                                                const uno::Reference< frame::XStorable >& rStorable )
@@ -1899,7 +1899,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
     }
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
                                              const OUString& rTemplateName,
                                              const OUString& rSourceURL )
@@ -2050,7 +2050,7 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     return sal_False;
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool SfxDocTplService_Impl::removeTemplate( const OUString& rGroupName,
                                                 const OUString& rTemplateName )
 {
@@ -2102,7 +2102,7 @@ sal_Bool SfxDocTplService_Impl::removeTemplate( const OUString& rGroupName,
     return removeContent( aTemplate );
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool SfxDocTplService_Impl::renameTemplate( const OUString& rGroupName,
                                                 const OUString& rOldName,
                                                 const OUString& rNewName )
@@ -2162,7 +2162,7 @@ sal_Bool SfxDocTplService_Impl::renameTemplate( const OUString& rGroupName,
     return setProperty( aTemplate, aTitleProp, aTitleValue );
 }
 
-//-----------------------------------------------------------------------------
+
 class SfxDocTplService: public ::cppu::WeakImplHelper3< css::lang::XLocalizable, css::frame::XDocumentTemplates, css::lang::XServiceInfo >
 {
     SfxDocTplService_Impl       *pImp;
@@ -2216,22 +2216,22 @@ public:
     void SAL_CALL                   update() throw( css::uno::RuntimeException );
 };
 
-//-----------------------------------------------------------------------------
+
 SfxDocTplService::SfxDocTplService( const uno::Reference< XComponentContext >& xContext )
 {
     pImp = new SfxDocTplService_Impl(xContext);
 }
 
-//-----------------------------------------------------------------------------
+
 
 SfxDocTplService::~SfxDocTplService()
 {
     delete pImp;
 }
 
-//-----------------------------------------------------------------------------
+
 //--- XLocalizable ---
-//-----------------------------------------------------------------------------
+
 
 Locale SAL_CALL SfxDocTplService::getLocale()
     throw( uno::RuntimeException )
@@ -2239,7 +2239,7 @@ Locale SAL_CALL SfxDocTplService::getLocale()
     return pImp->getLocale();
 }
 
-//-----------------------------------------------------------------------------
+
 
 void SAL_CALL SfxDocTplService::setLocale( const Locale & rLocale )
     throw( uno::RuntimeException )
@@ -2247,9 +2247,9 @@ void SAL_CALL SfxDocTplService::setLocale( const Locale & rLocale )
     pImp->setLocale( rLocale );
 }
 
-//-----------------------------------------------------------------------------
+
 //--- XDocumentTemplates ---
-//-----------------------------------------------------------------------------
+
 uno::Reference< ucb::XContent > SAL_CALL SfxDocTplService::getContent()
     throw( uno::RuntimeException )
 {
@@ -2259,7 +2259,7 @@ uno::Reference< ucb::XContent > SAL_CALL SfxDocTplService::getContent()
         return NULL;
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SfxDocTplService::storeTemplate( const OUString& GroupName,
                                                    const OUString& TemplateName,
                                                    const uno::Reference< frame::XStorable >& Storable )
@@ -2271,7 +2271,7 @@ sal_Bool SAL_CALL SfxDocTplService::storeTemplate( const OUString& GroupName,
         return sal_False;
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SfxDocTplService::addTemplate( const OUString& rGroupName,
                                                  const OUString& rTemplateName,
                                                  const OUString& rSourceURL )
@@ -2283,7 +2283,7 @@ sal_Bool SAL_CALL SfxDocTplService::addTemplate( const OUString& rGroupName,
         return sal_False;
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SfxDocTplService::removeTemplate( const OUString& rGroupName,
                                                     const OUString& rTemplateName )
     throw( uno::RuntimeException )
@@ -2294,7 +2294,7 @@ sal_Bool SAL_CALL SfxDocTplService::removeTemplate( const OUString& rGroupName,
         return sal_False;
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SfxDocTplService::renameTemplate( const OUString& rGroupName,
                                                     const OUString& rOldName,
                                                     const OUString& rNewName )
@@ -2309,7 +2309,7 @@ sal_Bool SAL_CALL SfxDocTplService::renameTemplate( const OUString& rGroupName,
         return sal_False;
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SfxDocTplService::addGroup( const OUString& rGroupName )
     throw( uno::RuntimeException )
 {
@@ -2319,7 +2319,7 @@ sal_Bool SAL_CALL SfxDocTplService::addGroup( const OUString& rGroupName )
         return sal_False;
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SfxDocTplService::removeGroup( const OUString& rGroupName )
     throw( uno::RuntimeException )
 {
@@ -2329,7 +2329,7 @@ sal_Bool SAL_CALL SfxDocTplService::removeGroup( const OUString& rGroupName )
         return sal_False;
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SfxDocTplService::renameGroup( const OUString& rOldName,
                                                  const OUString& rNewName )
     throw( uno::RuntimeException )
@@ -2343,7 +2343,7 @@ sal_Bool SAL_CALL SfxDocTplService::renameGroup( const OUString& rOldName,
         return sal_False;
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL SfxDocTplService::update()
     throw( uno::RuntimeException )
 {
@@ -2351,32 +2351,32 @@ void SAL_CALL SfxDocTplService::update()
         pImp->update( sal_True );
 }
 
-//------------------------------------------------------------------------
+
 
 Updater_Impl::Updater_Impl( SfxDocTplService_Impl* pTemplates )
 {
     mpDocTemplates = pTemplates;
 }
 
-//------------------------------------------------------------------------
+
 Updater_Impl::~Updater_Impl()
 {
 }
 
-//------------------------------------------------------------------------
+
 void SAL_CALL Updater_Impl::run()
 {
     mpDocTemplates->doUpdate();
 }
 
-//------------------------------------------------------------------------
+
 void SAL_CALL Updater_Impl::onTerminated()
 {
     mpDocTemplates->finished();
     delete this;
 }
 
-//-----------------------------------------------------------------------------
+
 WaitWindow_Impl::WaitWindow_Impl()
     : WorkWindow( NULL, WB_BORDER | WB_3DLOOK )
 {
@@ -2394,19 +2394,19 @@ WaitWindow_Impl::WaitWindow_Impl()
     Flush();
 }
 
-//-----------------------------------------------------------------------------
+
 WaitWindow_Impl::~WaitWindow_Impl()
 {
     Hide();
 }
 
-//-----------------------------------------------------------------------------
+
 void WaitWindow_Impl::Paint( const Rectangle& /*rRect*/ )
 {
     DrawText( _aRect, _aText, _nTextStyle );
 }
 
-//-----------------------------------------------------------------------------
+
 void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
                                           const OUString& rTitle,
                                           const OUString& rOwnURL )
@@ -2477,7 +2477,7 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
     }
 }
 
-//-----------------------------------------------------------------------------
+
 void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
                                           const OUString& rTitle,
                                           const OUString& rUITitle,
@@ -2635,7 +2635,7 @@ void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
     }
 }
 
-//-----------------------------------------------------------------------------
+
 void SfxDocTplService_Impl::removeFromHierarchy( DocTemplates_EntryData_Impl *pData )
 {
     Content aTemplate;
@@ -2646,7 +2646,7 @@ void SfxDocTplService_Impl::removeFromHierarchy( DocTemplates_EntryData_Impl *pD
     }
 }
 
-//-----------------------------------------------------------------------------
+
 void SfxDocTplService_Impl::addToHierarchy( GroupData_Impl *pGroup,
                                             DocTemplates_EntryData_Impl *pData )
 {
@@ -2673,7 +2673,7 @@ void SfxDocTplService_Impl::addToHierarchy( GroupData_Impl *pGroup,
               pData->getType() );
 }
 
-//-----------------------------------------------------------------------------
+
 void SfxDocTplService_Impl::updateData( DocTemplates_EntryData_Impl *pData )
 {
     Content aTemplate;
@@ -2696,7 +2696,7 @@ void SfxDocTplService_Impl::updateData( DocTemplates_EntryData_Impl *pData )
     }
 }
 
-//-----------------------------------------------------------------------------
+
 void SfxDocTplService_Impl::addGroupToHierarchy( GroupData_Impl *pGroup )
 {
     OUString aAdditionalProp( TARGET_DIR_URL  );
@@ -2723,7 +2723,7 @@ void SfxDocTplService_Impl::addGroupToHierarchy( GroupData_Impl *pGroup )
     }
 }
 
-//-----------------------------------------------------------------------------
+
 void SfxDocTplService_Impl::removeFromHierarchy( GroupData_Impl *pGroup )
 {
     Content aGroup;

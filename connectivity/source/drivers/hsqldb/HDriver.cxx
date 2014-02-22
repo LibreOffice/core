@@ -87,7 +87,7 @@ namespace connectivity
     //====================================================================
     //= ODriverDelegator
     //====================================================================
-    //--------------------------------------------------------------------
+    
     ODriverDelegator::ODriverDelegator(const Reference< XComponentContext >& _rxContext)
         : ODriverDelegator_BASE(m_aMutex)
         ,m_xContext(_rxContext)
@@ -95,7 +95,7 @@ namespace connectivity
     {
     }
 
-    //--------------------------------------------------------------------
+    
     ODriverDelegator::~ODriverDelegator()
     {
         try
@@ -129,7 +129,7 @@ namespace connectivity
 
         cppu::WeakComponentImplHelperBase::disposing();
     }
-    //--------------------------------------------------------------------
+    
     Reference< XDriver > ODriverDelegator::loadDriver( )
     {
         if ( !m_xDriver.is() )
@@ -142,7 +142,7 @@ namespace connectivity
         return m_xDriver;
     }
 
-    //--------------------------------------------------------------------
+    
     namespace
     {
         OUString lcl_getPermittedJavaMethods_nothrow( const Reference< XComponentContext >& _rxContext )
@@ -173,7 +173,7 @@ namespace connectivity
         }
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XConnection > SAL_CALL ODriverDelegator::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException)
     {
         Reference< XConnection > xConnection;
@@ -392,7 +392,7 @@ namespace connectivity
         return xConnection;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool SAL_CALL ODriverDelegator::acceptsURL( const OUString& url ) throw (SQLException, RuntimeException)
     {
         sal_Bool bEnabled = sal_False;
@@ -414,7 +414,7 @@ namespace connectivity
         return bEnabled  && url.equals("sdbc:embedded:hsqldb");
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< DriverPropertyInfo > SAL_CALL ODriverDelegator::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw (SQLException, RuntimeException)
     {
         if ( !acceptsURL(url) )
@@ -444,19 +444,19 @@ namespace connectivity
         return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int32 SAL_CALL ODriverDelegator::getMajorVersion(  ) throw (RuntimeException)
     {
         return 1;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int32 SAL_CALL ODriverDelegator::getMinorVersion(  ) throw (RuntimeException)
     {
         return 0;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XTablesSupplier > SAL_CALL ODriverDelegator::getDataDefinitionByConnection( const Reference< XConnection >& connection ) throw (SQLException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -482,7 +482,7 @@ namespace connectivity
         return xTab;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XTablesSupplier > SAL_CALL ODriverDelegator::getDataDefinitionByURL( const OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException)
     {
         if ( ! acceptsURL(url) )
@@ -497,12 +497,12 @@ namespace connectivity
 
     // XServiceInfo
     // --------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------
+    
     OUString ODriverDelegator::getImplementationName_Static(  ) throw(RuntimeException)
     {
         return OUString("com.sun.star.sdbcx.comp.hsqldb.Driver");
     }
-    //------------------------------------------------------------------------------
+    
     Sequence< OUString > ODriverDelegator::getSupportedServiceNames_Static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSNS( 2 );
@@ -510,7 +510,7 @@ namespace connectivity
         aSNS[1] = "com.sun.star.sdbcx.Driver";
         return aSNS;
     }
-    //------------------------------------------------------------------
+    
     OUString SAL_CALL ODriverDelegator::getImplementationName(  ) throw(RuntimeException)
     {
         return getImplementationName_Static();
@@ -520,17 +520,17 @@ namespace connectivity
     {
         return cppu::supportsService(this, _rServiceName);
     }
-    //------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL ODriverDelegator::getSupportedServiceNames(  ) throw(RuntimeException)
     {
         return getSupportedServiceNames_Static();
     }
-    //------------------------------------------------------------------
+    
     void SAL_CALL ODriverDelegator::createCatalog( const Sequence< PropertyValue >& /*info*/ ) throw (SQLException, ::com::sun::star::container::ElementExistException, RuntimeException)
     {
         ::dbtools::throwFeatureNotImplementedException( "XCreateCatalog::createCatalog", *this );
     }
-    //------------------------------------------------------------------
+    
     void ODriverDelegator::shutdownConnection(const TWeakPairVector::iterator& _aIter )
     {
         OSL_ENSURE(m_aConnections.end() != _aIter,"Iterator equals .end()");
@@ -565,7 +565,7 @@ namespace connectivity
         if ( !m_bInShutDownConnections )
             m_aConnections.erase(_aIter);
     }
-    //------------------------------------------------------------------
+    
     void SAL_CALL ODriverDelegator::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
@@ -596,7 +596,7 @@ namespace connectivity
             }
         }
     }
-    //------------------------------------------------------------------
+    
     void ODriverDelegator::shutdownConnections()
     {
         m_bInShutDownConnections = sal_True;
@@ -615,7 +615,7 @@ namespace connectivity
         m_aConnections.clear();
         m_bInShutDownConnections = sal_True;
     }
-    //------------------------------------------------------------------
+    
     void ODriverDelegator::flushConnections()
     {
         TWeakPairVector::iterator aEnd = m_aConnections.end();
@@ -631,7 +631,7 @@ namespace connectivity
             }
         }
     }
-    //------------------------------------------------------------------
+    
     void SAL_CALL ODriverDelegator::preCommit( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
@@ -672,19 +672,19 @@ namespace connectivity
             }
         }
     }
-    //------------------------------------------------------------------
+    
     void SAL_CALL ODriverDelegator::commited( const ::com::sun::star::lang::EventObject& /*aEvent*/ ) throw (::com::sun::star::uno::RuntimeException)
     {
     }
-    //------------------------------------------------------------------
+    
     void SAL_CALL ODriverDelegator::preRevert( const ::com::sun::star::lang::EventObject& /*aEvent*/ ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
     {
     }
-    //------------------------------------------------------------------
+    
     void SAL_CALL ODriverDelegator::reverted( const ::com::sun::star::lang::EventObject& /*aEvent*/ ) throw (::com::sun::star::uno::RuntimeException)
     {
     }
-    //------------------------------------------------------------------
+    
     namespace
     {
         //..............................................................
@@ -873,7 +873,7 @@ namespace connectivity
             return sLocaleString;
         }
     }
-    //------------------------------------------------------------------
+    
     void ODriverDelegator::onConnectedNewDatabase( const Reference< XConnection >& _rxConnection )
     {
         try
@@ -896,8 +896,8 @@ namespace connectivity
         }
     }
 
-    //------------------------------------------------------------------
-    //------------------------------------------------------------------
+    
+    
 //........................................................................
 }   // namespace connectivity
 //........................................................................

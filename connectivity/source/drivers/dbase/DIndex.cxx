@@ -106,7 +106,7 @@ void ODbaseIndex::refreshColumns()
     else
         m_pColumns = new ODbaseIndexColumns(this,m_aMutex,aVector);
 }
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > ODbaseIndex::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId * pId = 0;
@@ -123,14 +123,14 @@ Sequence< sal_Int8 > ODbaseIndex::getUnoTunnelImplementationId()
 }
 
 // XUnoTunnel
-//------------------------------------------------------------------
+
 sal_Int64 ODbaseIndex::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )
                 : ODbaseIndex_BASE::getSomething(rId);
 }
-//------------------------------------------------------------------
+
 ONDXPagePtr ODbaseIndex::getRoot()
 {
     openIndexFile();
@@ -142,7 +142,7 @@ ONDXPagePtr ODbaseIndex::getRoot()
     }
     return m_aRoot;
 }
-//------------------------------------------------------------------
+
 sal_Bool ODbaseIndex::openIndexFile()
 {
     if(!m_pFileStream)
@@ -172,14 +172,14 @@ sal_Bool ODbaseIndex::openIndexFile()
 
     return m_pFileStream != NULL;
 }
-//------------------------------------------------------------------
+
 OIndexIterator* ODbaseIndex::createIterator(OBoolOperator* pOp,
                                             const OOperand* pOperand)
 {
     openIndexFile();
     return new OIndexIterator(this, pOp, pOperand);
 }
-//------------------------------------------------------------------
+
 sal_Bool ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
@@ -207,7 +207,7 @@ sal_Bool ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSet
     return sal_True;
 }
 
-//------------------------------------------------------------------
+
 sal_Bool ODbaseIndex::Find(sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     openIndexFile();
@@ -218,7 +218,7 @@ sal_Bool ODbaseIndex::Find(sal_uInt32 nRec, const ORowSetValue& rValue)
     return ConvertToKey(&aKey, nRec, rValue) && getRoot()->Find(aKey);
 }
 
-//------------------------------------------------------------------
+
 sal_Bool ODbaseIndex::Insert(sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     openIndexFile();
@@ -242,7 +242,7 @@ sal_Bool ODbaseIndex::Insert(sal_uInt32 nRec, const ORowSetValue& rValue)
     return bResult;
 }
 
-//------------------------------------------------------------------
+
 sal_Bool ODbaseIndex::Update(sal_uInt32 nRec, const ORowSetValue& rOldValue,
                          const ORowSetValue& rNewValue)
 {
@@ -255,7 +255,7 @@ sal_Bool ODbaseIndex::Update(sal_uInt32 nRec, const ORowSetValue& rOldValue,
         return Delete(nRec, rOldValue) && Insert(nRec,rNewValue);
 }
 
-//------------------------------------------------------------------
+
 sal_Bool ODbaseIndex::Delete(sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     openIndexFile();
@@ -277,13 +277,13 @@ sal_Bool ODbaseIndex::Delete(sal_uInt32 nRec, const ORowSetValue& rValue)
 
     return m_aCurLeaf->Delete(m_nCurNode);
 }
-//------------------------------------------------------------------
+
 void ODbaseIndex::Collect(ONDXPage* pPage)
 {
     if (pPage)
         m_aCollector.push_back(pPage);
 }
-//------------------------------------------------------------------
+
 void ODbaseIndex::Release(sal_Bool bSave)
 {
     // Release the Index-recources
@@ -329,7 +329,7 @@ void ODbaseIndex::closeImpl()
         m_pFileStream = NULL;
     }
 }
-//------------------------------------------------------------------
+
 ONDXPage* ODbaseIndex::CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent, sal_Bool bLoad)
 {
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
@@ -351,7 +351,7 @@ ONDXPage* ODbaseIndex::CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent, sal_Bo
     return pPage;
 }
 
-//------------------------------------------------------------------
+
 SvStream& connectivity::dbase::operator >> (SvStream &rStream, ODbaseIndex& rIndex)
 {
     rStream.Seek(0);
@@ -361,7 +361,7 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ODbaseIndex& rInd
     rIndex.m_nPageCount = rIndex.m_aHeader.db_pagecount;
     return rStream;
 }
-//------------------------------------------------------------------
+
 SvStream& connectivity::dbase::WriteODbaseIndex(SvStream &rStream, ODbaseIndex& rIndex)
 {
     rStream.Seek(0);
@@ -376,7 +376,7 @@ OUString ODbaseIndex::getCompletePath()
         m_Name + ".ndx";
     return sDir;
 }
-//------------------------------------------------------------------
+
 void ODbaseIndex::createINFEntry()
 {
     // synchronize inf-file
@@ -463,7 +463,7 @@ void ODbaseIndex::impl_killFileAndthrowError_throw(sal_uInt16 _nErrorId,const OU
         UCBContentHelper::Kill(_sFile);
     m_pTable->getConnection()->throwGenericSQLException(_nErrorId,*this);
 }
-//------------------------------------------------------------------
+
 sal_Bool ODbaseIndex::CreateImpl()
 {
     // Create the Index

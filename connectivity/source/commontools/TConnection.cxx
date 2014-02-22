@@ -31,13 +31,13 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::beans;
 using namespace ::osl;
 
-//------------------------------------------------------------------------------
+
 OMetaConnection::OMetaConnection()
     : OMetaConnection_BASE(m_aMutex)
     , m_nTextEncoding(RTL_TEXTENCODING_MS_1252)
 {
 }
-//------------------------------------------------------------------------------
+
 void OMetaConnection::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);

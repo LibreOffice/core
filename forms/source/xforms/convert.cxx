@@ -323,7 +323,7 @@ Convert::Any_t Convert::toAny( const OUString& rValue,
     return aIter != maMap.end() ? aIter->second.second( rValue ) : Any_t();
 }
 
-//------------------------------------------------------------------------
+
 OUString Convert::collapseWhitespace( const OUString& _rString )
 {
     sal_Int32 nLength = _rString.getLength();

@@ -44,7 +44,7 @@ using namespace com::sun::star::test::performance;
 namespace benchmark_object
 {
 
-//--------------------------------------------------------------------------------------------------
+
 inline static Sequence< OUString > getSupportedServiceNames()
 {
     OUString aName( SERVICENAME);

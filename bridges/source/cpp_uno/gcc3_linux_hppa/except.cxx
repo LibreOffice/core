@@ -196,7 +196,7 @@ namespace CPPU_CURRENT_NAMESPACE
         return rtti;
     }
 
-    //------------------------------------------------------------------
+    
     static void deleteException( void * pExc )
     {
         __cxa_exception const * header = ((__cxa_exception const *)pExc - 1);

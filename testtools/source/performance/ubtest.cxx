@@ -107,7 +107,7 @@ static inline sal_uInt32 getSystemTicks()
 #endif
 }
 
-//--------------------------------------------------------------------------------------------------
+
 static void out( const sal_Char * pText, FILE * stream = stderr,
                  sal_Int32 nStart = -1, sal_Char cFillchar = ' ' )
 {
@@ -130,14 +130,14 @@ static void out( const sal_Char * pText, FILE * stream = stderr,
             ++s_nPos;
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 static inline void out( const OUString & rText, FILE * stream = stderr,
                         sal_Int32 nStart = -1, sal_Char cFillchar = ' ' )
 {
     OString aText( OUStringToOString( rText, RTL_TEXTENCODING_ASCII_US ) );
     out( aText.getStr(), stream, nStart, cFillchar );
 }
-//--------------------------------------------------------------------------------------------------
+
 static inline void out( double fVal, FILE * stream = stderr,
                         sal_Int32 nStart = -1, sal_Char cFillchar = ' ' )
 {
@@ -145,7 +145,7 @@ static inline void out( double fVal, FILE * stream = stderr,
     ::snprintf( ar, sizeof(ar), (fVal < 0.000001 ? "%g" : "%f"), fVal );
     out( ar, stream, nStart, cFillchar );
 }
-//--------------------------------------------------------------------------------------------------
+
 static inline void out( sal_Int64 nVal, FILE * stream = stderr,
                         sal_Int32 nStart = -1, sal_Char cFillchar = ' ' )
 {
@@ -312,7 +312,7 @@ Reference< XSingleServiceFactory > loadLibComponentFactory(
 
     return xRet;
 }
-//--------------------------------------------------------------------------------------------------
+
 template< class T >
 static void createInstance( Reference< T > & rxOut,
                             const Reference< XMultiServiceFactory > & xMgr,
@@ -392,7 +392,7 @@ static void createInstance( Reference< T > & rxOut,
     }
 }
 
-//--------------------------------------------------------------------------------------------------
+
 inline static Sequence< OUString > getSupportedServiceNames()
 {
     OUString aName( SERVICENAME );
@@ -479,7 +479,7 @@ Reference< XInterface > TestImpl::getDirect()
     }
     return _xDirect;
 }
-//--------------------------------------------------------------------------------------------------
+
 Reference< XInterface > TestImpl::resolveObject( const OUString & rUnoUrl )
     throw (Exception)
 {
@@ -553,7 +553,7 @@ void TimingSheet::insert( const sal_Char * pText, sal_Int64 nLoop, sal_uInt32 nT
 //==================================================================================================
 typedef boost::unordered_map< std::string, TimingSheet > t_TimingSheetMap;
 
-//--------------------------------------------------------------------------------------------------
+
 static void benchmark(
     TimingSheet & rSheet, const Reference< XInterface > & xInstance, sal_Int64 nLoop )
     throw (Exception)
@@ -570,7 +570,7 @@ static void benchmark(
 
     ComplexTypes aDummyStruct;
 
-    //------------------------------------
+    
     // oneway calls
     i = nLoop;
     tStart = getSystemTicks();
@@ -928,10 +928,10 @@ static void benchmark(
     tEnd = getSystemTicks();
     rSheet.insert( "Ba: raising RuntimeException", nLoop, tEnd - tStart );
 
-    //------------------------------------
+    
 }
 
-//--------------------------------------------------------------------------------------------------
+
 static OUString extractParam( const Sequence< OUString > & rArgs, const OUString & rParam )
 {
     const OUString * pArgs = rArgs.getConstArray();
@@ -1027,7 +1027,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
         t_TimingSheetMap aSheets;
         TimingSheet aDirect;
 
-        //------------------------------------------------------------------------------------------
+        
 
         if (aArg.indexOf( 'd' ) >= 0)
         {
@@ -1038,7 +1038,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
             fprintf( stderr, "Duration (direct in process): %g s\n", (nEnd - nStart)/1000.  );
         }
 
-        //------------------------------------------------------------------------------------------
+        
 
         if (aArg.indexOf( 'm' ) >= 0)
         {
@@ -1069,7 +1069,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
             fprintf( stderr, "Duration (mapped in process): %g s\n", (nStart - nEnd)/1000. );
         }
 
-        //------------------------------------------------------------------------------------------
+        
 
         if (aArg.indexOf( 's' ) >= 0)
         {
@@ -1137,7 +1137,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
             benchmark( aSheets[ "remote same host" ], xResolvedObject, nLoop / 300 );
         }
 
-        //------------------------------------------------------------------------------------------
+        
 
         if (aArg.indexOf( 'r' ) >= 0)
         {
@@ -1156,7 +1156,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
             fprintf( stderr, "Duration (%s): %g s\n", o.getStr(),(t2 - t1)/1000. );
         }
 
-        //------------------------------------------------------------------------------------------
+        
 
         if (aArg.indexOf( 'j' ) >= 0)
         {
@@ -1166,7 +1166,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
                        nLoop / 1000 );
         }
 
-        //------------------------------------------------------------------------------------------
+        
         // dump out tables
 
         out( "\nTimes( ratio to direct in process )", stream );

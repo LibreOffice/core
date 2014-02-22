@@ -28,7 +28,7 @@ namespace comphelper
 //==================================================================
 //= OEnumerationByName
 //==================================================================
-//------------------------------------------------------------------------------
+
 OEnumerationByName::OEnumerationByName(const staruno::Reference<starcontainer::XNameAccess>& _rxAccess)
     :m_aNames(_rxAccess->getElementNames())
     ,m_nPos(0)
@@ -38,7 +38,7 @@ OEnumerationByName::OEnumerationByName(const staruno::Reference<starcontainer::X
     impl_startDisposeListening();
 }
 
-//------------------------------------------------------------------------------
+
 OEnumerationByName::OEnumerationByName(const staruno::Reference<starcontainer::XNameAccess>& _rxAccess,
                                        const staruno::Sequence< OUString >&           _aNames  )
     :m_aNames(_aNames)
@@ -49,13 +49,13 @@ OEnumerationByName::OEnumerationByName(const staruno::Reference<starcontainer::X
     impl_startDisposeListening();
 }
 
-//------------------------------------------------------------------------------
+
 OEnumerationByName::~OEnumerationByName()
 {
     impl_stopDisposeListening();
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEnumerationByName::hasMoreElements(  ) throw(staruno::RuntimeException)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -72,7 +72,7 @@ sal_Bool SAL_CALL OEnumerationByName::hasMoreElements(  ) throw(staruno::Runtime
     return sal_False;
 }
 
-//------------------------------------------------------------------------------
+
 staruno::Any SAL_CALL OEnumerationByName::nextElement(  )
         throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException)
 {
@@ -94,7 +94,7 @@ staruno::Any SAL_CALL OEnumerationByName::nextElement(  )
     return aRes;
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OEnumerationByName::disposing(const starlang::EventObject& aEvent)
         throw(staruno::RuntimeException)
 {
@@ -104,7 +104,7 @@ void SAL_CALL OEnumerationByName::disposing(const starlang::EventObject& aEvent)
         m_xAccess.clear();
 }
 
-//------------------------------------------------------------------------------
+
 void OEnumerationByName::impl_startDisposeListening()
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -122,7 +122,7 @@ void OEnumerationByName::impl_startDisposeListening()
     --m_refCount;
 }
 
-//------------------------------------------------------------------------------
+
 void OEnumerationByName::impl_stopDisposeListening()
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -143,7 +143,7 @@ void OEnumerationByName::impl_stopDisposeListening()
 //==================================================================
 //= OEnumerationByIndex
 //==================================================================
-//------------------------------------------------------------------------------
+
 OEnumerationByIndex::OEnumerationByIndex(const staruno::Reference< starcontainer::XIndexAccess >& _rxAccess)
     :m_nPos(0)
     ,m_xAccess(_rxAccess)
@@ -152,13 +152,13 @@ OEnumerationByIndex::OEnumerationByIndex(const staruno::Reference< starcontainer
     impl_startDisposeListening();
 }
 
-//------------------------------------------------------------------------------
+
 OEnumerationByIndex::~OEnumerationByIndex()
 {
     impl_stopDisposeListening();
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEnumerationByIndex::hasMoreElements(  ) throw(staruno::RuntimeException)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -175,7 +175,7 @@ sal_Bool SAL_CALL OEnumerationByIndex::hasMoreElements(  ) throw(staruno::Runtim
     return sal_False;
 }
 
-//------------------------------------------------------------------------------
+
 staruno::Any SAL_CALL OEnumerationByIndex::nextElement(  )
         throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException)
 {
@@ -197,7 +197,7 @@ staruno::Any SAL_CALL OEnumerationByIndex::nextElement(  )
     return aRes;
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OEnumerationByIndex::disposing(const starlang::EventObject& aEvent)
         throw(staruno::RuntimeException)
 {
@@ -207,7 +207,7 @@ void SAL_CALL OEnumerationByIndex::disposing(const starlang::EventObject& aEvent
         m_xAccess.clear();
 }
 
-//------------------------------------------------------------------------------
+
 void OEnumerationByIndex::impl_startDisposeListening()
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -225,7 +225,7 @@ void OEnumerationByIndex::impl_startDisposeListening()
     --m_refCount;
 }
 
-//------------------------------------------------------------------------------
+
 void OEnumerationByIndex::impl_stopDisposeListening()
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -247,19 +247,19 @@ void OEnumerationByIndex::impl_stopDisposeListening()
 //= OAnyEnumeration
 //==================================================================
 
-//------------------------------------------------------------------------------
+
 OAnyEnumeration::OAnyEnumeration(const staruno::Sequence< staruno::Any >& lItems)
     :m_nPos(0)
     ,m_lItems(lItems)
 {
 }
 
-//------------------------------------------------------------------------------
+
 OAnyEnumeration::~OAnyEnumeration()
 {
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OAnyEnumeration::hasMoreElements(  ) throw(staruno::RuntimeException)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -267,7 +267,7 @@ sal_Bool SAL_CALL OAnyEnumeration::hasMoreElements(  ) throw(staruno::RuntimeExc
     return (m_lItems.getLength() > m_nPos);
 }
 
-//------------------------------------------------------------------------------
+
 staruno::Any SAL_CALL OAnyEnumeration::nextElement(  )
         throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException)
 {

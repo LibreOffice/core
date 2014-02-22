@@ -295,7 +295,7 @@ SfxTabPage* SvxBitmapTabPage::Create( Window* pWindow,
     return new SvxBitmapTabPage( pWindow, rSet );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
 {
@@ -463,7 +463,7 @@ long SvxBitmapTabPage::CheckChanges_Impl()
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
 {
@@ -573,7 +573,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
 /******************************************************************************/
 
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
 {
@@ -657,7 +657,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
 {
@@ -722,7 +722,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl_Impl)
 {
@@ -908,7 +908,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickSaveHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ChangePixelColorHdl_Impl)
 {
@@ -927,7 +927,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangePixelColorHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBackgrndColorHdl_Impl)
 {
@@ -946,7 +946,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBackgrndColorHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxBitmapTabPage::PointChanged( Window* pWindow, RECT_POINT )
 {

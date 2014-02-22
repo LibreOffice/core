@@ -120,7 +120,7 @@ IMPL_LINK( PopupWindowControllerImpl, WindowEventListener, VclSimpleEvent*, pEve
     return 1;
 }
 
-//--------------------------------------------------------------------
+
 
 IMPL_STATIC_LINK( PopupWindowControllerImpl, AsyncDeleteWindowHdl, Window*, pWindow )
 {

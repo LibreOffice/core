@@ -683,7 +683,7 @@ bool BackendImpl::PackageImpl::checkDependencies(
         //Only use interaction if there is no version of this extension already installed
         //and the suppress-on-update flag is not set for the new extension
         // alreadyInstalled | bSuppressOnUpdate | show license
-        //----------------------------------------
+        
         //      0     |      0            |     1
         //      0     |      1            |     1
         //      1     |      0            |     1

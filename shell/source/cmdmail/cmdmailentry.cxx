@@ -22,9 +22,9 @@
 #include <osl/diagnose.h>
 #include "cmdmailsuppl.hxx"
 
-//-----------------------------------------------------------------------
+
 // namespace directives
-//-----------------------------------------------------------------------
+
 
 using namespace ::rtl                       ;
 using namespace ::com::sun::star::uno       ;
@@ -37,7 +37,7 @@ using com::sun::star::system::XSimpleMailClientSupplier;
 #define COMP_SERVICE_NAME  "com.sun.star.system.SimpleCommandMail"
 #define COMP_IMPL_NAME     "com.sun.star.comp.system.SimpleCommandMail"
 
-//-----------------------------------------------------------------------
+
 
 namespace
 {
@@ -49,9 +49,9 @@ namespace
 
 extern "C"
 {
-//----------------------------------------------------------------------
+
 // component_getFactory
-//----------------------------------------------------------------------
+
 
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL cmdmail_component_getFactory(
     const sal_Char* pImplName,

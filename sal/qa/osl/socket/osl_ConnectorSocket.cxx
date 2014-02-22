@@ -43,9 +43,9 @@
     inline sal_Bool SAL_CALL operator== (const SocketAddr & Addr) const;
  */
 
-//------------------------------------------------------------------------
+
 // include files
-//------------------------------------------------------------------------
+
 
 #include <sal/types.h>
 #include <cppunit/TestFixture.h>
@@ -62,9 +62,9 @@ using ::rtl::OUString;
 #define IP_PORT_FTP     21
 #define IP_PORT_MYPORT3 8884
 
-//------------------------------------------------------------------------
+
 // helper functions
-//------------------------------------------------------------------------
+
 
 class CloseSocketThread : public Thread
 {

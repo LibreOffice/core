@@ -102,7 +102,7 @@ namespace connectivity
             ORealObdcDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) : ODBCDriver(_rxFactory) {}
         };
 
-        //------------------------------------------------------------------
+        
 oslGenericFunction ORealObdcDriver::getOdbcFunction(sal_Int32 _nIndex) const
 {
     oslGenericFunction pFunction = NULL;
@@ -324,7 +324,7 @@ oslGenericFunction ORealObdcDriver::getOdbcFunction(sal_Int32 _nIndex) const
     return pFunction;
 }
 
-//------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL ODBCDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
 {
     return *(new ORealObdcDriver(_rxFactory));

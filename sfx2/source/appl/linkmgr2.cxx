@@ -103,7 +103,7 @@ void LinkManager::CloseCachedComps()
     maCachedComps.clear();
 }
 
-//--------------------------------------------------------------------------
+
 
 void LinkManager::Remove( SvBaseLink *pLink )
 {
@@ -338,7 +338,7 @@ void LinkManager::UpdateAllLinks(
     CloseCachedComps();
 }
 
-//--------------------------------------------------------------------------
+
 
 SvLinkSourceRef LinkManager::CreateObj( SvBaseLink * pLink )
 {

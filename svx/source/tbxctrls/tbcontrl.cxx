@@ -707,7 +707,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 IMPL_STATIC_LINK( SvxStyleBox_Impl, FocusHdl_Impl, Control*, _pCtrl )
 {
@@ -2111,7 +2111,7 @@ void SvxStyleToolBoxControl::Update()
         return;
     }
 
-    //--------------------------------------------------------------------
+    
     const SfxTemplateItem* pItem = NULL;
 
     if ( nActFamily == 0xffff || 0 == (pItem = pFamilyState[nActFamily-1]) )

@@ -1501,7 +1501,7 @@ void SAL_CALL UnoControl::removeModeChangeApproveListener( const Reference< XMod
     throw NoSupportException( );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 awt::Point SAL_CALL UnoControl::convertPointToLogic( const awt::Point& i_Point, ::sal_Int16 i_TargetUnit ) throw (IllegalArgumentException, RuntimeException)
 {
     Reference< XUnitConversion > xPeerConversion;
@@ -1514,7 +1514,7 @@ awt::Point SAL_CALL UnoControl::convertPointToLogic( const awt::Point& i_Point, 
     return awt::Point( );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 awt::Point SAL_CALL UnoControl::convertPointToPixel( const awt::Point& i_Point, ::sal_Int16 i_SourceUnit ) throw (IllegalArgumentException, RuntimeException)
 {
     Reference< XUnitConversion > xPeerConversion;
@@ -1527,7 +1527,7 @@ awt::Point SAL_CALL UnoControl::convertPointToPixel( const awt::Point& i_Point, 
     return awt::Point( );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 awt::Size SAL_CALL UnoControl::convertSizeToLogic( const awt::Size& i_Size, ::sal_Int16 i_TargetUnit ) throw (IllegalArgumentException, RuntimeException)
 {
     Reference< XUnitConversion > xPeerConversion;
@@ -1540,7 +1540,7 @@ awt::Size SAL_CALL UnoControl::convertSizeToLogic( const awt::Size& i_Size, ::sa
     return awt::Size( );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 awt::Size SAL_CALL UnoControl::convertSizeToPixel( const awt::Size& i_Size, ::sal_Int16 i_SourceUnit ) throw (IllegalArgumentException, RuntimeException)
 {
     Reference< XUnitConversion > xPeerConversion;
@@ -1553,7 +1553,7 @@ awt::Size SAL_CALL UnoControl::convertSizeToPixel( const awt::Size& i_Size, ::sa
     return awt::Size( );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 uno::Reference< awt::XStyleSettings > SAL_CALL UnoControl::getStyleSettings() throw (RuntimeException)
 {
     Reference< awt::XStyleSettingsSupplier > xPeerSupplier;

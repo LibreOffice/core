@@ -52,21 +52,21 @@ java_sql_Driver::~java_sql_Driver()
 }
 
 // static ServiceInfo
-//------------------------------------------------------------------------------
+
 OUString java_sql_Driver::getImplementationName_Static(  ) throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.sdbc.JDBCDriver");
         // this name is referenced in the configuration and in the jdbc.xml
         // Please take care when changing it.
 }
-//------------------------------------------------------------------------------
+
 Sequence< OUString > java_sql_Driver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     Sequence< OUString > aSNS( 1 );
     aSNS[0] = "com.sun.star.sdbc.Driver";
     return aSNS;
 }
-//------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL connectivity::java_sql_Driver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
 {
     return *(new java_sql_Driver( comphelper::getComponentContext(_rxFactory)));

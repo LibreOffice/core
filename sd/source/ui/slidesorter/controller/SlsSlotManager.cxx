@@ -1270,7 +1270,7 @@ void SlotManager::NotifyEditModeChange (void)
 
 
 
-//-----------------------------------------------------------------------------
+
 
 namespace {
 

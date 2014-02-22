@@ -343,7 +343,7 @@ IMPL_LINK( Condition, DropdownClick, ToolBox*, /*pToolBar*/ )
 
     return 1;
 }
-//------------------------------------------------------------------
+
 IMPL_LINK( Condition, OnFormatAction, ToolBox*, /*NOTINTERESTEDIN*/ )
 {
     Color aCol(COL_AUTO);
@@ -351,7 +351,7 @@ IMPL_LINK( Condition, OnFormatAction, ToolBox*, /*NOTINTERESTEDIN*/ )
     return 0L;
 }
 
-//------------------------------------------------------------------
+
 IMPL_LINK( Condition, OnConditionAction, Button*, _pClickedButton )
 {
     if ( _pClickedButton == &m_aMoveUp )
@@ -365,7 +365,7 @@ IMPL_LINK( Condition, OnConditionAction, Button*, _pClickedButton )
     return 0L;
 }
 
-//------------------------------------------------------------------------------
+
 void Condition::ApplyCommand( sal_uInt16 _nCommandId, const ::Color& _rColor)
 {
     if ( _nCommandId == SID_ATTR_CHAR_COLOR2 )
@@ -375,7 +375,7 @@ void Condition::ApplyCommand( sal_uInt16 _nCommandId, const ::Color& _rColor)
 
     m_rAction.applyCommand( m_nCondIndex, _nCommandId, _rColor );
 }
-//------------------------------------------------------------------------------
+
 ImageList Condition::getImageList(sal_Int16 _eBitmapSet) const
 {
     sal_Int16 nN = IMG_CONDFORMAT_DLG_SC;
@@ -383,7 +383,7 @@ ImageList Condition::getImageList(sal_Int16 _eBitmapSet) const
         nN = IMG_CONDFORMAT_DLG_LC;
     return ImageList(ModuleRes(nN));
 }
-//------------------------------------------------------------------
+
 void Condition::resizeControls(const Size& _rDiff)
 {
     // we use large images so we must change them

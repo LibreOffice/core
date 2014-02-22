@@ -38,7 +38,7 @@
 
 namespace connectivity { namespace evoab {
 
-//------------------------------------------------------------------------------
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -47,7 +47,7 @@ using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
-//------------------------------------------------------------------------------
+
 OCommonStatement::OCommonStatement(OEvoabConnection* _pConnection)
     : OCommonStatement_IBase(m_aMutex)
     , ::comphelper::OPropertyContainer(OCommonStatement_IBase::rBHelper)
@@ -91,7 +91,7 @@ OCommonStatement::OCommonStatement(OEvoabConnection* _pConnection)
 OCommonStatement::~OCommonStatement()
 {
 }
-//------------------------------------------------------------------------------
+
 void OCommonStatement::disposeResultSet()
 {
     // free the cursor if alive
@@ -100,7 +100,7 @@ void OCommonStatement::disposeResultSet()
         xComp->dispose();
     m_xResultSet.clear();
 }
-//------------------------------------------------------------------------------
+
 void OCommonStatement::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -114,7 +114,7 @@ void OCommonStatement::disposing()
     dispose_ChildImpl();
     OCommonStatement_IBase::disposing();
 }
-//-----------------------------------------------------------------------------
+
 Any SAL_CALL OCommonStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = OCommonStatement_IBase::queryInterface(rType);

@@ -76,7 +76,7 @@ void SkeletonDriver::disposing()
 }
 
 // static ServiceInfo
-//------------------------------------------------------------------------------
+
 rtl::OUString SkeletonDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
     return rtl::OUString("com.sun.star.comp.sdbc.SkeletonDriver");

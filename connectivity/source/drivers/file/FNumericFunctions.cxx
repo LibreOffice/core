@@ -24,7 +24,7 @@
 
 using namespace connectivity;
 using namespace connectivity::file;
-//------------------------------------------------------------------
+
 ORowSetValue OOp_Abs::operate(const ORowSetValue& lhs) const
 {
     if ( lhs.isNull() )
@@ -35,7 +35,7 @@ ORowSetValue OOp_Abs::operate(const ORowSetValue& lhs) const
         nVal *= -1.0;
     return fabs(nVal);
 }
-//------------------------------------------------------------------
+
 ORowSetValue OOp_Sign::operate(const ORowSetValue& lhs) const
 {
     if ( lhs.isNull() )
@@ -50,7 +50,7 @@ ORowSetValue OOp_Sign::operate(const ORowSetValue& lhs) const
 
     return nRet;
 }
-//------------------------------------------------------------------
+
 ORowSetValue OOp_Mod::operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const
 {
     if ( lhs.isNull() || rhs.isNull() )
@@ -58,7 +58,7 @@ ORowSetValue OOp_Mod::operate(const ORowSetValue& lhs,const ORowSetValue& rhs) c
 
     return fmod((double)lhs,(double)rhs);
 }
-//------------------------------------------------------------------
+
 ORowSetValue OOp_Floor::operate(const ORowSetValue& lhs) const
 {
     if ( lhs.isNull() )
@@ -146,7 +146,7 @@ ORowSetValue OOp_Pow::operate(const ORowSetValue& lhs,const ORowSetValue& rhs) c
 
     return pow((double)lhs,(double)rhs);
 }
-//------------------------------------------------------------------
+
 ORowSetValue OOp_Sqrt::operate(const ORowSetValue& lhs) const
 {
     if ( lhs.isNull() )

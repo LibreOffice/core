@@ -33,7 +33,7 @@
 using namespace connectivity::evoab;
 using namespace dbtools;
 
-//------------------------------------------------------------------------------
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -71,7 +71,7 @@ OEvoabConnection::OEvoabConnection( OEvoabDriver& _rDriver )
     ,m_xCatalog(NULL)
 {
 }
-//-----------------------------------------------------------------------------
+
 OEvoabConnection::~OEvoabConnection()
 {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -82,7 +82,7 @@ OEvoabConnection::~OEvoabConnection()
     }
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL OEvoabConnection::release() throw()
 {
     relase_ChildImpl();
@@ -92,7 +92,7 @@ void SAL_CALL OEvoabConnection::release() throw()
 // --------------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(OEvoabConnection, "com.sun.star.sdbc.drivers.evoab.Connection", "com.sun.star.sdbc.Connection")
 
-//-----------------------------------------------------------------------------
+
 void OEvoabConnection::construct(const OUString& url, const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     osl_atomic_increment( &m_refCount );
@@ -144,7 +144,7 @@ Reference< XDatabaseMetaData > SAL_CALL OEvoabConnection::getMetaData(  ) throw(
 
     return xMetaData;
 }
-//------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< XTablesSupplier > OEvoabConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -215,7 +215,7 @@ void SAL_CALL OEvoabConnection::clearWarnings(  ) throw(SQLException, RuntimeExc
 {
     m_aWarnings.clearWarnings();
 }
-//------------------------------------------------------------------------------
+
 
 void OEvoabConnection::disposing()
 {

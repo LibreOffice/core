@@ -122,7 +122,7 @@ void FuncPage::UpdateFunctionList()
 
     aLbFunction.Clear();
     aLbFunction.SetUpdateMode( false );
-    //------------------------------------------------------
+    
 
     if ( nSelPos > 0 )
     {
@@ -155,7 +155,7 @@ void FuncPage::UpdateFunctionList()
         }
     }
 
-    //------------------------------------------------------
+    
     aLbFunction.SetUpdateMode( true );
     aLbFunction.SelectEntryPos(0);
 

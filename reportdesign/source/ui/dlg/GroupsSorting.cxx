@@ -168,7 +168,7 @@ public:
 //========================================================================
 // class OFieldExpressionControl
 //========================================================================
-//------------------------------------------------------------------------
+
 OFieldExpressionControl::OFieldExpressionControl( OGroupsSortingDialog* _pParent,const ResId& _rResId )
     :EditBrowseBox( _pParent, _rResId,EBBF_NONE, WB_TABSTOP | BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_AUTOSIZE_LASTCOL |
                                   BROWSER_KEEPSELECTION | BROWSER_HLINESFULL | BROWSER_VLINESFULL)
@@ -184,7 +184,7 @@ OFieldExpressionControl::OFieldExpressionControl( OGroupsSortingDialog* _pParent
     SetBorderStyle(WINDOW_BORDER_MONO);
 }
 
-//------------------------------------------------------------------------
+
 OFieldExpressionControl::~OFieldExpressionControl()
 {
     acquire();
@@ -199,7 +199,7 @@ OFieldExpressionControl::~OFieldExpressionControl()
 
     delete m_pComboCell;
 }
-//------------------------------------------------------------------------------
+
 uno::Sequence<uno::Any> OFieldExpressionControl::fillSelectedGroups()
 {
     uno::Sequence<uno::Any> aList;
@@ -232,7 +232,7 @@ uno::Sequence<uno::Any> OFieldExpressionControl::fillSelectedGroups()
     }
     return aList;
 }
-//------------------------------------------------------------------------------
+
 void OFieldExpressionControl::StartDrag( sal_Int8 /*_nAction*/ , const Point& /*_rPosPixel*/ )
 {
     if ( m_pParent && !m_pParent->isReadOnly( ) )
@@ -247,7 +247,7 @@ void OFieldExpressionControl::StartDrag( sal_Int8 /*_nAction*/ , const Point& /*
         }
     }
 }
-//------------------------------------------------------------------------------
+
 sal_Int8 OFieldExpressionControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
 {
     sal_Int8 nAction = DND_ACTION_NONE;
@@ -264,7 +264,7 @@ sal_Int8 OFieldExpressionControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt
     }
     return nAction;
 }
-//------------------------------------------------------------------------------
+
 sal_Int8 OFieldExpressionControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
 {
     sal_Int8 nAction = DND_ACTION_NONE;
@@ -285,7 +285,7 @@ sal_Int8 OFieldExpressionControl::ExecuteDrop( const BrowserExecuteDropEvent& rE
     }
     return nAction;
 }
-//------------------------------------------------------------------------------
+
 void OFieldExpressionControl::moveGroups(const uno::Sequence<uno::Any>& _aGroups,sal_Int32 _nRow,sal_Bool _bSelect)
 {
     if ( _aGroups.getLength() )
@@ -332,7 +332,7 @@ void OFieldExpressionControl::fillColumns(const uno::Reference< container::XName
     if ( _xColumns.is() )
         lcl_addToList_throw(*m_pComboCell,m_aColumnInfo,_xColumns);
 }
-//------------------------------------------------------------------------------
+
 void OFieldExpressionControl::lateInit()
 {
     uno::Reference< report::XGroups > xGroups = m_pParent->getGroups();
@@ -391,18 +391,18 @@ IMPL_LINK( OFieldExpressionControl, CBChangeHdl, ComboBox*, /*pComboBox*/ )
     return 0L;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OFieldExpressionControl::IsTabAllowed(sal_Bool /*bForward*/) const
 {
     return sal_False;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OFieldExpressionControl::SaveModified()
 {
     return SaveModified(true);
 }
-//------------------------------------------------------------------------------
+
 sal_Bool OFieldExpressionControl::SaveModified(bool _bAppendRow)
 {
     sal_Int32 nRow = GetCurRow();
@@ -482,7 +482,7 @@ sal_Bool OFieldExpressionControl::SaveModified(bool _bAppendRow)
 
     return sal_True;
 }
-//------------------------------------------------------------------------------
+
 OUString OFieldExpressionControl::GetCellText( long nRow, sal_uInt16 /*nColId*/ ) const
 {
     OUString sText;
@@ -512,13 +512,13 @@ OUString OFieldExpressionControl::GetCellText( long nRow, sal_uInt16 /*nColId*/ 
     return sText;
 }
 
-//------------------------------------------------------------------------------
+
 void OFieldExpressionControl::InitController( CellControllerRef& /*rController*/, long nRow, sal_uInt16 nColumnId )
 {
 
     m_pComboCell->SetText( GetCellText( nRow, nColumnId ) );
 }
-//------------------------------------------------------------------------------
+
 sal_Bool OFieldExpressionControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
 {
 
@@ -533,7 +533,7 @@ sal_Bool OFieldExpressionControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
     m_pParent->DisplayData( m_nDataPos );
     return sal_True;
 }
-//------------------------------------------------------------------------------
+
 CellController* OFieldExpressionControl::GetController( long /*nRow*/, sal_uInt16 /*nColumnId*/ )
 {
     ComboBoxCellController* pCellController = new ComboBoxCellController( m_pComboCell );
@@ -541,7 +541,7 @@ CellController* OFieldExpressionControl::GetController( long /*nRow*/, sal_uInt1
     return pCellController;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OFieldExpressionControl::SeekRow( long _nRow )
 {
     // die Basisklasse braucht den Aufruf, da sie sich dort merkt, welche Zeile gepainted wird
@@ -550,7 +550,7 @@ sal_Bool OFieldExpressionControl::SeekRow( long _nRow )
     return sal_True;
 }
 
-//------------------------------------------------------------------------------
+
 void OFieldExpressionControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const
 {
     OUString aText  =const_cast< OFieldExpressionControl*>(this)->GetCellText( m_nCurrentPos, nColumnId );
@@ -567,7 +567,7 @@ void OFieldExpressionControl::PaintCell( OutputDevice& rDev, const Rectangle& rR
     if( rDev.IsClipRegion() )
         rDev.SetClipRegion();
 }
-//------------------------------------------------------------------------------
+
 EditBrowseBox::RowStatus OFieldExpressionControl::GetRowStatus(long nRow) const
 {
     if (nRow >= 0 && nRow == m_nDataPos)
@@ -587,13 +587,13 @@ EditBrowseBox::RowStatus OFieldExpressionControl::GetRowStatus(long nRow) const
     return EditBrowseBox::CLEAN;
 }
 //  XEventListener
-//------------------------------------------------------------------------------
+
 void SAL_CALL OFieldExpressionControl::disposing(const lang::EventObject& /*e*/) throw( uno::RuntimeException )
 {
 }
-//------------------------------------------------------------------------------
+
 // XContainerListener
-//------------------------------------------------------------------------------
+
 void SAL_CALL OFieldExpressionControl::elementInserted(const container::ContainerEvent& evt) throw(uno::RuntimeException)
 {
     if ( m_bIgnoreEvent )
@@ -633,11 +633,11 @@ void SAL_CALL OFieldExpressionControl::elementInserted(const container::Containe
         Invalidate();
     }
 }
-//------------------------------------------------------------------------------
+
 void SAL_CALL OFieldExpressionControl::elementReplaced(const container::ContainerEvent& /*evt*/) throw(uno::RuntimeException)
 {
 }
-//------------------------------------------------------------------------------
+
 void SAL_CALL OFieldExpressionControl::elementRemoved(const container::ContainerEvent& evt) throw(uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -661,12 +661,12 @@ void SAL_CALL OFieldExpressionControl::elementRemoved(const container::Container
         }
     }
 }
-//------------------------------------------------------------------------------
+
 sal_Bool OFieldExpressionControl::IsDeleteAllowed( )
 {
     return !m_pParent->isReadOnly() && GetSelectRowCount() > 0;
 }
-//------------------------------------------------------------------------
+
 void OFieldExpressionControl::KeyInput( const KeyEvent& rEvt )
 {
     if (IsDeleteAllowed())
@@ -681,7 +681,7 @@ void OFieldExpressionControl::KeyInput( const KeyEvent& rEvt )
     }
     EditBrowseBox::KeyInput(rEvt);
 }
-//------------------------------------------------------------------------
+
 void OFieldExpressionControl::Command(const CommandEvent& rEvt)
 {
     switch (rEvt.GetCommand())
@@ -736,7 +736,7 @@ void OFieldExpressionControl::Command(const CommandEvent& rEvt)
     }
 
 }
-//------------------------------------------------------------------------------
+
 void OFieldExpressionControl::DeleteRows()
 {
 
@@ -797,15 +797,15 @@ void OFieldExpressionControl::DeleteRows()
     m_bIgnoreEvent = false;
     Invalidate();
 }
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+
+
 void OFieldExpressionControl::cut()
 {
     copy();
     DeleteRows();
 }
 
-//------------------------------------------------------------------------------
+
 void OFieldExpressionControl::copy()
 {
     //////////////////////////////////////////////////////////////////////
@@ -822,7 +822,7 @@ void OFieldExpressionControl::copy()
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OFieldExpressionControl::paste()
 {
     TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(GetParent()));
@@ -833,7 +833,7 @@ void OFieldExpressionControl::paste()
         m_nPasteEvent = Application::PostUserEvent( LINK(this, OFieldExpressionControl, DelayedPaste) );
     }
 }
-//------------------------------------------------------------------------------
+
 IMPL_LINK( OFieldExpressionControl, DelayedPaste, void*,  )
 {
     m_nPasteEvent = 0;
@@ -846,14 +846,14 @@ IMPL_LINK( OFieldExpressionControl, DelayedPaste, void*,  )
 
     return 0;
 }
-//------------------------------------------------------------------------------
+
 IMPL_LINK( OFieldExpressionControl, DelayedDelete, void*,  )
 {
     m_nDeleteEvent = 0;
     DeleteRows();
     return 0;
 }
-//------------------------------------------------------------------------------
+
 void OFieldExpressionControl::InsertRows( long nRow )
 {
 
@@ -911,7 +911,7 @@ void OFieldExpressionControl::InsertRows( long nRow )
 
     RowInserted( nRow,nSize,sal_True );
 }
-//------------------------------------------------------------------------------
+
 
 //========================================================================
 // class OGroupsSortingDialog
@@ -1006,7 +1006,7 @@ OGroupsSortingDialog::OGroupsSortingDialog( Window* _pParent
     FreeResource();
 }
 
-//------------------------------------------------------------------------
+
 OGroupsSortingDialog::~OGroupsSortingDialog()
 {
     delete m_pFieldExpression;
@@ -1020,7 +1020,7 @@ sal_Bool OGroupsSortingDialog::isReadOnly( ) const
 {
     return m_bReadOnly;
 }
-//------------------------------------------------------------------------------
+
 void OGroupsSortingDialog::UpdateData( )
 {
     m_pFieldExpression->Invalidate();
@@ -1029,7 +1029,7 @@ void OGroupsSortingDialog::UpdateData( )
     m_pFieldExpression->ActivateCell(nCurRow, m_pFieldExpression->GetCurColumnId());
     DisplayData(nCurRow);
 }
-//------------------------------------------------------------------------------
+
 void OGroupsSortingDialog::DisplayData( sal_Int32 _nRow )
 {
     sal_Int32 nGroupPos = m_pFieldExpression->getGroupPosition(_nRow);
@@ -1065,7 +1065,7 @@ void OGroupsSortingDialog::DisplayData( sal_Int32 _nRow )
         displayGroup(xGroup);
     }
 }
-//------------------------------------------------------------------------------
+
 void OGroupsSortingDialog::SaveData( sal_Int32 _nRow)
 {
     sal_Int32 nGroupPos = m_pFieldExpression->getGroupPosition(_nRow);
@@ -1119,7 +1119,7 @@ sal_Int32 OGroupsSortingDialog::getColumnDataType(const OUString& _sColumnName)
 
     return nDataType;
 }
-//------------------------------------------------------------------------------
+
 IMPL_LINK(OGroupsSortingDialog, OnControlFocusGot, Control*, pControl )
 {
     if ( m_pFieldExpression && m_pFieldExpression->getExpressionControl() )
@@ -1142,7 +1142,7 @@ IMPL_LINK(OGroupsSortingDialog, OnControlFocusGot, Control*, pControl )
     }
     return 0L;
 }
-//------------------------------------------------------------------------------
+
 IMPL_LINK(OGroupsSortingDialog, OnControlFocusLost, Control*, pControl )
 {
     if ( m_pFieldExpression && pControl == &m_aGroupIntervalEd )
@@ -1340,7 +1340,7 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
         pControlsLst2[i]->SetReadOnly(bReadOnly);
     m_aGroupIntervalEd.SetReadOnly(bReadOnly);
 }
-//------------------------------------------------------------------------------
+
 void OGroupsSortingDialog::Resize()
 {
     Window::Resize();
@@ -1375,7 +1375,7 @@ void OGroupsSortingDialog::Resize()
     Point aHelpPos = m_aHelpWindow.GetPosPixel();
     m_aHelpWindow.SetSizePixel(Size(aTotalOutputSize.Width() - aHelpPos.X(),aTotalOutputSize.Height() - aHelpPos.Y()));
 }
-//------------------------------------------------------------------------------
+
 void OGroupsSortingDialog::checkButtons(sal_Int32 _nRow)
 {
     sal_Int32 nGroupCount = m_xGroups->getCount();
@@ -1419,7 +1419,7 @@ ImageList OGroupsSortingDialog::getImageList(sal_Int16 _eBitmapSet) const
     return ImageList(ModuleRes( nN ));
 }
 
-//------------------------------------------------------------------
+
 void OGroupsSortingDialog::resizeControls(const Size& _rDiff)
 {
     // we use large images so we must change them
@@ -1429,7 +1429,7 @@ void OGroupsSortingDialog::resizeControls(const Size& _rDiff)
     }
 }
 
-//------------------------------------------------------------------
+
 // load the images
 ImageList OGroupsSortingDialog::getImageList(vcl::ImageListType) SAL_THROW (( com::sun::star::lang::IllegalArgumentException ))
 {

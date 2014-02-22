@@ -34,11 +34,11 @@
 
 using namespace ::com::sun::star;
 
-//---------------------------------------------
+
 // this struct conforms to the Microsoft
 // OBJECTDESCRIPTOR -> see oleidl.h
 // (MS platform sdk)
-//---------------------------------------------
+
 
 struct OleObjectDescriptor
 {
@@ -91,7 +91,7 @@ void SvObjectServerList::Remove( const SvGlobalName & rName )
     }
 }
 
-//---------------------------------------------------------------------
+
 void SvObjectServerList::FillInsertObjects()
 /* [Description]
 

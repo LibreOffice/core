@@ -94,7 +94,7 @@ void OScrollWindowHelper::initialize()
 
     m_aReportWindow.initialize();
 }
-//------------------------------------------------------------------------------
+
 void OScrollWindowHelper::setTotalSize(sal_Int32 _nWidth ,sal_Int32 _nHeight)
 {
     m_aTotalPixelSize.Width() = _nWidth;
@@ -108,7 +108,7 @@ void OScrollWindowHelper::setTotalSize(sal_Int32 _nWidth ,sal_Int32 _nHeight)
 
     Resize();
 }
-//------------------------------------------------------------------------------
+
 Size OScrollWindowHelper::ResizeScrollBars()
 {
     // get the new output-size in pixel
@@ -174,7 +174,7 @@ Size OScrollWindowHelper::ResizeScrollBars()
 
     return aOutPixSz;
 }
-//------------------------------------------------------------------------------
+
 void OScrollWindowHelper::Resize()
 {
     OScrollWindowHelper_BASE::Resize();
@@ -182,110 +182,110 @@ void OScrollWindowHelper::Resize()
 
     m_aReportWindow.SetPosSizePixel(Point( 0, 0 ),aTotalOutputSize);
 }
-//------------------------------------------------------------------------------
+
 IMPL_LINK( OScrollWindowHelper, ScrollHdl, ScrollBar*, /*pScroll*/ )
 {
     m_aReportWindow.ScrollChildren( getThumbPos() );
     return 0;
 }
-//------------------------------------------------------------------------------
+
 void OScrollWindowHelper::addSection(const uno::Reference< report::XSection >& _xSection
                                    ,const OUString& _sColorEntry
                                    ,sal_uInt16 _nPosition)
 {
     m_aReportWindow.addSection(_xSection,_sColorEntry,_nPosition);
 }
-//------------------------------------------------------------------------------
+
 void OScrollWindowHelper::removeSection(sal_uInt16 _nPosition)
 {
     m_aReportWindow.removeSection(_nPosition);
 }
-//------------------------------------------------------------------------------
+
 void OScrollWindowHelper::toggleGrid(sal_Bool _bVisible)
 {
     m_aReportWindow.toggleGrid(_bVisible);
 }
-//------------------------------------------------------------------------------
+
 sal_uInt16 OScrollWindowHelper::getSectionCount() const
 {
     return m_aReportWindow.getSectionCount();
 }
-//------------------------------------------------------------------------------
+
 void OScrollWindowHelper::SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType )
 {
     m_aReportWindow.SetInsertObj(eObj,_sShapeType);
 }
-//----------------------------------------------------------------------------
+
 OUString OScrollWindowHelper::GetInsertObjString() const
 {
     return m_aReportWindow.GetInsertObjString();
 }
-//------------------------------------------------------------------------------
+
 void OScrollWindowHelper::SetMode( DlgEdMode _eNewMode )
 {
     m_aReportWindow.SetMode(_eNewMode);
 }
-//------------------------------------------------------------------------------
+
 sal_Bool OScrollWindowHelper::HasSelection() const
 {
     return m_aReportWindow.HasSelection();
 }
-//----------------------------------------------------------------------------
+
 void OScrollWindowHelper::Delete()
 {
     m_aReportWindow.Delete();
 }
-//----------------------------------------------------------------------------
+
 void OScrollWindowHelper::Copy()
 {
     m_aReportWindow.Copy();
 }
-//----------------------------------------------------------------------------
+
 void OScrollWindowHelper::Paste()
 {
     m_aReportWindow.Paste();
 }
-//----------------------------------------------------------------------------
+
 sal_Bool OScrollWindowHelper::IsPasteAllowed() const
 {
     return m_aReportWindow.IsPasteAllowed();
 }
-//-----------------------------------------------------------------------------
+
 void OScrollWindowHelper::SelectAll(const sal_uInt16 _nObjectType)
 {
     m_aReportWindow.SelectAll(_nObjectType);
 }
-//----------------------------------------------------------------------------
+
 void OScrollWindowHelper::unmarkAllObjects(OSectionView* _pSectionView)
 {
     m_aReportWindow.unmarkAllObjects(_pSectionView);
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 OScrollWindowHelper::getMaxMarkerWidth(sal_Bool _bWithEnd) const
 {
     return m_aReportWindow.getMaxMarkerWidth(_bWithEnd);
 }
-//----------------------------------------------------------------------------
+
 void OScrollWindowHelper::showRuler(sal_Bool _bShow)
 {
     m_aReportWindow.showRuler(_bShow);
 }
-//------------------------------------------------------------------------------
+
 sal_Bool OScrollWindowHelper::handleKeyEvent(const KeyEvent& _rEvent)
 {
     return m_aReportWindow.handleKeyEvent(_rEvent);
 }
-//------------------------------------------------------------------------
+
 void OScrollWindowHelper::setMarked(OSectionView* _pSectionView,sal_Bool _bMark)
 {
     m_aReportWindow.setMarked(_pSectionView,_bMark);
 }
-//------------------------------------------------------------------------
+
 void OScrollWindowHelper::setMarked(const uno::Reference< report::XSection>& _xSection,sal_Bool _bMark)
 {
     m_aReportWindow.setMarked(_xSection,_bMark);
 }
-//------------------------------------------------------------------------
+
 void OScrollWindowHelper::setMarked(const uno::Sequence< uno::Reference< report::XReportComponent> >& _xShape,sal_Bool _bMark)
 {
     m_aReportWindow.setMarked(_xShape,_bMark);
@@ -315,7 +315,7 @@ void OScrollWindowHelper::collapseSections(const uno::Sequence< ::com::sun::star
 {
     m_aReportWindow.collapseSections(_aCollpasedSections);
 }
-//------------------------------------------------------------------------------
+
 bool OScrollWindowHelper::Notify( NotifyEvent& rNEvt )
 {
     const CommandEvent* pCommandEvent = rNEvt.GetCommandEvent();
@@ -342,14 +342,14 @@ void OScrollWindowHelper::alignMarkedObjects(sal_Int32 _nControlModification,boo
 {
     m_aReportWindow.alignMarkedObjects(_nControlModification, _bAlignAtSection, bBoundRects);
 }
-//------------------------------------------------------------------------------
+
 void OScrollWindowHelper::ImplInitSettings()
 {
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ));
     SetFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
     SetTextFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
 }
-//-----------------------------------------------------------------------------
+
 void OScrollWindowHelper::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );

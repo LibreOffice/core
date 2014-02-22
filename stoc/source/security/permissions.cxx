@@ -44,7 +44,7 @@ using namespace ::com::sun::star::uno;
 namespace stoc_sec
 {
 
-//--------------------------------------------------------------------------------------------------
+
 static inline sal_Int32 makeMask(
     OUString const & items, char const * const * strings ) SAL_THROW(())
 {
@@ -81,7 +81,7 @@ static inline sal_Int32 makeMask(
     while (n >= 0); // all items
     return mask;
 }
-//--------------------------------------------------------------------------------------------------
+
 static inline OUString makeStrings(
     sal_Int32 mask, char const * const * strings ) SAL_THROW(())
 {
@@ -292,7 +292,7 @@ public:
 };
 //__________________________________________________________________________________________________
 char const * FilePermission::s_actions [] = { "read", "write", "execute", "delete", 0 };
-//--------------------------------------------------------------------------------------------------
+
 static OUString const & getWorkingDir() SAL_THROW(())
 {
     static OUString * s_workingDir = 0;
@@ -551,7 +551,7 @@ inline static bool __implies(
 }
 
 #ifdef __DIAGNOSE
-//--------------------------------------------------------------------------------------------------
+
 static void demanded_diag(
     Permission const & perm )
     SAL_THROW(())
@@ -565,7 +565,7 @@ static void demanded_diag(
     OSL_TRACE( "%s", str.getStr() );
 }
 #endif
-//--------------------------------------------------------------------------------------------------
+
 static void throwAccessControlException(
     Permission const & perm, Any const & demanded_perm )
     SAL_THROW( (security::AccessControlException) )

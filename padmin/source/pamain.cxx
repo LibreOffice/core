@@ -85,9 +85,9 @@ int MyApp::Main()
 
     EnableAutoHelpId();
 
-    //-------------------------------------------------
+    
     // create the global service-manager
-    //-------------------------------------------------
+    
     Reference< XComponentContext > xCtx;
     Reference< XMultiServiceFactory > xFactory;
     try

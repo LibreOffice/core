@@ -194,7 +194,7 @@ const LanguageTag& SvtSysLocale::GetUILanguageTag() const
     return pImpl->aSysLocaleOptions.GetRealUILanguageTag();
 }
 
-//------------------------------------------------------------------------
+
 
 // static
 rtl_TextEncoding SvtSysLocale::GetBestMimeEncoding()

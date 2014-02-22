@@ -236,7 +236,7 @@ private:
 //==================================================================================================
 //==================================================================================================
 
-//--------------------------------------------------------------------------------------------------
+
 Invocation_Impl::Invocation_Impl
 (
     const Any & rAdapted,
@@ -329,7 +329,7 @@ Any SAL_CALL Invocation_Impl::queryInterface( const Type & aType )
 }
 
 
-//--------------------------------------------------------------------------------------------------
+
 Any Invocation_Impl::getMaterial(void) throw(RuntimeException)
 {
     // AB, 12.2.1999  Sicherstellen, dass das Material wenn moeglich
@@ -353,7 +353,7 @@ Any Invocation_Impl::getMaterial(void) throw(RuntimeException)
     return _aMaterial;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 void Invocation_Impl::setMaterial( const Any& rMaterial )
 {
     // set the material first and only once
@@ -441,7 +441,7 @@ void Invocation_Impl::setMaterial( const Any& rMaterial )
     }
 }
 
-//--------------------------------------------------------------------------------------------------
+
 OUString Invocation_Impl::getExactName( const OUString& rApproximateName )
     throw( RuntimeException )
 {
@@ -456,7 +456,7 @@ OUString Invocation_Impl::getExactName( const OUString& rApproximateName )
     return aRet;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 Reference<XIntrospectionAccess> Invocation_Impl::getIntrospection(void)
     throw( RuntimeException )
 {
@@ -466,7 +466,7 @@ Reference<XIntrospectionAccess> Invocation_Impl::getIntrospection(void)
         return _xIntrospectionAccess;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 sal_Bool Invocation_Impl::hasMethod( const OUString& Name )
     throw( RuntimeException )
 {
@@ -477,7 +477,7 @@ sal_Bool Invocation_Impl::hasMethod( const OUString& Name )
     return sal_False;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 sal_Bool Invocation_Impl::hasProperty( const OUString& Name )
     throw( RuntimeException )
 {
@@ -493,7 +493,7 @@ sal_Bool Invocation_Impl::hasProperty( const OUString& Name )
     return sal_False;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 Any Invocation_Impl::getValue( const OUString& PropertyName )
     throw( UnknownPropertyException, RuntimeException )
 {
@@ -529,7 +529,7 @@ Any Invocation_Impl::getValue( const OUString& PropertyName )
         Reference< XInterface >() );
 }
 
-//--------------------------------------------------------------------------------------------------
+
 void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
     throw( UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException )
 {
@@ -608,7 +608,7 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
     }
 }
 
-//--------------------------------------------------------------------------------------------------
+
 Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& InParams,
                                 Sequence<sal_Int16>& OutIndices, Sequence<Any>& OutParams )
     throw( IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException )
@@ -712,7 +712,7 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
     throw aExc;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 
 // Struct to optimize sorting
 struct MemberItem
@@ -1123,14 +1123,14 @@ Sequence< OUString > InvocationService::getSupportedServiceNames(void) throw( Ru
     return inv_getSupportedServiceNames();
 }
 
-//--------------------------------------------------------------------------------------------------
+
 Reference<XInterface> InvocationService::createInstance(void) throw( Exception, RuntimeException )
 {
     //TODO:throw( Exception("no default construction of invocation adapter possible!", *this) );
     return Reference<XInterface>(); // dummy
 }
 
-//--------------------------------------------------------------------------------------------------
+
 Reference<XInterface> InvocationService::createInstanceWithArguments(
     const Sequence<Any>& rArguments ) throw( Exception, RuntimeException )
 {

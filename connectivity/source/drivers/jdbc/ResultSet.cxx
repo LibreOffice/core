@@ -891,35 +891,35 @@ void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, co
         updateObject( columnIndex,x);
     }
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 java_sql_ResultSet::getResultSetConcurrency() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "jdbc Ocke.Janssen@sun.com java_sql_ResultSet::getResultSetConcurrency" );
     static jmethodID mID(NULL);
     return callIntMethod("getConcurrency",mID,true);
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 java_sql_ResultSet::getResultSetType() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "jdbc Ocke.Janssen@sun.com java_sql_ResultSet::getResultSetType" );
     static jmethodID mID(NULL);
     return callIntMethod("getType",mID,true);
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 java_sql_ResultSet::getFetchDirection() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "jdbc Ocke.Janssen@sun.com java_sql_ResultSet::getFetchDirection" );
     static jmethodID mID(NULL);
     return callIntMethod("getFetchDirection",mID,true);
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 java_sql_ResultSet::getFetchSize() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "jdbc Ocke.Janssen@sun.com java_sql_ResultSet::getFetchSize" );
     static jmethodID mID(NULL);
     return callIntMethod("getFetchSize",mID,true);
 }
-//------------------------------------------------------------------------------
+
 OUString java_sql_ResultSet::getCursorName() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "jdbc Ocke.Janssen@sun.com java_sql_ResultSet::getCursorName" );
@@ -927,21 +927,21 @@ OUString java_sql_ResultSet::getCursorName() const throw(::com::sun::star::sdbc:
     return callStringMethod("getCursorName",mID);
 }
 
-//------------------------------------------------------------------------------
+
 void java_sql_ResultSet::setFetchDirection(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "jdbc Ocke.Janssen@sun.com java_sql_ResultSet::setFetchDirection" );
     static jmethodID mID(NULL);
     callVoidMethodWithIntArg("setFetchDirection",mID,_par0,true);
 }
-//------------------------------------------------------------------------------
+
 void SAL_CALL java_sql_ResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "jdbc Ocke.Janssen@sun.com java_sql_ResultSet::refreshRow" );
     static jmethodID mID(NULL);
     callVoidMethod("refreshRow",mID);
 }
-//------------------------------------------------------------------------------
+
 void java_sql_ResultSet::setFetchSize(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "jdbc Ocke.Janssen@sun.com java_sql_ResultSet::setFetchSize" );

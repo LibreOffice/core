@@ -45,7 +45,7 @@ using namespace reportdesign;
 using namespace com::sun::star;
 TYPEINIT1(OReportModel,SdrModel);
 
-//----------------------------------------------------------------------------
+
 
 OReportModel::OReportModel(::reportdesign::OReportDefinition* _pReportDefinition) :
     SdrModel(SvtPathOptions().GetPalettePath(),NULL,_pReportDefinition)
@@ -57,7 +57,7 @@ OReportModel::OReportModel(::reportdesign::OReportDefinition* _pReportDefinition
     SetSdrUndoFactory(new OReportUndoFactory);
 }
 
-//----------------------------------------------------------------------------
+
 OReportModel::~OReportModel()
 {
     detachController();
@@ -72,14 +72,14 @@ void OReportModel::detachController()
     ClearUndoBuffer();
     m_pUndoEnv->Clear(OXUndoEnvironment::Accessor());
 }
-//----------------------------------------------------------------------------
+
 SdrPage* OReportModel::AllocPage(bool /*bMasterPage*/)
 {
     OSL_FAIL("Who called me!");
     return NULL;
 }
 
-//----------------------------------------------------------------------------
+
 
 void OReportModel::SetChanged( bool bChanged )
 {
@@ -87,13 +87,13 @@ void OReportModel::SetChanged( bool bChanged )
     SetModified( bChanged );
 }
 
-//----------------------------------------------------------------------------
+
 
 OXUndoEnvironment&  OReportModel::GetUndoEnv()
 {
     return *m_pUndoEnv;
 }
-//----------------------------------------------------------------------------
+
 void OReportModel::SetModified(sal_Bool _bModified)
 {
     if ( m_pController )

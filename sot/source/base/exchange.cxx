@@ -212,7 +212,7 @@ namespace
             const DataFlavorRepresentation, ImplFormatArray_Impl > {};
 }
 
-//-----------------------------------------------------------------------
+
 
 static tDataFlavorList& InitFormats_Impl()
 {

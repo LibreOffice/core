@@ -42,7 +42,7 @@
 #include <vcl/settings.hxx>
 #include <rtl/instance.hxx>
 
-//-----------------------------------------------------------------------------
+
 using namespace utl;
 using namespace com::sun::star;
 

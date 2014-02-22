@@ -126,7 +126,7 @@ namespace
         virtual void SAL_CALL onShot();
     };
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL CallbackTimer::onShot()
     {
         OSL_ENSURE( m_pTimeoutHandler, "CallbackTimer::onShot: nobody interested in?" );
@@ -2039,7 +2039,7 @@ void SvtFileView_Impl::CancelRunningAsyncAction()
     m_pCancelAsyncTimer = NULL;
 }
 
-//-----------------------------------------------------------------------
+
 void SvtFileView_Impl::onTimeout( CallbackTimer* )
 {
     SolarMutexGuard aSolarGuard;
@@ -2057,7 +2057,7 @@ void SvtFileView_Impl::onTimeout( CallbackTimer* )
     }
 }
 
-//-----------------------------------------------------------------------
+
 void SvtFileView_Impl::enumerationDone( ::svt::EnumerationResult eResult )
 {
     SolarMutexGuard aSolarGuard;
@@ -2087,7 +2087,7 @@ void SvtFileView_Impl::enumerationDone( ::svt::EnumerationResult eResult )
     }
 }
 
-//-----------------------------------------------------------------------
+
 void SvtFileView_Impl::implEnumerationSuccess()
 {
     FilterFolderContent_Impl( maCurrentFilter );

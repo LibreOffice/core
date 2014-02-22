@@ -2164,7 +2164,7 @@ void DrawGraphic( const SvxBrushItem *pBrush,
     }
 }
 
-//------------------------------------------------------------------------
+
 
 /** local help method for SwRootFrm::Paint(..) - Adjust given rectangle to pixel size
 

@@ -205,21 +205,21 @@ namespace framework
 
 class AddonsOptions_Impl : public ConfigItem
 {
-    //-------------------------------------------------------------------------------------------------------------
+    
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+    
 
     public:
-        //---------------------------------------------------------------------------------------------------------
+        
         //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
+        
 
          AddonsOptions_Impl();
         ~AddonsOptions_Impl();
 
-        //---------------------------------------------------------------------------------------------------------
+        
         //  overloaded methods of baseclass
-        //---------------------------------------------------------------------------------------------------------
+        
 
         /*-****************************************************************************************************//**
             @short      called for notify of configmanager
@@ -252,9 +252,9 @@ class AddonsOptions_Impl : public ConfigItem
 
         virtual void Commit();
 
-        //---------------------------------------------------------------------------------------------------------
+        
         //  public interface
-        //---------------------------------------------------------------------------------------------------------
+        
 
         /*-****************************************************************************************************//**
             @short      base implementation of public interface for "SvtDynamicMenuOptions"!
@@ -282,9 +282,9 @@ class AddonsOptions_Impl : public ConfigItem
         const MergeStatusbarInstructionContainer&       GetMergeStatusbarInstructions() const;
         void                                            ReadConfigurationData();
 
-    //-------------------------------------------------------------------------------------------------------------
+    
     //  private methods
-    //-------------------------------------------------------------------------------------------------------------
+    
 
     private:
         enum ImageSize
@@ -361,9 +361,9 @@ class AddonsOptions_Impl : public ConfigItem
         Sequence< OUString > GetPropertyNamesImages( const OUString& aPropertyRootNode ) const;
         sal_Bool             CreateImageFromSequence( Image& rImage, Sequence< sal_Int8 >& rBitmapDataSeq ) const;
 
-    //-------------------------------------------------------------------------------------------------------------
+    
     //  private member
-    //-------------------------------------------------------------------------------------------------------------
+    
 
     private:
         ImageEntry* ReadOptionalImageData( const OUString& aMenuNodeName );

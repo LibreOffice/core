@@ -42,7 +42,7 @@ namespace connectivity
     namespace file
     {
 
-//------------------------------------------------------------------------------
+
 using namespace dbtools;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -52,7 +52,7 @@ using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 DBG_NAME( file_OStatement_Base )
 
-//------------------------------------------------------------------------------
+
 OStatement_Base::OStatement_Base(OConnection* _pConnection )
     :OStatement_BASE(m_aMutex)
     ,::comphelper::OPropertyContainer(OStatement_BASE::rBHelper)
@@ -101,7 +101,7 @@ OStatement_Base::~OStatement_Base()
 
     DBG_DTOR( file_OStatement_Base, NULL );
 }
-//------------------------------------------------------------------------------
+
 void OStatement_BASE2::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -144,12 +144,12 @@ void SAL_CALL OStatement_Base::acquire() throw()
 {
     OStatement_BASE::acquire();
 }
-//-----------------------------------------------------------------------------
+
 void SAL_CALL OStatement_BASE2::release() throw()
 {
     relase_ChildImpl();
 }
-//-----------------------------------------------------------------------------
+
 Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     //SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::queryInterface" );
@@ -355,7 +355,7 @@ void OStatement_Base::anylizeSQL()
         }
     }
 }
-//------------------------------------------------------------------
+
 void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
                                         OSQLParseNode* pAscendingDescending)
 {
@@ -676,7 +676,7 @@ void OStatement_Base::ParseAssignValues(const ::std::vector< OUString>& aColumnN
         throwFunctionSequenceException(*this);
     }
 }
-//------------------------------------------------------------------
+
 void OStatement_Base::SetAssignValue(const OUString& aColumnName,
                                      const OUString& aValue,
                                      sal_Bool bSetNull,

@@ -36,7 +36,7 @@ using namespace ::connectivity;
 //= OSystemParseContext
 //==========================================================================
 DBG_NAME(OSystemParseContext)
-//-----------------------------------------------------------------------------
+
 OSystemParseContext::OSystemParseContext() : IParseContext()
 {
     DBG_CTOR(OSystemParseContext,NULL);
@@ -46,19 +46,19 @@ OSystemParseContext::OSystemParseContext() : IParseContext()
     aKeywords.get( m_aLocalizedKeywords );
 }
 
-//-----------------------------------------------------------------------------
+
 OSystemParseContext::~OSystemParseContext()
 {
     DBG_DTOR(OSystemParseContext,NULL);
 }
 
-//-----------------------------------------------------------------------------
+
 ::com::sun::star::lang::Locale OSystemParseContext::getPreferredLocale( ) const
 {
     return SvtSysLocale().GetLanguageTag().getLocale();
 }
 
-//-----------------------------------------------------------------------------
+
 OUString OSystemParseContext::getErrorMessage(ErrorCode _eCode) const
 {
     OUString aMsg;
@@ -82,7 +82,7 @@ OUString OSystemParseContext::getErrorMessage(ErrorCode _eCode) const
     return aMsg;
 }
 
-//-----------------------------------------------------------------------------
+
 OString OSystemParseContext::getIntlKeywordAscii(InternationalKeyCode _eKey) const
 {
     size_t nIndex = 0;

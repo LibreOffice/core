@@ -1494,14 +1494,14 @@ SfxTabPage* SvxLineTabPage::Create( Window* pWindow,
     return( new SvxLineTabPage( pWindow, rAttrs ) );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16* SvxLineTabPage::GetRanges()
 {
     return pLineRanges;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( SvxLineTabPage, ChangePreviewHdl_Impl, void *, pCntrl )
 {
@@ -1566,7 +1566,7 @@ IMPL_LINK( SvxLineTabPage, ChangePreviewHdl_Impl, void *, pCntrl )
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( SvxLineTabPage, ChangeStartHdl_Impl, void *, p )
 {
@@ -1585,7 +1585,7 @@ IMPL_LINK( SvxLineTabPage, ChangeStartHdl_Impl, void *, p )
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 // #116827#
 
 IMPL_LINK_NOARG(SvxLineTabPage, ChangeEdgeStyleHdl_Impl)
@@ -1595,7 +1595,7 @@ IMPL_LINK_NOARG(SvxLineTabPage, ChangeEdgeStyleHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 // fdo#43209
 
 IMPL_LINK( SvxLineTabPage, ChangeCapStyleHdl_Impl, void *, EMPTYARG )
@@ -1604,7 +1604,7 @@ IMPL_LINK( SvxLineTabPage, ChangeCapStyleHdl_Impl, void *, EMPTYARG )
 
     return( 0L );
 }
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineTabPage, ClickInvisibleHdl_Impl)
 {
@@ -1641,7 +1641,7 @@ IMPL_LINK_NOARG(SvxLineTabPage, ClickInvisibleHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( SvxLineTabPage, ChangeEndHdl_Impl, void *, p )
 {
@@ -1660,7 +1660,7 @@ IMPL_LINK( SvxLineTabPage, ChangeEndHdl_Impl, void *, p )
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineTabPage, ChangeTransparentHdl_Impl)
 {
@@ -1677,14 +1677,14 @@ IMPL_LINK_NOARG(SvxLineTabPage, ChangeTransparentHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxLineTabPage::PointChanged( Window*, RECT_POINT eRcPt )
 {
     eRP = eRcPt;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxLineTabPage::FillUserData()
 {

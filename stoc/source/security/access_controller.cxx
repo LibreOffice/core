@@ -107,7 +107,7 @@ inline acc_Intersection::acc_Intersection(
 acc_Intersection::~acc_Intersection()
     SAL_THROW(())
 {}
-//--------------------------------------------------------------------------------------------------
+
 inline Reference< security::XAccessControlContext > acc_Intersection::create(
     Reference< security::XAccessControlContext > const & x1,
     Reference< security::XAccessControlContext > const & x2 )
@@ -166,7 +166,7 @@ inline acc_Union::acc_Union(
 acc_Union::~acc_Union()
     SAL_THROW(())
 {}
-//--------------------------------------------------------------------------------------------------
+
 inline Reference< security::XAccessControlContext > acc_Union::create(
     Reference< security::XAccessControlContext > const & x1,
     Reference< security::XAccessControlContext > const & x2 )

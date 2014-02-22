@@ -115,7 +115,7 @@ SvxNumberInfoItem::~SvxNumberInfoItem()
     delete [] pDelFormatArr;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxNumberInfoItem::GetPresentation
 (

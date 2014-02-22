@@ -271,7 +271,7 @@ std::type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SA
     return rtti;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 static void deleteException( void * pExc )
 {
     __cxa_exception const * header = ((__cxa_exception const *)pExc - 1);

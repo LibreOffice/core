@@ -40,7 +40,7 @@ OOperandAttr* OFILEAnalyzer::createOperandAttr(sal_Int32 _nPos,
     return new OFILEOperandAttr((sal_uInt16)_nPos,_xCol,_xIndexes);
 }
 
-//------------------------------------------------------------------
+
 OFILEOperandAttr::OFILEOperandAttr(sal_uInt16 _nPos,
                                    const Reference< XPropertySet>& _xColumn,
                                    const Reference< XNameAccess>& _xIndexes)
@@ -87,7 +87,7 @@ sal_Bool OFILEOperandAttr::isIndexed() const
 {
     return m_xIndex.is();
 }
-//------------------------------------------------------------------
+
 OEvaluateSet* OFILEOperandAttr::preProcess(OBoolOperator* pOp, OOperand* pRight)
 {
     OEvaluateSet* pEvaluateSet = NULL;

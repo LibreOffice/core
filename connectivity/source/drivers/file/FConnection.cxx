@@ -44,7 +44,7 @@
 
 using namespace connectivity::file;
 using namespace dbtools;
-//------------------------------------------------------------------------------
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -68,19 +68,19 @@ OConnection::OConnection(OFileDriver*   _pDriver)
 {
     m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
 }
-//-----------------------------------------------------------------------------
+
 OConnection::~OConnection()
 {
     if(!isClosed(  ))
         close();
 }
-//-----------------------------------------------------------------------------
+
 void SAL_CALL OConnection::release() throw()
 {
     relase_ChildImpl();
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool OConnection::matchesExtension( const OUString& _rExt ) const
 {
     if ( isCaseSensitveExtension() )
@@ -92,7 +92,7 @@ sal_Bool OConnection::matchesExtension( const OUString& _rExt ) const
     return sMyExtension == sExt;
 }
 
-//-----------------------------------------------------------------------------
+
 void OConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     osl_atomic_increment( &m_refCount );
@@ -365,7 +365,7 @@ Any SAL_CALL OConnection::getWarnings(  ) throw(SQLException, RuntimeException)
 void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
 }
-//------------------------------------------------------------------------------
+
 void OConnection::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -378,7 +378,7 @@ m_xContent.clear();
 
     dispose_ChildImpl();
 }
-//------------------------------------------------------------------------------
+
 Reference< XTablesSupplier > OConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );

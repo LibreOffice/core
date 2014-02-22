@@ -57,20 +57,20 @@ extern "C" int SAL_CALL SbCompare_UString_Property_Impl( const void *arg1, const
     return pArg1->compareTo( pArg2->Name );
 }
 
-//----------------------------------------------------------------------------
+
 
 SbPropertyValues::SbPropertyValues()
 {
 }
 
-//----------------------------------------------------------------------------
+
 
 SbPropertyValues::~SbPropertyValues()
 {
     m_xInfo.clear();
 }
 
-//----------------------------------------------------------------------------
+
 
 Reference< XPropertySetInfo > SbPropertyValues::getPropertySetInfo(void) throw( RuntimeException )
 {
@@ -83,7 +83,7 @@ Reference< XPropertySetInfo > SbPropertyValues::getPropertySetInfo(void) throw( 
     return m_xInfo;
 }
 
-//-------------------------------------------------------------------------
+
 
 size_t SbPropertyValues::GetIndex_Impl( const OUString &rPropName ) const
 {
@@ -99,7 +99,7 @@ size_t SbPropertyValues::GetIndex_Impl( const OUString &rPropName ) const
     return it - m_aPropVals.begin();
 }
 
-//----------------------------------------------------------------------------
+
 
 void SbPropertyValues::setPropertyValue(
                     const OUString& aPropertyName,
@@ -115,7 +115,7 @@ void SbPropertyValues::setPropertyValue(
     rPropVal.Value = aValue;
 }
 
-//----------------------------------------------------------------------------
+
 
 Any SbPropertyValues::getPropertyValue(
                     const OUString& aPropertyName)
@@ -127,7 +127,7 @@ Any SbPropertyValues::getPropertyValue(
     return m_aPropVals[nIndex].Value;
 }
 
-//----------------------------------------------------------------------------
+
 
 void SbPropertyValues::addPropertyChangeListener(
                     const OUString& aPropertyName,
@@ -137,7 +137,7 @@ void SbPropertyValues::addPropertyChangeListener(
     (void)aPropertyName;
 }
 
-//----------------------------------------------------------------------------
+
 
 void SbPropertyValues::removePropertyChangeListener(
                     const OUString& aPropertyName,
@@ -147,7 +147,7 @@ void SbPropertyValues::removePropertyChangeListener(
     (void)aPropertyName;
 }
 
-//----------------------------------------------------------------------------
+
 
 void SbPropertyValues::addVetoableChangeListener(
                     const OUString& aPropertyName,
@@ -157,7 +157,7 @@ void SbPropertyValues::addVetoableChangeListener(
     (void)aPropertyName;
 }
 
-//----------------------------------------------------------------------------
+
 
 void SbPropertyValues::removeVetoableChangeListener(
                     const OUString& aPropertyName,
@@ -167,7 +167,7 @@ void SbPropertyValues::removeVetoableChangeListener(
     (void)aPropertyName;
 }
 
-//----------------------------------------------------------------------------
+
 
 Sequence< PropertyValue > SbPropertyValues::getPropertyValues(void) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -177,7 +177,7 @@ Sequence< PropertyValue > SbPropertyValues::getPropertyValues(void) throw (::com
     return aRet;
 }
 
-//----------------------------------------------------------------------------
+
 
 void SbPropertyValues::setPropertyValues(const Sequence< PropertyValue >& rPropertyValues )
                      throw (::com::sun::star::beans::UnknownPropertyException,
@@ -234,7 +234,7 @@ sal_Bool PropertySetInfoImpl::hasPropertyByName(const OUString& Name) throw( Run
 }
 
 
-//----------------------------------------------------------------------------
+
 
 SbPropertySetInfo::SbPropertySetInfo( const SbPropertyValueArr_Impl &rPropVals )
 {
@@ -250,13 +250,13 @@ SbPropertySetInfo::SbPropertySetInfo( const SbPropertyValueArr_Impl &rPropVals )
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 SbPropertySetInfo::~SbPropertySetInfo()
 {
 }
 
-//-------------------------------------------------------------------------
+
 
 Sequence< Property > SbPropertySetInfo::getProperties(void) throw( RuntimeException )
 {
@@ -275,7 +275,7 @@ sal_Bool SbPropertySetInfo::hasPropertyByName(const OUString& Name)
     return aImpl.hasPropertyByName( Name );
 }
 
-//----------------------------------------------------------------------------
+
 
 void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
 {

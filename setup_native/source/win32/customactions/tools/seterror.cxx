@@ -34,7 +34,7 @@
 
 #include <seterror.hxx>
 
-//----------------------------------------------------------
+
 #ifdef DEBUG
 inline void OutputDebugStringFormat( LPCTSTR pFormat, ... )
 {
@@ -51,7 +51,7 @@ static inline void OutputDebugStringFormat( LPCTSTR, ... )
 }
 #endif
 
-//----------------------------------------------------------
+
 void SetMsiErrorCode( int nErrorCode )
 {
     const TCHAR sMemMapName[] = TEXT( "Global\\MsiErrorObject" );

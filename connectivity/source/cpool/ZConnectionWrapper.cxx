@@ -26,7 +26,7 @@
 #include <comphelper/sequence.hxx>
 
 using namespace connectivity;
-//------------------------------------------------------------------------------
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -38,7 +38,7 @@ OConnectionWeakWrapper::OConnectionWeakWrapper(Reference< XAggregation >& _xConn
     setDelegation(_xConnection,m_refCount);
     OSL_ENSURE(m_xConnection.is(),"OConnectionWeakWrapper: Connection must be valid!");
 }
-//-----------------------------------------------------------------------------
+
 OConnectionWeakWrapper::~OConnectionWeakWrapper()
 {
     if ( !OConnectionWeakWrapper_BASE::rBHelper.bDisposed )
@@ -221,7 +221,7 @@ void SAL_CALL OConnectionWeakWrapper::close(  ) throw(SQLException, RuntimeExcep
     }
     dispose();
 }
-//------------------------------------------------------------------------------
+
 void OConnectionWeakWrapper::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);

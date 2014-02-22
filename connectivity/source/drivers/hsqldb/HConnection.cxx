@@ -142,20 +142,20 @@ namespace connectivity { namespace hsqldb
     IMPLEMENT_SERVICE_INFO(OHsqlConnection, "com.sun.star.sdbc.drivers.hsqldb.OHsqlConnection", "com.sun.star.sdbc.Connection")
     IMPLEMENT_FORWARD_XTYPEPROVIDER2(OHsqlConnection,OHsqlConnection_BASE,OConnectionWrapper)
 
-    //--------------------------------------------------------------------
+    
     ::osl::Mutex& OHsqlConnection::getMutex() const
     {
         return m_aMutex;
     }
 
-    //--------------------------------------------------------------------
+    
     void OHsqlConnection::checkDisposed() const
     {
         ::connectivity::checkDisposed( rBHelper.bDisposed );
     }
 
     // XFlushable
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OHsqlConnection::flush(  ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -193,14 +193,14 @@ namespace connectivity { namespace hsqldb
         }
    }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OHsqlConnection::addFlushListener( const Reference< XFlushListener >& l ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         m_aFlushListeners.addInterface( l );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OHsqlConnection::removeFlushListener( const Reference< XFlushListener >& l ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );

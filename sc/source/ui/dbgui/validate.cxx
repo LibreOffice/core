@@ -706,7 +706,7 @@ void ScTPValidationHelp::Init()
     pTsbHelp->EnableTriState( false );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16* ScTPValidationHelp::GetRanges()
 {
@@ -795,7 +795,7 @@ void ScTPValidationError::Init()
     SelectActionHdl( NULL );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16* ScTPValidationError::GetRanges()
 {

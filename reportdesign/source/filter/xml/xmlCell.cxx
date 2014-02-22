@@ -273,7 +273,7 @@ void OXMLCell::setContainsShape(bool _bContainsShape)
     m_bContainsShape = _bContainsShape;
 }
 
-//----------------------------------------------------------------------------
+
 } // namespace rptxml
 // -----------------------------------------------------------------------------
 

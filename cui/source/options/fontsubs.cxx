@@ -315,7 +315,7 @@ IMPL_LINK(SvxFontSubstTabPage, SelectHdl, Window*, pWin)
     return 0;
 }
 
-//--------------------------------------------------------------------------
+
 IMPL_LINK(SvxFontSubstTabPage, NonPropFontsHdl, CheckBox*, pBox)
 {
     OUString sFontName = m_pFontNameLB->GetSelectEntry();

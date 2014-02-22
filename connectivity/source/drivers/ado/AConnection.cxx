@@ -43,7 +43,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 
-//------------------------------------------------------------------------------
+
 IMPLEMENT_SERVICE_INFO(OConnection,"com.sun.star.sdbcx.AConnection","com.sun.star.sdbc.Connection");
 // --------------------------------------------------------------------------------
 OConnection::OConnection(ODriver*   _pDriver) throw(SQLException, RuntimeException)
@@ -92,11 +92,11 @@ OConnection::OConnection(ODriver*   _pDriver) throw(SQLException, RuntimeExcepti
 
     osl_atomic_decrement( &m_refCount );
 }
-//-----------------------------------------------------------------------------
+
 OConnection::~OConnection()
 {
 }
-//-----------------------------------------------------------------------------
+
 void OConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)
 {
     osl_atomic_increment( &m_refCount );
@@ -157,7 +157,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
     }
     osl_atomic_decrement( &m_refCount );
 }
-//-----------------------------------------------------------------------------
+
 void SAL_CALL OConnection::release() throw()
 {
     relase_ChildImpl();
@@ -416,7 +416,7 @@ Any SAL_CALL OConnection::getWarnings(  ) throw(SQLException, RuntimeException)
 void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
 }
-//--------------------------------------------------------------------
+
 void OConnection::buildTypeInfo() throw( SQLException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -475,7 +475,7 @@ void OConnection::buildTypeInfo() throw( SQLException)
         pRecordset->Release();
     }
 }
-//------------------------------------------------------------------------------
+
 void OConnection::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);

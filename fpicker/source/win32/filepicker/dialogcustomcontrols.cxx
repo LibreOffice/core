@@ -20,9 +20,9 @@
 #include "dialogcustomcontrols.hxx"
 #include <osl/diagnose.h>
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 CDialogCustomControlBase::CDialogCustomControlBase(HWND aControlHandle, HWND aParentHandle) :
     m_CustomControlHandle(aControlHandle),
@@ -30,9 +30,9 @@ CDialogCustomControlBase::CDialogCustomControlBase(HWND aControlHandle, HWND aPa
 {
 }
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 void SAL_CALL CDialogCustomControlBase::SetFont(HFONT hFont)
 {
@@ -43,9 +43,9 @@ void SAL_CALL CDialogCustomControlBase::SetFont(HFONT hFont)
         (LPARAM)sal_True);
 }
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 void SAL_CALL CDialogCustomControlBase::AlignToBuddy(HWND aBuddyHandle)
 {
@@ -79,102 +79,102 @@ void SAL_CALL CDialogCustomControlBase::AlignToBuddy(HWND aBuddyHandle)
         SWP_NOACTIVATE);
 }
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 CDummyCustomControl::CDummyCustomControl(HWND, HWND)
 {
 }
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 void SAL_CALL CDummyCustomControl::Align()
 {
     // do nothing
 }
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 void SAL_CALL CDummyCustomControl::SetFont(HFONT)
 {
     // do nothing
 }
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 CStaticCustomControl::CStaticCustomControl(HWND aControlHandle, HWND aParentHandle) :
     CDialogCustomControlBase(aControlHandle,aParentHandle)
 {
 }
 
-//-----------------------------------
+
 // Align to the "File name" static
 // text of the standard FileOpen dlg
-//-----------------------------------
+
 
 void SAL_CALL CStaticCustomControl::Align()
 {
     AlignToBuddy(GetDlgItem(m_ParentHandle,stc3));
 }
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 CPushButtonCustomControl::CPushButtonCustomControl(HWND aControlHandle, HWND aParentHandle) :
     CDialogCustomControlBase(aControlHandle,aParentHandle)
 {
 }
 
-//-----------------------------------
+
 // Align to the "OK" button of the
 // standard FileOpen dlg
-//-----------------------------------
+
 
 void SAL_CALL CPushButtonCustomControl::Align()
 {
     AlignToBuddy(GetDlgItem(m_ParentHandle,IDCANCEL));
 }
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 CComboboxCustomControl::CComboboxCustomControl(HWND aControlHandle, HWND aParentHandle) :
     CDialogCustomControlBase(aControlHandle,aParentHandle)
 {
 }
 
-//-----------------------------------
+
 // Align to the "File name" combobox
 // of the standard FileOpen dlg
-//-----------------------------------
+
 
 void SAL_CALL CComboboxCustomControl::Align()
 {
     AlignToBuddy(GetDlgItem(m_ParentHandle,cmb1));
 }
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 CCheckboxCustomControl::CCheckboxCustomControl(HWND aControlHandle, HWND aParentHandle) :
     CDialogCustomControlBase(aControlHandle,aParentHandle)
 {
 }
 
-//-----------------------------------
+
 // Align to the "File name" combobox
 // of the standard FileOpen dlg
-//-----------------------------------
+
 
 void SAL_CALL CCheckboxCustomControl::Align()
 {

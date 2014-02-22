@@ -140,7 +140,7 @@ OSingleFactoryHelper::~OSingleFactoryHelper()
 }
 
 
-//-----------------------------------------------------------------------------
+
 Any OSingleFactoryHelper::queryInterface( const Type & rType )
     throw(::com::sun::star::uno::RuntimeException)
 {

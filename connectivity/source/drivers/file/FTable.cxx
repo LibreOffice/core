@@ -136,7 +136,7 @@ void SAL_CALL OFileTable::disposing(void)
 
     FileClose();
 }
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OFileTable::getUnoTunnelImplementationId()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::getUnoTunnelImplementationId" );
@@ -154,7 +154,7 @@ Sequence< sal_Int8 > OFileTable::getUnoTunnelImplementationId()
 }
 
 // com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
 sal_Int64 OFileTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::getSomething" );

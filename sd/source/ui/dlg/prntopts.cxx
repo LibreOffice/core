@@ -196,7 +196,7 @@ SfxTabPage* SdPrintOptions::Create( Window* pWindow,
     return( new SdPrintOptions( pWindow, rOutAttrs ) );
 }
 
-//-----------------------------------------------------------------------
+
 
 IMPL_LINK( SdPrintOptions, ClickCheckboxHdl, CheckBox *, pCbx )
 {
@@ -208,7 +208,7 @@ IMPL_LINK( SdPrintOptions, ClickCheckboxHdl, CheckBox *, pCbx )
     return 0;
 }
 
-//-----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SdPrintOptions, ClickBookletHdl)
 {

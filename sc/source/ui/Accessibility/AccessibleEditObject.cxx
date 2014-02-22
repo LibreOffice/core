@@ -442,12 +442,12 @@ sal_Int32 ScAccessibleEditObject::GetFgBgColor( const OUString &strPropColor)
     return nColor;
 }
 //=====  XAccessibleSelection  ============================================
-//--------------------------------------------------------------------------------
+
 void SAL_CALL ScAccessibleEditObject::selectAccessibleChild( sal_Int32 )
 throw ( IndexOutOfBoundsException, RuntimeException )
 {
 }
-//----------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ScAccessibleEditObject::isAccessibleChildSelected( sal_Int32 nChildIndex )
 throw ( IndexOutOfBoundsException,
        RuntimeException )
@@ -470,17 +470,17 @@ throw ( IndexOutOfBoundsException,
     }
     return sal_False;
 }
-//---------------------------------------------------------------------
+
 void SAL_CALL ScAccessibleEditObject::clearAccessibleSelection(  )
 throw ( RuntimeException )
 {
 }
-//-------------------------------------------------------------------------
+
 void SAL_CALL ScAccessibleEditObject::selectAllAccessibleChildren(  )
 throw ( RuntimeException )
 {
 }
-//----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ScAccessibleEditObject::getSelectedAccessibleChildCount()
 throw ( RuntimeException )
 {
@@ -490,7 +490,7 @@ throw ( RuntimeException )
         if( isAccessibleChildSelected(i) ) nCount++;
     return nCount;
 }
-//--------------------------------------------------------------------------------------
+
 uno::Reference<XAccessible> SAL_CALL ScAccessibleEditObject::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
 throw ( IndexOutOfBoundsException, RuntimeException)
 {

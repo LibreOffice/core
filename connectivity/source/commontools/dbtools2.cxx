@@ -507,7 +507,7 @@ namespace
 
         return xProp;
     }
-    //------------------------------------------------------------------
+    
     Reference< XModel> lcl_getXModel(const Reference< XInterface>& _xIface)
     {
         Reference< XInterface > xParent = _xIface;

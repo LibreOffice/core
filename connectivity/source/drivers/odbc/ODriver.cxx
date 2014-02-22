@@ -56,7 +56,7 @@ void ODBCDriver::disposing()
 }
 
 // static ServiceInfo
-//------------------------------------------------------------------------------
+
 OUString ODBCDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.sdbc.ODBCDriver");
@@ -64,7 +64,7 @@ OUString ODBCDriver::getImplementationName_Static(  ) throw(RuntimeException)
         // Please take care when changing it.
 }
 
-//------------------------------------------------------------------------------
+
 Sequence< OUString > ODBCDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     Sequence< OUString > aSNS( 1 );
@@ -72,7 +72,7 @@ Sequence< OUString > ODBCDriver::getSupportedServiceNames_Static(  ) throw (Runt
     return aSNS;
 }
 
-//------------------------------------------------------------------
+
 OUString SAL_CALL ODBCDriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
@@ -83,7 +83,7 @@ sal_Bool SAL_CALL ODBCDriver::supportsService( const OUString& _rServiceName ) t
     return cppu::supportsService(this, _rServiceName);
 }
 
-//------------------------------------------------------------------
+
 Sequence< OUString > SAL_CALL ODBCDriver::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
@@ -207,7 +207,7 @@ sal_Int32 SAL_CALL ODBCDriver::getMinorVersion(  ) throw(RuntimeException)
     return 0;
 }
 // --------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

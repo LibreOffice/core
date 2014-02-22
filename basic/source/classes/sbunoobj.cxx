@@ -4053,7 +4053,7 @@ Reference< XInterface > createAllListenerAdapter
 }
 
 
-//--------------------------------------------------------------------------------------------------
+
 // InvocationToAllListenerMapper
 InvocationToAllListenerMapper::InvocationToAllListenerMapper
     ( const Reference< XIdlClass >& ListenerType, const Reference< XAllListener >& AllListener, const Any& Helper )

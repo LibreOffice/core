@@ -178,9 +178,9 @@ public:
     TableDesignStyleVector  maDesigns;
 };
 
-//------------------------------------------------------------------------
+
 // TableDesignStyle
-//------------------------------------------------------------------------
+
 
 TableDesignStyle::TableDesignStyle()
 : TableDesignStyleBase(m_aMutex)
@@ -415,9 +415,9 @@ void SAL_CALL TableDesignStyle::disposing()
         maCellStyles[nIndex].clear();
 }
 
-//------------------------------------------------------------------------
+
 // XModifyBroadcaster
-//------------------------------------------------------------------------
+
 
 void SAL_CALL TableDesignStyle::addModifyListener( const Reference< XModifyListener >& xListener ) throw (RuntimeException)
 {
@@ -434,14 +434,14 @@ void SAL_CALL TableDesignStyle::addModifyListener( const Reference< XModifyListe
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void SAL_CALL TableDesignStyle::removeModifyListener( const Reference< XModifyListener >& xListener ) throw (RuntimeException)
 {
     rBHelper.removeListener( cppu::UnoType<XModifyListener>::get(), xListener );
 }
 
-//------------------------------------------------------------------------
+
 
 void TableDesignStyle::notifyModifyListener()
 {
@@ -455,9 +455,9 @@ void TableDesignStyle::notifyModifyListener()
     }
 }
 
-//------------------------------------------------------------------------
+
 // XModifyListener
-//------------------------------------------------------------------------
+
 
 // if we get a modify hint from a style, notify all registered XModifyListener
 void SAL_CALL TableDesignStyle::modified( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException)
@@ -465,15 +465,15 @@ void SAL_CALL TableDesignStyle::modified( const ::com::sun::star::lang::EventObj
     notifyModifyListener();
 }
 
-//------------------------------------------------------------------------
+
 
 void SAL_CALL TableDesignStyle::disposing( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
-//------------------------------------------------------------------------
+
 // TableStyle
-//------------------------------------------------------------------------
+
 
 // ----------------------------------------------------------
 // XServiceInfo

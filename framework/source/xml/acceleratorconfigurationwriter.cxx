@@ -35,7 +35,7 @@
 namespace framework{
 
 
-//-----------------------------------------------
+
 AcceleratorConfigurationWriter::AcceleratorConfigurationWriter(const AcceleratorCache&                                       rContainer,
                                                                const css::uno::Reference< css::xml::sax::XDocumentHandler >& xConfig   )
     : ThreadHelpBase(&Application::GetSolarMutex())
@@ -44,12 +44,12 @@ AcceleratorConfigurationWriter::AcceleratorConfigurationWriter(const Accelerator
 {
 }
 
-//-----------------------------------------------
+
 AcceleratorConfigurationWriter::~AcceleratorConfigurationWriter()
 {
 }
 
-//-----------------------------------------------
+
 void AcceleratorConfigurationWriter::flush()
 {
     // SAFE -> ----------------------------------
@@ -101,7 +101,7 @@ void AcceleratorConfigurationWriter::flush()
     xCFG->endDocument();
 }
 
-//-----------------------------------------------
+
 void AcceleratorConfigurationWriter::impl_ts_writeKeyCommandPair(const css::awt::KeyEvent&                                     aKey    ,
                                                                  const OUString&                                        sCommand,
                                                                  const css::uno::Reference< css::xml::sax::XDocumentHandler >& xConfig )

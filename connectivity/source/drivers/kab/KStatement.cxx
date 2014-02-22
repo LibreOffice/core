@@ -58,7 +58,7 @@ namespace
 }
 
 IMPLEMENT_SERVICE_INFO(KabStatement, "com.sun.star.sdbc.drivers.KabStatement", "com.sun.star.sdbc.Statement");
-//------------------------------------------------------------------------------
+
 KabCommonStatement::KabCommonStatement(KabConnection* _pConnection )
     : KabCommonStatement_BASE(m_aMutex),
     OPropertySetHelper(KabCommonStatement_BASE::rBHelper),
@@ -284,7 +284,7 @@ KabOrder *KabCommonStatement::analyseOrderByClause(const OSQLParseNode *pParseNo
     OSL_ASSERT(false);
     return 0;
 }
-//------------------------------------------------------------------------------
+
 sal_Bool KabCommonStatement::isTableKnown(KabResultSet *pResult) const
 {
     // can handle requests like        SELECT * FROM addresses addresses
@@ -297,7 +297,7 @@ sal_Bool KabCommonStatement::isTableKnown(KabResultSet *pResult) const
 
     return sal_True;
 }
-//------------------------------------------------------------------------------
+
 void KabCommonStatement::setKabFields(KabResultSet *pResult) const throw(SQLException)
 {
     ::rtl::Reference<connectivity::OSQLColumns> xColumns;   // selected columns
@@ -351,7 +351,7 @@ void KabCommonStatement::sortAddressees(KabResultSet *pResult) const throw(SQLEx
         }
     }
 }
-//-----------------------------------------------------------------------------
+
 Any SAL_CALL KabCommonStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = KabCommonStatement_BASE::queryInterface(rType);

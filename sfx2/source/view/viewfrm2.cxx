@@ -55,7 +55,7 @@ using namespace ::com::sun::star::beans;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::XComponent;
 
-//--------------------------------------------------------------------
+
 void SfxFrameViewWindow_Impl::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == STATE_CHANGE_INITSHOW )
@@ -78,7 +78,7 @@ void SfxFrameViewWindow_Impl::Resize()
 
 //========================================================================
 
-//--------------------------------------------------------------------
+
 void SfxViewFrame::UpdateTitle()
 
 /*  [Description]

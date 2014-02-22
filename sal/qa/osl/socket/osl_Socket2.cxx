@@ -67,9 +67,9 @@ using ::rtl::OUString;
 #define IP_PORT_MYPORT8 8896
 #define IP_PORT_MYPORT9 8897
 
-//------------------------------------------------------------------------
+
 // helper functions
-//------------------------------------------------------------------------
+
 
 // just used to test socket::close() when accepting
 class AcceptorThread : public Thread

@@ -196,7 +196,7 @@ bool SvxFontListItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nM
     return true;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxFontListItem::GetPresentation
 (
@@ -439,7 +439,7 @@ SfxPoolItem* SvxFontItem::Create(SvStream& rStrm, sal_uInt16) const
                             (FontPitch)eFontPitch, (rtl_TextEncoding)eFontTextEncoding, Which() );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxFontItem::GetPresentation
 (
@@ -463,7 +463,7 @@ SfxItemPresentation SvxFontItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxFontItem::EnableStoreUnicodeNames( sal_Bool bEnable )
 {
@@ -508,7 +508,7 @@ SfxPoolItem* SvxPostureItem::Create(SvStream& rStrm, sal_uInt16) const
     return new SvxPostureItem( (const FontItalic)nPosture, Which() );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxPostureItem::GetPresentation
 (
@@ -673,7 +673,7 @@ SfxPoolItem* SvxWeightItem::Create(SvStream& rStrm, sal_uInt16) const
     return new SvxWeightItem( (FontWeight)nWeight, Which() );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxWeightItem::GetPresentation
 (
@@ -1037,7 +1037,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxFontHeightItem::GetPresentation
 (
@@ -1236,7 +1236,7 @@ bool SvxFontWidthItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxFontWidthItem::GetPresentation
 (
@@ -1330,7 +1330,7 @@ SfxPoolItem* SvxTextLineItem::Create(SvStream& rStrm, sal_uInt16) const
     return new SvxTextLineItem(  (FontUnderline)nState, Which() );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxTextLineItem::GetPresentation
 (
@@ -1440,7 +1440,7 @@ SvxUnderlineItem::SvxUnderlineItem( const FontUnderline eSt, const sal_uInt16 nI
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SfxPoolItem* SvxUnderlineItem::Clone( SfxItemPool * ) const
 {
@@ -1473,7 +1473,7 @@ SvxOverlineItem::SvxOverlineItem( const FontUnderline eSt, const sal_uInt16 nId 
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SfxPoolItem* SvxOverlineItem::Clone( SfxItemPool * ) const
 {
@@ -1558,7 +1558,7 @@ SfxPoolItem* SvxCrossedOutItem::Create(SvStream& rStrm, sal_uInt16) const
     return new SvxCrossedOutItem(  (FontStrikeout)eCross, Which() );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxCrossedOutItem::GetPresentation
 (
@@ -1655,7 +1655,7 @@ SfxPoolItem* SvxShadowedItem::Create(SvStream& rStrm, sal_uInt16) const
     return new SvxShadowedItem( nState, Which() );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxShadowedItem::GetPresentation
 (
@@ -1716,7 +1716,7 @@ SfxPoolItem* SvxAutoKernItem::Create(SvStream& rStrm, sal_uInt16) const
     return new SvxAutoKernItem( nState, Which() );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxAutoKernItem::GetPresentation
 (
@@ -1778,7 +1778,7 @@ SfxPoolItem* SvxWordLineModeItem::Create(SvStream& rStrm, sal_uInt16) const
     return new SvxWordLineModeItem( bValue, Which() );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxWordLineModeItem::GetPresentation
 (
@@ -1839,7 +1839,7 @@ SfxPoolItem* SvxContourItem::Create(SvStream& rStrm, sal_uInt16) const
     return new SvxContourItem( bValue, Which() );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxContourItem::GetPresentation
 (
@@ -1900,7 +1900,7 @@ SfxPoolItem* SvxPropSizeItem::Create(SvStream& rStrm, sal_uInt16) const
     return new SvxPropSizeItem( nSize, Which() );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxPropSizeItem::GetPresentation
 (
@@ -2019,7 +2019,7 @@ SfxPoolItem* SvxColorItem::Create(SvStream& rStrm, sal_uInt16 /*nVer*/ ) const
     return new SvxColorItem( rStrm, Which() );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxColorItem::GetPresentation
 (
@@ -2098,7 +2098,7 @@ SfxPoolItem* SvxCharSetColorItem::Create(SvStream& rStrm, sal_uInt16) const
     return new SvxCharSetColorItem( aColor,  (rtl_TextEncoding)cSet, Which() );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxCharSetColorItem::GetPresentation
 (
@@ -2158,7 +2158,7 @@ SfxPoolItem* SvxKerningItem::Create(SvStream& rStrm, sal_uInt16) const
     return new SvxKerningItem( nValue, Which() );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxKerningItem::GetPresentation
 (
@@ -2257,7 +2257,7 @@ SfxPoolItem* SvxCaseMapItem::Create(SvStream& rStrm, sal_uInt16) const
     return new SvxCaseMapItem( (const SvxCaseMap)cMap, Which() );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxCaseMapItem::GetPresentation
 (
@@ -2405,7 +2405,7 @@ sal_uInt16 SvxEscapementItem::GetValueCount() const
     return SVX_ESCAPEMENT_END;  // SVX_ESCAPEMENT_SUBSCRIPT + 1
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxEscapementItem::GetPresentation
 (
@@ -2570,7 +2570,7 @@ SfxPoolItem* SvxLanguageItem::Create(SvStream& rStrm, sal_uInt16) const
     return new SvxLanguageItem( (LanguageType)nValue, Which() );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxLanguageItem::GetPresentation
 (
@@ -2670,7 +2670,7 @@ SfxPoolItem* SvxNoLinebreakItem::Create(SvStream& rStrm, sal_uInt16) const
     return new SvxNoLinebreakItem( bValue, Which() );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxNoLinebreakItem::GetPresentation
 (
@@ -2715,7 +2715,7 @@ SfxPoolItem* SvxNoHyphenItem::Create( SvStream& rStrm, sal_uInt16 ) const
     return new SvxNoHyphenItem( bValue, Which() );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxNoHyphenItem::GetPresentation
 (
@@ -2756,7 +2756,7 @@ SvxLineColorItem::~SvxLineColorItem()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxLineColorItem::GetPresentation
 (
@@ -2866,7 +2866,7 @@ SfxPoolItem* SvxEmphasisMarkItem::Create( SvStream& rStrm, sal_uInt16 ) const
     return new SvxEmphasisMarkItem( (FontEmphasisMark)nValue, Which() );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxEmphasisMarkItem::GetPresentation
 (

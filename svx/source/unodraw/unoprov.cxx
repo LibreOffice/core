@@ -851,7 +851,7 @@ namespace {
   }
 }
 
-//----------------------------------------------------------------------
+
 OUString UHashMap::getNameFromId(sal_uInt32 nId)
 {
     const UHashMapImpl &rMap = GetUHashImpl();

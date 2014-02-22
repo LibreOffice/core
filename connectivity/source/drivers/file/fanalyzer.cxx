@@ -35,7 +35,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
 DBG_NAME( file_OSQLAnalyzer )
-//------------------------------------------------------------------
+
 OSQLAnalyzer::OSQLAnalyzer(OConnection* _pConnection)
                :m_pConnection(_pConnection)
                ,m_bHasSelectionCode(sal_False)
@@ -57,7 +57,7 @@ void OSQLAnalyzer::setIndexes(const Reference< XNameAccess>& _xIndexes)
 {
     m_aCompiler->m_xIndexes = _xIndexes;
 }
-//------------------------------------------------------------------
+
 void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
 {
     if (SQL_ISRULE(pSQLParseNode,select_statement))
@@ -120,7 +120,7 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
     m_aCompiler->start(pSQLParseNode);
 }
 
-//------------------------------------------------------------------
+
 void OSQLAnalyzer::bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow,OEvaluateSetList& _rEvaluateSetList)
 {
     // count criteria
@@ -153,7 +153,7 @@ void OSQLAnalyzer::bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow,OEvalu
         }
     }
 }
-//------------------------------------------------------------------
+
 void OSQLAnalyzer::bindSelectRow(const OValueRefRow& _pRow)
 {
     // first the select part
@@ -164,7 +164,7 @@ void OSQLAnalyzer::bindSelectRow(const OValueRefRow& _pRow)
             bindRow( aIter->first->m_aCodeList,_pRow,aEvaluateSetList);
     }
 }
-//------------------------------------------------------------------
+
 ::std::vector<sal_Int32>* OSQLAnalyzer::bindEvaluationRow(OValueRefRow& _pRow)
 {
     OEvaluateSetList    aEvaluateSetList;

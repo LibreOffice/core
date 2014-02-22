@@ -126,7 +126,7 @@ ORptFilter& OXMLReportElement::GetOwnImport()
 {
     return static_cast<ORptFilter&>(GetImport());
 }
-//----------------------------------------------------------------------------
+
 } // namespace rptxml
 // -----------------------------------------------------------------------------
 

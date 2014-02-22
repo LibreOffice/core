@@ -48,7 +48,7 @@ Sequence< sal_Int8 > OImplementationId::getImplementationId() const SAL_THROW(()
     return *_pSeq;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 static inline void copy( Sequence< Type > & rDest, const Sequence< Type > & rSource, sal_Int32 nOffset )
     SAL_THROW(())
 {

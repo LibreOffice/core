@@ -39,7 +39,7 @@ using namespace connectivity::odbc;
 using namespace connectivity;
 using namespace dbtools;
 
-//------------------------------------------------------------------------------
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -61,7 +61,7 @@ OConnection::OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver* _pDriver)
 {
     m_pDriver->acquire();
 }
-//-----------------------------------------------------------------------------
+
 OConnection::~OConnection()
 {
     if(!isClosed(  ))
@@ -84,7 +84,7 @@ OConnection::~OConnection()
     m_pDriver->release();
     m_pDriver = NULL;
 }
-//-----------------------------------------------------------------------------
+
 void SAL_CALL OConnection::release() throw()
 {
     relase_ChildImpl();
@@ -95,7 +95,7 @@ oslGenericFunction OConnection::getOdbcFunction(sal_Int32 _nIndex)  const
     OSL_ENSURE(m_pDriver,"OConnection::getOdbcFunction: m_pDriver is null!");
     return m_pDriver->getOdbcFunction(_nIndex);
 }
-//-----------------------------------------------------------------------------
+
 SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr,sal_Int32 nTimeOut, sal_Bool bSilent)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -176,7 +176,7 @@ SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr,sal_Int32 nTim
 
     return nSQLRETURN;
 }
-//-----------------------------------------------------------------------------
+
 SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     m_aConnectionHandle  = SQL_NULL_HANDLE;
@@ -487,7 +487,7 @@ Any SAL_CALL OConnection::getWarnings(  ) throw(SQLException, RuntimeException)
 void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
 }
-//------------------------------------------------------------------------------
+
 void OConnection::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);

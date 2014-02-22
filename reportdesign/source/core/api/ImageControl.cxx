@@ -172,12 +172,12 @@ OUString OImageControl::getImplementationName_Static(  ) throw(uno::RuntimeExcep
     return OUString("com.sun.star.comp.report.OImageControl");
 }
 
-//--------------------------------------------------------------------------
+
 OUString SAL_CALL OImageControl::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
-//--------------------------------------------------------------------------
+
 uno::Sequence< OUString > OImageControl::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aServices(1);
@@ -185,18 +185,18 @@ uno::Sequence< OUString > OImageControl::getSupportedServiceNames_Static(  ) thr
 
     return aServices;
 }
-//------------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > OImageControl::create(uno::Reference< uno::XComponentContext > const & xContext)
 {
     return *(new OImageControl(xContext));
 }
 
-//--------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL OImageControl::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OImageControl::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);

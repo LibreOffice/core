@@ -76,7 +76,7 @@ OAdoColumn::OAdoColumn(sal_Bool _bCase,OConnection* _pConnection)
     m_Type = DataType::OTHER;
 }
 
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OAdoColumn::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId * pId = 0;
@@ -93,7 +93,7 @@ Sequence< sal_Int8 > OAdoColumn::getUnoTunnelImplementationId()
 }
 
 // com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
 sal_Int64 OAdoColumn::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )

@@ -658,10 +658,10 @@ sal_Int32 OTools::MapOdbcType2Jdbc(SQLSMALLINT _nType)
     }
     return nValue;
 }
-//--------------------------------------------------------------------
+
 // jdbcTypeToOdbc
 // Convert the JDBC SQL type to the correct ODBC type
-//--------------------------------------------------------------------
+
 SQLSMALLINT OTools::jdbcTypeToOdbc(sal_Int32 jdbcType)
 {
     SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OTools::jdbcTypeToOdbc" );
@@ -692,7 +692,7 @@ SQLSMALLINT OTools::jdbcTypeToOdbc(sal_Int32 jdbcType)
 
     return odbcType;
 }
-//-----------------------------------------------------------------------------
+
 void OTools::getBindTypes(sal_Bool _bUseWChar,
                           sal_Bool _bUseOldTimeDate,
                           SQLSMALLINT _nOdbcType,

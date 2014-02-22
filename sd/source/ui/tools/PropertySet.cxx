@@ -187,7 +187,7 @@ void SAL_CALL PropertySet::removeVetoableChangeListener (
 
 
 
-//-----------------------------------------------------------------------------
+
 
 void PropertySet::CallListeners (
     const OUString& rsPropertyName,

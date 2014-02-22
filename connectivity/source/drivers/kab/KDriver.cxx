@@ -340,12 +340,12 @@ void KabDriver::disposing()
     WeakComponentImplHelperBase::disposing();
 }
 // static ServiceInfo
-//------------------------------------------------------------------------------
+
 OUString KabDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
     return OUString::createFromAscii( impl_getAsciiImplementationName() );
 }
-//------------------------------------------------------------------------------
+
 Sequence< OUString > KabDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     // which service is supported
@@ -355,7 +355,7 @@ Sequence< OUString > KabDriver::getSupportedServiceNames_Static(  ) throw (Runti
 
     return aSNS;
 }
-//------------------------------------------------------------------
+
 OUString SAL_CALL KabDriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
@@ -365,7 +365,7 @@ sal_Bool SAL_CALL KabDriver::supportsService( const OUString& _rServiceName ) th
 {
     return cppu::supportsService(this, _rServiceName);
 }
-//------------------------------------------------------------------
+
 Sequence< OUString > SAL_CALL KabDriver::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();

@@ -112,14 +112,14 @@ sal_uInt16* SvxHeaderPage::GetRanges()
     return pRanges;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxTabPage* SvxHeaderPage::Create( Window* pParent, const SfxItemSet& rSet )
 {
     return new SvxHeaderPage( pParent, rSet );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16* SvxFooterPage::GetRanges()
 {
@@ -248,7 +248,7 @@ sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
     SfxMapUnit          eUnit       = pPool->GetMetric( nWSize );
     SfxItemSet          aSet        ( *pPool, aWhichTab );
 
-    //--------------------------------------------------------------------
+    
 
     aSet.Put( SfxBoolItem( nWOn,      m_pTurnOnBox->IsChecked() ) );
     aSet.Put( SfxBoolItem( nWDynamic, m_pHeightDynBtn->IsChecked() ) );
@@ -570,7 +570,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
 
     if ( svx::ShowBorderBackgroundDlg( this, pBBSet, bEnableBackgroundSelector ) )
     {
-        //----------------------------------------------------------------
+        
 
         sal_uInt16 nWhich = GetWhich( SID_ATTR_BRUSH );
 
@@ -583,7 +583,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
                 m_pBspWin->SetFtColor( rItem.GetColor() );
         }
 
-        //----------------------------------------------------------------
+        
 
         nWhich = GetWhich( SID_ATTR_BORDER_OUTER );
 

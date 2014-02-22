@@ -33,7 +33,7 @@ namespace reportdesign
 // =============================================================================
     using namespace com::sun::star;
     using namespace comphelper;
-//------------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > OFormatCondition::create(uno::Reference< uno::XComponentContext > const & xContext)
 {
     return *(new OFormatCondition(xContext));
@@ -64,12 +64,12 @@ OUString OFormatCondition::getImplementationName_Static(  ) throw(uno::RuntimeEx
     return OUString("com.sun.star.comp.report.OFormatCondition");
 }
 
-//--------------------------------------------------------------------------
+
 OUString SAL_CALL OFormatCondition::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
-//--------------------------------------------------------------------------
+
 uno::Sequence< OUString > OFormatCondition::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aServices(1);
@@ -77,12 +77,12 @@ uno::Sequence< OUString > OFormatCondition::getSupportedServiceNames_Static(  ) 
 
     return aServices;
 }
-//--------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL OFormatCondition::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OFormatCondition::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);

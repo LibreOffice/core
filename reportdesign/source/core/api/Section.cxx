@@ -127,13 +127,13 @@ OSection::OSection(const uno::Reference< report::XReportDefinition >& xParentDef
 ,m_bInInsertNotify(false)
 {
 }
-//--------------------------------------------------------------------------
+
 // TODO: VirtualFunctionFinder: This is virtual function!
 //
 OSection::~OSection()
 {
 }
-//--------------------------------------------------------------------------
+
 //IMPLEMENT_FORWARD_XINTERFACE2(OSection,SectionBase,SectionPropertySet)
 IMPLEMENT_FORWARD_REFCOUNT( OSection, SectionBase )
 // --------------------------------------------------------------------------------
@@ -172,19 +172,19 @@ void SAL_CALL OSection::disposing()
     m_aContainerListeners.disposeAndClear( aDisposeEvent );
     m_xContext.clear();
 }
-//--------------------------------------------------------------------------
+
 OUString SAL_CALL OSection::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return OUString("com.sun.star.comp.report.Section");
 }
-//------------------------------------------------------------------------------
+
 uno::Sequence< OUString> OSection::getSupportedServiceNames_Static(void) throw( uno::RuntimeException )
 {
     uno::Sequence< OUString> aSupported(1);
     aSupported.getArray()[0] = SERVICE_SECTION;
     return aSupported;
 }
-//-------------------------------------------------------------------------
+
 uno::Sequence< OUString> SAL_CALL OSection::getSupportedServiceNames() throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
@@ -656,7 +656,7 @@ sal_Bool SAL_CALL OSection::hasForms() throw (uno::RuntimeException)
 
 // -----------------------------------------------------------------------------
 // com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
 sal_Int64 OSection::getSomething( const uno::Sequence< sal_Int8 > & rId ) throw (uno::RuntimeException)
 {
     if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
@@ -675,7 +675,7 @@ OSection* OSection::getImplementation( const uno::Reference< uno::XInterface >& 
 
     return pContent;
 }
-//------------------------------------------------------------------------
+
 uno::Sequence< sal_Int8 > OSection::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId * pId = 0;

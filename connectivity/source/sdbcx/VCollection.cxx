@@ -462,7 +462,7 @@ void SAL_CALL OCollection::addContainerListener( const Reference< XContainerList
     m_aContainerListeners.addInterface(_rxListener);
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OCollection::removeContainerListener( const Reference< XContainerListener >& _rxListener ) throw(RuntimeException)
 {
     m_aContainerListeners.removeInterface(_rxListener);

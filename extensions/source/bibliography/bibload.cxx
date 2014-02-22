@@ -440,7 +440,7 @@ static OUString lcl_AddProperty(Reference< XNameAccess >  xColumns,
         uRet = xCol->getString();
     return uRet;
 }
-//-----------------------------------------------------------------------------
+
 Any BibliographyLoader::getByName(const OUString& rName) throw
                         ( NoSuchElementException, WrappedTargetException, RuntimeException )
 {

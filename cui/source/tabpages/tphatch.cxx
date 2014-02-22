@@ -346,7 +346,7 @@ SfxTabPage* SvxHatchTabPage::Create( Window* pWindow,
     return new SvxHatchTabPage( pWindow, rSet );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( SvxHatchTabPage, ModifiedHdl_Impl, void *, p )
 {
@@ -379,7 +379,7 @@ IMPL_LINK( SvxHatchTabPage, ModifiedHdl_Impl, void *, p )
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
 {
@@ -452,7 +452,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
 {
@@ -549,7 +549,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl)
 {
@@ -619,7 +619,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl)
 {
@@ -798,7 +798,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickSaveHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxHatchTabPage::PointChanged( Window* pWindow, RECT_POINT eRcPt )
 {

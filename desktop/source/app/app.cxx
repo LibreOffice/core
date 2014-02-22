@@ -1078,7 +1078,7 @@ sal_Bool Desktop::isUIOnSessionShutdownAllowed()
         ::get();
 }
 
-//-----------------------------------------------
+
 /** @short  check if recovery must be started or not.
 
     @param  bCrashed [boolean ... out!]
@@ -1108,7 +1108,7 @@ void impl_checkRecoveryState(sal_Bool& bCrashed           ,
     bSessionDataExists = elements && session;
 }
 
-//-----------------------------------------------
+
 /*  @short  start the recovery wizard.
 
     @param  bEmergencySave

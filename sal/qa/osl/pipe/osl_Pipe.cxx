@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//------------------------------------------------------------------------
+
 // include files
-//------------------------------------------------------------------------
+
 
 #include <sal/types.h>
 #include "cppunit/TestAssert.h"
@@ -47,9 +47,9 @@ using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OString;
 
-//------------------------------------------------------------------------
+
 // helper functions
-//------------------------------------------------------------------------
+
 
 /** print Boolean value.
  */
@@ -118,9 +118,9 @@ inline void printPipeError( ::osl::Pipe aPipe )
 
 
 
-//------------------------------------------------------------------------
+
 // pipe name and transfer contents
-//------------------------------------------------------------------------
+
 const rtl::OUString aTestPipeName("testpipe2");
 const rtl::OUString aTestPipe1("testpipe1");
 const rtl::OUString aTestString("Sun Microsystems");
@@ -128,16 +128,16 @@ const rtl::OUString aTestString("Sun Microsystems");
 const OString m_pTestString1("Sun Microsystems");
 const OString m_pTestString2("test pipe PASS/OK");
 
-//------------------------------------------------------------------------
+
 // test code start here
-//------------------------------------------------------------------------
+
 
 namespace osl_Pipe
 {
 
-//------------------------------------------------------------------------
+
 // most return value -1 denote a fail of operation.
-//------------------------------------------------------------------------
+
 #define OSL_PIPE_FAIL   -1
 
     /** testing the methods:

@@ -101,7 +101,7 @@ void SAL_CALL ChineseTranslation_UnoDialog::setTitle( const OUString& ) throw(un
     //not implemented - fell free to do so, if you do need this
 }
 
-//-------------------------------------------------------------------------
+
 void SAL_CALL ChineseTranslation_UnoDialog::initialize( const uno::Sequence< uno::Any >& aArguments ) throw(uno::Exception, uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -122,7 +122,7 @@ void SAL_CALL ChineseTranslation_UnoDialog::initialize( const uno::Sequence< uno
     }
 }
 
-//-------------------------------------------------------------------------
+
 sal_Int16 SAL_CALL ChineseTranslation_UnoDialog::execute() throw(uno::RuntimeException)
 {
     sal_Int16 nRet = ui::dialogs::ExecutableDialogResults::CANCEL;
@@ -152,7 +152,7 @@ sal_Int16 SAL_CALL ChineseTranslation_UnoDialog::execute() throw(uno::RuntimeExc
     return nRet;
 }
 
-//-------------------------------------------------------------------------
+
 // lang::XComponent
 
 void SAL_CALL ChineseTranslation_UnoDialog::dispose() throw (uno::RuntimeException)
@@ -190,7 +190,7 @@ void SAL_CALL ChineseTranslation_UnoDialog::removeEventListener( const uno::Refe
     m_aDisposeEventListeners.removeInterface( xListener );
 }
 
-//-------------------------------------------------------------------------
+
 // XPropertySet
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ChineseTranslation_UnoDialog::getPropertySetInfo(  ) throw (uno::RuntimeException)

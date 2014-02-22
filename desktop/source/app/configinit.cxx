@@ -104,7 +104,7 @@ private:
     InteractionHandler  m_xHandler;
 };
 
-//------------------------------------------------------------------------------
+
 uno::Any SAL_CALL ConfigurationErrorHandler::Context::getValueByName( OUString const & aName)
         throw (uno::RuntimeException)
 {
@@ -117,13 +117,13 @@ uno::Any SAL_CALL ConfigurationErrorHandler::Context::getValueByName( OUString c
     return SimpleCurrentContext::getValueByName( aName );
 }
 
-//------------------------------------------------------------------------------
+
 ConfigurationErrorHandler::~ConfigurationErrorHandler()
 {
     deactivate();
 }
 
-//------------------------------------------------------------------------------
+
 /// installs the handler into the current context
 void ConfigurationErrorHandler::activate()
 {
@@ -135,7 +135,7 @@ void ConfigurationErrorHandler::activate()
     m_pContext->install();
 }
 
-//------------------------------------------------------------------------------
+
 /// deinstalls the handler from the current context, restoring the previous context
 void ConfigurationErrorHandler::deactivate()
 {
@@ -146,7 +146,7 @@ void ConfigurationErrorHandler::deactivate()
         m_pContext = 0;
     }
 }
-//------------------------------------------------------------------------------
+
 
 ConfigurationErrorHandler::InteractionHandler ConfigurationErrorHandler::getDefaultInteractionHandler()
 {
@@ -154,7 +154,7 @@ ConfigurationErrorHandler::InteractionHandler ConfigurationErrorHandler::getDefa
     InteractionHandler xHandler( com::sun::star::task::InteractionHandler::createWithParent(xContext, 0), UNO_QUERY );
     return xHandler;
 }
-//------------------------------------------------------------------------------
+
 
 
 

@@ -156,7 +156,7 @@ Sequence< sal_Int8 > ClassData::getImplementationId() SAL_THROW(())
     return *pId;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 static inline bool td_equals(
     typelib_TypeDescription * pTD, typelib_TypeDescriptionReference * pType )
     SAL_THROW(())

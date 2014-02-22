@@ -50,7 +50,7 @@ void OTables::disposing(void)
 m_xMetaData.clear();
     OCollection::disposing();
 }
-//------------------------------------------------------------------
+
 Any SAL_CALL OTables::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     if( rType == ::getCppuType((const Reference<XColumnLocate>*)0) ||

@@ -315,7 +315,7 @@ OUString SfxDocumentTemplates::GetFullRegionName
     return aName;
 }
 
-//------------------------------------------------------------------------
+
 
 const OUString& SfxDocumentTemplates::GetRegionName
 (
@@ -351,7 +351,7 @@ const OUString& SfxDocumentTemplates::GetRegionName
     return maTmpString;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SfxDocumentTemplates::GetRegionCount() const
 
@@ -374,7 +374,7 @@ sal_uInt16 SfxDocumentTemplates::GetRegionCount() const
     return (sal_uInt16) nCount;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SfxDocumentTemplates::GetCount
 (
@@ -405,7 +405,7 @@ sal_uInt16 SfxDocumentTemplates::GetCount
     return (sal_uInt16) nCount;
 }
 
-//------------------------------------------------------------------------
+
 
 const OUString& SfxDocumentTemplates::GetName
 (
@@ -446,7 +446,7 @@ const OUString& SfxDocumentTemplates::GetName
     return maTmpString;
 }
 
-//------------------------------------------------------------------------
+
 
 OUString SfxDocumentTemplates::GetPath
 (
@@ -480,7 +480,7 @@ OUString SfxDocumentTemplates::GetPath
         return OUString();
 }
 
-//------------------------------------------------------------------------
+
 
 OUString SfxDocumentTemplates::GetTemplateTargetURLFromComponent( const OUString& aGroupName,
                                                                          const OUString& aTitle )
@@ -511,7 +511,7 @@ OUString SfxDocumentTemplates::GetTemplateTargetURLFromComponent( const OUString
     return aResult;
 }
 
-//------------------------------------------------------------------------
+
 
 /** Convert a resource string - a template name - to its localised pair if it exists.
     @param nSourceResIds
@@ -536,7 +536,7 @@ OUString SfxDocumentTemplates::ConvertResourceString (
     return rString;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxDocumentTemplates::CopyOrMove
 (
@@ -642,7 +642,7 @@ sal_Bool SfxDocumentTemplates::CopyOrMove
     return sal_False;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxDocumentTemplates::Move
 (
@@ -672,7 +672,7 @@ sal_Bool SfxDocumentTemplates::Move
                        nSourceRegion, nSourceIdx, sal_True );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxDocumentTemplates::Copy
 (
@@ -703,7 +703,7 @@ sal_Bool SfxDocumentTemplates::Copy
                        nSourceRegion, nSourceIdx, sal_False );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxDocumentTemplates::CopyTo
 (
@@ -775,7 +775,7 @@ sal_Bool SfxDocumentTemplates::CopyTo
     return sal_True;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxDocumentTemplates::CopyFrom
 (
@@ -920,7 +920,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
     return sal_False;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxDocumentTemplates::Delete
 (
@@ -984,7 +984,7 @@ sal_Bool SfxDocumentTemplates::Delete
     return bRet;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxDocumentTemplates::InsertDir
 (
@@ -1105,7 +1105,7 @@ sal_Bool SfxDocumentTemplates::SetName( const OUString& rName, sal_uInt16 nRegio
     return sal_False;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxDocumentTemplates::GetFull
 (
@@ -1161,7 +1161,7 @@ sal_Bool SfxDocumentTemplates::GetFull
     return ( pEntry != NULL );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxDocumentTemplates::GetLogicNames
 (
@@ -1229,7 +1229,7 @@ sal_Bool SfxDocumentTemplates::GetLogicNames
     return bFound;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxDocumentTemplates::SfxDocumentTemplates()
 
@@ -1244,7 +1244,7 @@ SfxDocumentTemplates::SfxDocumentTemplates()
     pImp = gpTemplateData;
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxDocumentTemplates::Construct()
 
@@ -1253,7 +1253,7 @@ void SfxDocumentTemplates::Construct()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SfxDocumentTemplates::~SfxDocumentTemplates()
 

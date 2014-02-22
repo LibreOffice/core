@@ -218,7 +218,7 @@ CanvasFactory::~CanvasFactory()
 {
 }
 
-//------------------------------------------------------------------------------
+
 Reference<XInterface> create( Reference<XComponentContext> const & xContext )
 {
     return static_cast< ::cppu::OWeakObject * >(

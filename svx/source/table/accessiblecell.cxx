@@ -135,30 +135,30 @@ sal_Bool AccessibleCell::ResetState (sal_Int16 aState)
     return bStateHasChanged;
 }
 
-//-----------------------------------------------------------------------------
+
 
 bool AccessibleCell::operator== (const AccessibleCell& rAccessibleCell)
 {
     return this == &rAccessibleCell;
 }
 
-//-----------------------------------------------------------------------------
+
 // XInterface
-//-----------------------------------------------------------------------------
+
 
 Any SAL_CALL AccessibleCell::queryInterface( const Type& aType ) throw (RuntimeException)
 {
     return AccessibleCellBase::queryInterface( aType );
 }
 
-//-----------------------------------------------------------------------------
+
 
 void SAL_CALL AccessibleCell::acquire(  ) throw ()
 {
     AccessibleCellBase::acquire();
 }
 
-//-----------------------------------------------------------------------------
+
 
 void SAL_CALL AccessibleCell::release(  ) throw ()
 {

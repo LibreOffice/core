@@ -132,7 +132,7 @@ void EditBrowseBox::GrabTableFocus()
     if ( aController.Is() )
         aController->GetWindow().GrabFocus();
 }
-//------------------------------------------------------------------------------
+
 void EditBrowseBox::DetermineFocus( const sal_uInt16 _nGetFocusFlags )
 {
     sal_Bool bFocus = sal_False;

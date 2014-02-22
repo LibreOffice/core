@@ -150,13 +150,13 @@ Reference< XPropertySetInfo > SAL_CALL PDFDialog::getPropertySetInfo()
     return xInfo;
 }
 
-//-------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper& PDFDialog::getInfoHelper()
 {
     return *const_cast<PDFDialog*>(this)->getArrayHelper();
 }
 
-//------------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* PDFDialog::createArrayHelper() const
 {
     Sequence< Property > aProps;

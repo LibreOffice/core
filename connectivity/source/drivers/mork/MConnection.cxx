@@ -32,7 +32,7 @@
 
 using namespace dbtools;
 
-//------------------------------------------------------------------------------
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -56,7 +56,7 @@ OConnection::OConnection(MorkDriver* _pDriver)
     m_pBook = new MorkParser();
     m_pHistory = new MorkParser();
 }
-//-----------------------------------------------------------------------------
+
 OConnection::~OConnection()
 {
     acquire();
@@ -68,13 +68,13 @@ OConnection::~OConnection()
     delete m_pBook;
     delete m_pHistory;
 }
-//-----------------------------------------------------------------------------
+
 void SAL_CALL OConnection::release() throw()
 {
     relase_ChildImpl();
 }
 // -----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+
 void OConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     (void) info; // avoid warnings
@@ -349,7 +349,7 @@ void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeExceptio
 {
     // you should clear your collected warnings here
 }
-//------------------------------------------------------------------------------
+
 void OConnection::disposing()
 {
     // we noticed that we should be destroied in near future so we have to dispose our statements

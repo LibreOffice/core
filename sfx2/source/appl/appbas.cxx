@@ -94,7 +94,7 @@ sal_uInt16 SfxApplication::SaveBasicAndDialogContainer() const
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 
 SbxVariable* MakeVariable( StarBASIC *pBas, SbxObject *pObject,
            const char *pName, sal_uInt32 nSID, SbxDataType eType, SbxClassType eClassType )
@@ -116,7 +116,7 @@ SbxVariable* MakeVariable( StarBASIC *pBas, SbxObject *pObject,
 #endif
 }
 
-//--------------------------------------------------------------------
+
 
 BasicManager* SfxApplication::GetBasicManager()
 {
@@ -127,7 +127,7 @@ BasicManager* SfxApplication::GetBasicManager()
 #endif
 }
 
-//--------------------------------------------------------------------
+
 
 XLibraryContainer * SfxApplication::GetDialogContainer()
 {
@@ -140,7 +140,7 @@ XLibraryContainer * SfxApplication::GetDialogContainer()
 #endif
 }
 
-//--------------------------------------------------------------------
+
 
 XLibraryContainer * SfxApplication::GetBasicContainer()
 {
@@ -153,7 +153,7 @@ XLibraryContainer * SfxApplication::GetBasicContainer()
 #endif
 }
 
-//--------------------------------------------------------------------
+
 
 StarBASIC* SfxApplication::GetBasic()
 {
@@ -164,7 +164,7 @@ StarBASIC* SfxApplication::GetBasic()
 #endif
 }
 
-//-------------------------------------------------------------------------
+
 void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 {
 #ifdef DISABLE_SCRIPTING
@@ -219,7 +219,7 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 #endif
 }
 
-//-------------------------------------------------------------------------
+
 void SfxApplication::PropState_Impl( SfxItemSet &rSet )
 {
 #ifdef DISABLE_SCRIPTING

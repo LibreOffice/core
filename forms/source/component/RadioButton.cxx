@@ -46,13 +46,13 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form::binding;
 
 //==================================================================
-//------------------------------------------------------------------------------
+
 InterfaceRef SAL_CALL ORadioButtonControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return *(new ORadioButtonControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 StringSequence SAL_CALL ORadioButtonControl::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
@@ -64,13 +64,13 @@ StringSequence SAL_CALL ORadioButtonControl::getSupportedServiceNames() throw(Ru
 }
 
 
-//------------------------------------------------------------------
+
 ORadioButtonControl::ORadioButtonControl(const Reference<XComponentContext>& _rxFactory)
                       :OBoundControl(_rxFactory, VCL_CONTROL_RADIOBUTTON)
 {
 }
 
-//------------------------------------------------------------------
+
 void SAL_CALL ORadioButtonControl::createPeer(const Reference<starawt::XToolkit>& _rxToolkit, const Reference<starawt::XWindowPeer>& _rxParent) throw (RuntimeException)
 {
     OBoundControl::createPeer(_rxToolkit, _rxParent);
@@ -97,8 +97,8 @@ InterfaceRef SAL_CALL ORadioButtonModel_CreateInstance(const Reference<XMultiSer
     return *(new ORadioButtonModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------
-//------------------------------------------------------------------
+
+
 ORadioButtonModel::ORadioButtonModel(const Reference<XComponentContext>& _rxFactory)
     :OReferenceValueComponent( _rxFactory, VCL_CONTROLMODEL_RADIOBUTTON, FRM_SUN_CONTROL_RADIOBUTTON,sal_True )
                     // use the old control name for compytibility reasons
@@ -110,23 +110,23 @@ ORadioButtonModel::ORadioButtonModel(const Reference<XComponentContext>& _rxFact
     startAggregatePropertyListening( PROPERTY_GROUP_NAME );
 }
 
-//------------------------------------------------------------------
+
 ORadioButtonModel::ORadioButtonModel( const ORadioButtonModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OReferenceValueComponent( _pOriginal, _rxFactory )
 {
 }
 
-//------------------------------------------------------------------------------
+
 ORadioButtonModel::~ORadioButtonModel()
 {
 }
 
 // XCloneable
-//------------------------------------------------------------------------------
+
 IMPLEMENT_DEFAULT_CLONING( ORadioButtonModel )
 
 // XServiceInfo
-//------------------------------------------------------------------------------
+
 StringSequence SAL_CALL ORadioButtonModel::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OReferenceValueComponent::getSupportedServiceNames();
@@ -149,7 +149,7 @@ StringSequence SAL_CALL ORadioButtonModel::getSupportedServiceNames() throw(Runt
     return aSupported;
 }
 
-//------------------------------------------------------------------------------
+
 void ORadioButtonModel::SetSiblingPropsTo(const OUString& rPropName, const Any& rValue)
 {
     // my name
@@ -191,7 +191,7 @@ void ORadioButtonModel::SetSiblingPropsTo(const OUString& rPropName, const Any& 
     }
 }
 
-//------------------------------------------------------------------------------
+
 void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) throw (Exception)
 {
     OReferenceValueComponent::setFastPropertyValue_NoBroadcast( nHandle, rValue );
@@ -275,7 +275,7 @@ void ORadioButtonModel::setControlSource()
     }
 }
 
-//------------------------------------------------------------------------------
+
 void ORadioButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 1, OReferenceValueComponent )
@@ -283,13 +283,13 @@ void ORadioButtonModel::describeFixedProperties( Sequence< Property >& _rProps )
     END_DESCRIBE_PROPERTIES();
 }
 
-//------------------------------------------------------------------------------
+
 OUString SAL_CALL ORadioButtonModel::getServiceName() throw(RuntimeException)
 {
     return OUString(FRM_COMPONENT_RADIOBUTTON);   // old (non-sun) name for compatibility !
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL ORadioButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
     throw(IOException, RuntimeException)
 {
@@ -307,7 +307,7 @@ void SAL_CALL ORadioButtonModel::write(const Reference<XObjectOutputStream>& _rx
     writeCommonProperties(_rxOutStream);
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL ORadioButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw(IOException, RuntimeException)
 {
     OReferenceValueComponent::read(_rxInStream);
@@ -350,7 +350,7 @@ void SAL_CALL ORadioButtonModel::read(const Reference<XObjectInputStream>& _rxIn
         resetNoBroadcast();
 }
 
-//------------------------------------------------------------------------------
+
 void ORadioButtonModel::_propertyChanged(const PropertyChangeEvent& _rEvent) throw(RuntimeException)
 {
     if ( _rEvent.PropertyName.equals( PROPERTY_STATE ) )
@@ -374,7 +374,7 @@ void ORadioButtonModel::_propertyChanged(const PropertyChangeEvent& _rEvent) thr
     OReferenceValueComponent::_propertyChanged( _rEvent );
 }
 
-//------------------------------------------------------------------------------
+
 Any ORadioButtonModel::translateDbColumnToControlValue()
 {
     return makeAny( (sal_Int16)
@@ -382,7 +382,7 @@ Any ORadioButtonModel::translateDbColumnToControlValue()
     );
 }
 
-//------------------------------------------------------------------------------
+
 Any ORadioButtonModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
 {
     Any aControlValue = OReferenceValueComponent::translateExternalValueToControlValue( _rExternalValue );
@@ -393,7 +393,7 @@ Any ORadioButtonModel::translateExternalValueToControlValue( const Any& _rExtern
     return aControlValue;
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool ORadioButtonModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Reference< XPropertySet > xField( getField() );

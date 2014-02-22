@@ -48,9 +48,9 @@ const OUString Windows_FormatName ("windows_formatname");
 const com::sun::star::uno::Type CppuType_ByteSequence = ::getCppuType((const com::sun::star::uno::Sequence<sal_Int8>*)0);
 const com::sun::star::uno::Type CppuType_String       = ::getCppuType((const OUString*)0);
 
-//------------------------------------------------------------------------
+
 // namespace directives
-//------------------------------------------------------------------------
+
 
 using namespace osl;
 using namespace cppu;
@@ -60,9 +60,9 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::container;
 
-//------------------------------------------------------------------------
+
 // helper functions
-//------------------------------------------------------------------------
+
 
 namespace MODULE_PRIVATE
 {
@@ -74,17 +74,17 @@ namespace MODULE_PRIVATE
     }
 }
 
-//------------------------------------------------
+
 //
-//------------------------------------------------
+
 
 FormatEntry::FormatEntry()
 {
 }
 
-//------------------------------------------------
+
 //
-//------------------------------------------------
+
 
 FormatEntry::FormatEntry(
     const char* mime_content_type,
@@ -105,9 +105,9 @@ FormatEntry::FormatEntry(
     aStandardFormatId = std_clipboard_format_id;
 }
 
-//------------------------------------------------------------------------
+
 // ctor
-//------------------------------------------------------------------------
+
 
 CDataFormatTranslator::CDataFormatTranslator( const Reference< XComponentContext >& rxContext ) :
     m_xContext( rxContext )
@@ -115,9 +115,9 @@ CDataFormatTranslator::CDataFormatTranslator( const Reference< XComponentContext
     initTranslationTable( );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 Any SAL_CALL CDataFormatTranslator::getSystemDataTypeFromDataFlavor( const DataFlavor& aDataFlavor )
     throw( RuntimeException )
@@ -174,9 +174,9 @@ Any SAL_CALL CDataFormatTranslator::getSystemDataTypeFromDataFlavor( const DataF
     return aAny;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 DataFlavor SAL_CALL CDataFormatTranslator::getDataFlavorFromSystemDataType( const Any& aSysDataType )
     throw( RuntimeException )

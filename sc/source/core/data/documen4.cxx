@@ -892,7 +892,7 @@ void ScDocument::DeleteConditionalFormat(sal_uLong nOldIndex, SCTAB nTab)
         maTabs[nTab]->DeleteConditionalFormat(nOldIndex);
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScDocument::HasDetectiveOperations() const
 {
@@ -919,11 +919,11 @@ void ScDocument::SetDetOpList(ScDetOpList* pNew)
     pDetOpList = pNew;
 }
 
-//------------------------------------------------------------------------
+
 //
 //      Vergleich von Dokumenten
 //
-//------------------------------------------------------------------------
+
 
 //  Pfriemel-Faktoren
 #define SC_DOCCOMP_MAXDIFF  256

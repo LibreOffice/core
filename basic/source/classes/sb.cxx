@@ -1614,7 +1614,7 @@ void StarBASIC::SetErrorData( SbError nCode, sal_uInt16 nLine,
     aGlobals.nCol2 = nCol2;
 }
 
-//----------------------------------------------------------------
+
 // help class for access to string SubResource of a Resource.
 // Source: sfx2\source\doc\docfile.cxx (TLX)
 struct BasicStringList_Impl : private Resource
@@ -1629,7 +1629,7 @@ struct BasicStringList_Impl : private Resource
     sal_Bool IsErrorTextAvailable( void )
         { return IsAvailableRes(aResId.SetRT(RSC_STRING)); }
 };
-//----------------------------------------------------------------
+
 
 void StarBASIC::MakeErrorText( SbError nId, const OUString& aMsg )
 {

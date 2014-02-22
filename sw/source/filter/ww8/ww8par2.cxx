@@ -555,9 +555,9 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     return aRet;
 }
 
-//---------------------------------------------------------------------
+
 // helper methods for outline, numbering and bullets
-//---------------------------------------------------------------------
+
 
 static void SetBaseAnlv(SwNumFmt &rNum, WW8_ANLV &rAV, sal_uInt8 nSwLevel )
 {
@@ -701,9 +701,9 @@ void SwWW8ImplReader::SetAnld(SwNumRule* pNumR, WW8_ANLD* pAD, sal_uInt8 nSwLeve
     pNumR->Set(nSwLevel, aNF);
 }
 
-//-------------------------------------------------------
+
 // chapter numbering and bullets
-//-------------------------------------------------------
+
 // Chapter numbering happens in the style definition.
 // Sprm 13 provides the level, Sprm 12 the content.
 
@@ -808,9 +808,9 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
     }
 }
 
-//-----------------------------------------
+
 // Numbering / Bullets
-//-----------------------------------------
+
 
 // SetNumOlst() carries the Numrules for this cell to SwNumFmt.
 // For this the info is fetched from OLST and not from ANLD ( see later )
@@ -3545,9 +3545,9 @@ const SwFmt* SwWW8ImplReader::GetStyleWithOrgWWName( OUString& rName ) const
     return pRet;
 }
 
-//-----------------------------------------
+
 //          class WW8RStyle
-//-----------------------------------------
+
 
 const sal_uInt8* WW8RStyle::HasParaSprm( sal_uInt16 nId ) const
 {

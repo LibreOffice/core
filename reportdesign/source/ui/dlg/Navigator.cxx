@@ -256,7 +256,7 @@ NavigatorTree::~NavigatorTree()
     m_pReportListener->dispose();
     m_pSelectionListener->dispose();
 }
-//------------------------------------------------------------------------------
+
 void NavigatorTree::Command( const CommandEvent& rEvt )
 {
     sal_Bool bHandled = sal_False;
@@ -407,7 +407,7 @@ void NavigatorTree::StartDrag( sal_Int8 /*_nAction*/, const Point& _rPosPixel )
         EndSelection();
     }
 }
-//------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(NavigatorTree, OnDropActionTimer)
 {
     if (--m_nTimerCounter > 0)
@@ -882,7 +882,7 @@ ONavigatorImpl::ONavigatorImpl(OReportController& _rController,ONavigator* _pPar
     lang::EventObject aEvent(m_rController);
     m_pNavigatorTree->_selectionChanged(aEvent);
 }
-//------------------------------------------------------------------------
+
 ONavigatorImpl::~ONavigatorImpl()
 {
 }
@@ -909,11 +909,11 @@ ONavigator::ONavigator( Window* _pParent
 }
 // -----------------------------------------------------------------------------
 
-//------------------------------------------------------------------------
+
 ONavigator::~ONavigator()
 {
 }
-//------------------------------------------------------------------------------
+
 void ONavigator::Resize()
 {
     FloatingWindow::Resize();

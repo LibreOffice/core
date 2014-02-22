@@ -931,7 +931,7 @@ void DrawController::getFastPropertyValue (
 
 
 
-//-----------------------------------------------------------------------------
+
 
 void DrawController::ProvideFrameworkControllers (void)
 {

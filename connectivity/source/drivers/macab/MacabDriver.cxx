@@ -208,12 +208,12 @@ void MacabDriver::disposing()
     WeakComponentImplHelperBase::disposing();
 }
 // static ServiceInfo
-//------------------------------------------------------------------------------
+
 OUString MacabDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
     return OUString::createFromAscii( impl_getAsciiImplementationName() );
 }
-//------------------------------------------------------------------------------
+
 Sequence< OUString > MacabDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     // which service is supported
@@ -223,7 +223,7 @@ Sequence< OUString > MacabDriver::getSupportedServiceNames_Static(  ) throw (Run
 
     return aSNS;
 }
-//------------------------------------------------------------------
+
 OUString SAL_CALL MacabDriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
@@ -233,7 +233,7 @@ sal_Bool SAL_CALL MacabDriver::supportsService( const OUString& _rServiceName ) 
 {
     return cppu::supportsService(this, _rServiceName);
 }
-//------------------------------------------------------------------
+
 Sequence< OUString > SAL_CALL MacabDriver::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();

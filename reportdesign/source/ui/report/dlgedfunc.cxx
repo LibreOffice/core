@@ -60,9 +60,9 @@
 namespace rptui
 {
 using namespace ::com::sun::star;
-//----------------------------------------------------------------------------
 
-//----------------------------------------------------------------------------
+
+
 
 IMPL_LINK( DlgEdFunc, ScrollTimeout, Timer *,  )
 {
@@ -70,7 +70,7 @@ IMPL_LINK( DlgEdFunc, ScrollTimeout, Timer *,  )
     return 0;
 }
 
-//----------------------------------------------------------------------------
+
 
 void DlgEdFunc::ForceScroll( const Point& rPos )
 {
@@ -117,7 +117,7 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
     aScrollTimer.Start();
 }
 
-//----------------------------------------------------------------------------
+
 
 DlgEdFunc::DlgEdFunc( OReportSection* _pParent )
 :m_pParent(_pParent),
@@ -133,7 +133,7 @@ DlgEdFunc::DlgEdFunc( OReportSection* _pParent )
     aScrollTimer.SetTimeout( SELENG_AUTOREPEAT_INTERVAL );
 }
 
-//----------------------------------------------------------------------------
+
 void DlgEdFunc::setOverlappedControlColor(sal_Int32 _nColor)
 {
     m_nOverlappedControlColor = _nColor;
@@ -167,7 +167,7 @@ DlgEdFunc::~DlgEdFunc()
     aScrollTimer.Stop();
 }
 
-//----------------------------------------------------------------------------
+
 
 sal_Bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -227,7 +227,7 @@ sal_Bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
     return bHandled;
 }
 
-//----------------------------------------------------------------------------
+
 
 sal_Bool DlgEdFunc::MouseButtonUp( const MouseEvent& /*rMEvt*/ )
 {
@@ -263,13 +263,13 @@ void DlgEdFunc::stopScrollTimer()
     if ( m_pParent->IsMouseCaptured() )
         m_pParent->ReleaseMouse();
 }
-//----------------------------------------------------------------------------
+
 
 sal_Bool DlgEdFunc::MouseMove( const MouseEvent& /*rMEvt*/ )
 {
     return sal_False;
 }
-//------------------------------------------------------------------------------
+
 sal_Bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
 {
     sal_Bool bReturn = sal_False;
@@ -649,7 +649,7 @@ bool DlgEdFunc::setMovementPointer(const MouseEvent& rMEvt)
     }
     return bIsSetPoint;
 }
-//----------------------------------------------------------------------------
+
 
 DlgEdFuncInsert::DlgEdFuncInsert( OReportSection* _pParent ) :
     DlgEdFunc( _pParent )
@@ -657,14 +657,14 @@ DlgEdFuncInsert::DlgEdFuncInsert( OReportSection* _pParent ) :
     m_rView.SetCreateMode( sal_True );
 }
 
-//----------------------------------------------------------------------------
+
 
 DlgEdFuncInsert::~DlgEdFuncInsert()
 {
     m_rView.SetEditMode( sal_True );
 }
 
-//----------------------------------------------------------------------------
+
 
 sal_Bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -709,7 +709,7 @@ sal_Bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
     return sal_True;
 }
 
-//----------------------------------------------------------------------------
+
 sal_Bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if ( DlgEdFunc::MouseButtonUp( rMEvt ) )
@@ -771,7 +771,7 @@ sal_Bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
     return bReturn;
 }
 
-//----------------------------------------------------------------------------
+
 
 sal_Bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
 {
@@ -807,20 +807,20 @@ sal_Bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
     return sal_True;
 }
 
-//----------------------------------------------------------------------------
+
 
 DlgEdFuncSelect::DlgEdFuncSelect( OReportSection* _pParent ) :
     DlgEdFunc( _pParent )
 {
 }
 
-//----------------------------------------------------------------------------
+
 
 DlgEdFuncSelect::~DlgEdFuncSelect()
 {
 }
 
-//----------------------------------------------------------------------------
+
 
 sal_Bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -866,7 +866,7 @@ sal_Bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
     return sal_True;
 }
 
-//----------------------------------------------------------------------------
+
 
 sal_Bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -890,7 +890,7 @@ sal_Bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
     return sal_True;
 }
 
-//----------------------------------------------------------------------------
+
 
 sal_Bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 {
@@ -936,7 +936,7 @@ sal_Bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
     return sal_True;
 }
 
-//----------------------------------------------------------------------------
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -48,14 +48,14 @@ namespace rptui
     using namespace ::com::sun::star;
 
 
-    //--------------------------------------------------------------------
+    
     FormattedFieldBeautifier::FormattedFieldBeautifier(const OReportController& _aController)
         :m_rReportController(_aController)
         ,m_nTextColor(-1)
     {
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int32 FormattedFieldBeautifier::getTextColor()
     {
         if (m_nTextColor == -1)
@@ -66,7 +66,7 @@ namespace rptui
         return m_nTextColor;
     }
 
-    //--------------------------------------------------------------------
+    
     FormattedFieldBeautifier::~FormattedFieldBeautifier()
     {
     }

@@ -33,24 +33,14 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::clipboard;
-
-
-//----------------------------------------------------------------------------
-
 DlgEdTransferableImpl::DlgEdTransferableImpl( const Sequence< DataFlavor >& aSeqFlavors, const Sequence< Any >& aSeqData )
 {
     m_SeqFlavors = aSeqFlavors;
     m_SeqData = aSeqData;
 }
-
-//----------------------------------------------------------------------------
-
 DlgEdTransferableImpl::~DlgEdTransferableImpl()
 {
 }
-
-//----------------------------------------------------------------------------
-
 sal_Bool DlgEdTransferableImpl::compareDataFlavors( const DataFlavor& lFlavor, const DataFlavor& rFlavor )
 {
     // compare mime content types
@@ -71,8 +61,6 @@ sal_Bool DlgEdTransferableImpl::compareDataFlavors( const DataFlavor& lFlavor, c
 }
 
 // XTransferable
-//----------------------------------------------------------------------------
-
 Any SAL_CALL DlgEdTransferableImpl::getTransferData( const DataFlavor& rFlavor ) throw(UnsupportedFlavorException, IOException, RuntimeException)
 {
     const SolarMutexGuard aGuard;
@@ -93,18 +81,12 @@ Any SAL_CALL DlgEdTransferableImpl::getTransferData( const DataFlavor& rFlavor )
 
     return aData;
 }
-
-//----------------------------------------------------------------------------
-
 Sequence< DataFlavor > SAL_CALL DlgEdTransferableImpl::getTransferDataFlavors(  ) throw(RuntimeException)
 {
     const SolarMutexGuard aGuard;
 
     return m_SeqFlavors;
 }
-
-//----------------------------------------------------------------------------
-
 sal_Bool SAL_CALL DlgEdTransferableImpl::isDataFlavorSupported( const DataFlavor& rFlavor ) throw(RuntimeException)
 {
     const SolarMutexGuard aGuard;
@@ -116,8 +98,6 @@ sal_Bool SAL_CALL DlgEdTransferableImpl::isDataFlavorSupported( const DataFlavor
 }
 
 // XClipboardOwner
-//----------------------------------------------------------------------------
-
 void SAL_CALL DlgEdTransferableImpl::lostOwnership( const Reference< XClipboard >&, const Reference< XTransferable >& ) throw(RuntimeException)
 {
     const SolarMutexGuard aGuard;
@@ -125,8 +105,6 @@ void SAL_CALL DlgEdTransferableImpl::lostOwnership( const Reference< XClipboard 
     m_SeqFlavors = Sequence< DataFlavor >();
     m_SeqData = Sequence< Any >();
 }
-
-
 } // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

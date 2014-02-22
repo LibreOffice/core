@@ -666,7 +666,7 @@ SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& r
 
 
 // private methods
-//--------------------------------------------------------------------------------------------------------------
+
 
 
 void SlideImpl::viewAdded( const UnoViewSharedPtr& rView )

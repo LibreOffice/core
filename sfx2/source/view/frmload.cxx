@@ -117,9 +117,9 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (css::uno::RuntimeException);
 
-    //----------------------------------------------------------------------------------
+    
     // XSynchronousFrameLoader
-    //----------------------------------------------------------------------------------
+    
     virtual sal_Bool SAL_CALL load( const css::uno::Sequence< css::beans::PropertyValue >& _rArgs, const css::uno::Reference< css::frame::XFrame >& _rxFrame ) throw( css::uno::RuntimeException );
     virtual void SAL_CALL cancel() throw( css::uno::RuntimeException );
 

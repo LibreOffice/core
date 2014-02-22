@@ -43,9 +43,9 @@
     inline sal_Bool SAL_CALL operator== (const SocketAddr & Addr) const;
  */
 
-//------------------------------------------------------------------------
+
 // include files
-//------------------------------------------------------------------------
+
 
 #include <sal/types.h>
 #include <cppunit/TestFixture.h>
@@ -63,9 +63,9 @@ using ::rtl::OUString;
 #define IP_PORT_MYPORT4 8885
 #define IP_PORT_MYPORT3 8884
 
-//------------------------------------------------------------------------
+
 // helper functions
-//------------------------------------------------------------------------
+
 
 // just used to test socket::close() when accepting
 class AcceptorThread : public Thread

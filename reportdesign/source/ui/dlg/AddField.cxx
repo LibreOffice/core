@@ -101,7 +101,7 @@ uno::Sequence< beans::PropertyValue > OAddFieldWindowListBox::getSelectedFieldDe
 //==================================================================
 // class OAddFieldWindowListBox
 //==================================================================
-//------------------------------------------------------------------------------
+
 OAddFieldWindowListBox::OAddFieldWindowListBox( OAddFieldWindow* _pParent )
     :SvTreeListBox( _pParent, WB_TABSTOP|WB_BORDER|WB_SORT )
     ,m_pTabWin( _pParent )
@@ -112,24 +112,24 @@ OAddFieldWindowListBox::OAddFieldWindowListBox( OAddFieldWindow* _pParent )
     SetHighlightRange( );
 }
 
-//------------------------------------------------------------------------------
+
 OAddFieldWindowListBox::~OAddFieldWindowListBox()
 {
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int8 OAddFieldWindowListBox::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 {
     return DND_ACTION_NONE;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int8 OAddFieldWindowListBox::ExecuteDrop( const ExecuteDropEvent& /*rEvt*/ )
 {
     return DND_ACTION_NONE;
 }
 
-//------------------------------------------------------------------------------
+
 void OAddFieldWindowListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
 {
     if ( GetSelectionCount() < 1 )
@@ -145,7 +145,7 @@ void OAddFieldWindowListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_r
 //========================================================================
 // class OAddFieldWindow
 //========================================================================
-//-----------------------------------------------------------------------
+
 OAddFieldWindow::OAddFieldWindow(Window* pParent
                                  ,const uno::Reference< beans::XPropertySet >& _xRowSet
                                  )
@@ -208,7 +208,7 @@ OAddFieldWindow::OAddFieldWindow(Window* pParent
     }
 }
 
-//-----------------------------------------------------------------------
+
 OAddFieldWindow::~OAddFieldWindow()
 {
     if ( m_pListBox.get() )
@@ -226,7 +226,7 @@ OAddFieldWindow::~OAddFieldWindow()
         m_pContainerListener->dispose();
 }
 
-//-----------------------------------------------------------------------
+
 void OAddFieldWindow::GetFocus()
 {
     if ( m_pListBox.get() )
@@ -234,13 +234,13 @@ void OAddFieldWindow::GetFocus()
     else
         FloatingWindow::GetFocus();
 }
-//-----------------------------------------------------------------------
+
 uno::Sequence< beans::PropertyValue > OAddFieldWindow::getSelectedFieldDescriptors()
 {
     return m_pListBox->getSelectedFieldDescriptors();
 }
 
-//-----------------------------------------------------------------------
+
 bool OAddFieldWindow::PreNotify( NotifyEvent& _rNEvt )
 {
     if ( EVENT_KEYINPUT == _rNEvt.GetType() )
@@ -258,7 +258,7 @@ bool OAddFieldWindow::PreNotify( NotifyEvent& _rNEvt )
 
     return FloatingWindow::PreNotify( _rNEvt );
 }
-//-----------------------------------------------------------------------
+
 void OAddFieldWindow::_propertyChanged( const beans::PropertyChangeEvent& _evt ) throw( uno::RuntimeException )
 {
     OSL_ENSURE( _evt.Source == m_xRowSet, "OAddFieldWindow::_propertyChanged: where did this come from?" );
@@ -266,7 +266,7 @@ void OAddFieldWindow::_propertyChanged( const beans::PropertyChangeEvent& _evt )
     Update();
 }
 
-//-----------------------------------------------------------------------
+
 namespace
 {
     void lcl_addToList( OAddFieldWindowListBox& _rListBox, const uno::Sequence< OUString >& _rEntries )
@@ -295,7 +295,7 @@ namespace
     }
 }
 
-//-----------------------------------------------------------------------
+
 void OAddFieldWindow::Update()
 {
     SolarMutexGuard aSolarGuard;
@@ -370,7 +370,7 @@ void OAddFieldWindow::Update()
     }
 }
 
-//-----------------------------------------------------------------------
+
 void OAddFieldWindow::Resize()
 {
     FloatingWindow::Resize();
@@ -491,7 +491,7 @@ IMPL_LINK( OAddFieldWindow, OnDoubleClickHdl, void* ,/*_pAddFieldDlg*/)
 
     return 0L;
 }
-//------------------------------------------------------------------------------
+
 ImageList OAddFieldWindow::getImageList(sal_Int16 _eBitmapSet) const
 {
     sal_Int16 nN = IMG_ADDFIELD_DLG_SC;
@@ -499,7 +499,7 @@ ImageList OAddFieldWindow::getImageList(sal_Int16 _eBitmapSet) const
         nN = IMG_ADDFIELD_DLG_LC;
     return ImageList(ModuleRes(nN));
 }
-//------------------------------------------------------------------
+
 void OAddFieldWindow::resizeControls(const Size& _rDiff)
 {
     // we use large images so we must change them
@@ -508,7 +508,7 @@ void OAddFieldWindow::resizeControls(const Size& _rDiff)
         Invalidate();
     }
 }
-//------------------------------------------------------------------
+
 IMPL_LINK( OAddFieldWindow, OnSortAction, ToolBox*, /*NOTINTERESTEDIN*/ )
 {
     const sal_uInt16 nCurItem = m_aActions.GetCurItemId();

@@ -180,13 +180,13 @@ Reference< XPropertySetInfo > SAL_CALL SVGDialog::getPropertySetInfo()
     return( Reference< XPropertySetInfo >( createPropertySetInfo( getInfoHelper() ) ) );
 }
 
-//-------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper& SVGDialog::getInfoHelper()
 {
     return( *const_cast< SVGDialog *>(this)->getArrayHelper() );
 }
 
-//------------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* SVGDialog::createArrayHelper() const
 {
     Sequence< Property > aProps;

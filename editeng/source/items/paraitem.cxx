@@ -233,7 +233,7 @@ SfxPoolItem* SvxLineSpacingItem::Clone( SfxItemPool * ) const
     return new SvxLineSpacingItem( *this );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxLineSpacingItem::GetPresentation
 (
@@ -426,7 +426,7 @@ SfxPoolItem* SvxAdjustItem::Clone( SfxItemPool * ) const
     return new SvxAdjustItem( *this );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxAdjustItem::GetPresentation
 (
@@ -555,7 +555,7 @@ SvStream& SvxWidowsItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
     return rStrm;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxWidowsItem::GetPresentation
 (
@@ -626,7 +626,7 @@ SvStream& SvxOrphansItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
     return rStrm;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxOrphansItem::GetPresentation
 (
@@ -746,7 +746,7 @@ SfxPoolItem* SvxHyphenZoneItem::Clone( SfxItemPool * ) const
     return new SvxHyphenZoneItem( *this );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxHyphenZoneItem::GetPresentation
 (
@@ -1101,7 +1101,7 @@ SfxPoolItem* SvxTabStopItem::Clone( SfxItemPool * ) const
     return new SvxTabStopItem( *this );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxTabStopItem::GetPresentation
 (
@@ -1269,7 +1269,7 @@ SfxPoolItem* SvxFmtSplitItem::Create( SvStream& rStrm, sal_uInt16 ) const
     return new SvxFmtSplitItem( sal_Bool( bIsSplit != 0 ), Which() );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxFmtSplitItem::GetPresentation
 (
@@ -1306,7 +1306,7 @@ SfxPoolItem* SvxPageModelItem::Clone( SfxItemPool* ) const
     return new SvxPageModelItem( *this );
 }
 
-//------------------------------------------------------------------------
+
 
 bool SvxPageModelItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
@@ -1369,7 +1369,7 @@ SfxItemPresentation SvxPageModelItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//------------------------------------------------------------------------
+
 
 SvxScriptSpaceItem::SvxScriptSpaceItem( sal_Bool bOn, const sal_uInt16 nId )
     : SfxBoolItem( nId, bOn )
@@ -1421,7 +1421,7 @@ SfxItemPresentation SvxScriptSpaceItem::GetPresentation(
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//------------------------------------------------------------------------
+
 
 SvxHangingPunctuationItem::SvxHangingPunctuationItem(
                                     bool bOn, const sal_uInt16 nId )
@@ -1474,7 +1474,7 @@ SfxItemPresentation SvxHangingPunctuationItem::GetPresentation(
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
-//------------------------------------------------------------------------
+
 
 SvxForbiddenRuleItem::SvxForbiddenRuleItem(
                                     sal_Bool bOn, const sal_uInt16 nId )

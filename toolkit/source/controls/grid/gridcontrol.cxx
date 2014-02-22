@@ -67,7 +67,7 @@ namespace
     }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 UnoGridModel::UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
         :UnoControlModel( rxContext )
 {
@@ -109,7 +109,7 @@ UnoGridModel::UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::
     ImplRegisterProperty( BASEPROPERTY_VERTICALALIGN );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 UnoGridModel::UnoGridModel( const UnoGridModel& rModel )
     :UnoControlModel( rModel )
 {
@@ -154,13 +154,13 @@ UnoGridModel::UnoGridModel( const UnoGridModel& rModel )
     osl_atomic_decrement( &m_refCount );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 UnoControlModel* UnoGridModel::Clone() const
 {
     return new UnoGridModel( *this );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 namespace
 {
     void lcl_dispose_nothrow( const Any& i_component )
@@ -177,7 +177,7 @@ namespace
     }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 void SAL_CALL UnoGridModel::dispose(  ) throw(RuntimeException)
 {
     lcl_dispose_nothrow( getFastPropertyValue( BASEPROPERTY_GRID_COLUMNMODEL ) );
@@ -186,7 +186,7 @@ void SAL_CALL UnoGridModel::dispose(  ) throw(RuntimeException)
     UnoControlModel::dispose();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 void SAL_CALL UnoGridModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
 {
     Any aOldSubModel;
@@ -207,13 +207,13 @@ void SAL_CALL UnoGridModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,
         lcl_dispose_nothrow( aOldSubModel );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 OUString UnoGridModel::getServiceName() throw(RuntimeException)
 {
     return OUString("com.sun.star.awt.grid.UnoControlGridModel");
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 Any UnoGridModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     switch( nPropId )
@@ -246,7 +246,7 @@ Any UnoGridModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper& UnoGridModel::getInfoHelper()
 {
     static UnoPropertyArrayHelper* pHelper = NULL;
@@ -258,7 +258,7 @@ Any UnoGridModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     return *pHelper;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 // XMultiPropertySet
 Reference< XPropertySetInfo > UnoGridModel::getPropertySetInfo(  ) throw(RuntimeException)
 {
@@ -277,18 +277,18 @@ UnoGridControl::UnoGridControl()
 {
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 UnoGridControl::~UnoGridControl()
 {
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 OUString UnoGridControl::GetComponentServiceName()
 {
     return OUString("Grid");
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 void SAL_CALL UnoGridControl::dispose(  ) throw(RuntimeException)
 {
     lang::EventObject aEvt;
@@ -297,7 +297,7 @@ void SAL_CALL UnoGridControl::dispose(  ) throw(RuntimeException)
     UnoControl::dispose();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 void SAL_CALL UnoGridControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
 {
     UnoControlBase::createPeer( rxToolkit, rParentPeer );
@@ -306,7 +306,7 @@ void SAL_CALL UnoGridControl::createPeer( const uno::Reference< awt::XToolkit > 
     xGrid->addSelectionListener( &m_aSelectionListeners );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 namespace
 {
     void lcl_setEventForwarding( const Reference< XControlModel >& i_gridControlModel, const ::boost::scoped_ptr< toolkit::GridEventForwarder >& i_listener,
@@ -346,7 +346,7 @@ namespace
     }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL UnoGridControl::setModel( const Reference< XControlModel >& i_model ) throw(RuntimeException)
 {
     lcl_setEventForwarding( getModel(), m_pEventForwarder, false );
@@ -356,90 +356,90 @@ sal_Bool SAL_CALL UnoGridControl::setModel( const Reference< XControlModel >& i_
     return sal_True;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 ::sal_Int32 UnoGridControl::getRowAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException)
 {
     Reference< XGridControl > const xGrid ( getPeer(), UNO_QUERY_THROW );
     return xGrid->getRowAtPoint( x, y );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 ::sal_Int32 UnoGridControl::getColumnAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException)
 {
     Reference< XGridControl > const xGrid ( getPeer(), UNO_QUERY_THROW );
     return xGrid->getColumnAtPoint( x, y );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 ::sal_Int32 SAL_CALL UnoGridControl::getCurrentColumn(  ) throw (RuntimeException)
 {
     Reference< XGridControl > const xGrid ( getPeer(), UNO_QUERY_THROW );
     return xGrid->getCurrentColumn();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 ::sal_Int32 SAL_CALL UnoGridControl::getCurrentRow(  ) throw (RuntimeException)
 {
     Reference< XGridControl > const xGrid ( getPeer(), UNO_QUERY_THROW );
     return xGrid->getCurrentRow();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 void SAL_CALL UnoGridControl::goToCell( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex ) throw (RuntimeException, IndexOutOfBoundsException, VetoException)
 {
     Reference< XGridControl > const xGrid ( getPeer(), UNO_QUERY_THROW );
     xGrid->goToCell( i_columnIndex, i_rowIndex );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 void SAL_CALL UnoGridControl::selectRow( ::sal_Int32 i_rowIndex ) throw (RuntimeException, IndexOutOfBoundsException )
 {
     Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->selectRow( i_rowIndex );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 void SAL_CALL UnoGridControl::selectAllRows() throw (::com::sun::star::uno::RuntimeException)
 {
     Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->selectAllRows();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 void SAL_CALL UnoGridControl::deselectRow( ::sal_Int32 i_rowIndex ) throw (RuntimeException, IndexOutOfBoundsException )
 {
     Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->deselectRow( i_rowIndex );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 void SAL_CALL UnoGridControl::deselectAllRows() throw (::com::sun::star::uno::RuntimeException)
 {
     Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->deselectAllRows();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Sequence< ::sal_Int32 > SAL_CALL UnoGridControl::getSelectedRows() throw (::com::sun::star::uno::RuntimeException)
 {
     return Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->getSelectedRows();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 ::sal_Bool SAL_CALL UnoGridControl::hasSelectedRows() throw (::com::sun::star::uno::RuntimeException)
 {
     return Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->hasSelectedRows();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 ::sal_Bool SAL_CALL UnoGridControl::isRowSelected(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException)
 {
     return Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->isRowSelected( index );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 void SAL_CALL UnoGridControl::addSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException)
 {
     m_aSelectionListeners.addInterface( listener );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 void SAL_CALL UnoGridControl::removeSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException)
 {
     m_aSelectionListeners.removeInterface( listener );

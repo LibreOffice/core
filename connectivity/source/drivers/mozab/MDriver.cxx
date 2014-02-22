@@ -36,7 +36,7 @@ namespace connectivity
 {
     namespace mozab
     {
-        //------------------------------------------------------------------
+        
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL MozabDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
         {
             return *(new MozabDriver( _rxFactory ));
@@ -80,14 +80,14 @@ void MozabDriver::disposing()
 }
 
 // static ServiceInfo
-//------------------------------------------------------------------------------
+
 OUString MozabDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
     return OUString(MOZAB_DRIVER_IMPL_NAME);
         // this name is referenced in the configuration and in the mozab.xml
         // Please take care when changing it.
 }
-//------------------------------------------------------------------------------
+
 Sequence< OUString > MozabDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     // which service is supported
@@ -97,7 +97,7 @@ Sequence< OUString > MozabDriver::getSupportedServiceNames_Static(  ) throw (Run
     return aSNS;
 }
 
-//------------------------------------------------------------------
+
 OUString SAL_CALL MozabDriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
@@ -108,7 +108,7 @@ sal_Bool SAL_CALL MozabDriver::supportsService( const OUString& _rServiceName ) 
     return cppu::supportsService(this, _rServiceName);
 }
 
-//------------------------------------------------------------------
+
 Sequence< OUString > SAL_CALL MozabDriver::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();

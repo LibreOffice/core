@@ -219,7 +219,7 @@ void OXMLReport::addMasterDetailPair(const ::std::pair< OUString,OUString >& _aP
     m_aMasterFields.push_back(_aPair.first);
     m_aDetailFields.push_back(_aPair.second);
 }
-//----------------------------------------------------------------------------
+
 } // namespace rptxml
 // -----------------------------------------------------------------------------
 

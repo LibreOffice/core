@@ -32,7 +32,7 @@
 #include "sc.hrc"
 
 
-//------------------------------------------------------------------
+
 
 void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
 {

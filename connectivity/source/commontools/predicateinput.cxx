@@ -60,7 +60,7 @@ namespace dbtools
     using ::connectivity::OSQLParseNode;
 
     //=====================================================================
-    //---------------------------------------------------------------------
+    
     static sal_Unicode lcl_getSeparatorChar( const OUString& _rSeparator, sal_Unicode _nFallback )
     {
         OSL_ENSURE( !_rSeparator.isEmpty(), "::lcl_getSeparatorChar: invalid separator string!" );
@@ -74,7 +74,7 @@ namespace dbtools
     //=====================================================================
     //= OPredicateInputController
     //=====================================================================
-    //---------------------------------------------------------------------
+    
     sal_Bool OPredicateInputController::getSeparatorChars( const Locale& _rLocale, sal_Unicode& _rDecSep, sal_Unicode& _rThdSep ) const
     {
         _rDecSep = '.';
@@ -97,7 +97,7 @@ namespace dbtools
         return sal_False;
     }
 
-    //---------------------------------------------------------------------
+    
     OPredicateInputController::OPredicateInputController(
         const Reference< XComponentContext >& rxContext, const Reference< XConnection >& _rxConnection, const IParseContext* _pParseContext )
         : m_xConnection( _rxConnection )
@@ -133,7 +133,7 @@ namespace dbtools
         }
     }
 
-    //---------------------------------------------------------------------
+    
     OSQLParseNode* OPredicateInputController::implPredicateTree(OUString& _rErrorMessage, const OUString& _rStatement, const Reference< XPropertySet > & _rxField) const
     {
         OSQLParseNode* pReturn = const_cast< OSQLParser& >( m_aParser ).predicateTree( _rErrorMessage, _rStatement, m_xFormatter, _rxField );
@@ -243,7 +243,7 @@ namespace dbtools
         return pReturn;
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool OPredicateInputController::normalizePredicateString(
         OUString& _rPredicateValue, const Reference< XPropertySet > & _rxField, OUString* _pErrorMessage ) const
     {
@@ -281,7 +281,7 @@ namespace dbtools
         return bSuccess;
     }
 
-    //---------------------------------------------------------------------
+    
     OUString OPredicateInputController::getPredicateValue(
         const OUString& _rPredicateValue, const Reference< XPropertySet > & _rxField,
         sal_Bool _bForStatementUse, OUString* _pErrorMessage ) const

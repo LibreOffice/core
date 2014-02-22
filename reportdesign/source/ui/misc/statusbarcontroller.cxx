@@ -49,7 +49,7 @@ OUString OStatusbarController::getImplementationName_Static() throw( RuntimeExce
 {
     return OUString("com.sun.star.report.comp.StatusbarController");
 }
-//------------------------------------------------------------------------------
+
 Sequence< OUString> OStatusbarController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< OUString> aSupported(1);
@@ -61,7 +61,7 @@ Sequence< OUString> OStatusbarController::getSupportedServiceNames_Static(void) 
 {
     return cppu::supportsService(this, ServiceName);
 }
-//-------------------------------------------------------------------------
+
 Sequence< OUString> SAL_CALL OStatusbarController::getSupportedServiceNames() throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();

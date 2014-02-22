@@ -74,7 +74,7 @@ jclass java_util_Properties::getMyClass() const
     return theClass;
 }
 
-//--------------------------------------------------------------------------
+
 java_util_Properties::java_util_Properties( ): java_lang_Object( NULL, (jobject)NULL )
 {
     SDBThreadAttach t;

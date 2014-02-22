@@ -104,7 +104,7 @@ SvXMLImportContext* OXMLMasterFields::CreateChildContext(
     return pContext;
 }
 
-//----------------------------------------------------------------------------
+
 } // namespace rptxml
 // -----------------------------------------------------------------------------
 

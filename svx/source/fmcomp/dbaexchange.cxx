@@ -46,7 +46,7 @@ namespace svx
     //====================================================================
     //= OColumnTransferable
     //====================================================================
-    //--------------------------------------------------------------------
+    
     OColumnTransferable::OColumnTransferable(const OUString& _rDatasource
                                             ,const OUString& _rConnectionResource
                                             ,const sal_Int32        _nCommandType
@@ -58,7 +58,7 @@ namespace svx
         implConstruct(_rDatasource,_rConnectionResource,_nCommandType, _rCommand, _rFieldName);
     }
 
-    //--------------------------------------------------------------------
+    
     OColumnTransferable::OColumnTransferable(const ODataAccessDescriptor& _rDescriptor, sal_Int32 _nFormats )
         :m_nFormatFlags(_nFormats)
     {
@@ -86,7 +86,7 @@ namespace svx
         }
     }
 
-    //--------------------------------------------------------------------
+    
     OColumnTransferable::OColumnTransferable(const Reference< XPropertySet >& _rxForm,
             const OUString& _rFieldName, const Reference< XPropertySet >& _rxColumn,
             const Reference< XConnection >& _rxConnection, sal_Int32 _nFormats)
@@ -152,7 +152,7 @@ namespace svx
         }
     }
 
-    //--------------------------------------------------------------------
+    
     sal_uInt32 OColumnTransferable::getDescriptorFormatId()
     {
         static sal_uInt32 s_nFormat = (sal_uInt32)-1;
@@ -164,7 +164,7 @@ namespace svx
         return s_nFormat;
     }
 
-    //--------------------------------------------------------------------
+    
     void OColumnTransferable::implConstruct( const OUString& _rDatasource
                                             ,const OUString& _rConnectionResource
                                             ,const sal_Int32 _nCommandType
@@ -210,7 +210,7 @@ namespace svx
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void OColumnTransferable::AddSupportedFormats()
     {
         if (CTF_CONTROL_EXCHANGE & m_nFormatFlags)
@@ -223,7 +223,7 @@ namespace svx
             AddFormat(getDescriptorFormatId());
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool OColumnTransferable::GetData( const DataFlavor& _rFlavor )
     {
         const sal_uInt32 nFormatId = SotExchange::GetFormat(_rFlavor);
@@ -239,7 +239,7 @@ namespace svx
         return sal_False;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool OColumnTransferable::canExtractColumnDescriptor(const DataFlavorExVector& _rFlavors, sal_Int32 _nFormats)
     {
         sal_Bool bFieldFormat       = 0 != (_nFormats & CTF_FIELD_DESCRIPTOR);
@@ -261,7 +261,7 @@ namespace svx
         return sal_False;
     }
 
-    //--------------------------------------------------------------------
+    
     ODataAccessDescriptor OColumnTransferable::extractColumnDescriptor(const TransferableDataHelper& _rData)
     {
         if (_rData.HasFormat(getDescriptorFormatId()))
@@ -312,7 +312,7 @@ namespace svx
         return aDescriptor;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool OColumnTransferable::extractColumnDescriptor(const TransferableDataHelper& _rData
                                             ,OUString& _rDatasource
                                             ,OUString& _rDatabaseLocation
@@ -358,7 +358,7 @@ namespace svx
         return sal_True;
     }
 
-    //--------------------------------------------------------------------
+    
     void OColumnTransferable::addDataToContainer( TransferDataContainer* _pContainer )
     {
         OSL_ENSURE( _pContainer, "OColumnTransferable::addDataToContainer: invalid container!" );
@@ -392,7 +392,7 @@ namespace svx
     {
         construct(_rDatasource,_rConnectionResource,_nCommandType,_rCommand,NULL,(CommandType::COMMAND == _nCommandType),_rCommand);
     }
-    //--------------------------------------------------------------------
+    
     ODataAccessObjectTransferable::ODataAccessObjectTransferable(
                     const OUString&  _rDatasource
                     ,const OUString& _rConnectionResource
@@ -623,11 +623,11 @@ namespace svx
         m_sCompatibleObjectDescription += sSeparator;
     }
 
-    //--------------------------------------------------------------------
+    
     OMultiColumnTransferable::OMultiColumnTransferable(const Sequence< PropertyValue >& _aDescriptors) : m_aDescriptors(_aDescriptors)
     {
     }
-    //--------------------------------------------------------------------
+    
     sal_uInt32 OMultiColumnTransferable::getDescriptorFormatId()
     {
         static sal_uInt32 s_nFormat = (sal_uInt32)-1;
@@ -638,12 +638,12 @@ namespace svx
         }
         return s_nFormat;
     }
-    //--------------------------------------------------------------------
+    
     void OMultiColumnTransferable::AddSupportedFormats()
     {
         AddFormat(getDescriptorFormatId());
     }
-    //--------------------------------------------------------------------
+    
     sal_Bool OMultiColumnTransferable::GetData( const DataFlavor& _rFlavor )
     {
         const sal_uInt32 nFormatId = SotExchange::GetFormat(_rFlavor);
@@ -655,7 +655,7 @@ namespace svx
         return sal_False;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool OMultiColumnTransferable::canExtractDescriptor(const DataFlavorExVector& _rFlavors)
     {
         DataFlavorExVector::const_iterator aCheck = _rFlavors.begin();
@@ -668,7 +668,7 @@ namespace svx
         return aCheck == _rFlavors.end();
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< PropertyValue > OMultiColumnTransferable::extractDescriptor(const TransferableDataHelper& _rData)
     {
         Sequence< PropertyValue > aList;

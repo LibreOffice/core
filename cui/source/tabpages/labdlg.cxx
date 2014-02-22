@@ -336,14 +336,14 @@ SfxTabPage* SvxCaptionTabPage::Create( Window* pWindow,
     return( new SvxCaptionTabPage( pWindow, rOutAttrs ) );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16* SvxCaptionTabPage::GetRanges()
 {
     return( pCaptionRanges );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
 {
@@ -401,7 +401,7 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_INLINE_START( SvxCaptionTabPage, AnsatzSelectHdl_Impl, ListBox *, pListBox )
 {
@@ -413,7 +413,7 @@ IMPL_LINK_INLINE_START( SvxCaptionTabPage, AnsatzSelectHdl_Impl, ListBox *, pLis
 }
 IMPL_LINK_INLINE_END( SvxCaptionTabPage, AnsatzSelectHdl_Impl, ListBox *, pListBox )
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_INLINE_START( SvxCaptionTabPage, AnsatzRelSelectHdl_Impl, ListBox *, pListBox )
 {
@@ -425,7 +425,7 @@ IMPL_LINK_INLINE_START( SvxCaptionTabPage, AnsatzRelSelectHdl_Impl, ListBox *, p
 }
 IMPL_LINK_INLINE_END( SvxCaptionTabPage, AnsatzRelSelectHdl_Impl, ListBox *, pListBox )
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( SvxCaptionTabPage, LineOptHdl_Impl, Button *, pButton )
 {
@@ -445,7 +445,7 @@ IMPL_LINK( SvxCaptionTabPage, LineOptHdl_Impl, Button *, pButton )
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(SvxCaptionTabPage, SelectCaptTypeHdl_Impl)
 {
@@ -454,7 +454,7 @@ IMPL_LINK_NOARG_INLINE_START(SvxCaptionTabPage, SelectCaptTypeHdl_Impl)
 }
 IMPL_LINK_NOARG_INLINE_END(SvxCaptionTabPage, SelectCaptTypeHdl_Impl)
 
-//------------------------------------------------------------------------
+
 
 void SvxCaptionTabPage::SetupType_Impl( sal_uInt16 nType )
 {

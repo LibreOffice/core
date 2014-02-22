@@ -32,7 +32,7 @@ using namespace connectivity::file;
 
 typedef connectivity::file::OConnection  OConnection_B;
 
-//------------------------------------------------------------------------------
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -49,7 +49,7 @@ OFlatConnection::OFlatConnection(ODriver*   _pDriver) : OConnection(_pDriver)
     ,m_cThousandDelimiter('.')
 {
 }
-//-----------------------------------------------------------------------------
+
 OFlatConnection::~OFlatConnection()
 {
 }
@@ -58,7 +58,7 @@ OFlatConnection::~OFlatConnection()
 // --------------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(OFlatConnection, "com.sun.star.sdbc.drivers.flat.Connection", "com.sun.star.sdbc.Connection")
 
-//-----------------------------------------------------------------------------
+
 void OFlatConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     osl_atomic_increment( &m_refCount );
@@ -119,7 +119,7 @@ Reference< XDatabaseMetaData > SAL_CALL OFlatConnection::getMetaData(  ) throw(S
 
     return xMetaData;
 }
-//------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< XTablesSupplier > OFlatConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );

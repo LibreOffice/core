@@ -155,7 +155,7 @@ static void add_IE_Plugins( PluginLocationMap & rPlugins )
     }
 }
 
-//--------------------------------------------------------------------------------------------------
+
 static void add_NS_keys( HKEY hKey, PluginLocationMap & rPlugins )
 {
     TCHAR value[MAX_PATH];
@@ -194,7 +194,7 @@ static void add_NS_keys( HKEY hKey, PluginLocationMap & rPlugins )
         addPluginsFromPath( value, rPlugins );
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 static void add_NS_lookupRecursive( HKEY hKey, PluginLocationMap & rPlugins )
 {
     add_NS_keys( hKey, rPlugins );

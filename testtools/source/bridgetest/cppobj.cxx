@@ -61,7 +61,7 @@ using namespace test::testtools::bridgetest;
 namespace bridge_object
 {
 
-//--------------------------------------------------------------------------------------------------
+
 inline static Sequence< OUString > getSupportedServiceNames()
 {
     OUString aName( SERVICENAME );

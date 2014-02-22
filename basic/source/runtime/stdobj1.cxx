@@ -40,7 +40,7 @@
 #define METH_SETDATA            24
 #define METH_SETTEXT            25
 
-//------------------------------------------------------------------------------
+
 SbStdFactory::SbStdFactory()
 {
 }
@@ -55,7 +55,7 @@ SbxObject* SbStdFactory::CreateObject( const OUString& rClassName )
         return NULL;
 }
 
-//------------------------------------------------------------------------------
+
 
 
 
@@ -171,7 +171,7 @@ void SbStdPicture::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
     }
 }
 
-//-----------------------------------------------------------------------------
+
 
 void SbStdFont::PropBold( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
 {
@@ -300,7 +300,7 @@ void SbStdFont::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 }
 
 
-//-----------------------------------------------------------------------------
+
 
 
 void SbStdClipboard::MethClear( SbxVariable*, SbxArray* pPar_, sal_Bool )

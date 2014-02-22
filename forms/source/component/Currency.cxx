@@ -43,25 +43,25 @@ using namespace ::com::sun::star::util;
 //==================================================================
 // OCurrencyControl
 //==================================================================
-//------------------------------------------------------------------
+
 OCurrencyControl::OCurrencyControl(const Reference<XComponentContext>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_CURRENCYFIELD)
 {
 }
 
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OCurrencyControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OCurrencyControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> OCurrencyControl::_getTypes()
 {
     return OBoundControl::_getTypes();
 }
 
-//------------------------------------------------------------------------------
+
 StringSequence SAL_CALL OCurrencyControl::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
@@ -75,19 +75,19 @@ StringSequence SAL_CALL OCurrencyControl::getSupportedServiceNames() throw()
 //==================================================================
 // OCurrencyModel
 //==================================================================
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OCurrencyModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OCurrencyModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> OCurrencyModel::_getTypes()
 {
     return OEditBaseModel::_getTypes();
 }
 
-//------------------------------------------------------------------
+
 void OCurrencyModel::implConstruct()
 {
     if (m_xAggregateSet.is())
@@ -132,8 +132,8 @@ void OCurrencyModel::implConstruct()
     }
 }
 
-//------------------------------------------------------------------
-//------------------------------------------------------------------
+
+
 OCurrencyModel::OCurrencyModel(const Reference<XComponentContext>& _rxFactory)
     :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_CURRENCYFIELD, FRM_SUN_CONTROL_CURRENCYFIELD, sal_False, sal_True )
                                     // use the old control name for compytibility reasons
@@ -145,24 +145,24 @@ OCurrencyModel::OCurrencyModel(const Reference<XComponentContext>& _rxFactory)
     implConstruct();
 }
 
-//------------------------------------------------------------------
+
 OCurrencyModel::OCurrencyModel( const OCurrencyModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OEditBaseModel( _pOriginal, _rxFactory )
 {
     implConstruct();
 }
 
-//------------------------------------------------------------------
+
 OCurrencyModel::~OCurrencyModel()
 {
 }
 
 // XCloneable
-//------------------------------------------------------------------------------
+
 IMPLEMENT_DEFAULT_CLONING( OCurrencyModel )
 
 // XServiceInfo
-//------------------------------------------------------------------------------
+
 StringSequence SAL_CALL OCurrencyModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
@@ -180,7 +180,7 @@ StringSequence SAL_CALL OCurrencyModel::getSupportedServiceNames() throw()
     return aSupported;
 }
 
-//------------------------------------------------------------------------------
+
 void OCurrencyModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 2, OEditBaseModel )
@@ -192,13 +192,13 @@ void OCurrencyModel::describeFixedProperties( Sequence< Property >& _rProps ) co
     END_DESCRIBE_PROPERTIES();
 }
 
-//------------------------------------------------------------------------------
+
 OUString SAL_CALL OCurrencyModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return OUString(FRM_COMPONENT_CURRENCYFIELD); // old (non-sun) name for compatibility !
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OCurrencyModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
@@ -222,7 +222,7 @@ sal_Bool OCurrencyModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     return sal_True;
 }
 
-//------------------------------------------------------------------------------
+
 Any OCurrencyModel::translateDbColumnToControlValue()
 {
     m_aSaveValue <<= m_xColumn->getDouble();
@@ -232,7 +232,7 @@ Any OCurrencyModel::translateDbColumnToControlValue()
 }
 
 // XReset
-//------------------------------------------------------------------------------
+
 Any OCurrencyModel::getDefaultForReset() const
 {
     Any aValue;
@@ -242,7 +242,7 @@ Any OCurrencyModel::getDefaultForReset() const
     return aValue;
 }
 
-//------------------------------------------------------------------------------
+
 void OCurrencyModel::resetNoBroadcast()
 {
     OEditBaseModel::resetNoBroadcast();

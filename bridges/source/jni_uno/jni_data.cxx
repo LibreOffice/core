@@ -32,7 +32,7 @@ using namespace ::rtl;
 namespace jni_uno
 {
 
-//------------------------------------------------------------------------------
+
 inline rtl_mem * seq_allocate( sal_Int32 nElements, sal_Int32 nSize )
 {
     o3tl::heap_ptr< rtl_mem > seq(

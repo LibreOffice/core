@@ -88,7 +88,7 @@ AccessControl::AccessControl( AccessControl const & ac )
 #pragma pack(pop)
 #endif
 
-//--------------------------------------------------------------------------------------------------
+
 inline void __checkPermission(
     Reference< security::XAccessController > const & xController,
     Type const & type, rtl_uString * str1, rtl_uString * str2 )

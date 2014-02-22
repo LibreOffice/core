@@ -33,7 +33,7 @@ using namespace connectivity::file;
 
 typedef connectivity::file::OConnection  OConnection_BASE;
 
-//------------------------------------------------------------------------------
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -47,7 +47,7 @@ ODbaseConnection::ODbaseConnection(ODriver* _pDriver) : OConnection(_pDriver)
     DBG_CTOR(ODbaseConnection,NULL);
     m_aFilenameExtension = "dbf";
 }
-//-----------------------------------------------------------------------------
+
 ODbaseConnection::~ODbaseConnection()
 {
     DBG_DTOR(ODbaseConnection,NULL);
@@ -73,7 +73,7 @@ Reference< XDatabaseMetaData > SAL_CALL ODbaseConnection::getMetaData(  ) throw(
 
     return xMetaData;
 }
-//------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< XTablesSupplier > ODbaseConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );

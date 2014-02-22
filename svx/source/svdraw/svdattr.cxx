@@ -819,9 +819,9 @@ SfxItemPresentation SdrYesNoItem::GetPresentation(SfxItemPresentation ePres,
     return ePres;
 }
 
-//------------------------------------------------------------
+
 // class SdrPercentItem
-//------------------------------------------------------------
+
 
 TYPEINIT1_AUTOFACTORY(SdrPercentItem,SfxUInt16Item);
 
@@ -853,9 +853,9 @@ SfxItemPresentation SdrPercentItem::GetPresentation(
     return ePres;
 }
 
-//------------------------------------------------------------
+
 // class SdrAngleItem
-//------------------------------------------------------------
+
 
 TYPEINIT1_AUTOFACTORY(SdrAngleItem,SfxInt32Item);
 
@@ -942,9 +942,9 @@ SfxItemPresentation SdrAngleItem::GetPresentation(
     return ePres;
 }
 
-//------------------------------------------------------------
+
 // class SdrMetricItem
-//------------------------------------------------------------
+
 
 TYPEINIT1_AUTOFACTORY(SdrMetricItem,SfxInt32Item);
 
@@ -2038,9 +2038,9 @@ bool SdrCircKindItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
     return true;
 }
 
-//------------------------------------------------------------
+
 // class SdrSignedPercentItem
-//------------------------------------------------------------
+
 
 TYPEINIT1_AUTOFACTORY( SdrSignedPercentItem, SfxInt16Item );
 

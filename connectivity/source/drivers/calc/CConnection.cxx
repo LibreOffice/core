@@ -40,7 +40,7 @@ using namespace connectivity::file;
 
 typedef connectivity::file::OConnection OConnection_BASE;
 
-//------------------------------------------------------------------------------
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -213,7 +213,7 @@ Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  ) throw(S
     return xMetaData;
 }
 
-//------------------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Reference< XTablesSupplier > OCalcConnection::createCatalog()
 {

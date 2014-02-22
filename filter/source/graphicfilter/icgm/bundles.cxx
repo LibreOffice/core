@@ -238,7 +238,7 @@ void CGMFList::InsertName( sal_uInt8* pSource, sal_uInt32 nSize )
     delete[] pBuf;
 }
 
-//--------------------------------------------------------------------------
+
 
 void CGMFList::InsertCharSet( CharSetType eCharSetType, sal_uInt8* pSource, sal_uInt32 nSize )
 {

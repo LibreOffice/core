@@ -39,7 +39,7 @@ namespace
 extern "C"
 {
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL Mapping_acquire( uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
@@ -47,7 +47,7 @@ void SAL_CALL Mapping_acquire( uno_Mapping * mapping )
     that->m_bridge->acquire();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL Mapping_release( uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
@@ -55,7 +55,7 @@ void SAL_CALL Mapping_release( uno_Mapping * mapping )
     that->m_bridge->release();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL Mapping_map_to_uno(
     uno_Mapping * mapping, void ** ppOut,
     void * pIn, typelib_InterfaceTypeDescription * td )
@@ -113,7 +113,7 @@ void SAL_CALL Mapping_map_to_uno(
     }
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL Mapping_map_to_java(
     uno_Mapping * mapping, void ** ppOut,
     void * pIn, typelib_InterfaceTypeDescription * td )
@@ -415,7 +415,7 @@ extern "C"
 namespace
 {
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL java_env_disposing( uno_Environment * java_env )
     SAL_THROW_EXTERN_C()
 {
@@ -431,7 +431,7 @@ void SAL_CALL java_env_disposing( uno_Environment * java_env )
 #define uno_initEnvironment java_uno_initEnvironment
 #endif
 
-//------------------------------------------------------------------------------
+
 SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * java_env )
     SAL_THROW_EXTERN_C()
 {
@@ -449,7 +449,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * java_e
 #define uno_ext_getMapping java_uno_ext_getMapping
 #endif
 
-//------------------------------------------------------------------------------
+
 SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo )
     SAL_THROW_EXTERN_C()

@@ -50,24 +50,24 @@ using namespace ::com::sun::star::uno;
 namespace cfg_test
 {
 
-//--------------------------------------------------------------------------------------------------
+
 static Sequence< OUString > impl0_getSupportedServiceNames()
 {
     OUString str("com.sun.star.bootstrap.TestComponent0");
     return Sequence< OUString >( &str, 1 );
 }
-//--------------------------------------------------------------------------------------------------
+
 static OUString impl0_getImplementationName()
 {
     return OUString("com.sun.star.comp.bootstrap.TestComponent0");
 }
-//--------------------------------------------------------------------------------------------------
+
 static Sequence< OUString > impl1_getSupportedServiceNames()
 {
     OUString str("com.sun.star.bootstrap.TestComponent1");
     return Sequence< OUString >( &str, 1 );
 }
-//--------------------------------------------------------------------------------------------------
+
 static OUString impl1_getImplementationName()
 {
     return OUString("com.sun.star.comp.bootstrap.TestComponent1");

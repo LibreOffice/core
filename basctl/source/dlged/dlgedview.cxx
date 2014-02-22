@@ -33,8 +33,6 @@ namespace basctl
 
 TYPEINIT1( DlgEdView, SdrView );
 
-//----------------------------------------------------------------------------
-
 DlgEdView::DlgEdView (SdrModel& rModel, OutputDevice& rOut, DlgEditor& rEditor) :
     SdrView(&rModel, &rOut),
     rDlgEditor(rEditor)
@@ -44,13 +42,9 @@ DlgEdView::DlgEdView (SdrModel& rModel, OutputDevice& rOut, DlgEditor& rEditor) 
     SetBufferedOverlayAllowed(true);
 }
 
-//----------------------------------------------------------------------------
-
 DlgEdView::~DlgEdView()
 {
 }
-
-//----------------------------------------------------------------------------
 
 void DlgEdView::MarkListHasChanged()
 {
@@ -60,8 +54,6 @@ void DlgEdView::MarkListHasChanged()
     rDlgEditor.Broadcast( aHint );
     rDlgEditor.UpdatePropertyBrowserDelayed();
 }
-
-//----------------------------------------------------------------------------
 
 void DlgEdView::MakeVisible( const Rectangle& rRect, Window& rWin )
 {
@@ -130,8 +122,6 @@ void DlgEdView::MakeVisible( const Rectangle& rRect, Window& rWin )
         rDlgEditor.Broadcast( aHint );
     }
 }
-
-//----------------------------------------------------------------------------
 
 SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt16 nTol)
 {

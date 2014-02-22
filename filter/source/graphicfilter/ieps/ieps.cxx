@@ -67,7 +67,7 @@ static sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLo
     return NULL;
 }
 
-//--------------------------------------------------------------------------
+
 // SecurityCount is the buffersize of the buffer in which we will parse for a number
 static long ImplGetNumber( sal_uInt8 **pBuf, int& nSecurityCount )
 {
@@ -106,7 +106,7 @@ static long ImplGetNumber( sal_uInt8 **pBuf, int& nSecurityCount )
     return nRetValue;
 }
 
-//--------------------------------------------------------------------------
+
 
 static int ImplGetLen( sal_uInt8* pBuf, int nMax )
 {

@@ -206,7 +206,7 @@ void OStartMarker::ImplInitSettings()
     SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
     setColor();
 }
-//------------------------------------------------------------------------------
+
 void OStartMarker::Resize()
 {
     const Size aOutputSize( GetOutputSizePixel() );
@@ -250,13 +250,13 @@ void OStartMarker::Notify(SfxBroadcaster & rBc, SfxHint const & rHint)
         Invalidate(INVALIDATE_CHILDREN);
     }
 }
-//----------------------------------------------------------------------------
+
 void OStartMarker::showRuler(sal_Bool _bShow)
 {
     m_bShowRuler = _bShow;
     m_aVRuler.Show(!m_bCollapsed && m_bShowRuler);
 }
-//------------------------------------------------------------------------------
+
 void OStartMarker::RequestHelp( const HelpEvent& rHEvt )
 {
     if( !m_aText.GetText().isEmpty())

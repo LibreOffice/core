@@ -109,7 +109,7 @@ SFX_IMPL_INTERFACE(SfxApplication,SfxShell,SfxResId(RID_DESKTOP))
     SFX_CHILDWINDOW_REGISTRATION(SID_DOCKWIN_9);
 }
 
-//--------------------------------------------------------------------
+
 SfxProgress* SfxApplication::GetProgress() const
 
 /*  [Description]

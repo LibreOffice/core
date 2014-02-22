@@ -24,7 +24,7 @@
 #include <o3tl/compat_functional.hxx>
 
 using namespace connectivity;
-//------------------------------------------------------------------
+
 /// binary_function Functor object for class OSortIndex::TIntValuePairVector::value_type returntype is bool
 struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::value_type,OSortIndex::TIntValuePairVector::value_type,bool>
 {
@@ -98,11 +98,11 @@ OSortIndex::OSortIndex( const ::std::vector<OKeyType>& _aKeyType,
     ,m_bFrozen(sal_False)
 {
 }
-//------------------------------------------------------------------
+
 OSortIndex::~OSortIndex()
 {
 }
-//------------------------------------------------------------------
+
 void OSortIndex::AddKeyValue(OKeyValue * pKeyValue)
 {
     OSL_ENSURE(pKeyValue,"Can not be null here!");
@@ -116,7 +116,7 @@ void OSortIndex::AddKeyValue(OKeyValue * pKeyValue)
 }
 
 
-//------------------------------------------------------------------
+
 void OSortIndex::Freeze()
 {
     OSL_ENSURE(! m_bFrozen,"OSortIndex::Freeze: already frozen!");

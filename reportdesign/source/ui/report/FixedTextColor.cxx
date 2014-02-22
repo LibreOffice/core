@@ -55,7 +55,7 @@ namespace rptui
     {
     }
 
-    //--------------------------------------------------------------------
+    
     FixedTextColor::~FixedTextColor()
     {
     }

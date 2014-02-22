@@ -107,7 +107,7 @@ namespace rptui
         FreeResource();
     }
 
-    //------------------------------------------------------------------------
+    
     ConditionalFormattingDialog::~ConditionalFormattingDialog()
     {
         m_aConditions.clear();

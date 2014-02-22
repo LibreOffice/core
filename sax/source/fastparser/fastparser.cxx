@@ -1086,11 +1086,11 @@ void FastSaxParserImpl::parse()
         produce( DONE );
 }
 
-//------------------------------------------
+
 //
 // The C-Callbacks
 //
-//-----------------------------------------
+
 
 void FastSaxParserImpl::callbackStartElement( const XML_Char* pwName, const XML_Char** awAttributes )
 {

@@ -308,7 +308,7 @@ sal_Bool SdTPAction::FillItemSet( SfxItemSet& rAttrs )
     return( bModified );
 }
 
-//------------------------------------------------------------------------
+
 
 void SdTPAction::Reset( const SfxItemSet& rAttrs )
 {
@@ -381,7 +381,7 @@ SfxTabPage* SdTPAction::Create( Window* pWindow,
     return( new SdTPAction( pWindow, rAttrs ) );
 }
 
-//------------------------------------------------------------------------
+
 
 void SdTPAction::UpdateTree()
 {
@@ -393,7 +393,7 @@ void SdTPAction::UpdateTree()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void SdTPAction::OpenFileDialog()
 {
@@ -474,7 +474,7 @@ void SdTPAction::OpenFileDialog()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SdTPAction, ClickSearchHdl)
 {
@@ -483,7 +483,7 @@ IMPL_LINK_NOARG(SdTPAction, ClickSearchHdl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SdTPAction, ClickActionHdl)
 {
@@ -660,7 +660,7 @@ IMPL_LINK_NOARG(SdTPAction, ClickActionHdl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SdTPAction, SelectTreeHdl)
 {
@@ -668,7 +668,7 @@ IMPL_LINK_NOARG(SdTPAction, SelectTreeHdl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SdTPAction, CheckFileHdl)
 {
@@ -718,7 +718,7 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 presentation::ClickAction SdTPAction::GetActualClickAction()
 {
@@ -730,7 +730,7 @@ presentation::ClickAction SdTPAction::GetActualClickAction()
     return( eCA );
 }
 
-//------------------------------------------------------------------------
+
 
 void SdTPAction::SetActualClickAction( presentation::ClickAction eCA )
 {
@@ -741,7 +741,7 @@ void SdTPAction::SetActualClickAction( presentation::ClickAction eCA )
         m_pLbAction->SelectEntryPos( pIter-maCurrentActions.begin() );
 }
 
-//------------------------------------------------------------------------
+
 
 void SdTPAction::SetEditText( OUString const & rStr )
 {
@@ -804,7 +804,7 @@ void SdTPAction::SetEditText( OUString const & rStr )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 OUString SdTPAction::GetEditText( sal_Bool bFullDocDestination )
 {
@@ -871,7 +871,7 @@ OUString SdTPAction::GetEditText( sal_Bool bFullDocDestination )
     return( aStr );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SdTPAction::GetClickActionSdResId( presentation::ClickAction eCA )
 {

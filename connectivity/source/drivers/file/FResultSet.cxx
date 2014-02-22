@@ -71,7 +71,7 @@ namespace
         ::dbtools::throwGenericSQLException(sMessage ,_xContext);
     }
 }
-//------------------------------------------------------------------------------
+
 IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.drivers.file.ResultSet","com.sun.star.sdbc.ResultSet");
 DBG_NAME( file_OResultSet )
 // -------------------------------------------------------------------------
@@ -882,7 +882,7 @@ IPropertyArrayHelper & OResultSet::getInfoHelper()
     return *const_cast<OResultSet*>(this)->getArrayHelper();
 }
 
-//------------------------------------------------------------------
+
 sal_Bool OResultSet::ExecuteRow(IResultSetHelper::Movement eFirstCursorPosition,
                                sal_Int32 nFirstOffset,
                                sal_Bool bEvaluate,
@@ -1020,7 +1020,7 @@ again:
     return sal_True;
 }
 
-//-------------------------------------------------------------------
+
 sal_Bool OResultSet::Move(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Bool bRetrieveData)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::Move" );
@@ -1598,7 +1598,7 @@ sal_Bool OResultSet::OpenImpl()
 
     return sal_True;
 }
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OResultSet::getUnoTunnelImplementationId()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getUnoTunnelImplementationId" );
@@ -1616,7 +1616,7 @@ Sequence< sal_Int8 > OResultSet::getUnoTunnelImplementationId()
 }
 
 // com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
 sal_Int64 OResultSet::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getSomething" );

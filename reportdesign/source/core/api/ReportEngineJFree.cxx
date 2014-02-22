@@ -74,7 +74,7 @@ OReportEngineJFree::OReportEngineJFree( const uno::Reference< uno::XComponentCon
 OReportEngineJFree::~OReportEngineJFree()
 {
 }
-//--------------------------------------------------------------------------
+
 IMPLEMENT_FORWARD_XINTERFACE2(OReportEngineJFree,ReportEngineBase,ReportEnginePropertySet)
 // -----------------------------------------------------------------------------
 void SAL_CALL OReportEngineJFree::dispose() throw(uno::RuntimeException)
@@ -89,12 +89,12 @@ OUString OReportEngineJFree::getImplementationName_Static(  ) throw(uno::Runtime
     return OUString("com.sun.star.comp.report.OReportEngineJFree");
 }
 
-//--------------------------------------------------------------------------
+
 OUString SAL_CALL OReportEngineJFree::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
-//--------------------------------------------------------------------------
+
 uno::Sequence< OUString > OReportEngineJFree::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aServices(1);
@@ -102,18 +102,18 @@ uno::Sequence< OUString > OReportEngineJFree::getSupportedServiceNames_Static(  
 
     return aServices;
 }
-//------------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > OReportEngineJFree::create(uno::Reference< uno::XComponentContext > const & xContext)
 {
     return *(new OReportEngineJFree(xContext));
 }
 
-//--------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL OReportEngineJFree::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OReportEngineJFree::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);

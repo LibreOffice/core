@@ -36,7 +36,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 
 IMPLEMENT_SERVICE_INFO(MacabConnection, "com.sun.star.sdbc.drivers.MacabConnection", "com.sun.star.sdbc.Connection")
-//-----------------------------------------------------------------------------
+
 MacabConnection::MacabConnection(MacabDriver*   _pDriver)
          : OSubComponent<MacabConnection, MacabConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
          m_pAddressBook(NULL),
@@ -44,7 +44,7 @@ MacabConnection::MacabConnection(MacabDriver*   _pDriver)
 {
     m_pDriver->acquire();
 }
-//-----------------------------------------------------------------------------
+
 MacabConnection::~MacabConnection()
 {
     if (!isClosed())
@@ -53,7 +53,7 @@ MacabConnection::~MacabConnection()
     m_pDriver->release();
     m_pDriver = NULL;
 }
-//-----------------------------------------------------------------------------
+
 void SAL_CALL MacabConnection::release() throw()
 {
     relase_ChildImpl();
@@ -259,7 +259,7 @@ void SAL_CALL MacabConnection::clearWarnings(  ) throw(SQLException, RuntimeExce
 {
     // you should clear your collected warnings here
 }
-//------------------------------------------------------------------------------
+
 void MacabConnection::disposing()
 {
     // we noticed that we should be destroied in near future so we have to dispose our statements

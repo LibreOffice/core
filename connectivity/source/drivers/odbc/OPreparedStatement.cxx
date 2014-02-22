@@ -681,10 +681,10 @@ Sequence< sal_Int32 > SAL_CALL OPreparedStatement::executeBatch(  ) throw(SQLExc
 // methods
 //====================================================================
 
-//--------------------------------------------------------------------
+
 // initBoundParam
 // Initialize the bound parameter objects
-//--------------------------------------------------------------------
+
 
 void OPreparedStatement::initBoundParam () throw(SQLException)
 {
@@ -706,11 +706,11 @@ void OPreparedStatement::initBoundParam () throw(SQLException)
 }
 // -------------------------------------------------------------------------
 
-//--------------------------------------------------------------------
+
 // allocBindBuf
 // Allocate storage for the permanent data buffer for the bound
 // parameter.
-//--------------------------------------------------------------------
+
 
 void* OPreparedStatement::allocBindBuf( sal_Int32 index,sal_Int32 bufLen)
 {
@@ -727,10 +727,10 @@ void* OPreparedStatement::allocBindBuf( sal_Int32 index,sal_Int32 bufLen)
 }
 // -------------------------------------------------------------------------
 
-//--------------------------------------------------------------------
+
 // getLengthBuf
 // Gets the length buffer for the given parameter index
-//--------------------------------------------------------------------
+
 
 SQLLEN* OPreparedStatement::getLengthBuf (sal_Int32 index)
 {
@@ -748,11 +748,11 @@ SQLLEN* OPreparedStatement::getLengthBuf (sal_Int32 index)
 }
 // -------------------------------------------------------------------------
 
-//--------------------------------------------------------------------
+
 // putParamData
 // Puts parameter data from a previously bound input stream.  The
 // input stream was bound using SQL_LEN_DATA_AT_EXEC.
-//--------------------------------------------------------------------
+
 
 void OPreparedStatement::putParamData (sal_Int32 index) throw(SQLException)
 {
@@ -816,10 +816,10 @@ void OPreparedStatement::putParamData (sal_Int32 index) throw(SQLException)
 }
 // -------------------------------------------------------------------------
 
-//--------------------------------------------------------------------
+
 // setStream
 // Sets an input stream as a parameter, using the given SQL type
-//--------------------------------------------------------------------
+
 
 void OPreparedStatement::setStream(
                                     sal_Int32 ParameterIndex,

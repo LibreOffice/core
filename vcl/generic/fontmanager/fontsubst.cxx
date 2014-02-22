@@ -152,7 +152,7 @@ namespace
     };
 }
 
-//--------------------------------------------------------------------------
+
 
 bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelData ) const
 {

@@ -63,7 +63,7 @@ const sal_uInt16 ALIGN              = 0x0002;
 const sal_uInt16 OLD_HIDDEN         = 0x0004;
 const sal_uInt16 COMPATIBLE_HIDDEN  = 0x0008;
 
-//------------------------------------------------------------------------------
+
 const StringSequence& getColumnTypes()
 {
     static StringSequence aColumnTypes(10);
@@ -84,7 +84,7 @@ const StringSequence& getColumnTypes()
     return aColumnTypes;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int32 getColumnTypeByModelName(const OUString& aModelName)
 {
     const OUString aModelPrefix ("com.sun.star.form.component.");
@@ -124,7 +124,7 @@ const Sequence<sal_Int8>& OGridColumn::getUnoTunnelImplementationId()
     return theOGridColumnImplementationId::get().getSeq();
 }
 
-//------------------------------------------------------------------
+
 sal_Int64 SAL_CALL OGridColumn::getSomething( const Sequence<sal_Int8>& _rIdentifier) throw(RuntimeException)
 {
     sal_Int64 nReturn(0);
@@ -144,13 +144,13 @@ sal_Int64 SAL_CALL OGridColumn::getSomething( const Sequence<sal_Int8>& _rIdenti
     return nReturn;
 }
 
-//------------------------------------------------------------------
+
 Sequence<sal_Int8> SAL_CALL OGridColumn::getImplementationId() throw(RuntimeException)
 {
     return OImplementationIds::getImplementationId(getTypes());
 }
 
-//------------------------------------------------------------------
+
 Sequence<Type> SAL_CALL OGridColumn::getTypes() throw(RuntimeException)
 {
     TypeBag aTypes( OGridColumn_BASE::getTypes() );
@@ -174,7 +174,7 @@ Sequence<Type> SAL_CALL OGridColumn::getTypes() throw(RuntimeException)
     return aTypes.getTypes();
 }
 
-//------------------------------------------------------------------
+
 Any SAL_CALL OGridColumn::queryAggregation( const Type& _rType ) throw (RuntimeException)
 {
     Any aReturn;
@@ -198,7 +198,7 @@ Any SAL_CALL OGridColumn::queryAggregation( const Type& _rType ) throw (RuntimeE
     return aReturn;
 }
 
-//------------------------------------------------------------------------------
+
 OGridColumn::OGridColumn( const Reference<XComponentContext>& _rContext, const OUString& _sModelName )
     :OGridColumn_BASE(m_aMutex)
     ,OPropertySetAggregationHelper(OGridColumn_BASE::rBHelper)
@@ -226,7 +226,7 @@ OGridColumn::OGridColumn( const Reference<XComponentContext>& _rContext, const O
     }
 }
 
-//------------------------------------------------------------------------------
+
 OGridColumn::OGridColumn( const OGridColumn* _pOriginal )
     :OGridColumn_BASE( m_aMutex )
     ,OPropertySetAggregationHelper( OGridColumn_BASE::rBHelper )
@@ -253,7 +253,7 @@ OGridColumn::OGridColumn( const OGridColumn* _pOriginal )
     decrement( m_refCount );
 }
 
-//------------------------------------------------------------------------------
+
 OGridColumn::~OGridColumn()
 {
     if (!OGridColumn_BASE::rBHelper.bDisposed)
@@ -272,7 +272,7 @@ OGridColumn::~OGridColumn()
 }
 
 // XEventListener
-//------------------------------------------------------------------------------
+
 void SAL_CALL OGridColumn::disposing(const EventObject& _rSource) throw(RuntimeException)
 {
     OPropertySetAggregationHelper::disposing(_rSource);
@@ -283,7 +283,7 @@ void SAL_CALL OGridColumn::disposing(const EventObject& _rSource) throw(RuntimeE
 }
 
 // OGridColumn_BASE
-//-----------------------------------------------------------------------------
+
 void OGridColumn::disposing()
 {
     OGridColumn_BASE::disposing();
@@ -294,7 +294,7 @@ void OGridColumn::disposing()
         xComp->dispose();
 }
 
-//------------------------------------------------------------------------------
+
 void OGridColumn::clearAggregateProperties( Sequence< Property >& _rProps, sal_Bool bAllowDropDown )
 {
     // some properties are not to be exposed to the outer world
@@ -354,7 +354,7 @@ void OGridColumn::clearAggregateProperties( Sequence< Property >& _rProps, sal_B
     _rProps = aNewProps;
 }
 
-//------------------------------------------------------------------------------
+
 void OGridColumn::setOwnProperties(Sequence<Property>& aDescriptor)
 {
     aDescriptor.realloc(5);
@@ -367,7 +367,7 @@ void OGridColumn::setOwnProperties(Sequence<Property>& aDescriptor)
 }
 
 // Reference<XPropertySet>
-//------------------------------------------------------------------------------
+
 void OGridColumn::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) const
 {
     switch (nHandle)
@@ -392,7 +392,7 @@ void OGridColumn::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) const
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OGridColumn::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue,
                                             sal_Int32 nHandle, const Any& rValue )throw( IllegalArgumentException )
 {
@@ -423,7 +423,7 @@ sal_Bool OGridColumn::convertFastPropertyValue( Any& rConvertedValue, Any& rOldV
     return bModified;
 }
 
-//------------------------------------------------------------------------------
+
 void OGridColumn::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (::com::sun::star::uno::Exception)
 {
     switch (nHandle)
@@ -446,7 +446,7 @@ void OGridColumn::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any
 
 
 // XPropertyState
-//------------------------------------------------------------------------------
+
 Any OGridColumn::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 {
     switch (nHandle)
@@ -462,7 +462,7 @@ Any OGridColumn::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 }
 
 // XCloneable
-//------------------------------------------------------------------------------
+
 Reference< XCloneable > SAL_CALL OGridColumn::createClone(  ) throw (RuntimeException)
 {
     OGridColumn* pNewColumn = createCloneColumn();
@@ -470,7 +470,7 @@ Reference< XCloneable > SAL_CALL OGridColumn::createClone(  ) throw (RuntimeExce
 }
 
 // XPersistObject
-//------------------------------------------------------------------------------
+
 void SAL_CALL OGridColumn::write(const Reference<XObjectOutputStream>& _rxOutStream)
 {
     // 1. Write the UnoControl
@@ -518,7 +518,7 @@ void SAL_CALL OGridColumn::write(const Reference<XObjectOutputStream>& _rxOutStr
         _rxOutStream->writeBoolean(getBOOL(m_aHidden));
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OGridColumn::read(const Reference<XObjectInputStream>& _rxInStream)
 {
     // 1. Read the UnoControl
@@ -567,7 +567,7 @@ void SAL_CALL OGridColumn::read(const Reference<XObjectInputStream>& _rxInStream
     }
 }
 
-//------------------------------------------------------------------------------
+
 IMPL_COLUMN(TextFieldColumn,        FRM_SUN_COMPONENT_TEXTFIELD,        sal_False);
 IMPL_COLUMN(PatternFieldColumn,     FRM_SUN_COMPONENT_PATTERNFIELD,     sal_False);
 IMPL_COLUMN(DateFieldColumn,        FRM_SUN_COMPONENT_DATEFIELD,        sal_True);

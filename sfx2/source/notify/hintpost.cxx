@@ -23,7 +23,7 @@
 #include <sfx2/app.hxx>
 #include "sfxtypes.hxx"
 
-//--------------------------------------------------------------------
+
 
 SfxHintPoster::SfxHintPoster( const GenLink& rLink ):
     aLink(rLink)
@@ -31,13 +31,13 @@ SfxHintPoster::SfxHintPoster( const GenLink& rLink ):
 }
 
 
-//--------------------------------------------------------------------
+
 
 SfxHintPoster::~SfxHintPoster()
 {
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxHintPoster::Post( SfxHint* pHintToPost )
 {
@@ -45,7 +45,7 @@ void SfxHintPoster::Post( SfxHint* pHintToPost )
     AddRef();
 }
 
-//--------------------------------------------------------------------
+
 
 IMPL_LINK_INLINE_START( SfxHintPoster, DoEvent_Impl, SfxHint *, pPostedHint )
 {
@@ -55,14 +55,14 @@ IMPL_LINK_INLINE_START( SfxHintPoster, DoEvent_Impl, SfxHint *, pPostedHint )
 }
 IMPL_LINK_INLINE_END( SfxHintPoster, DoEvent_Impl, SfxHint *, pPostedHint )
 
-//--------------------------------------------------------------------
+
 
 void SfxHintPoster::Event( SfxHint* pPostedHint )
 {
     aLink.Call( pPostedHint );
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxHintPoster::SetEventHdl( const GenLink& rLink )
 {

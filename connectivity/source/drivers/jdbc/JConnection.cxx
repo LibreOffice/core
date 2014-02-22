@@ -249,9 +249,9 @@ bool loadClass(
 
 }
 
-//------------------------------------------------------------------------------
+
 IMPLEMENT_SERVICE_INFO(java_sql_Connection,"com.sun.star.sdbcx.JConnection","com.sun.star.sdbc.Connection");
-//------------------------------------------------------------------------------
+
 //**************************************************************
 //************ Class: java.sql.Connection
 //**************************************************************
@@ -291,12 +291,12 @@ java_sql_Connection::~java_sql_Connection()
         t.releaseRef();
     }
 }
-//-----------------------------------------------------------------------------
+
 void SAL_CALL java_sql_Connection::release() throw()
 {
     relase_ChildImpl();
 }
-//------------------------------------------------------------------------------
+
 void java_sql_Connection::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);

@@ -37,7 +37,7 @@ namespace reportdesign
 // =============================================================================
     using namespace com::sun::star;
     using namespace comphelper;
-//------------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > OFormattedField::create(uno::Reference< uno::XComponentContext > const & xContext)
 {
     return *(new OFormattedField(xContext));
@@ -106,12 +106,12 @@ OUString OFormattedField::getImplementationName_Static(  ) throw(uno::RuntimeExc
     return OUString("com.sun.star.comp.report.OFormattedField");
 }
 
-//--------------------------------------------------------------------------
+
 OUString SAL_CALL OFormattedField::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
-//--------------------------------------------------------------------------
+
 uno::Sequence< OUString > OFormattedField::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aServices(2);
@@ -120,12 +120,12 @@ uno::Sequence< OUString > OFormattedField::getSupportedServiceNames_Static(  ) t
 
     return aServices;
 }
-//--------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL OFormattedField::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OFormattedField::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);

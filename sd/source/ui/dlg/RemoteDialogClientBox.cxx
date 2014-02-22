@@ -34,37 +34,37 @@ using namespace ::com::sun::star;
 
 namespace sd {
 
-//------------------------------------------------------------------------------
+
 //                          struct ClientBoxEntry
-//------------------------------------------------------------------------------
+
 ClientBoxEntry::ClientBoxEntry( ClientInfo* pClientInfo ) :
     m_bActive( false ),
     m_pClientInfo( pClientInfo )
 {
 }
 
-//------------------------------------------------------------------------------
+
 ClientBoxEntry::~ClientBoxEntry()
 {}
 
 
-//------------------------------------------------------------------------------
+
 // ClientRemovedListener
-//------------------------------------------------------------------------------
+
 void ClientRemovedListener::disposing( lang::EventObject const & rEvt )
     throw ( uno::RuntimeException )
 {
     (void) rEvt;
 }
 
-//------------------------------------------------------------------------------
+
 ClientRemovedListener::~ClientRemovedListener()
 {
 }
 
-//------------------------------------------------------------------------------
+
 // ClientBox
-//------------------------------------------------------------------------------
+
 ClientBox::ClientBox( Window* pParent, WinBits nStyle ) :
     Control( pParent, nStyle ),
     m_bHasScrollBar( false ),
@@ -126,7 +126,7 @@ Size ClientBox::GetOptimalSize() const
     return LogicToPixel(Size(200, 140), MAP_APPFONT);
 }
 
-//------------------------------------------------------------------------------
+
 ClientBox::~ClientBox()
 {
     if ( ! m_bInDelete )
@@ -146,7 +146,7 @@ ClientBox::~ClientBox()
     m_xRemoveListener.clear();
 }
 
-//------------------------------------------------------------------------------
+
 // Title + description
 void ClientBox::CalcActiveHeight( const long nPos )
 {
@@ -179,7 +179,7 @@ void ClientBox::CalcActiveHeight( const long nPos )
     m_nActiveHeight = aTextHeight + 2;
 }
 
-//------------------------------------------------------------------------------
+
 Rectangle ClientBox::GetEntryRect( const long nPos ) const
 {
     const ::osl::MutexGuard aGuard( m_entriesMutex );
@@ -201,7 +201,7 @@ Rectangle ClientBox::GetEntryRect( const long nPos ) const
     return Rectangle( aPos, aSize );
 }
 
-//------------------------------------------------------------------------------
+
 void ClientBox::DeleteRemoved()
 {
     const ::osl::MutexGuard aGuard( m_entriesMutex );
@@ -224,7 +224,7 @@ long ClientBox::GetActiveEntryIndex()
         return -1;
 }
 
-//------------------------------------------------------------------------------
+
 //This function may be called with nPos < 0
 void ClientBox::selectEntry( const long nPos )
 {
@@ -558,7 +558,7 @@ void ClientBox::Resize()
     RecalcAll();
 }
 
-//------------------------------------------------------------------------------
+
 long ClientBox::PointToPos( const Point& rPos )
 {
     long nPos = ( rPos.Y() + m_nTopIndex ) / m_nStdHeight;
@@ -579,7 +579,7 @@ OUString ClientBox::getPin()
     return OUString::number( m_aPinBox.GetValue() );
 }
 
-//------------------------------------------------------------------------------
+
 void ClientBox::MouseButtonDown( const MouseEvent& rMEvt )
 {
     long nPos = PointToPos( rMEvt.GetPosPixel() );
@@ -593,7 +593,7 @@ void ClientBox::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-//------------------------------------------------------------------------------
+
 bool ClientBox::Notify( NotifyEvent& rNEvt )
 {
     if ( !m_bInDelete )
@@ -638,7 +638,7 @@ bool ClientBox::Notify( NotifyEvent& rNEvt )
 }
 
 
-//------------------------------------------------------------------------------
+
 long ClientBox::addEntry( ClientInfo* pClientInfo )
 {
     long         nPos = 0;

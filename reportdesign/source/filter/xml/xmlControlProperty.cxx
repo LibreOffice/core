@@ -321,7 +321,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
 
     return aReturn;
 }
-//---------------------------------------------------------------------
+
 ::com::sun::star::util::Time OXMLControlProperty::implGetTime(double _nValue)
 {
     ::com::sun::star::util::Time aTime;
@@ -338,7 +338,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
     return aTime;
 }
 
-//---------------------------------------------------------------------
+
 ::com::sun::star::util::Date OXMLControlProperty::implGetDate(double _nValue)
 {
     Date aToolsDate((sal_uInt32)_nValue);
@@ -346,7 +346,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
     ::utl::typeConvert(aToolsDate, aDate);
     return aDate;
 }
-//----------------------------------------------------------------------------
+
 } // namespace rptxml
 // -----------------------------------------------------------------------------
 

@@ -83,7 +83,7 @@ SfxPrinter* SfxPrinter::Create( SvStream& rStream, SfxItemSet* pOptions )
     return pPrinter;
 }
 
-//--------------------------------------------------------------------
+
 
 SvStream& SfxPrinter::Store( SvStream& rStream ) const
 
@@ -96,7 +96,7 @@ SvStream& SfxPrinter::Store( SvStream& rStream ) const
     return WriteJobSetup( rStream, GetJobSetup() );
 }
 
-//--------------------------------------------------------------------
+
 
 SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions ) :
 
@@ -112,7 +112,7 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions ) :
     pImpl = new SfxPrinter_Impl;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
                         const JobSetup& rTheOrigJobSetup ) :
@@ -128,7 +128,7 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
         SetJobSetup( rTheOrigJobSetup );
 }
 
-//--------------------------------------------------------------------
+
 
 SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
                         const OUString& rPrinterName ) :
@@ -141,7 +141,7 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
     pImpl = new SfxPrinter_Impl;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxPrinter::SfxPrinter( const SfxPrinter& rPrinter ) :
 
@@ -160,7 +160,7 @@ SfxPrinter::SfxPrinter( const SfxPrinter& rPrinter ) :
     pImpl->mbRange = rPrinter.pImpl->mbRange;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxPrinter* SfxPrinter::Clone() const
 {
@@ -181,7 +181,7 @@ SfxPrinter* SfxPrinter::Clone() const
         return new SfxPrinter( *this );
 }
 
-//--------------------------------------------------------------------
+
 
 SfxPrinter::~SfxPrinter()
 {
@@ -189,14 +189,14 @@ SfxPrinter::~SfxPrinter()
     delete pImpl;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxPrinter::SetOptions( const SfxItemSet &rNewOptions )
 {
     pOptions->Set(rNewOptions);
 }
 
-//--------------------------------------------------------------------
+
 
 SfxPrintOptionsDialog::SfxPrintOptionsDialog(Window *pParent,
                                               SfxViewShell *pViewShell,
@@ -221,7 +221,7 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog(Window *pParent,
     }
 }
 
-//--------------------------------------------------------------------
+
 
 SfxPrintOptionsDialog::~SfxPrintOptionsDialog()
 {
@@ -230,7 +230,7 @@ SfxPrintOptionsDialog::~SfxPrintOptionsDialog()
     delete pOptions;
 }
 
-//--------------------------------------------------------------------
+
 
 short SfxPrintOptionsDialog::Execute()
 {
@@ -245,7 +245,7 @@ short SfxPrintOptionsDialog::Execute()
     return nRet;
 }
 
-//--------------------------------------------------------------------
+
 
 bool SfxPrintOptionsDialog::Notify( NotifyEvent& rNEvt )
 {
@@ -258,7 +258,7 @@ bool SfxPrintOptionsDialog::Notify( NotifyEvent& rNEvt )
     return ModalDialog::Notify( rNEvt );
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxPrintOptionsDialog::DisableHelp()
 {

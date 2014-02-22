@@ -934,7 +934,7 @@ static SfxStyleSheetBase* lcl_CopyStyleToPool
         return NULL;
     }
 
-    //--------------------------------------------------------
+    
 
     const OUString       aStrSrcStyle = pSrcStyle->GetName();
     const SfxStyleFamily eFamily      = pSrcStyle->GetFamily();

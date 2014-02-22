@@ -48,7 +48,7 @@
 // usage.
 
 #include "solver.h"
-//-----------------------------------------------------------------------------
+
 void NaturalSpline (int N, double* x, double* a, double*& b, double*& c,
     double*& d)
 {

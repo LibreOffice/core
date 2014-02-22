@@ -200,7 +200,7 @@ SfxPoolItem* SfxFrameDescriptorItem::Clone( SfxItemPool* ) const
     return new SfxFrameDescriptorItem( *this );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SfxFrameDescriptorItem::GetPresentation
 (

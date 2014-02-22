@@ -712,7 +712,7 @@ sal_Bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
             pNumFmtShell->FindEntry(aFormat, &nCurKey);
         }
 
-        //---------------------------------------------------------------
+        
         // Chosen format:
         // --------------
         if ( bDataChanged )
@@ -758,7 +758,7 @@ sal_Bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
             delete [] pDelArr;
         }
 
-        //---------------------------------------------------------------
+        
         // Whether source format is to be taken or not:
         // --------------------------------------------
         if ( m_pCbSourceFormat->IsEnabled() )
@@ -1170,7 +1170,7 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
         pNumFmtShell->SetCurrencySymbol(nCurrencyPos);
     }
 
-    //--------------------------------------------------------------------
+    
     // Format-ListBox ----------------------------------------------------
     if (pLb == m_pLbFormat)
     {
@@ -1220,7 +1220,7 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
         return 0;
     }
 
-    //--------------------------------------------------------------------
+    
     // category-ListBox -------------------------------------------------
     if (pLb == m_pLbCategory || pLb == m_pLbCurrency)
     {
@@ -1231,7 +1231,7 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
         return 0;
     }
 
-    //--------------------------------------------------------------------
+    
     // language/country-ListBox ----------------------------------------------
     if (pLb == m_pLbLanguage)
     {

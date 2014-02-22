@@ -29,7 +29,7 @@ namespace stoc_corefl
 ClassNameList g_aClassNames;
 #endif
 
-//--------------------------------------------------------------------------------------------------
+
 Mutex & getMutexAccess()
 {
     static Mutex * s_pMutex = 0;

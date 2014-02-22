@@ -43,7 +43,7 @@ SvxPostItAuthorItem::SvxPostItAuthorItem( const OUString& rAuthor,
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxPostItAuthorItem::GetPresentation
 (
@@ -91,7 +91,7 @@ SvxPostItDateItem::SvxPostItDateItem( const OUString& rDate, sal_uInt16 _nWhich 
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxPostItDateItem::GetPresentation
 (
@@ -139,7 +139,7 @@ SvxPostItTextItem::SvxPostItTextItem( const OUString& rText, sal_uInt16 _nWhich 
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxPostItTextItem::GetPresentation
 (

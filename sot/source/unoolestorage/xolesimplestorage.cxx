@@ -72,7 +72,7 @@ OLESimpleStorage::~OLESimpleStorage()
     }
 }
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL OLESimpleStorage::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(1);
@@ -80,20 +80,20 @@ uno::Sequence< OUString > SAL_CALL OLESimpleStorage::impl_staticGetSupportedServ
     return aRet;
 }
 
-//-------------------------------------------------------------------------
+
 OUString SAL_CALL OLESimpleStorage::impl_staticGetImplementationName()
 {
     return OUString("com.sun.star.comp.embed.OLESimpleStorage");
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL OLESimpleStorage::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
     return uno::Reference< uno::XInterface >( *new OLESimpleStorage( xServiceManager ) );
 }
 
-//-------------------------------------------------------------------------
+
 void OLESimpleStorage::UpdateOriginal_Impl()
 {
     if ( !m_bNoTemporaryCopy )
@@ -119,7 +119,7 @@ void OLESimpleStorage::UpdateOriginal_Impl()
     }
 }
 
-//-------------------------------------------------------------------------
+
 void OLESimpleStorage::InsertInputStreamToStorage_Impl( BaseStorage* pStorage, OUString aName, const uno::Reference< io::XInputStream >& xInputStream )
     throw ( uno::Exception )
 {
@@ -164,7 +164,7 @@ void OLESimpleStorage::InsertInputStreamToStorage_Impl( BaseStorage* pStorage, O
     DELETEZ( pNewStream );
 }
 
-//-------------------------------------------------------------------------
+
 void OLESimpleStorage::InsertNameAccessToStorage_Impl( BaseStorage* pStorage, OUString aName, const uno::Reference< container::XNameAccess >& xNameAccess )
     throw ( uno::Exception )
 {

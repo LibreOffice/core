@@ -51,7 +51,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
-//------------------------------------------------------------------------------
+
 //  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.AResultSet","com.sun.star.sdbc.ResultSet");
 OUString SAL_CALL OResultSet::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)  \
 {
@@ -822,7 +822,7 @@ void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any&
     if (!::dbtools::implUpdateObject(this, columnIndex, x))
         throw SQLException();
 }
-//------------------------------------------------------------------------------
+
 // XRowLocate
 Any SAL_CALL OResultSet::getBookmark(  ) throw(SQLException, RuntimeException)
 {
@@ -838,7 +838,7 @@ Any SAL_CALL OResultSet::getBookmark(  ) throw(SQLException, RuntimeException)
     return makeAny((sal_Int32)(m_aBookmarks.size()-1));
 
 }
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OResultSet::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -853,7 +853,7 @@ sal_Bool SAL_CALL OResultSet::moveToBookmark( const Any& bookmark ) throw(SQLExc
 
     return SUCCEEDED(m_pRecordSet->Move(0,m_aBookmarks[nPos]));
 }
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -868,7 +868,7 @@ sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const Any& bookmark, sal_I
         ::dbtools::throwFunctionSequenceException(*this);
     return SUCCEEDED(m_pRecordSet->Move(rows,m_aBookmarks[nPos]));
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OResultSet::compareBookmarks( const Any& bookmark1, const Any& bookmark2 ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -887,7 +887,7 @@ sal_Int32 SAL_CALL OResultSet::compareBookmarks( const Any& bookmark1, const Any
     m_pRecordSet->CompareBookmarks(m_aBookmarks[nPos1],m_aBookmarks[nPos2],&eNum);
     return ((sal_Int32)eNum) +1;
 }
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -913,7 +913,7 @@ sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks(  ) throw(SQLException, Runtim
         bValue = aVar;
     return bValue;
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OResultSet::hashBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -924,7 +924,7 @@ sal_Int32 SAL_CALL OResultSet::hashBookmark( const Any& bookmark ) throw(SQLExce
     bookmark >>= nPos;
     return nPos;
 }
-//------------------------------------------------------------------------------
+
 // XDeleteRows
 Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const Sequence< Any >& rows ) throw(SQLException, RuntimeException)
 {
@@ -973,7 +973,7 @@ Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const Sequence< Any >& ro
     }
     return aSeq;
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 OResultSet::getResultSetConcurrency() const
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -993,7 +993,7 @@ sal_Int32 OResultSet::getResultSetConcurrency() const
     }
     return nValue;
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 OResultSet::getResultSetType() const
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -1018,13 +1018,13 @@ sal_Int32 OResultSet::getResultSetType() const
     }
     return nValue;
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 OResultSet::getFetchDirection() const
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     return FetchDirection::FORWARD;
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 OResultSet::getFetchSize() const
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -1032,20 +1032,20 @@ sal_Int32 OResultSet::getFetchSize() const
     m_pRecordSet->get_CacheSize(&nValue);
     return nValue;
 }
-//------------------------------------------------------------------------------
+
 OUString OResultSet::getCursorName() const
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     return OUString();
 }
 
-//------------------------------------------------------------------------------
+
 void OResultSet::setFetchDirection(sal_Int32 /*_par0*/)
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "ResultSet::FetchDirection", *this );
 }
-//------------------------------------------------------------------------------
+
 void OResultSet::setFetchSize(sal_Int32 _par0)
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {

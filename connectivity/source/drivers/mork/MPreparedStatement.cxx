@@ -397,7 +397,7 @@ ORowSetValue& x)
     (m_aParameterRow->get())[parameterIndex] = x;
 }
 
-//------------------------------------------------------------------
+
 size_t OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Reference<XPropertySet>& _xCol)
 {
     OSL_UNUSED( pParameter );

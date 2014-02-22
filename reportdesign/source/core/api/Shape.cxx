@@ -113,7 +113,7 @@ void SAL_CALL OShape::dispose() throw(uno::RuntimeException)
     ShapePropertySet::dispose();
     cppu::WeakComponentImplHelperBase::dispose();
 }
-//------------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > OShape::create(uno::Reference< uno::XComponentContext > const & xContext)
 {
     return *(new OShape(xContext));
@@ -125,12 +125,12 @@ OUString OShape::getImplementationName_Static(  ) throw(uno::RuntimeException)
     return OUString("com.sun.star.comp.report.Shape");
 }
 
-//--------------------------------------------------------------------------
+
 OUString SAL_CALL OShape::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
-//--------------------------------------------------------------------------
+
 uno::Sequence< OUString > OShape::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aServices(1);
@@ -138,7 +138,7 @@ uno::Sequence< OUString > OShape::getSupportedServiceNames_Static(  ) throw(uno:
 
     return aServices;
 }
-//--------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL OShape::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     if(m_sServiceName.isEmpty())
@@ -154,7 +154,7 @@ uno::Sequence< OUString > SAL_CALL OShape::getSupportedServiceNames(  ) throw(un
         return aServices;
     }
 }
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OShape::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
 

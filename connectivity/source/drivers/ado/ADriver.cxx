@@ -59,7 +59,7 @@ ODriver::~ODriver()
     CoUninitialize();
     CoInitialize(NULL);
 }
-//------------------------------------------------------------------------------
+
 void ODriver::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -76,12 +76,12 @@ void ODriver::disposing()
     ODriver_BASE::disposing();
 }
 // static ServiceInfo
-//------------------------------------------------------------------------------
+
 OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.sdbc.ado.ODriver");
 }
-//------------------------------------------------------------------------------
+
 Sequence< OUString > ODriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     Sequence< OUString > aSNS( 2 );
@@ -89,7 +89,7 @@ Sequence< OUString > ODriver::getSupportedServiceNames_Static(  ) throw (Runtime
     aSNS[1] = "com.sun.star.sdbcx.Driver";
     return aSNS;
 }
-//------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL connectivity::ado::ODriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
 {
     return *(new ODriver(_rxFactory));

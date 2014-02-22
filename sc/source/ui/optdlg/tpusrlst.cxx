@@ -264,7 +264,7 @@ sal_uInt16 ScTpUserLists::UpdateUserListBox()
 
     if ( !pUserLists ) return 0;
 
-    //----------------------------------------------------------
+    
 
     size_t nCount = pUserLists->size();
     OUString  aEntry;
@@ -285,7 +285,7 @@ void ScTpUserLists::UpdateEntries( size_t nList )
 {
     if ( !pUserLists ) return;
 
-    //----------------------------------------------------------
+    
 
     if ( nList < pUserLists->size() )
     {
@@ -367,7 +367,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
 {
     if ( bCopyDone ) return;
 
-    //----------------------------------------------------------
+    
 
     SCTAB   nTab            = rStartPos.Tab();
     SCCOL   nStartCol       = rStartPos.Col();
@@ -446,7 +446,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
         }
     }
 
-    //----------------------------------------------------------
+    
 
     bCopyDone = true;
 
@@ -459,7 +459,7 @@ void ScTpUserLists::ModifyList( sal_uInt16          nSelList,
 {
     if ( !pUserLists ) return;
 
-    //----------------------------------------------------------
+    
 
     OUString theEntriesStr( rEntriesStr );
 
@@ -480,9 +480,9 @@ void ScTpUserLists::RemoveList( size_t nList )
     }
 }
 
-//-----------------------------------------------------------------------
+
 // Handler:
-//---------
+
 
 IMPL_LINK( ScTpUserLists, LbSelectHdl, ListBox*, pLb )
 {
@@ -528,7 +528,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
             mpBtnAdd->Disable();
             mpBtnModify->Disable();
             mpBtnRemove->Disable();
-            //-----------------------------
+            
             if ( mpBtnCopy->IsEnabled() )
             {
                 mpBtnCopy->Disable();
@@ -557,7 +557,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
             }
             mpBtnAdd->Disable();
             mpBtnModify->Disable();
-            //-----------------------------
+            
             if ( pViewData && !bCopyDone )
             {
                 mpBtnCopy->Enable();
@@ -692,7 +692,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
         if ( bCopyDone )
             return 0;
 
-        //-----------------------------------------------------------
+        
 
         ScRefAddress theStartPos;
         ScRefAddress theEndPos;
@@ -751,7 +751,7 @@ IMPL_LINK( ScTpUserLists, EdEntriesModHdl, VclMultiLineEdit*, pEd )
     if ( pEd != mpEdEntries )
         return 0;
 
-    //-----------------------------------------------------------
+    
 
     if ( mpBtnCopy->IsEnabled() )
     {

@@ -101,7 +101,7 @@ void OXMLReportElementBase::EndElement()
         OSL_FAIL("Exception caught while inserting a new control!");
     }
 }
-//----------------------------------------------------------------------------
+
 } // namespace rptxml
 // -----------------------------------------------------------------------------
 

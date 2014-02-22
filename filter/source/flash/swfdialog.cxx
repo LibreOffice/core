@@ -208,13 +208,13 @@ Reference< XPropertySetInfo > SAL_CALL SWFDialog::getPropertySetInfo()
     return xInfo;
 }
 
-//-------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper& SWFDialog::getInfoHelper()
 {
     return *const_cast<SWFDialog*>(this)->getArrayHelper();
 }
 
-//------------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* SWFDialog::createArrayHelper() const
 {
     Sequence< Property > aProps;

@@ -227,7 +227,7 @@ struct OleComponentNative_Impl {
     uno::Sequence< datatransfer::DataFlavor > GetFlavorsForAspects( sal_uInt32 nSupportedAspects );
 };
 
-//----------------------------------------------
+
 DWORD GetAspectFromFlavor( const datatransfer::DataFlavor& aFlavor )
 {
     if ( aFlavor.MimeType.indexOf( ";Aspect=THUMBNAIL" ) != -1 )
@@ -240,7 +240,7 @@ DWORD GetAspectFromFlavor( const datatransfer::DataFlavor& aFlavor )
         return DVASPECT_CONTENT;
 }
 
-//----------------------------------------------
+
 OUString GetFlavorSuffixFromAspect( DWORD nAsp )
 {
     OUString aResult;
@@ -257,7 +257,7 @@ OUString GetFlavorSuffixFromAspect( DWORD nAsp )
     return aResult;
 }
 
-//----------------------------------------------
+
 HRESULT OpenIStorageFromURL_Impl( const OUString& aURL, IStorage** ppIStorage )
 {
     OSL_ENSURE( ppIStorage, "The pointer must not be empty!" );
@@ -274,7 +274,7 @@ HRESULT OpenIStorageFromURL_Impl( const OUString& aURL, IStorage** ppIStorage )
                              ppIStorage );
 }
 
-//----------------------------------------------
+
 sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium,
                                                         const datatransfer::DataFlavor& aFlavor,
                                                         uno::Any& aResult )
@@ -368,7 +368,7 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
     return bAnyIsReady;
 }
 
-//----------------------------------------------
+
 sal_Bool OleComponentNative_Impl::GraphicalFlavor( const datatransfer::DataFlavor& aFlavor )
 {
     // Actually all the required graphical formats must be supported
@@ -380,7 +380,7 @@ sal_Bool OleComponentNative_Impl::GraphicalFlavor( const datatransfer::DataFlavo
     return sal_False;
 }
 
-//----------------------------------------------
+
 sal_Bool GetClassIDFromSequence_Impl( uno::Sequence< sal_Int8 > aSeq, CLSID& aResult )
 {
     if ( aSeq.getLength() == 16 )
@@ -397,7 +397,7 @@ sal_Bool GetClassIDFromSequence_Impl( uno::Sequence< sal_Int8 > aSeq, CLSID& aRe
     return sal_False;
 }
 
-//----------------------------------------------
+
 OUString WinAccToVcl_Impl( const sal_Unicode* pStr )
 {
     OUString aResult;
@@ -422,7 +422,7 @@ OUString WinAccToVcl_Impl( const sal_Unicode* pStr )
     return aResult;
 }
 
-//----------------------------------------------
+
 OleComponent::OleComponent( const uno::Reference< lang::XMultiServiceFactory >& xFactory, OleEmbeddedObject* pUnoOleObject )
 : m_pInterfaceContainer( NULL )
 , m_bDisposed( sal_False )
@@ -452,7 +452,7 @@ OleComponent::OleComponent( const uno::Reference< lang::XMultiServiceFactory >& 
 
 }
 
-//----------------------------------------------
+
 OleComponent::~OleComponent()
 {
     OSL_ENSURE( !m_pOleWrapClientSite && !m_pImplAdviseSink && !m_pInterfaceContainer && !m_bOleInitialized,
@@ -479,14 +479,14 @@ OleComponent::~OleComponent()
     delete m_pNativeImpl;
 }
 
-//----------------------------------------------
+
 void OleComponentNative_Impl::AddSupportedFormat( const FORMATETC& aFormatEtc )
 {
     FORMATETC* pFormatToInsert = new FORMATETC( aFormatEtc );
     m_aFormatsList.push_back( pFormatToInsert );
 }
 
-//----------------------------------------------
+
 FORMATETC* OleComponentNative_Impl::GetSupportedFormatForAspect( sal_uInt32 nRequestedAspect )
 {
     for ( FormatEtcList::iterator aIter = m_aFormatsList.begin();
@@ -498,7 +498,7 @@ FORMATETC* OleComponentNative_Impl::GetSupportedFormatForAspect( sal_uInt32 nReq
     return NULL;
 }
 
-//----------------------------------------------
+
 void OleComponent::Dispose()
 {
     // the mutex must be locked before this method is called
@@ -542,7 +542,7 @@ void OleComponent::Dispose()
     m_bDisposed = sal_True;
 }
 
-//----------------------------------------------
+
 void OleComponent::disconnectEmbeddedObject()
 {
     // must not be called from destructor of UNO OLE object!!!
@@ -550,7 +550,7 @@ void OleComponent::disconnectEmbeddedObject()
     m_pUnoOleObject = NULL;
 }
 
-//----------------------------------------------
+
 void OleComponent::CreateNewIStorage_Impl()
 {
     // TODO: in future a global memory could be used instead of file.
@@ -577,7 +577,7 @@ void OleComponent::CreateNewIStorage_Impl()
         throw io::IOException(); // TODO: transport error code?
 }
 
-//----------------------------------------------
+
 uno::Sequence< datatransfer::DataFlavor > OleComponentNative_Impl::GetFlavorsForAspects( sal_uInt32 nSupportedAspects )
 {
     uno::Sequence< datatransfer::DataFlavor > aResult;
@@ -600,7 +600,7 @@ uno::Sequence< datatransfer::DataFlavor > OleComponentNative_Impl::GetFlavorsFor
     return aResult;
 }
 
-//----------------------------------------------
+
 void OleComponent::RetrieveObjectDataFlavors_Impl()
 {
     if ( !m_pNativeImpl->m_pOleObject )
@@ -652,7 +652,7 @@ void OleComponent::RetrieveObjectDataFlavors_Impl()
     }
 }
 
-//----------------------------------------------
+
 sal_Bool OleComponent::InitializeObject_Impl()
 // There will be no static objects!
 {
@@ -717,7 +717,7 @@ sal_Bool OleComponent::InitializeObject_Impl()
     return sal_True;
 }
 
-//----------------------------------------------
+
 void OleComponent::LoadEmbeddedObject( const OUString& aTempURL )
 {
     if ( !aTempURL.getLength() )
@@ -742,7 +742,7 @@ void OleComponent::LoadEmbeddedObject( const OUString& aTempURL )
         throw uno::RuntimeException(); // TODO
 }
 
-//----------------------------------------------
+
 void OleComponent::CreateObjectFromClipboard()
 {
     if ( m_pNativeImpl->m_pIStorage )
@@ -781,7 +781,7 @@ void OleComponent::CreateObjectFromClipboard()
         throw uno::RuntimeException(); // TODO
 }
 
-//----------------------------------------------
+
 void OleComponent::CreateNewEmbeddedObject( const uno::Sequence< sal_Int8 >& aSeqCLSID )
 {
     CLSID aClsID;
@@ -815,7 +815,7 @@ void OleComponent::CreateNewEmbeddedObject( const uno::Sequence< sal_Int8 >& aSe
     // TODO: getExtent???
 }
 
-//----------------------------------------------
+
 void OleComponent::CreateObjectFromData( const uno::Reference< datatransfer::XTransferable >& )
 // Static objects are not supported, they should be inserted as graphics
 {
@@ -826,7 +826,7 @@ void OleComponent::CreateObjectFromData( const uno::Reference< datatransfer::XTr
     // OleQueryCreateFromData...
 }
 
-//----------------------------------------------
+
 void OleComponent::CreateObjectFromFile( const OUString& aFileURL )
 {
     if ( m_pNativeImpl->m_pIStorage )
@@ -856,7 +856,7 @@ void OleComponent::CreateObjectFromFile( const OUString& aFileURL )
         throw uno::RuntimeException(); // TODO
 }
 
-//----------------------------------------------
+
 void OleComponent::CreateLinkFromFile( const OUString& aFileURL )
 {
     if ( m_pNativeImpl->m_pIStorage )
@@ -885,7 +885,7 @@ void OleComponent::CreateLinkFromFile( const OUString& aFileURL )
         throw uno::RuntimeException(); // TODO
 }
 
-//----------------------------------------------
+
 void OleComponent::InitEmbeddedCopyOfLink( OleComponent* pOleLinkComponent )
 {
     if ( !pOleLinkComponent || !pOleLinkComponent->m_pNativeImpl->m_pObj )
@@ -979,7 +979,7 @@ void OleComponent::InitEmbeddedCopyOfLink( OleComponent* pOleLinkComponent )
         throw uno::RuntimeException(); // TODO
 }
 
-//----------------------------------------------
+
 void OleComponent::RunObject()
 {
     OSL_ENSURE( m_pNativeImpl->m_pOleObject, "The pointer can not be set to NULL here!\n" );
@@ -1000,7 +1000,7 @@ void OleComponent::RunObject()
     }
 }
 
-//----------------------------------------------
+
 awt::Size OleComponent::CalculateWithFactor( const awt::Size& aSize,
                                             const awt::Size& aMultiplier,
                                             const awt::Size& aDivisor )
@@ -1019,14 +1019,14 @@ awt::Size OleComponent::CalculateWithFactor( const awt::Size& aSize,
     return aResult;
 }
 
-//----------------------------------------------
+
 void OleComponent::CloseObject()
 {
     if ( m_pNativeImpl->m_pOleObject && OleIsRunning( m_pNativeImpl->m_pOleObject ) )
         m_pNativeImpl->m_pOleObject->Close( OLECLOSE_NOSAVE ); // must be saved before
 }
 
-//----------------------------------------------
+
 uno::Sequence< embed::VerbDescriptor > OleComponent::GetVerbList()
 {
     if ( !m_pNativeImpl->m_pOleObject )
@@ -1065,7 +1065,7 @@ uno::Sequence< embed::VerbDescriptor > OleComponent::GetVerbList()
     return m_aVerbList;
 }
 
-//----------------------------------------------
+
 void OleComponent::ExecuteVerb( sal_Int32 nVerbID )
 {
     if ( !m_pNativeImpl->m_pOleObject )
@@ -1086,7 +1086,7 @@ void OleComponent::ExecuteVerb( sal_Int32 nVerbID )
     m_pNativeImpl->m_pOleObject->SetHostNames( L"app name", L"untitled" );
 }
 
-//----------------------------------------------
+
 void OleComponent::SetHostName( const OUString&,
                                 const OUString& )
 {
@@ -1096,7 +1096,7 @@ void OleComponent::SetHostName( const OUString&,
     // TODO: use aContName and aEmbDocName in m_pNativeImpl->m_pOleObject->SetHostNames()
 }
 
-//----------------------------------------------
+
 void OleComponent::SetExtent( const awt::Size& aVisAreaSize, sal_Int64 nAspect )
 {
     if ( !m_pNativeImpl->m_pOleObject )
@@ -1118,7 +1118,7 @@ void OleComponent::SetExtent( const awt::Size& aVisAreaSize, sal_Int64 nAspect )
     }
 }
 
-//----------------------------------------------
+
 awt::Size OleComponent::GetExtent( sal_Int64 nAspect )
 {
     if ( !m_pNativeImpl->m_pOleObject )
@@ -1200,7 +1200,7 @@ awt::Size OleComponent::GetExtent( sal_Int64 nAspect )
     return aSize;
 }
 
-//----------------------------------------------
+
 awt::Size OleComponent::GetCachedExtent( sal_Int64 nAspect )
 {
     if ( !m_pNativeImpl->m_pOleObject )
@@ -1226,7 +1226,7 @@ awt::Size OleComponent::GetCachedExtent( sal_Int64 nAspect )
     return awt::Size( aSize.cx, aSize.cy );
 }
 
-//----------------------------------------------
+
 awt::Size OleComponent::GetReccomendedExtent( sal_Int64 nAspect )
 {
     if ( !m_pNativeImpl->m_pOleObject )
@@ -1241,7 +1241,7 @@ awt::Size OleComponent::GetReccomendedExtent( sal_Int64 nAspect )
     return awt::Size( aSize.cx, aSize.cy );
 }
 
-//----------------------------------------------
+
 sal_Int64 OleComponent::GetMiscStatus( sal_Int64 nAspect )
 {
     if ( !m_pNativeImpl->m_pOleObject )
@@ -1252,7 +1252,7 @@ sal_Int64 OleComponent::GetMiscStatus( sal_Int64 nAspect )
     return ( sal_Int64 )nResult; // first 32 bits are for MS flags
 }
 
-//----------------------------------------------
+
 uno::Sequence< sal_Int8 > OleComponent::GetCLSID()
 {
     if ( !m_pNativeImpl->m_pOleObject )
@@ -1270,7 +1270,7 @@ uno::Sequence< sal_Int8 > OleComponent::GetCLSID()
                                 aCLSID.Data4[6], aCLSID.Data4[7] );
 }
 
-//----------------------------------------------
+
 sal_Bool OleComponent::IsDirty()
 {
     if ( !m_pNativeImpl->m_pOleObject )
@@ -1288,7 +1288,7 @@ sal_Bool OleComponent::IsDirty()
     return ( hr != S_FALSE );
 }
 
-//----------------------------------------------
+
 void OleComponent::StoreOwnTmpIfNecessary()
 {
     if ( !m_pNativeImpl->m_pOleObject )
@@ -1334,7 +1334,7 @@ void OleComponent::StoreOwnTmpIfNecessary()
     }
 }
 
-//----------------------------------------------
+
 sal_Bool OleComponent::SaveObject_Impl()
 {
     sal_Bool bResult = sal_False;
@@ -1358,7 +1358,7 @@ sal_Bool OleComponent::SaveObject_Impl()
     return bResult;
 }
 
-//----------------------------------------------
+
 sal_Bool OleComponent::OnShowWindow_Impl( bool bShow )
 {
     sal_Bool bResult = sal_False;
@@ -1383,7 +1383,7 @@ sal_Bool OleComponent::OnShowWindow_Impl( bool bShow )
     return bResult;
 }
 
-//----------------------------------------------
+
 void OleComponent::OnViewChange_Impl( sal_uInt32 dwAspect )
 {
     // TODO: check if it is enough or may be saving notifications are required for Visio2000
@@ -1405,7 +1405,7 @@ void OleComponent::OnViewChange_Impl( sal_uInt32 dwAspect )
     }
 }
 
-//----------------------------------------------
+
 void OleComponent::OnClose_Impl()
 {
     ::rtl::Reference< OleEmbeddedObject > xLockObject;
@@ -1427,7 +1427,7 @@ void OleComponent::OnClose_Impl()
 }
 
 // XCloseable
-//----------------------------------------------
+
 void SAL_CALL OleComponent::close( sal_Bool bDeliverOwnership )
     throw ( util::CloseVetoException,
             uno::RuntimeException )
@@ -1481,7 +1481,7 @@ void SAL_CALL OleComponent::close( sal_Bool bDeliverOwnership )
     Dispose();
 }
 
-//----------------------------------------------
+
 void SAL_CALL OleComponent::addCloseListener( const uno::Reference< util::XCloseListener >& xListener )
     throw ( uno::RuntimeException )
 {
@@ -1495,7 +1495,7 @@ void SAL_CALL OleComponent::addCloseListener( const uno::Reference< util::XClose
     m_pInterfaceContainer->addInterface( ::getCppuType( ( const uno::Reference< util::XCloseListener >* )0 ), xListener );
 }
 
-//----------------------------------------------
+
 void SAL_CALL OleComponent::removeCloseListener( const uno::Reference< util::XCloseListener >& xListener )
     throw ( uno::RuntimeException )
 {
@@ -1509,7 +1509,7 @@ void SAL_CALL OleComponent::removeCloseListener( const uno::Reference< util::XCl
 }
 
 // XTransferable
-//----------------------------------------------
+
 uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor& aFlavor )
     throw ( datatransfer::UnsupportedFlavorException,
             io::IOException,
@@ -1612,7 +1612,7 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
     return aResult;
 }
 
-//----------------------------------------------
+
 uno::Sequence< datatransfer::DataFlavor > SAL_CALL OleComponent::getTransferDataFlavors()
     throw ( uno::RuntimeException )
 {
@@ -1628,7 +1628,7 @@ uno::Sequence< datatransfer::DataFlavor > SAL_CALL OleComponent::getTransferData
     return m_aDataFlavors;
 }
 
-//----------------------------------------------
+
 sal_Bool SAL_CALL OleComponent::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
     throw ( uno::RuntimeException )
 {
@@ -1675,7 +1675,7 @@ void SAL_CALL OleComponent::addEventListener( const uno::Reference< lang::XEvent
     m_pInterfaceContainer->addInterface( ::getCppuType( ( const uno::Reference< lang::XEventListener >* )0 ), xListener );
 }
 
-//----------------------------------------------
+
 void SAL_CALL OleComponent::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
     throw ( uno::RuntimeException )
 {

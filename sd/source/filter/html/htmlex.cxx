@@ -604,7 +604,7 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
 
     mnHeightPixel = (sal_uInt16)(mnWidthPixel/dRatio);
 
-    //------------------------------------------------------------------
+    
     // we come up with a destination...
 
     INetURLObject aINetURLObj( maPath );
@@ -673,7 +673,7 @@ void HtmlExport::ExportHtml()
 
     mpDocSh->SetWaitCursor( true );
 
-    //------------------------------------------------------------------
+    
     // Exceptions are cool...
 
     CreateFileNames();

@@ -224,7 +224,7 @@ void SdFileDialog_Imp::CheckSelectionState()
     }
 }
 
-//-----------------------------------------------------------------------------
+
 SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
                                     sal_Bool        bUsableSelection    ) :
     FileDialogHelper( nDialogType, 0 ),

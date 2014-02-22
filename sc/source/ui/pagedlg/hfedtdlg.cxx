@@ -22,7 +22,7 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #include "scitems.hxx"
 #include <svl/eitem.hxx>
@@ -32,7 +32,7 @@
 #include "globstr.hrc"
 #include "scresid.hxx"
 #include "scuitphfedit.hxx"
-//------------------------------------------------------------------
+
 
 //  macros from docsh4.cxx
 //! use SIDs?

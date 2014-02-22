@@ -185,7 +185,7 @@ void SfxChildWindow::Destroy()
         delete this;
 }
 
-//-------------------------------------------------------------------------
+
 SfxChildWindow::~SfxChildWindow()
 {
     DBG_DTOR(SfxChildWindow,0);
@@ -194,7 +194,7 @@ SfxChildWindow::~SfxChildWindow()
     delete pImp;
 }
 
-//-------------------------------------------------------------------------
+
 SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
         Window *pParent, SfxBindings* pBindings, SfxChildWinInfo& rInfo)
 {
@@ -276,7 +276,7 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
     return pChild;
 }
 
-//-------------------------------------------------------------------------
+
 void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
 {
     sal_uInt16 nID = GetType();
@@ -308,7 +308,7 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
     pImp->pFact->aInfo = rInfo;
 }
 
-//-------------------------------------------------------------------------
+
 void SfxChildWindow::SetAlignment(SfxChildAlignment eAlign)
 {
     DBG_CHKTHIS(SfxChildWindow,0);
@@ -316,7 +316,7 @@ void SfxChildWindow::SetAlignment(SfxChildAlignment eAlign)
     eChildAlignment = eAlign;
 }
 
-//-------------------------------------------------------------------------
+
 SfxChildWinInfo SfxChildWindow::GetInfo() const
 {
     DBG_CHKTHIS(SfxChildWindow,0);
@@ -348,13 +348,13 @@ SfxChildWinInfo SfxChildWindow::GetInfo() const
     return aInfo;
 }
 
-//-------------------------------------------------------------------------
+
 sal_uInt16 SfxChildWindow::GetPosition()
 {
     return pImp->pFact->nPos;
 }
 
-//-------------------------------------------------------------------------
+
 void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinInfo& rInfo)
 {
     // load configuration

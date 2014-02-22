@@ -92,7 +92,7 @@ ExportDocumentHandler::~ExportDocumentHandler()
 }
 IMPLEMENT_GET_IMPLEMENTATION_ID(ExportDocumentHandler)
 IMPLEMENT_FORWARD_REFCOUNT( ExportDocumentHandler, ExportDocumentHandler_BASE )
-//------------------------------------------------------------------------
+
 OUString SAL_CALL ExportDocumentHandler::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
@@ -116,7 +116,7 @@ OUString ExportDocumentHandler::getImplementationName_Static(  ) throw(uno::Runt
     return OUString("com.sun.star.comp.report.ExportDocumentHandler");
 }
 
-//------------------------------------------------------------------------
+
 uno::Sequence< OUString > ExportDocumentHandler::getSupportedServiceNames_static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSupported(1);
@@ -124,7 +124,7 @@ uno::Sequence< OUString > ExportDocumentHandler::getSupportedServiceNames_static
     return aSupported;
 }
 
-//------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL ExportDocumentHandler::create( const uno::Reference< uno::XComponentContext >& _rxContext )
 {
     return *(new ExportDocumentHandler( _rxContext ));

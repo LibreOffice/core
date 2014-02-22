@@ -220,7 +220,7 @@ inline void AdapterImpl::release()
         delete this;
 }
 
-//------------------------------------------------------------------------------
+
 static inline void constructRuntimeException(
     uno_Any * pExc, const OUString & rMsg )
 {
@@ -230,7 +230,7 @@ static inline void constructRuntimeException(
         pExc, &exc, ::getCppuType( &exc ).getTypeLibType(), 0 );
 }
 
-//------------------------------------------------------------------------------
+
 static inline bool type_equals(
     typelib_TypeDescriptionReference * pType1,
     typelib_TypeDescriptionReference * pType2 )
@@ -335,7 +335,7 @@ inline bool AdapterImpl::coerce_construct(
     return coerce_assign( pDest, pType, pSource, pExc );
 }
 
-//------------------------------------------------------------------------------
+
 static void handleInvokExc( uno_Any * pDest, uno_Any * pSource )
 {
     OUString const & name =
@@ -780,7 +780,7 @@ FactoryImpl::~FactoryImpl() SAL_THROW(())
 #endif
 }
 
-//------------------------------------------------------------------------------
+
 static inline AdapterImpl * lookup_adapter(
     t_ptr_set ** pp_adapter_set,
     t_ptr_map & map, void * key, Sequence< Type > const & rTypes )

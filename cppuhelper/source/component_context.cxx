@@ -70,7 +70,7 @@ namespace cppu
 {
 
 #ifdef CONTEXT_DIAG
-//--------------------------------------------------------------------------------------------------
+
 static OUString val2str( void const * pVal, typelib_TypeDescriptionReference * pTypeRef )
 {
     OSL_ASSERT( pVal );
@@ -255,7 +255,7 @@ static OUString val2str( void const * pVal, typelib_TypeDescriptionReference * p
 
     return buf.makeStringAndClear();
 }
-//--------------------------------------------------------------------------------------------------
+
 static void dumpEntry( OUString const & key, Any const & value )
 {
     OUString val( val2str( value.getValue(), value.getValueTypeRef() ) );
@@ -264,7 +264,7 @@ static void dumpEntry( OUString const & key, Any const & value )
     ::fprintf( stderr, "| %s = %s\n", key_str.getStr(), val_str.getStr() );
 }
 #endif
-//--------------------------------------------------------------------------------------------------
+
 static inline void try_dispose( Reference< XInterface > const & xInstance )
     SAL_THROW( (RuntimeException) )
 {
@@ -274,7 +274,7 @@ static inline void try_dispose( Reference< XInterface > const & xInstance )
         xComp->dispose();
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 static inline void try_dispose( Reference< lang::XComponent > const & xComp )
     SAL_THROW( (RuntimeException) )
 {

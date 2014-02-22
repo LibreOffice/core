@@ -367,7 +367,7 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
     return rStrm;
 }
 
-//------------------------------------------------------------------------
+
 
 OUString SvxBulletItem::GetFullText() const
 {
@@ -377,7 +377,7 @@ OUString SvxBulletItem::GetFullText() const
     return aStr.makeStringAndClear();
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxBulletItem::GetPresentation
 (
@@ -405,7 +405,7 @@ SfxItemPresentation SvxBulletItem::GetPresentation
     return eRet;
 }
 
-//------------------------------------------------------------------------
+
 
 const GraphicObject& SvxBulletItem::GetGraphicObject() const
 {
@@ -418,7 +418,7 @@ const GraphicObject& SvxBulletItem::GetGraphicObject() const
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxBulletItem::SetGraphicObject( const GraphicObject& rGraphicObject )
 {

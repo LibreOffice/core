@@ -250,19 +250,19 @@ OUString SAL_CALL OReportController::getImplementationName() throw( RuntimeExcep
     return getImplementationName_Static();
 }
 
-//------------------------------------------------------------------------------
+
 OUString OReportController::getImplementationName_Static() throw( RuntimeException )
 {
     return OUString("com.sun.star.report.comp.ReportDesign");
 }
-//------------------------------------------------------------------------------
+
 Sequence< OUString> OReportController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< OUString> aSupported(1);
     aSupported[0] = "com.sun.star.sdb.ReportDesign";
     return aSupported;
 }
-//-------------------------------------------------------------------------
+
 Sequence< OUString> SAL_CALL OReportController::getSupportedServiceNames() throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
@@ -2348,13 +2348,13 @@ void OReportController::groupChange( const uno::Reference< report::XGroup>& _xGr
         }
     }
 }
-//------------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(OReportController, OnClipboardChanged)
 {
     OnInvalidateClipboard();
     return 0;
 }
-//------------------------------------------------------------------------------
+
 void OReportController::OnInvalidateClipboard()
 {
     InvalidateFeature(SID_CUT);

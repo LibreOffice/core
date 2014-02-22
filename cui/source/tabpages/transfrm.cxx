@@ -340,7 +340,7 @@ SfxTabPage* SvxAngleTabPage::Create( Window* pWindow, const SfxItemSet& rSet)
     return(new SvxAngleTabPage(pWindow, rSet));
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16* SvxAngleTabPage::GetRanges()
 {
@@ -365,7 +365,7 @@ int SvxAngleTabPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxAngleTabPage::PointChanged(Window* pWindow, RECT_POINT eRP)
 {
@@ -577,7 +577,7 @@ SfxTabPage* SvxSlantTabPage::Create( Window* pWindow, const SfxItemSet& rOutAttr
     return( new SvxSlantTabPage( pWindow, rOutAttrs ) );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16* SvxSlantTabPage::GetRanges()
 {
@@ -609,7 +609,7 @@ int SvxSlantTabPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxSlantTabPage::PointChanged( Window* , RECT_POINT  )
 {
@@ -1018,7 +1018,7 @@ SfxTabPage* SvxPositionSizeTabPage::Create( Window* pWindow, const SfxItemSet& r
     return( new SvxPositionSizeTabPage( pWindow, rOutAttrs ) );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16* SvxPositionSizeTabPage::GetRanges()
 {
@@ -1063,7 +1063,7 @@ int SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangePosProtectHdl)
 {
@@ -1073,7 +1073,7 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangePosProtectHdl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxPositionSizeTabPage::UpdateControlStates()
 {
@@ -1107,7 +1107,7 @@ void SvxPositionSizeTabPage::UpdateControlStates()
 
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeSizeProtectHdl)
 {
@@ -1129,7 +1129,7 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeSizeProtectHdl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxPositionSizeTabPage::SetMinMaxPosition()
 {
@@ -1300,7 +1300,7 @@ void SvxPositionSizeTabPage::SetMinMaxPosition()
     m_pMtrHeight->SetLast(basegfx::fround64(fNewY));
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxPositionSizeTabPage::GetTopLeftPosition(double& rfX, double& rfY, const basegfx::B2DRange& rRange)
 {
@@ -1357,7 +1357,7 @@ void SvxPositionSizeTabPage::GetTopLeftPosition(double& rfX, double& rfY, const 
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxPositionSizeTabPage::PointChanged( Window* pWindow, RECT_POINT eRP )
 {
@@ -1429,21 +1429,21 @@ void SvxPositionSizeTabPage::PointChanged( Window* pWindow, RECT_POINT eRP )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxPositionSizeTabPage::DisableResize()
 {
     mbSizeDisabled = true;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxPositionSizeTabPage::DisableProtect()
 {
     mbProtectDisabled = true;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeWidthHdl)
 {
@@ -1468,7 +1468,7 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeWidthHdl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeHeightHdl)
 {
@@ -1493,7 +1493,7 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeHeightHdl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxPositionSizeTabPage, ClickSizeProtectHdl)
 {
@@ -1501,7 +1501,7 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ClickSizeProtectHdl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxPositionSizeTabPage, ClickAutoHdl)
 {
@@ -1514,7 +1514,7 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ClickAutoHdl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxPositionSizeTabPage::FillUserData()
 {

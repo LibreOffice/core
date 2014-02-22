@@ -55,7 +55,7 @@ using namespace ::comphelper;
 //==================================================================
 // class OReportWindow
 //==================================================================
-//------------------------------------------------------------------------------
+
 OReportWindow::OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView)
 : Window(_pParent,WB_DIALOGCONTROL)
 , ::comphelper::OPropertyChangeListener(m_aMutex)
@@ -83,7 +83,7 @@ OReportWindow::OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView)
     ImplInitSettings();
     m_pReportListener = addStyleListener(_pView->getController().getReportDefinition(),this);
 }
-//------------------------------------------------------------------------------
+
 OReportWindow::~OReportWindow()
 {
     if ( m_pReportListener.is() )
@@ -94,30 +94,30 @@ void OReportWindow::initialize()
 {
     m_aViewsWindow.initialize();
 }
-//----------------------------------------------------------------------------
+
 void OReportWindow::SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType )
 {
     m_aViewsWindow.SetInsertObj( eObj,_sShapeType);
 }
 
-//----------------------------------------------------------------------------
+
 OUString OReportWindow::GetInsertObjString() const
 {
     return m_aViewsWindow.GetInsertObjString();
 }
-//------------------------------------------------------------------------------
+
 void OReportWindow::SetMode( DlgEdMode eNewMode )
 {
     m_aViewsWindow.SetMode(eNewMode);
 }
-//----------------------------------------------------------------------------
+
 void OReportWindow::removeSection(sal_uInt16 _nPosition)
 {
     m_aViewsWindow.removeSection(_nPosition);
     m_pParent->setTotalSize(GetTotalWidth(),GetTotalHeight());
     m_aViewsWindow.Invalidate(INVALIDATE_TRANSPARENT);
 }
-//----------------------------------------------------------------------------
+
 void OReportWindow::addSection(const uno::Reference< report::XSection >& _xSection,const OUString& _sColorEntry,sal_uInt16 _nPosition)
 {
     if ( !_xSection.is() )
@@ -127,19 +127,19 @@ void OReportWindow::addSection(const uno::Reference< report::XSection >& _xSecti
 
     m_pParent->setTotalSize(GetTotalWidth(),GetTotalHeight());
 }
-//------------------------------------------------------------------------------
+
 void OReportWindow::toggleGrid(sal_Bool _bVisible)
 {
     m_aViewsWindow.toggleGrid(_bVisible);
 }
-//----------------------------------------------------------------------------
+
 void OReportWindow::showRuler(sal_Bool _bShow)
 {
     m_aHRuler.Show(_bShow);
 
     m_aViewsWindow.showRuler(_bShow);
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 OReportWindow::getMaxMarkerWidth(sal_Bool _bWithEnd) const
 {
     Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
@@ -148,7 +148,7 @@ sal_Int32 OReportWindow::getMaxMarkerWidth(sal_Bool _bWithEnd) const
         aStartWidth += Fraction(long(REPORT_ENDMARKER_WIDTH));
     return sal_Int32((long)aStartWidth);
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 OReportWindow::GetTotalWidth() const
 {
     sal_Int32 nWidth = 0;
@@ -165,7 +165,7 @@ sal_Int32 OReportWindow::GetTotalWidth() const
     }
     return nWidth;
 }
-//------------------------------------------------------------------------------
+
 void OReportWindow::Resize()
 {
     Window::Resize();
@@ -202,17 +202,17 @@ void OReportWindow::Resize()
         m_aViewsWindow.SetPosSizePixel(aStartPoint,Size(aTotalOutputSize.Width(),nSectionsHeight));
     }
 }
-//------------------------------------------------------------------------------
+
 Point OReportWindow::getThumbPos() const
 {
     return m_pParent->getThumbPos();
 }
-//------------------------------------------------------------------------------
+
 void OReportWindow::ImplInitSettings()
 {
     SetBackground( );
 }
-//-----------------------------------------------------------------------------
+
 void OReportWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
@@ -224,12 +224,12 @@ void OReportWindow::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 OReportWindow::GetTotalHeight() const
 {
     return m_aViewsWindow.getTotalHeight();
 }
-//------------------------------------------------------------------------------
+
 void OReportWindow::ScrollChildren(const Point& _aThumbPos)
 {
     MapMode aMap = m_aHRuler.GetMapMode();
@@ -243,91 +243,91 @@ void OReportWindow::ScrollChildren(const Point& _aThumbPos)
 
     m_aViewsWindow.scrollChildren(_aThumbPos);
 }
-//----------------------------------------------------------------------------
+
 sal_uInt16 OReportWindow::getSectionCount() const
 {
     return m_aViewsWindow.getSectionCount();
 }
-//----------------------------------------------------------------------------
+
 void OReportWindow::notifySizeChanged()
 {
     m_pParent->setTotalSize(GetTotalWidth(),GetTotalHeight());
 }
-//----------------------------------------------------------------------------
+
 sal_Bool OReportWindow::HasSelection() const
 {
     return m_aViewsWindow.HasSelection();
 }
-//----------------------------------------------------------------------------
+
 void OReportWindow::Delete()
 {
 
     m_aViewsWindow.Delete();
 }
-//----------------------------------------------------------------------------
+
 void OReportWindow::Copy()
 {
 
     m_aViewsWindow.Copy();
 }
-//----------------------------------------------------------------------------
+
 void OReportWindow::Paste()
 {
 
     m_aViewsWindow.Paste();
 }
-//----------------------------------------------------------------------------
+
 sal_Bool OReportWindow::IsPasteAllowed() const
 {
     return m_aViewsWindow.IsPasteAllowed();
 }
-//-----------------------------------------------------------------------------
+
 void OReportWindow::SelectAll(const sal_uInt16 _nObjectType)
 {
 
     m_aViewsWindow.SelectAll(_nObjectType);
 }
-//-----------------------------------------------------------------------------
+
 void OReportWindow::unmarkAllObjects(OSectionView* _pSectionView)
 {
 
     m_aViewsWindow.unmarkAllObjects(_pSectionView);
 }
-//-----------------------------------------------------------------------------
+
 void OReportWindow::showProperties(const uno::Reference< report::XSection>& _xReportComponent)
 {
     ::boost::shared_ptr<OSectionWindow> pSectionWindow = m_aViewsWindow.getSectionWindow( _xReportComponent );
     m_pView->UpdatePropertyBrowserDelayed(pSectionWindow->getReportSection().getSectionView());
 }
-//------------------------------------------------------------------------------
+
 sal_Bool OReportWindow::handleKeyEvent(const KeyEvent& _rEvent)
 {
     return m_aViewsWindow.handleKeyEvent(_rEvent);
 }
-//------------------------------------------------------------------------
+
 void OReportWindow::setMarked(OSectionView* _pSectionView,sal_Bool _bMark)
 {
     if ( _pSectionView )
         m_aViewsWindow.setMarked(_pSectionView,_bMark);
 }
-//------------------------------------------------------------------------
+
 void OReportWindow::setMarked(const uno::Reference< report::XSection>& _xSection,sal_Bool _bMark)
 {
 
     m_aViewsWindow.setMarked(_xSection,_bMark);
 }
-//------------------------------------------------------------------------
+
 void OReportWindow::setMarked(const uno::Sequence< uno::Reference< report::XReportComponent> >& _xShape,sal_Bool _bMark)
 {
 
     m_aViewsWindow.setMarked(_xShape,_bMark);
 }
-//-----------------------------------------------------------------------------
+
 ::boost::shared_ptr<OSectionWindow> OReportWindow::getMarkedSection(NearSectionAccess nsa) const
 {
     return  m_aViewsWindow.getMarkedSection(nsa);
 }
-//-----------------------------------------------------------------------------
+
 ::boost::shared_ptr<OSectionWindow> OReportWindow::getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const
 {
     return  m_aViewsWindow.getSectionWindow(_xSection);

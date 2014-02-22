@@ -271,7 +271,7 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
     return bOk;
 }
 
-//----------------------------------------------------------------------
+
 
 Any SAL_CALL SdUnoDrawView::getSelection()
     throw(RuntimeException)
@@ -486,7 +486,7 @@ void SAL_CALL SdUnoDrawView::setCurrentPage (
     }
 }
 
-//----------------------------------------------------------------------
+
 
 Reference< drawing::XDrawPage > SAL_CALL SdUnoDrawView::getCurrentPage()
     throw(RuntimeException)

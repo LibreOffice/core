@@ -654,7 +654,7 @@ ServiceInfo_Impl * SvxLinguData_Impl::GetInfoByImplName( const OUString &rSvcImp
 }
 
 
-//-----------------------------------------------------------------------------
+
 
 static void lcl_MergeLocales(Sequence< Locale >& aAllLocales, const Sequence< Locale >& rAdd)
 {
@@ -1171,7 +1171,7 @@ SvxLinguTabPage::~SvxLinguTabPage()
         delete pLinguData;
 }
 
-//------------------------------------------------------------------------
+
 
 // don't throw away overloaded
 sal_uInt16* SvxLinguTabPage::GetRanges()
@@ -1180,7 +1180,7 @@ sal_uInt16* SvxLinguTabPage::GetRanges()
     return pRanges;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxTabPage* SvxLinguTabPage::Create( Window* pParent,
                                      const SfxItemSet& rAttrSet )
@@ -1188,7 +1188,7 @@ SfxTabPage* SvxLinguTabPage::Create( Window* pParent,
     return ( new SvxLinguTabPage( pParent, rAttrSet ) );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
 {
@@ -1438,7 +1438,7 @@ void SvxLinguTabPage::UpdateModulesBox_Impl()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
 {

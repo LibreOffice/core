@@ -64,7 +64,7 @@ ImportDocumentHandler::~ImportDocumentHandler()
 }
 IMPLEMENT_GET_IMPLEMENTATION_ID(ImportDocumentHandler)
 IMPLEMENT_FORWARD_REFCOUNT( ImportDocumentHandler, ImportDocumentHandler_BASE )
-//------------------------------------------------------------------------
+
 OUString SAL_CALL ImportDocumentHandler::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
@@ -95,7 +95,7 @@ uno::Sequence< OUString > ImportDocumentHandler::getSupportedServiceNames_static
     return aSupported;
 }
 
-//------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL ImportDocumentHandler::create( const uno::Reference< uno::XComponentContext >& _rxContext )
 {
     return *(new ImportDocumentHandler( _rxContext ));

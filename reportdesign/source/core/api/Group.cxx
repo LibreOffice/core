@@ -50,13 +50,13 @@ OGroup::OGroup(const uno::Reference< report::XGroups >& _xParent
     }
     osl_atomic_decrement( &m_refCount );
 }
-//--------------------------------------------------------------------------
+
 // TODO: VirtualFunctionFinder: This is virtual function!
 //
 OGroup::~OGroup()
 {
 }
-//--------------------------------------------------------------------------
+
 void OGroup::copyGroup(const uno::Reference< report::XGroup >& _xSource)
 {
     ::comphelper::copyProperties(_xSource.get(),static_cast<GroupPropertySet*>(this));
@@ -73,21 +73,21 @@ void OGroup::copyGroup(const uno::Reference< report::XGroup >& _xSource)
         OSection::lcl_copySection(_xSource->getFooter(),m_xFooter);
     }
 }
-//--------------------------------------------------------------------------
+
 IMPLEMENT_FORWARD_XINTERFACE2(OGroup,GroupBase,GroupPropertySet)
-//--------------------------------------------------------------------------
+
 OUString SAL_CALL OGroup::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return OUString("com.sun.star.comp.report.Group");
 }
-//------------------------------------------------------------------------------
+
 uno::Sequence< OUString> OGroup::getSupportedServiceNames_Static(void) throw( uno::RuntimeException )
 {
     uno::Sequence< OUString> aSupported(1);
     aSupported.getArray()[0] = SERVICE_GROUP;
     return aSupported;
 }
-//-------------------------------------------------------------------------
+
 uno::Sequence< OUString> SAL_CALL OGroup::getSupportedServiceNames() throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();

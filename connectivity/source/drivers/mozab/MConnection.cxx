@@ -54,7 +54,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void*  SAL_CALL OMozabConnection_CreateInstance(
 
 using namespace dbtools;
 
-//------------------------------------------------------------------------------
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -123,7 +123,7 @@ OConnection::OConnection(MozabDriver*   _pDriver)
     m_pDriver->acquire();
 
 }
-//-----------------------------------------------------------------------------
+
 OConnection::~OConnection()
 {
     acquire();
@@ -132,13 +132,13 @@ OConnection::~OConnection()
     m_pDriver->release();
     m_pDriver = NULL;
 }
-//-----------------------------------------------------------------------------
+
 void SAL_CALL OConnection::release() throw()
 {
     relase_ChildImpl();
 }
 // -----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+
 void OConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     OSL_TRACE("IN OConnection::construct()" );
@@ -505,7 +505,7 @@ void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeExceptio
 {
     // you should clear your collected warnings here
 }
-//------------------------------------------------------------------------------
+
 void OConnection::disposing()
 {
     // we noticed that we should be destroied in near future so we have to dispose our statements

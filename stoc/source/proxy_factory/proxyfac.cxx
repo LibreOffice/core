@@ -200,7 +200,7 @@ struct binuno_Proxy : public uno_Interface
 extern "C"
 {
 
-//------------------------------------------------------------------------------
+
 static void SAL_CALL binuno_proxy_free(
     uno_ExtEnvironment * pEnv, void * pProxy )
 {
@@ -211,7 +211,7 @@ static void SAL_CALL binuno_proxy_free(
     delete proxy;
 }
 
-//------------------------------------------------------------------------------
+
 static void SAL_CALL binuno_proxy_acquire( uno_Interface * pUnoI )
 {
     binuno_Proxy * that = static_cast< binuno_Proxy * >( pUnoI );
@@ -230,7 +230,7 @@ static void SAL_CALL binuno_proxy_acquire( uno_Interface * pUnoI )
     }
 }
 
-//------------------------------------------------------------------------------
+
 static void SAL_CALL binuno_proxy_release( uno_Interface * pUnoI )
 {
     binuno_Proxy * that = static_cast< binuno_Proxy * >( pUnoI );
@@ -243,7 +243,7 @@ static void SAL_CALL binuno_proxy_release( uno_Interface * pUnoI )
     }
 }
 
-//------------------------------------------------------------------------------
+
 static void SAL_CALL binuno_proxy_dispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberType,
     void * pReturn, void * pArgs [], uno_Any ** ppException )

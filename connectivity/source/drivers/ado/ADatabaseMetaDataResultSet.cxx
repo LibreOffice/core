@@ -41,7 +41,7 @@ using namespace dbtools;
 using namespace connectivity::ado;
 using namespace cppu;
 using namespace ::comphelper;
-//------------------------------------------------------------------------------
+
 using namespace ::com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -652,25 +652,25 @@ Any SAL_CALL ODatabaseMetaDataResultSet::getWarnings(  ) throw(SQLException, Run
 {
     return Any();
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 ODatabaseMetaDataResultSet::getResultSetConcurrency() const
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     return ResultSetConcurrency::READ_ONLY;
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 ODatabaseMetaDataResultSet::getResultSetType() const
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     return ResultSetType::FORWARD_ONLY;
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 ODatabaseMetaDataResultSet::getFetchDirection() const
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     return FetchDirection::FORWARD;
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 ODatabaseMetaDataResultSet::getFetchSize() const
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -679,20 +679,20 @@ sal_Int32 ODatabaseMetaDataResultSet::getFetchSize() const
         m_pRecordSet->get_CacheSize(&nValue);
     return nValue;
 }
-//------------------------------------------------------------------------------
+
 OUString ODatabaseMetaDataResultSet::getCursorName() const
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     return OUString();
 }
 
-//------------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSet::setFetchDirection(sal_Int32 /*_par0*/)
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "ResultSet::FetchDirection", *this );
 }
-//------------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSet::setFetchSize(sal_Int32 _par0)
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {

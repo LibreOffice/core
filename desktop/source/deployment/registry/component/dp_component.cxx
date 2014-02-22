@@ -1072,7 +1072,7 @@ Reference<XInterface> BackendImpl::insertObject(
     return insertion.first->second;
 }
 
-//------------------------------------------------------------------------------
+
 Reference<XComponentContext> raise_uno_process(
     Reference<XComponentContext> const & xContext,
     ::rtl::Reference<AbortChannel> const & abortChannel )
@@ -1123,7 +1123,7 @@ Reference<XComponentContext> raise_uno_process(
     }
 }
 
-//------------------------------------------------------------------------------
+
 namespace {
 
 void extractComponentData(

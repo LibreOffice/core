@@ -80,7 +80,7 @@ void OStatementCommonBase::freeStatementHandle()
     }
 }
 
-//-----------------------------------------------------------------------------
+
 Any SAL_CALL OStatementCommonBase::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = OStatementCommonBase_Base::queryInterface(rType);

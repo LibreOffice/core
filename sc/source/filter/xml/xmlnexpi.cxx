@@ -30,7 +30,7 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------
+
 
 ScXMLNamedExpressionsContext::GlobalInserter::GlobalInserter(ScXMLImport& rImport) : mrImport(rImport) {}
 

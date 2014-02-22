@@ -58,7 +58,7 @@ namespace toolkitform
 
     namespace
     {
-        //--------------------------------------------------------------------
+        
         /** determines the FormComponentType of a form control
         */
         sal_Int16 classifyFormControl( const Reference< XPropertySet >& _rxModel ) SAL_THROW(( Exception ))
@@ -77,7 +77,7 @@ namespace toolkitform
             return nControlType;
         }
 
-        //--------------------------------------------------------------------
+        
         /** (default-)creates a PDF widget according to a given FormComponentType
         */
         ::vcl::PDFWriter::AnyWidget* createDefaultWidget( sal_Int16 _nFormComponentType )
@@ -107,7 +107,7 @@ namespace toolkitform
             return NULL;
         }
 
-        //--------------------------------------------------------------------
+        
         /** determines a unique number for the radio group which the given radio
             button model belongs to
 
@@ -238,7 +238,7 @@ namespace toolkitform
             return -1;
         }
 
-        //--------------------------------------------------------------------
+        
         /** copies a StringItemList to a PDF widget's list
         */
         void getStringItemVector( const Reference< XPropertySet >& _rxModel, ::std::vector< OUString >& _rVector )
@@ -251,7 +251,7 @@ namespace toolkitform
         }
     }
 
-    //--------------------------------------------------------------------
+    
     /** creates a PDF compatible control descriptor for the given control
     */
     void TOOLKIT_DLLPUBLIC describePDFControl( const Reference< XControl >& _rxControl,

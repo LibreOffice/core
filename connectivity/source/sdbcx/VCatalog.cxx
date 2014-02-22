@@ -33,9 +33,9 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-//------------------------------------------------------------------------------
+
 IMPLEMENT_SERVICE_INFO(OCatalog,"com.sun.star.comp.connectivity.OCatalog","com.sun.star.sdbcx.DatabaseDefinition")
-//------------------------------------------------------------------------------
+
 OCatalog::OCatalog(const Reference< XConnection> &_xConnection) : OCatalog_BASE(m_aMutex)
             ,connectivity::OSubComponent<OCatalog, OCatalog_BASE>(_xConnection, this)
             ,m_pTables(NULL)
@@ -52,7 +52,7 @@ OCatalog::OCatalog(const Reference< XConnection> &_xConnection) : OCatalog_BASE(
         OSL_FAIL("No Metadata available!");
     }
 }
-//-----------------------------------------------------------------------------
+
 OCatalog::~OCatalog()
 {
     delete m_pTables;
@@ -60,18 +60,18 @@ OCatalog::~OCatalog()
     delete m_pGroups;
     delete m_pUsers;
 }
-//-----------------------------------------------------------------------------
+
 void SAL_CALL OCatalog::acquire() throw()
 {
     OCatalog_BASE::acquire();
 }
-//------------------------------------------------------------------------------
+
 void SAL_CALL OCatalog::release() throw()
 {
     relase_ChildImpl();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OCatalog::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -88,7 +88,7 @@ void SAL_CALL OCatalog::disposing()
     dispose_ChildImpl();
     OCatalog_BASE::disposing();
 }
-//------------------------------------------------------------------------------
+
 // XTablesSupplier
 Reference< XNameAccess > SAL_CALL OCatalog::getTables(  ) throw(RuntimeException)
 {

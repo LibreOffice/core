@@ -31,7 +31,7 @@
 #include <string.h>
 
 using namespace connectivity;
-//------------------------------------------------------------------------------
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -96,7 +96,7 @@ void OConnectionWrapper::disposing()
 {
 m_xConnection.clear();
 }
-//-----------------------------------------------------------------------------
+
 OConnectionWrapper::~OConnectionWrapper()
 {
     if (m_xProxyConnection.is())

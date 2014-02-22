@@ -161,7 +161,7 @@ ExtensionRemoveGuard::~ExtensionRemoveGuard()
 
 namespace dp_manager {
 
-//------------------------------------------------------------------------------
+
 
 //ToDo: bundled extension
 ExtensionManager::ExtensionManager( Reference< uno::XComponentContext > const& xContext) :
@@ -176,7 +176,7 @@ ExtensionManager::ExtensionManager( Reference< uno::XComponentContext > const& x
     m_repositoryNames.push_back("bundled");
 }
 
-//------------------------------------------------------------------------------
+
 
 ExtensionManager::~ExtensionManager()
 {
@@ -1452,7 +1452,7 @@ sal_Bool ExtensionManager::isReadOnlyRepository(OUString const & repository)
 {
     return getPackageManager(repository)->isReadOnly();
 }
-//------------------------------------------------------------------------------
+
 
 namespace sdecl = comphelper::service_decl;
 sdecl::class_<ExtensionManager> servicePIP;

@@ -56,7 +56,7 @@ SfxSpellCheckItem::SfxSpellCheckItem( const SfxSpellCheckItem& rItem ) :
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SfxSpellCheckItem::GetPresentation
 (
@@ -135,7 +135,7 @@ SfxPoolItem* SfxHyphenRegionItem::Clone( SfxItemPool* ) const
     return new SfxHyphenRegionItem( *this );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SfxHyphenRegionItem::GetPresentation
 (

@@ -825,7 +825,7 @@ struct ImplFSNameItem
     const char* mszUtf8Name;
 };
 
-//------------------------------------------------------------------------
+
 
 static const ImplFSNameItem aImplSimplifiedChinese[] =
 {
@@ -847,7 +847,7 @@ static const ImplFSNameItem aImplSimplifiedChinese[] =
     { 420, "\xe5\x88\x9d\xe5\x8f\xb7" }
 };
 
-//------------------------------------------------------------------------
+
 
 FontSizeNames::FontSizeNames( LanguageType eLanguage )
 {
@@ -869,7 +869,7 @@ FontSizeNames::FontSizeNames( LanguageType eLanguage )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 long FontSizeNames::Name2Size( const OUString& rName ) const
 {
@@ -887,7 +887,7 @@ long FontSizeNames::Name2Size( const OUString& rName ) const
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 OUString FontSizeNames::Size2Name( long nValue ) const
 {
@@ -911,7 +911,7 @@ OUString FontSizeNames::Size2Name( long nValue ) const
     return aStr;
 }
 
-//------------------------------------------------------------------------
+
 
 OUString FontSizeNames::GetIndexName( sal_uLong nIndex ) const
 {
@@ -923,7 +923,7 @@ OUString FontSizeNames::GetIndexName( sal_uLong nIndex ) const
     return aStr;
 }
 
-//------------------------------------------------------------------------
+
 
 long FontSizeNames::GetIndexSize( sal_uLong nIndex ) const
 {

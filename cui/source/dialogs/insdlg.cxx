@@ -692,7 +692,7 @@ short SfxInsertFloatingFrameDialog::Execute()
     return nRet;
 }
 
-//------------------------------------------------------------------------------
+
 
 IMPL_STATIC_LINK( SfxInsertFloatingFrameDialog, CheckHdl, CheckBox*, pCB )
 {
@@ -715,7 +715,7 @@ IMPL_STATIC_LINK( SfxInsertFloatingFrameDialog, CheckHdl, CheckBox*, pCB )
     return 0L;
 }
 
-//------------------------------------------------------------------------------
+
 
 IMPL_STATIC_LINK( SfxInsertFloatingFrameDialog, OpenHdl, PushButton*, EMPTYARG )
 {

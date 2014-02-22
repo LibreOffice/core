@@ -144,7 +144,7 @@ sdbcx::OCollection* OMySQLTable::createIndexes(const TStringVector& _rNames)
 {
     return new OIndexesHelper(this,m_aMutex,_rNames);
 }
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OMySQLTable::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId * pId = 0;
@@ -161,7 +161,7 @@ Sequence< sal_Int8 > OMySQLTable::getUnoTunnelImplementationId()
 }
 
 // com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
 sal_Int64 OMySQLTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )

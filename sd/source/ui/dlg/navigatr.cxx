@@ -744,7 +744,7 @@ void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
     maLbDocs.SelectEntryPos( nPos );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SdNavigatorWin::GetDragTypeSdResId( NavigatorDragType eDT, sal_Bool bImage )
 {
@@ -763,7 +763,7 @@ sal_uInt16 SdNavigatorWin::GetDragTypeSdResId( NavigatorDragType eDT, sal_Bool b
     return( 0 );
 }
 
-//------------------------------------------------------------------------
+
 
 NavDocInfo* SdNavigatorWin::GetDocInfo()
 {

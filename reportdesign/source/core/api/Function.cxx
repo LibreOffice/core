@@ -30,7 +30,7 @@ namespace reportdesign
 // =============================================================================
     using namespace com::sun::star;
     using namespace comphelper;
-//------------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > OFunction::create(uno::Reference< uno::XComponentContext > const & xContext)
 {
     return *(new OFunction(xContext));
@@ -64,12 +64,12 @@ OUString OFunction::getImplementationName_Static(  ) throw(uno::RuntimeException
     return OUString("com.sun.star.comp.report.OFunction");
 }
 
-//--------------------------------------------------------------------------
+
 OUString SAL_CALL OFunction::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
-//--------------------------------------------------------------------------
+
 uno::Sequence< OUString > OFunction::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aServices(1);
@@ -77,12 +77,12 @@ uno::Sequence< OUString > OFunction::getSupportedServiceNames_Static(  ) throw(u
 
     return aServices;
 }
-//--------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL OFunction::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OFunction::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);

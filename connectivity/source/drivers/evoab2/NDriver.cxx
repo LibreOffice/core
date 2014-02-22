@@ -78,7 +78,7 @@ void OEvoabDriver::disposing()
 }
 
 // static ServiceInfo
-//------------------------------------------------------------------------------
+
 OUString OEvoabDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
     return OUString(EVOAB_DRIVER_IMPL_NAME);
@@ -86,7 +86,7 @@ OUString OEvoabDriver::getImplementationName_Static(  ) throw(RuntimeException)
     // Please take care when changing it.
 }
 
-//------------------------------------------------------------------
+
 Sequence< OUString > OEvoabDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     // which service is supported
@@ -95,7 +95,7 @@ Sequence< OUString > OEvoabDriver::getSupportedServiceNames_Static(  ) throw (Ru
     aSNS[0] = "com.sun.star.sdbc.Driver";
     return aSNS;
 }
-//------------------------------------------------------------------
+
 OUString SAL_CALL OEvoabDriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
@@ -105,13 +105,13 @@ sal_Bool SAL_CALL OEvoabDriver::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
-//------------------------------------------------------------------
+
 Sequence< OUString > SAL_CALL OEvoabDriver::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 
-//------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL connectivity::evoab::OEvoabDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
 {
     return *(new OEvoabDriver(_rxFactory));

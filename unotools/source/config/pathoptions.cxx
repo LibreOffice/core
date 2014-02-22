@@ -306,7 +306,7 @@ void SvtPathOptions_Impl::SetPath( SvtPathOptions::Paths ePath, const OUString& 
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 OUString SvtPathOptions_Impl::ExpandMacros( const OUString& rPath ) const
 {
@@ -319,7 +319,7 @@ OUString SvtPathOptions_Impl::ExpandMacros( const OUString& rPath ) const
     return sExpanded;
 }
 
-//-------------------------------------------------------------------------
+
 
 OUString SvtPathOptions_Impl::UsePathVariables( const OUString& rPath ) const
 {

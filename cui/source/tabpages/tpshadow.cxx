@@ -462,14 +462,14 @@ SfxTabPage* SvxShadowTabPage::Create( Window* pWindow,
     return( new SvxShadowTabPage( pWindow, rAttrs ) );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16* SvxShadowTabPage::GetRanges()
 {
     return( pShadowRanges );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxShadowTabPage, ClickShadowHdl_Impl)
 {
@@ -488,7 +488,7 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ClickShadowHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl)
 {
@@ -531,7 +531,7 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxShadowTabPage::PointChanged( Window* pWindow, RECT_POINT eRcPt )
 {

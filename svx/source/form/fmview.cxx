@@ -79,17 +79,17 @@ using namespace ::svxform;
 using namespace ::svx;
 
 //========================================================================
-//------------------------------------------------------------------------
+
 TYPEINIT1(FmFormView, E3dView);
 
-//------------------------------------------------------------------------
+
 FmFormView::FmFormView( FmFormModel* pModel, OutputDevice* pOut )
     :E3dView(pModel,pOut)
 {
     Init();
 }
 
-//------------------------------------------------------------------------
+
 void FmFormView::Init()
 {
     pFormShell = NULL;
@@ -138,7 +138,7 @@ void FmFormView::Init()
     SetDesignMode( bInitDesignMode );
 }
 
-//------------------------------------------------------------------------
+
 FmFormView::~FmFormView()
 {
     if( pFormShell )
@@ -149,7 +149,7 @@ FmFormView::~FmFormView()
     pImpl = NULL;
 }
 
-//------------------------------------------------------------------------
+
 FmFormPage* FmFormView::GetCurPage()
 {
     SdrPageView* pPageView = GetSdrPageView();
@@ -157,7 +157,7 @@ FmFormPage* FmFormView::GetCurPage()
     return pCurPage;
 }
 
-//------------------------------------------------------------------------
+
 void FmFormView::MarkListHasChanged()
 {
     E3dView::MarkListHasChanged();
@@ -201,7 +201,7 @@ namespace
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmFormView::AddWindowToPaintView(OutputDevice* pNewWin)
 {
     E3dView::AddWindowToPaintView(pNewWin);
@@ -216,7 +216,7 @@ void FmFormView::AddWindowToPaintView(OutputDevice* pNewWin)
         pImpl->addWindow( *pPageWindow );
 }
 
-//------------------------------------------------------------------------
+
 void FmFormView::DeleteWindowFromPaintView(OutputDevice* pNewWin)
 {
     const SdrPageWindow* pPageWindow = findPageWindow( this, pNewWin );
@@ -226,7 +226,7 @@ void FmFormView::DeleteWindowFromPaintView(OutputDevice* pNewWin)
     E3dView::DeleteWindowFromPaintView(pNewWin);
 }
 
-//------------------------------------------------------------------------
+
 void FmFormView::ChangeDesignMode(sal_Bool bDesign)
 {
     if (bDesign == IsDesignMode())
@@ -313,14 +313,14 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
         pModel->GetUndoEnv().UnLock();
 }
 
-//------------------------------------------------------------------------
+
 void FmFormView::GrabFirstControlFocus( sal_Bool _bForceSync )
 {
     if ( !IsDesignMode() )
         pImpl->AutoFocus( _bForceSync );
 }
 
-//------------------------------------------------------------------------
+
 SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage)
 {
     SdrPageView* pPV = E3dView::ShowSdrPage(pPage);
@@ -356,7 +356,7 @@ SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage)
     return pPV;
 }
 
-//------------------------------------------------------------------------
+
 void FmFormView::HideSdrPage()
 {
     // --- 1. deactivate controls
@@ -373,19 +373,19 @@ void FmFormView::HideSdrPage()
     E3dView::HideSdrPage();
 }
 
-//------------------------------------------------------------------------
+
 SdrModel* FmFormView::GetMarkedObjModel() const
 {
     return E3dView::GetMarkedObjModel();
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmFormView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
 {
     return E3dView::Paste(rMod, rPos, pLst, nOptions);
 }
 
-//------------------------------------------------------------------------
+
 void FmFormView::ActivateControls(SdrPageView* pPageView)
 {
     if (!pPageView)
@@ -398,7 +398,7 @@ void FmFormView::ActivateControls(SdrPageView* pPageView)
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmFormView::DeactivateControls(SdrPageView* pPageView)
 {
     if( !pPageView )
@@ -411,19 +411,19 @@ void FmFormView::DeactivateControls(SdrPageView* pPageView)
     }
 }
 
-//------------------------------------------------------------------------
+
 SdrObject* FmFormView::CreateFieldControl( const ODataAccessDescriptor& _rColumnDescriptor )
 {
     return pImpl->implCreateFieldControl( _rColumnDescriptor );
 }
 
-//------------------------------------------------------------------------
+
 SdrObject* FmFormView::CreateXFormsControl( const OXFormsDescriptor &_rDesc )
 {
     return pImpl->implCreateXFormsControl(_rDesc);
 }
 
-//------------------------------------------------------------------------
+
 SdrObject* FmFormView::CreateFieldControl(const OUString& rFieldDesc) const
 {
     OUString sDataSource     = rFieldDesc.getToken(0,sal_Unicode(11));
@@ -443,7 +443,7 @@ SdrObject* FmFormView::CreateFieldControl(const OUString& rFieldDesc) const
     return pImpl->implCreateFieldControl( aColumnDescriptor );
 }
 
-//------------------------------------------------------------------------
+
 void FmFormView::InsertControlContainer(const Reference< ::com::sun::star::awt::XControlContainer > & xCC)
 {
     if( !IsDesignMode() )
@@ -465,7 +465,7 @@ void FmFormView::InsertControlContainer(const Reference< ::com::sun::star::awt::
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmFormView::RemoveControlContainer(const Reference< ::com::sun::star::awt::XControlContainer > & xCC)
 {
     if( !IsDesignMode() )

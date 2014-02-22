@@ -43,14 +43,14 @@
 using namespace ::comphelper;
 using namespace connectivity;
 using namespace ::cppu;
-//------------------------------------------------------------------------------
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-//------------------------------------------------------------------------------
+
 //**************************************************************
 //************ Class: java.sql.Statement
 //**************************************************************
@@ -72,12 +72,12 @@ java_sql_Statement_Base::java_sql_Statement_Base( JNIEnv * pEnv, java_sql_Connec
     m_pConnection->acquire();
 }
 
-//------------------------------------------------------------------------------
+
 java_sql_Statement_Base::~java_sql_Statement_Base()
 {
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OStatement_BASE2::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -412,32 +412,32 @@ void SAL_CALL java_sql_Statement_Base::clearWarnings(  ) throw(::com::sun::star:
         callVoidMethod("clearWarnings",mID);
     }
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 java_sql_Statement_Base::getQueryTimeOut()  throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_getProperty("getQueryTimeOut",mID);
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 java_sql_Statement_Base::getMaxRows() throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_getProperty("getMaxRows",mID);
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 java_sql_Statement_Base::getResultSetConcurrency() throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_getProperty("getResultSetConcurrency",mID,m_nResultSetConcurrency);
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int32 java_sql_Statement_Base::getResultSetType() throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_getProperty("getResultSetType",mID,m_nResultSetType);
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 java_sql_Statement_Base::impl_getProperty(const char* _pMethodName, jmethodID& _inout_MethodID,sal_Int32 _nDefault)
 {
     sal_Int32 out = _nDefault;
@@ -446,7 +446,7 @@ sal_Int32 java_sql_Statement_Base::impl_getProperty(const char* _pMethodName, jm
 
     return out;
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 java_sql_Statement_Base::impl_getProperty(const char* _pMethodName, jmethodID& _inout_MethodID)
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
@@ -454,25 +454,25 @@ sal_Int32 java_sql_Statement_Base::impl_getProperty(const char* _pMethodName, jm
     return callIntMethod(_pMethodName,_inout_MethodID,true);
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int32 java_sql_Statement_Base::getFetchDirection() throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_getProperty("getFetchDirection",mID);
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 java_sql_Statement_Base::getFetchSize() throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_getProperty("getFetchSize",mID);
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 java_sql_Statement_Base::getMaxFieldSize() throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_getProperty("getMaxFieldSize",mID);
 }
-//------------------------------------------------------------------------------
+
 OUString java_sql_Statement_Base::getCursorName() throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -489,7 +489,7 @@ OUString java_sql_Statement_Base::getCursorName() throw(SQLException, RuntimeExc
     }
     return OUString();
 }
-//------------------------------------------------------------------------------
+
 void java_sql_Statement_Base::setQueryTimeOut(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -500,7 +500,7 @@ void java_sql_Statement_Base::setQueryTimeOut(sal_Int32 _par0) throw(SQLExceptio
     callVoidMethodWithIntArg("setQueryTimeOut",mID,_par0,true);
 }
 
-//------------------------------------------------------------------------------
+
 void java_sql_Statement_Base::setEscapeProcessing(bool _par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -514,7 +514,7 @@ void java_sql_Statement_Base::setEscapeProcessing(bool _par0) throw(SQLException
     callVoidMethodWithBoolArg("setEscapeProcessing",mID,_par0,true);
 }
 
-//------------------------------------------------------------------------------
+
 void java_sql_Statement_Base::setMaxRows(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -524,7 +524,7 @@ void java_sql_Statement_Base::setMaxRows(sal_Int32 _par0) throw(SQLException, Ru
     static jmethodID mID(NULL);
     callVoidMethodWithIntArg("setMaxRows",mID,_par0,true);
 }
-//------------------------------------------------------------------------------
+
 void java_sql_Statement_Base::setResultSetConcurrency(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -534,7 +534,7 @@ void java_sql_Statement_Base::setResultSetConcurrency(sal_Int32 _par0) throw(SQL
 
     clearObject();
 }
-//------------------------------------------------------------------------------
+
 void java_sql_Statement_Base::setResultSetType(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -544,7 +544,7 @@ void java_sql_Statement_Base::setResultSetType(sal_Int32 _par0) throw(SQLExcepti
 
     clearObject();
 }
-//------------------------------------------------------------------------------
+
 void java_sql_Statement_Base::setFetchDirection(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -555,7 +555,7 @@ void java_sql_Statement_Base::setFetchDirection(sal_Int32 _par0) throw(SQLExcept
     static jmethodID mID(NULL);
     callVoidMethodWithIntArg("setFetchDirection",mID,_par0,true);
 }
-//------------------------------------------------------------------------------
+
 void java_sql_Statement_Base::setFetchSize(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -567,7 +567,7 @@ void java_sql_Statement_Base::setFetchSize(sal_Int32 _par0) throw(SQLException, 
     static jmethodID mID(NULL);
     callVoidMethodWithIntArg("setFetchSize",mID,_par0,true);
 }
-//------------------------------------------------------------------------------
+
 void java_sql_Statement_Base::setMaxFieldSize(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -577,7 +577,7 @@ void java_sql_Statement_Base::setMaxFieldSize(sal_Int32 _par0) throw(SQLExceptio
     static jmethodID mID(NULL);
     callVoidMethodWithIntArg("setMaxFieldSize",mID,_par0,true);
 }
-//------------------------------------------------------------------------------
+
 void java_sql_Statement_Base::setCursorName(const OUString &_par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );

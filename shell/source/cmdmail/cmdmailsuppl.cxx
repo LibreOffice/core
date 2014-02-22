@@ -40,9 +40,9 @@
 #include <errno.h>
 #include <unistd.h>
 
-//------------------------------------------------------------------------
+
 // namespace directives
-//------------------------------------------------------------------------
+
 
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::system::XSimpleMailClientSupplier;
@@ -62,9 +62,9 @@ using namespace com::sun::star::configuration;
 
 #define COMP_IMPL_NAME  "com.sun.star.comp.system.SimpleCommandMail2"
 
-//------------------------------------------------------------------------
+
 // helper functions
-//------------------------------------------------------------------------
+
 
 namespace // private
 {
@@ -77,7 +77,7 @@ namespace // private
 
 } // end private namespace
 
-//-------------------------------------------------
+
 
 CmdMailSuppl::CmdMailSuppl( const Reference< XComponentContext >& xContext ) :
     WeakImplHelper3< XSimpleMailClientSupplier, XSimpleMailClient, XServiceInfo >()
@@ -85,9 +85,9 @@ CmdMailSuppl::CmdMailSuppl( const Reference< XComponentContext >& xContext ) :
     m_xConfigurationProvider = theDefaultProvider::get(xContext);
 }
 
-//-------------------------------------------------
+
 // XSimpleMailClientSupplier
-//-------------------------------------------------
+
 
 Reference< XSimpleMailClient > SAL_CALL CmdMailSuppl::querySimpleMailClient(  )
     throw (RuntimeException)
@@ -95,9 +95,9 @@ Reference< XSimpleMailClient > SAL_CALL CmdMailSuppl::querySimpleMailClient(  )
     return static_cast < XSimpleMailClient * > (this);
 }
 
-//------------------------------------------------
+
 // XSimpleMailClient
-//------------------------------------------------
+
 
 Reference< XSimpleMailMessage > SAL_CALL CmdMailSuppl::createSimpleMailMessage(  )
         throw (::com::sun::star::uno::RuntimeException)
@@ -105,9 +105,9 @@ Reference< XSimpleMailMessage > SAL_CALL CmdMailSuppl::createSimpleMailMessage( 
     return Reference< XSimpleMailMessage >( new CmdMailMsg(  ) );
 }
 
-//------------------------------------------------
+
 // XSimpleMailClient
-//------------------------------------------------
+
 
 namespace {
 

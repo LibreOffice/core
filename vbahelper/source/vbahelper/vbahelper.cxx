@@ -802,7 +802,7 @@ void setOrAppendPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, con
 }
 
 // ====UserFormGeomentryHelper====
-//---------------------------------------------
+
 UserFormGeometryHelper::UserFormGeometryHelper(
         const uno::Reference< uno::XComponentContext >& /*xContext*/,
         const uno::Reference< awt::XControl >& xControl,

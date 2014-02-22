@@ -40,7 +40,7 @@
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 
-//-----------------------------------------------------------------------------
+
 using namespace utl;
 using namespace com::sun::star;
 

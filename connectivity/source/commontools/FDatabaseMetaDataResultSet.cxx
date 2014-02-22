@@ -44,7 +44,7 @@
 using namespace connectivity;
 using namespace dbtools;
 using namespace cppu;
-//------------------------------------------------------------------------------
+
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbcx;
@@ -848,19 +848,19 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
 }
 // XServiceInfo
     // --------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------
+    
     OUString ODatabaseMetaDataResultSet::getImplementationName_Static(  ) throw(RuntimeException)
     {
         return OUString("org.openoffice.comp.helper.DatabaseMetaDataResultSet");
     }
-    //------------------------------------------------------------------------------
+    
     Sequence< OUString > ODatabaseMetaDataResultSet::getSupportedServiceNames_Static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSNS( 1 );
         aSNS[0] = "com.sun.star.sdbc.ResultSet";
         return aSNS;
     }
-    //------------------------------------------------------------------
+    
     OUString SAL_CALL ODatabaseMetaDataResultSet::getImplementationName(  ) throw(RuntimeException)
     {
         return getImplementationName_Static();
@@ -870,7 +870,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
     {
         return cppu::supportsService(this, _rServiceName);
     }
-    //------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL ODatabaseMetaDataResultSet::getSupportedServiceNames(  ) throw(RuntimeException)
     {
         return getSupportedServiceNames_Static();
@@ -908,7 +908,7 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 extern "C"
 {
 
-//---------------------------------------------------------------------------------------
+
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL dbtools_component_getFactory(const sal_Char* implName, ::com::sun::star::lang::XMultiServiceFactory* serviceManager, void* registryKey)
 {
     return cppu::component_getFactoryHelper(implName, serviceManager, registryKey, entries);

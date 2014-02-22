@@ -810,7 +810,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterCanvas::getScaledBitmap(
 
 
 
-//-----------------------------------------------------------------------------
+
 
 rendering::ViewState PresenterCanvas::MergeViewState (
     const rendering::ViewState& rViewState)
@@ -1180,7 +1180,7 @@ Reference<rendering::XCanvas> PresenterCustomSprite::getContentCanvas (void)
 
 
 
-//-----------------------------------------------------------------------------
+
 
 void PresenterCustomSprite::ThrowIfDisposed (void)
     throw (css::lang::DisposedException)

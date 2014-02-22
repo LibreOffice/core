@@ -55,19 +55,19 @@ OTable::OTable( sdbcx::OCollection* _pTables, OConnection* _pConnection,
     construct();
 }
 
-//--------------------------------------------------------------------------
+
 sdbcx::OCollection* OTable::createColumns( const TStringVector& _rNames )
 {
     return new OColumns( this, m_aMutex, _rNames );
 }
 
-//--------------------------------------------------------------------------
+
 sdbcx::OCollection* OTable::createKeys(const TStringVector& _rNames)
 {
     return new OKeysHelper( this, m_aMutex, _rNames );
 }
 
-//--------------------------------------------------------------------------
+
 sdbcx::OCollection* OTable::createIndexes(const TStringVector& _rNames)
 {
     return new OIndexesHelper( this, m_aMutex, _rNames );

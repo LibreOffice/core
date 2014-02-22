@@ -36,7 +36,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 
 IMPLEMENT_SERVICE_INFO(KabConnection, "com.sun.star.sdbc.drivers.KabConnection", "com.sun.star.sdbc.Connection")
-//-----------------------------------------------------------------------------
+
 KabConnection::KabConnection(KabDriver* _pDriver)
          : OMetaConnection_BASE(m_aMutex),
          OSubComponent<KabConnection, KabConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
@@ -46,7 +46,7 @@ KabConnection::KabConnection(KabDriver* _pDriver)
 {
     m_pDriver->acquire();
 }
-//-----------------------------------------------------------------------------
+
 KabConnection::~KabConnection()
 {
     if (!isClosed())
@@ -55,7 +55,7 @@ KabConnection::~KabConnection()
     m_pDriver->release();
     m_pDriver = NULL;
 }
-//-----------------------------------------------------------------------------
+
 void SAL_CALL KabConnection::release() throw()
 {
     relase_ChildImpl();
@@ -264,7 +264,7 @@ void SAL_CALL KabConnection::clearWarnings(  ) throw(SQLException, RuntimeExcept
 {
     // you should clear your collected warnings here
 }
-//------------------------------------------------------------------------------
+
 void KabConnection::disposing()
 {
     // we noticed that we should be destroied in near future so we have to dispose our statements

@@ -35,7 +35,7 @@
 
 using namespace ::com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 SVT_DLLPUBLIC const OUString ApplyLreOrRleEmbedding( const OUString &rText )
 {
@@ -112,7 +112,7 @@ SVT_DLLPUBLIC const OUString ApplyLreOrRleEmbedding( const OUString &rText )
     return aRes;
 }
 
-//------------------------------------------------------------------------
+
 
 namespace {
     BOOST_STATIC_ASSERT(
@@ -125,13 +125,13 @@ SvtLanguageTable::SvtLanguageTable() :
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SvtLanguageTable::~SvtLanguageTable()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 const OUString SvtLanguageTable::GetString( const LanguageType eType, bool bUserInterfaceSelection ) const
 {
@@ -156,7 +156,7 @@ OUString SvtLanguageTable::GetLanguageString( const LanguageType eType )
     return aLangTable.GetString( eType );
 }
 
-//------------------------------------------------------------------------
+
 
 LanguageType SvtLanguageTable::GetType( const OUString& rStr ) const
 {
@@ -174,14 +174,14 @@ LanguageType SvtLanguageTable::GetType( const OUString& rStr ) const
     return eType;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt32 SvtLanguageTable::GetEntryCount() const
 {
     return Count();
 }
 
-//------------------------------------------------------------------------
+
 
 LanguageType SvtLanguageTable::GetTypeAtIndex( sal_uInt32 nIndex ) const
 {
@@ -191,6 +191,6 @@ LanguageType SvtLanguageTable::GetTypeAtIndex( sal_uInt32 nIndex ) const
     return nType;
 }
 
-//------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

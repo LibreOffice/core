@@ -300,7 +300,7 @@ void OXMLTable::incrementRowIndex()
     m_nColumnIndex = 0;
     m_aGrid.push_back(::std::vector<TCell>(m_aWidth.size()));
 }
-//----------------------------------------------------------------------------
+
 } // namespace rptxml
 // -----------------------------------------------------------------------------
 

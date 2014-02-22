@@ -36,13 +36,13 @@ OGroups::OGroups(const uno::Reference< report::XReportDefinition >& _xParent,con
 ,m_xParent(_xParent)
 {
 }
-//--------------------------------------------------------------------------
+
 // TODO: VirtualFunctionFinder: This is virtual function!
 //
 OGroups::~OGroups()
 {
 }
-//--------------------------------------------------------------------------
+
 void OGroups::copyGroups(const uno::Reference< report::XGroups >& _xSource)
 {
     sal_Int32 nCount = _xSource->getCount();

@@ -56,23 +56,23 @@ class SvtPrintWarningOptions_Impl : public ConfigItem
 {
 public:
 
-//---------------------------------------------------------------------------------------------------------
+
 //  constructor / destructor
-//---------------------------------------------------------------------------------------------------------
+
 
      SvtPrintWarningOptions_Impl();
     ~SvtPrintWarningOptions_Impl();
 
-//---------------------------------------------------------------------------------------------------------
+
 //  overloaded methods of baseclass
-//---------------------------------------------------------------------------------------------------------
+
 
     virtual void Commit();
     virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames );
 
-//---------------------------------------------------------------------------------------------------------
+
 //  public interface
-//---------------------------------------------------------------------------------------------------------
+
 
     bool    IsPaperSize() const { return m_bPaperSize; }
     bool    IsPaperOrientation() const { return m_bPaperOrientation; }
@@ -86,17 +86,17 @@ public:
     void        SetTransparency( bool bState ) { m_bTransparency = bState; SetModified(); }
     void        SetModifyDocumentOnPrintingAllowed( bool bState ) { m_bModifyDocumentOnPrintingAllowed = bState; SetModified(); }
 
-//-------------------------------------------------------------------------------------------------------------
+
 //  private methods
-//-------------------------------------------------------------------------------------------------------------
+
 
 private:
 
     static Sequence< OUString > impl_GetPropertyNames();
 
-//-------------------------------------------------------------------------------------------------------------
+
 //  private member
-//-------------------------------------------------------------------------------------------------------------
+
 
 private:
 

@@ -60,9 +60,9 @@ using ::rtl::OUString;
 const char * pTestString1 = "test socket";
 const char * pTestString2 = " Passed#OK";
 
-//------------------------------------------------------------------------
+
 // helper functions
-//------------------------------------------------------------------------
+
 
 class CloseSocketThread : public Thread
 {
@@ -88,9 +88,9 @@ public:
     }
 };
 
-//------------------------------------------------------------------------
+
 // tests cases begins here
-//------------------------------------------------------------------------
+
 
 namespace osl_DatagramSocket
 {

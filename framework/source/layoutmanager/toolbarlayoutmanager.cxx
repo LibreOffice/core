@@ -82,9 +82,9 @@ ToolbarLayoutManager::~ToolbarLayoutManager()
     delete m_pAddonOptions;
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 //  XInterface
-//---------------------------------------------------------------------------------------------------------
+
 void SAL_CALL ToolbarLayoutManager::acquire() throw()
 {
     OWeakObject::acquire();
@@ -1566,9 +1566,9 @@ void ToolbarLayoutManager::implts_destroyDockingAreaWindows()
     xBottomDockingWindow->dispose();
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 // persistence methods
-//---------------------------------------------------------------------------------------------------------
+
 
 sal_Bool ToolbarLayoutManager::implts_readWindowStateData( const OUString& aName, UIElement& rElementData )
 {
@@ -3215,9 +3215,9 @@ void ToolbarLayoutManager::implts_renumberRowColumnData(
     }
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 //  XWindowListener
-//---------------------------------------------------------------------------------------------------------
+
 void SAL_CALL ToolbarLayoutManager::windowResized( const awt::WindowEvent& aEvent )
 throw( uno::RuntimeException )
 {
@@ -3283,9 +3283,9 @@ throw( uno::RuntimeException )
 {
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 //  XDockableWindowListener
-//---------------------------------------------------------------------------------------------------------
+
 void SAL_CALL ToolbarLayoutManager::startDocking( const awt::DockingEvent& e )
 throw (uno::RuntimeException)
 {
@@ -3840,9 +3840,9 @@ throw (uno::RuntimeException)
 {
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 //  XUIConfigurationListener
-//---------------------------------------------------------------------------------------------------------
+
 void SAL_CALL ToolbarLayoutManager::elementInserted( const ui::ConfigurationEvent& rEvent )
 throw (uno::RuntimeException)
 {

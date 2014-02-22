@@ -80,12 +80,12 @@ void MozillaBootstrap::disposing()
 }
 
 // static ServiceInfo
-//------------------------------------------------------------------------------
+
 OUString MozillaBootstrap::getImplementationName_Static(  ) throw(RuntimeException)
 {
     return OUString(MOZAB_MozillaBootstrap_IMPL_NAME);
 }
-//------------------------------------------------------------------------------
+
 Sequence< OUString > MozillaBootstrap::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     // which service is supported
@@ -95,7 +95,7 @@ Sequence< OUString > MozillaBootstrap::getSupportedServiceNames_Static(  ) throw
     return aSNS;
 }
 
-//------------------------------------------------------------------
+
 OUString SAL_CALL MozillaBootstrap::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
@@ -106,7 +106,7 @@ sal_Bool SAL_CALL MozillaBootstrap::supportsService( const OUString& _rServiceNa
     return cppu::supportsService(this, _rServiceName);
 }
 
-//------------------------------------------------------------------
+
 Sequence< OUString > SAL_CALL MozillaBootstrap::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();

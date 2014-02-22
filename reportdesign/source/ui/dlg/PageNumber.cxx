@@ -60,7 +60,7 @@ OPageNumberDialog::OPageNumberDialog( Window* _pParent
 
 }
 
-//------------------------------------------------------------------------
+
 OPageNumberDialog::~OPageNumberDialog()
 {
 }

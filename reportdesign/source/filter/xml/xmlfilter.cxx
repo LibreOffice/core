@@ -275,35 +275,35 @@ sal_Int32 ReadThroughComponent(
     return 1;
 }
 
-//---------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > ORptImportHelper::create(uno::Reference< uno::XComponentContext > const & xContext)
 {
     return static_cast< XServiceInfo* >(new ORptFilter(xContext, IMPORT_SETTINGS ));
 }
-//---------------------------------------------------------------------
+
 OUString ORptImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
 {
     return OUString(SERVICE_SETTINGSIMPORTER);
 }
-//---------------------------------------------------------------------
+
 Sequence< OUString > ORptImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
     Sequence< OUString > aSupported(1);
     aSupported[0] = SERVICE_IMPORTFILTER;
     return aSupported;
 }
-//---------------------------------------------------------------------
+
 Reference< XInterface > ORptContentImportHelper::create(const Reference< XComponentContext > & xContext)
 {
     return static_cast< XServiceInfo* >(new ORptFilter(xContext,IMPORT_AUTOSTYLES |   IMPORT_CONTENT | IMPORT_SCRIPTS |
         IMPORT_FONTDECLS ));
 }
-//---------------------------------------------------------------------
+
 OUString ORptContentImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
 {
     return OUString(SERVICE_CONTENTIMPORTER);
 }
-//---------------------------------------------------------------------
+
 Sequence< OUString > ORptContentImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
     Sequence< OUString > aSupported(1);
@@ -311,19 +311,19 @@ Sequence< OUString > ORptContentImportHelper::getSupportedServiceNames_Static(  
     return aSupported;
 }
 
-//---------------------------------------------------------------------
+
 Reference< XInterface > ORptStylesImportHelper::create(Reference< XComponentContext > const & xContext)
 {
     return static_cast< XServiceInfo* >(new ORptFilter(xContext,
         IMPORT_STYLES | IMPORT_MASTERSTYLES | IMPORT_AUTOSTYLES |
         IMPORT_FONTDECLS ));
 }
-//---------------------------------------------------------------------
+
 OUString ORptStylesImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
 {
     return OUString(SERVICE_STYLESIMPORTER);
 }
-//---------------------------------------------------------------------
+
 Sequence< OUString > ORptStylesImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
     Sequence< OUString > aSupported(1);
@@ -331,18 +331,18 @@ Sequence< OUString > ORptStylesImportHelper::getSupportedServiceNames_Static(  )
     return aSupported;
 }
 
-//---------------------------------------------------------------------
+
 Reference< XInterface > ORptMetaImportHelper::create(Reference< XComponentContext > const & xContext)
 {
     return static_cast< XServiceInfo* >(new ORptFilter(xContext,
         IMPORT_META));
 }
-//---------------------------------------------------------------------
+
 OUString ORptMetaImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
 {
     return OUString(SERVICE_METAIMPORTER);
 }
-//---------------------------------------------------------------------
+
 Sequence< OUString > ORptMetaImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
     Sequence< OUString > aSupported(1);
@@ -378,7 +378,7 @@ ORptFilter::ORptFilter( const uno::Reference< XComponentContext >& _rxContext,sa
 ORptFilter::~ORptFilter() throw()
 {
 }
-//------------------------------------------------------------------------------
+
 uno::Reference< XInterface > ORptFilter::create(uno::Reference< XComponentContext > const & xContext)
 {
     return *(new ORptFilter(xContext));

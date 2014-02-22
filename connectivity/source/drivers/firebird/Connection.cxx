@@ -690,7 +690,7 @@ void SAL_CALL Connection::disposing(const EventObject& /*rSource*/)
     throw (RuntimeException)
 {
 }
-//--------------------------------------------------------------------
+
 void Connection::buildTypeInfo() throw( SQLException)
 {
     SAL_INFO("connectivity.firebird", "buildTypeInfo().");

@@ -25,9 +25,6 @@
 namespace basctl
 {
 
-//-------------------
-// class TbxControls
-//-------------------
 class TbxControls : public SfxToolBoxControl
 {
 private:

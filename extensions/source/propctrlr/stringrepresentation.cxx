@@ -271,7 +271,7 @@ void SAL_CALL StringRepresentation::initialize(const uno::Sequence< uno::Any > &
         }
     }
 }
-//------------------------------------------------------------------------
+
 OUString StringRepresentation::convertSimpleToString( const uno::Any& _rValue )
 {
     OUString sReturn;
@@ -307,7 +307,7 @@ OUString StringRepresentation::convertSimpleToString( const uno::Any& _rValue )
     return sReturn;
 }
 
-//--------------------------------------------------------------------
+
 namespace
 {
     struct ConvertIntegerFromAndToString
@@ -365,7 +365,7 @@ namespace
     }
 }
 
-//--------------------------------------------------------------------
+
 bool StringRepresentation::convertGenericValueToString( const uno::Any& _rValue, OUString& _rStringRep )
 {
     bool bCanConvert = true;
@@ -473,7 +473,7 @@ bool StringRepresentation::convertGenericValueToString( const uno::Any& _rValue,
 
     return bCanConvert;
 }
-//------------------------------------------------------------------------
+
 uno::Any StringRepresentation::convertStringToSimple( const OUString& _rValue,const uno::TypeClass& _ePropertyType )
 {
     uno::Any aReturn;
@@ -504,7 +504,7 @@ uno::Any StringRepresentation::convertStringToSimple( const OUString& _rValue,co
     }
     return aReturn;
 }
-//--------------------------------------------------------------------
+
 bool StringRepresentation::convertStringToGenericValue( const OUString& _rStringRep, uno::Any& _rValue, const uno::Type& _rTargetType )
 {
     bool bCanConvert = true;
@@ -612,10 +612,10 @@ bool StringRepresentation::convertStringToGenericValue( const OUString& _rString
 
     return bCanConvert;
 }
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+
+
 } // pcr
-//------------------------------------------------------------------------
+
 
 
 // component helper namespace
@@ -643,7 +643,7 @@ uno::Reference< uno::XInterface > SAL_CALL _create(
 
 } // closing component helper namespace
 
-//------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_StringRepresentation()
 {
     ::pcr::PcrModule::getInstance().registerImplementation(

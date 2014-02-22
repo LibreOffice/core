@@ -69,7 +69,7 @@ IMPL_LINK( SwFootNoteOptionDlg, OkHdl, Button *, pBtn )
 }
 
 
-//----------------------------------------------------------------------
+
 
 
 SwEndNoteOptionPage::SwEndNoteOptionPage(Window *pParent, bool bEN,

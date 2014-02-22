@@ -48,7 +48,7 @@ using namespace ::comphelper;
 
 
 using namespace connectivity::odbc;
-//------------------------------------------------------------------------------
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -57,7 +57,7 @@ using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
-//------------------------------------------------------------------------------
+
 OStatement_Base::OStatement_Base(OConnection* _pConnection )
     :OStatement_BASE(m_aMutex)
     ,OPropertySetHelper(OStatement_BASE::rBHelper)
@@ -87,7 +87,7 @@ OStatement_Base::~OStatement_Base()
 {
     OSL_ENSURE(!m_aStatementHandle,"Sohould ne null here!");
 }
-//------------------------------------------------------------------------------
+
 void OStatement_Base::disposeResultSet()
 {
     // free the cursor if alive
@@ -115,7 +115,7 @@ void SAL_CALL OStatement_Base::disposing(void)
 
     OStatement_BASE::disposing();
 }
-//------------------------------------------------------------------------------
+
 void OStatement_BASE2::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -123,12 +123,12 @@ void OStatement_BASE2::disposing()
     dispose_ChildImpl();
     OStatement_Base::disposing();
 }
-//-----------------------------------------------------------------------------
+
 void SAL_CALL OStatement_BASE2::release() throw()
 {
     relase_ChildImpl();
 }
-//-----------------------------------------------------------------------------
+
 Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     if ( m_pConnection && !m_pConnection->isAutoRetrievingEnabled() && rType == ::getCppuType( (const Reference< XGeneratedResultSet > *)0 ) )
@@ -214,10 +214,10 @@ void OStatement_Base::reset() throw (SQLException)
         THROW_SQL(N3SQLFreeStmt(m_aStatementHandle, SQL_CLOSE));
     }
 }
-//--------------------------------------------------------------------
+
 // clearMyResultSet
 // If a ResultSet was created for this Statement, close it
-//--------------------------------------------------------------------
+
 
 void OStatement_Base::clearMyResultSet () throw (SQLException)
 {
@@ -234,7 +234,7 @@ void OStatement_Base::clearMyResultSet () throw (SQLException)
 
     m_xResultSet.clear();
 }
-//--------------------------------------------------------------------
+
 SQLLEN OStatement_Base::getRowCount () throw( SQLException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -251,12 +251,12 @@ SQLLEN OStatement_Base::getRowCount () throw( SQLException)
     }
     return numRows;
 }
-//--------------------------------------------------------------------
+
 // lockIfNecessary
 // If the given SQL statement contains a 'FOR UPDATE' clause, change
 // the concurrency to lock so that the row can then be updated.  Returns
 // true if the concurrency has been changed
-//--------------------------------------------------------------------
+
 
 sal_Bool OStatement_Base::lockIfNecessary (const OUString& sql) throw( SQLException)
 {
@@ -291,10 +291,10 @@ sal_Bool OStatement_Base::lockIfNecessary (const OUString& sql) throw( SQLExcept
 
     return rc;
 }
-//--------------------------------------------------------------------
+
 // setWarning
 // Sets the warning
-//--------------------------------------------------------------------
+
 
 void OStatement_Base::setWarning (const SQLWarning &ex) throw( SQLException)
 {
@@ -305,10 +305,10 @@ void OStatement_Base::setWarning (const SQLWarning &ex) throw( SQLException)
     m_aLastWarning = ex;
 }
 
-//--------------------------------------------------------------------
+
 // getColumnCount
 // Return the number of columns in the ResultSet
-//--------------------------------------------------------------------
+
 
 sal_Int32 OStatement_Base::getColumnCount () throw( SQLException)
 {
@@ -375,11 +375,11 @@ sal_Bool SAL_CALL OStatement_Base::execute( const OUString& sql ) throw(SQLExcep
 
     return hasResultSet;
 }
-//--------------------------------------------------------------------
+
 // getResultSet
 // getResultSet returns the current result as a ResultSet.  It
 // returns NULL if the current result is not a ResultSet.
-//--------------------------------------------------------------------
+
 Reference< XResultSet > OStatement_Base::getResultSet (sal_Bool checkCount) throw( SQLException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -419,10 +419,10 @@ Reference< XResultSet > OStatement_Base::getResultSet (sal_Bool checkCount) thro
 
     return pRs;
 }
-//--------------------------------------------------------------------
+
 // getStmtOption
 // Invoke SQLGetStmtOption with the given option.
-//--------------------------------------------------------------------
+
 
 template < typename T, SQLINTEGER BufferLength > T OStatement_Base::getStmtOption (SQLINTEGER fOption, T dflt) const
 {
@@ -652,17 +652,17 @@ void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeExce
     m_aLastWarning = SQLWarning();
 }
 // -------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+
 sal_Int64 OStatement_Base::getQueryTimeOut() const
 {
     return getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_QUERY_TIMEOUT);
 }
-//------------------------------------------------------------------------------
+
 sal_Int64 OStatement_Base::getMaxRows() const
 {
     return getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_MAX_ROWS);
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 OStatement_Base::getResultSetConcurrency() const
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
@@ -673,7 +673,7 @@ sal_Int32 OStatement_Base::getResultSetConcurrency() const
         nValue = ResultSetConcurrency::UPDATABLE;
     return nValue;
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 OStatement_Base::getResultSetType() const
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
@@ -696,7 +696,7 @@ sal_Int32 OStatement_Base::getResultSetType() const
 
     return nValue;
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 OStatement_Base::getFetchDirection() const
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
@@ -713,18 +713,18 @@ sal_Int32 OStatement_Base::getFetchDirection() const
 
     return nValue;
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 OStatement_Base::getFetchSize() const
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     return getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_ROW_ARRAY_SIZE);
 }
-//------------------------------------------------------------------------------
+
 sal_Int64 OStatement_Base::getMaxFieldSize() const
 {
     return getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_MAX_LENGTH);
 }
-//------------------------------------------------------------------------------
+
 OUString OStatement_Base::getCursorName() const
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
@@ -734,19 +734,19 @@ OUString OStatement_Base::getCursorName() const
     OSL_UNUSED( nRetCode );
     return OUString::createFromAscii((const char*)pName);
 }
-//------------------------------------------------------------------------------
+
 void OStatement_Base::setQueryTimeOut(sal_Int64 seconds)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_QUERY_TIMEOUT,seconds);
 }
-//------------------------------------------------------------------------------
+
 void OStatement_Base::setMaxRows(sal_Int64 _par0)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_MAX_ROWS, _par0);
 }
-//------------------------------------------------------------------------------
+
 void OStatement_Base::setResultSetConcurrency(sal_Int32 _par0)
 {
     SQLULEN nSet;
@@ -758,7 +758,7 @@ void OStatement_Base::setResultSetConcurrency(sal_Int32 _par0)
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_CONCURRENCY, nSet);
 }
-//------------------------------------------------------------------------------
+
 void OStatement_Base::setResultSetType(sal_Int32 _par0)
 {
 
@@ -814,7 +814,7 @@ void OStatement_Base::setResultSetType(sal_Int32 _par0)
 
     setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_CURSOR_SENSITIVITY, nSet);
 }
-//------------------------------------------------------------------------------
+
 void OStatement_Base::setEscapeProcessing( const sal_Bool _bEscapeProc )
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
@@ -822,7 +822,7 @@ void OStatement_Base::setEscapeProcessing( const sal_Bool _bEscapeProc )
     setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_NOSCAN, nEscapeProc);
 }
 
-//------------------------------------------------------------------------------
+
 void OStatement_Base::setFetchDirection(sal_Int32 _par0)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
@@ -835,7 +835,7 @@ void OStatement_Base::setFetchDirection(sal_Int32 _par0)
         setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_CURSOR_SCROLLABLE, SQL_SCROLLABLE);
     }
 }
-//------------------------------------------------------------------------------
+
 void OStatement_Base::setFetchSize(sal_Int32 _par0)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
@@ -850,13 +850,13 @@ void OStatement_Base::setFetchSize(sal_Int32 _par0)
         setStmtOption<SQLUSMALLINT*, SQL_IS_POINTER>(SQL_ATTR_ROW_STATUS_PTR, m_pRowStatusArray);
     }
 }
-//------------------------------------------------------------------------------
+
 void OStatement_Base::setMaxFieldSize(sal_Int64 _par0)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_MAX_LENGTH, _par0);
 }
-//------------------------------------------------------------------------------
+
 void OStatement_Base::setCursorName(const OUString &_par0)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");

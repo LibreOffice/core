@@ -2771,7 +2771,7 @@ IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( Svx3DWin, ClickColorHdl, PushButton *, pBtn )
 {

@@ -50,7 +50,7 @@ void SAL_CALL OPoolTimer::onShot()
 }
 namespace
 {
-    //--------------------------------------------------------------------
+    
     static const OUString& getTimeoutNodeName()
     {
         static OUString s_sNodeName( "Timeout" );
@@ -61,7 +61,7 @@ namespace
 //==========================================================================
 //= OConnectionPool
 //==========================================================================
-//--------------------------------------------------------------------------
+
 OConnectionPool::OConnectionPool(const Reference< XDriver >& _xDriver,
                                  const Reference< XInterface >& _xDriverNode,
                                  const Reference< ::com::sun::star::reflection::XProxyFactory >& _rxProxyFactory)
@@ -166,7 +166,7 @@ void OConnectionPool::clear(sal_Bool _bDispose)
 m_xDriverNode.clear();
 m_xDriver.clear();
 }
-//--------------------------------------------------------------------------
+
 Reference< XConnection > SAL_CALL OConnectionPool::getConnectionWithInfo( const OUString& _rURL, const Sequence< PropertyValue >& _rInfo ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
@@ -187,7 +187,7 @@ Reference< XConnection > SAL_CALL OConnectionPool::getConnectionWithInfo( const 
 
     return xConnection;
 }
-//--------------------------------------------------------------------------
+
 void SAL_CALL OConnectionPool::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (RuntimeException)
 {
     Reference<XConnection> xConnection(Source.Source,UNO_QUERY);

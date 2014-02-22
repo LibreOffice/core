@@ -72,7 +72,7 @@ namespace bridge_test
 template< class T>
 Sequence<T> cloneSequence(const Sequence<T>& val);
 
-//--------------------------------------------------------------------------------------------------
+
 inline static Sequence< OUString > getSupportedServiceNames()
 {
     OUString aName( SERVICENAME );

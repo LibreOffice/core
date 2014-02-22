@@ -193,9 +193,9 @@ uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId()
     return cRet;
 }
 
-//----------------------------------------------------------------------
+
 // XBitmap
-//----------------------------------------------------------------------
+
 
 awt::Size SAL_CALL Graphic::getSize(  ) throw (uno::RuntimeException)
 {
@@ -208,7 +208,7 @@ awt::Size SAL_CALL Graphic::getSize(  ) throw (uno::RuntimeException)
     return awt::Size( aVclSize.Width(), aVclSize.Height() );
 }
 
-//----------------------------------------------------------------------
+
 
 uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getDIB(  ) throw (uno::RuntimeException)
 {
@@ -227,7 +227,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getDIB(  ) throw (uno::RuntimeExce
     }
 }
 
-//----------------------------------------------------------------------
+
 
 uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getMaskDIB(  ) throw (uno::RuntimeException)
 {
@@ -246,7 +246,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getMaskDIB(  ) throw (uno::Runtime
     }
 }
 
-//----------------------------------------------------------------------
+
 const ::Graphic* Graphic::getImplementation( const uno::Reference< uno::XInterface >& rxIFace )
     throw()
 {
@@ -254,7 +254,7 @@ const ::Graphic* Graphic::getImplementation( const uno::Reference< uno::XInterfa
     return( xTunnel.is() ? reinterpret_cast< ::Graphic* >( xTunnel->getSomething( getImplementationId_Static() ) ) : NULL );
 }
 
-//----------------------------------------------------------------------
+
 sal_Int64 SAL_CALL Graphic::getSomething( const uno::Sequence< sal_Int8 >& rId )
     throw( uno::RuntimeException )
 {

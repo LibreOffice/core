@@ -50,7 +50,7 @@
 
 using namespace ::com::sun::star;
 
-//--------------------------------------------------------------------
+
 
 sal_uInt16 SfxStatusBarControl::convertAwtToVCLMouseButtons( sal_Int16 nAwtMouseButtons )
 {
@@ -66,7 +66,7 @@ sal_uInt16 SfxStatusBarControl::convertAwtToVCLMouseButtons( sal_Int16 nAwtMouse
     return nVCLMouseButtons;
 }
 
-//--------------------------------------------------------------------
+
 
 svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
     const uno::Reference< frame::XFrame >& rFrame,
@@ -128,7 +128,7 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
     return NULL;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxStatusBarControl::SfxStatusBarControl
 (
@@ -161,7 +161,7 @@ SfxStatusBarControl::SfxStatusBarControl
 {
 }
 
-//--------------------------------------------------------------------
+
 
 SfxStatusBarControl::~SfxStatusBarControl()
 
@@ -173,7 +173,7 @@ SfxStatusBarControl::~SfxStatusBarControl()
 
 {}
 
-//--------------------------------------------------------------------
+
 // XInterface
 uno::Any SAL_CALL SfxStatusBarControl::queryInterface( const uno::Type & rType )
 throw( uno::RuntimeException)
@@ -191,7 +191,7 @@ void SAL_CALL SfxStatusBarControl::release() throw()
     OWeakObject::release();
 }
 
-//--------------------------------------------------------------------
+
 // XEventListener
 void SAL_CALL SfxStatusBarControl::disposing( const lang::EventObject& aEvent )
 throw( uno::RuntimeException )
@@ -199,7 +199,7 @@ throw( uno::RuntimeException )
     svt::StatusbarController::disposing( aEvent );
 }
 
-//--------------------------------------------------------------------
+
 // XComponent
 void SAL_CALL SfxStatusBarControl::dispose()
 throw (uno::RuntimeException)
@@ -207,7 +207,7 @@ throw (uno::RuntimeException)
     svt::StatusbarController::dispose();
 }
 
-//--------------------------------------------------------------------
+
 // XStatusListener
 void SAL_CALL SfxStatusBarControl::statusChanged( const frame::FeatureStateEvent& rEvent )
 throw ( ::com::sun::star::uno::RuntimeException )
@@ -313,7 +313,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
     }
 }
 
-//--------------------------------------------------------------------
+
 // XStatusbarController
 
 ::sal_Bool SAL_CALL SfxStatusBarControl::mouseButtonDown(
@@ -332,7 +332,7 @@ throw ( uno::RuntimeException )
     return MouseButtonDown( aMouseEvent );
 }
 
-//--------------------------------------------------------------------
+
 
 ::sal_Bool SAL_CALL SfxStatusBarControl::mouseMove(
     const awt::MouseEvent& rMouseEvent )
@@ -349,7 +349,7 @@ throw (uno::RuntimeException)
     return MouseMove( aMouseEvent );
 }
 
-//--------------------------------------------------------------------
+
 
 ::sal_Bool SAL_CALL SfxStatusBarControl::mouseButtonUp(
     const ::awt::MouseEvent& rMouseEvent )
@@ -366,7 +366,7 @@ throw ( uno::RuntimeException )
     return MouseButtonUp( aMouseEvent );
 }
 
-//--------------------------------------------------------------------
+
 
 void SAL_CALL SfxStatusBarControl::command(
     const awt::Point& rPos,
@@ -382,7 +382,7 @@ throw (::com::sun::star::uno::RuntimeException)
     Command( aCmdEvent );
 }
 
-//--------------------------------------------------------------------
+
 
 void SAL_CALL SfxStatusBarControl::paint(
     const uno::Reference< awt::XGraphics >& xGraphics,
@@ -401,7 +401,7 @@ throw ( ::uno::RuntimeException )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SAL_CALL SfxStatusBarControl::click( const awt::Point& )
 throw ( uno::RuntimeException )
@@ -410,7 +410,7 @@ throw ( uno::RuntimeException )
     Click();
 }
 
-//--------------------------------------------------------------------
+
 
 void SAL_CALL SfxStatusBarControl::doubleClick( const awt::Point& )
 throw ( uno::RuntimeException )
@@ -419,9 +419,9 @@ throw ( uno::RuntimeException )
     DoubleClick();
 }
 
-//--------------------------------------------------------------------
+
 // old sfx2 interface
-//--------------------------------------------------------------------
+
 
 void SfxStatusBarControl::StateChanged
 (
@@ -457,7 +457,7 @@ void SfxStatusBarControl::StateChanged
     }
 }
 
-//--------------------------------------------------------------------
+
 
 sal_Bool SfxStatusBarControl::MouseButtonDown( const MouseEvent & )
 
@@ -484,7 +484,7 @@ sal_Bool SfxStatusBarControl::MouseButtonDown( const MouseEvent & )
     return sal_False;
 }
 
-//--------------------------------------------------------------------
+
 
 sal_Bool SfxStatusBarControl::MouseMove( const MouseEvent & )
 
@@ -511,7 +511,7 @@ sal_Bool SfxStatusBarControl::MouseMove( const MouseEvent & )
     return sal_False;
 }
 
-//--------------------------------------------------------------------
+
 
 sal_Bool SfxStatusBarControl::MouseButtonUp( const MouseEvent & )
 
@@ -538,7 +538,7 @@ sal_Bool SfxStatusBarControl::MouseButtonUp( const MouseEvent & )
     return sal_False;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxStatusBarControl::Command( const CommandEvent& )
 
@@ -553,7 +553,7 @@ void SfxStatusBarControl::Command( const CommandEvent& )
 {
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxStatusBarControl::Click()
 
@@ -568,7 +568,7 @@ void SfxStatusBarControl::Click()
 {
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxStatusBarControl::DoubleClick()
 
@@ -583,7 +583,7 @@ void SfxStatusBarControl::DoubleClick()
     execute( aArgs );
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxStatusBarControl::Paint
 (
@@ -603,19 +603,19 @@ void SfxStatusBarControl::Paint
 {
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxStatusBarControl::CaptureMouse()
 {
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxStatusBarControl::ReleaseMouse()
 {
 }
 
-//--------------------------------------------------------------------
+
 
 SfxStatusBarControl* SfxStatusBarControl::CreateControl
 (
@@ -662,11 +662,11 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
     return NULL;
 }
 
-//--------------------------------------------------------------------
+
 void SfxStatusBarControl::RegisterStatusBarControl(SfxModule* pMod, SfxStbCtrlFactory* pFact)
 {
     SFX_APP()->RegisterStatusBarControl_Impl( pMod, pFact );
 }
-//--------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

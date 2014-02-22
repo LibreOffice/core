@@ -340,7 +340,7 @@ const Sequence<OUString>& SvtFilterOptions::GetPropertyNames()
     }
     return aNames;
 }
-//-----------------------------------------------------------------------
+
 static sal_uLong lcl_GetFlag(sal_Int32 nProp)
 {
     sal_uLong nFlag = 0;

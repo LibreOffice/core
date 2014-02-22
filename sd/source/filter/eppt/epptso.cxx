@@ -3890,7 +3890,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
     mpPptEscherEx->CloseContainer();
 }
 
-//----------------------------------------------------------------------------------------------------------
+
 
 void TextObjBinary::Write( SvStream* pStrm )
 {

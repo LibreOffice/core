@@ -247,7 +247,7 @@ GeometryHandler::GeometryHandler(uno::Reference< uno::XComponentContext > const 
 GeometryHandler::~GeometryHandler()
 {
 }
-//------------------------------------------------------------------------
+
 OUString SAL_CALL GeometryHandler::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
@@ -1261,7 +1261,7 @@ void SAL_CALL GeometryHandler::removePropertyChangeListener(const uno::Reference
     m_xFormComponentHandler->removePropertyChangeListener(_rxListener);
 }
 // -----------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
 uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedProperties() throw (uno::RuntimeException)
 {
     ::std::vector< beans::Property > aNewProps;
@@ -2024,7 +2024,7 @@ void GeometryHandler::resetOwnProperties(::osl::ResettableMutexGuard& _aGuard,co
 
     _aGuard.reset();
 }
-//------------------------------------------------------------------------
+
 void GeometryHandler::impl_initFieldList_nothrow( uno::Sequence< OUString >& _rFieldNames ) const
 {
     _rFieldNames.realloc(0);

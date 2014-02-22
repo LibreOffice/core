@@ -54,7 +54,7 @@ void OColorListener::Notify(SfxBroadcaster & /*rBc*/, SfxHint const & rHint)
         Invalidate(INVALIDATE_NOCHILDREN|INVALIDATE_NOERASE);
     }
 }
-//-----------------------------------------------------------------------------
+
 void OColorListener::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );

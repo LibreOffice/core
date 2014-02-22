@@ -78,7 +78,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 
-//-------------------------------------------------------------------------
+
 
 class SfxEventAsyncer_Impl : public SfxListener
 {
@@ -148,7 +148,7 @@ IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pAsyncTimer)
 }
 
 
-//--------------------------------------------------------------------
+
 
 sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
 {
@@ -771,7 +771,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     batch->commit();
 }
 
-//--------------------------------------------------------------------
+
 void SfxApplication::SetOptions(const SfxItemSet &rSet)
 {
     SvtPathOptions aPathOptions;
@@ -873,7 +873,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
     Broadcast( SfxItemSetHint( rSet ) );
 }
 
-//--------------------------------------------------------------------
+
 void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, bool bSynchron )
 {
     SfxObjectShell *pDoc = rEventHint.GetObjShell();

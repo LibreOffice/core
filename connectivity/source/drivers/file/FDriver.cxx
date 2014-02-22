@@ -61,12 +61,12 @@ void OFileDriver::disposing()
 }
 
 // static ServiceInfo
-//------------------------------------------------------------------------------
+
 OUString OFileDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
     return OUString("com.sun.star.sdbc.driver.file.Driver");
 }
-//------------------------------------------------------------------------------
+
 Sequence< OUString > OFileDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     Sequence< OUString > aSNS( 2 );
@@ -75,7 +75,7 @@ Sequence< OUString > OFileDriver::getSupportedServiceNames_Static(  ) throw (Run
     return aSNS;
 }
 
-//------------------------------------------------------------------
+
 OUString SAL_CALL OFileDriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
@@ -86,7 +86,7 @@ sal_Bool SAL_CALL OFileDriver::supportsService( const OUString& _rServiceName ) 
     return cppu::supportsService(this, _rServiceName);
 }
 
-//------------------------------------------------------------------
+
 Sequence< OUString > SAL_CALL OFileDriver::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();

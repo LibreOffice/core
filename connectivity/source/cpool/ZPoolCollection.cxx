@@ -42,19 +42,19 @@ using namespace ::com::sun::star::reflection;
 using namespace ::osl;
 using namespace connectivity;
 
-//--------------------------------------------------------------------
+
 static const OUString& getConnectionPoolNodeName()
 {
     static OUString s_sNodeName(  "org.openoffice.Office.DataAccess/ConnectionPool" );
     return s_sNodeName;
 }
-//--------------------------------------------------------------------
+
 static const OUString& getEnablePoolingNodeName()
 {
     static OUString s_sNodeName(  "EnablePooling" );
     return s_sNodeName;
 }
-//--------------------------------------------------------------------
+
 static const OUString& getDriverNameNodeName()
 {
     static OUString s_sNodeName(  "DriverName" );
@@ -66,14 +66,14 @@ static const OUString& getDriverSettingsNodeName()
     static OUString s_sNodeName(  "DriverSettings" );
     return s_sNodeName;
 }
-//--------------------------------------------------------------------------
+
 static const OUString& getEnableNodeName()
 {
     static OUString s_sNodeName(  "Enable" );
     return s_sNodeName;
 }
 
-//--------------------------------------------------------------------
+
 OPoolCollection::OPoolCollection(const Reference< XComponentContext >& _rxContext)
     :m_xContext(_rxContext)
 {
@@ -149,7 +149,7 @@ sal_Bool SAL_CALL OPoolCollection::supportsService( const OUString& _rServiceNam
     return cppu::supportsService(this, _rServiceName);
 }
 
-//--------------------------------------------------------------------------
+
 Sequence< OUString > SAL_CALL OPoolCollection::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
@@ -161,13 +161,13 @@ Reference< XInterface > SAL_CALL OPoolCollection::CreateInstance(const Reference
     return static_cast<XDriverManager*>(new OPoolCollection(comphelper::getComponentContext(_rxFactory)));
 }
 
-//--------------------------------------------------------------------------
+
 OUString SAL_CALL OPoolCollection::getImplementationName_Static(  ) throw(RuntimeException)
 {
     return OUString("com.sun.star.sdbc.OConnectionPool");
 }
 
-//--------------------------------------------------------------------------
+
 Sequence< OUString > SAL_CALL OPoolCollection::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
     Sequence< OUString > aSupported(1);
@@ -329,7 +329,7 @@ Reference< XInterface > OPoolCollection::createWithServiceFactory(const OUString
         com::sun::star::configuration::theDefaultProvider::get(m_xContext),
         _rPath);
 }
-//------------------------------------------------------------------------
+
 Reference< XInterface > OPoolCollection::createWithProvider(const Reference< XMultiServiceFactory >& _rxConfProvider,
                             const OUString& _rPath) const
 {

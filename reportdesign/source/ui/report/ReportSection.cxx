@@ -74,7 +74,7 @@ sal_Int32 lcl_getOverlappedControlColor(/*const uno::Reference <lang::XMultiServ
     sal_Int32 nColor = aConfig.GetColorValue(CFG_REPORTDESIGNER, DBOVERLAPPEDCONTROL).getColor();
     return nColor;
 }
-//------------------------------------------------------------------------------
+
 OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< report::XSection >& _xSection)
 : Window(_pParent,WB_DIALOGCONTROL)
 , ::comphelper::OPropertyChangeListener(m_aMutex)
@@ -110,7 +110,7 @@ OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< re
     m_pFunc.reset(new DlgEdFuncSelect( this ));
     m_pFunc->setOverlappedControlColor(lcl_getOverlappedControlColor() );
 }
-//------------------------------------------------------------------------------
+
 OReportSection::~OReportSection()
 {
     m_pPage = NULL;
@@ -128,7 +128,7 @@ OReportSection::~OReportSection()
         m_pView = NULL;
     }
 }
-//------------------------------------------------------------------------------
+
 void OReportSection::Paint( const Rectangle& rRect )
 {
     Window::Paint(rRect);
@@ -164,12 +164,12 @@ void OReportSection::Paint( const Rectangle& rRect )
         --m_nPaintEntranceCount;
     }
 }
-//------------------------------------------------------------------------------
+
 void OReportSection::Resize()
 {
     Window::Resize();
 }
-//------------------------------------------------------------------------------
+
 void OReportSection::fill()
 {
     if ( !m_xSection.is() )
@@ -300,7 +300,7 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
         }
     }
 }
-//----------------------------------------------------------------------------
+
 void OReportSection::Delete()
 {
     if( !m_pView->AreObjectsMarked() )
@@ -309,7 +309,7 @@ void OReportSection::Delete()
     m_pView->BrkAction();
     m_pView->DeleteMarked();
 }
-//----------------------------------------------------------------------------
+
 void OReportSection::SetMode( DlgEdMode eNewMode )
 {
     if ( eNewMode != m_eMode )
@@ -332,7 +332,7 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
 {
     Copy(_rAllreadyCopiedObjects,false);
 }
-//----------------------------------------------------------------------------
+
 void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedObjects,bool _bEraseAnddNoClone)
 {
     OSL_ENSURE(m_xSection.is(),"Why is the section here NULL!");
@@ -383,33 +383,33 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
         pNewValue->Value <<= uno::Sequence< uno::Reference<report::XReportComponent> >(&(*aCopies.begin()),aCopies.size());
     }
 }
-//----------------------------------------------------------------------------
+
 void OReportSection::MouseButtonDown( const MouseEvent& rMEvt )
 {
     m_pParent->getViewsWindow()->getView()->setMarked(m_pView,sal_True); // mark the section in which is clicked
     m_pFunc->MouseButtonDown( rMEvt );
     Window::MouseButtonDown(rMEvt);
 }
-//----------------------------------------------------------------------------
+
 void OReportSection::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if ( !m_pFunc->MouseButtonUp( rMEvt ) )
         m_pParent->getViewsWindow()->getView()->getReportView()->getController().executeUnChecked(SID_OBJECT_SELECT,uno::Sequence< beans::PropertyValue>());
 }
 
-//----------------------------------------------------------------------------
+
 
 void OReportSection::MouseMove( const MouseEvent& rMEvt )
 {
     m_pFunc->MouseMove( rMEvt );
 
 }
-//----------------------------------------------------------------------------
+
 void OReportSection::SetGridVisible(sal_Bool _bVisible)
 {
     m_pView->SetGridVisible( _bVisible );
 }
-//------------------------------------------------------------------------------
+
 void OReportSection::SelectAll(const sal_uInt16 _nObjectType)
 {
     if ( m_pView )
@@ -466,7 +466,7 @@ void lcl_insertMenuItemImages(
         }
     }
 }
-//----------------------------------------------------------------------------
+
 void OReportSection::Command( const CommandEvent& _rCEvt )
 {
     Window::Command(_rCEvt);
@@ -600,7 +600,7 @@ void OReportSection::impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_I
         OSL_FAIL("Exception caught: OReportSection::impl_adjustObjectSizePosition()");
     }
 }
-//------------------------------------------------------------------------------
+
 sal_Bool OReportSection::handleKeyEvent(const KeyEvent& _rEvent)
 {
     return m_pFunc.get() ? m_pFunc->handleKeyEvent(_rEvent) : sal_False;

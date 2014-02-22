@@ -42,9 +42,6 @@ OUString const sPropertyIconId("IconId");
 
 }
 
-
-//----------------------------------------------------------------------------
-
 Controller::Controller (Shell* pViewShell)
     :OPropertyContainer( m_aBHelper )
     ,SfxBaseController( pViewShell )
@@ -57,14 +54,10 @@ Controller::Controller (Shell* pViewShell)
     );
 }
 
-//----------------------------------------------------------------------------
-
 Controller::~Controller()
 { }
 
 // XInterface
-//----------------------------------------------------------------------------
-
 Any SAL_CALL Controller::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aReturn = SfxBaseController::queryInterface( rType );
@@ -74,24 +67,17 @@ Any SAL_CALL Controller::queryInterface( const Type & rType ) throw(RuntimeExcep
     return aReturn;
 }
 
-//----------------------------------------------------------------------------
-
 void SAL_CALL Controller::acquire() throw()
 {
     SfxBaseController::acquire();
 }
-
-//----------------------------------------------------------------------------
 
 void SAL_CALL Controller::release() throw()
 {
     SfxBaseController::release();
 }
 
-
 // XTypeProvider ( ::SfxBaseController )
-//----------------------------------------------------------------------------
-
 Sequence< Type > SAL_CALL Controller::getTypes() throw(RuntimeException)
 {
     Sequence< Type > aTypes = ::comphelper::concatSequences(
@@ -101,8 +87,6 @@ Sequence< Type > SAL_CALL Controller::getTypes() throw(RuntimeException)
 
     return aTypes;
 }
-
-//----------------------------------------------------------------------------
 
 Sequence< sal_Int8 > SAL_CALL Controller::getImplementationId() throw(RuntimeException)
 {
@@ -120,8 +104,6 @@ Sequence< sal_Int8 > SAL_CALL Controller::getImplementationId() throw(RuntimeExc
 }
 
 // XPropertySet
-//----------------------------------------------------------------------------
-
 Reference< beans::XPropertySetInfo > SAL_CALL Controller::getPropertySetInfo() throw(RuntimeException)
 {
     Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -129,24 +111,18 @@ Reference< beans::XPropertySetInfo > SAL_CALL Controller::getPropertySetInfo() t
 }
 
 // OPropertySetHelper
-//----------------------------------------------------------------------------
-
 ::cppu::IPropertyArrayHelper& Controller::getInfoHelper()
 {
     return *getArrayHelper();
 }
 
 // OPropertyArrayUsageHelper
-//----------------------------------------------------------------------------
-
 ::cppu::IPropertyArrayHelper* Controller::createArrayHelper( ) const
 {
     Sequence< Property > aProps;
     describeProperties( aProps );
     return new ::cppu::OPropertyArrayHelper( aProps );
 }
-
-//----------------------------------------------------------------------------
 
 } // namespace basctl
 

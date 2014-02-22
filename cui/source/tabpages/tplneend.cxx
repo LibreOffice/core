@@ -107,7 +107,7 @@ void SvxLineEndDefTabPage::Resize()
     SfxTabPage::Resize();
 }
 
-//------------------------------------------------------------------------
+
 
 SvxLineEndDefTabPage::~SvxLineEndDefTabPage()
 {
@@ -269,7 +269,7 @@ SfxTabPage* SvxLineEndDefTabPage::Create( Window* pWindow, const SfxItemSet& rSe
     return( new SvxLineEndDefTabPage( pWindow, rSet ) );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineEndDefTabPage, SelectLineEndHdl_Impl)
 {
@@ -296,7 +296,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, SelectLineEndHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 long SvxLineEndDefTabPage::ChangePreviewHdl_Impl( void* )
 {
@@ -304,7 +304,7 @@ long SvxLineEndDefTabPage::ChangePreviewHdl_Impl( void* )
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
 {
@@ -386,7 +386,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
 {
@@ -502,7 +502,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickDeleteHdl_Impl)
 {
@@ -538,7 +538,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickDeleteHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
 {
@@ -608,7 +608,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl)
 {

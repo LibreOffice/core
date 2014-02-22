@@ -33,7 +33,7 @@
 
 //============================================================================
 //  class ScTabOpDlg
-//----------------------------------------------------------------------------
+
 
 ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                         ScDocument*         pDocument,
@@ -77,14 +77,14 @@ ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     Init();
 }
 
-//----------------------------------------------------------------------------
+
 
 ScTabOpDlg::~ScTabOpDlg()
 {
     Hide();
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScTabOpDlg::Init()
 {
@@ -114,14 +114,14 @@ void ScTabOpDlg::Init()
     //SFX_APPWINDOW->Enable();
 }
 
-//----------------------------------------------------------------------------
+
 
 bool ScTabOpDlg::Close()
 {
     return DoClose( ScTabOpDlgWrapper::GetChildWindowId() );
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScTabOpDlg::SetActive()
 {
@@ -137,7 +137,7 @@ void ScTabOpDlg::SetActive()
     RefInputDone();
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
@@ -174,7 +174,7 @@ void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScTabOpDlg::RaiseError( ScTabOpErr eError )
 {
@@ -223,7 +223,7 @@ void ScTabOpDlg::RaiseError( ScTabOpErr eError )
     pEd->GrabFocus();
 }
 
-//----------------------------------------------------------------------------
+
 
 static sal_Bool lcl_Parse( const OUString& rString, ScDocument* pDoc, SCTAB nCurTab,
                 ScRefAddress& rStart, ScRefAddress& rEnd )
@@ -240,7 +240,7 @@ static sal_Bool lcl_Parse( const OUString& rString, ScDocument* pDoc, SCTAB nCur
     return bRet;
 }
 
-//----------------------------------------------------------------------------
+
 // Handler:
 
 IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
@@ -323,7 +323,7 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
     return 0;
 }
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScTabOpDlg, GetFocusHdl, Control*, pCtrl )
 {
@@ -342,7 +342,7 @@ IMPL_LINK( ScTabOpDlg, GetFocusHdl, Control*, pCtrl )
     return 0;
 }
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScTabOpDlg, LoseFocusHdl)
 {

@@ -33,7 +33,7 @@ inline sal_Bool IsValidPrinter( const Printer* pPtr )
     return pPtr->GetName().isEmpty() ? sal_False : sal_True;
 }
 
-//------------------------------------------------------------------------
+
 
 Size SvxPaperInfo::GetPaperSize( Paper ePaper, MapUnit eUnit )
 {

@@ -209,13 +209,13 @@ LocaleBackend::LocaleBackend()
 {
 }
 
-//------------------------------------------------------------------------------
+
 
 LocaleBackend::~LocaleBackend(void)
 {
 }
 
-//------------------------------------------------------------------------------
+
 
 LocaleBackend* LocaleBackend::createInstance()
 {
@@ -235,7 +235,7 @@ OUString LocaleBackend::getLocale(void)
 #endif
 }
 
-//------------------------------------------------------------------------------
+
 
 OUString LocaleBackend::getUILocale(void)
 {
@@ -259,7 +259,7 @@ OUString LocaleBackend::getSystemLocale(void)
     return getLocale();
 #endif
 }
-//------------------------------------------------------------------------------
+
 
 void LocaleBackend::setPropertyValue(
     OUString const &, css::uno::Any const &)
@@ -300,7 +300,7 @@ css::uno::Any LocaleBackend::getPropertyValue(
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 OUString SAL_CALL LocaleBackend::getBackendName(void) {
     return OUString("com.sun.star.comp.configuration.backend.LocaleBackend") ;

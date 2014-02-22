@@ -1169,7 +1169,7 @@ bool SvxNumberFormatShell::IsRemoved_Impl( size_t nKey )
     return ::std::find(aAddList.begin(), aAddList.end(), nKey);
 }
 
-//------------------------------------------------------------------------
+
 
 bool SvxNumberFormatShell::IsAdded_Impl( size_t nKey )
 {

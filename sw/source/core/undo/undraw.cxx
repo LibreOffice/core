@@ -112,7 +112,7 @@ OUString SwSdrUndo::GetComment() const
     return pSdrUndo->GetComment();
 }
 
-//--------------------------------------------
+
 
 static void lcl_SendRemoveToUno( SwFmt& rFmt )
 {
@@ -503,7 +503,7 @@ void SwUndoDrawUnGroupConnectToLayout::AddFmtAndObj( SwDrawFrmFmt* pDrawFrmFmt,
             std::pair< SwDrawFrmFmt*, SdrObject* >( pDrawFrmFmt, pDrawObject ) );
 }
 
-//-------------------------------------
+
 
 SwUndoDrawDelete::SwUndoDrawDelete( sal_uInt16 nCnt )
     : SwUndo( UNDO_DRAWDELETE ), nSize( nCnt ), bDelFmt( sal_True )

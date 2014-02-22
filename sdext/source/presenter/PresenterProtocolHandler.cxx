@@ -321,7 +321,7 @@ Sequence<Reference<frame::XDispatch> > SAL_CALL PresenterProtocolHandler::queryD
     return Sequence<Reference<frame::XDispatch> >();
 }
 
-//-----------------------------------------------------------------------------
+
 
 void PresenterProtocolHandler::ThrowIfDisposed (void) const
     throw (::com::sun::star::lang::DisposedException)

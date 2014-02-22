@@ -57,7 +57,7 @@
 using namespace ::com::sun::star;
 
 #ifdef WNT
-//----------------------------------------------
+
 void OleEmbeddedObject::SwitchComponentToRunningState_Impl()
 {
     if ( m_pOleComponent )
@@ -83,7 +83,7 @@ void OleEmbeddedObject::SwitchComponentToRunningState_Impl()
     }
 }
 
-//----------------------------------------------
+
 uno::Sequence< sal_Int32 > OleEmbeddedObject::GetReachableStatesList_Impl(
                                                         const uno::Sequence< embed::VerbDescriptor >& aVerbList )
 {
@@ -100,7 +100,7 @@ uno::Sequence< sal_Int32 > OleEmbeddedObject::GetReachableStatesList_Impl(
     return aStates;
 }
 
-//----------------------------------------------
+
 uno::Sequence< sal_Int32 > OleEmbeddedObject::GetIntermediateVerbsSequence_Impl( sal_Int32 nNewState )
 {
     SAL_WARN_IF( m_nObjectState == embed::EmbedStates::LOADED, "embeddedobj.ole", "Loaded object is switched to running state without verbs using!" );
@@ -115,7 +115,7 @@ uno::Sequence< sal_Int32 > OleEmbeddedObject::GetIntermediateVerbsSequence_Impl(
     return uno::Sequence< sal_Int32 >();
 }
 #endif
-//----------------------------------------------
+
 void OleEmbeddedObject::MoveListeners()
 {
     if ( m_pInterfaceContainer )
@@ -200,7 +200,7 @@ void OleEmbeddedObject::MoveListeners()
     }
 }
 
-//----------------------------------------------
+
 uno::Reference< embed::XStorage > OleEmbeddedObject::CreateTemporarySubstorage( OUString& o_aStorageName )
 {
     uno::Reference< embed::XStorage > xResult;
@@ -224,7 +224,7 @@ uno::Reference< embed::XStorage > OleEmbeddedObject::CreateTemporarySubstorage( 
     return xResult;
 }
 
-//----------------------------------------------
+
 OUString OleEmbeddedObject::MoveToTemporarySubstream()
 {
     OUString aResult;
@@ -244,7 +244,7 @@ OUString OleEmbeddedObject::MoveToTemporarySubstream()
     return aResult;
 }
 
-//----------------------------------------------
+
 sal_Bool OleEmbeddedObject::TryToConvertToOOo()
 {
     sal_Bool bResult = sal_False;
@@ -433,7 +433,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
     return bResult;
 }
 
-//----------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
         throw ( embed::UnreachableStateException,
                 embed::WrongStateException,
@@ -593,7 +593,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
     }
 }
 
-//----------------------------------------------
+
 uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -637,7 +637,7 @@ uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
     }
 }
 
-//----------------------------------------------
+
 sal_Int32 SAL_CALL OleEmbeddedObject::getCurrentState()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -749,7 +749,7 @@ namespace
     }
 }
 
-//----------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
@@ -888,7 +888,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
     }
 }
 
-//----------------------------------------------
+
 uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedVerbs()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -930,7 +930,7 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedV
     }
 }
 
-//----------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::setClientSite(
                 const uno::Reference< embed::XEmbeddedClient >& xClient )
         throw ( embed::WrongStateException,
@@ -961,7 +961,7 @@ void SAL_CALL OleEmbeddedObject::setClientSite(
     }
 }
 
-//----------------------------------------------
+
 uno::Reference< embed::XEmbeddedClient > SAL_CALL OleEmbeddedObject::getClientSite()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -986,7 +986,7 @@ uno::Reference< embed::XEmbeddedClient > SAL_CALL OleEmbeddedObject::getClientSi
     return m_xClientSite;
 }
 
-//----------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::update()
         throw ( embed::WrongStateException,
                 uno::Exception,
@@ -1021,7 +1021,7 @@ void SAL_CALL OleEmbeddedObject::update()
     }
 }
 
-//----------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::setUpdateMode( sal_Int32 nMode )
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -1050,7 +1050,7 @@ void SAL_CALL OleEmbeddedObject::setUpdateMode( sal_Int32 nMode )
     m_nUpdateMode = nMode;
 }
 
-//----------------------------------------------
+
 sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64
     nAspect
 )
@@ -1093,7 +1093,7 @@ sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64
     return ( nResult | embed::EmbedMisc::EMBED_NEEDSSIZEONLOAD );
 }
 
-//----------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::setContainerName( const OUString& sName )
         throw ( uno::RuntimeException )
 {

@@ -27,7 +27,7 @@ namespace comphelper{
 
 static const char ERRMSG_INVALID_COMPONENT_PARAM[] = "NULL as component reference not allowed.";
 
-//-----------------------------------------------
+
 NumberedCollection::NumberedCollection()
     : ::cppu::BaseMutex ()
     , m_sUntitledPrefix ()
@@ -36,12 +36,12 @@ NumberedCollection::NumberedCollection()
 {
 }
 
-//-----------------------------------------------
+
 NumberedCollection::~NumberedCollection()
 {
 }
 
-//-----------------------------------------------
+
 void NumberedCollection::setOwner(const css::uno::Reference< css::uno::XInterface >& xOwner)
 {
     // SYNCHRONIZED ->
@@ -52,7 +52,7 @@ void NumberedCollection::setOwner(const css::uno::Reference< css::uno::XInterfac
     // <- SYNCHRONIZED
 }
 
-//-----------------------------------------------
+
 void NumberedCollection::setUntitledPrefix(const OUString& sPrefix)
 {
     // SYNCHRONIZED ->
@@ -63,7 +63,7 @@ void NumberedCollection::setUntitledPrefix(const OUString& sPrefix)
     // <- SYNCHRONIZED
 }
 
-//-----------------------------------------------
+
 ::sal_Int32 SAL_CALL NumberedCollection::leaseNumber(const css::uno::Reference< css::uno::XInterface >& xComponent)
     throw (css::lang::IllegalArgumentException,
            css::uno::RuntimeException         )
@@ -100,7 +100,7 @@ void NumberedCollection::setUntitledPrefix(const OUString& sPrefix)
     // <- SYNCHRONIZED
 }
 
-//-----------------------------------------------
+
 void SAL_CALL NumberedCollection::releaseNumber(::sal_Int32 nNumber)
     throw (css::lang::IllegalArgumentException,
            css::uno::RuntimeException         )
@@ -139,7 +139,7 @@ void SAL_CALL NumberedCollection::releaseNumber(::sal_Int32 nNumber)
     // <- SYNCHRONIZED
 }
 
-//-----------------------------------------------
+
 void SAL_CALL NumberedCollection::releaseNumberForComponent(const css::uno::Reference< css::uno::XInterface >& xComponent)
     throw (css::lang::IllegalArgumentException,
            css::uno::RuntimeException         )
@@ -163,7 +163,7 @@ void SAL_CALL NumberedCollection::releaseNumberForComponent(const css::uno::Refe
     // <- SYNCHRONIZED
 }
 
-//-----------------------------------------------
+
 OUString SAL_CALL NumberedCollection::getUntitledPrefix()
     throw (css::uno::RuntimeException)
 {
@@ -175,7 +175,7 @@ OUString SAL_CALL NumberedCollection::getUntitledPrefix()
     // <- SYNCHRONIZED
 }
 
-//-----------------------------------------------
+
 /** create an ordered list of all possible numbers ...
     e.g. {1,2,3,...,N} Max size of these list will be
     current size of component list + 1 .

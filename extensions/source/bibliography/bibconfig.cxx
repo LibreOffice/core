@@ -213,7 +213,7 @@ void BibConfig::SetBibliographyURL(const BibDBDescriptor& rDesc)
     nTblOrQuery = rDesc.nCommandType;
     SetModified();
 };
-//---------------------------------------------------------------------------
+
 void BibConfig::Notify( const com::sun::star::uno::Sequence<OUString>& )
 {
 }

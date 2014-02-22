@@ -1092,7 +1092,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_createLabeledDataSequenceFro
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-//----------------------------------------------------
+
 /**
  * Check the current list of reference tokens, and add the upper left
  * corner of the minimum range that encloses all ranges if certain

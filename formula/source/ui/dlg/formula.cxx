@@ -1581,9 +1581,9 @@ void FormulaDlg_Impl::UpdateParaWin(const Selection& _rSelection, const OUString
     theSel.Max() = theSel.Min() + _sRefStr.getLength();
     aEdRef.SetSelection( theSel );
 
-    //-------------------------------------
+    
     // Manual Update of the results' fields:
-    //-------------------------------------
+    
     sal_uInt16 nPrivActiv = pParaWin->GetActiveLine();
     pParaWin->SetArgument(nPrivActiv,aEdRef.GetText());
     pParaWin->UpdateParas();

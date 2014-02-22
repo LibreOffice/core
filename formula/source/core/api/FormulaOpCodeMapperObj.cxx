@@ -80,7 +80,7 @@ SAL_CALL FormulaOpCodeMapperObj::getAvailableMappings(
         throw lang::IllegalArgumentException();
     return xMap->createSequenceOfAvailableMappings( *m_pCompiler,nGroups);
 }
-//--------------------------------------------------------------------------
+
 OUString SAL_CALL FormulaOpCodeMapperObj::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();

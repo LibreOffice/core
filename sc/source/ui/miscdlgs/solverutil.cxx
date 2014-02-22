@@ -33,7 +33,7 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------
+
 
 #define SCSOLVER_SERVICE "com.sun.star.sheet.Solver"
 

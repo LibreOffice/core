@@ -220,12 +220,12 @@ SvxGeneralTabPage::SvxGeneralTabPage(Window* pParent, const SfxItemSet& rCoreSet
     SetLinks();
 }
 
-//------------------------------------------------------------------------
+
 
 SvxGeneralTabPage::~SvxGeneralTabPage ()
 { }
 
-//------------------------------------------------------------------------
+
 
 // Initializes the titles and the edit boxes,
 // according to vRowInfo[] and vFieldInfo[] above.
@@ -284,7 +284,7 @@ void SvxGeneralTabPage::InitControls ()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxGeneralTabPage::SetLinks ()
 {
@@ -295,14 +295,14 @@ void SvxGeneralTabPage::SetLinks ()
         vFields[i]->pEdit->SetModifyHdl(aLink);
 }
 
-//------------------------------------------------------------------------
+
 
 SfxTabPage* SvxGeneralTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return ( new SvxGeneralTabPage( pParent, rAttrSet ) );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SvxGeneralTabPage::FillItemSet( SfxItemSet& )
 {
@@ -321,7 +321,7 @@ sal_Bool SvxGeneralTabPage::FillItemSet( SfxItemSet& )
     return bModified;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxGeneralTabPage::Reset( const SfxItemSet& rSet )
 {
@@ -344,7 +344,7 @@ void SvxGeneralTabPage::Reset( const SfxItemSet& rSet )
     m_pUseDataCB->Check( SvtSaveOptions().IsUseUserData() );
 }
 
-//------------------------------------------------------------------------
+
 
 // ModifyHdl_Impl()
 // This handler updates the initials (short name)
@@ -381,7 +381,7 @@ IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit *, pEdit )
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SvxGeneralTabPage::GetAddress_Impl()
 {
@@ -400,7 +400,7 @@ sal_Bool SvxGeneralTabPage::GetAddress_Impl()
     return false;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxGeneralTabPage::SetAddress_Impl()
 {

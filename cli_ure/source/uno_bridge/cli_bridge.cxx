@@ -44,7 +44,7 @@ void SAL_CALL Mapping_acquire( uno_Mapping * mapping )
     Mapping const * that = static_cast< Mapping const * >( mapping );
      that->m_bridge->acquire();
 }
-//--------------------------------------------------------------------------------------------------
+
 void SAL_CALL Mapping_release( uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
@@ -53,7 +53,7 @@ void SAL_CALL Mapping_release( uno_Mapping * mapping )
 }
 
 
-//--------------------------------------------------------------------------------------------------
+
 void SAL_CALL Mapping_cli2uno(
     uno_Mapping * mapping, void ** ppOut,
     void * pIn, typelib_InterfaceTypeDescription * td )
@@ -93,7 +93,7 @@ void SAL_CALL Mapping_cli2uno(
 #endif
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 void SAL_CALL Mapping_uno2cli(
     uno_Mapping * mapping, void ** ppOut,
     void * pIn, typelib_InterfaceTypeDescription * td )
@@ -249,7 +249,7 @@ extern "C"
 
 namespace cli_uno
 {
-//--------------------------------------------------------------------------------------------------
+
 void SAL_CALL cli_env_disposing( uno_Environment * uno_cli_env )
     SAL_THROW_EXTERN_C()
 {

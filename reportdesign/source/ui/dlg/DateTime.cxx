@@ -110,7 +110,7 @@ ODateTimeDialog::ODateTimeDialog( Window* _pParent
             pListBox->SetEntryData(nPos, reinterpret_cast<void*>(*pIter));
         }
     }
-//------------------------------------------------------------------------
+
 ODateTimeDialog::~ODateTimeDialog()
 {
 }

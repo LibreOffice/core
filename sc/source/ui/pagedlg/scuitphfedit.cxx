@@ -20,7 +20,7 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-//------------------------------------------------------------------
+
 
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
@@ -759,9 +759,9 @@ void ScHFEditPage::ClearTextAreas()
     m_pWndRight->Invalidate();
 }
 
-//-----------------------------------------------------------------------
+
 // Handler:
-//-----------------------------------------------------------------------
+
 
 IMPL_LINK( ScHFEditPage, ListHdl_Impl, ListBox*, pList )
 {

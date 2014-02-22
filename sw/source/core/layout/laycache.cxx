@@ -81,7 +81,7 @@ void SwLayoutCache::Read( SvStream &rStream )
     }
 }
 
-//-----------------------------------------------------------------------------
+
 
 void SwLayCacheImpl::Insert( sal_uInt16 nType, sal_uLong nIndex, sal_Int32 nOffset )
 {

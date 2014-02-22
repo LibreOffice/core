@@ -820,7 +820,7 @@ sal_Bool SVGFilter::implExportDocument()
 }
 
 
-//------------------------------------------------------------------------------
+
 // Append aField to aFieldSet if it is not already present in the set
 // and create the field id sFieldId
 //
@@ -853,7 +853,7 @@ OUString implGenerateFieldId( std::vector< TextField* > & aFieldSet,
     return sFieldId;
 }
 
-//------------------------------------------------------------------------------
+
 
 sal_Bool SVGFilter::implGenerateMetaData()
 {

@@ -2336,9 +2336,9 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const datatransfer::DataF
 }
 
 
-//--------------------------------------------------------------------------------------------------------
+
 //  XEventsSupplier
-//--------------------------------------------------------------------------------------------------------
+
 
 Reference< container::XNameReplace > SAL_CALL SfxBaseModel::getEvents() throw( RuntimeException )
 {
@@ -2352,9 +2352,9 @@ Reference< container::XNameReplace > SAL_CALL SfxBaseModel::getEvents() throw( R
     return m_pData->m_xEvents;
 }
 
-//--------------------------------------------------------------------------------------------------------
+
 //  XEmbeddedScripts
-//--------------------------------------------------------------------------------------------------------
+
 
 Reference< script::XStorageBasedLibraryContainer > SAL_CALL SfxBaseModel::getBasicLibraries() throw (RuntimeException)
 {
@@ -2385,9 +2385,9 @@ Reference< script::XStorageBasedLibraryContainer > SAL_CALL SfxBaseModel::getDia
     return sal_False;
 }
 
-//--------------------------------------------------------------------------------------------------------
+
 //  XScriptInvocationContext
-//--------------------------------------------------------------------------------------------------------
+
 
 Reference< document::XEmbeddedScripts > SAL_CALL SfxBaseModel::getScriptContainer() throw (RuntimeException)
 {
@@ -2421,9 +2421,9 @@ Reference< document::XEmbeddedScripts > SAL_CALL SfxBaseModel::getScriptContaine
     return xDocumentScripts;
 }
 
-//--------------------------------------------------------------------------------------------------------
+
 //  XEventBroadcaster
-//--------------------------------------------------------------------------------------------------------
+
 
 void SAL_CALL SfxBaseModel::addEventListener( const Reference< document::XEventListener >& aListener ) throw( RuntimeException )
 {
@@ -2432,9 +2432,9 @@ void SAL_CALL SfxBaseModel::addEventListener( const Reference< document::XEventL
     m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const Reference< document::XEventListener >*)0), aListener );
 }
 
-//--------------------------------------------------------------------------------------------------------
+
 //  XEventBroadcaster
-//--------------------------------------------------------------------------------------------------------
+
 
 void SAL_CALL SfxBaseModel::removeEventListener( const Reference< document::XEventListener >& aListener ) throw( RuntimeException )
 {
@@ -2443,9 +2443,9 @@ void SAL_CALL SfxBaseModel::removeEventListener( const Reference< document::XEve
     m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const Reference< document::XEventListener >*)0), aListener );
 }
 
-//--------------------------------------------------------------------------------------------------------
+
 //  XDocumentEventBroadcaster
-//--------------------------------------------------------------------------------------------------------
+
 // ---------------------------------
 void SAL_CALL SfxBaseModel::addDocumentEventListener( const Reference< document::XDocumentEventListener >& aListener )
     throw ( RuntimeException )

@@ -100,7 +100,7 @@ ScPivotFilterDlg::ScPivotFilterDlg( Window*             pParent,
     FreeResource();
 }
 
-//------------------------------------------------------------------------
+
 
 ScPivotFilterDlg::~ScPivotFilterDlg()
 {
@@ -111,7 +111,7 @@ ScPivotFilterDlg::~ScPivotFilterDlg()
         delete pOutItem;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
 {
@@ -265,7 +265,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScPivotFilterDlg::FillFieldLists()
 {
@@ -302,7 +302,7 @@ void ScPivotFilterDlg::FillFieldLists()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScPivotFilterDlg::UpdateValueList( sal_uInt16 nList )
 {
@@ -348,7 +348,7 @@ void ScPivotFilterDlg::UpdateValueList( sal_uInt16 nList )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScPivotFilterDlg::ClearValueList( sal_uInt16 nList )
 {
@@ -362,7 +362,7 @@ void ScPivotFilterDlg::ClearValueList( sal_uInt16 nList )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 ScPivotFilterDlg::GetFieldSelPos( SCCOL nField )
 {
@@ -372,7 +372,7 @@ sal_uInt16 ScPivotFilterDlg::GetFieldSelPos( SCCOL nField )
         return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
 {
@@ -447,9 +447,9 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
     return *pOutItem;
 }
 
-//------------------------------------------------------------------------
+
 // Handler:
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( ScPivotFilterDlg, LbSelectHdl, ListBox*, pLb )
 {
@@ -542,7 +542,7 @@ IMPL_LINK( ScPivotFilterDlg, LbSelectHdl, ListBox*, pLb )
     return 0;
 }
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScPivotFilterDlg, CheckBoxHdl, CheckBox*, pBox )
 {
@@ -567,7 +567,7 @@ IMPL_LINK( ScPivotFilterDlg, CheckBoxHdl, CheckBox*, pBox )
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( ScPivotFilterDlg, ValModifyHdl, ComboBox*, pEd )
 {

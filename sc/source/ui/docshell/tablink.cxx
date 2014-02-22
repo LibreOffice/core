@@ -56,7 +56,7 @@ struct TableLink_Impl
 
 TYPEINIT1(ScTableLink, ::sfx2::SvBaseLink);
 
-//------------------------------------------------------------------------
+
 
 ScTableLink::ScTableLink(ScDocShell* pDocSh, const OUString& rFile,
                             const OUString& rFilter, const OUString& rOpt,

@@ -61,7 +61,7 @@ namespace connectivity
 }
 
 IMPLEMENT_SERVICE_INFO(MacabStatement, "com.sun.star.sdbc.drivers.MacabStatement", "com.sun.star.sdbc.Statement");
-//------------------------------------------------------------------------------
+
 MacabCommonStatement::MacabCommonStatement(MacabConnection* _pConnection )
     : MacabCommonStatement_BASE(m_aMutex),
     OPropertySetHelper(MacabCommonStatement_BASE::rBHelper),
@@ -285,7 +285,7 @@ MacabOrder *MacabCommonStatement::analyseOrderByClause(const OSQLParseNode *pPar
     OSL_ASSERT(false);
     return 0;
 }
-//------------------------------------------------------------------------------
+
 OUString MacabCommonStatement::getTableName() const
 {
     const OSQLTables& xTabs = m_aSQLIterator.getTables();
@@ -299,7 +299,7 @@ OUString MacabCommonStatement::getTableName() const
 
     return xTabs.begin()->first;
 }
-//------------------------------------------------------------------------------
+
 void MacabCommonStatement::setMacabFields(MacabResultSet *pResult) const throw(SQLException)
 {
     ::rtl::Reference<connectivity::OSQLColumns> xColumns;   // selected columns
@@ -361,7 +361,7 @@ void MacabCommonStatement::sortRecords(MacabResultSet *pResult) const throw(SQLE
         }
     }
 }
-//-----------------------------------------------------------------------------
+
 Any SAL_CALL MacabCommonStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = MacabCommonStatement_BASE::queryInterface(rType);

@@ -519,7 +519,7 @@ SfxTabPage* SdTpOptionsMisc::Create( Window* pWindow,
 {
     return( new SdTpOptionsMisc( pWindow, rAttrs ) );
 }
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl)
 {

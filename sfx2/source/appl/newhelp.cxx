@@ -3009,7 +3009,7 @@ IMPL_LINK( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox )
     return 1;
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl)
 {
@@ -3051,7 +3051,7 @@ IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl)
     return 0;
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK( SfxHelpWindow_Impl, SelectFactoryHdl, SfxHelpIndexWindow_Impl* , pWin )
 {

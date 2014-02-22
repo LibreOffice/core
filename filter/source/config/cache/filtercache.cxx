@@ -452,7 +452,7 @@ void FilterCache::setItem(      EItemType        eType ,
     impl_addItem2FlushList(eType, sItem);
 }
 
-//-----------------------------------------------
+
 void FilterCache::refreshItem(      EItemType        eType,
                               const OUString& sItem)
     throw(css::uno::Exception)
@@ -1680,7 +1680,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
     aItem[PROPNAME_NAME] = css::uno::makeAny(sItem);
     switch(eType)
     {
-        //---------------------------------------
+        
         case E_TYPE :
         {
             // read standard properties of a type
@@ -1709,7 +1709,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
         }
         break;
 
-        //---------------------------------------
+        
         case E_FILTER :
         {
             // read standard properties of a filter
@@ -1749,7 +1749,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
         }
         break;
 
-        //---------------------------------------
+        
         case E_FRAMELOADER :
         case E_CONTENTHANDLER :
         {
@@ -1850,7 +1850,7 @@ void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XName
     CacheItem::const_iterator pIt;
     switch(eType)
     {
-        //---------------------------------------
+        
         case E_TYPE :
         {
             pIt = aItem.find(PROPNAME_PREFERREDFILTER);
@@ -1881,7 +1881,7 @@ void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XName
         }
         break;
 
-        //---------------------------------------
+        
         case E_FILTER :
         {
             pIt = aItem.find(PROPNAME_TYPE);
@@ -1930,7 +1930,7 @@ void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XName
         }
         break;
 
-        //---------------------------------------
+        
         case E_FRAMELOADER :
         case E_CONTENTHANDLER :
         {

@@ -364,7 +364,7 @@ using namespace ::jni_uno;
 extern "C"
 {
 
-//------------------------------------------------------------------------------
+
 SAL_JNI_EXPORT jobject
 JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
     JNIEnv * jni_env, jobject jo_proxy, jlong bridge_handle, jstring jo_method,
@@ -613,7 +613,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
     }
 }
 
-//------------------------------------------------------------------------------
+
 SAL_JNI_EXPORT void
 JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_finalize__J(
     JNIEnv * jni_env, jobject jo_proxy, jlong bridge_handle )

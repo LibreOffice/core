@@ -48,7 +48,7 @@ using namespace connectivity::mysqlc;
 
 #include <stdio.h>
 
-//------------------------------------------------------------------------------
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
 using namespace com::sun::star::lang;

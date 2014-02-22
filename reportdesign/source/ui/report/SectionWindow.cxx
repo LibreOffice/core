@@ -190,7 +190,7 @@ bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>&
     }
     return bRet;
 }
-//------------------------------------------------------------------------------
+
 void OSectionWindow::ImplInitSettings()
 {
     static bool t = false;
@@ -202,7 +202,7 @@ void OSectionWindow::ImplInitSettings()
     }
     SetBackground( );
 }
-//-----------------------------------------------------------------------------
+
 void OSectionWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
@@ -214,7 +214,7 @@ void OSectionWindow::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
 }
-//------------------------------------------------------------------------------
+
 void OSectionWindow::Resize()
 {
     Window::Resize();
@@ -273,12 +273,12 @@ void OSectionWindow::setCollapsed(sal_Bool _bCollapsed)
         m_aStartMarker.setCollapsed(_bCollapsed);
     }
 }
-//-----------------------------------------------------------------------------
+
 void OSectionWindow::showProperties()
 {
     m_pParent->getView()->showProperties( m_aReportSection.getSection().get() );
 }
-//-----------------------------------------------------------------------------
+
 void OSectionWindow::setMarked(sal_Bool _bMark)
 {
     m_aStartMarker.setMarked(_bMark);
@@ -309,20 +309,20 @@ void OSectionWindow::zoom(const Fraction& _aZoom)
     setZoomFactor(_aZoom,m_aEndMarker);
     Invalidate();
 }
-//-----------------------------------------------------------------------------
+
 IMPL_LINK( OSectionWindow, StartSplitHdl, Splitter*,  )
 {
     const OUString sUndoAction( ModuleRes( RID_STR_UNDO_CHANGE_SIZE ) );
     getViewsWindow()->getView()->getReportView()->getController().getUndoManager().EnterListAction( sUndoAction, OUString() );
     return 0L;
 }
-//------------------------------------------------------------------------------
+
 IMPL_LINK( OSectionWindow, EndSplitHdl, Splitter*,  )
 {
     getViewsWindow()->getView()->getReportView()->getController().getUndoManager().LeaveListAction();
     return 0L;
 }
-//-----------------------------------------------------------------------------
+
 IMPL_LINK( OSectionWindow, SplitHdl, Splitter*, _pSplitter )
 {
     if ( !getViewsWindow()->getView()->getReportView()->getController().isEditable() )
@@ -366,7 +366,7 @@ void lcl_setOrigin(Window& _rWindow,long _nX, long _nY)
     aMap.SetOrigin( Point(- _nX, - _nY));
     _rWindow.SetMapMode( aMap );
 }
-//----------------------------------------------------------------------------
+
 void OSectionWindow::scrollChildren(long _nX)
 {
     const Point aDelta( _nX,0 );

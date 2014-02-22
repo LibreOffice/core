@@ -46,7 +46,7 @@
 
 using namespace connectivity::skeleton;
 
-//------------------------------------------------------------------------------
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -63,7 +63,7 @@ OConnection::OConnection(SkeletonDriver*    _pDriver)
 {
     m_pDriver->acquire();
 }
-//-----------------------------------------------------------------------------
+
 OConnection::~OConnection()
 {
     if(!isClosed())
@@ -71,13 +71,13 @@ OConnection::~OConnection()
     m_pDriver->release();
     m_pDriver = NULL;
 }
-//-----------------------------------------------------------------------------
+
 void SAL_CALL OConnection::release() throw()
 {
     relase_ChildImpl();
 }
 // -----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+
 void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     osl_atomic_increment( &m_refCount );
@@ -332,7 +332,7 @@ void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeExceptio
 {
     // you should clear your collected warnings here
 }
-//--------------------------------------------------------------------
+
 void OConnection::buildTypeInfo() throw( SQLException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -377,7 +377,7 @@ void OConnection::buildTypeInfo() throw( SQLException)
     Reference< XCloseable> xClose(xRs,UNO_QUERY);
     xClose->close();
 }
-//------------------------------------------------------------------------------
+
 void OConnection::disposing()
 {
     // we noticed that we should be destroied in near future so we have to dispose our statements

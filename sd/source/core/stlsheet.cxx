@@ -831,9 +831,9 @@ void SAL_CALL SdStyleSheet::removeEventListener( const Reference< XEventListener
     mrBHelper.removeListener( ::getCppuType( &xListener ), xListener );
 }
 
-//------------------------------------------------------------------------
+
 // XModifyBroadcaster
-//------------------------------------------------------------------------
+
 
 void SAL_CALL SdStyleSheet::addModifyListener( const Reference< XModifyListener >& xListener ) throw (RuntimeException)
 {
@@ -852,14 +852,14 @@ void SAL_CALL SdStyleSheet::addModifyListener( const Reference< XModifyListener 
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void SAL_CALL SdStyleSheet::removeModifyListener( const Reference< XModifyListener >& xListener ) throw (RuntimeException)
 {
     mrBHelper.removeListener( cppu::UnoType<XModifyListener>::get(), xListener );
 }
 
-//------------------------------------------------------------------------
+
 
 void SdStyleSheet::notifyModifyListener()
 {

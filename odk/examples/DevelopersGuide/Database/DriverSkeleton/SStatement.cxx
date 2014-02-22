@@ -47,7 +47,7 @@
 #include "propertyids.hxx"
 
 using namespace connectivity::skeleton;
-//------------------------------------------------------------------------------
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -56,7 +56,7 @@ using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
-//------------------------------------------------------------------------------
+
 OStatement_Base::OStatement_Base(OConnection* _pConnection )
     : OStatement_BASE(m_aMutex),
     OPropertySetHelper(OStatement_BASE::rBHelper),
@@ -69,7 +69,7 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
 OStatement_Base::~OStatement_Base()
 {
 }
-//------------------------------------------------------------------------------
+
 void OStatement_Base::disposeResultSet()
 {
     // free the cursor if alive
@@ -78,7 +78,7 @@ void OStatement_Base::disposeResultSet()
         xComp->dispose();
     m_xResultSet.clear();
 }
-//------------------------------------------------------------------------------
+
 void OStatement_BASE2::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -92,12 +92,12 @@ void OStatement_BASE2::disposing()
     dispose_ChildImpl();
     OStatement_Base::disposing();
 }
-//-----------------------------------------------------------------------------
+
 void SAL_CALL OStatement_BASE2::release() throw()
 {
     relase_ChildImpl();
 }
-//-----------------------------------------------------------------------------
+
 Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = OStatement_BASE::queryInterface(rType);

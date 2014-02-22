@@ -62,9 +62,9 @@ using ::rtl::OString;
 const char * pTestString1 = "test socket";
 const char * pTestString2 = " Passed#OK";
 
-//------------------------------------------------------------------------
+
 // helper functions
-//------------------------------------------------------------------------
+
 
 // just used to test socket::close() when accepting
 class AcceptorThread : public Thread

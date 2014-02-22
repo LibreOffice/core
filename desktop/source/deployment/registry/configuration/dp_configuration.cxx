@@ -566,7 +566,7 @@ BackendImpl::PackageImpl::isRegistered_(
         true, beans::Ambiguous<sal_Bool>( bReg, false ) );
 }
 
-//------------------------------------------------------------------------------
+
 OUString encodeForXml( OUString const & text )
 {
     // encode conforming xml:

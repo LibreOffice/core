@@ -28,11 +28,11 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::osl;
 
-//---------------------------------------------------------------------------------------------
-// class SequenceInputStream
-//---------------------------------------------------------------------------------------------
 
-//------------------------------------------------------------------
+// class SequenceInputStream
+
+
+
 SequenceInputStream::SequenceInputStream(
     css::uno::Sequence<sal_Int8> const & rData)
 :   m_aData(rData)
@@ -41,7 +41,7 @@ SequenceInputStream::SequenceInputStream(
 }
 
 // checks if closed, returns available size, not mutex-protected
-//------------------------------------------------------------------
+
 inline sal_Int32 SequenceInputStream::avail()
 {
     if (m_nPos == -1)
@@ -51,7 +51,7 @@ inline sal_Int32 SequenceInputStream::avail()
 }
 
 // com::sun::star::io::XInputStream
-//------------------------------------------------------------------
+
 sal_Int32 SAL_CALL SequenceInputStream::readBytes( Sequence<sal_Int8>& aData, sal_Int32 nBytesToRead )
     throw(NotConnectedException, BufferSizeExceededException,
           IOException, RuntimeException)
@@ -73,7 +73,7 @@ sal_Int32 SAL_CALL SequenceInputStream::readBytes( Sequence<sal_Int8>& aData, sa
     return nBytesToRead;
 }
 
-//------------------------------------------------------------------
+
 sal_Int32 SAL_CALL SequenceInputStream::readSomeBytes( Sequence<sal_Int8>& aData, sal_Int32 nMaxBytesToRead )
     throw(NotConnectedException, BufferSizeExceededException,
           IOException, RuntimeException)
@@ -82,7 +82,7 @@ sal_Int32 SAL_CALL SequenceInputStream::readSomeBytes( Sequence<sal_Int8>& aData
     return readBytes(aData, nMaxBytesToRead);
 }
 
-//------------------------------------------------------------------
+
 void SAL_CALL SequenceInputStream::skipBytes( sal_Int32 nBytesToSkip )
     throw(NotConnectedException, BufferSizeExceededException,
           IOException, RuntimeException)
@@ -100,7 +100,7 @@ void SAL_CALL SequenceInputStream::skipBytes( sal_Int32 nBytesToSkip )
     m_nPos += nBytesToSkip;
 }
 
-//------------------------------------------------------------------
+
 sal_Int32 SAL_CALL SequenceInputStream::available(  )
     throw(NotConnectedException, IOException, RuntimeException)
 {
@@ -109,7 +109,7 @@ sal_Int32 SAL_CALL SequenceInputStream::available(  )
     return avail();
 }
 
-//------------------------------------------------------------------
+
 void SAL_CALL SequenceInputStream::closeInput(  )
     throw(NotConnectedException, IOException, RuntimeException)
 {
@@ -136,7 +136,7 @@ sal_Int64 SAL_CALL SequenceInputStream::getLength(  ) throw (IOException, Runtim
     return m_aData.getLength();
 }
 
-//--------------------------------------------------------------------------
+
 OSequenceOutputStream::OSequenceOutputStream(Sequence< sal_Int8 >& _rSeq, double _nResizeFactor, sal_Int32 _nMinimumResize, sal_Int32 _nMaximumResize)
     :m_rSequence(_rSeq)
     ,m_nResizeFactor(_nResizeFactor)
@@ -156,7 +156,7 @@ OSequenceOutputStream::OSequenceOutputStream(Sequence< sal_Int8 >& _rSeq, double
         // this heuristic is as good as any other ... supply better parameters if you don't like it :)
 }
 
-//--------------------------------------------------------------------------
+
 void SAL_CALL OSequenceOutputStream::writeBytes( const Sequence< sal_Int8 >& _rData ) throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
@@ -207,7 +207,7 @@ void SAL_CALL OSequenceOutputStream::writeBytes( const Sequence< sal_Int8 >& _rD
     m_nSize += _rData.getLength();
 }
 
-//--------------------------------------------------------------------------
+
 void SAL_CALL OSequenceOutputStream::flush(  ) throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
@@ -218,7 +218,7 @@ void SAL_CALL OSequenceOutputStream::flush(  ) throw(NotConnectedException, Buff
     m_rSequence.realloc(m_nSize);
 }
 
-//--------------------------------------------------------------------------
+
 void SAL_CALL OSequenceOutputStream::closeOutput(  ) throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);

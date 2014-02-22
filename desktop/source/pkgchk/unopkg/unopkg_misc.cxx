@@ -241,14 +241,14 @@ OUString makeAbsoluteFileUrl(
 
 namespace {
 
-//------------------------------------------------------------------------------
+
 inline void printf_space( sal_Int32 space )
 {
     while (space--)
         dp_misc::writeConsole("  ");
 }
 
-//------------------------------------------------------------------------------
+
 void printf_line(
     OUString const & name, OUString const & value, sal_Int32 level )
 {
@@ -256,7 +256,7 @@ void printf_line(
     dp_misc::writeConsole(name + ": " + value + "\n");
 }
 
-//------------------------------------------------------------------------------
+
 void printf_package(
     Reference<deployment::XPackage> const & xPackage,
     Reference<XCommandEnvironment> const & xCmdEnv, sal_Int32 level )
@@ -352,7 +352,7 @@ void printf_packages(
 
 namespace {
 
-//------------------------------------------------------------------------------
+
 Reference<XComponentContext> bootstrapStandAlone()
 {
     Reference<XComponentContext> xContext =
@@ -370,7 +370,7 @@ Reference<XComponentContext> bootstrapStandAlone()
     return xContext;
 }
 
-//------------------------------------------------------------------------------
+
 Reference<XComponentContext> connectToOffice(
     Reference<XComponentContext> const & xLocalComponentContext,
     bool verbose )

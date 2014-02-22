@@ -913,7 +913,7 @@ SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _
     return pOverlappedObj;
 }
 
-//----------------------------------------------------------------------------
+
 SdrObject* isOver(SdrObject* _pObj,SdrPage& _rPage,SdrView& _rView,bool _bUnMarkedObjects)
 {
     SdrObject* pOverlappedObj = NULL;

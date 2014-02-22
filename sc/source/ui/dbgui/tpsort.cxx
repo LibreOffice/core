@@ -417,7 +417,7 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 ScTabPageSortFields::GetFieldSelPos( SCCOLROW nField )
 {
@@ -457,7 +457,7 @@ void ScTabPageSortFields::SetLastSortKey( sal_uInt16 nItem )
 
 // -----------------------------------------------------------------------
 // Handler:
-//---------
+
 
 IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox *, pLb )
 {

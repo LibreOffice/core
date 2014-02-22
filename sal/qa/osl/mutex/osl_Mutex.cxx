@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//------------------------------------------------------------------------
+
 // include files
-//------------------------------------------------------------------------
+
 #include <sal/types.h>
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
@@ -30,9 +30,9 @@
 using namespace osl;
 using namespace rtl;
 
-//------------------------------------------------------------------------
+
 // helper functions
-//------------------------------------------------------------------------
+
 
 /** print a UNI_CODE String.
 */
@@ -76,9 +76,9 @@ namespace ThreadHelper
 }
 
 
-//------------------------------------------------------------------------
+
 // Beginning of the test cases for osl_Mutex class
-//------------------------------------------------------------------------
+
 
 
 /** mutually exclusive data
@@ -263,7 +263,7 @@ protected:
 };
 
 
-//--------------------------------------------------------------
+
 namespace osl_Mutex
 {
 
@@ -557,9 +557,9 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Mutex::getGlobalMutex, "osl_Mutex");
 } // namespace osl_Mutex
 
 
-//------------------------------------------------------------------------
+
 // Beginning of the test cases for osl_Guard class
-//------------------------------------------------------------------------
+
 
 class GuardThread : public Thread
 {
@@ -641,9 +641,9 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Guard::ctor, "osl_Guard");
 } // namespace osl_Guard
 
 
-//------------------------------------------------------------------------
+
 // Beginning of the test cases for osl_ClearableGuard class
-//------------------------------------------------------------------------
+
 
 /** Thread for test ClearableGuard
  */
@@ -783,9 +783,9 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_ClearableGuard::clear, "osl_Clearable
 } // namespace osl_ClearableGuard
 
 
-//------------------------------------------------------------------------
+
 // Beginning of the test cases for osl_ResettableGuard class
-//------------------------------------------------------------------------
+
 
 /** Thread for test ResettableGuard
  */

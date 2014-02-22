@@ -125,7 +125,7 @@ sdbcx::OCollection* OHSQLTable::createIndexes(const TStringVector& _rNames)
 {
     return new OIndexesHelper(this,m_aMutex,_rNames);
 }
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OHSQLTable::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId * pId = 0;
@@ -142,7 +142,7 @@ Sequence< sal_Int8 > OHSQLTable::getUnoTunnelImplementationId()
 }
 
 // com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
 sal_Int64 OHSQLTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )

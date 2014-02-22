@@ -38,7 +38,7 @@ using namespace ::com::sun::star::uno;
 namespace climaker
 {
 System::String^ mapUnoPolymorphicName(System::String^ unoName);
-//------------------------------------------------------------------------------
+
 static inline ::System::String ^ to_cts_name(
     OUString const & uno_name )
 {
@@ -48,7 +48,7 @@ static inline ::System::String ^ to_cts_name(
     return ustring_to_String( buf.makeStringAndClear() );
 }
 
-//------------------------------------------------------------------------------
+
 static inline ::System::Object ^ to_cli_constant( Any const & value )
 {
     switch (value.getValueTypeClass())
@@ -95,7 +95,7 @@ static inline ::System::Object ^ to_cli_constant( Any const & value )
     }
 }
 
-//------------------------------------------------------------------------------
+
 static inline void emit_ldarg( Emit::ILGenerator ^ code, ::System::Int32 index )
 {
     switch (index)
@@ -1575,7 +1575,7 @@ Assembly ^ TypeEmitter::type_resolve(
         if (attrBuilder != nullptr)
             method_builder->SetCustomAttribute(attrBuilder);
 
-        //-------------------------------------------------------------
+        
         //define parameter attributes (paramarray), names etc.
         //The first parameter is the XComponentContext, which cannot be obtained
         //from reflection.

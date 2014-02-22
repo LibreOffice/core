@@ -68,7 +68,7 @@ namespace slideshow
         private:
 
             // View layer methods
-            //------------------------------------------------------------------
+            
 
             virtual void addViewLayer( const ViewLayerSharedPtr&    rNewLayer,
                                        bool                         bRedrawLayer );
@@ -77,7 +77,7 @@ namespace slideshow
 
 
             // ExternalShapeBase methods
-            //------------------------------------------------------------------
+            
 
             virtual bool implRender( const ::basegfx::B2DRange& rCurrBounds ) const;
             virtual void implViewChanged( const UnoViewSharedPtr& rView );

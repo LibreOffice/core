@@ -192,7 +192,7 @@ void OXReportControllerObserver::UnLock()
 }
 sal_Bool OXReportControllerObserver::IsLocked() const { return m_pImpl->m_nLocks != 0; }
 
-//------------------------------------------------------------------------------
+
 void OXReportControllerObserver::AddSection(const uno::Reference< report::XSection > & _xSection)
 {
     OEnvLock aLock(*this);
@@ -209,7 +209,7 @@ void OXReportControllerObserver::AddSection(const uno::Reference< report::XSecti
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OXReportControllerObserver::RemoveSection(const uno::Reference< report::XSection > & _xSection)
 {
     OEnvLock aLock(*this);
@@ -227,7 +227,7 @@ void OXReportControllerObserver::RemoveSection(const uno::Reference< report::XSe
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OXReportControllerObserver::TogglePropertyListening(const uno::Reference< uno::XInterface > & Element)
 {
     // listen at Container
@@ -254,7 +254,7 @@ void OXReportControllerObserver::TogglePropertyListening(const uno::Reference< u
 }
 
 
-//------------------------------------------------------------------------------
+
 void OXReportControllerObserver::switchListening( const uno::Reference< container::XIndexAccess >& _rxContainer, bool _bStartListening ) SAL_THROW(())
 {
     OSL_PRECOND( _rxContainer.is(), "OXReportControllerObserver::switchListening: invalid container!" );
@@ -291,7 +291,7 @@ void OXReportControllerObserver::switchListening( const uno::Reference< containe
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OXReportControllerObserver::switchListening( const uno::Reference< uno::XInterface >& _rxObject, bool _bStartListening ) SAL_THROW(())
 {
     OSL_PRECOND( _rxObject.is(), "OXReportControllerObserver::switchListening: how should I listen at a NULL object?" );
@@ -325,12 +325,12 @@ void OXReportControllerObserver::switchListening( const uno::Reference< uno::XIn
     }
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OXReportControllerObserver::modified( const lang::EventObject& /*aEvent*/ ) throw (uno::RuntimeException)
 {
 }
 
-//------------------------------------------------------------------------------
+
 void OXReportControllerObserver::AddElement(const uno::Reference< uno::XInterface >& _rxElement )
 {
     m_aFormattedFieldBeautifier.notifyElementInserted(_rxElement);
@@ -344,7 +344,7 @@ void OXReportControllerObserver::AddElement(const uno::Reference< uno::XInterfac
     switchListening( _rxElement, true );
 }
 
-//------------------------------------------------------------------------------
+
 void OXReportControllerObserver::RemoveElement(const uno::Reference< uno::XInterface >& _rxElement)
 {
     switchListening( _rxElement, false );
@@ -371,7 +371,7 @@ void OXReportControllerObserver::RemoveElement(const uno::Reference< uno::XInter
     return aFind;
 }
 // XContainerListener
-//------------------------------------------------------------------------------
+
 void SAL_CALL OXReportControllerObserver::elementInserted(const container::ContainerEvent& evt) throw(uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -385,7 +385,7 @@ void SAL_CALL OXReportControllerObserver::elementInserted(const container::Conta
     }
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OXReportControllerObserver::elementReplaced(const container::ContainerEvent& evt) throw(uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -399,7 +399,7 @@ void SAL_CALL OXReportControllerObserver::elementReplaced(const container::Conta
     AddElement(xIface);
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OXReportControllerObserver::elementRemoved(const container::ContainerEvent& evt) throw(uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;

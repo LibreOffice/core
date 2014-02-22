@@ -18,9 +18,9 @@
  */
 
 
-//------------------------------------------------------------------------
+
 // include files
-//------------------------------------------------------------------------
+
 #include <osl_Module_Const.h>
 
 using namespace osl;
@@ -28,9 +28,9 @@ using namespace osl;
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OString;
-//------------------------------------------------------------------------
+
 // helper functions and classes
-//------------------------------------------------------------------------
+
 
 /** print Boolean value.
 */
@@ -143,9 +143,9 @@ inline void deleteTestFile( const ::rtl::OUString filename )
 }
 
 
-//------------------------------------------------------------------------
+
 // test code start here
-//------------------------------------------------------------------------
+
 
 namespace osl_Module
 {

@@ -78,10 +78,10 @@ using ::com::sun::star::awt::XWindow;
 //========================================================================
 //= FmPropBrwMgr
 //========================================================================
-//-----------------------------------------------------------------------
+
 SFX_IMPL_FLOATINGWINDOW(FmPropBrwMgr, SID_FM_SHOW_PROPERTIES)
 
-//-----------------------------------------------------------------------
+
 FmPropBrwMgr::FmPropBrwMgr( Window* _pParent, sal_uInt16 _nId,
                             SfxBindings* _pBindings, SfxChildWinInfo* _pInfo)
               :SfxChildWindow(_pParent, _nId)
@@ -190,7 +190,7 @@ OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
 // class FmPropBrw
 //========================================================================
 DBG_NAME(FmPropBrw);
-//------------------------------------------------------------------------
+
 FmPropBrw::FmPropBrw( const Reference< XComponentContext >& _xORB, SfxBindings* _pBindings,
             SfxChildWindow* _pMgr, Window* _pParent, const SfxChildWinInfo* _pInfo )
     :SfxFloatingWindow(_pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK|WB_ROLLABLE) )
@@ -240,7 +240,7 @@ FmPropBrw::FmPropBrw( const Reference< XComponentContext >& _xORB, SfxBindings* 
         m_sLastActivePage = _pInfo->aExtraString;
 }
 
-//------------------------------------------------------------------------
+
 void FmPropBrw::Resize()
 {
     SfxFloatingWindow::Resize();
@@ -259,7 +259,7 @@ void FmPropBrw::Resize()
     }
 }
 
-//------------------------------------------------------------------------
+
 FmPropBrw::~FmPropBrw()
 {
     if (m_xBrowserController.is())
@@ -287,7 +287,7 @@ FmPropBrw::~FmPropBrw()
     DBG_DTOR(FmPropBrw,NULL);
 }
 
-//-----------------------------------------------------------------------
+
 OUString FmPropBrw::getCurrentPage() const
 {
     OUString sCurrentPage;
@@ -308,7 +308,7 @@ OUString FmPropBrw::getCurrentPage() const
     return sCurrentPage;
 }
 
-//-----------------------------------------------------------------------
+
 void FmPropBrw::implDetachController()
 {
     m_sLastActivePage = getCurrentPage();
@@ -336,7 +336,7 @@ void FmPropBrw::implDetachController()
     m_xMeAsFrame.clear();
 }
 
-//-----------------------------------------------------------------------
+
 bool FmPropBrw::Close()
 {
     // suspend the controller (it is allowed to veto)
@@ -375,7 +375,7 @@ bool FmPropBrw::Close()
     return bClose;
 }
 
-//-----------------------------------------------------------------------
+
 bool FmPropBrw::implIsReadOnlyModel() const
 {
     try
@@ -391,7 +391,7 @@ bool FmPropBrw::implIsReadOnlyModel() const
     return true;
 }
 
-//-----------------------------------------------------------------------
+
 void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
 {
     if ( m_xBrowserController.is() )
@@ -482,14 +482,14 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
     }
 }
 
-//-----------------------------------------------------------------------
+
 void FmPropBrw::FillInfo( SfxChildWinInfo& rInfo ) const
 {
     rInfo.bVisible = sal_False;
     rInfo.aExtraString = getCurrentPage();
 }
 
-//-----------------------------------------------------------------------
+
 IMPL_LINK( FmPropBrw, OnAsyncGetFocus, void*, /*NOTINTERESTEDIN*/ )
 {
     if (m_xBrowserComponentWindow.is())
@@ -497,7 +497,7 @@ IMPL_LINK( FmPropBrw, OnAsyncGetFocus, void*, /*NOTINTERESTEDIN*/ )
     return 0L;
 }
 
-//-----------------------------------------------------------------------
+
 namespace
 {
     static bool lcl_shouldEnableHelpSection( const Reference< XComponentContext >& _rxContext )
@@ -513,7 +513,7 @@ namespace
         return bEnabled;
     }
 }
-//-----------------------------------------------------------------------
+
 void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
 {
     // the document in which we live
@@ -595,7 +595,7 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
     }
 }
 
-//-----------------------------------------------------------------------
+
 void FmPropBrw::impl_ensurePropertyBrowser_nothrow( FmFormShell* _pFormShell )
 {
     // the document in which we live
@@ -628,7 +628,7 @@ void FmPropBrw::impl_ensurePropertyBrowser_nothrow( FmFormShell* _pFormShell )
     m_xLastKnownDocument = xDocument;
 }
 
-//-----------------------------------------------------------------------
+
 void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState)
 {
     if (!pState  || SID_FM_PROPERTY_CONTROL != nSID)

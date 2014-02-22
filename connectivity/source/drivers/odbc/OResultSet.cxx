@@ -65,7 +65,7 @@ namespace
     const SQLLEN nMaxBookmarkLen = 20;
 }
 
-//------------------------------------------------------------------------------
+
 //  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
 OUString SAL_CALL OResultSet::getImplementationName(  ) throw ( RuntimeException)
 {
@@ -1309,7 +1309,7 @@ Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const  Sequence<  Any >& 
     }
     return aRet;
 }
-//------------------------------------------------------------------------------
+
 template < typename T, SQLINTEGER BufferLength > T OResultSet::getStmtOption (SQLINTEGER fOption, T dflt) const
 {
     T result (dflt);
@@ -1323,7 +1323,7 @@ template < typename T, SQLINTEGER BufferLength > SQLRETURN OResultSet::setStmtOp
     SQLPOINTER sv = reinterpret_cast<SQLPOINTER>(value);
     return N3SQLSetStmtAttr(m_aStatementHandle, fOption, sv, BufferLength);
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 OResultSet::getResultSetConcurrency() const
 {
     sal_uInt32 nValue = getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_CONCURRENCY);
@@ -1334,7 +1334,7 @@ sal_Int32 OResultSet::getResultSetConcurrency() const
 
     return nValue;
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 OResultSet::getResultSetType() const
 {
     sal_uInt32 nValue = getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_CURSOR_SENSITIVITY);
@@ -1356,17 +1356,17 @@ sal_Int32 OResultSet::getResultSetType() const
     }
     return nValue;
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 OResultSet::getFetchDirection() const
 {
     return FetchDirection::FORWARD;
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 OResultSet::getFetchSize() const
 {
     return getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_ROW_ARRAY_SIZE);
 }
-//------------------------------------------------------------------------------
+
 OUString OResultSet::getCursorName() const
 {
     SQLCHAR pName[258];
@@ -1412,7 +1412,7 @@ sal_Bool  OResultSet::isBookmarkable() const
 
     return (m_nUseBookmarks != SQL_UB_OFF) && (nAttr & SQL_CA1_BOOKMARK) == SQL_CA1_BOOKMARK;
 }
-//------------------------------------------------------------------------------
+
 void OResultSet::setFetchDirection(sal_Int32 _par0)
 {
     ::dbtools::throwFunctionNotSupportedException( "setFetchDirection", *this );
@@ -1423,7 +1423,7 @@ void OResultSet::setFetchDirection(sal_Int32 _par0)
         setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_CURSOR_TYPE, _par0);
     }
 }
-//------------------------------------------------------------------------------
+
 void OResultSet::setFetchSize(sal_Int32 _par0)
 {
     OSL_ENSURE(_par0>0,"Illegal fetch size!");

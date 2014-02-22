@@ -227,7 +227,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowCellAttrTokenMap()
     return *pTableRowCellAttrTokenMap;
 }
 
-//----------------------------------------------------------------------------
+
 
 
 

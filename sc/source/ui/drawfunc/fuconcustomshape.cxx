@@ -36,7 +36,7 @@
 
 #include <math.h>
 
-//------------------------------------------------------------------------
+
 
 FuConstCustomShape::FuConstCustomShape( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP, SdrModel* pDoc, SfxRequest& rReq )
     : FuConstruct( pViewSh, pWin, pViewP, pDoc, rReq )

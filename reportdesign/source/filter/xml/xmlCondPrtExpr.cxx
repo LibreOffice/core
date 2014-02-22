@@ -82,7 +82,7 @@ void OXMLCondPrtExpr::Characters( const OUString& rChars )
 {
     m_xComponent->setPropertyValue(PROPERTY_CONDITIONALPRINTEXPRESSION,makeAny(rChars));
 }
-//----------------------------------------------------------------------------
+
 } // namespace rptxml
 // -----------------------------------------------------------------------------
 

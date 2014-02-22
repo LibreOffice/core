@@ -58,7 +58,7 @@ static ::osl::Mutex m_ThreadMutex;
 using namespace ::comphelper;
 using namespace connectivity::mozab;
 using namespace connectivity;
-//------------------------------------------------------------------------------
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -66,7 +66,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
-//------------------------------------------------------------------------------
+
 OCommonStatement::OCommonStatement(OConnection* _pConnection )
     :OCommonStatement_IBASE(m_aMutex)
     ,OPropertySetHelper(OCommonStatement_IBASE::rBHelper)
@@ -88,7 +88,7 @@ OCommonStatement::~OCommonStatement()
 {
 }
 
-//------------------------------------------------------------------------------
+
 void OCommonStatement::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -105,7 +105,7 @@ void OCommonStatement::disposing()
     dispose_ChildImpl();
     OCommonStatement_IBASE::disposing();
 }
-//-----------------------------------------------------------------------------
+
 Any SAL_CALL OCommonStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = OCommonStatement_IBASE::queryInterface(rType);
@@ -525,7 +525,7 @@ void OCommonStatement::analyseSQL()
         }
     }
 }
-//------------------------------------------------------------------
+
 void OCommonStatement::setOrderbyColumn(    OSQLParseNode* pColumnRef,
                                         OSQLParseNode* pAscendingDescending)
 {

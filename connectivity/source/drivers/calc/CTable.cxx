@@ -701,7 +701,7 @@ Any SAL_CALL OCalcTable::queryInterface( const Type & rType ) throw(RuntimeExcep
     return aRet.hasValue() ? aRet : OTable_TYPEDEF::queryInterface(rType);
 }
 
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OCalcTable::getUnoTunnelImplementationId()
 {
     //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::getUnoTunnelImplementationId" );
@@ -719,7 +719,7 @@ Sequence< sal_Int8 > OCalcTable::getUnoTunnelImplementationId()
 }
 
 // com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
 sal_Int64 OCalcTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::getSomething" );
@@ -727,13 +727,13 @@ sal_Int64 OCalcTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OCalcTable_BASE::getSomething(rId);
 }
-//------------------------------------------------------------------
+
 sal_Int32 OCalcTable::getCurrentLastPos() const
 {
     //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::getCurrentLastPos" );
     return m_nDataRows;
 }
-//------------------------------------------------------------------
+
 sal_Bool OCalcTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::seekRow" );
@@ -806,7 +806,7 @@ End:
     nCurPos = m_nFilePos;
     return sal_True;
 }
-//------------------------------------------------------------------
+
 sal_Bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
                                 sal_Bool _bUseTableDefs, sal_Bool bRetrieveData )
 {

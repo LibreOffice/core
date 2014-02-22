@@ -747,13 +747,13 @@ void SvxTableField::Save( SvPersistStream & /*rStm*/ )
 {
 }
 
-//----------------------------------------------------------------------------
+
 //      SvxExtTimeField
-//----------------------------------------------------------------------------
+
 
 SV_IMPL_PERSIST1( SvxExtTimeField, SvxFieldData );
 
-//----------------------------------------------------------------------------
+
 
 SvxExtTimeField::SvxExtTimeField()
     : m_nFixTime( Time(Time::SYSTEM).GetTime() )
@@ -762,7 +762,7 @@ SvxExtTimeField::SvxExtTimeField()
     eFormat = SVXTIMEFORMAT_STANDARD;
 }
 
-//----------------------------------------------------------------------------
+
 
 SvxExtTimeField::SvxExtTimeField( const Time& rTime, SvxTimeType eT, SvxTimeFormat eF )
     : m_nFixTime( rTime.GetTime() )
@@ -771,14 +771,14 @@ SvxExtTimeField::SvxExtTimeField( const Time& rTime, SvxTimeType eT, SvxTimeForm
     eFormat = eF;
 }
 
-//----------------------------------------------------------------------------
+
 
 SvxFieldData* SvxExtTimeField::Clone() const
 {
     return new SvxExtTimeField( *this );
 }
 
-//----------------------------------------------------------------------------
+
 
 bool SvxExtTimeField::operator==( const SvxFieldData& rOther ) const
 {
@@ -791,7 +791,7 @@ bool SvxExtTimeField::operator==( const SvxFieldData& rOther ) const
                 ( eFormat == rOtherFld.eFormat ) );
 }
 
-//----------------------------------------------------------------------------
+
 
 void SvxExtTimeField::Load( SvPersistStream & rStm )
 {
@@ -805,7 +805,7 @@ void SvxExtTimeField::Load( SvPersistStream & rStm )
     eFormat= (SvxTimeFormat) nFormat;
 }
 
-//----------------------------------------------------------------------------
+
 
 void SvxExtTimeField::Save( SvPersistStream & rStm )
 {
@@ -814,7 +814,7 @@ void SvxExtTimeField::Save( SvPersistStream & rStm )
     rStm.WriteUInt16( (sal_uInt16) eFormat );
 }
 
-//----------------------------------------------------------------------------
+
 
 OUString SvxExtTimeField::GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLang ) const
 {
@@ -892,13 +892,13 @@ MetaAction* SvxExtTimeField::createBeginComment() const
     return new MetaCommentAction( "FIELD_SEQ_BEGIN" );
 }
 
-//----------------------------------------------------------------------------
+
 //      SvxExtFileField
-//----------------------------------------------------------------------------
+
 
 SV_IMPL_PERSIST1( SvxExtFileField, SvxFieldData );
 
-//----------------------------------------------------------------------------
+
 
 SvxExtFileField::SvxExtFileField()
 {
@@ -906,7 +906,7 @@ SvxExtFileField::SvxExtFileField()
     eFormat = SVXFILEFORMAT_FULLPATH;
 }
 
-//----------------------------------------------------------------------------
+
 
 SvxExtFileField::SvxExtFileField( const OUString& rStr, SvxFileType eT, SvxFileFormat eF )
 {
@@ -915,14 +915,14 @@ SvxExtFileField::SvxExtFileField( const OUString& rStr, SvxFileType eT, SvxFileF
     eFormat = eF;
 }
 
-//----------------------------------------------------------------------------
+
 
 SvxFieldData* SvxExtFileField::Clone() const
 {
     return new SvxExtFileField( *this );
 }
 
-//----------------------------------------------------------------------------
+
 
 bool SvxExtFileField::operator==( const SvxFieldData& rOther ) const
 {
@@ -935,7 +935,7 @@ bool SvxExtFileField::operator==( const SvxFieldData& rOther ) const
                 ( eFormat == rOtherFld.eFormat ) );
 }
 
-//----------------------------------------------------------------------------
+
 
 void SvxExtFileField::Load( SvPersistStream & rStm )
 {
@@ -951,7 +951,7 @@ void SvxExtFileField::Load( SvPersistStream & rStm )
     eFormat= (SvxFileFormat) nFormat;
 }
 
-//----------------------------------------------------------------------------
+
 
 void SvxExtFileField::Save( SvPersistStream & rStm )
 {
@@ -962,7 +962,7 @@ void SvxExtFileField::Save( SvPersistStream & rStm )
     rStm.WriteUInt16( (sal_uInt16) eFormat );
 }
 
-//----------------------------------------------------------------------------
+
 
 OUString SvxExtFileField::GetFormatted() const
 {
@@ -1039,13 +1039,13 @@ OUString SvxExtFileField::GetFormatted() const
     return aString;
 }
 
-//----------------------------------------------------------------------------
+
 //      SvxAuthorField
-//----------------------------------------------------------------------------
+
 
 SV_IMPL_PERSIST1( SvxAuthorField, SvxFieldData );
 
-//----------------------------------------------------------------------------
+
 
 SvxAuthorField::SvxAuthorField()
 {
@@ -1053,7 +1053,7 @@ SvxAuthorField::SvxAuthorField()
     eFormat = SVXAUTHORFORMAT_FULLNAME;
 }
 
-//----------------------------------------------------------------------------
+
 
 SvxAuthorField::SvxAuthorField( const OUString& rFirstName,
                                 const OUString& rLastName,
@@ -1067,14 +1067,14 @@ SvxAuthorField::SvxAuthorField( const OUString& rFirstName,
     eFormat = eF;
 }
 
-//----------------------------------------------------------------------------
+
 
 SvxFieldData* SvxAuthorField::Clone() const
 {
     return new SvxAuthorField( *this );
 }
 
-//----------------------------------------------------------------------------
+
 
 bool SvxAuthorField::operator==( const SvxFieldData& rOther ) const
 {
@@ -1089,7 +1089,7 @@ bool SvxAuthorField::operator==( const SvxFieldData& rOther ) const
                 ( eFormat == rOtherFld.eFormat ) );
 }
 
-//----------------------------------------------------------------------------
+
 
 void SvxAuthorField::Load( SvPersistStream & rStm )
 {
@@ -1106,7 +1106,7 @@ void SvxAuthorField::Load( SvPersistStream & rStm )
     eFormat= (SvxAuthorFormat) nFormat;
 }
 
-//----------------------------------------------------------------------------
+
 
 void SvxAuthorField::Save( SvPersistStream & rStm )
 {
@@ -1118,7 +1118,7 @@ void SvxAuthorField::Save( SvPersistStream & rStm )
     rStm.WriteUInt16( (sal_uInt16) eFormat );
 }
 
-//----------------------------------------------------------------------------
+
 
 OUString SvxAuthorField::GetFormatted() const
 {
