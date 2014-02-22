@@ -906,7 +906,7 @@ void SwHTMLParser::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     switch( pOld ? pOld->Which() : pNew ? pNew->Which() : 0 )
     {
     case RES_OBJECTDYING:
-        if( ((SwPtrMsgPoolItem *)pOld)->pObject == GetRegisteredIn() )
+        if (pOld && ((SwPtrMsgPoolItem *)pOld)->pObject == GetRegisteredIn())
         {
             // dann uns selbst beenden
             GetRegisteredInNonConst()->Remove( this );
