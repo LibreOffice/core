@@ -58,15 +58,15 @@ VCLXAccessibleTabPageWindow::VCLXAccessibleTabPageWindow( VCLXWindow* pVCLXWindo
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleTabPageWindow::~VCLXAccessibleTabPageWindow()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 // OCommonAccessibleComponent
-// -----------------------------------------------------------------------------
+
 
 awt::Rectangle VCLXAccessibleTabPageWindow::implGetBounds() throw (RuntimeException)
 {
@@ -86,9 +86,9 @@ awt::Rectangle VCLXAccessibleTabPageWindow::implGetBounds() throw (RuntimeExcept
     return aBounds;
 }
 
-// -----------------------------------------------------------------------------
+
 // XComponent
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTabPageWindow::disposing()
 {
@@ -98,9 +98,9 @@ void VCLXAccessibleTabPageWindow::disposing()
     m_pTabPage = NULL;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleContext
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > VCLXAccessibleTabPageWindow::getAccessibleParent(  ) throw (RuntimeException)
 {
@@ -129,7 +129,7 @@ Reference< XAccessible > VCLXAccessibleTabPageWindow::getAccessibleParent(  ) th
     return xParent;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleTabPageWindow::getAccessibleIndexInParent(  ) throw (RuntimeException)
 {
@@ -138,6 +138,6 @@ sal_Int32 VCLXAccessibleTabPageWindow::getAccessibleIndexInParent(  ) throw (Run
     return 0;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

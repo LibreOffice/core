@@ -476,7 +476,7 @@ IMPL_LINK( BibToolBar, SendSelHdl, Timer*,/*pT*/)
 
     return 0;
 }
-//-----------------------------------------------------------------------------
+
 IMPL_LINK( BibToolBar, MenuHdl, ToolBox*, /*pToolbox*/)
 {
     sal_uInt16  nId=GetCurItemId();
@@ -513,7 +513,7 @@ IMPL_LINK( BibToolBar, MenuHdl, ToolBox*, /*pToolbox*/)
     }
     return 0;
 }
-//-----------------------------------------------------------------------------
+
 void    BibToolBar::statusChanged(const frame::FeatureStateEvent& rEvent)
                                             throw( uno::RuntimeException )
 {
@@ -554,7 +554,7 @@ IMPL_LINK( BibToolBar, OptionsChanged_Impl, void*, /*pVoid*/ )
     return 0L;
 }
 
-//-----------------------------------------------------------------------------
+
 
 IMPL_LINK( BibToolBar, SettingsChanged_Impl, void*, /*pVoid*/ )
 {
@@ -569,7 +569,7 @@ IMPL_LINK( BibToolBar, SettingsChanged_Impl, void*, /*pVoid*/ )
     return 0L;
 }
 
-//-----------------------------------------------------------------------------
+
 void BibToolBar::RebuildToolbar()
 {
     ApplyImageList();
@@ -577,7 +577,7 @@ void BibToolBar::RebuildToolbar()
     Application::PostUserEvent( aLayoutManager, 0 );
 }
 
-//-----------------------------------------------------------------------------
+
 
 void BibToolBar::ApplyImageList()
 {

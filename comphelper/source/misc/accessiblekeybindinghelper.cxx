@@ -38,7 +38,7 @@ namespace comphelper
     {
     }
 
-    // -----------------------------------------------------------------------------
+
 
     OAccessibleKeyBindingHelper::OAccessibleKeyBindingHelper( const OAccessibleKeyBindingHelper& rHelper )
         : cppu::WeakImplHelper1<XAccessibleKeyBinding>( rHelper )
@@ -46,13 +46,13 @@ namespace comphelper
     {
     }
 
-    // -----------------------------------------------------------------------------
+
 
     OAccessibleKeyBindingHelper::~OAccessibleKeyBindingHelper()
     {
     }
 
-    // -----------------------------------------------------------------------------
+
 
     void OAccessibleKeyBindingHelper::AddKeyBinding( const Sequence< awt::KeyStroke >& rKeyBinding ) throw (RuntimeException)
     {
@@ -61,7 +61,7 @@ namespace comphelper
         m_aKeyBindings.push_back( rKeyBinding );
     }
 
-    // -----------------------------------------------------------------------------
+
 
     void OAccessibleKeyBindingHelper::AddKeyBinding( const awt::KeyStroke& rKeyStroke ) throw (RuntimeException)
     {
@@ -72,9 +72,9 @@ namespace comphelper
         m_aKeyBindings.push_back( aSeq );
     }
 
-    // -----------------------------------------------------------------------------
+
     // XAccessibleKeyBinding
-    // -----------------------------------------------------------------------------
+
 
     sal_Int32 OAccessibleKeyBindingHelper::getAccessibleKeyBindingCount() throw (RuntimeException)
     {
@@ -83,7 +83,7 @@ namespace comphelper
         return m_aKeyBindings.size();
     }
 
-    // -----------------------------------------------------------------------------
+
 
     Sequence< awt::KeyStroke > OAccessibleKeyBindingHelper::getAccessibleKeyBinding( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
@@ -95,7 +95,7 @@ namespace comphelper
         return m_aKeyBindings[nIndex];
     }
 
-    // -----------------------------------------------------------------------------
+
 
 //..............................................................................
 }   // namespace comphelper

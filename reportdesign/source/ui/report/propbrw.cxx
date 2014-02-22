@@ -67,8 +67,8 @@ using namespace beans;
 using namespace container;
 using namespace ::comphelper;
 
-//----------------------------------------------------------------------------
-//-----------------------------------------------------------------------
+
+
 namespace
 {
     static bool lcl_shouldEnableHelpSection( const Reference< XComponentContext >& _rxContext )
@@ -84,13 +84,13 @@ namespace
         return bEnabled;
     }
 }
-//-----------------------------------------------------------------------
+
 //============================================================================
 // PropBrw
 //============================================================================
 
 
-//----------------------------------------------------------------------------
+
 
 PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, Window* pParent, ODesignView*  _pDesignView)
           :DockingWindow(pParent,WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK|WB_ROLLABLE))
@@ -181,7 +181,7 @@ PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, Window* pParent, O
     ::rptui::notifySystemWindow(pParent,this,::comphelper::mem_fun(&TaskPaneList::AddWindow));
 }
 
-//----------------------------------------------------------------------------
+
 
 PropBrw::~PropBrw()
 {
@@ -205,12 +205,12 @@ PropBrw::~PropBrw()
 
     ::rptui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
 }
-// -----------------------------------------------------------------------------
+
 void PropBrw::setCurrentPage(const OUString& _sLastActivePage)
 {
     m_sLastActivePage = _sLastActivePage;
 }
-//----------------------------------------------------------------------------
+
 
 void PropBrw::implDetachController()
 {
@@ -227,7 +227,7 @@ void PropBrw::implDetachController()
     m_xBrowserController.clear();
     m_xBrowserComponentWindow.clear();
 }
-//-----------------------------------------------------------------------
+
 OUString PropBrw::getCurrentPage() const
 {
     OUString sCurrentPage;
@@ -247,7 +247,7 @@ OUString PropBrw::getCurrentPage() const
     }
     return sCurrentPage;
 }
-//----------------------------------------------------------------------------
+
 
 bool PropBrw::Close()
 {
@@ -276,7 +276,7 @@ bool PropBrw::Close()
     return true;
 }
 
-//----------------------------------------------------------------------------
+
 
 uno::Sequence< Reference<uno::XInterface> > PropBrw::CreateCompPropSet(const SdrMarkList& _rMarkList)
 {
@@ -308,7 +308,7 @@ uno::Sequence< Reference<uno::XInterface> > PropBrw::CreateCompPropSet(const Sdr
     Reference<uno::XInterface> *pSets = aSets.empty() ? NULL : &aSets[0];
     return uno::Sequence< Reference<uno::XInterface> >(pSets, aSets.size());
 }
-//----------------------------------------------------------------------------
+
 void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> >& _aObjects )
 {
     if ( m_xBrowserController.is() )
@@ -326,7 +326,7 @@ void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> 
     SetText( GetHeadlineName(_aObjects) );
 }
 
-//----------------------------------------------------------------------------
+
 
 OUString PropBrw::GetHeadlineName( const uno::Sequence< Reference<uno::XInterface> >& _aObjects )
 {
@@ -400,13 +400,13 @@ OUString PropBrw::GetHeadlineName( const uno::Sequence< Reference<uno::XInterfac
 
     return aName;
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface> PropBrw::CreateComponentPair(OObjectBase* _pObj)
 {
     _pObj->initializeOle();
     return CreateComponentPair(_pObj->getAwtComponent(),_pObj->getReportComponent());
 }
-//----------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface> PropBrw::CreateComponentPair(const uno::Reference< uno::XInterface>& _xFormComponent
                                                               ,const uno::Reference< uno::XInterface>& _xReportComponent)
 {
@@ -418,7 +418,7 @@ uno::Reference< uno::XInterface> PropBrw::CreateComponentPair(const uno::Referen
 
     return xNameCont.get();
 }
-// -----------------------------------------------------------------------------
+
 ::Size PropBrw::getMinimumSize() const
 {
     ::Size aSize;
@@ -433,7 +433,7 @@ uno::Reference< uno::XInterface> PropBrw::CreateComponentPair(const uno::Referen
     }
     return aSize;
 }
-//----------------------------------------------------------------------------
+
 void PropBrw::Resize()
 {
     Window::Resize();
@@ -466,7 +466,7 @@ void PropBrw::Resize()
             awt::PosSize::WIDTH | awt::PosSize::HEIGHT);
     }
 }
-//----------------------------------------------------------------------------
+
 void PropBrw::Update( OSectionView* pNewView )
 {
     try
@@ -539,7 +539,7 @@ void PropBrw::Update( OSectionView* pNewView )
         OSL_FAIL( "PropBrw::Update: Exception occurred!" );
     }
 }
-//----------------------------------------------------------------------------
+
 void PropBrw::Update( const uno::Reference< uno::XInterface>& _xReportComponent)
 {
     if ( m_xLastSection != _xReportComponent )
@@ -562,20 +562,20 @@ void PropBrw::Update( const uno::Reference< uno::XInterface>& _xReportComponent)
         }
     }
 }
-//-----------------------------------------------------------------------
+
 IMPL_LINK( PropBrw, OnAsyncGetFocus, void*,  )
 {
     if (m_xBrowserComponentWindow.is())
         m_xBrowserComponentWindow->setFocus();
     return 0L;
 }
-//----------------------------------------------------------------------------
+
 void PropBrw::LoseFocus()
 {
     DockingWindow::LoseFocus();
     m_pDesignView->getController().InvalidateAll();
 }
-//----------------------------------------------------------------------------
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

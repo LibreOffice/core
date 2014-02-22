@@ -116,7 +116,7 @@ static const AutoFormatPatternEntry spAutoFormatPattern4[] =
 #undef AUTOFORMAT_PATTERN_COLORMOD
 #undef AUTOFORMAT_PATTERN_END
 
-// ----------------------------------------------------------------------------
+
 
 struct AutoFormatEntry
 {
@@ -409,7 +409,7 @@ const AutoFormatEntry* lclGetAutoFormatEntry( const AutoFormatEntry* pEntries, s
     return 0;
 }
 
-// ----------------------------------------------------------------------------
+
 
 struct AutoTextEntry
 {
@@ -460,7 +460,7 @@ const AutoTextEntry* lclGetAutoTextEntry( const AutoTextEntry* pEntries, sal_Int
     return 0;
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** Property identifiers for common chart objects, to be used in ShapePropertyInfo. */
 static const sal_Int32 spnCommonPropIds[] =
@@ -499,7 +499,7 @@ static const ShapePropertyInfo saLinearPropInfo( spnLinearPropIds, false, true, 
 /** Property info for filled data series, to be used in ShapePropertyMap. */
 static const ShapePropertyInfo saFilledPropInfo( spnFilledPropIds, false, true, true, true );
 
-// ----------------------------------------------------------------------------
+
 
 /** Contains information about formatting of a specific chart object type. */
 struct ObjectTypeFormatEntry
@@ -553,7 +553,7 @@ static const ObjectTypeFormatEntry spObjTypeFormatEntries[] =
 #undef TYPEFORMAT_FRAME
 #undef TYPEFORMAT_LINE
 
-// ----------------------------------------------------------------------------
+
 
 void lclConvertPictureOptions( FillProperties& orFillProps, const PictureOptionsModel& rPicOptions )
 {
@@ -567,7 +567,7 @@ void lclConvertPictureOptions( FillProperties& orFillProps, const PictureOptions
 
 struct ObjectFormatterData;
 
-// ----------------------------------------------------------------------------
+
 
 class DetailFormatterBase
 {
@@ -595,7 +595,7 @@ protected:
     ColorPatternVec     maColorPattern;     /// Different cycling colors for data series.
 };
 
-// ----------------------------------------------------------------------------
+
 
 class LineFormatter : public DetailFormatterBase
 {
@@ -614,7 +614,7 @@ private:
     LinePropertiesPtr   mxAutoLine;         /// Automatic line properties.
 };
 
-// ----------------------------------------------------------------------------
+
 
 class FillFormatter : public DetailFormatterBase
 {
@@ -634,7 +634,7 @@ private:
     FillPropertiesPtr   mxAutoFill;         /// Automatic fill properties.
 };
 
-// ----------------------------------------------------------------------------
+
 
 class EffectFormatter : public DetailFormatterBase
 {
@@ -650,7 +650,7 @@ public:
                             sal_Int32 nSeriesIdx ) const;
 };
 
-// ----------------------------------------------------------------------------
+
 
 class TextFormatter : public DetailFormatterBase
 {
@@ -673,7 +673,7 @@ private:
     TextCharacterPropertiesPtr mxAutoText;  /// Automatic text properties.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Formatter for a specific object type. */
 class ObjectTypeFormatter
@@ -721,7 +721,7 @@ private:
     const ObjectTypeFormatEntry& mrEntry;   /// Additional settings.
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct ObjectFormatterData
 {

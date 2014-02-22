@@ -518,7 +518,7 @@ SvxLanguageItem AnnotationWindow::GetLanguage(void)
     return SvxLanguageItem( Doc()->GetLanguage( EE_CHAR_LANGUAGE ), SID_ATTR_LANGUAGE );
 }
 
-// --------------------------------------------------------------------
+
 
 TextApiObject* getTextApiObject( const Reference< XAnnotation >& xAnnotation )
 {
@@ -530,7 +530,7 @@ TextApiObject* getTextApiObject( const Reference< XAnnotation >& xAnnotation )
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationWindow::setAnnotation( const Reference< XAnnotation >& xAnnotation, bool bGrabFocus )
 {

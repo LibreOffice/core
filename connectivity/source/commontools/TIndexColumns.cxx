@@ -35,7 +35,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-// -------------------------------------------------------------------------
+
 OIndexColumns::OIndexColumns(   OIndexHelper* _pIndex,
                         ::osl::Mutex& _rMutex,
                         const ::std::vector< OUString> &_rVector)
@@ -43,7 +43,7 @@ OIndexColumns::OIndexColumns(   OIndexHelper* _pIndex,
             ,m_pIndex(_pIndex)
 {
 }
-// -------------------------------------------------------------------------
+
 sdbcx::ObjectType OIndexColumns::createObject(const OUString& _rName)
 {
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
@@ -104,16 +104,16 @@ sdbcx::ObjectType OIndexColumns::createObject(const OUString& _rName)
 
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OIndexColumns::createDescriptor()
 {
     return new OIndexColumn(sal_True);
 }
-// -------------------------------------------------------------------------
+
 void OIndexColumns::impl_refresh() throw(RuntimeException)
 {
     m_pIndex->refreshColumns();
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

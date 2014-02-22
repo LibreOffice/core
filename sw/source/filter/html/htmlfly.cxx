@@ -142,7 +142,7 @@ static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFmt,
 static Writer& OutHTML_FrmFmtAsMarquee( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                                         const SdrObject& rSdrObj    );
 
-//-----------------------------------------------------------------------
+
 
 extern HTMLOutEvent aAnchorEventTable[];
 
@@ -1226,7 +1226,7 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
 }
 
 
-//-----------------------------------------------------------------------
+
 
 static Writer& OutHTML_FrmFmtTableNode( Writer& rWrt, const SwFrmFmt& rFrmFmt )
 {
@@ -1514,7 +1514,7 @@ static Writer& OutHTML_FrmFmtAsMarquee( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     return rWrt;
 }
 
-//-----------------------------------------------------------------------
+
 
 Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                               sal_Bool bHeader )
@@ -1720,7 +1720,7 @@ void SwHTMLWriter::CollectLinkTargets()
     }
 }
 
-//-----------------------------------------------------------------------
+
 
 SwHTMLPosFlyFrm::SwHTMLPosFlyFrm( const SwPosFlyFrm& rPosFly,
                                   const SdrObject *pSdrObj,

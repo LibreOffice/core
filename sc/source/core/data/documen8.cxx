@@ -109,7 +109,7 @@ void ScDocument::ImplCreateOptions()
     pViewOptions = new ScViewOptions();
 }
 
-//------------------------------------------------------------------------
+
 
 void ScDocument::ImplDeleteOptions()
 {
@@ -118,7 +118,7 @@ void ScDocument::ImplDeleteOptions()
     delete pExtDocOptions;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)
 {
@@ -150,7 +150,7 @@ SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)
     return pPrinter;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScDocument::SetPrinter( SfxPrinter* pNewPrinter )
 {
@@ -172,7 +172,7 @@ void ScDocument::SetPrinter( SfxPrinter* pNewPrinter )
     InvalidateTextWidth(NULL, NULL, false);     // in both cases
 }
 
-//------------------------------------------------------------------------
+
 
 void ScDocument::SetPrintOptions()
 {
@@ -196,7 +196,7 @@ void ScDocument::SetPrintOptions()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 VirtualDevice* ScDocument::GetVirtualDevice_100th_mm()
 {
@@ -226,7 +226,7 @@ OutputDevice* ScDocument::GetRefDevice()
     return pRefDevice;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
                                    const SfxItemSet&  rChanges )
@@ -309,7 +309,7 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScDocument::CopyStdStylesFrom( ScDocument* pSrcDoc )
 {
@@ -318,7 +318,7 @@ void ScDocument::CopyStdStylesFrom( ScDocument* pSrcDoc )
     xPoolHelper->GetStylePool()->CopyStdStylesFrom( pSrcDoc->xPoolHelper->GetStylePool() );
 }
 
-//------------------------------------------------------------------------
+
 
 void ScDocument::InvalidateTextWidth( const OUString& rStyleName )
 {
@@ -328,7 +328,7 @@ void ScDocument::InvalidateTextWidth( const OUString& rStyleName )
             InvalidateTextWidth( i );
 }
 
-//------------------------------------------------------------------------
+
 
 void ScDocument::InvalidateTextWidth( SCTAB nTab )
 {
@@ -337,7 +337,7 @@ void ScDocument::InvalidateTextWidth( SCTAB nTab )
     InvalidateTextWidth( &aAdrFrom, &aAdrTo, false );
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScDocument::IsPageStyleInUse( const OUString& rStrPageStyle, SCTAB* pInTab )
 {
@@ -354,7 +354,7 @@ bool ScDocument::IsPageStyleInUse( const OUString& rStrPageStyle, SCTAB* pInTab 
     return bInUse;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScDocument::RemovePageStyleInUse( const OUString& rStyle )
 {
@@ -386,7 +386,7 @@ bool ScDocument::RenamePageStyleInUse( const OUString& rOld, const OUString& rNe
     return bWasInUse;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt8 ScDocument::GetEditTextDirection(SCTAB nTab) const
 {
@@ -485,7 +485,7 @@ void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress
     }
 }
 
-//------------------------------------------------------------------------
+
 
 #define CALCMAX                 1000    // Berechnungen
 #define ABORT_EVENTS            (VCL_INPUT_ANY & ~VCL_INPUT_TIMER & ~VCL_INPUT_OTHER)
@@ -963,7 +963,7 @@ ScDdeLink* lclGetDdeLink( const sfx2::LinkManager* pLinkManager, size_t nDdePos 
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 bool ScDocument::FindDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem,
         sal_uInt8 nMode, size_t& rnDdePos )
@@ -1040,7 +1040,7 @@ bool ScDocument::SetDdeLinkResultMatrix( size_t nDdePos, ScMatrixRef pResults )
     return false;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScDocument::HasAreaLinks() const
 {
@@ -1163,7 +1163,7 @@ void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
     }
 }
 
-//------------------------------------------------------------------------
+
 
 // TimerDelays etc.
 void ScDocument::KeyInput( const KeyEvent& )
@@ -1184,7 +1184,7 @@ bool ScDocument::CheckMacroWarn()
     return true;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxBindings* ScDocument::GetViewBindings()
 {
@@ -1213,7 +1213,7 @@ ScDrawLayer* ScDocument::GetDrawLayer()
     return pDrawLayer;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nType )
 {

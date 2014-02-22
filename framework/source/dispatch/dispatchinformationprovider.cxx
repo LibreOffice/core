@@ -32,7 +32,7 @@
 
 namespace framework{
 
-//_________________________________________________________________________________________________________________
+
 DispatchInformationProvider::DispatchInformationProvider(const css::uno::Reference< css::uno::XComponentContext >& xContext ,
                                                          const css::uno::Reference< css::frame::XFrame >&          xFrame)
     : ThreadHelpBase(&Application::GetSolarMutex())
@@ -41,12 +41,12 @@ DispatchInformationProvider::DispatchInformationProvider(const css::uno::Referen
 {
 }
 
-//_________________________________________________________________________________________________________________
+
 DispatchInformationProvider::~DispatchInformationProvider()
 {
 }
 
-//_________________________________________________________________________________________________________________
+
 css::uno::Sequence< sal_Int16 > SAL_CALL DispatchInformationProvider::getSupportedCommandGroups()
     throw (css::uno::RuntimeException)
 {
@@ -78,7 +78,7 @@ css::uno::Sequence< sal_Int16 > SAL_CALL DispatchInformationProvider::getSupport
     return lGroups.getAsConstList();
 }
 
-//_________________________________________________________________________________________________________________
+
 css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformationProvider::getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
     throw (css::uno::RuntimeException)
 {
@@ -128,7 +128,7 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformati
     return lReturn;
 }
 
-//_________________________________________________________________________________________________________________
+
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > DispatchInformationProvider::implts_getAllSubProvider()
 {
     // SAFE -> ----------------------------------

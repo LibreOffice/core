@@ -48,7 +48,7 @@
 
 using namespace ::com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 typedef std::map<OUString, uno::Sequence< sal_Int8 > *> ScShapeImplementationIdMap;
 
@@ -88,7 +88,7 @@ ScMacroInfo* ScShapeObj_getShapeHyperMacroInfo( ScShapeObj* pShape, sal_Bool bCr
         return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 namespace
 {
@@ -99,7 +99,7 @@ namespace
     }
 }
 
-//------------------------------------------------------------------------
+
 
 ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape ) :
       pShapePropertySet(NULL),

@@ -342,7 +342,7 @@ sal_Int32 SAL_CALL OResultSet::findColumn(const OUString& rColumnName)
     assert(false);
     return 0; // Never reached
 }
-// -------------------------------------------------------------------------
+
 uno::Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
@@ -351,7 +351,7 @@ uno::Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 c
 
     return NULL;
 }
-// -------------------------------------------------------------------------
+
 uno::Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
@@ -630,7 +630,7 @@ DateTime SAL_CALL OResultSet::getTimestamp(sal_Int32 nIndex)
     return safelyRetrieveValue< DateTime >(nIndex, SQL_TIMESTAMP);
 }
 
-// -------------------------------------------------------------------------
+
 uno::Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
@@ -640,7 +640,7 @@ uno::Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(
         m_xMetaData = new OResultSetMetaData(m_pConnection, m_pSqlda);
     return m_xMetaData;
 }
-// -------------------------------------------------------------------------
+
 uno::Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
@@ -650,7 +650,7 @@ uno::Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex ) 
     return NULL;
 }
 
-// -------------------------------------------------------------------------
+
 
 uno::Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
@@ -674,7 +674,7 @@ uno::Reference< XBlob > SAL_CALL OResultSet::getBlob(sal_Int32 columnIndex)
         return 0;
     return m_pConnection->createBlob(pBlobID);
 }
-// -------------------------------------------------------------------------
+
 
 uno::Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
@@ -684,7 +684,7 @@ uno::Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 columnIndex ) thro
 
     return NULL;
 }
-// -------------------------------------------------------------------------
+
 
 Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const uno::Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
 {
@@ -698,7 +698,7 @@ Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const uno::Reference<
 
 
 
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OResultSet::close() throw(SQLException, RuntimeException)
 {
@@ -746,7 +746,7 @@ void SAL_CALL OResultSet::refreshRow() throw(SQLException, RuntimeException)
     ::dbtools::throwFunctionNotSupportedException("refreshRow not supported in firebird",
                                                   *this);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OResultSet::cancel(  ) throw(RuntimeException)
 {
@@ -781,17 +781,17 @@ IPropertyArrayHelper & OResultSet::getInfoHelper()
 {
     return *const_cast<OResultSet*>(this)->getArrayHelper();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OResultSet::acquire() throw()
 {
     OResultSet_BASE::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OResultSet::release() throw()
 {
     OResultSet_BASE::release();
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());

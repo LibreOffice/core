@@ -80,11 +80,11 @@ LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContex
     connection.connectSimple(aDefinition);
     connection.getUserProfile(loggedOnUser, &data_);
 }
-//------------------------------------------------------------------------------
+
 LdapUserProfileBe::~LdapUserProfileBe()
 {
 }
-//------------------------------------------------------------------------------
+
 
 bool LdapUserProfileBe::readLdapConfiguration(
     css::uno::Reference< css::uno::XComponentContext > const & context,
@@ -159,7 +159,7 @@ bool LdapUserProfileBe::readLdapConfiguration(
     return true;
 }
 
-//------------------------------------------------------------------------------
+
 bool LdapUserProfileBe::getLdapStringParam(
     uno::Reference<container::XNameAccess>& xAccess,
     const OUString& aLdapSetting,
@@ -169,7 +169,7 @@ bool LdapUserProfileBe::getLdapStringParam(
 
     return !aServerParameter.isEmpty();
 }
-//------------------------------------------------------------------------------
+
 void LdapUserProfileBe::setPropertyValue(
     OUString const &, css::uno::Any const &)
     throw (
@@ -211,18 +211,18 @@ css::uno::Any LdapUserProfileBe::getPropertyValue(
     return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
 }
 
-//------------------------------------------------------------------------------
+
 OUString SAL_CALL LdapUserProfileBe::getLdapUserProfileBeName(void) {
     return OUString("com.sun.star.comp.configuration.backend.LdapUserProfileBe");
 }
-//------------------------------------------------------------------------------
+
 
 OUString SAL_CALL LdapUserProfileBe::getImplementationName(void)
     throw (uno::RuntimeException)
 {
     return getLdapUserProfileBeName() ;
 }
-//------------------------------------------------------------------------------
+
 
 uno::Sequence<OUString> SAL_CALL LdapUserProfileBe::getLdapUserProfileBeServiceNames(void)
 {
@@ -243,8 +243,8 @@ SAL_CALL LdapUserProfileBe::getSupportedServiceNames(void)
 {
     return getLdapUserProfileBeServiceNames() ;
 }
-// ---------------------------------------------------------------------------------------
+
 }}}
-// ---------------------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

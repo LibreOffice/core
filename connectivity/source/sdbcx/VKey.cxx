@@ -35,14 +35,14 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL OKey::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     if(isNew())
         return OUString("com.sun.star.sdbcx.VKeyDescription");
     return OUString("com.sun.star.sdbcx.VKey");
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL OKey::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Sequence< OUString > aSupported(1);
@@ -58,14 +58,14 @@ sal_Bool SAL_CALL OKey::supportsService( const OUString& _rServiceName ) throw(:
 {
     return cppu::supportsService(this, _rServiceName);
 }
-// -------------------------------------------------------------------------
+
 OKey::OKey(sal_Bool _bCase) :   ODescriptor_BASE(m_aMutex)
             ,   ODescriptor(ODescriptor_BASE::rBHelper,_bCase,sal_True)
             ,   m_aProps(new KeyProperties())
             ,   m_pColumns(NULL)
 {
 }
-// -------------------------------------------------------------------------
+
 OKey::OKey(const OUString& _Name,const TKeyProperties& _rProps,sal_Bool _bCase)
 : ODescriptor_BASE(m_aMutex)
  ,ODescriptor(ODescriptor_BASE::rBHelper,_bCase)
@@ -89,12 +89,12 @@ OKey::OKey(const OUString& _Name,const TKeyProperties& _rProps,sal_Bool _bCase)
 //{
 //  m_Name = _Name;
 //}
-// -------------------------------------------------------------------------
+
 OKey::~OKey( )
 {
     delete m_pColumns;
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OKey::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = ODescriptor::queryInterface( rType);
@@ -108,7 +108,7 @@ Any SAL_CALL OKey::queryInterface( const Type & rType ) throw(RuntimeException)
 
     return aRet;
 }
-// -------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OKey::getTypes(  ) throw(RuntimeException)
 {
     if(isNew())
@@ -116,7 +116,7 @@ Sequence< Type > SAL_CALL OKey::getTypes(  ) throw(RuntimeException)
 
     return ::comphelper::concatSequences(ODescriptor::getTypes(),ODescriptor_BASE::getTypes(),OKey_BASE::getTypes());
 }
-// -------------------------------------------------------------------------
+
 void OKey::construct()
 {
     ODescriptor::construct();
@@ -128,7 +128,7 @@ void OKey::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_UPDATERULE),      PROPERTY_ID_UPDATERULE,         nAttrib,&m_aProps->m_UpdateRule,        ::getCppuType(static_cast<sal_Int32*>(0)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELETERULE),      PROPERTY_ID_DELETERULE,         nAttrib,&m_aProps->m_DeleteRule,        ::getCppuType(static_cast<sal_Int32*>(0)));
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OKey::disposing()
 {
     OPropertySetHelper::disposing();
@@ -140,17 +140,17 @@ void SAL_CALL OKey::disposing()
 
     ODescriptor_BASE::disposing();
 }
-// -------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* OKey::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {
     return doCreateArrayHelper();
 }
-// -------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper & OKey::getInfoHelper()
 {
     return *const_cast<OKey*>(this)->getArrayHelper(isNew() ? 1 : 0);
 }
-// -------------------------------------------------------------------------
+
 Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OKey::getColumns(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -173,7 +173,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OKey::getColumns(
 
     return const_cast<OKey*>(this)->m_pColumns;
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > SAL_CALL OKey::createDataDescriptor(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -182,31 +182,31 @@ Reference< XPropertySet > SAL_CALL OKey::createDataDescriptor(  ) throw(RuntimeE
 
     return this;
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OKey::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL OKey::getName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return m_Name;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OKey::setName( const OUString& /*aName*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
 }
-// -----------------------------------------------------------------------------
+
 // XInterface
 void SAL_CALL OKey::acquire() throw()
 {
     ODescriptor_BASE::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OKey::release() throw()
 {
     ODescriptor_BASE::release();
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

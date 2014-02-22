@@ -26,9 +26,9 @@
 
 namespace sdr { namespace contact {
 
-// ------------------
+
 // - SdrMediaWindow -
-// ------------------
+
 
 SdrMediaWindow::SdrMediaWindow( Window* pParent, ViewObjectContactOfSdrMediaObj& rViewObjContact ) :
     ::avmedia::MediaWindow( pParent, false ),
@@ -36,13 +36,13 @@ SdrMediaWindow::SdrMediaWindow( Window* pParent, ViewObjectContactOfSdrMediaObj&
 {
 }
 
-// ------------------------------------------------------------------------------
+
 
 SdrMediaWindow::~SdrMediaWindow()
 {
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SdrMediaWindow::MouseMove( const MouseEvent& rMEvt )
 {
@@ -58,7 +58,7 @@ void SdrMediaWindow::MouseMove( const MouseEvent& rMEvt )
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SdrMediaWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -73,7 +73,7 @@ void SdrMediaWindow::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SdrMediaWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -88,7 +88,7 @@ void SdrMediaWindow::MouseButtonUp( const MouseEvent& rMEvt )
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SdrMediaWindow::KeyInput( const KeyEvent& rKEvt )
 {
@@ -98,7 +98,7 @@ void SdrMediaWindow::KeyInput( const KeyEvent& rKEvt )
         pWindow->KeyInput( rKEvt );
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SdrMediaWindow::KeyUp( const KeyEvent& rKEvt )
 {
@@ -108,7 +108,7 @@ void SdrMediaWindow::KeyUp( const KeyEvent& rKEvt )
         pWindow->KeyUp( rKEvt );
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SdrMediaWindow::Command( const CommandEvent& rCEvt )
 {
@@ -123,7 +123,7 @@ void SdrMediaWindow::Command( const CommandEvent& rCEvt )
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 sal_Int8 SdrMediaWindow::AcceptDrop( const AcceptDropEvent& rEvt )
 {
@@ -143,7 +143,7 @@ sal_Int8 SdrMediaWindow::AcceptDrop( const AcceptDropEvent& rEvt )
     return( nRet );
 }
 
-// ------------------------------------------------------------------------------
+
 
 sal_Int8 SdrMediaWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
@@ -163,7 +163,7 @@ sal_Int8 SdrMediaWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
     return( nRet );
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SdrMediaWindow::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 {

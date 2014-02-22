@@ -34,7 +34,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
-// -------------------------------------------------------------------------
+
 OParseColumn::OParseColumn(const Reference<XPropertySet>& _xColumn,sal_Bool     _bCase)
     : connectivity::sdbcx::OColumn( getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))
                                 ,   getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)))
@@ -60,7 +60,7 @@ OParseColumn::OParseColumn(const Reference<XPropertySet>& _xColumn,sal_Bool     
     construct();
 }
 
-// -------------------------------------------------------------------------
+
 OParseColumn::OParseColumn( const OUString& _Name,
                     const OUString& _TypeName,
                     const OUString& _DefaultValue,
@@ -98,7 +98,7 @@ OParseColumn::OParseColumn( const OUString& _Name,
     construct();
 }
 
-// -------------------------------------------------------------------------
+
 ::rtl::Reference< OSQLColumns > OParseColumn::createColumnsForResultSet( const Reference< XResultSetMetaData >& _rxResMetaData,
     const Reference< XDatabaseMetaData >& _rxDBMetaData,const Reference< XNameAccess>& i_xQueryColumns )
 {
@@ -123,7 +123,7 @@ OParseColumn::OParseColumn( const OUString& _Name,
     return aReturn;
 }
 
-// -------------------------------------------------------------------------
+
 OParseColumn* OParseColumn::createColumnForResultSet( const Reference< XResultSetMetaData >& _rxResMetaData,
     const Reference< XDatabaseMetaData >& _rxDBMetaData, sal_Int32 _nColumnPos, StringMap& _rColumns )
 {
@@ -163,11 +163,11 @@ OParseColumn* OParseColumn::createColumnForResultSet( const Reference< XResultSe
     return pColumn;
 }
 
-// -------------------------------------------------------------------------
+
 OParseColumn::~OParseColumn()
 {
 }
-// -------------------------------------------------------------------------
+
 void OParseColumn::construct()
 {
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION),                PROPERTY_ID_FUNCTION,               0,  &m_bFunction,               ::getCppuType(&m_bFunction));
@@ -177,19 +177,19 @@ void OParseColumn::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISSEARCHABLE),            PROPERTY_ID_ISSEARCHABLE,           0,  &m_bIsSearchable,           ::getCppuType(&m_bIsSearchable));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_LABEL),                   PROPERTY_ID_LABEL,                  0,  &m_sLabel,                  ::getCppuType(&m_sLabel));
 }
-// -----------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* OParseColumn::createArrayHelper() const
 {
     return doCreateArrayHelper();
 }
-// -----------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper & SAL_CALL OParseColumn::getInfoHelper()
 {
     OSL_ENSURE( !isNew(), "OParseColumn::getInfoHelper: a *new* ParseColumn?" );
     return *OParseColumn_PROP::getArrayHelper();
 }
 
-// -----------------------------------------------------------------------------
+
 OOrderColumn::OOrderColumn( const Reference<XPropertySet>& _xColumn, const OUString& i_rOriginatingTableName,
                             sal_Bool    _bCase, sal_Bool _bAscending )
     : connectivity::sdbcx::OColumn(
@@ -214,7 +214,7 @@ OOrderColumn::OOrderColumn( const Reference<XPropertySet>& _xColumn, const OUStr
     construct();
 }
 
-// -----------------------------------------------------------------------------
+
 OOrderColumn::OOrderColumn( const Reference<XPropertySet>& _xColumn, sal_Bool _bCase, sal_Bool _bAscending )
     : connectivity::sdbcx::OColumn(
         getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),
@@ -238,29 +238,29 @@ OOrderColumn::OOrderColumn( const Reference<XPropertySet>& _xColumn, sal_Bool _b
     construct();
 }
 
-// -------------------------------------------------------------------------
+
 OOrderColumn::~OOrderColumn()
 {
 }
 
-// -------------------------------------------------------------------------
+
 void OOrderColumn::construct()
 {
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISASCENDING), PROPERTY_ID_ISASCENDING,
         PropertyAttribute::READONLY,  const_cast< sal_Bool* >( &m_bAscending ),    ::getCppuType( &m_bAscending ) );
 }
-// -----------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* OOrderColumn::createArrayHelper() const
 {
     return doCreateArrayHelper();
 }
-// -----------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper & SAL_CALL OOrderColumn::getInfoHelper()
 {
     OSL_ENSURE( !isNew(), "OOrderColumn::getInfoHelper: a *new* OrderColumn?" );
     return *OOrderColumn_PROP::getArrayHelper();
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL OOrderColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Sequence< OUString > aSupported(1);
@@ -268,6 +268,6 @@ void OOrderColumn::construct()
 
     return aSupported;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

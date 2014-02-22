@@ -3057,9 +3057,9 @@ sal_uInt32 ImpEditEngine::CalcTextWidth( sal_Bool bIgnoreExtraSpace )
     long nMaxWidth = 0;
     long nCurWidth = 0;
 
-    // --------------------------------------------------
+
     // Over all the paragraphs ...
-    // --------------------------------------------------
+
     sal_Int32 nParas = GetParaPortions().Count();
     for ( sal_Int32 nPara = 0; nPara < nParas; nPara++ )
     {
@@ -3069,9 +3069,9 @@ sal_uInt32 ImpEditEngine::CalcTextWidth( sal_Bool bIgnoreExtraSpace )
             const SvxLRSpaceItem& rLRItem = GetLRSpaceItem( pPortion->GetNode() );
             sal_Int32 nSpaceBeforeAndMinLabelWidth = GetSpaceBeforeAndMinLabelWidth( pPortion->GetNode() );
 
-            // --------------------------------------------------
+
             // On the lines of the paragraph ...
-            // --------------------------------------------------
+
             sal_Int32 nLines = (sal_Int32)pPortion->GetLines().Count();
             for ( sal_Int32 nLine = 0; nLine < nLines; nLine++ )
             {

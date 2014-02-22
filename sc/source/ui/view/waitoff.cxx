@@ -21,7 +21,7 @@
 
 #include "waitoff.hxx"
 
-//------------------------------------------------------------------------
+
 
 ScWaitCursorOff::ScWaitCursorOff( Window* pWinP )
         :

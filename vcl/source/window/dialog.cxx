@@ -108,7 +108,7 @@ static bool ImplIsMnemonicCtrl( Window* pWindow )
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 // Called by native error dialog popup implementations
 void ImplHideSplash()
@@ -182,7 +182,7 @@ Window * firstLogicalChildOfParent(Window *pTopLevel)
     return pChild;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplWindowAutoMnemonic( Window* pWindow )
 {
@@ -281,7 +281,7 @@ static PushButton* ImplGetDefaultButton( Dialog* pDialog )
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 static PushButton* ImplGetOKButton( Dialog* pDialog )
 {
@@ -297,7 +297,7 @@ static PushButton* ImplGetOKButton( Dialog* pDialog )
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 static PushButton* ImplGetCancelButton( Dialog* pDialog )
 {
@@ -314,7 +314,7 @@ static PushButton* ImplGetCancelButton( Dialog* pDialog )
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplMouseAutoPos( Dialog* pDialog )
 {
@@ -371,7 +371,7 @@ void Dialog::ImplInitDialogData()
     maLayoutTimer.SetTimeoutHdl( LINK( this, Dialog, ImplHandleLayoutTimerHdl ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Dialog::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -456,7 +456,7 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
     ImplInitSettings();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Dialog::ImplInitSettings()
 {
@@ -474,7 +474,7 @@ void Dialog::ImplInitSettings()
         SetBackground( GetSettings().GetStyleSettings().GetDialogColor() );
 }
 
-// -----------------------------------------------------------------------
+
 
 Dialog::Dialog( WindowType nType )
     : SystemWindow( nType )
@@ -537,7 +537,7 @@ Dialog::Dialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescri
 }
 
 
-// -----------------------------------------------------------------------
+
 
 Dialog::Dialog( Window* pParent, WinBits nStyle )
     : SystemWindow( WINDOW_DIALOG )
@@ -577,7 +577,7 @@ void Dialog::set_content_area(VclBox* pContentArea)
     mpContentArea = pContentArea;
 }
 
-// -----------------------------------------------------------------------
+
 
 Dialog::~Dialog()
 {
@@ -586,7 +586,7 @@ Dialog::~Dialog()
     mpDialogImpl = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(Dialog, ImplAsyncCloseHdl)
 {
@@ -594,7 +594,7 @@ IMPL_LINK_NOARG(Dialog, ImplAsyncCloseHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Dialog::Notify( NotifyEvent& rNEvt )
 {
@@ -698,7 +698,7 @@ void Dialog::setOptimalLayoutSize()
     setPosSizeOnContainee(aSize, *pBox);
 }
 
-// -----------------------------------------------------------------------
+
 
 void Dialog::StateChanged( StateChangedType nType )
 {
@@ -737,7 +737,7 @@ void Dialog::StateChanged( StateChangedType nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Dialog::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -751,7 +751,7 @@ void Dialog::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Dialog::Close()
 {
@@ -801,7 +801,7 @@ bool Dialog::Close()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Dialog::ImplStartExecuteModal()
 {
@@ -880,7 +880,7 @@ bool Dialog::ImplStartExecuteModal()
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Dialog::ImplEndExecuteModal()
 {
@@ -888,7 +888,7 @@ void Dialog::ImplEndExecuteModal()
     pSVData->maAppData.mnModalMode--;
 }
 
-// -----------------------------------------------------------------------
+
 
 short Dialog::Execute()
 {
@@ -989,7 +989,7 @@ short Dialog::Execute()
 #endif
 }
 
-// -----------------------------------------------------------------------
+
 
 // virtual
 void Dialog::StartExecuteModal( const Link& rEndDialogHdl )
@@ -1001,7 +1001,7 @@ void Dialog::StartExecuteModal( const Link& rEndDialogHdl )
     mpDialogImpl->mbStartedModal = true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Dialog::EndDialog( long nResult )
 {
@@ -1059,14 +1059,14 @@ void Dialog::EndDialog( long nResult )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 long Dialog::GetResult() const
 {
     return mpDialogImpl->mnResult;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Dialog::EndAllDialogs( Window* pParent )
 {
@@ -1085,7 +1085,7 @@ void Dialog::EndAllDialogs( Window* pParent )
    }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Dialog::SetModalInputMode( bool bModal )
 {
@@ -1153,7 +1153,7 @@ void Dialog::SetModalInputMode( bool bModal )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Dialog::SetModalInputMode( bool bModal, bool bSubModalDialogs )
 {
@@ -1172,7 +1172,7 @@ void Dialog::SetModalInputMode( bool bModal, bool bSubModalDialogs )
     SetModalInputMode( bModal );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Dialog::GrabFocusToFirstControl()
 {
@@ -1345,7 +1345,7 @@ VclBuilderContainer::~VclBuilderContainer()
     delete m_pUIBuilder;
 }
 
-// -----------------------------------------------------------------------
+
 
 ModelessDialog::ModelessDialog( Window* pParent, const ResId& rResId ) :
     Dialog( WINDOW_MODELESSDIALOG )
@@ -1371,7 +1371,7 @@ ModalDialog::ModalDialog( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-// -----------------------------------------------------------------------
+
 
 ModalDialog::ModalDialog( Window* pParent, const ResId& rResId ) :
     Dialog( WINDOW_MODALDIALOG )

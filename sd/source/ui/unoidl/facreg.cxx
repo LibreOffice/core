@@ -200,7 +200,7 @@ using namespace ::sd::sidebar;
 
 
 
-// ----------------------------------------------------------------------------
+
 // Declaration and initialization of a map from service names to locally
 // unique factory identifiers.
 

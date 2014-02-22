@@ -56,7 +56,7 @@ namespace migration
         return *pImplName;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     Sequence< OUString > WordbookMigration_getSupportedServiceNames()
     {
@@ -82,13 +82,13 @@ namespace migration
     {
     }
 
-    // -----------------------------------------------------------------------------
+
 
     WordbookMigration::~WordbookMigration()
     {
     }
 
-    // -----------------------------------------------------------------------------
+
 
     TStringVectorPtr WordbookMigration::getFiles( const OUString& rBaseURL ) const
     {
@@ -125,7 +125,7 @@ namespace migration
         return aResult;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     ::osl::FileBase::RC WordbookMigration::checkAndCreateDirectory( INetURLObject& rDirURL )
     {
@@ -186,7 +186,7 @@ bool IsUserWordbook( const OUString& rFile )
 }
 
 
-    // -----------------------------------------------------------------------------
+
 
     void WordbookMigration::copyFiles()
     {
@@ -224,16 +224,16 @@ bool IsUserWordbook( const OUString& rFile )
         }
     }
 
-    // -----------------------------------------------------------------------------
+
     // XServiceInfo
-    // -----------------------------------------------------------------------------
+
 
     OUString WordbookMigration::getImplementationName() throw (RuntimeException)
     {
         return WordbookMigration_getImplementationName();
     }
 
-    // -----------------------------------------------------------------------------
+
 
     sal_Bool WordbookMigration::supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException)
@@ -241,16 +241,16 @@ bool IsUserWordbook( const OUString& rFile )
         return cppu::supportsService(this, ServiceName);
     }
 
-    // -----------------------------------------------------------------------------
+
 
     Sequence< OUString > WordbookMigration::getSupportedServiceNames() throw (RuntimeException)
     {
         return WordbookMigration_getSupportedServiceNames();
     }
 
-    // -----------------------------------------------------------------------------
+
     // XInitialization
-    // -----------------------------------------------------------------------------
+
 
     void WordbookMigration::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
     {
@@ -274,9 +274,9 @@ bool IsUserWordbook( const OUString& rFile )
         }
     }
 
-    // -----------------------------------------------------------------------------
+
     // XJob
-    // -----------------------------------------------------------------------------
+
 
     Any WordbookMigration::execute( const Sequence< beans::NamedValue >& )
         throw (lang::IllegalArgumentException, Exception, RuntimeException)
@@ -299,7 +299,7 @@ bool IsUserWordbook( const OUString& rFile )
         return static_cast< lang::XTypeProvider * >( new WordbookMigration() );
     }
 
-    // -----------------------------------------------------------------------------
+
 
 //.........................................................................
 }   // namespace migration

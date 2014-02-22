@@ -48,7 +48,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
-// -----------------------------------------------------------------------
+
 TYPEINIT1(SfxEventHint, SfxHint);
 TYPEINIT1(SfxEventNamesItem, SfxPoolItem);
 TYPEINIT1(SfxViewEventHint, SfxEventHint);
@@ -139,7 +139,7 @@ void SfxEventNamesItem::AddEvent( const OUString& rName, const OUString& rUIName
 
 //==========================================================================
 
-//--------------------------------------------------------------------------
+
 uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
 {
 /*
@@ -221,7 +221,7 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
     return aEventData;
 }
 
-//--------------------------------------------------------------------------
+
 void PropagateEvent_Impl( SfxObjectShell *pDoc, OUString aEventName, const SvxMacro* pMacro )
 {
     uno::Reference < document::XEventsSupplier > xSupplier;
@@ -262,7 +262,7 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, OUString aEventName, const SvxMa
     }
 }
 
-//--------------------------------------------------------------------------------------------------------
+
 void SfxEventConfiguration::ConfigureEvent( OUString aName, const SvxMacro& rMacro, SfxObjectShell *pDoc )
 {
     boost::scoped_ptr<SvxMacro> pMacro;
@@ -271,7 +271,7 @@ void SfxEventConfiguration::ConfigureEvent( OUString aName, const SvxMacro& rMac
     PropagateEvent_Impl( pDoc ? pDoc : 0, aName, pMacro.get() );
 }
 
-// -------------------------------------------------------------------------------------------------------
+
 SvxMacro* SfxEventConfiguration::ConvertToMacro( const com::sun::star::uno::Any& rElement, SfxObjectShell* pDoc, sal_Bool bBlowUp )
 {
     return SfxEvents_Impl::ConvertToMacro( rElement, pDoc, bBlowUp );

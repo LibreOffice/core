@@ -42,7 +42,7 @@ void ImplFillPrnDlgListBox( const Printer* pPrinter,
     pPropBtn->Show( pPrinter->HasSupport( SUPPORT_SETUPDIALOG ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplFreePrnDlgListBox( ListBox* pBox, sal_Bool bClear )
 {
@@ -50,7 +50,7 @@ void ImplFreePrnDlgListBox( ListBox* pBox, sal_Bool bClear )
         pBox->Clear();
 }
 
-// -----------------------------------------------------------------------
+
 
 Printer* ImplPrnDlgListBoxSelect( ListBox* pBox, PushButton* pPropBtn,
                                   Printer* pPrinter, Printer* pTempPrinter )
@@ -89,7 +89,7 @@ Printer* ImplPrnDlgListBoxSelect( ListBox* pBox, PushButton* pPropBtn,
     return pTempPrinter;
 }
 
-// -----------------------------------------------------------------------
+
 
 Printer* ImplPrnDlgUpdatePrinter( Printer* pPrinter, Printer* pTempPrinter )
 {
@@ -109,7 +109,7 @@ Printer* ImplPrnDlgUpdatePrinter( Printer* pPrinter, Printer* pTempPrinter )
     return pTempPrinter;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplPrnDlgUpdateQueueInfo( ListBox* pBox, QueueInfo& rInfo )
 {
@@ -121,7 +121,7 @@ void ImplPrnDlgUpdateQueueInfo( ListBox* pBox, QueueInfo& rInfo )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static OUString ImplPrnDlgAddString(const OUString& rStr, const OUString& rAddStr)
 {
@@ -131,14 +131,14 @@ static OUString ImplPrnDlgAddString(const OUString& rStr, const OUString& rAddSt
     return aStr + rAddStr;
 }
 
-// -----------------------------------------------------------------------
+
 
 static OUString ImplPrnDlgAddResString(const OUString& rStr, sal_uInt16 nResId)
 {
     return ImplPrnDlgAddString(rStr, SVT_RESSTR(nResId));
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
 {
@@ -241,7 +241,7 @@ PrinterSetupDialog::PrinterSetupDialog(Window* pParent)
     m_pLbName->SetSelectHdl( LINK( this, PrinterSetupDialog, ImplChangePrinterHdl ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 PrinterSetupDialog::~PrinterSetupDialog()
 {
@@ -249,7 +249,7 @@ PrinterSetupDialog::~PrinterSetupDialog()
     delete mpTempPrinter;
 }
 
-// -----------------------------------------------------------------------
+
 
 void PrinterSetupDialog::SetOptionsHdl( const Link& rLink )
 {
@@ -277,7 +277,7 @@ void PrinterSetupDialog::ImplSetInfo()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(PrinterSetupDialog, ImplStatusHdl)
 {
@@ -288,7 +288,7 @@ IMPL_LINK_NOARG(PrinterSetupDialog, ImplStatusHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(PrinterSetupDialog, ImplPropertiesHdl)
 {
@@ -299,7 +299,7 @@ IMPL_LINK_NOARG(PrinterSetupDialog, ImplPropertiesHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(PrinterSetupDialog, ImplChangePrinterHdl)
 {
@@ -309,7 +309,7 @@ IMPL_LINK_NOARG(PrinterSetupDialog, ImplChangePrinterHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool PrinterSetupDialog::Notify( NotifyEvent& rNEvt )
 {
@@ -319,7 +319,7 @@ bool PrinterSetupDialog::Notify( NotifyEvent& rNEvt )
     return ModalDialog::Notify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void PrinterSetupDialog::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -338,7 +338,7 @@ void PrinterSetupDialog::DataChanged( const DataChangedEvent& rDCEvt )
     ModalDialog::DataChanged( rDCEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 short PrinterSetupDialog::Execute()
 {

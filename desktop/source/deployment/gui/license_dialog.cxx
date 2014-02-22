@@ -294,13 +294,13 @@ LicenseDialog::LicenseDialog( Sequence<Any> const& args,
 }
 
 // XExecutableDialog
-//______________________________________________________________________________
+
 void LicenseDialog::setTitle( OUString const & ) throw (RuntimeException)
 {
 
 }
 
-//______________________________________________________________________________
+
 sal_Int16 LicenseDialog::execute() throw (RuntimeException)
 {
     return vcl::solarthread::syncExecute(

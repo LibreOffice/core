@@ -59,7 +59,7 @@ namespace sd
 const sal_uInt32 SMART_TAG_HDL_NUM = SAL_MAX_UINT32;
 static const int DRGPIX     = 2;                               // Drag MinMove in Pixel
 
-// --------------------------------------------------------------------
+
 
 static OUString getInitials( const OUString& rName )
 {
@@ -93,9 +93,9 @@ static OUString getInitials( const OUString& rName )
     return sInitials;
 }
 
-// --------------------------------------------------------------------
 
-// --------------------------------------------------------------------
+
+
 
 class AnnotationDragMove : public SdrDragMove
 {
@@ -158,7 +158,7 @@ void AnnotationDragMove::CancelSdrDrag()
     Hide();
 }
 
-// --------------------------------------------------------------------
+
 
 class AnnotationHdl : public SmartHdl
 {
@@ -176,7 +176,7 @@ private:
     rtl::Reference< AnnotationTag > mxTag;
 };
 
-// --------------------------------------------------------------------
+
 
 AnnotationHdl::AnnotationHdl( const SmartTagReference& xTag, const Reference< XAnnotation >& xAnnotation, const Point& rPnt )
 : SmartHdl( xTag, rPnt )
@@ -185,13 +185,13 @@ AnnotationHdl::AnnotationHdl( const SmartTagReference& xTag, const Reference< XA
 {
 }
 
-// --------------------------------------------------------------------
+
 
 AnnotationHdl::~AnnotationHdl()
 {
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationHdl::CreateB2dIAObject()
 {
@@ -255,21 +255,21 @@ void AnnotationHdl::CreateB2dIAObject()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool AnnotationHdl::IsFocusHdl() const
 {
     return sal_True;
 }
 
-// --------------------------------------------------------------------
+
 
 bool AnnotationHdl::isMarkable() const
 {
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 Pointer AnnotationHdl::GetSdrDragPointer() const
 {
@@ -303,7 +303,7 @@ AnnotationTag::AnnotationTag( AnnotationManagerImpl& rManager, ::sd::View& rView
 {
 }
 
-// --------------------------------------------------------------------
+
 
 AnnotationTag::~AnnotationTag()
 {
@@ -311,7 +311,7 @@ AnnotationTag::~AnnotationTag()
     Dispose();
 }
 
-// --------------------------------------------------------------------
+
 
 /** returns true if the AnnotationTag handled the event. */
 bool AnnotationTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& /*rHdl*/ )
@@ -347,7 +347,7 @@ bool AnnotationTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& /*rHdl*/
     return bRet;
 }
 
-// --------------------------------------------------------------------
+
 
 /** returns true if the SmartTag consumes this event. */
 bool AnnotationTag::KeyInput( const KeyEvent& rKEvt )
@@ -469,27 +469,27 @@ bool AnnotationTag::OnMove( const KeyEvent& rKEvt )
     return true;
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationTag::CheckPossibilities()
 {
 }
 
-// --------------------------------------------------------------------
+
 
 sal_uLong AnnotationTag::GetMarkablePointCount() const
 {
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_uLong AnnotationTag::GetMarkedPointCount() const
 {
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool AnnotationTag::MarkPoint(SdrHdl& /*rHdl*/, sal_Bool /*bUnmark*/ )
 {
@@ -497,7 +497,7 @@ sal_Bool AnnotationTag::MarkPoint(SdrHdl& /*rHdl*/, sal_Bool /*bUnmark*/ )
     return bRet;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool AnnotationTag::MarkPoints(const Rectangle* /*pRect*/, sal_Bool /*bUnmark*/ )
 {
@@ -505,14 +505,14 @@ sal_Bool AnnotationTag::MarkPoints(const Rectangle* /*pRect*/, sal_Bool /*bUnmar
     return bChgd;
 }
 
-// --------------------------------------------------------------------
+
 
 bool AnnotationTag::getContext( SdrViewContext& /*rContext*/ )
 {
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationTag::addCustomHandles( SdrHdlList& rHandlerList )
 {
@@ -532,7 +532,7 @@ void AnnotationTag::addCustomHandles( SdrHdlList& rHandlerList )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationTag::disposing()
 {
@@ -552,7 +552,7 @@ void AnnotationTag::disposing()
     SmartTag::disposing();
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationTag::select()
 {
@@ -571,7 +571,7 @@ void AnnotationTag::select()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationTag::deselect()
 {
@@ -582,7 +582,7 @@ void AnnotationTag::deselect()
     mrManager.onTagDeselected( *this );
 }
 
-// --------------------------------------------------------------------
+
 
 BitmapEx AnnotationTag::CreateAnnotationBitmap( bool bSelected )
 {

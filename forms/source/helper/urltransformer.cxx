@@ -35,7 +35,7 @@ namespace frm
     //====================================================================
     //= UrlTransformer
     //====================================================================
-    //--------------------------------------------------------------------
+
     UrlTransformer::UrlTransformer( const Reference< XComponentContext >& _rxORB )
         :m_xORB( _rxORB )
         ,m_bTriedToCreateTransformer( false )
@@ -43,7 +43,7 @@ namespace frm
         DBG_ASSERT( _rxORB.is(), "UrlTransformer::UrlTransformer: invalid service factory!" );
     }
 
-    //--------------------------------------------------------------------
+
     bool UrlTransformer::implEnsureTransformer() const
     {
         // create the transformer, if not already attempted to do so
@@ -59,7 +59,7 @@ namespace frm
         return m_xTransformer.is();
     }
 
-    //--------------------------------------------------------------------
+
     URL UrlTransformer::getStrictURL( const OUString& _rURL ) const
     {
         URL aReturn;
@@ -69,13 +69,13 @@ namespace frm
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+
     URL UrlTransformer::getStrictURLFromAscii( const sal_Char* _pAsciiURL ) const
     {
         return getStrictURL( OUString::createFromAscii( _pAsciiURL ) );
     }
 
-    //--------------------------------------------------------------------
+
     void UrlTransformer::parseSmartWithAsciiProtocol( ::com::sun::star::util::URL& _rURL, const sal_Char* _pAsciiURL ) const
     {
         if ( implEnsureTransformer() )

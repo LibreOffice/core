@@ -49,7 +49,7 @@
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-//-------------------------------------------------------------------------
+
 sal_Bool KillFile_Impl( const OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory )
 {
     if ( !xFactory.is() )
@@ -72,7 +72,7 @@ sal_Bool KillFile_Impl( const OUString& aURL, const uno::Reference< lang::XMulti
     return bRet;
 }
 
-//----------------------------------------------
+
 OUString GetNewTempFileURL_Impl( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
 {
     SAL_WARN_IF( !xFactory.is(), "embeddedobj.ole", "No factory is provided!" );
@@ -98,7 +98,7 @@ OUString GetNewTempFileURL_Impl( const uno::Reference< lang::XMultiServiceFactor
     return aResult;
 }
 
-//-----------------------------------------------
+
 OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xInStream,
                                       const uno::Reference< lang::XMultiServiceFactory >& xFactory )
         throw ( io::IOException,
@@ -182,7 +182,7 @@ OUString GetNewFilledTempFile_Impl( const uno::Reference< embed::XOptimizedStora
     return aResult;
 }
 
-//------------------------------------------------------
+
 void SetStreamMediaType_Impl( const uno::Reference< io::XStream >& xStream, const OUString& aMediaType )
 {
     uno::Reference< beans::XPropertySet > xPropSet( xStream, uno::UNO_QUERY );
@@ -192,7 +192,7 @@ void SetStreamMediaType_Impl( const uno::Reference< io::XStream >& xStream, cons
     xPropSet->setPropertyValue("MediaType", uno::makeAny( aMediaType ) );
 }
 #endif
-//------------------------------------------------------
+
 void LetCommonStoragePassBeUsed_Impl( const uno::Reference< io::XStream >& xStream )
 {
     uno::Reference< beans::XPropertySet > xPropSet( xStream, uno::UNO_QUERY );
@@ -203,7 +203,7 @@ void LetCommonStoragePassBeUsed_Impl( const uno::Reference< io::XStream >& xStre
                                 uno::makeAny( (sal_Bool)sal_True ) );
 }
 #ifdef WNT
-//------------------------------------------------------
+
 void VerbExecutionController::StartControlExecution()
 {
     osl::MutexGuard aGuard( m_aVerbExecutionMutex );
@@ -217,7 +217,7 @@ void VerbExecutionController::StartControlExecution()
     }
 }
 
-//------------------------------------------------------
+
 sal_Bool VerbExecutionController::EndControlExecution_WasModified()
 {
     osl::MutexGuard aGuard( m_aVerbExecutionMutex );
@@ -232,7 +232,7 @@ sal_Bool VerbExecutionController::EndControlExecution_WasModified()
     return bResult;
 }
 
-//------------------------------------------------------
+
 void VerbExecutionController::ModificationNotificationIsDone()
 {
     osl::MutexGuard aGuard( m_aVerbExecutionMutex );
@@ -241,7 +241,7 @@ void VerbExecutionController::ModificationNotificationIsDone()
         m_bChangedOnVerbExecution = sal_True;
 }
 #endif
-//-----------------------------------------------
+
 void VerbExecutionController::LockNotification()
 {
     osl::MutexGuard aGuard( m_aVerbExecutionMutex );
@@ -249,7 +249,7 @@ void VerbExecutionController::LockNotification()
         m_nNotificationLock++;
 }
 
-//-----------------------------------------------
+
 void VerbExecutionController::UnlockNotification()
 {
     osl::MutexGuard aGuard( m_aVerbExecutionMutex );
@@ -257,7 +257,7 @@ void VerbExecutionController::UnlockNotification()
         m_nNotificationLock--;
 }
 
-//-----------------------------------------------
+
 uno::Reference< io::XStream > OleEmbeddedObject::GetNewFilledTempStream_Impl( const uno::Reference< io::XInputStream >& xInStream )
         throw( io::IOException )
 {
@@ -279,7 +279,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::GetNewFilledTempStream_Impl( co
     return xTempFile;
 }
 
-//------------------------------------------------------
+
 uno::Reference< io::XStream > OleEmbeddedObject::TryToGetAcceptableFormat_Impl( const uno::Reference< io::XStream >& xStream )
         throw ( uno::Exception )
 {
@@ -361,7 +361,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToGetAcceptableFormat_Impl( 
     return uno::Reference< io::XStream >();
 }
 
-//------------------------------------------------------
+
 void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStream >& xTargetStream,
                                                 const uno::Reference< io::XStream >& xCachedVisualRepresentation )
         throw ( uno::Exception )
@@ -513,7 +513,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
     xTransacted->commit();
 }
 
-//------------------------------------------------------
+
 void OleEmbeddedObject::RemoveVisualCache_Impl( const uno::Reference< io::XStream >& xTargetStream )
         throw ( uno::Exception )
 {
@@ -547,14 +547,14 @@ void OleEmbeddedObject::RemoveVisualCache_Impl( const uno::Reference< io::XStrea
     xTransacted->commit();
 }
 
-//------------------------------------------------------
+
 void OleEmbeddedObject::SetVisReplInStream( sal_Bool bExists )
 {
     m_bVisReplInitialized = sal_True;
     m_bVisReplInStream = bExists;
 }
 
-//------------------------------------------------------
+
 sal_Bool OleEmbeddedObject::HasVisReplInStream()
 {
     if ( !m_bVisReplInitialized )
@@ -620,7 +620,7 @@ sal_Bool OleEmbeddedObject::HasVisReplInStream()
     return m_bVisReplInStream;
 }
 
-//------------------------------------------------------
+
 uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepresentation_Impl(
         const uno::Reference< io::XStream >& xStream,
         sal_Bool bAllowToRepair50 )
@@ -755,7 +755,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
     return xResult;
 }
 
-//------------------------------------------------------
+
 void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStorage >& xNewParentStorage,
                                               const uno::Reference< io::XStream >& xNewObjectStream,
                                               const OUString& aNewName )
@@ -781,7 +781,7 @@ void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStor
     m_aEntryName = aNewName;
 }
 
-//------------------------------------------------------
+
 void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStorage >& xNewParentStorage,
                                               const OUString& aNewName )
 {
@@ -797,7 +797,7 @@ void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStor
 }
 
 #ifdef WNT
-//----------------------------------------------
+
 sal_Bool OleEmbeddedObject::SaveObject_Impl()
 {
     sal_Bool bResult = sal_False;
@@ -817,7 +817,7 @@ sal_Bool OleEmbeddedObject::SaveObject_Impl()
     return bResult;
 }
 
-//----------------------------------------------
+
 sal_Bool OleEmbeddedObject::OnShowWindow_Impl( sal_Bool bShow )
 {
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
@@ -861,14 +861,14 @@ sal_Bool OleEmbeddedObject::OnShowWindow_Impl( sal_Bool bShow )
     return bResult;
 }
 
-//------------------------------------------------------
+
 void OleEmbeddedObject::OnIconChanged_Impl()
 {
     // TODO/LATER: currently this notification seems to be impossible
     // MakeEventListenerNotification_Impl( OUString( "OnIconChanged" ) );
 }
 
-//------------------------------------------------------
+
 void OleEmbeddedObject::OnViewChanged_Impl()
 {
     if ( m_bDisposed )
@@ -900,7 +900,7 @@ void OleEmbeddedObject::OnViewChanged_Impl()
     // ===============================================================
 }
 
-//------------------------------------------------------
+
 void OleEmbeddedObject::OnClosed_Impl()
 {
     if ( m_bDisposed )
@@ -914,7 +914,7 @@ void OleEmbeddedObject::OnClosed_Impl()
     }
 }
 
-//------------------------------------------------------
+
 OUString OleEmbeddedObject::CreateTempURLEmpty_Impl()
 {
     SAL_WARN_IF( !m_aTempURL.isEmpty(), "embeddedobj.ole", "The object has already the temporary file!" );
@@ -923,7 +923,7 @@ OUString OleEmbeddedObject::CreateTempURLEmpty_Impl()
     return m_aTempURL;
 }
 
-//------------------------------------------------------
+
 OUString OleEmbeddedObject::GetTempURL_Impl()
 {
     if ( m_aTempURL.isEmpty() )
@@ -950,7 +950,7 @@ OUString OleEmbeddedObject::GetTempURL_Impl()
     return m_aTempURL;
 }
 
-//------------------------------------------------------
+
 void OleEmbeddedObject::CreateOleComponent_Impl( OleComponent* pOleComponent )
 {
     if ( !m_pOleComponent )
@@ -967,7 +967,7 @@ void OleEmbeddedObject::CreateOleComponent_Impl( OleComponent* pOleComponent )
     }
 }
 
-//------------------------------------------------------
+
 void OleEmbeddedObject::CreateOleComponentAndLoad_Impl( OleComponent* pOleComponent )
 {
     if ( !m_pOleComponent )
@@ -988,7 +988,7 @@ void OleEmbeddedObject::CreateOleComponentAndLoad_Impl( OleComponent* pOleCompon
     }
 }
 
-//------------------------------------------------------
+
 void OleEmbeddedObject::CreateOleComponentFromClipboard_Impl( OleComponent* pOleComponent )
 {
     if ( !m_pOleComponent )
@@ -1004,7 +1004,7 @@ void OleEmbeddedObject::CreateOleComponentFromClipboard_Impl( OleComponent* pOle
     }
 }
 
-//------------------------------------------------------
+
 uno::Reference< io::XOutputStream > OleEmbeddedObject::GetStreamForSaving()
 {
     if ( !m_xObjectStream.is() )
@@ -1023,7 +1023,7 @@ uno::Reference< io::XOutputStream > OleEmbeddedObject::GetStreamForSaving()
     return xOutStream;
 }
 
-//----------------------------------------------
+
 void OleEmbeddedObject::StoreObjectToStream( uno::Reference< io::XOutputStream > xOutStream )
     throw ( uno::Exception )
 {
@@ -1062,7 +1062,7 @@ void OleEmbeddedObject::StoreObjectToStream( uno::Reference< io::XOutputStream >
     //       probably it must be specified on storing
 }
 #endif
-//------------------------------------------------------
+
 void OleEmbeddedObject::StoreToLocation_Impl(
                             const uno::Reference< embed::XStorage >& xStorage,
                             const OUString& sEntName,
@@ -1274,7 +1274,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
     }
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::setPersistentEntry(
                     const uno::Reference< embed::XStorage >& xStorage,
                     const OUString& sEntName,
@@ -1484,7 +1484,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
 #endif
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::storeToEntry( const uno::Reference< embed::XStorage >& xStorage,
                             const OUString& sEntName,
                             const uno::Sequence< beans::PropertyValue >& lArguments,
@@ -1518,7 +1518,7 @@ void SAL_CALL OleEmbeddedObject::storeToEntry( const uno::Reference< embed::XSto
     // TODO: should the listener notification be done?
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XStorage >& xStorage,
                             const OUString& sEntName,
                             const uno::Sequence< beans::PropertyValue >& lArguments,
@@ -1552,7 +1552,7 @@ void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XSto
     // TODO: should the listener notification be done here or in saveCompleted?
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
         throw ( embed::WrongStateException,
                 uno::Exception,
@@ -1653,7 +1653,7 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     }
 }
 
-//------------------------------------------------------
+
 sal_Bool SAL_CALL OleEmbeddedObject::hasEntry()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -1682,7 +1682,7 @@ sal_Bool SAL_CALL OleEmbeddedObject::hasEntry()
     return sal_False;
 }
 
-//------------------------------------------------------
+
 OUString SAL_CALL OleEmbeddedObject::getEntryName()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -1716,7 +1716,7 @@ OUString SAL_CALL OleEmbeddedObject::getEntryName()
 }
 
 
-//------------------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::storeOwn()
         throw ( embed::WrongStateException,
                 io::IOException,
@@ -1836,7 +1836,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
         MakeEventListenerNotification_Impl( OUString( "OnVisAreaChanged" ));
 }
 
-//------------------------------------------------------
+
 sal_Bool SAL_CALL OleEmbeddedObject::isReadonly()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -1869,7 +1869,7 @@ sal_Bool SAL_CALL OleEmbeddedObject::isReadonly()
     return m_bReadOnly;
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::reload(
                 const uno::Sequence< beans::PropertyValue >& lArguments,
                 const uno::Sequence< beans::PropertyValue >& lObjArgs )
@@ -1913,7 +1913,7 @@ void SAL_CALL OleEmbeddedObject::reload(
     // use meaningfull part of lArguments
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorage >& xStorage,
                                                 const OUString& sEntName )
         throw ( lang::IllegalArgumentException,
@@ -2033,7 +2033,7 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
     }
 }
 
-//------------------------------------------------------
+
 sal_Bool SAL_CALL  OleEmbeddedObject::isLink()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -2054,7 +2054,7 @@ sal_Bool SAL_CALL  OleEmbeddedObject::isLink()
     return m_bIsLink;
 }
 
-//------------------------------------------------------
+
 OUString SAL_CALL OleEmbeddedObject::getLinkURL()
         throw ( embed::WrongStateException,
                 uno::Exception,

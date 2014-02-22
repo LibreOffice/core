@@ -197,7 +197,7 @@ void ScFormulaDlg::notifyChange()
     if ( pInputHdl )
         pInputHdl->NotifyChange( NULL );
 }
-// -----------------------------------------------------------------------------
+
 void ScFormulaDlg::fill()
 {
     ScModule* pScMod = SC_MOD();

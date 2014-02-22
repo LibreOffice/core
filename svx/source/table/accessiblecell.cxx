@@ -42,9 +42,9 @@ using namespace ::com::sun::star::container;
 
 namespace accessibility {
 
-// --------------------------------------------------------------------
+
 // AccessibleCell
-// --------------------------------------------------------------------
+
 
 AccessibleCell::AccessibleCell( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>& rxParent, const sdr::table::CellRef& rCell, sal_Int32 nIndex, const AccessibleShapeTreeInfo& rShapeTreeInfo )
 : AccessibleCellBase( rxParent, AccessibleRole::TABLE_CELL )
@@ -57,14 +57,14 @@ AccessibleCell::AccessibleCell( const ::com::sun::star::uno::Reference< ::com::s
     pAccTable = dynamic_cast <AccessibleTableShape *> (rxParent.get());
 }
 
-// --------------------------------------------------------------------
+
 
 AccessibleCell::~AccessibleCell (void)
 {
     DBG_ASSERT( mpText == 0, "svx::AccessibleCell::~AccessibleCell(), not disposed!?" );
 }
 
-// --------------------------------------------------------------------
+
 
 void AccessibleCell::Init (void)
 {
@@ -95,7 +95,7 @@ void AccessibleCell::Init (void)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool AccessibleCell::SetState (sal_Int16 aState)
 {
@@ -115,7 +115,7 @@ sal_Bool AccessibleCell::SetState (sal_Int16 aState)
     return bStateHasChanged;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool AccessibleCell::ResetState (sal_Int16 aState)
 {
@@ -135,39 +135,39 @@ sal_Bool AccessibleCell::ResetState (sal_Int16 aState)
     return bStateHasChanged;
 }
 
-//-----------------------------------------------------------------------------
+
 
 bool AccessibleCell::operator== (const AccessibleCell& rAccessibleCell)
 {
     return this == &rAccessibleCell;
 }
 
-//-----------------------------------------------------------------------------
+
 // XInterface
-//-----------------------------------------------------------------------------
+
 
 Any SAL_CALL AccessibleCell::queryInterface( const Type& aType ) throw (RuntimeException)
 {
     return AccessibleCellBase::queryInterface( aType );
 }
 
-//-----------------------------------------------------------------------------
+
 
 void SAL_CALL AccessibleCell::acquire(  ) throw ()
 {
     AccessibleCellBase::acquire();
 }
 
-//-----------------------------------------------------------------------------
+
 
 void SAL_CALL AccessibleCell::release(  ) throw ()
 {
     AccessibleCellBase::release();
 }
 
-// --------------------------------------------------------------------
+
 // XAccessibleContext
-// --------------------------------------------------------------------
+
 
 /** The children of this cell come from the paragraphs of text.
 */
@@ -178,7 +178,7 @@ sal_Int32 SAL_CALL AccessibleCell::getAccessibleChildCount() throw (::com::sun::
     return mpText != NULL ? mpText->GetChildCount () : 0;
 }
 
-// --------------------------------------------------------------------
+
 
 /** Forward the request to the shape.  Return the requested shape or throw
     an exception for a wrong index.
@@ -192,7 +192,7 @@ Reference<XAccessible> SAL_CALL AccessibleCell::getAccessibleChild (sal_Int32 nI
     return mpText->GetChild (nIndex);
 }
 
-// --------------------------------------------------------------------
+
 
 /** Return a copy of the state set.
     Possible states are:
@@ -267,9 +267,9 @@ Reference<XAccessibleStateSet> SAL_CALL AccessibleCell::getAccessibleStateSet (v
     return xStateSet;
 }
 
-// --------------------------------------------------------------------
+
 // XAccessibleComponent
-// --------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL AccessibleCell::containsPoint( const ::com::sun::star::awt::Point& aPoint) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -313,7 +313,7 @@ Reference<XAccessible > SAL_CALL  AccessibleCell::getAccessibleAtPoint ( const :
     return uno::Reference<XAccessible>();
 }
 
-// --------------------------------------------------------------------
+
 
 ::com::sun::star::awt::Rectangle SAL_CALL AccessibleCell::getBounds(void) throw(RuntimeException)
 {
@@ -360,7 +360,7 @@ Reference<XAccessible > SAL_CALL  AccessibleCell::getAccessibleAtPoint ( const :
     return aBoundingBox;
 }
 
-// --------------------------------------------------------------------
+
 
 ::com::sun::star::awt::Point SAL_CALL AccessibleCell::getLocation(void) throw (RuntimeException)
 {
@@ -369,7 +369,7 @@ Reference<XAccessible > SAL_CALL  AccessibleCell::getAccessibleAtPoint ( const :
     return ::com::sun::star::awt::Point(aBoundingBox.X, aBoundingBox.Y);
 }
 
-// --------------------------------------------------------------------
+
 
 ::com::sun::star::awt::Point SAL_CALL AccessibleCell::getLocationOnScreen(void) throw(RuntimeException)
 {
@@ -394,7 +394,7 @@ Reference<XAccessible > SAL_CALL  AccessibleCell::getAccessibleAtPoint ( const :
     return aLocation;
 }
 
-// --------------------------------------------------------------------
+
 
 awt::Size SAL_CALL AccessibleCell::getSize (void) throw (RuntimeException)
 {
@@ -403,28 +403,28 @@ awt::Size SAL_CALL AccessibleCell::getSize (void) throw (RuntimeException)
     return awt::Size (aBoundingBox.Width, aBoundingBox.Height);
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL AccessibleCell::addFocusListener ( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener) throw (::com::sun::star::uno::RuntimeException)
 {
     AccessibleComponentBase::addFocusListener( xListener );
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL AccessibleCell::removeFocusListener (const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
     AccessibleComponentBase::removeFocusListener( xListener );
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL AccessibleCell::grabFocus (void) throw (::com::sun::star::uno::RuntimeException)
 {
     AccessibleComponentBase::grabFocus();
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL AccessibleCell::getForeground(void) throw (RuntimeException)
 {
@@ -435,7 +435,7 @@ sal_Int32 SAL_CALL AccessibleCell::getForeground(void) throw (RuntimeException)
     return nColor;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL AccessibleCell::getBackground (void) throw (RuntimeException)
 {
@@ -446,9 +446,9 @@ sal_Int32 SAL_CALL AccessibleCell::getBackground (void) throw (RuntimeException)
     return nColor;
 }
 
-// --------------------------------------------------------------------
+
 // XAccessibleExtendedComponent
-// --------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL AccessibleCell::getFont (void) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -456,23 +456,23 @@ sal_Int32 SAL_CALL AccessibleCell::getBackground (void) throw (RuntimeException)
     return AccessibleComponentBase::getFont();
 }
 
-// --------------------------------------------------------------------
+
 
 OUString SAL_CALL AccessibleCell::getTitledBorderText (void) throw (::com::sun::star::uno::RuntimeException)
 {
     return AccessibleComponentBase::getTitledBorderText();
 }
 
-// --------------------------------------------------------------------
+
 
 OUString SAL_CALL AccessibleCell::getToolTipText (void) throw (::com::sun::star::uno::RuntimeException)
 {
     return AccessibleComponentBase::getToolTipText();
 }
 
-// --------------------------------------------------------------------
+
 // XAccessibleEventBroadcaster
-// --------------------------------------------------------------------
+
 
 void SAL_CALL AccessibleCell::addAccessibleEventListener( const Reference<XAccessibleEventListener >& rxListener)  throw (RuntimeException)
 {
@@ -492,7 +492,7 @@ void SAL_CALL AccessibleCell::addAccessibleEventListener( const Reference<XAcces
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL AccessibleCell::removeAccessibleEventListener( const Reference<XAccessibleEventListener >& rxListener) throw (RuntimeException)
 {
@@ -502,16 +502,16 @@ void SAL_CALL AccessibleCell::removeAccessibleEventListener( const Reference<XAc
         mpText->RemoveEventListener (rxListener);
 }
 
-// --------------------------------------------------------------------
+
 // XServiceInfo
-// --------------------------------------------------------------------
+
 
 OUString SAL_CALL AccessibleCell::getImplementationName(void) throw (RuntimeException)
 {
     return OUString("AccessibleCell");
 }
 
-// --------------------------------------------------------------------
+
 
 Sequence<OUString> SAL_CALL AccessibleCell::getSupportedServiceNames(void) throw (RuntimeException)
 {
@@ -529,9 +529,9 @@ Sequence<OUString> SAL_CALL AccessibleCell::getSupportedServiceNames(void) throw
     return aServiceNames;
 }
 
-// --------------------------------------------------------------------
+
 // IAccessibleViewForwarderListener
-// --------------------------------------------------------------------
+
 
 void AccessibleCell::ViewForwarderChanged (ChangeType /*aChangeType*/, const IAccessibleViewForwarder* /*pViewForwarder*/)
 {
@@ -544,9 +544,9 @@ void AccessibleCell::ViewForwarderChanged (ChangeType /*aChangeType*/, const IAc
         mpText->UpdateChildren();
 }
 
-// --------------------------------------------------------------------
+
 // protected
-// --------------------------------------------------------------------
+
 
 void AccessibleCell::disposing (void)
 {

@@ -100,7 +100,7 @@ namespace sd { namespace colortoolpanel
     //==================================================================================================================
     //= class SingleColorPanel
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     SingleColorPanel::SingleColorPanel( const Reference< XComponentContext >& i_rContext, const Reference< XWindow >& i_rParentWindow, const ::sal_Int32 i_nPanelColor )
         :SingleColorPanel_Base( m_aMutex )
         ,m_xWindow()
@@ -124,12 +124,12 @@ namespace sd { namespace colortoolpanel
         osl_atomic_decrement( &m_refCount );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     SingleColorPanel::~SingleColorPanel()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XWindow > SAL_CALL SingleColorPanel::getWindow() throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -138,7 +138,7 @@ namespace sd { namespace colortoolpanel
         return m_xWindow;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XAccessible > SAL_CALL SingleColorPanel::createAccessible( const Reference< XAccessible >& i_rParentAccessible ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -151,7 +151,7 @@ namespace sd { namespace colortoolpanel
         return Reference< XAccessible >( getWindow(), UNO_QUERY );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SingleColorPanel::windowPaint( const PaintEvent& i_rEvent ) throw (RuntimeException)
     {
         try
@@ -170,13 +170,13 @@ namespace sd { namespace colortoolpanel
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SingleColorPanel::disposing( const EventObject& i_rSource ) throw (RuntimeException)
     {
         (void)i_rSource;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SingleColorPanel::disposing()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -198,7 +198,7 @@ namespace sd { namespace colortoolpanel
     //==================================================================================================================
     //= PanelUIElement
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     PanelUIElement::PanelUIElement( const Reference< XComponentContext >& i_rContext, const Reference< XWindow >& i_rParentWindow,
         const OUString& i_rResourceURL, const ::sal_Int32 i_nPanelColor )
         :PanelUIElement_Base( m_aMutex )
@@ -207,31 +207,31 @@ namespace sd { namespace colortoolpanel
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     PanelUIElement::~PanelUIElement()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XFrame > SAL_CALL PanelUIElement::getFrame() throw (RuntimeException)
     {
         // TODO
         return NULL;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     OUString SAL_CALL PanelUIElement::getResourceURL() throw (RuntimeException)
     {
         return m_sResourceURL;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     ::sal_Int16 SAL_CALL PanelUIElement::getType() throw (RuntimeException)
     {
         return UIElementType::TOOLPANEL;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XInterface > SAL_CALL PanelUIElement::getRealInterface(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -240,7 +240,7 @@ namespace sd { namespace colortoolpanel
         return m_xToolPanel;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL PanelUIElement::disposing()
     {
         Reference< XComponent > xPanelComponent( m_xToolPanel, UNO_QUERY_THROW );

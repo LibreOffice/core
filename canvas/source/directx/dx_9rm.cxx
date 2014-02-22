@@ -1011,7 +1011,7 @@ namespace dxcanvas
             mpWindow->setPosSizePixel(0,0,maSize.getX(),maSize.getY());
 
             // resize back buffer, if necessary
-            // -------------------------------------------------------------
+
 
             // don't attempt to create anything if the
             // requested size is NULL.

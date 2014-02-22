@@ -72,13 +72,13 @@ namespace svx
         }
     }
 
-    // -----------------------------------------------------------------------
+
 
     ToolboxButtonColorUpdater::~ToolboxButtonColorUpdater()
     {
     }
 
-    // -----------------------------------------------------------------------
+
 
     void ToolboxButtonColorUpdater::Update( const Color& rColor )
     {

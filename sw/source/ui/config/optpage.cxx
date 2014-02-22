@@ -2222,7 +2222,7 @@ void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
 }
 
 
-//----------------------------------------------------------
+
 SwCompareOptionsTabPage::SwCompareOptionsTabPage(  Window* pParent, const SfxItemSet& rSet )
     : SfxTabPage( pParent,"OptComparison","modules/swriter/ui/optcomparison.ui", rSet )
 {

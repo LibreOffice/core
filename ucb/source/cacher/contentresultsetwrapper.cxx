@@ -36,11 +36,11 @@ using namespace com::sun::star::util;
 using namespace cppu;
 
 
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 // class ContentResultSetWrapper
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 
 ContentResultSetWrapper::ContentResultSetWrapper(
                                 Reference< XResultSet > xOrigin )
@@ -335,9 +335,9 @@ sal_Bool SAL_CALL ContentResultSetWrapper
     */
 }
 
-//--------------------------------------------------------------------------
+
 // XInterface methods.
-//--------------------------------------------------------------------------
+
 //list all interfaces inclusive baseclasses of interfaces
 QUERYINTERFACE_IMPL_START( ContentResultSetWrapper )
 
@@ -352,9 +352,9 @@ QUERYINTERFACE_IMPL_START( ContentResultSetWrapper )
 
 QUERYINTERFACE_IMPL_END
 
-//--------------------------------------------------------------------------
+
 // XComponent methods.
-//--------------------------------------------------------------------------
+
 // virtual
 void SAL_CALL ContentResultSetWrapper
     ::dispose() throw( RuntimeException )
@@ -428,7 +428,7 @@ void SAL_CALL ContentResultSetWrapper
     m_bInDispose = sal_False;
 }
 
-//--------------------------------------------------------------------------
+
 // virtual
 void SAL_CALL ContentResultSetWrapper
     ::addEventListener( const Reference< XEventListener >& Listener )
@@ -444,7 +444,7 @@ void SAL_CALL ContentResultSetWrapper
     m_pDisposeEventListeners->addInterface( Listener );
 }
 
-//--------------------------------------------------------------------------
+
 // virtual
 void SAL_CALL ContentResultSetWrapper
     ::removeEventListener( const Reference< XEventListener >& Listener )
@@ -457,9 +457,9 @@ void SAL_CALL ContentResultSetWrapper
         m_pDisposeEventListeners->removeInterface( Listener );
 }
 
-//--------------------------------------------------------------------------
+
 //XCloseable methods.
-//--------------------------------------------------------------------------
+
 //virtual
 void SAL_CALL ContentResultSetWrapper
     ::close()
@@ -470,9 +470,9 @@ void SAL_CALL ContentResultSetWrapper
     dispose();
 }
 
-//--------------------------------------------------------------------------
+
 //XResultSetMetaDataSupplier methods.
-//--------------------------------------------------------------------------
+
 //virtual
 Reference< XResultSetMetaData > SAL_CALL ContentResultSetWrapper
     ::getMetaData()
@@ -503,9 +503,9 @@ Reference< XResultSetMetaData > SAL_CALL ContentResultSetWrapper
 }
 
 
-//--------------------------------------------------------------------------
+
 // XPropertySet methods.
-//--------------------------------------------------------------------------
+
 // virtual
 Reference< XPropertySetInfo > SAL_CALL ContentResultSetWrapper
     ::getPropertySetInfo() throw( RuntimeException )
@@ -519,7 +519,7 @@ Reference< XPropertySetInfo > SAL_CALL ContentResultSetWrapper
     impl_initPropertySetInfo();
     return m_xPropertySetInfo;
 }
-//--------------------------------------------------------------------------
+
 // virtual
 void SAL_CALL ContentResultSetWrapper
     ::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
@@ -539,7 +539,7 @@ void SAL_CALL ContentResultSetWrapper
     m_xPropertySetOrigin->setPropertyValue( rPropertyName, rValue );
 }
 
-//--------------------------------------------------------------------------
+
 // virtual
 Any SAL_CALL ContentResultSetWrapper
     ::getPropertyValue( const OUString& rPropertyName )
@@ -557,7 +557,7 @@ Any SAL_CALL ContentResultSetWrapper
     return m_xPropertySetOrigin->getPropertyValue( rPropertyName );
 }
 
-//--------------------------------------------------------------------------
+
 // virtual
 void SAL_CALL ContentResultSetWrapper
     ::addPropertyChangeListener(
@@ -609,7 +609,7 @@ void SAL_CALL ContentResultSetWrapper
     }
 }
 
-//--------------------------------------------------------------------------
+
 // virtual
 void SAL_CALL ContentResultSetWrapper
     ::addVetoableChangeListener(
@@ -660,7 +660,7 @@ void SAL_CALL ContentResultSetWrapper
     }
 }
 
-//--------------------------------------------------------------------------
+
 // virtual
 void SAL_CALL ContentResultSetWrapper
     ::removePropertyChangeListener(
@@ -719,7 +719,7 @@ void SAL_CALL ContentResultSetWrapper
     }
 }
 
-//--------------------------------------------------------------------------
+
 // virtual
 void SAL_CALL ContentResultSetWrapper
     ::removeVetoableChangeListener(
@@ -778,9 +778,9 @@ void SAL_CALL ContentResultSetWrapper
     }
 }
 
-//--------------------------------------------------------------------------
+
 // own methods.
-//--------------------------------------------------------------------------
+
 
 //virtual
 void SAL_CALL ContentResultSetWrapper
@@ -835,9 +835,9 @@ void SAL_CALL ContentResultSetWrapper
     impl_notifyVetoableChangeListeners( aEvt );
 }
 
-//--------------------------------------------------------------------------
+
 // XContentAccess methods.  ( -- position dependent )
-//--------------------------------------------------------------------------
+
 
 // virtual
 OUString SAL_CALL ContentResultSetWrapper
@@ -854,7 +854,7 @@ OUString SAL_CALL ContentResultSetWrapper
     return m_xContentAccessOrigin->queryContentIdentifierString();
 }
 
-//--------------------------------------------------------------------------
+
 // virtual
 Reference< XContentIdentifier > SAL_CALL ContentResultSetWrapper
     ::queryContentIdentifier()
@@ -870,7 +870,7 @@ Reference< XContentIdentifier > SAL_CALL ContentResultSetWrapper
     return m_xContentAccessOrigin->queryContentIdentifier();
 }
 
-//--------------------------------------------------------------------------
+
 // virtual
 Reference< XContent > SAL_CALL ContentResultSetWrapper
     ::queryContent()
@@ -886,9 +886,9 @@ Reference< XContent > SAL_CALL ContentResultSetWrapper
     return m_xContentAccessOrigin->queryContent();
 }
 
-//-----------------------------------------------------------------
+
 // XResultSet methods.
-//-----------------------------------------------------------------
+
 //virtual
 
 sal_Bool SAL_CALL ContentResultSetWrapper
@@ -1174,9 +1174,9 @@ Reference< XInterface > SAL_CALL ContentResultSetWrapper
     return Reference< XInterface >();
 }
 
-//-----------------------------------------------------------------
+
 // XRow methods.
-//-----------------------------------------------------------------
+
 
 #define XROW_GETXXX( getXXX )                                   \
 impl_EnsureNotDisposed();                                       \
@@ -1389,11 +1389,11 @@ Reference< XArray > SAL_CALL ContentResultSetWrapper
     XROW_GETXXX( getArray );
 }
 
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 // class ContentResultSetWrapperListener
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 
 ContentResultSetWrapperListener::ContentResultSetWrapperListener(
     ContentResultSetWrapper* pOwner )
@@ -1405,9 +1405,9 @@ ContentResultSetWrapperListener::~ContentResultSetWrapperListener()
 {
 }
 
-//--------------------------------------------------------------------------
+
 // XInterface methods.
-//--------------------------------------------------------------------------
+
 //list all interfaces inclusive baseclasses of interfaces
 XINTERFACE_COMMON_IMPL( ContentResultSetWrapperListener )
 QUERYINTERFACE_IMPL_START( ContentResultSetWrapperListener )
@@ -1420,9 +1420,9 @@ QUERYINTERFACE_IMPL_START( ContentResultSetWrapperListener )
 QUERYINTERFACE_IMPL_END
 
 
-//--------------------------------------------------------------------------
+
 //XEventListener methods.
-//--------------------------------------------------------------------------
+
 
 //virtual
 void SAL_CALL ContentResultSetWrapperListener
@@ -1433,9 +1433,9 @@ void SAL_CALL ContentResultSetWrapperListener
         m_pOwner->impl_disposing( rEventObject );
 }
 
-//--------------------------------------------------------------------------
+
 //XPropertyChangeListener methods.
-//--------------------------------------------------------------------------
+
 
 //virtual
 void SAL_CALL ContentResultSetWrapperListener
@@ -1446,9 +1446,9 @@ void SAL_CALL ContentResultSetWrapperListener
         m_pOwner->impl_propertyChange( rEvt );
 }
 
-//--------------------------------------------------------------------------
+
 //XVetoableChangeListener methods.
-//--------------------------------------------------------------------------
+
 //virtual
 void SAL_CALL ContentResultSetWrapperListener
     ::vetoableChange( const PropertyChangeEvent& rEvt )

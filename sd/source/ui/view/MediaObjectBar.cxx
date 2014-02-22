@@ -48,19 +48,19 @@ using namespace sd;
 
 namespace sd {
 
-// ------------------
+
 // - MediaObjectBar -
-// ------------------
+
 
 TYPEINIT1( MediaObjectBar, SfxShell );
 
-// -----------------------------------------------------------------------------
+
 
 SFX_IMPL_INTERFACE( MediaObjectBar, SfxShell, SdResId( STR_MEDIAOBJECTBARSHELL ) )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 MediaObjectBar::MediaObjectBar( ViewShell* pSdViewShell, ::sd::View* pSdView ) :
     SfxShell( pSdViewShell->GetViewShell() ),
@@ -76,14 +76,14 @@ MediaObjectBar::MediaObjectBar( ViewShell* pSdViewShell, ::sd::View* pSdView ) :
     SetName(SD_RESSTR(RID_DRAW_MEDIA_TOOLBOX));
 }
 
-// -----------------------------------------------------------------------------
+
 
 MediaObjectBar::~MediaObjectBar()
 {
     SetRepeatTarget( NULL );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void MediaObjectBar::GetState( SfxItemSet& rSet )
 {
@@ -121,7 +121,7 @@ void MediaObjectBar::GetState( SfxItemSet& rSet )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void MediaObjectBar::Execute( SfxRequest& rReq )
 {

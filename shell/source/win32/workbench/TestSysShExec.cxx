@@ -38,9 +38,9 @@
 #pragma warning(pop)
 #endif
 
-//--------------------------------------------------------------
+
 //  namesapces
-//--------------------------------------------------------------
+
 
 using namespace ::rtl                   ;
 using namespace ::cppu                  ;
@@ -51,24 +51,24 @@ using namespace com::sun::star::system;
 
 #define RDB_SYSPATH "D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\applicat.rdb"
 
-//--------------------------------------------------------------
+
 //  global variables
-//--------------------------------------------------------------
+
 
 Reference< XMultiServiceFactory >   g_xFactory;
 
 
-//--------------------------------------------------------------
+
 //  main
-//--------------------------------------------------------------
+
 
 
 // int SAL_CALL main(int nArgc, char* Argv[], char* Env[]   )
 int SAL_CALL main(int nArgc, char* Argv[], char*    )
 {
-    //-------------------------------------------------
+
     // get the global service-manager
-    //-------------------------------------------------
+
 
     if ( nArgc < 4 )
         return 0;
@@ -86,9 +86,9 @@ int SAL_CALL main(int nArgc, char* Argv[], char*    )
 
     printf("Creating RegistryServiceFactory successful\n");
 
-    //-------------------------------------------------
+
     // try to get an Interface to a XFilePicker Service
-    //-------------------------------------------------
+
 
     Reference< XSystemShellExecute > xSysShExec(
         g_xFactory->createInstance("com.sun.star.system.SystemShellExecute"), UNO_QUERY );
@@ -116,9 +116,9 @@ int SAL_CALL main(int nArgc, char* Argv[], char*    )
         OSL_FAIL( "Invalid parameter" );
     }
 
-    //--------------------------------------------------
+
     // shutdown
-    //--------------------------------------------------
+
 
     // Cast factory to XComponent
     Reference< XComponent > xComponent( g_xFactory, UNO_QUERY );

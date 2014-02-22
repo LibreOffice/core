@@ -361,7 +361,7 @@ void SAL_CALL PresenterButton::disposing (const css::lang::EventObject& rEvent)
         mxWindow = NULL;
 }
 
-//-----------------------------------------------------------------------------
+
 
 css::geometry::IntegerSize2D PresenterButton::CalculateButtonSize (void)
 {

@@ -149,7 +149,7 @@ void OTools::getValue(  OConnection* _pConnection,
                             _aStatementHandle,SQL_HANDLE_STMT,_xInterface,sal_False);
     _bWasNull = pcbValue == SQL_NULL_DATA;
 }
-// -------------------------------------------------------------------------
+
 void OTools::bindValue( OConnection* _pConnection,
                         SQLHANDLE _aStatementHandle,
                         sal_Int32 columnIndex,
@@ -289,7 +289,7 @@ void OTools::bindValue( OConnection* _pConnection,
 
     OTools::ThrowException(_pConnection,nRetcode,_aStatementHandle,SQL_HANDLE_STMT,_xInterface);
 }
-// -----------------------------------------------------------------------------
+
 void OTools::ThrowException(const OConnection* _pConnection,
                             const SQLRETURN _rRetCode,
                             const SQLHANDLE _pContext,
@@ -349,7 +349,7 @@ void OTools::ThrowException(const OConnection* _pConnection,
                                 );
 
 }
-// -------------------------------------------------------------------------
+
 Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
                                          const SQLHANDLE _aStatementHandle,
                                          const sal_Int32 columnIndex,
@@ -402,7 +402,7 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
     }
     return aData;
 }
-// -------------------------------------------------------------------------
+
 OUString OTools::getStringValue(OConnection* _pConnection,
                                        SQLHANDLE _aStatementHandle,
                                        sal_Int32 columnIndex,
@@ -516,7 +516,7 @@ OUString OTools::getStringValue(OConnection* _pConnection,
 
     return aData.makeStringAndClear();
 }
-// -------------------------------------------------------------------------
+
 void OTools::GetInfo(OConnection* _pConnection,
                      SQLHANDLE _aConnectionHandle,
                      SQLUSMALLINT _nInfo,
@@ -532,7 +532,7 @@ void OTools::GetInfo(OConnection* _pConnection,
 
     _rValue = OUString(aValue,nValueLen,_nTextEncoding);
 }
-// -------------------------------------------------------------------------
+
 void OTools::GetInfo(OConnection* _pConnection,
                      SQLHANDLE _aConnectionHandle,
                      SQLUSMALLINT _nInfo,
@@ -545,7 +545,7 @@ void OTools::GetInfo(OConnection* _pConnection,
         (*(T3SQLGetInfo)_pConnection->getOdbcFunction(ODBC3SQLGetInfo))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
         _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
 }
-// -------------------------------------------------------------------------
+
 void OTools::GetInfo(OConnection* _pConnection,
                      SQLHANDLE _aConnectionHandle,
                      SQLUSMALLINT _nInfo,
@@ -558,7 +558,7 @@ void OTools::GetInfo(OConnection* _pConnection,
         (*(T3SQLGetInfo)_pConnection->getOdbcFunction(ODBC3SQLGetInfo))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
         _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
 }
-// -------------------------------------------------------------------------
+
 void OTools::GetInfo(OConnection* _pConnection,
                      SQLHANDLE _aConnectionHandle,
                      SQLUSMALLINT _nInfo,
@@ -571,7 +571,7 @@ void OTools::GetInfo(OConnection* _pConnection,
         (*(T3SQLGetInfo)_pConnection->getOdbcFunction(ODBC3SQLGetInfo))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
         _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
 }
-// -------------------------------------------------------------------------
+
 void OTools::GetInfo(OConnection* _pConnection,
                      SQLHANDLE _aConnectionHandle,
                      SQLUSMALLINT _nInfo,
@@ -583,7 +583,7 @@ void OTools::GetInfo(OConnection* _pConnection,
                             (*(T3SQLGetInfo)_pConnection->getOdbcFunction(ODBC3SQLGetInfo))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
                             _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 OTools::MapOdbcType2Jdbc(SQLSMALLINT _nType)
 {
     sal_Int32 nValue = DataType::VARCHAR;
@@ -658,10 +658,10 @@ sal_Int32 OTools::MapOdbcType2Jdbc(SQLSMALLINT _nType)
     }
     return nValue;
 }
-//--------------------------------------------------------------------
+
 // jdbcTypeToOdbc
 // Convert the JDBC SQL type to the correct ODBC type
-//--------------------------------------------------------------------
+
 SQLSMALLINT OTools::jdbcTypeToOdbc(sal_Int32 jdbcType)
 {
     SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OTools::jdbcTypeToOdbc" );
@@ -692,7 +692,7 @@ SQLSMALLINT OTools::jdbcTypeToOdbc(sal_Int32 jdbcType)
 
     return odbcType;
 }
-//-----------------------------------------------------------------------------
+
 void OTools::getBindTypes(sal_Bool _bUseWChar,
                           sal_Bool _bUseOldTimeDate,
                           SQLSMALLINT _nOdbcType,

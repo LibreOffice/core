@@ -27,7 +27,7 @@ namespace offapp
     //====================================================================
     //= DriverPooling
     //====================================================================
-    //--------------------------------------------------------------------
+
     DriverPooling::DriverPooling( const OUString& _rName, sal_Bool _bEnabled, const sal_Int32 _nTimeout )
         :sName(_rName)
         ,bEnabled(_bEnabled)
@@ -35,7 +35,7 @@ namespace offapp
     {
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool DriverPooling::operator == (const DriverPooling& _rR) const
     {
         return  (sName == _rR.sName)
@@ -46,7 +46,7 @@ namespace offapp
     //====================================================================
     //= DriverPoolingSettings
     //====================================================================
-    //--------------------------------------------------------------------
+
     DriverPoolingSettings::DriverPoolingSettings()
     {
     }
@@ -55,14 +55,14 @@ namespace offapp
     //= DriverPoolingSettingsItem
     //====================================================================
     TYPEINIT1( DriverPoolingSettingsItem, SfxPoolItem )
-    //--------------------------------------------------------------------
+
     DriverPoolingSettingsItem::DriverPoolingSettingsItem( sal_uInt16 _nId, const DriverPoolingSettings &_rSettings )
         :SfxPoolItem(_nId)
         ,m_aSettings(_rSettings)
     {
     }
 
-    //--------------------------------------------------------------------
+
     bool DriverPoolingSettingsItem::operator==( const SfxPoolItem& _rCompare ) const
     {
         const DriverPoolingSettingsItem* pItem = PTR_CAST(DriverPoolingSettingsItem, &_rCompare);
@@ -87,13 +87,13 @@ namespace offapp
         return true;
     }
 
-    //--------------------------------------------------------------------
+
     SfxPoolItem* DriverPoolingSettingsItem::Clone( SfxItemPool * ) const
     {
         return new DriverPoolingSettingsItem(Which(), m_aSettings);
     }
 
-    //--------------------------------------------------------------------
+
 
 //........................................................................
 }   // namespace offapp

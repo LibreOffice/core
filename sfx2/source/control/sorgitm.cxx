@@ -24,7 +24,7 @@
 
 TYPEINIT1_AUTOFACTORY(SfxScriptOrganizerItem, SfxStringItem);
 
-//------------------------------------------------------------------------
+
 
 SfxScriptOrganizerItem::SfxScriptOrganizerItem() :
 
@@ -33,7 +33,7 @@ SfxScriptOrganizerItem::SfxScriptOrganizerItem() :
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SfxScriptOrganizerItem::SfxScriptOrganizerItem( const SfxScriptOrganizerItem& rItem ) :
 
@@ -44,20 +44,20 @@ SfxScriptOrganizerItem::SfxScriptOrganizerItem( const SfxScriptOrganizerItem& rI
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SfxScriptOrganizerItem::~SfxScriptOrganizerItem()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SfxPoolItem* SfxScriptOrganizerItem::Clone( SfxItemPool * ) const
 {
     return new SfxScriptOrganizerItem( *this );
 }
 
-//------------------------------------------------------------------------
+
 
 bool SfxScriptOrganizerItem::operator==( const SfxPoolItem& rItem) const
 {

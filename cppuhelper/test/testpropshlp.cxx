@@ -293,9 +293,9 @@ void test_PropertyArrayHelper()
 
 
 
-//----------------------------------------------------
+
 //  test_OPropertySetHelper
-//----------------------------------------------------
+
 struct MutexContainer
 {
     Mutex aMutex;
@@ -384,9 +384,9 @@ protected:
     void SAL_CALL getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const throw(RuntimeException);
 };
 
-//----------------------------------------------------------------------
+
 //------ The Properties of this implementation -------------------------
-//----------------------------------------------------------------------
+
 // Id must be the index into the array
 #define PROPERTY_BOOL       0
 #define PROPERTY_INT16      1
@@ -421,9 +421,9 @@ Property * getBasicProps()
 }
 
 
-//----------------------------------------------------
+
 //  test_OPropertySetHelper_Listener
-//----------------------------------------------------
+
 class test_OPropertySetHelper_Listener
     : public WeakImplHelper3< XPropertyChangeListener, XPropertiesChangeListener, XVetoableChangeListener >
 {
@@ -744,7 +744,7 @@ void test_OPropertySetHelper::setFastPropertyValue_NoBroadcast
     }
 }
 
-//--------------------------
+
 void test_OPropertySetHelper::getFastPropertyValue( Any & rRet, sal_Int32 nHandle ) const
     throw(RuntimeException)
 {

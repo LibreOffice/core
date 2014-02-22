@@ -71,10 +71,10 @@ namespace
         ::dbtools::throwGenericSQLException(sMessage ,_xContext);
     }
 }
-//------------------------------------------------------------------------------
+
 IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.drivers.file.ResultSet","com.sun.star.sdbc.ResultSet");
 DBG_NAME( file_OResultSet )
-// -------------------------------------------------------------------------
+
 OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIterator) :    OResultSet_BASE(m_aMutex)
                         ,::comphelper::OPropertyContainer(OResultSet_BASE::rBHelper)
                         ,m_aAssignValues(NULL)
@@ -126,7 +126,7 @@ OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIte
     osl_atomic_decrement( &m_refCount );
 }
 
-// -------------------------------------------------------------------------
+
 OResultSet::~OResultSet()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::~OResultSet" );
@@ -134,7 +134,7 @@ OResultSet::~OResultSet()
     disposing();
     DBG_DTOR( file_OResultSet, NULL );
 }
-// -------------------------------------------------------------------------
+
 void OResultSet::construct()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::construct" );
@@ -143,7 +143,7 @@ void OResultSet::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),      PROPERTY_ID_FETCHDIRECTION,     0,&m_nFetchDirection,   ::getCppuType(static_cast<sal_Int32*>(0)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY), PROPERTY_ID_RESULTSETCONCURRENCY,PropertyAttribute::READONLY,&m_nResultSetConcurrency,                ::getCppuType(static_cast<sal_Int32*>(0)));
 }
-// -------------------------------------------------------------------------
+
 void OResultSet::disposing(void)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::disposing" );
@@ -175,14 +175,14 @@ void OResultSet::disposing(void)
 
     m_aSkipDeletedSet.clear();
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     //SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::queryInterface" );
     Any aRet = OPropertySetHelper::queryInterface(rType);
     return aRet.hasValue() ? aRet : OResultSet_BASE::queryInterface(rType);
 }
-// -------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OResultSet::getTypes(  ) throw(RuntimeException)
 {
     //SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getTypes" );
@@ -194,7 +194,7 @@ Sequence< Type > SAL_CALL OResultSet::getTypes(  ) throw(RuntimeException)
 
     return ::comphelper::concatSequences(aTypes.getTypes(),OResultSet_BASE::getTypes());
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL OResultSet::findColumn( const OUString& columnName ) throw(SQLException, RuntimeException)
 {
@@ -217,7 +217,7 @@ sal_Int32 SAL_CALL OResultSet::findColumn( const OUString& columnName ) throw(SQ
     assert(false);
     return 0; // Never reached
 }
-// -----------------------------------------------------------------------------
+
 const ORowSetValue& OResultSet::getValue(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getValue" );
@@ -230,7 +230,7 @@ const ORowSetValue& OResultSet::getValue(sal_Int32 columnIndex ) throw(::com::su
     m_bWasNull = (m_aSelectRow->get())[columnIndex]->getValue().isNull();
     return *(m_aSelectRow->get())[columnIndex];
 }
-// -----------------------------------------------------------------------------
+
 void OResultSet::checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException)
 {
     //SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::checkIndex" );
@@ -238,68 +238,68 @@ void OResultSet::checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc
             || columnIndex >= m_nColumnCount )
         ::dbtools::throwInvalidIndexException(*this);
 }
-// -------------------------------------------------------------------------
+
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getBinaryStream" );
     return NULL;
 }
-// -------------------------------------------------------------------------
+
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getCharacterStream" );
     return NULL;
 }
 
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getBoolean" );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getByte" );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 
 Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getBytes" );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 
 ::com::sun::star::util::Date SAL_CALL OResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getDate" );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 
 double SAL_CALL OResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getDouble" );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 
 float SAL_CALL OResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getFloat" );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL OResultSet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getInt" );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
 {
@@ -311,14 +311,14 @@ sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
 
     return m_aSkipDeletedSet.getMappedPosition((m_aRow->get())[0]->getValue());
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getLong" );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 
 Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLException, RuntimeException)
 {
@@ -331,66 +331,66 @@ Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLEx
         m_xMetaData = new OResultSetMetaData(m_xColumns,m_aSQLIterator.getTables().begin()->first,m_pTable);
     return m_xMetaData;
 }
-// -------------------------------------------------------------------------
+
 Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getArray" );
     return NULL;
 }
 
-// -------------------------------------------------------------------------
+
 
 Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getClob" );
     return NULL;
 }
-// -------------------------------------------------------------------------
+
 Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getBlob" );
     return NULL;
 }
-// -------------------------------------------------------------------------
+
 
 Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getRef" );
     return NULL;
 }
-// -------------------------------------------------------------------------
+
 
 Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getObject" );
     return getValue(columnIndex).makeAny();
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getShort" );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL OResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     //SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getString" );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 ::com::sun::star::util::Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getTime" );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 ::com::sun::star::util::DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getTimestamp" );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL OResultSet::isAfterLast(  ) throw(SQLException, RuntimeException)
 {
@@ -401,7 +401,7 @@ sal_Bool SAL_CALL OResultSet::isAfterLast(  ) throw(SQLException, RuntimeExcepti
 
     return m_nRowPos == sal_Int32(m_pFileSet->get().size());
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OResultSet::isFirst(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::isFirst" );
@@ -411,7 +411,7 @@ sal_Bool SAL_CALL OResultSet::isFirst(  ) throw(SQLException, RuntimeException)
 
     return m_nRowPos == 0;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OResultSet::isLast(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::isLast" );
@@ -421,7 +421,7 @@ sal_Bool SAL_CALL OResultSet::isLast(  ) throw(SQLException, RuntimeException)
 
     return m_nRowPos == sal_Int32(m_pFileSet->get().size() - 1);
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OResultSet::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::beforeFirst" );
@@ -432,7 +432,7 @@ void SAL_CALL OResultSet::beforeFirst(  ) throw(SQLException, RuntimeException)
     if(first())
         previous();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OResultSet::afterLast(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::afterLast" );
@@ -444,14 +444,14 @@ void SAL_CALL OResultSet::afterLast(  ) throw(SQLException, RuntimeException)
         next();
     m_bEOF = sal_True;
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OResultSet::close(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::close" );
     dispose();
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL OResultSet::first(  ) throw(SQLException, RuntimeException)
 {
@@ -460,7 +460,7 @@ sal_Bool SAL_CALL OResultSet::first(  ) throw(SQLException, RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     return m_pTable ? m_aSkipDeletedSet.skipDeleted(IResultSetHelper::FIRST,1,sal_True) : sal_False;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL OResultSet::last(  ) throw(SQLException, RuntimeException)
 {
@@ -470,7 +470,7 @@ sal_Bool SAL_CALL OResultSet::last(  ) throw(SQLException, RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     return m_pTable ? m_aSkipDeletedSet.skipDeleted(IResultSetHelper::LAST,1,sal_True) : sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::absolute" );
@@ -478,7 +478,7 @@ sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, Runt
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     return m_pTable ? m_aSkipDeletedSet.skipDeleted(IResultSetHelper::ABSOLUTE,row,sal_True) : sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::relative" );
@@ -486,7 +486,7 @@ sal_Bool SAL_CALL OResultSet::relative( sal_Int32 row ) throw(SQLException, Runt
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     return m_pTable ? m_aSkipDeletedSet.skipDeleted(IResultSetHelper::RELATIVE,row,sal_True) : sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OResultSet::previous(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::previous" );
@@ -494,7 +494,7 @@ sal_Bool SAL_CALL OResultSet::previous(  ) throw(SQLException, RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     return m_pTable ? m_aSkipDeletedSet.skipDeleted(IResultSetHelper::PRIOR,0,sal_True) : sal_False;
 }
-// -------------------------------------------------------------------------
+
 Reference< XInterface > SAL_CALL OResultSet::getStatement(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getStatement" );
@@ -504,7 +504,7 @@ Reference< XInterface > SAL_CALL OResultSet::getStatement(  ) throw(SQLException
 
     return m_xStatement;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL OResultSet::rowDeleted(  ) throw(SQLException, RuntimeException)
 {
@@ -515,7 +515,7 @@ sal_Bool SAL_CALL OResultSet::rowDeleted(  ) throw(SQLException, RuntimeExceptio
 
     return m_bRowDeleted;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OResultSet::rowInserted(  ) throw(SQLException, RuntimeException)
 {   ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -523,7 +523,7 @@ sal_Bool SAL_CALL OResultSet::rowInserted(  ) throw(SQLException, RuntimeExcepti
 
     return m_bRowInserted;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OResultSet::rowUpdated(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::rowInserted" );
@@ -533,7 +533,7 @@ sal_Bool SAL_CALL OResultSet::rowUpdated(  ) throw(SQLException, RuntimeExceptio
 
     return m_bRowUpdated;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL OResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
 {
@@ -544,7 +544,7 @@ sal_Bool SAL_CALL OResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeExcep
 
     return m_nRowPos == -1;
 }
-// -------------------------------------------------------------------------
+
 // sal_Bool OResultSet::evaluate()
 // {
 //     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::evaluate" );
@@ -576,7 +576,7 @@ sal_Bool SAL_CALL OResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeExcep
 
 //     return bRet;
 // }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL OResultSet::next(  ) throw(SQLException, RuntimeException)
 {
@@ -586,7 +586,7 @@ sal_Bool SAL_CALL OResultSet::next(  ) throw(SQLException, RuntimeException)
 
     return m_pTable ? m_aSkipDeletedSet.skipDeleted(IResultSetHelper::NEXT,1,sal_True) : sal_False;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL OResultSet::wasNull(  ) throw(SQLException, RuntimeException)
 {
@@ -596,24 +596,24 @@ sal_Bool SAL_CALL OResultSet::wasNull(  ) throw(SQLException, RuntimeException)
 
     return m_bWasNull;
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OResultSet::cancel(  ) throw(RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::cancel" );
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OResultSet::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::clearWarnings" );
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OResultSet::getWarnings(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getWarnings" );
     return Any();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::insertRow" );
@@ -638,7 +638,7 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
         m_aSkipDeletedSet.insertNewPosition((m_aRow->get())[0]->getValue());
     }
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::updateRow" );
@@ -653,7 +653,7 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
 
     clearInsertRow();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OResultSet::deleteRow() throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::deleteRow" );
@@ -677,7 +677,7 @@ void SAL_CALL OResultSet::deleteRow() throw(SQLException, RuntimeException)
         m_aSkipDeletedSet.deletePosition(nPos);
     }
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OResultSet::cancelRowUpdates(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::cancelRowUpdates" );
@@ -700,7 +700,7 @@ void SAL_CALL OResultSet::cancelRowUpdates(  ) throw(SQLException, RuntimeExcept
         }
     }
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
 {
@@ -720,13 +720,13 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeExcepti
         (*aIter)->setNull();
     }
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OResultSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::moveToCurrentRow" );
 }
-// -------------------------------------------------------------------------
+
 void OResultSet::updateValue(sal_Int32 columnIndex ,const ORowSetValue& x) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::updateValue" );
@@ -739,7 +739,7 @@ void OResultSet::updateValue(sal_Int32 columnIndex ,const ORowSetValue& x) throw
     (m_aInsertRow->get())[columnIndex]->setBound(true);
     *(m_aInsertRow->get())[columnIndex] = x;
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
@@ -747,84 +747,84 @@ void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException
     ORowSetValue aEmpty;
     updateValue(columnIndex,aEmpty);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::updateBoolean" );
     updateValue(columnIndex, static_cast<bool>(x));
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::updateByte" );
     updateValue(columnIndex,x);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OResultSet::updateShort( sal_Int32 columnIndex, sal_Int16 x ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::updateShort" );
     updateValue(columnIndex,x);
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::updateInt" );
     updateValue(columnIndex,x);
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OResultSet::updateLong( sal_Int32 /*columnIndex*/, sal_Int64 /*x*/ ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::updateLong" );
     ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::updateLong", *this );
 }
-// -----------------------------------------------------------------------
+
 void SAL_CALL OResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::updateFloat" );
     updateValue(columnIndex,x);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::updateDouble" );
     updateValue(columnIndex,x);
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const OUString& x ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::updateString" );
     updateValue(columnIndex,x);
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sal_Int8 >& x ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::updateBytes" );
     updateValue(columnIndex,x);
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const ::com::sun::star::util::Date& x ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::updateDate" );
     updateValue(columnIndex,x);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OResultSet::updateTime( sal_Int32 columnIndex, const ::com::sun::star::util::Time& x ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::updateTime" );
     updateValue(columnIndex,x);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OResultSet::updateTimestamp( sal_Int32 columnIndex, const ::com::sun::star::util::DateTime& x ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::updateTimestamp" );
     updateValue(columnIndex,x);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
@@ -839,27 +839,27 @@ void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Refer
     x->readBytes(aSeq,length);
     updateValue(columnIndex,aSeq);
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::updateCharacterStream" );
     updateBinaryStream(columnIndex,x,length);
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::refreshRow" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OResultSet::updateObject( sal_Int32 columnIndex, const Any& x ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::updateObject" );
     if (!::dbtools::implUpdateObject(this, columnIndex, x))
         throw SQLException();
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 /*scale*/ ) throw(SQLException, RuntimeException)
 {
@@ -867,7 +867,7 @@ void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any&
     if (!::dbtools::implUpdateObject(this, columnIndex, x))
         throw SQLException();
 }
-// -------------------------------------------------------------------------
+
 IPropertyArrayHelper* OResultSet::createArrayHelper( ) const
 {
     //SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::createArrayHelper" );
@@ -875,14 +875,14 @@ IPropertyArrayHelper* OResultSet::createArrayHelper( ) const
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
-// -------------------------------------------------------------------------
+
 IPropertyArrayHelper & OResultSet::getInfoHelper()
 {
     //SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getInfoHelper" );
     return *const_cast<OResultSet*>(this)->getArrayHelper();
 }
 
-//------------------------------------------------------------------
+
 sal_Bool OResultSet::ExecuteRow(IResultSetHelper::Movement eFirstCursorPosition,
                                sal_Int32 nFirstOffset,
                                sal_Bool bEvaluate,
@@ -1020,7 +1020,7 @@ again:
     return sal_True;
 }
 
-//-------------------------------------------------------------------
+
 sal_Bool OResultSet::Move(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Bool bRetrieveData)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::Move" );
@@ -1229,7 +1229,7 @@ Error:
     }
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 void OResultSet::sortRows()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::sortRows" );
@@ -1336,7 +1336,7 @@ void OResultSet::sortRows()
 }
 
 
-// -------------------------------------------------------------------------
+
 sal_Bool OResultSet::OpenImpl()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::OpenImpl" );
@@ -1598,7 +1598,7 @@ sal_Bool OResultSet::OpenImpl()
 
     return sal_True;
 }
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OResultSet::getUnoTunnelImplementationId()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getUnoTunnelImplementationId" );
@@ -1616,7 +1616,7 @@ Sequence< sal_Int8 > OResultSet::getUnoTunnelImplementationId()
 }
 
 // com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
 sal_Int64 OResultSet::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getSomething" );
@@ -1624,7 +1624,7 @@ sal_Int64 OResultSet::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
                 ? reinterpret_cast< sal_Int64 >( this )
                 : 0;
 }
-// -----------------------------------------------------------------------------
+
 void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
                                    const OValueRefRow& _rSelectRow,
                                    const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,
@@ -1743,23 +1743,23 @@ void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OResultSet::acquire() throw()
 {
     OResultSet_BASE::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OResultSet::release() throw()
 {
     OResultSet_BASE::release();
 }
-// -----------------------------------------------------------------------------
+
 Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInfo(  ) throw(RuntimeException)
 {
     //SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getPropertySetInfo" );
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
-// -----------------------------------------------------------------------------
+
 void OResultSet::doTableSpecials(const OSQLTable& _xTable)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::doTableSpecials" );
@@ -1771,7 +1771,7 @@ void OResultSet::doTableSpecials(const OSQLTable& _xTable)
             m_pTable->acquire();
     }
 }
-// -----------------------------------------------------------------------------
+
 void OResultSet::clearInsertRow()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::clearInsertRow" );
@@ -1790,7 +1790,7 @@ void OResultSet::clearInsertRow()
         rValue->setNull();
     }
 }
-// -----------------------------------------------------------------------------
+
 void OResultSet::initializeRow(OValueRefRow& _rRow,sal_Int32 _nColumnCount)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::initializeRow" );
@@ -1801,37 +1801,37 @@ void OResultSet::initializeRow(OValueRefRow& _rRow,sal_Int32 _nColumnCount)
         ::std::for_each(_rRow->get().begin()+1,_rRow->get().end(),TSetRefBound(false));
     }
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OResultSet::fillIndexValues(const Reference< XColumnsSupplier> &/*_xIndex*/)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::fillIndexValues" );
     return sal_False;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, sal_Bool _bRetrieveData)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::move" );
     return Move(_eCursorPosition,_nOffset,_bRetrieveData);
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 OResultSet::getDriverPos() const
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::getDriverPos" );
     return (m_aRow->get())[0]->getValue();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OResultSet::deletedVisible() const
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::deletedVisible" );
     return m_bShowDeleted;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OResultSet::isRowDeleted() const
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::isRowDeleted" );
     return m_aRow->isDeleted();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OResultSet::disposing( const EventObject& Source ) throw (RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::disposing" );
@@ -1842,6 +1842,6 @@ void SAL_CALL OResultSet::disposing( const EventObject& Source ) throw (RuntimeE
         m_pTable = NULL;
     }
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,7 +33,7 @@ using namespace ::com::sun::star;
 
 // TODO: do not create OLE objects that represent OOo documents
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL OleEmbeddedObjectFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
@@ -42,20 +42,20 @@ uno::Sequence< OUString > SAL_CALL OleEmbeddedObjectFactory::impl_staticGetSuppo
     return aRet;
 }
 
-//-------------------------------------------------------------------------
+
 OUString SAL_CALL OleEmbeddedObjectFactory::impl_staticGetImplementationName()
 {
     return OUString("com.sun.star.comp.embed.OLEEmbeddedObjectFactory");
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
     return uno::Reference< uno::XInterface >( *new OleEmbeddedObjectFactory( xServiceManager ) );
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceInitFromEntry(
                                                                     const uno::Reference< embed::XStorage >& xStorage,
                                                                     const OUString& sEntName,
@@ -128,7 +128,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
     return xResult;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceInitFromMediaDescriptor(
         const uno::Reference< embed::XStorage >& xStorage,
         const OUString& sEntName,
@@ -169,7 +169,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
     return xResult;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceInitNew(
                                             const uno::Sequence< sal_Int8 >& aClassID,
                                             const OUString& aClassName,
@@ -211,7 +211,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
     return xResult;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceLink(
                                             const uno::Reference< embed::XStorage >& xStorage,
                                             const OUString& sEntName,
@@ -254,7 +254,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
     return xResult;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceUserInit(
             const uno::Sequence< sal_Int8 >& aClassID,
             const OUString& aClassName,
@@ -301,7 +301,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
     return xResult;
 }
 
-//-------------------------------------------------------------------------
+
 OUString SAL_CALL OleEmbeddedObjectFactory::getImplementationName()
     throw ( uno::RuntimeException )
 {
@@ -314,7 +314,7 @@ sal_Bool SAL_CALL OleEmbeddedObjectFactory::supportsService( const OUString& Ser
     return cppu::supportsService(this, ServiceName);
 }
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL OleEmbeddedObjectFactory::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {

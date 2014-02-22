@@ -306,13 +306,13 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     SfxViewShell::Notify( rBC, rHint );
 }
 
-//------------------------------------------------------------------
+
 
 SvxNumberInfoItem* ScTabViewShell::MakeNumberInfoItem( ScDocument* pDoc, ScViewData* pViewData )
 {
-    //------------------------------
+
     // NumberInfo-Item konstruieren:
-    //------------------------------
+
     SvxNumberValueType  eValType        = SVX_VALUE_TYPE_UNDEFINED;
     double              nCellValue      = 0;
     OUString aCellString;
@@ -379,7 +379,7 @@ SvxNumberInfoItem* ScTabViewShell::MakeNumberInfoItem( ScDocument* pDoc, ScViewD
         pDoc->GetFormatTable(), static_cast<const sal_uInt16>(SID_ATTR_NUMBERFORMAT_INFO));
 }
 
-//------------------------------------------------------------------
+
 
 void ScTabViewShell::UpdateNumberFormatter(
                         const SvxNumberInfoItem& rInfoItem )

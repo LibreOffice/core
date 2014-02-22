@@ -243,7 +243,7 @@ namespace cppcanvas
     namespace internal
     {
         // state stack manipulators
-        // ------------------------
+
         void VectorOfOutDevStates::clearStateStack()
         {
             m_aStates.clear();
@@ -527,7 +527,7 @@ namespace cppcanvas
 
 
                     // setup start/end color values
-                    // ----------------------------
+
 
                     // scale color coefficients with gradient intensities
                     const sal_uInt16 nStartIntensity( rGradient.GetStartIntensity() );
@@ -1143,7 +1143,7 @@ namespace cppcanvas
                 // sweep line implementation is done.
 
                 // general case: convert to polygon and clip
-                // -----------------------------------------
+
 
                 // convert rect to polygon beforehand, must revert
                 // to general polygon clipping here.
@@ -1239,13 +1239,13 @@ namespace cppcanvas
 
                 switch( pCurrAct->GetType() )
                 {
-                    // ------------------------------------------------------------
+
 
                     // In the first part of this monster-switch, we
                     // handle all state-changing meta actions. These
                     // are all handled locally.
 
-                    // ------------------------------------------------------------
+
 
                     case META_PUSH_ACTION:
                     {
@@ -1534,14 +1534,14 @@ namespace cppcanvas
                     }
                     break;
 
-                    // ------------------------------------------------------------
+
 
                     // In the second part of this monster-switch, we
                     // handle all recursing meta actions. These are the
                     // ones generating a metafile by themselves, which is
                     // then processed by recursively calling this method.
 
-                    // ------------------------------------------------------------
+
 
                     case META_GRADIENT_ACTION:
                     {
@@ -1798,14 +1798,14 @@ namespace cppcanvas
                     }
                     break;
 
-                    // ------------------------------------------------------------
+
 
                     // In the third part of this monster-switch, we
                     // handle all 'acting' meta actions. These are all
                     // processed by constructing function objects for
                     // them, which will later ease caching.
 
-                    // ------------------------------------------------------------
+
 
                     case META_POINT_ACTION:
                     {

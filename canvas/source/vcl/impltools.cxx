@@ -169,7 +169,7 @@ namespace vclcanvas
 
 
         // VCL-Canvas related
-        //---------------------------------------------------------------------
+
 
         ::Point mapRealPoint2D( const geometry::RealPoint2D&    rPoint,
                                 const rendering::ViewState&     rViewState,

@@ -55,26 +55,26 @@ Convert::Convert()
 
 namespace
 {
-    // ------------------------------------------------------------------------
+
     OUString lcl_toXSD_OUString( const Any& rAny )
     { OUString sStr; rAny >>= sStr; return sStr; }
 
-    // ------------------------------------------------------------------------
+
     Any lcl_toAny_OUString( const OUString& rStr )
     { Any aAny; aAny <<= rStr; return aAny; }
 
-    // ------------------------------------------------------------------------
+
     OUString lcl_toXSD_bool( const Any& rAny )
     { bool b = false; rAny >>= b; return b ? OUString("true") : OUString("false"); }
 
-    // ------------------------------------------------------------------------
+
     Any lcl_toAny_bool( const OUString& rStr )
     {
         bool b = ( rStr == "true"  ||  rStr == "1" );
         return makeAny( b );
     }
 
-    // ------------------------------------------------------------------------
+
     OUString lcl_toXSD_double( const Any& rAny )
     {
         double f = 0.0;
@@ -87,7 +87,7 @@ namespace
             : OUString();
     }
 
-    // ------------------------------------------------------------------------
+
     Any lcl_toAny_double( const OUString& rString )
     {
         rtl_math_ConversionStatus eStatus;
@@ -96,7 +96,7 @@ namespace
         return ( eStatus == rtl_math_ConversionStatus_Ok ) ? makeAny( f ) : Any();
     }
 
-    // ------------------------------------------------------------------------
+
     void lcl_appendInt32ToBuffer( const sal_Int32 _nValue, OUStringBuffer& _rBuffer, sal_Int16 _nMinDigits )
     {
         if ( ( _nMinDigits >= 4 ) && ( _nValue < 1000 ) )
@@ -108,7 +108,7 @@ namespace
         _rBuffer.append( _nValue );
     }
 
-    // ------------------------------------------------------------------------
+
     OUString lcl_toXSD_UNODate_typed( const UNODate& rDate )
     {
 
@@ -122,7 +122,7 @@ namespace
         return sInfo.makeStringAndClear();
     }
 
-    // ------------------------------------------------------------------------
+
     OUString lcl_toXSD_UNODate( const Any& rAny )
     {
         UNODate aDate;
@@ -130,7 +130,7 @@ namespace
         return lcl_toXSD_UNODate_typed( aDate );
     }
 
-    // ------------------------------------------------------------------------
+
     UNODate lcl_toUNODate( const OUString& rString )
     {
         UNODate aDate( 1, 1, 1900 );
@@ -154,13 +154,13 @@ namespace
         return aDate;
     }
 
-    // ------------------------------------------------------------------------
+
     Any lcl_toAny_UNODate( const OUString& rString )
     {
         return makeAny( lcl_toUNODate( rString ) );
     }
 
-    // ------------------------------------------------------------------------
+
     OUString lcl_toXSD_UNOTime_typed( const UNOTime& rTime )
     {
 
@@ -184,7 +184,7 @@ namespace
         return sInfo.makeStringAndClear();
     }
 
-    // ------------------------------------------------------------------------
+
     OUString lcl_toXSD_UNOTime( const Any& rAny )
     {
         UNOTime aTime;
@@ -192,7 +192,7 @@ namespace
         return lcl_toXSD_UNOTime_typed( aTime );
     }
 
-    // ------------------------------------------------------------------------
+
     UNOTime lcl_toUNOTime( const OUString& rString )
     {
         UNOTime aTime;
@@ -224,13 +224,13 @@ namespace
         return aTime;
     }
 
-    // ------------------------------------------------------------------------
+
     Any lcl_toAny_UNOTime( const OUString& rString )
     {
         return makeAny( lcl_toUNOTime( rString ) );
     }
 
-    // ------------------------------------------------------------------------
+
     OUString lcl_toXSD_UNODateTime( const Any& rAny )
     {
         UNODateTime aDateTime;
@@ -247,7 +247,7 @@ namespace
         return sRet;
     }
 
-    // ------------------------------------------------------------------------
+
     Any lcl_toAny_UNODateTime( const OUString& rString )
     {
         // separate the date from the time part
@@ -323,7 +323,7 @@ Convert::Any_t Convert::toAny( const OUString& rValue,
     return aIter != maMap.end() ? aIter->second.second( rValue ) : Any_t();
 }
 
-//------------------------------------------------------------------------
+
 OUString Convert::collapseWhitespace( const OUString& _rString )
 {
     sal_Int32 nLength = _rString.getLength();

@@ -687,7 +687,7 @@ void PresenterSlideShowView::DeactivatePresenterView (void)
     }
 }
 
-//-----------------------------------------------------------------------------
+
 
 void PresenterSlideShowView::PaintOuterWindow (const awt::Rectangle& rRepaintBox)
 {

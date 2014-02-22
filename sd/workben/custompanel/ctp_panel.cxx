@@ -103,7 +103,7 @@ namespace sd { namespace colortoolpanel
     //==================================================================================================================
     //= class SingleColorPanel
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     SingleColorPanel::SingleColorPanel( const Reference< XComponentContext >& i_rContext,
             const Reference< XConfigurationController >& i_rConfigController, const Reference< XResourceId >& i_rResourceId )
         :SingleColorPanel_Base( m_aMutex )
@@ -143,12 +143,12 @@ namespace sd { namespace colortoolpanel
         osl_atomic_decrement( &m_refCount );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     SingleColorPanel::~SingleColorPanel()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XWindow > SAL_CALL SingleColorPanel::getWindow(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -157,7 +157,7 @@ namespace sd { namespace colortoolpanel
         return m_xWindow;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XAccessible > SAL_CALL SingleColorPanel::createAccessible( const Reference< XAccessible >& i_rParentAccessible ) throw (RuntimeException)
     {
         (void)i_rParentAccessible;
@@ -166,7 +166,7 @@ namespace sd { namespace colortoolpanel
         // extension only, you'll want to do this correctly ....
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XResourceId > SAL_CALL SingleColorPanel::getResourceId(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -175,7 +175,7 @@ namespace sd { namespace colortoolpanel
         return m_xResourceId;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     ::sal_Bool SAL_CALL SingleColorPanel::isAnchorOnly(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -184,7 +184,7 @@ namespace sd { namespace colortoolpanel
         return sal_False;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SingleColorPanel::windowPaint( const PaintEvent& i_rEvent ) throw (RuntimeException)
     {
         try
@@ -204,13 +204,13 @@ namespace sd { namespace colortoolpanel
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SingleColorPanel::disposing( const EventObject& i_rSource ) throw (RuntimeException)
     {
         (void)i_rSource;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SingleColorPanel::disposing()
     {
         ::osl::MutexGuard aGuard( m_aMutex );

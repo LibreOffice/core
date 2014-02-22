@@ -478,7 +478,7 @@ void SAL_CALL PresenterPaneBorderManager::disposing (const lang::EventObject& rE
         }
 }
 
-//-----------------------------------------------------------------------------
+
 
 void PresenterPaneBorderManager::CaptureMouse (const Reference<awt::XWindow>& rxWindow)
 {

@@ -189,7 +189,7 @@ void FilterCache::load(EFillState eRequired,
 
     // Otherwise load the missing items.
 
-    // ------------------------------------------
+
     // a) load some const values from configration.
     //    These values are needed there for loading
     //    config items ...
@@ -216,7 +216,7 @@ void FilterCache::load(EFillState eRequired,
         /* LateInitListener* pLateInit = */ new LateInitListener(comphelper::getProcessComponentContext());
     }
 
-    // ------------------------------------------
+
     // b) If the required fill state was not reached
     //    but std values was already loaded ...
     //    we must load some further missing items.
@@ -452,7 +452,7 @@ void FilterCache::setItem(      EItemType        eType ,
     impl_addItem2FlushList(eType, sItem);
 }
 
-//-----------------------------------------------
+
 void FilterCache::refreshItem(      EItemType        eType,
                               const OUString& sItem)
     throw(css::uno::Exception)
@@ -1346,7 +1346,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
     // Attention: Detect services are part of the standard set!
     // So there is no need to handle it separately.
 
-    // ------------------------------------------
+
     // a) The standard set of config value is needed.
     if (
         ((eRequiredState & E_CONTAINS_STANDARD) == E_CONTAINS_STANDARD) &&
@@ -1363,7 +1363,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         }
     }
 
-    // ------------------------------------------
+
     // b) We need all type information ...
     if (
         ((eRequiredState & E_CONTAINS_TYPES) == E_CONTAINS_TYPES) &&
@@ -1380,7 +1380,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         }
     }
 
-    // ------------------------------------------
+
     // c) We need all filter information ...
     if (
         ((eRequiredState & E_CONTAINS_FILTERS) == E_CONTAINS_FILTERS) &&
@@ -1397,7 +1397,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         }
     }
 
-    // ------------------------------------------
+
     // c) We need all frame loader information ...
     if (
         ((eRequiredState & E_CONTAINS_FRAMELOADERS) == E_CONTAINS_FRAMELOADERS) &&
@@ -1414,7 +1414,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         }
     }
 
-    // ------------------------------------------
+
     // d) We need all content handler information ...
     if (
         ((eRequiredState & E_CONTAINS_CONTENTHANDLERS) == E_CONTAINS_CONTENTHANDLERS) &&
@@ -1680,7 +1680,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
     aItem[PROPNAME_NAME] = css::uno::makeAny(sItem);
     switch(eType)
     {
-        //---------------------------------------
+
         case E_TYPE :
         {
             // read standard properties of a type
@@ -1709,7 +1709,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
         }
         break;
 
-        //---------------------------------------
+
         case E_FILTER :
         {
             // read standard properties of a filter
@@ -1749,7 +1749,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
         }
         break;
 
-        //---------------------------------------
+
         case E_FRAMELOADER :
         case E_CONTENTHANDLER :
         {
@@ -1850,7 +1850,7 @@ void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XName
     CacheItem::const_iterator pIt;
     switch(eType)
     {
-        //---------------------------------------
+
         case E_TYPE :
         {
             pIt = aItem.find(PROPNAME_PREFERREDFILTER);
@@ -1881,7 +1881,7 @@ void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XName
         }
         break;
 
-        //---------------------------------------
+
         case E_FILTER :
         {
             pIt = aItem.find(PROPNAME_TYPE);
@@ -1930,7 +1930,7 @@ void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XName
         }
         break;
 
-        //---------------------------------------
+
         case E_FRAMELOADER :
         case E_CONTENTHANDLER :
         {

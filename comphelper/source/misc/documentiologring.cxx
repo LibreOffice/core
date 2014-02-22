@@ -31,7 +31,7 @@ using namespace ::com::sun::star;
 namespace comphelper
 {
 
-// ----------------------------------------------------------
+
 OSimpleLogRing::OSimpleLogRing()
 : m_aMessages( SIMPLELOGRING_SIZE )
 , m_bInitialized( false )
@@ -40,12 +40,12 @@ OSimpleLogRing::OSimpleLogRing()
 {
 }
 
-// ----------------------------------------------------------
+
 OSimpleLogRing::~OSimpleLogRing()
 {
 }
 
-// ----------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getSupportedServiceNames_static()
 {
     uno::Sequence< OUString > aResult( 1 );
@@ -53,32 +53,32 @@ uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getSupportedServiceNames_stat
     return aResult;
 }
 
-// ----------------------------------------------------------
+
 OUString SAL_CALL OSimpleLogRing::getImplementationName_static()
 {
     return OUString( "com.sun.star.comp.logging.SimpleLogRing" );
 }
 
-// ----------------------------------------------------------
+
 OUString SAL_CALL OSimpleLogRing::getSingletonName_static()
 {
     return OUString( "com.sun.star.logging.DocumentIOLogRing" );
 }
 
-// ----------------------------------------------------------
+
 OUString SAL_CALL OSimpleLogRing::getServiceName_static()
 {
     return OUString( "com.sun.star.logging.SimpleLogRing" );
 }
 
-// ----------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL OSimpleLogRing::Create( SAL_UNUSED_PARAMETER const uno::Reference< uno::XComponentContext >& )
 {
     return static_cast< cppu::OWeakObject* >( new OSimpleLogRing );
 }
 
 // XSimpleLogRing
-// ----------------------------------------------------------
+
 void SAL_CALL OSimpleLogRing::logString( const OUString& aMessage ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -94,7 +94,7 @@ void SAL_CALL OSimpleLogRing::logString( const OUString& aMessage ) throw (uno::
     m_bInitialized = true;
 }
 
-// ----------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getCollectedLog() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -113,7 +113,7 @@ uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getCollectedLog() throw (uno:
 }
 
 // XInitialization
-// ----------------------------------------------------------
+
 void SAL_CALL OSimpleLogRing::initialize( const uno::Sequence< uno::Any >& aArguments ) throw (uno::Exception, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );

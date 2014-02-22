@@ -233,7 +233,7 @@ static void save_Separators(
     aItem.PutProperties(aNames, aValues);
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
                                     SvStream* pInStream, ScImportAsciiCall eCall ) :
@@ -463,7 +463,7 @@ ScImportAsciiDlg::~ScImportAsciiDlg()
 }
 
 
-// ----------------------------------------------------------------------------
+
 
 bool ScImportAsciiDlg::GetLine( sal_uLong nLine, OUString &rText )
 {
@@ -630,7 +630,7 @@ void ScImportAsciiDlg::UpdateVertical()
 }
 
 
-// ----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScImportAsciiDlg, RbSepFixHdl, RadioButton*, pButton )
 {

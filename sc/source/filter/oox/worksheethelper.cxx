@@ -132,7 +132,7 @@ bool ColumnModel::isMergeable( const ColumnModel& rModel ) const
         (mbCollapsed            == rModel.mbCollapsed);
 }
 
-// ----------------------------------------------------------------------------
+
 
 RowModel::RowModel() :
     mnRow( -1 ),
@@ -167,7 +167,7 @@ bool RowModel::isMergeable( const RowModel& rModel ) const
         (mbCollapsed    == rModel.mbCollapsed);
 }
 
-// ----------------------------------------------------------------------------
+
 
 PageBreakModel::PageBreakModel() :
     mnColRow( 0 ),
@@ -175,13 +175,13 @@ PageBreakModel::PageBreakModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 HyperlinkModel::HyperlinkModel()
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ValidationModel::ValidationModel() :
     mnType( XML_none ),
@@ -430,7 +430,7 @@ private:
     bool                mbHasDefWidth;      /// True = default column width is set from defaultColWidth attribute.
 };
 
-// ----------------------------------------------------------------------------
+
 
 WorksheetGlobals::WorksheetGlobals( const WorkbookHelper& rHelper, const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
     WorkbookHelper( rHelper ),

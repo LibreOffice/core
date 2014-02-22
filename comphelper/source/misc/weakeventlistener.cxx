@@ -32,7 +32,7 @@ namespace comphelper
     //=====================================================================
     //= OWeakListenerAdapter
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OWeakListenerAdapterBase::~OWeakListenerAdapterBase()
     {
     }
@@ -40,7 +40,7 @@ namespace comphelper
     //=====================================================================
     //= OWeakEventListenerAdapter
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OWeakEventListenerAdapter::OWeakEventListenerAdapter( Reference< XWeak > _rxListener, Reference< XComponent > _rxBroadcaster )
         :OWeakEventListenerAdapter_Base( _rxListener, _rxBroadcaster )
     {
@@ -63,7 +63,7 @@ namespace comphelper
         OSL_ENSURE( getListener().is(), "OWeakEventListenerAdapter::OWeakEventListenerAdapter: invalid listener (does not support the XEventListener interface)!" );
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OWeakEventListenerAdapter::disposing( )
     {
         Reference< XComponent > xBroadcaster( getBroadcaster( ), UNO_QUERY );

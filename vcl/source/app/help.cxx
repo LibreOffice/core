@@ -57,9 +57,9 @@ Help::~Help()
 {
 }
 
-// -----------------------------------------------------------------------
 
-// -----------------------------------------------------------------------
+
+
 
 bool Help::Start( const OUString&, const Window* )
 {
@@ -71,56 +71,56 @@ bool Help::SearchKeyword( const OUString& )
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString Help::GetHelpText( const OUString&, const Window* )
 {
     return OUString();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Help::EnableContextHelp()
 {
     ImplGetSVData()->maHelpData.mbContextHelp = true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Help::DisableContextHelp()
 {
     ImplGetSVData()->maHelpData.mbContextHelp = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Help::IsContextHelpEnabled()
 {
     return ImplGetSVData()->maHelpData.mbContextHelp;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Help::EnableExtHelp()
 {
     ImplGetSVData()->maHelpData.mbExtHelp = true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Help::DisableExtHelp()
 {
     ImplGetSVData()->maHelpData.mbExtHelp = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Help::IsExtHelpEnabled()
 {
     return ImplGetSVData()->maHelpData.mbExtHelp;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Help::StartExtHelp()
 {
@@ -139,7 +139,7 @@ bool Help::StartExtHelp()
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Help::EndExtHelp()
 {
@@ -157,28 +157,28 @@ bool Help::EndExtHelp()
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Help::EnableBalloonHelp()
 {
     ImplGetSVData()->maHelpData.mbBalloonHelp = true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Help::DisableBalloonHelp()
 {
     ImplGetSVData()->maHelpData.mbBalloonHelp = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Help::IsBalloonHelpEnabled()
 {
     return ImplGetSVData()->maHelpData.mbBalloonHelp;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Help::ShowBalloon( Window* pParent,
                         const Point& rScreenPos,
@@ -190,7 +190,7 @@ bool Help::ShowBalloon( Window* pParent,
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Help::ShowBalloon( Window* pParent,
                         const Point& rScreenPos, const Rectangle& rRect,
@@ -202,28 +202,28 @@ bool Help::ShowBalloon( Window* pParent,
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Help::EnableQuickHelp()
 {
     ImplGetSVData()->maHelpData.mbQuickHelp = true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Help::DisableQuickHelp()
 {
     ImplGetSVData()->maHelpData.mbQuickHelp = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Help::IsQuickHelpEnabled()
 {
     return ImplGetSVData()->maHelpData.mbQuickHelp;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Help::ShowQuickHelp( Window* pParent,
                           const Rectangle& rScreenRect,
@@ -237,7 +237,7 @@ bool Help::ShowQuickHelp( Window* pParent,
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Help::HideBalloonAndQuickHelp()
 {
@@ -246,7 +246,7 @@ void Help::HideBalloonAndQuickHelp()
     ImplDestroyHelpWindow( bIsVisible );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uIntPtr Help::ShowTip( Window* pParent, const Rectangle& rScreenRect,
                      const OUString& rText, sal_uInt16 nStyle )
@@ -261,7 +261,7 @@ sal_uIntPtr Help::ShowTip( Window* pParent, const Rectangle& rScreenRect,
     return nId;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Help::UpdateTip( sal_uIntPtr nId, Window* pParent, const Rectangle& rScreenRect, const OUString& rText )
 {
@@ -277,7 +277,7 @@ void Help::UpdateTip( sal_uIntPtr nId, Window* pParent, const Rectangle& rScreen
     pHelpWin->Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Help::HideTip( sal_uLong nId )
 {
@@ -342,7 +342,7 @@ HelpTextWindow::HelpTextWindow( Window* pParent, const OUString& rText, sal_uInt
     maHideTimer.SetTimeout( rHelpSettings.GetTipTimeout() );
 }
 
-// -----------------------------------------------------------------------
+
 
 HelpTextWindow::~HelpTextWindow()
 {
@@ -353,7 +353,7 @@ HelpTextWindow::~HelpTextWindow()
         ImplGetSVData()->maHelpData.mpHelpWin = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 void HelpTextWindow::SetHelpText( const OUString& rHelpText )
 {
@@ -396,7 +396,7 @@ void HelpTextWindow::SetHelpText( const OUString& rHelpText )
     SetOutputSizePixel( aSize );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HelpTextWindow::ImplShow()
 {
@@ -406,7 +406,7 @@ void HelpTextWindow::ImplShow()
     Update();
 }
 
-// -----------------------------------------------------------------------
+
 
 void HelpTextWindow::Paint( const Rectangle& )
 {
@@ -455,7 +455,7 @@ void HelpTextWindow::Paint( const Rectangle& )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void HelpTextWindow::ShowHelp( sal_uInt16 nDelayMode )
 {
@@ -482,7 +482,7 @@ void HelpTextWindow::ShowHelp( sal_uInt16 nDelayMode )
     maShowTimer.Start();
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( HelpTextWindow, TimerHdl, Timer*, pTimer)
 {
@@ -506,7 +506,7 @@ IMPL_LINK( HelpTextWindow, TimerHdl, Timer*, pTimer)
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 Size HelpTextWindow::CalcOutSize() const
 {
@@ -516,7 +516,7 @@ Size HelpTextWindow::CalcOutSize() const
     return aSz;
 }
 
-// -----------------------------------------------------------------------
+
 
 void HelpTextWindow::RequestHelp( const HelpEvent& /*rHEvt*/ )
 {
@@ -524,14 +524,14 @@ void HelpTextWindow::RequestHelp( const HelpEvent& /*rHEvt*/ )
     // ShowQuickHelp/ShowBalloonHelp in the HelpTextWindow.
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString HelpTextWindow::GetText() const
 {
     return maHelpText;
 }
 
-// -----------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > HelpTextWindow::CreateAccessible()
 {
@@ -618,7 +618,7 @@ void ImplShowHelpWindow( Window* pParent, sal_uInt16 nHelpWinStyle, sal_uInt16 n
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDestroyHelpWindow( bool bUpdateHideTime )
 {
@@ -640,7 +640,7 @@ void ImplDestroyHelpWindow( bool bUpdateHideTime )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplSetHelpWindowPos( Window* pHelpWin, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,
                            const Point& rPos, const Rectangle* pHelpArea )

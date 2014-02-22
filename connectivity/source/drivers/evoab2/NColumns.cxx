@@ -34,7 +34,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace connectivity::evoab;
 
-// -------------------------------------------------------------------------
+
 sdbcx::ObjectType OEvoabColumns::createObject(const OUString& _rName)
 {
     const Any aCatalog;
@@ -80,7 +80,7 @@ sdbcx::ObjectType OEvoabColumns::createObject(const OUString& _rName)
 
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 void OEvoabColumns::impl_refresh() throw(RuntimeException)
 {
     m_pTable->refreshColumns();

@@ -77,18 +77,18 @@ sdbcx::ObjectType ODbaseIndexes::createObject(const OUString& _rName)
     }
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 void ODbaseIndexes::impl_refresh(  ) throw(RuntimeException)
 {
     if(m_pTable)
         m_pTable->refreshIndexes();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > ODbaseIndexes::createDescriptor()
 {
     return new ODbaseIndex(m_pTable);
 }
-// -------------------------------------------------------------------------
+
 // XAppend
 sdbcx::ObjectType ODbaseIndexes::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
@@ -102,7 +102,7 @@ sdbcx::ObjectType ODbaseIndexes::appendObject( const OUString& _rForName, const 
 
     return createObject( _rForName );
 }
-// -------------------------------------------------------------------------
+
 // XDrop
 void ODbaseIndexes::dropObject(sal_Int32 _nPos,const OUString /*_sElementName*/)
 {
@@ -115,7 +115,7 @@ void ODbaseIndexes::dropObject(sal_Int32 _nPos,const OUString /*_sElementName*/)
     }
 
 }
-// -------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

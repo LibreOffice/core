@@ -40,7 +40,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 
-// -----------------------------------------------------------------------------
+
 ::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM2(const ::rtl::Reference< jvmaccess::VirtualMachine >& _rVM = ::rtl::Reference< jvmaccess::VirtualMachine >(),
                                                         sal_Bool _bSet = sal_False)
 {
@@ -49,7 +49,7 @@ using namespace ::com::sun::star::lang;
         s_VM = _rVM;
     return s_VM;
 }
-// -----------------------------------------------------------------------------
+
 ::rtl::Reference< jvmaccess::VirtualMachine > java_lang_Object::getVM(const Reference<XComponentContext >& _rxContext)
 {
     ::rtl::Reference< jvmaccess::VirtualMachine > xVM = getJavaVM2();
@@ -58,7 +58,7 @@ using namespace ::com::sun::star::lang;
 
     return xVM;
 }
-// -----------------------------------------------------------------------------
+
 SDBThreadAttach::SDBThreadAttach()
  : m_aGuard(java_lang_Object::getVM())
  , pEnv(NULL)
@@ -66,22 +66,22 @@ SDBThreadAttach::SDBThreadAttach()
     pEnv = m_aGuard.getEnvironment();
     OSL_ENSURE(pEnv,"Environment is nULL!");
 }
-// -----------------------------------------------------------------------------
+
 SDBThreadAttach::~SDBThreadAttach()
 {
 }
-// -----------------------------------------------------------------------------
+
 oslInterlockedCount& getJavaVMRefCount()
 {
     static oslInterlockedCount s_nRefCount = 0;
     return s_nRefCount;
 }
-// -----------------------------------------------------------------------------
+
 void SDBThreadAttach::addRef()
 {
     osl_atomic_increment(&getJavaVMRefCount());
 }
-// -----------------------------------------------------------------------------
+
 void SDBThreadAttach::releaseRef()
 {
     osl_atomic_decrement(&getJavaVMRefCount());
@@ -90,7 +90,7 @@ void SDBThreadAttach::releaseRef()
         getJavaVM2(::rtl::Reference< jvmaccess::VirtualMachine >(),sal_True);
     }
 }
-// -----------------------------------------------------------------------------
+
 // static variables of the class
 jclass java_lang_Object::theClass = 0;
 
@@ -157,7 +157,7 @@ OUString java_lang_Object::toString() const
     return callStringMethod("toString",mID);
 }
 
-// --------------------------------------------------------------------------------
+
 namespace
 {
     bool    lcl_translateJNIExceptionToUNOException(
@@ -197,7 +197,7 @@ namespace
     }
 }
 
-// --------------------------------------------------------------------------------
+
 void java_lang_Object::ThrowLoggedSQLException( const ::comphelper::ResourceBasedEventLogger& _rLogger, JNIEnv* _pEnvironment,
     const Reference< XInterface >& _rxContext )
 {
@@ -209,14 +209,14 @@ void java_lang_Object::ThrowLoggedSQLException( const ::comphelper::ResourceBase
     }
 }
 
-// --------------------------------------------------------------------------------
+
 void java_lang_Object::ThrowSQLException( JNIEnv* _pEnvironment, const Reference< XInterface>& _rxContext )
 {
     SQLException aException;
     if ( lcl_translateJNIExceptionToUNOException( _pEnvironment, _rxContext, aException ) )
         throw aException;
 }
-// -----------------------------------------------------------------------------
+
 void java_lang_Object::obtainMethodId(JNIEnv* _pEnv,const char* _pMethodName, const char* _pSignature,jmethodID& _inout_MethodID) const
 {
     if  ( !_inout_MethodID )
@@ -227,7 +227,7 @@ void java_lang_Object::obtainMethodId(JNIEnv* _pEnv,const char* _pMethodName, co
             throw SQLException();
     } // if  ( !_inout_MethodID )
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool java_lang_Object::callBooleanMethod( const char* _pMethodName, jmethodID& _inout_MethodID ) const
 {
     jboolean out( sal_False );
@@ -241,7 +241,7 @@ sal_Bool java_lang_Object::callBooleanMethod( const char* _pMethodName, jmethodI
 
     return out;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool java_lang_Object::callBooleanMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const
 {
     jboolean out( sal_False );
@@ -254,14 +254,14 @@ sal_Bool java_lang_Object::callBooleanMethodWithIntArg( const char* _pMethodName
 
     return out;
 }
-// -------------------------------------------------------------------------
+
 jobject java_lang_Object::callResultSetMethod( JNIEnv& _rEnv,const char* _pMethodName, jmethodID& _inout_MethodID ) const
 {
     // call method
     jobject out = callObjectMethod(&_rEnv,_pMethodName,"()Ljava/sql/ResultSet;", _inout_MethodID);
     return out;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 java_lang_Object::callIntMethod( const char* _pMethodName, jmethodID& _inout_MethodID,bool _bIgnoreException ) const
 {
     SDBThreadAttach t;
@@ -277,7 +277,7 @@ sal_Int32 java_lang_Object::callIntMethod( const char* _pMethodName, jmethodID& 
 
     return (sal_Int32)out;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 java_lang_Object::callIntMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID,sal_Int32 _nArgument ) const
 {
     SDBThreadAttach t;
@@ -289,7 +289,7 @@ sal_Int32 java_lang_Object::callIntMethodWithIntArg( const char* _pMethodName, j
 
     return (sal_Int32)out;
 }
-// -------------------------------------------------------------------------
+
 void java_lang_Object::callVoidMethod( const char* _pMethodName, jmethodID& _inout_MethodID) const
 {
     SDBThreadAttach t;
@@ -300,7 +300,7 @@ void java_lang_Object::callVoidMethod( const char* _pMethodName, jmethodID& _ino
     t.pEnv->CallVoidMethod( object, _inout_MethodID );
     ThrowSQLException( t.pEnv, NULL );
 }
-// -------------------------------------------------------------------------
+
 void java_lang_Object::callVoidMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument,bool _bIgnoreException ) const
 {
     SDBThreadAttach t;
@@ -314,7 +314,7 @@ void java_lang_Object::callVoidMethodWithIntArg( const char* _pMethodName, jmeth
     else
         ThrowSQLException( t.pEnv, NULL );
 }
-// -------------------------------------------------------------------------
+
 void java_lang_Object::callVoidMethodWithBoolArg( const char* _pMethodName, jmethodID& _inout_MethodID, bool _nArgument,bool _bIgnoreException ) const
 {
     SDBThreadAttach t;
@@ -327,7 +327,7 @@ void java_lang_Object::callVoidMethodWithBoolArg( const char* _pMethodName, jmet
     else
         ThrowSQLException( t.pEnv, NULL );
 }
-// -----------------------------------------------------------------------------
+
 OUString java_lang_Object::callStringMethod( const char* _pMethodName, jmethodID& _inout_MethodID ) const
 {
     SDBThreadAttach t;
@@ -337,7 +337,7 @@ OUString java_lang_Object::callStringMethod( const char* _pMethodName, jmethodID
     jstring out = (jstring)callObjectMethod(t.pEnv,_pMethodName,"()Ljava/lang/String;", _inout_MethodID);
     return JavaString2String( t.pEnv, out );
 }
-// -----------------------------------------------------------------------------
+
 jobject java_lang_Object::callObjectMethod( JNIEnv * _pEnv,const char* _pMethodName,const char* _pSignature, jmethodID& _inout_MethodID ) const
 {
     // obtain method ID
@@ -348,7 +348,7 @@ jobject java_lang_Object::callObjectMethod( JNIEnv * _pEnv,const char* _pMethodN
     return out;
 }
 
-// -----------------------------------------------------------------------------
+
 jobject java_lang_Object::callObjectMethodWithIntArg( JNIEnv * _pEnv,const char* _pMethodName,const char* _pSignature, jmethodID& _inout_MethodID , sal_Int32 _nArgument) const
 {
     obtainMethodId(_pEnv, _pMethodName,_pSignature, _inout_MethodID);
@@ -357,7 +357,7 @@ jobject java_lang_Object::callObjectMethodWithIntArg( JNIEnv * _pEnv,const char*
     ThrowSQLException( _pEnv, NULL );
     return out;
 }
-// -----------------------------------------------------------------------------
+
 OUString java_lang_Object::callStringMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID , sal_Int32 _nArgument) const
 {
     SDBThreadAttach t;
@@ -365,7 +365,7 @@ OUString java_lang_Object::callStringMethodWithIntArg( const char* _pMethodName,
     jstring out = (jstring)callObjectMethodWithIntArg(t.pEnv,_pMethodName,"(I)Ljava/lang/String;",_inout_MethodID,_nArgument);
     return JavaString2String( t.pEnv, out );
 }
-// -------------------------------------------------------------------------
+
 void java_lang_Object::callVoidMethodWithStringArg( const char* _pMethodName, jmethodID& _inout_MethodID,const OUString& _nArgument ) const
 {
     SDBThreadAttach t;
@@ -377,7 +377,7 @@ void java_lang_Object::callVoidMethodWithStringArg( const char* _pMethodName, jm
     t.pEnv->CallVoidMethod( object, _inout_MethodID , str.get());
     ThrowSQLException( t.pEnv, NULL );
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 java_lang_Object::callIntMethodWithStringArg( const char* _pMethodName, jmethodID& _inout_MethodID,const OUString& _nArgument ) const
 {
     SDBThreadAttach t;
@@ -399,7 +399,7 @@ sal_Int32 java_lang_Object::callIntMethodWithStringArg( const char* _pMethodName
     ThrowSQLException( t.pEnv, NULL );
     return (sal_Int32)out;
 }
-// -----------------------------------------------------------------------------
+
 jclass java_lang_Object::findMyClass(const char* _pClassName)
 {
     // the class must be fetched only once, therefore static

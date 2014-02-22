@@ -383,9 +383,9 @@ uno::Sequence< OUString > SvxPixelCtlAccessible::getSupportedServiceNames(  )
     return aRet;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleSelection
-// -----------------------------------------------------------------------------
+
 void SAL_CALL SvxPixelCtlAccessible::selectAccessibleChild( sal_Int32 nChildIndex ) throw (lang::IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
@@ -397,7 +397,7 @@ void SAL_CALL SvxPixelCtlAccessible::selectAccessibleChild( sal_Int32 nChildInde
     long nIndex = pPixelCtl->ShowPosition(pPixelCtl->IndexToPoint(nChildIndex));
     NotifyChild(nIndex,sal_True,sal_False);
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SvxPixelCtlAccessible::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (lang::IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
@@ -406,7 +406,7 @@ sal_Bool SAL_CALL SvxPixelCtlAccessible::isAccessibleChildSelected( sal_Int32 nC
 
     return pPixelCtl->GetFoucsPosIndex() == nChildIndex;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL SvxPixelCtlAccessible::clearAccessibleSelection(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
@@ -414,7 +414,7 @@ void SAL_CALL SvxPixelCtlAccessible::clearAccessibleSelection(  ) throw (Runtime
     IsValid();
 
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL SvxPixelCtlAccessible::selectAllAccessibleChildren(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
@@ -422,7 +422,7 @@ void SAL_CALL SvxPixelCtlAccessible::selectAllAccessibleChildren(  ) throw (Runt
     IsValid();
 
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL SvxPixelCtlAccessible::getSelectedAccessibleChildCount(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
@@ -431,7 +431,7 @@ sal_Int32 SAL_CALL SvxPixelCtlAccessible::getSelectedAccessibleChildCount(  ) th
 
     return 1;
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< XAccessible > SAL_CALL SvxPixelCtlAccessible::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (lang::IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
@@ -451,7 +451,7 @@ uno::Reference< XAccessible > SAL_CALL SvxPixelCtlAccessible::getSelectedAccessi
     }
     return xChild;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL SvxPixelCtlAccessible::deselectAccessibleChild( sal_Int32 ) throw (lang::IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );

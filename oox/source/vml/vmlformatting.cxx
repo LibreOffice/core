@@ -64,7 +64,7 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 bool ConversionHelper::separatePair( OUString& orValue1, OUString& orValue2,
         const OUString& rValue, sal_Unicode cSep )

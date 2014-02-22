@@ -27,8 +27,6 @@
 namespace basctl
 {
 
-//----------------------------------------------------------------------------
-
 IMPL_LINK_INLINE_START( DlgEdFunc, ScrollTimeout, Timer *, pTimer )
 {
     (void)pTimer;
@@ -39,8 +37,6 @@ IMPL_LINK_INLINE_START( DlgEdFunc, ScrollTimeout, Timer *, pTimer )
     return 0;
 }
 IMPL_LINK_INLINE_END( DlgEdFunc, ScrollTimeout, Timer *, pTimer )
-
-//----------------------------------------------------------------------------
 
 void DlgEdFunc::ForceScroll( const Point& rPos )
 {
@@ -83,8 +79,6 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
     aScrollTimer.Start();
 }
 
-//----------------------------------------------------------------------------
-
 DlgEdFunc::DlgEdFunc (DlgEditor& rParent_) :
     rParent(rParent_)
 {
@@ -92,20 +86,14 @@ DlgEdFunc::DlgEdFunc (DlgEditor& rParent_) :
     aScrollTimer.SetTimeout( SELENG_AUTOREPEAT_INTERVAL );
 }
 
-//----------------------------------------------------------------------------
-
 DlgEdFunc::~DlgEdFunc()
 {
 }
-
-//----------------------------------------------------------------------------
 
 bool DlgEdFunc::MouseButtonDown( const MouseEvent& )
 {
     return true;
 }
-
-//----------------------------------------------------------------------------
 
 bool DlgEdFunc::MouseButtonUp( const MouseEvent& )
 {
@@ -113,14 +101,10 @@ bool DlgEdFunc::MouseButtonUp( const MouseEvent& )
     return true;
 }
 
-//----------------------------------------------------------------------------
-
 bool DlgEdFunc::MouseMove( const MouseEvent& )
 {
     return true;
 }
-
-//----------------------------------------------------------------------------
 
 bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
 {
@@ -349,22 +333,16 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
     return bReturn;
 }
 
-//----------------------------------------------------------------------------
-
 DlgEdFuncInsert::DlgEdFuncInsert (DlgEditor& rParent_) :
     DlgEdFunc(rParent_)
 {
     rParent.GetView().SetCreateMode(true);
 }
 
-//----------------------------------------------------------------------------
-
 DlgEdFuncInsert::~DlgEdFuncInsert()
 {
     rParent.GetView().SetEditMode( true );
 }
-
-//----------------------------------------------------------------------------
 
 bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -405,8 +383,6 @@ bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
     return true;
 }
 
-//----------------------------------------------------------------------------
-
 bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
 {
     DlgEdFunc::MouseButtonUp( rMEvt );
@@ -439,8 +415,6 @@ bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
     }
 }
 
-//----------------------------------------------------------------------------
-
 bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
 {
     SdrView& rView  = rParent.GetView();
@@ -461,21 +435,15 @@ bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
     return true;
 }
 
-//----------------------------------------------------------------------------
-
 DlgEdFuncSelect::DlgEdFuncSelect (DlgEditor& rParent_) :
     DlgEdFunc(rParent_),
     bMarkAction(false)
 {
 }
 
-//----------------------------------------------------------------------------
-
 DlgEdFuncSelect::~DlgEdFuncSelect()
 {
 }
-
-//----------------------------------------------------------------------------
 
 bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -539,8 +507,6 @@ bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
     return true;
 }
 
-//----------------------------------------------------------------------------
-
 bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
 {
     DlgEdFunc::MouseButtonUp( rMEvt );
@@ -575,8 +541,6 @@ bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
     return true;
 }
 
-//----------------------------------------------------------------------------
-
 bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 {
     SdrView& rView  = rParent.GetView();
@@ -599,8 +563,6 @@ bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 
     return true;
 }
-
-//----------------------------------------------------------------------------
 
 } // namespace basctl
 

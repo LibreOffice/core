@@ -36,7 +36,7 @@
 #include <iterator>
 
 
-//--------------------------------------------------------------------------
+
 using namespace ::com::sun::star;
 
 void createRegistryInfo_OPropertyBag()
@@ -58,7 +58,7 @@ namespace comphelper
     //====================================================================
     //= OPropertyBag
     //====================================================================
-    //--------------------------------------------------------------------
+
     OPropertyBag::OPropertyBag()
         :OPropertyBag_PBase( GetBroadcastHelper(), this )
         ,::cppu::IEventNotificationHook()
@@ -69,16 +69,16 @@ namespace comphelper
     {
     }
 
-    //--------------------------------------------------------------------
+
     OPropertyBag::~OPropertyBag()
     {
     }
 
-    //--------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XINTERFACE2( OPropertyBag, OPropertyBag_Base, OPropertyBag_PBase )
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OPropertyBag, OPropertyBag_Base, OPropertyBag_PBase )
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > OPropertyBag::getSupportedServiceNames_static() throw( RuntimeException )
     {
         Sequence< OUString > aServices(1);
@@ -86,7 +86,7 @@ namespace comphelper
         return aServices;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OPropertyBag::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
     {
         Sequence< Type > aTypes;
@@ -125,19 +125,19 @@ namespace comphelper
         }
     }
 
-    //--------------------------------------------------------------------
+
     OUString OPropertyBag::getImplementationName_static() throw( RuntimeException )
     {
         return OUString( "com.sun.star.comp.comphelper.OPropertyBag" );
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XInterface > SAL_CALL OPropertyBag::Create( SAL_UNUSED_PARAMETER const Reference< XComponentContext >& )
     {
         return *new OPropertyBag;
     }
 
-    //--------------------------------------------------------------------
+
     OUString SAL_CALL OPropertyBag::getImplementationName() throw (RuntimeException)
     {
         return getImplementationName_static();
@@ -148,13 +148,13 @@ namespace comphelper
         return cppu::supportsService(this, rServiceName);
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL OPropertyBag::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
-    //--------------------------------------------------------------------
+
     void OPropertyBag::fireEvents(
             sal_Int32 * /*pnHandles*/,
             sal_Int32 nCount,
@@ -189,7 +189,7 @@ namespace comphelper
         }
     }
 
-    //--------------------------------------------------------------------
+
     ::sal_Bool SAL_CALL OPropertyBag::isModified()
         throw (RuntimeException)
     {
@@ -217,13 +217,13 @@ namespace comphelper
         m_NotifyListeners.removeInterface(xListener);
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XPropertySetInfo > SAL_CALL OPropertyBag::getPropertySetInfo(  ) throw(RuntimeException)
     {
         return createPropertySetInfo( getInfoHelper() );
     }
 
-    //--------------------------------------------------------------------
+
     ::sal_Bool SAL_CALL OPropertyBag::has( const Any& /*aElement*/ ) throw (RuntimeException)
     {
         // XSet is only a workaround for addProperty not being able to add default-void properties.
@@ -231,7 +231,7 @@ namespace comphelper
         return sal_False;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OPropertyBag::insert( const Any& _element ) throw (IllegalArgumentException, ElementExistException, RuntimeException)
     {
         // This is a workaround for addProperty not being able to add default-void properties.
@@ -258,7 +258,7 @@ namespace comphelper
         setModified(sal_True);
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OPropertyBag::remove( const Any& /*aElement*/ ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException)
     {
         // XSet is only a workaround for addProperty not being able to add default-void properties.
@@ -267,7 +267,7 @@ namespace comphelper
     }
 
 
-    //--------------------------------------------------------------------
+
     Reference< XEnumeration > SAL_CALL OPropertyBag::createEnumeration(  ) throw (RuntimeException)
     {
         // XSet is only a workaround for addProperty not being able to add default-void properties.
@@ -275,7 +275,7 @@ namespace comphelper
         return NULL;
     }
 
-    //--------------------------------------------------------------------
+
     Type SAL_CALL OPropertyBag::getElementType(  ) throw (RuntimeException)
     {
         // XSet is only a workaround for addProperty not being able to add default-void properties.
@@ -283,7 +283,7 @@ namespace comphelper
         return Type();
     }
 
-    //--------------------------------------------------------------------
+
     ::sal_Bool SAL_CALL OPropertyBag::hasElements(  ) throw (RuntimeException)
     {
         // XSet is only a workaround for addProperty not being able to add default-void properties.
@@ -291,25 +291,25 @@ namespace comphelper
         return sal_False;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OPropertyBag::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         m_aDynamicProperties.getFastPropertyValue( _nHandle, _rValue );
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool SAL_CALL OPropertyBag::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue ) throw (IllegalArgumentException)
     {
         return m_aDynamicProperties.convertFastPropertyValue( _nHandle, _rValue, _rConvertedValue, _rOldValue );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OPropertyBag::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
     {
         m_aDynamicProperties.setFastPropertyValue( nHandle, rValue );
     }
 
-    //--------------------------------------------------------------------
+
     ::cppu::IPropertyArrayHelper& SAL_CALL OPropertyBag::getInfoHelper()
     {
         if ( !m_pArrayHelper.get() )
@@ -322,7 +322,7 @@ namespace comphelper
 
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int32 OPropertyBag::findFreeHandle() const
     {
         const sal_Int32 nPrime = 1009;
@@ -344,7 +344,7 @@ namespace comphelper
         return nCheck;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OPropertyBag::addProperty( const OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException)
     {
         ::osl::ClearableMutexGuard g( m_aMutex );
@@ -367,7 +367,7 @@ namespace comphelper
         setModified(sal_True);
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OPropertyBag::removeProperty( const OUString& _rName ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException)
     {
         ::osl::ClearableMutexGuard g( m_aMutex );
@@ -381,7 +381,7 @@ namespace comphelper
         setModified(sal_True);
     }
 
-    //--------------------------------------------------------------------
+
     namespace
     {
         struct ComparePropertyValueByName : public ::std::binary_function< PropertyValue, PropertyValue, bool >
@@ -410,7 +410,7 @@ namespace comphelper
         };
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< PropertyValue > SAL_CALL OPropertyBag::getPropertyValues(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -465,7 +465,7 @@ namespace comphelper
         return aPropertyValues;
     }
 
-    //--------------------------------------------------------------------
+
     void OPropertyBag::impl_setPropertyValues_throw( const Sequence< PropertyValue >& _rProps )
     {
         // sort (the XMultiPropertySet interface requires this)
@@ -543,14 +543,14 @@ namespace comphelper
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OPropertyBag::setPropertyValues( const Sequence< PropertyValue >& _rProps ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         impl_setPropertyValues_throw( _rProps );
     }
 
-    //--------------------------------------------------------------------
+
     PropertyState OPropertyBag::getPropertyStateByHandle( sal_Int32 _nHandle )
     {
         // for properties which do not support the MAYBEDEFAULT attribute, don't rely on the base class, but
@@ -570,7 +570,7 @@ namespace comphelper
         return OPropertyBag_PBase::getPropertyStateByHandle( _nHandle );
     }
 
-    //--------------------------------------------------------------------
+
     Any OPropertyBag::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
     {
         Any aDefault;

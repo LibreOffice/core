@@ -582,7 +582,7 @@ static const XclFunctionInfo saFuncTable_OOoLO[] =
 
 #undef EXC_FUNCENTRY_OOO
 
-// ----------------------------------------------------------------------------
+
 
 XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
 {
@@ -747,7 +747,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclTokenArrayRef& rxTokArr 
     return rStrm;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclTokenArrayIterator::XclTokenArrayIterator() :
     mppScTokenBeg( 0 ),

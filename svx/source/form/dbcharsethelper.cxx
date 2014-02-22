@@ -27,12 +27,12 @@ namespace svxform
     //====================================================================
     //= ODataAccessCharsetHelper
     //====================================================================
-    //--------------------------------------------------------------------
+
     ODataAccessCharsetHelper::ODataAccessCharsetHelper( )
     {
     }
 
-    //--------------------------------------------------------------------
+
     bool ODataAccessCharsetHelper::ensureLoaded() const
     {
         if ( !ODbtoolsClient::ensureLoaded() )

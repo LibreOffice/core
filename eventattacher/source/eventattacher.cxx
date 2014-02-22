@@ -107,7 +107,7 @@ Reference< XInterface > createAllListenerAdapter
 }
 
 
-//--------------------------------------------------------------------------------------------------
+
 // InvocationToAllListenerMapper
 InvocationToAllListenerMapper::InvocationToAllListenerMapper
     ( const Reference< XIdlClass >& ListenerType, const Reference< XAllListener >& AllListener, const Any& Helper )
@@ -432,9 +432,9 @@ Reference< XTypeConverter > EventAttacherImpl::getConverter() throw( Exception )
     return m_xConverter;
 }
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+
+
+
 // Implementation of an EventAttacher-related AllListeners, which brings
 // a few Events to a general AllListener
 class FilterAllListenerImpl : public WeakImplHelper1< XAllListener  >

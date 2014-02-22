@@ -127,7 +127,7 @@ void SystemChildWindow::ImplInitSysChild( Window* pParent, WinBits nStyle, Syste
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle ) :
     Window( WINDOW_SYSTEMCHILDWINDOW )
@@ -135,7 +135,7 @@ SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle ) :
     ImplInitSysChild( pParent, nStyle, NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow ) :
     Window( WINDOW_SYSTEMCHILDWINDOW )
@@ -143,7 +143,7 @@ SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle, SystemWin
     ImplInitSysChild( pParent, nStyle, pData, bShow );
 }
 
-// -----------------------------------------------------------------------
+
 
 SystemChildWindow::~SystemChildWindow()
 {
@@ -155,7 +155,7 @@ SystemChildWindow::~SystemChildWindow()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 const SystemEnvData* SystemChildWindow::GetSystemData() const
 {
@@ -165,7 +165,7 @@ const SystemEnvData* SystemChildWindow::GetSystemData() const
         return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemChildWindow::EnableEraseBackground( bool bEnable )
 {
@@ -173,7 +173,7 @@ void SystemChildWindow::EnableEraseBackground( bool bEnable )
         mpWindowImpl->mpSysObj->EnableEraseBackground( bEnable );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemChildWindow::ImplTestJavaException( void* pEnv )
 {
@@ -213,7 +213,7 @@ void SystemChildWindow::SetForwardKey( bool bEnable )
         mpWindowImpl->mpSysObj->SetForwardKey( bEnable );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_IntPtr SystemChildWindow::GetParentWindowHandle( bool bUseJava )
 {

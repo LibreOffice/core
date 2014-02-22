@@ -30,13 +30,13 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
-// -------------------------------------------------------------------------
+
 using namespace connectivity::flat;
-// -------------------------------------------------------------------------
+
 OFlatCatalog::OFlatCatalog(OFlatConnection* _pCon) : file::OFileCatalog(_pCon)
 {
 }
-// -------------------------------------------------------------------------
+
 void OFlatCatalog::refreshTables()
 {
     TStringVector aVector;
@@ -55,7 +55,7 @@ void OFlatCatalog::refreshTables()
     else
         m_pTables = new OFlatTables(m_xMetaData,*this,m_aMutex,aVector);
 }
-// -----------------------------------------------------------------------------
+
 
 
 

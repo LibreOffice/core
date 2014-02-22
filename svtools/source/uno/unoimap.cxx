@@ -737,9 +737,9 @@ sal_Bool SvUnoImageMap::fillImageMap( ImageMap& rMap ) const
     return sal_True;
 }
 
-// -------------------------------------------------------------------
+
 // factory helper methods
-// -------------------------------------------------------------------
+
 
 Reference< XInterface > SvUnoImageMapRectangleObject_createInstance( const SvEventDescription* pSupportedMacroItems )
 {

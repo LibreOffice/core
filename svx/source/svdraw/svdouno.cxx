@@ -534,7 +534,7 @@ void SdrUnoObj::SetUnoControlModel( const uno::Reference< awt::XControlModel >& 
     }
 }
 
-//------------------------------------------------------------------------
+
 uno::Reference< awt::XControl > SdrUnoObj::GetUnoControl(const SdrView& _rView, const OutputDevice& _rOut) const
 {
     uno::Reference< awt::XControl > xControl;
@@ -558,7 +558,7 @@ uno::Reference< awt::XControl > SdrUnoObj::GetUnoControl(const SdrView& _rView, 
     return xControl;
 }
 
-//------------------------------------------------------------------------
+
 uno::Reference< awt::XControl > SdrUnoObj::GetTemporaryControlForWindow(
     const Window& _rWindow, uno::Reference< awt::XControlContainer >& _inout_ControlContainer ) const
 {
@@ -571,7 +571,7 @@ uno::Reference< awt::XControl > SdrUnoObj::GetTemporaryControlForWindow(
     return xControl;
 }
 
-//------------------------------------------------------------------------
+
 bool SdrUnoObj::impl_getViewContact( ViewContactOfUnoControl*& _out_rpContact ) const
 {
     ViewContact& rViewContact( GetViewContact() );
@@ -580,7 +580,7 @@ bool SdrUnoObj::impl_getViewContact( ViewContactOfUnoControl*& _out_rpContact ) 
     return ( _out_rpContact != NULL );
 }
 
-//------------------------------------------------------------------------
+
 ::sdr::contact::ViewContact* SdrUnoObj::CreateObjectSpecificViewContact()
 {
   return new ::sdr::contact::ViewContactOfUnoControl( *this );

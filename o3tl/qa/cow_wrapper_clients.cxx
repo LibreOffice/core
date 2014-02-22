@@ -103,7 +103,7 @@ bool cow_wrapper_client2::operator<( const cow_wrapper_client2& rRHS ) const
     return maImpl < rRHS.maImpl;
 }
 
-// ---------------------------------------------------------------------------
+
 
 cow_wrapper_client3::cow_wrapper_client3() : maImpl()
 {
@@ -170,7 +170,7 @@ bool cow_wrapper_client3::operator<( const cow_wrapper_client3& rRHS ) const
     return maImpl < rRHS.maImpl;
 }
 
-// ---------------------------------------------------------------------------
+
 
 namespace { struct theDefaultClient4 : public rtl::Static< o3tl::cow_wrapper< int >,
                                                             theDefaultClient4 > {}; }

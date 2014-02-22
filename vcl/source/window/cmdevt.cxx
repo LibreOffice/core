@@ -39,7 +39,7 @@ CommandExtTextInputData::CommandExtTextInputData( const OUString& rText,
     mbOnlyCursor    = bOnlyCursor;
 }
 
-// -----------------------------------------------------------------------
+
 
 CommandExtTextInputData::CommandExtTextInputData( const CommandExtTextInputData& rData ) :
     maText( rData.maText )
@@ -56,7 +56,7 @@ CommandExtTextInputData::CommandExtTextInputData( const CommandExtTextInputData&
     mbOnlyCursor    = rData.mbOnlyCursor;
 }
 
-// -----------------------------------------------------------------------
+
 
 CommandExtTextInputData::~CommandExtTextInputData()
 {

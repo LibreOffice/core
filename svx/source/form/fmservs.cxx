@@ -24,7 +24,7 @@
 
 using namespace com::sun::star;
 
-// ------------------------------------------------------------------------
+
 #define DECL_SERVICE(ImplName)                      \
 uno::Reference< uno::XInterface > SAL_CALL ImplName##_NewInstance_Impl(const uno::Reference< lang::XMultiServiceFactory > &) throw( uno::Exception );
 
@@ -42,17 +42,17 @@ uno::Reference< uno::XInterface > SAL_CALL ImplName##_NewInstance_Impl(const uno
     DECL_SERVICE( LegacyFormController )
 
 
-// ------------------------------------------------------------------------
+
 namespace svxform
 {
 
-    // ------------------------------------------------------------------------
+
     // declare selfaware service
     uno::Reference< uno::XInterface > SAL_CALL OAddConditionDialog_Create( const uno::Reference< lang::XMultiServiceFactory >& );
     OUString SAL_CALL OAddConditionDialog_GetImplementationName();
     uno::Sequence< OUString > SAL_CALL OAddConditionDialog_GetSupportedServiceNames();
 
-    // ------------------------------------------------------------------------
+
     void ImplSmartRegisterUnoServices()
     {
         uno::Reference< lang::XMultiServiceFactory >  xServiceFactory(::comphelper::getProcessServiceFactory(), uno::UNO_QUERY);
@@ -64,12 +64,12 @@ namespace svxform
 
         OUString sString;
 
-        // ------------------------------------------------------------------------
+
         // FormController
         REGISTER_SERVICE( FormController, OUString( "com.sun.star.form.runtime.FormController" ) );
         REGISTER_SERVICE( LegacyFormController, OUString( "com.sun.star.form.FormController" ) );
 
-        // ------------------------------------------------------------------------
+
         // FormController - register selfaware service
         xSingleFactory = ::cppu::createSingleFactory( xServiceFactory,
                              OAddConditionDialog_GetImplementationName(),
@@ -79,7 +79,7 @@ namespace svxform
         if ( xSingleFactory.is() )
             xSet->insert( uno::makeAny( xSingleFactory ) );
 
-        // ------------------------------------------------------------------------
+
         // DBGridControl
         REGISTER_SERVICE(FmXGridControl, FM_CONTROL_GRID);  // compatibility
         REGISTER_SERVICE(FmXGridControl, FM_CONTROL_GRIDCONTROL);

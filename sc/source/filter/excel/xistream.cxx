@@ -106,7 +106,7 @@ sal_uInt16 XclImpDecrypter::Read( SvStream& rStrm, void* pData, sal_uInt16 nByte
     return nRet;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpBiff5Decrypter::XclImpBiff5Decrypter( sal_uInt16 nKey, sal_uInt16 nHash ) :
     mnKey( nKey ),
@@ -197,7 +197,7 @@ sal_uInt16 XclImpBiff5Decrypter::OnRead( SvStream& rStrm, sal_uInt8* pnData, sal
     return nRet;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpBiff8Decrypter::XclImpBiff8Decrypter( sal_uInt8 pnSalt[ 16 ],
         sal_uInt8 pnVerifier[ 16 ], sal_uInt8 pnVerifierHash[ 16 ] ) :
@@ -513,7 +513,7 @@ void XclImpStream::EnableDecryption( bool bEnable )
     mbUseDecr = bEnable && HasValidDecrypter();
 }
 
-// ----------------------------------------------------------------------------
+
 
 void XclImpStream::PushPosition()
 {
@@ -605,7 +605,7 @@ sal_uInt16 XclImpStream::PeekRecId( sal_Size nPos )
     return nRecId;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpStream& XclImpStream::operator>>( sal_Int8& rnValue )
 {
@@ -873,7 +873,7 @@ void XclImpStream::Ignore( sal_Size nBytes )
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 sal_Size XclImpStream::ReadUniStringExtHeader(
         bool& rb16Bit, bool& rbRich, bool& rbFareast,
@@ -896,7 +896,7 @@ sal_Size XclImpStream::ReadUniStringExtHeader( bool& rb16Bit, sal_uInt8 nFlags )
     return ReadUniStringExtHeader( rb16Bit, bRich, bFareast, nCrun, nExtInf, nFlags );
 }
 
-// ----------------------------------------------------------------------------
+
 
 OUString XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
 {
@@ -1009,7 +1009,7 @@ void XclImpStream::IgnoreUniString( sal_uInt16 nChars )
     IgnoreUniString( nChars, ReaduInt8() );
 }
 
-// ----------------------------------------------------------------------------
+
 
 OUString XclImpStream::ReadRawByteString( sal_uInt16 nChars )
 {

@@ -242,7 +242,7 @@ public:
 
 //========================== Methoden von PSWriter ==========================
 
-//---------------------------------------------------------------------------------
+
 
 PSWriter::PSWriter()
     : mbStatus(sal_False)
@@ -305,7 +305,7 @@ PSWriter::~PSWriter()
     delete pAMTF;
 }
 
-//---------------------------------------------------------------------------------
+
 
 sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, FilterConfigItem* pFilterConfigItem )
 {
@@ -501,7 +501,7 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
     return mbStatus;
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteProlog( const Graphic* pPreview )
 {
@@ -638,7 +638,7 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     ImplWriteLine( "/tm matrix currentmatrix def" );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteEpilog()
 {
@@ -652,9 +652,9 @@ void PSWriter::ImplWriteEpilog()
     ImplWriteLine( "%%EOF" );
 }
 
-//---------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------
+
+
+
 
 void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 {
@@ -1463,7 +1463,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
 
 
-//---------------------------------------------------------------------------------
+
 
 inline void PSWriter::ImplWritePoint( const Point& rPoint, sal_uInt32 nMode )
 {
@@ -1471,7 +1471,7 @@ inline void PSWriter::ImplWritePoint( const Point& rPoint, sal_uInt32 nMode )
     ImplWriteDouble( rPoint.Y(), nMode );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplMoveTo( const Point& rPoint, sal_uInt32 nMode )
 {
@@ -1480,7 +1480,7 @@ void PSWriter::ImplMoveTo( const Point& rPoint, sal_uInt32 nMode )
     ImplExecMode( nMode );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplLineTo( const Point& rPoint, sal_uInt32 nMode )
 {
@@ -1489,7 +1489,7 @@ void PSWriter::ImplLineTo( const Point& rPoint, sal_uInt32 nMode )
     ImplExecMode( nMode );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplCurveTo( const Point& rP1, const Point& rP2, const Point& rP3, sal_uInt32 nMode )
 {
@@ -1500,7 +1500,7 @@ void PSWriter::ImplCurveTo( const Point& rP1, const Point& rP2, const Point& rP3
     ImplExecMode( nMode );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplTranslate( const double& fX, const double& fY, sal_uInt32 nMode )
 {
@@ -1510,7 +1510,7 @@ void PSWriter::ImplTranslate( const double& fX, const double& fY, sal_uInt32 nMo
     ImplExecMode( nMode );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplScale( const double& fX, const double& fY, sal_uInt32 nMode )
 {
@@ -1520,7 +1520,7 @@ void PSWriter::ImplScale( const double& fX, const double& fY, sal_uInt32 nMode )
     ImplExecMode( nMode );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplRect( const Rectangle & rRect )
 {
@@ -1545,7 +1545,7 @@ void PSWriter::ImplRect( const Rectangle & rRect )
     mnCursorPos = 0;
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplRectFill( const Rectangle & rRect )
 {
@@ -1565,7 +1565,7 @@ void PSWriter::ImplRectFill( const Rectangle & rRect )
     ImplExecMode( PS_RET );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplAddPath( const Polygon & rPolygon )
 {
@@ -1590,7 +1590,7 @@ void PSWriter::ImplAddPath( const Polygon & rPolygon )
     }
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplIntersect( const PolyPolygon& rPolyPoly )
 {
@@ -1608,7 +1608,7 @@ void PSWriter::ImplIntersect( const PolyPolygon& rPolyPoly )
     ImplWriteLine( "eoclip newpath" );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient, VirtualDevice& rVDev )
 {
@@ -1619,7 +1619,7 @@ void PSWriter::ImplWriteGradient( const PolyPolygon& rPolyPoly, const Gradient& 
     ImplWriteActions( aTmpMtf, rVDev );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplPolyPoly( const PolyPolygon & rPolyPoly, sal_Bool bTextOutline )
 {
@@ -1656,7 +1656,7 @@ void PSWriter::ImplPolyPoly( const PolyPolygon & rPolyPoly, sal_Bool bTextOutlin
     }
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplPolyLine( const Polygon & rPoly )
 {
@@ -1694,7 +1694,7 @@ void PSWriter::ImplPolyLine( const Polygon & rPoly )
     }
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplSetClipRegion( Region& rClipRegion )
 {
@@ -1757,7 +1757,7 @@ void PSWriter::ImplSetClipRegion( Region& rClipRegion )
     }
 }
 
-//---------------------------------------------------------------------------------
+
 // possible gfx formats:
 //
 // level 1: grayscale   8 bit
@@ -2088,7 +2088,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
     }
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteCharacter( sal_Char nChar )
 {
@@ -2102,7 +2102,7 @@ void PSWriter::ImplWriteCharacter( sal_Char nChar )
     ImplWriteByte( (sal_uInt8)nChar, PS_NONE );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteString( const OString& rString, VirtualDevice& rVDev, const sal_Int32* pDXArry, sal_Bool bStretch )
 {
@@ -2134,7 +2134,7 @@ void PSWriter::ImplWriteString( const OString& rString, VirtualDevice& rVDev, co
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const sal_Int32* pDXArry, sal_Int32 nWidth, VirtualDevice& rVDev )
 {
@@ -2195,7 +2195,7 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const sa
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void PSWriter::ImplSetAttrForText( const Point& rPoint )
 {
@@ -2238,7 +2238,7 @@ void PSWriter::ImplSetAttrForText( const Point& rPoint )
     }
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplDefineFont( const char* pOriginalName, const char* pItalic )
 {
@@ -2262,9 +2262,9 @@ void PSWriter::ImplDefineFont( const char* pOriginalName, const char* pItalic )
     ImplWriteLine( " f" );
 }
 
-//---------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------
+
+
+
 
 void PSWriter::ImplClosePathDraw( sal_uLong nMode )
 {
@@ -2280,7 +2280,7 @@ void PSWriter::ImplPathDraw()
     ImplExecMode( PS_RET );
 }
 
-//---------------------------------------------------------------------------------
+
 
 inline void PSWriter::ImplWriteLineColor( sal_uLong nMode )
 {
@@ -2315,7 +2315,7 @@ inline void PSWriter::ImplWriteTextFillColor( sal_uLong nMode )
     }
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteColor( sal_uLong nMode )
 {
@@ -2336,7 +2336,7 @@ void PSWriter::ImplWriteColor( sal_uLong nMode )
     ImplExecMode( nMode );
 }
 
-//---------------------------------------------------------------------------------
+
 
 double PSWriter::ImplGetScaling( const MapMode& rMapMode )
 {
@@ -2384,7 +2384,7 @@ double PSWriter::ImplGetScaling( const MapMode& rMapMode )
     return nMul;
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplGetMapMode( const MapMode& rMapMode )
 {
@@ -2396,7 +2396,7 @@ void PSWriter::ImplGetMapMode( const MapMode& rMapMode )
     ImplScale( fScaleX, fScaleY );
 }
 
-//---------------------------------------------------------------------------------
+
 
 inline void PSWriter::ImplExecMode( sal_uLong nMode )
 {
@@ -2421,7 +2421,7 @@ inline void PSWriter::ImplExecMode( sal_uLong nMode )
     }
 }
 
-//---------------------------------------------------------------------------------
+
 
 inline void PSWriter::ImplWriteLine( const char* pString, sal_uLong nMode )
 {
@@ -2434,7 +2434,7 @@ inline void PSWriter::ImplWriteLine( const char* pString, sal_uLong nMode )
     ImplExecMode( nMode );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteLineInfo( double fLWidth, double fMLimit,
                                     SvtGraphicStroke::CapType eLCap,
@@ -2479,7 +2479,7 @@ void PSWriter::ImplWriteLineInfo( double fLWidth, double fMLimit,
     }
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
 {
@@ -2529,7 +2529,7 @@ void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
     ImplWriteLineInfo( fLWidth, fMiterLimit, aCapType, aJoinType, l_aDashArray );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteLong(sal_Int32 nNumber, sal_uLong nMode)
 {
@@ -2539,7 +2539,7 @@ void PSWriter::ImplWriteLong(sal_Int32 nNumber, sal_uLong nMode)
     ImplExecMode(nMode);
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteDouble( double fNumber, sal_uLong nMode )
 {
@@ -2583,7 +2583,7 @@ void PSWriter::ImplWriteDouble( double fNumber, sal_uLong nMode )
     ImplExecMode( nMode );
 }
 
-//---------------------------------------------------------------------------------
+
 
 // writes the number to stream: nNumber / ( 10^nCount )
 
@@ -2625,7 +2625,7 @@ void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uLong nCount, sal_uLong nMode 
     ImplExecMode( nMode );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteByte( sal_uInt8 nNumb, sal_uLong nMode )
 {
@@ -2634,7 +2634,7 @@ void PSWriter::ImplWriteByte( sal_uInt8 nNumb, sal_uLong nMode )
     ImplExecMode( nMode );
 }
 
-//---------------------------------------------------------------------------------
+
 
 void PSWriter::ImplWriteHexByte( sal_uInt8 nNumb, sal_uLong nMode )
 {
@@ -2651,7 +2651,7 @@ void PSWriter::ImplWriteHexByte( sal_uInt8 nNumb, sal_uLong nMode )
     ImplExecMode( nMode );
 }
 
-//---------------------------------------------------------------------------------
+
 
 // writes the sal_uInt8 nNumb as a Number from 0.000 up to 1.000
 
@@ -2661,7 +2661,7 @@ void PSWriter::ImplWriteB1( sal_uInt8 nNumb, sal_uLong nMode )
 }
 
 
-// ------------------------------------------------------------------------
+
 
 inline void PSWriter::WriteBits( sal_uInt16 nCode, sal_uInt16 nCodeLen )
 {
@@ -2677,7 +2677,7 @@ inline void PSWriter::WriteBits( sal_uInt16 nCode, sal_uInt16 nCodeLen )
         ImplWriteHexByte( (sal_uInt8)( dwShift >> 24 ) );
 }
 
-// ------------------------------------------------------------------------
+
 
 void PSWriter::StartCompression()
 {
@@ -2703,7 +2703,7 @@ void PSWriter::StartCompression()
     WriteBits( nClearCode, nCodeSize );
 }
 
-// ------------------------------------------------------------------------
+
 
 void PSWriter::Compress( sal_uInt8 nCompThis )
 {
@@ -2757,7 +2757,7 @@ void PSWriter::Compress( sal_uInt8 nCompThis )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void PSWriter::EndCompression()
 {
@@ -2768,7 +2768,7 @@ void PSWriter::EndCompression()
     delete[] pTable;
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_uInt8* PSWriter::ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nComp, sal_uLong nSize )
 {
@@ -2787,7 +2787,7 @@ sal_uInt8* PSWriter::ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_
     return NULL;
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool PSWriter::ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uLong nSize )
 {

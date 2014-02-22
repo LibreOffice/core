@@ -68,7 +68,7 @@ void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, con
         rBox.SelectEntry( m_aInvalidString );
 }
 
-// --------------------------------------------------------------------------
+
 
 /*
  * RTSDialog
@@ -108,7 +108,7 @@ RTSDialog::RTSDialog( const PrinterInfo& rJobData, const OUString& rPrinter, boo
     ActivatePage(m_pTabControl);
 }
 
-// --------------------------------------------------------------------------
+
 
 RTSDialog::~RTSDialog()
 {
@@ -118,7 +118,7 @@ RTSDialog::~RTSDialog()
     delete m_pCommandPage;
 }
 
-// --------------------------------------------------------------------------
+
 
 IMPL_LINK( RTSDialog, ActivatePage, TabControl*, pTabCtrl )
 {
@@ -152,7 +152,7 @@ IMPL_LINK( RTSDialog, ActivatePage, TabControl*, pTabCtrl )
     return 0;
 }
 
-// --------------------------------------------------------------------------
+
 
 IMPL_LINK( RTSDialog, ClickButton, Button*, pButton )
 {
@@ -187,7 +187,7 @@ IMPL_LINK( RTSDialog, ClickButton, Button*, pButton )
     return 0;
 }
 
-// --------------------------------------------------------------------------
+
 
 /*
  * RTSPaperPage
@@ -225,13 +225,13 @@ RTSPaperPage::RTSPaperPage(RTSDialog* pParent)
     update();
 }
 
-// --------------------------------------------------------------------------
+
 
 RTSPaperPage::~RTSPaperPage()
 {
 }
 
-// --------------------------------------------------------------------------
+
 
 void RTSPaperPage::update()
 {
@@ -278,7 +278,7 @@ void RTSPaperPage::update()
     }
 }
 
-// --------------------------------------------------------------------------
+
 
 IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
 {
@@ -312,7 +312,7 @@ IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
     return 0;
 }
 
-// --------------------------------------------------------------------------
+
 
 /*
  * RTSDevicePage
@@ -398,13 +398,13 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
     }
 }
 
-// --------------------------------------------------------------------------
+
 
 RTSDevicePage::~RTSDevicePage()
 {
 }
 
-// --------------------------------------------------------------------------
+
 
 void RTSDevicePage::update()
 {
@@ -434,7 +434,7 @@ sal_uLong RTSDevicePage::getColorDevice()
     return 0;
 }
 
-// ------------------------------------------------------------------
+
 
 sal_uLong RTSDevicePage::getLevel()
 {
@@ -444,7 +444,7 @@ sal_uLong RTSDevicePage::getLevel()
     return nLevel < 10 ? nLevel-1 : 0;
 }
 
-// ------------------------------------------------------------------
+
 
 sal_uLong RTSDevicePage::getPDFDevice()
 {
@@ -456,7 +456,7 @@ sal_uLong RTSDevicePage::getPDFDevice()
     return -1;      //explicitly PS
 }
 
-// ------------------------------------------------------------------
+
 
 IMPL_LINK( RTSDevicePage, SelectHdl, ListBox*, pBox )
 {
@@ -478,7 +478,7 @@ IMPL_LINK( RTSDevicePage, SelectHdl, ListBox*, pBox )
     return 0;
 }
 
-// ------------------------------------------------------------------
+
 
 void RTSDevicePage::FillValueBox( const PPDKey* pKey )
 {
@@ -503,7 +503,7 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
     m_pPPDValueBox->SelectEntryPos( m_pPPDValueBox->GetEntryPos( (void*)pValue ) );
 }
 
-// --------------------------------------------------------------------------
+
 
 /*
  * RTSOtherPage
@@ -536,13 +536,13 @@ RTSOtherPage::RTSOtherPage( RTSDialog* pParent ) :
     initValues();
 }
 
-// ------------------------------------------------------------------
+
 
 RTSOtherPage::~RTSOtherPage()
 {
 }
 
-// ------------------------------------------------------------------
+
 
 void RTSOtherPage::initValues()
 {
@@ -573,7 +573,7 @@ void RTSOtherPage::initValues()
     m_aCommentEdt.SetText( m_pParent->m_aJobData.m_aComment );
 }
 
-// ------------------------------------------------------------------
+
 
 void RTSOtherPage::save()
 {
@@ -599,7 +599,7 @@ void RTSOtherPage::save()
     m_pParent->m_aJobData.m_aComment = m_aCommentEdt.GetText();
 }
 
-// ------------------------------------------------------------------
+
 
 IMPL_LINK( RTSOtherPage, ClickBtnHdl, Button*, pButton )
 {

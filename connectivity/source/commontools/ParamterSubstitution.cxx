@@ -39,12 +39,12 @@ namespace connectivity
         xConnection = aArgs.getUnpackedValueOrDefault("ActiveConnection",xConnection);
         m_xConnection = xConnection;
     }
-    //------------------------------------------------------------------------------
+
     OUString ParameterSubstitution::getImplementationName_Static(  ) throw(RuntimeException)
     {
         return OUString("org.openoffice.comp.helper.ParameterSubstitution");
     }
-    //------------------------------------------------------------------------------
+
     OUString SAL_CALL ParameterSubstitution::getImplementationName(  ) throw(RuntimeException)
     {
         return getImplementationName_Static();
@@ -54,12 +54,12 @@ namespace connectivity
     {
         return cppu::supportsService(this, _rServiceName);
     }
-    //------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL ParameterSubstitution::getSupportedServiceNames(  ) throw(RuntimeException)
     {
         return getSupportedServiceNames_Static();
     }
-    //------------------------------------------------------------------
+
     Sequence< OUString > ParameterSubstitution::getSupportedServiceNames_Static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSNS( 1 );
@@ -67,12 +67,12 @@ namespace connectivity
         return aSNS;
     }
 
-    //------------------------------------------------------------------
+
     Reference< XInterface >  ParameterSubstitution::create(const Reference< XComponentContext >& _xContext)
     {
         return *(new ParameterSubstitution(_xContext));
     }
-    //------------------------------------------------------------------
+
     OUString SAL_CALL ParameterSubstitution::substituteVariables( const OUString& _sText, ::sal_Bool /*bSubstRequired*/ ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException)
     {
         OUString sRet = _sText;
@@ -99,17 +99,17 @@ namespace connectivity
         }
         return sRet;
     }
-    //------------------------------------------------------------------
+
     OUString SAL_CALL ParameterSubstitution::reSubstituteVariables( const OUString& _sText ) throw (::com::sun::star::uno::RuntimeException)
     {
         return _sText;
     }
-    //------------------------------------------------------------------
+
     OUString SAL_CALL ParameterSubstitution::getSubstituteVariableValue( const OUString& /*variable*/ ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException)
     {
         throw container::NoSuchElementException();
     }
-    //------------------------------------------------------------------
+
 
 
 // ==================================

@@ -253,7 +253,7 @@ void SAL_CALL PresenterPreviewCache::resume (void)
 
 
 
-//-----------------------------------------------------------------------------
+
 
 void PresenterPreviewCache::ThrowIfDisposed (void)
     throw (::com::sun::star::lang::DisposedException)
@@ -453,7 +453,7 @@ Reference<XInterface> PresenterPreviewCache::PresenterCacheContext::GetModel (vo
 
 
 
-//-----------------------------------------------------------------------------
+
 
 const SdrPage* PresenterPreviewCache::PresenterCacheContext::GetPage (
     const sal_Int32 nSlideIndex) const

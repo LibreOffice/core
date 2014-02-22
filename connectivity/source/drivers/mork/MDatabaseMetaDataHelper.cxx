@@ -36,13 +36,13 @@ static ::osl::Mutex m_aMetaMutex;
 using namespace connectivity;
 using namespace connectivity::mork;
 
-// -------------------------------------------------------------------------
+
 MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()
 {
     SAL_INFO("connectivity.mork", "=> MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()" );
 }
 
-// -------------------------------------------------------------------------
+
 MDatabaseMetaDataHelper::~MDatabaseMetaDataHelper()
 {
 }

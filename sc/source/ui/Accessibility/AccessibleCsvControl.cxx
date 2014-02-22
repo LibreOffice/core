@@ -64,7 +64,7 @@ using ::com::sun::star::beans::PropertyValue;
 using namespace ::com::sun::star::accessibility;
 
 
-// ----------------------------------------------------------------------------
+
 
 const sal_uInt16 nRulerRole         = AccessibleRole::TEXT;
 const sal_uInt16 nGridRole          = AccessibleRole::TABLE;
@@ -341,7 +341,7 @@ static void lcl_FillFontAttributes( Sequence< PropertyValue >& rSeq, const Font&
 
 
 
-// ----------------------------------------------------------------------------
+
 
 DBG_NAME( ScAccessibleCsvRuler )
 
@@ -887,7 +887,7 @@ static inline sal_uInt32 lcl_GetGridColumn( sal_Int32 nApiColumn )
 }
 
 
-// ----------------------------------------------------------------------------
+
 
 DBG_NAME( ScAccessibleCsvGrid )
 

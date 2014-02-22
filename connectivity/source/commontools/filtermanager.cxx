@@ -41,14 +41,14 @@ namespace dbtools
     //====================================================================
     //= FilterManager
     //====================================================================
-    //--------------------------------------------------------------------
+
     FilterManager::FilterManager( )
         :m_aFilterComponents( FC_COMPONENT_COUNT )
         ,m_bApplyPublicFilter( true )
     {
     }
 
-    //--------------------------------------------------------------------
+
     void FilterManager::initialize( const Reference< XPropertySet >& _rxComponentAggregate )
     {
         m_xComponentAggregate = _rxComponentAggregate;
@@ -58,19 +58,19 @@ namespace dbtools
             m_xComponentAggregate->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_APPLYFILTER), makeAny( (sal_Bool)sal_True ) );
     }
 
-    //--------------------------------------------------------------------
+
     void FilterManager::dispose( )
     {
         m_xComponentAggregate.clear();
     }
 
-    //--------------------------------------------------------------------
+
     const OUString& FilterManager::getFilterComponent( FilterComponent _eWhich ) const
     {
         return m_aFilterComponents[ _eWhich ];
     }
 
-    //--------------------------------------------------------------------
+
     void FilterManager::setFilterComponent( FilterComponent _eWhich, const OUString& _rComponent )
     {
         m_aFilterComponents[ _eWhich ]  = _rComponent;
@@ -85,7 +85,7 @@ namespace dbtools
         }
     }
 
-    //--------------------------------------------------------------------
+
     void FilterManager::setApplyPublicFilter( sal_Bool _bApply )
     {
         if ( m_bApplyPublicFilter == _bApply )
@@ -106,7 +106,7 @@ namespace dbtools
         }
     }
 
-    //--------------------------------------------------------------------
+
     void FilterManager::appendFilterComponent( OUStringBuffer& io_appendTo, const OUString& i_component ) const
     {
         if ( !io_appendTo.isEmpty() )
@@ -121,7 +121,7 @@ namespace dbtools
         io_appendTo.appendAscii( " )" );
     }
 
-    //--------------------------------------------------------------------
+
     bool FilterManager::isThereAtMostOneComponent( OUStringBuffer& o_singleComponent ) const
     {
         sal_Int32 nOnlyNonEmpty = -1;
@@ -152,7 +152,7 @@ namespace dbtools
         return false;
     }
 
-    //--------------------------------------------------------------------
+
     OUString FilterManager::getComposedFilter( ) const
     {
         OUStringBuffer aComposedFilter;

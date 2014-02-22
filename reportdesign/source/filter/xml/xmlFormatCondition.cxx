@@ -85,18 +85,18 @@ OXMLFormatCondition::OXMLFormatCondition( ORptFilter& rImport,
         OSL_FAIL("Exception catched while filling the report definition props");
     }
 }
-// -----------------------------------------------------------------------------
+
 
 OXMLFormatCondition::~OXMLFormatCondition()
 {
 }
-// -----------------------------------------------------------------------------
+
 void OXMLFormatCondition::EndElement()
 {
     OXMLHelper::copyStyleElements(m_rImport.isOldFormat(),m_sStyleName,GetImport().GetAutoStyles(),m_xComponent.get());
 }
-//----------------------------------------------------------------------------
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

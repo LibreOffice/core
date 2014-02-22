@@ -52,7 +52,7 @@ OFileTable::OFileTable(sdbcx::OCollection* _pTables,OConnection* _pConnection)
     construct();
     m_aColumns = new OSQLColumns();
 }
-// -------------------------------------------------------------------------
+
 OFileTable::OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
                         const OUString& _Name,
                         const OUString& _Type,
@@ -78,12 +78,12 @@ OFileTable::OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
     construct();
     //  refreshColumns();
 }
-// -------------------------------------------------------------------------
+
 OFileTable::~OFileTable( )
 {
     DBG_DTOR( file_OFileTable, NULL );
 }
-// -------------------------------------------------------------------------
+
 void OFileTable::refreshColumns()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::refreshColumns" );
@@ -103,17 +103,17 @@ void OFileTable::refreshColumns()
     else
         m_pColumns  = new OColumns(this,m_aMutex,aVector);
 }
-// -------------------------------------------------------------------------
+
 void OFileTable::refreshKeys()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::refreshKeys" );
 }
-// -------------------------------------------------------------------------
+
 void OFileTable::refreshIndexes()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::refreshIndexes" );
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OFileTable::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::queryInterface" );
@@ -126,7 +126,7 @@ Any SAL_CALL OFileTable::queryInterface( const Type & rType ) throw(RuntimeExcep
 
     return OTable_TYPEDEF::queryInterface(rType);
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OFileTable::disposing(void)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::disposing" );
@@ -136,7 +136,7 @@ void SAL_CALL OFileTable::disposing(void)
 
     FileClose();
 }
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OFileTable::getUnoTunnelImplementationId()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::getUnoTunnelImplementationId" );
@@ -154,7 +154,7 @@ Sequence< sal_Int8 > OFileTable::getUnoTunnelImplementationId()
 }
 
 // com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
 sal_Int64 OFileTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::getSomething" );
@@ -162,7 +162,7 @@ sal_Int64 OFileTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OTable_TYPEDEF::getSomething(rId);
 }
-// -----------------------------------------------------------------------------
+
 void OFileTable::FileClose()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::FileClose" );
@@ -180,48 +180,48 @@ void OFileTable::FileClose()
         m_pBuffer = NULL;
     }
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OFileTable::acquire() throw()
 {
     OTable_TYPEDEF::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OFileTable::release() throw()
 {
     OTable_TYPEDEF::release();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OFileTable::InsertRow(OValueRefVector& /*rRow*/, sal_Bool /*bFlush*/,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& /*_xCols*/)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::InsertRow" );
     return sal_False;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OFileTable::DeleteRow(const OSQLColumns& /*_rCols*/)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::DeleteRow" );
     return sal_False;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OFileTable::UpdateRow(OValueRefVector& /*rRow*/, OValueRefRow& /*pOrgRow*/,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& /*_xCols*/)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::UpdateRow" );
     return sal_False;
 }
-// -----------------------------------------------------------------------------
+
 void OFileTable::addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& /*descriptor*/)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::addColumn" );
     OSL_FAIL( "OFileTable::addColumn: not implemented!" );
 }
-// -----------------------------------------------------------------------------
+
 void OFileTable::dropColumn(sal_Int32 /*_nPos*/)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::dropColumn" );
     OSL_FAIL( "OFileTable::addColumn: not implemented!" );
 }
 
-// -----------------------------------------------------------------------------
+
 SvStream* OFileTable::createStream_simpleError( const OUString& _rFileName, StreamMode _eOpenMode)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::createStream_simpleError" );
@@ -235,11 +235,11 @@ SvStream* OFileTable::createStream_simpleError( const OUString& _rFileName, Stre
     return pReturn;
 }
 
-// -----------------------------------------------------------------------------
+
 void OFileTable::refreshHeader()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::refreshHeader" );
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

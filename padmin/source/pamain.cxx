@@ -66,7 +66,7 @@ OUString MyApp::ReadStringHook( const OUString& rStr )
 };
 
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 MyApp::Exception( sal_uInt16 nError )
 {
@@ -85,9 +85,9 @@ int MyApp::Main()
 
     EnableAutoHelpId();
 
-    //-------------------------------------------------
+
     // create the global service-manager
-    //-------------------------------------------------
+
     Reference< XComponentContext > xCtx;
     Reference< XMultiServiceFactory > xFactory;
     try

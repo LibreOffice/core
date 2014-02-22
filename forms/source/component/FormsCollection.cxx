@@ -36,32 +36,32 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 
-//------------------------------------------------------------------
-//------------------------------------------------------------------
+
+
 InterfaceRef SAL_CALL OFormsCollection_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OFormsCollection( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 OUString SAL_CALL OFormsCollection::getServiceName() throw(RuntimeException)
 {
     return OUString("com.sun.star.form.Forms");
 }
 
-//------------------------------------------------------------------------------
+
 Sequence< sal_Int8 > SAL_CALL OFormsCollection::getImplementationId(  ) throw(RuntimeException)
 {
     return OImplementationIds::getImplementationId(getTypes());
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> SAL_CALL OFormsCollection::getTypes() throw(RuntimeException)
 {
     return concatSequences(OInterfaceContainer::getTypes(), FormsCollectionComponentBase::getTypes(), OFormsCollection_BASE::getTypes());
 }
 
-//------------------------------------------------------------------
+
 OFormsCollection::OFormsCollection(const Reference<XComponentContext>& _rxFactory)
     :FormsCollectionComponentBase( m_aMutex )
     ,OInterfaceContainer( _rxFactory, m_aMutex, cppu::UnoType<XForm>::get() )
@@ -69,7 +69,7 @@ OFormsCollection::OFormsCollection(const Reference<XComponentContext>& _rxFactor
 {
 }
 
-//------------------------------------------------------------------------------
+
 OFormsCollection::OFormsCollection( const OFormsCollection& _cloneSource )
     :FormsCollectionComponentBase( m_aMutex )
     ,OInterfaceContainer( m_aMutex, _cloneSource )
@@ -77,7 +77,7 @@ OFormsCollection::OFormsCollection( const OFormsCollection& _cloneSource )
 {
 }
 
-//------------------------------------------------------------------------------
+
 OFormsCollection::~OFormsCollection()
 {
     if (!FormsCollectionComponentBase::rBHelper.bDisposed)
@@ -87,7 +87,7 @@ OFormsCollection::~OFormsCollection()
     }
 }
 
-//------------------------------------------------------------------------------
+
 Any SAL_CALL OFormsCollection::queryAggregation(const Type& _rType) throw(RuntimeException)
 {
     Any aReturn = OFormsCollection_BASE::queryInterface(_rType);
@@ -133,7 +133,7 @@ Reference< XCloneable > SAL_CALL OFormsCollection::createClone(  ) throw (Runtim
 }
 
 // OComponentHelper
-//------------------------------------------------------------------------------
+
 void OFormsCollection::disposing()
 {
     {
@@ -145,14 +145,14 @@ void OFormsCollection::disposing()
 }
 
 //XChild
-//------------------------------------------------------------------------------
+
 void OFormsCollection::setParent(const InterfaceRef& Parent) throw( NoSupportException, RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     m_xParent = Parent;
 }
 
-//------------------------------------------------------------------------------
+
 InterfaceRef  OFormsCollection::getParent() throw( RuntimeException )
 {
     return m_xParent;

@@ -47,7 +47,7 @@
 
 using namespace ::com::sun::star;
 
-// -----------------------------------------------------------------------
+
 
 static void lcl_GetChartParameters( const uno::Reference< chart2::XChartDocument >& xChartDoc,
             OUString& rRanges, chart::ChartDataRowSource& rDataRowSource,

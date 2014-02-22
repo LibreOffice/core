@@ -40,7 +40,7 @@
 #include <svl/itempool.hxx>
 #include <sfx2/msgpool.hxx>
 
-//--------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_ORichTextControl()
 {
     static ::frm::OMultiInstanceAutoRegistration< ::frm::ORichTextControl > aAutoRegistration;
@@ -78,21 +78,21 @@ namespace frm
     //==================================================================
     // ORichTextControl
     //==================================================================
-    //------------------------------------------------------------------
+
     ORichTextControl::ORichTextControl()
         :UnoEditControl()
     {
     }
 
-    //------------------------------------------------------------------
+
     ORichTextControl::~ORichTextControl()
     {
     }
 
-    //------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ORichTextControl, UnoEditControl, ORichTextControl_Base )
 
-    //------------------------------------------------------------------
+
     Any SAL_CALL ORichTextControl::queryAggregation( const Type& _rType ) throw ( RuntimeException )
     {
         Any aReturn = UnoEditControl::queryAggregation( _rType );
@@ -103,7 +103,7 @@ namespace frm
         return aReturn;
     }
 
-    //------------------------------------------------------------------
+
     namespace
     {
         //..............................................................
@@ -173,7 +173,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL ORichTextControl::createPeer( const Reference< XToolkit >& _rToolkit, const Reference< XWindowPeer >& _rParentPeer ) throw( RuntimeException )
     {
         sal_Bool bReallyActAsRichText = sal_False;
@@ -248,25 +248,25 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+
     OUString SAL_CALL ORichTextControl::getImplementationName()  throw( RuntimeException )
     {
         return getImplementationName_Static();
     }
 
-    //------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL ORichTextControl::getSupportedServiceNames()  throw( RuntimeException )
     {
         return getSupportedServiceNames_Static();
     }
 
-    //------------------------------------------------------------------
+
     OUString SAL_CALL ORichTextControl::getImplementationName_Static()
     {
         return OUString( "com.sun.star.comp.form.ORichTextControl" );
     }
 
-    //------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL ORichTextControl::getSupportedServiceNames_Static()
     {
         Sequence< OUString > aServices( 3 );
@@ -276,25 +276,25 @@ namespace frm
         return aServices;
     }
 
-    //------------------------------------------------------------------
+
     Reference< XInterface > SAL_CALL ORichTextControl::Create( const Reference< XMultiServiceFactory >& )
     {
         return *( new ORichTextControl() );
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XDispatch > SAL_CALL ORichTextControl::queryDispatch( const ::com::sun::star::util::URL& _rURL, const OUString& _rTargetFrameName, sal_Int32 _nSearchFlags ) throw (RuntimeException)
     {
         FORWARD_TO_PEER_3_RET( Reference< XDispatch >, XDispatchProvider, queryDispatch, _rURL, _rTargetFrameName, _nSearchFlags );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< Reference< XDispatch > > SAL_CALL ORichTextControl::queryDispatches( const Sequence< DispatchDescriptor >& _rRequests ) throw (RuntimeException)
     {
         FORWARD_TO_PEER_1_RET( Sequence< Reference< XDispatch > >, XDispatchProvider, queryDispatches, _rRequests );
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool ORichTextControl::requiresNewPeer( const OUString& _rPropertyName ) const
     {
         return UnoControl::requiresNewPeer( _rPropertyName ) || _rPropertyName.equals( PROPERTY_RICH_TEXT );
@@ -303,7 +303,7 @@ namespace frm
     //==================================================================
     // ORichTextPeer
     //==================================================================
-    //------------------------------------------------------------------
+
     ORichTextPeer* ORichTextPeer::Create( const Reference< XControlModel >& _rxModel, Window* _pParentWindow, WinBits _nStyle )
     {
         DBG_TESTSOLARMUTEX();
@@ -328,17 +328,17 @@ namespace frm
         return pPeer;
     }
 
-    //------------------------------------------------------------------
+
     ORichTextPeer::ORichTextPeer()
     {
     }
 
-    //------------------------------------------------------------------
+
     ORichTextPeer::~ORichTextPeer()
     {
     }
 
-    //------------------------------------------------------------------
+
     void ORichTextPeer::dispose( ) throw(RuntimeException)
     {
         {
@@ -364,7 +364,7 @@ namespace frm
         VCLXWindow::dispose();
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ORichTextPeer::draw( sal_Int32 _nX, sal_Int32 _nY ) throw(::com::sun::star::uno::RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -391,7 +391,7 @@ namespace frm
         pControl->Draw( pTargetDevice, aPos, aSize, WINDOW_DRAW_NOCONTROLS );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ORichTextPeer::setProperty( const OUString& _rPropertyName, const Any& _rValue )
         throw (RuntimeException,
                std::exception)
@@ -455,13 +455,13 @@ namespace frm
             VCLXWindow::setProperty( _rPropertyName, _rValue );
     }
 
-    //------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XINTERFACE2( ORichTextPeer, VCLXWindow, ORichTextPeer_Base )
 
-    //------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ORichTextPeer, VCLXWindow, ORichTextPeer_Base )
 
-    //--------------------------------------------------------------------
+
     namespace
     {
         static SfxSlotId lcl_translateConflictingSlot( SfxSlotId _nIDFromPool )
@@ -495,7 +495,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     ORichTextPeer::SingleAttributeDispatcher ORichTextPeer::implCreateDispatcher( SfxSlotId _nSlotId, const ::com::sun::star::util::URL& _rURL )
     {
         RichTextControl* pRichTextControl = static_cast< RichTextControl* >( GetWindow() );
@@ -638,7 +638,7 @@ namespace frm
         return xDispatcher;
     }
 
-    //--------------------------------------------------------------------
+
     namespace
     {
         SfxSlotId lcl_getSlotFromUnoName( SfxSlotPool& _rSlotPool, const OUString& _rUnoSlotName )
@@ -664,7 +664,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XDispatch > SAL_CALL ORichTextPeer::queryDispatch( const ::com::sun::star::util::URL& _rURL, const OUString& /*_rTargetFrameName*/, sal_Int32 /*_nSearchFlags*/ ) throw (RuntimeException)
     {
         Reference< XDispatch > xReturn;
@@ -701,7 +701,7 @@ namespace frm
         return xReturn;
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< Reference< XDispatch > > SAL_CALL ORichTextPeer::queryDispatches( const Sequence< DispatchDescriptor >& _rRequests ) throw (RuntimeException)
     {
         Sequence< Reference< XDispatch > >  aReturn( _rRequests.getLength() );
@@ -716,7 +716,7 @@ namespace frm
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+
     void ORichTextPeer::onSelectionChanged( const ESelection& /*_rSelection*/ )
     {
         AttributeDispatchers::iterator aDispatcherPos = m_aDispatchers.find( SID_COPY );

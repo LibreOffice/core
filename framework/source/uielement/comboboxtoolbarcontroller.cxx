@@ -47,7 +47,7 @@ using namespace ::com::sun::star::util;
 namespace framework
 {
 
-// ------------------------------------------------------------------
+
 
 // Wrapper class to notify controller about events from combobox.
 // Unfortunaltly the events are notifed through virtual methods instead
@@ -135,7 +135,7 @@ bool ComboBoxControl::PreNotify( NotifyEvent& rNEvt )
     return nRet;
 }
 
-// ------------------------------------------------------------------
+
 
 ComboboxToolbarController::ComboboxToolbarController(
     const Reference< XComponentContext >& rxContext,
@@ -159,13 +159,13 @@ ComboboxToolbarController::ComboboxToolbarController(
     m_pToolbar->SetItemWindow( m_nID, m_pComboBox );
 }
 
-// ------------------------------------------------------------------
+
 
 ComboboxToolbarController::~ComboboxToolbarController()
 {
 }
 
-// ------------------------------------------------------------------
+
 
 void SAL_CALL ComboboxToolbarController::dispose()
 throw ( RuntimeException )
@@ -180,7 +180,7 @@ throw ( RuntimeException )
     m_pComboBox = 0;
 }
 
-// ------------------------------------------------------------------
+
 Sequence<PropertyValue> ComboboxToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
     Sequence<PropertyValue> aArgs( 2 );
@@ -194,7 +194,7 @@ Sequence<PropertyValue> ComboboxToolbarController::getExecuteArgs(sal_Int16 KeyM
     return aArgs;
 }
 
-// ------------------------------------------------------------------
+
 
 void ComboboxToolbarController::Select()
 {
@@ -259,7 +259,7 @@ bool ComboboxToolbarController::PreNotify( NotifyEvent& rNEvt )
     return false;
 }
 
-// --------------------------------------------------------
+
 
 void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {

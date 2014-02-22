@@ -41,13 +41,13 @@ HelpDispatch_Impl::HelpDispatch_Impl( HelpInterceptor_Impl& _rInterceptor,
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 HelpDispatch_Impl::~HelpDispatch_Impl()
 {
 }
 
-// -----------------------------------------------------------------------
+
 // XDispatch
 
 void SAL_CALL HelpDispatch_Impl::dispatch(
@@ -88,7 +88,7 @@ void SAL_CALL HelpDispatch_Impl::dispatch(
     pHelpWin->loadHelpContent(aURL.Complete);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL HelpDispatch_Impl::addStatusListener(
 
@@ -99,7 +99,7 @@ void SAL_CALL HelpDispatch_Impl::addStatusListener(
     m_xRealDispatch->addStatusListener( xControl, aURL );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL HelpDispatch_Impl::removeStatusListener(
 

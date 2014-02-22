@@ -57,14 +57,14 @@ Size SvxParaPrevWindow::GetOptimalSize() const
     return getParagraphPreviewOptimalSize(this);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxParaPrevWindow::Paint( const Rectangle& )
 {
     DrawParagraph( sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 
 #define DEF_MARGIN  120
 

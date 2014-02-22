@@ -79,9 +79,9 @@ namespace sd {
 
 sal_Bool DrawViewShell::mbPipette = sal_False;
 
-// ------------------------
+
 // - ScannerEventListener -
-// ------------------------
+
 
 class ScannerEventListener : public ::cppu::WeakImplHelper1< lang::XEventListener >
 {
@@ -100,13 +100,13 @@ public:
     void                    ParentDestroyed() { mpParent = NULL; }
 };
 
-// -----------------------------------------------------------------------------
+
 
 ScannerEventListener::~ScannerEventListener()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL ScannerEventListener::disposing( const lang::EventObject& rEventObject ) throw (uno::RuntimeException)
 {
@@ -814,7 +814,7 @@ void DrawViewShell::ExecuteAnnotation (SfxRequest& rRequest)
         mpAnnotationManager->ExecuteAnnotation( rRequest );
 }
 
-// --------------------------------------------------------------------
+
 
 void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
 {

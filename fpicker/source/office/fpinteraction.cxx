@@ -37,7 +37,7 @@ namespace svt
     //= OFilePickerInteractionHandler
     //====================================================================
     DBG_NAME( OFilePickerInteractionHandler )
-    //--------------------------------------------------------------------
+
     OFilePickerInteractionHandler::OFilePickerInteractionHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxMaster )
         :m_xMaster( _rxMaster )
         ,m_bUsed( sal_False )
@@ -47,13 +47,13 @@ namespace svt
         DBG_ASSERT( m_xMaster.is(), "OFilePickerInteractionHandler::OFilePickerInteractionHandler: invalid master handler!" );
     }
 
-    //--------------------------------------------------------------------
+
     OFilePickerInteractionHandler::~OFilePickerInteractionHandler( )
     {
         DBG_DTOR( OFilePickerInteractionHandler, NULL );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OFilePickerInteractionHandler::handle( const Reference< XInteractionRequest >& _rxRequest ) throw (RuntimeException)
     {
         if (!_rxRequest.is())
@@ -115,31 +115,31 @@ namespace svt
         m_xMaster->handle(_rxRequest);
     }
 
-    //--------------------------------------------------------------------
+
     void OFilePickerInteractionHandler::enableInterceptions( EInterceptedInteractions eInterceptions )
     {
         m_eInterceptions = eInterceptions;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool OFilePickerInteractionHandler::wasUsed() const
     {
         return m_bUsed;
     }
 
-    //--------------------------------------------------------------------
+
     void OFilePickerInteractionHandler::resetUseState()
     {
         m_bUsed = sal_False;
     }
 
-    //--------------------------------------------------------------------
+
     void OFilePickerInteractionHandler::forgetRequest()
     {
         m_aException = Any();
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool OFilePickerInteractionHandler::wasAccessDenied() const
     {
         InteractiveIOException aIoException;

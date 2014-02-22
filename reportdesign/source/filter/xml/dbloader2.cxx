@@ -39,12 +39,12 @@ using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::ui::dialogs;
 using ::com::sun::star::awt::XWindow;
 
-// -------------------------------------------------------------------------
+
 ORptTypeDetection::ORptTypeDetection(Reference< XComponentContext > const & xContext)
 : m_xContext(xContext)
 {
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ORptTypeDetection::detect( Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (RuntimeException)
 {
 
@@ -77,32 +77,32 @@ OUString SAL_CALL ORptTypeDetection::detect( Sequence< ::com::sun::star::beans::
     }
     return OUString();
 }
-// -------------------------------------------------------------------------
+
 Reference< XInterface > SAL_CALL
         ORptTypeDetection::create(Reference< XComponentContext > const & xContext)
 {
     return *(new ORptTypeDetection(xContext));
 }
-// -------------------------------------------------------------------------
+
 // XServiceInfo
 OUString SAL_CALL ORptTypeDetection::getImplementationName() throw(  )
 {
     return getImplementationName_Static();
 }
-// -------------------------------------------------------------------------
+
 
 // XServiceInfo
 sal_Bool SAL_CALL ORptTypeDetection::supportsService(const OUString& ServiceName) throw(  )
 {
     return cppu::supportsService(this, ServiceName);
 }
-// -------------------------------------------------------------------------
+
 // XServiceInfo
 Sequence< OUString > SAL_CALL ORptTypeDetection::getSupportedServiceNames(void) throw(  )
 {
     return getSupportedServiceNames_Static();
 }
-// -------------------------------------------------------------------------
+
 // ORegistryServiceManager_Static
 Sequence< OUString > ORptTypeDetection::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
@@ -110,9 +110,9 @@ Sequence< OUString > ORptTypeDetection::getSupportedServiceNames_Static(void) th
     aSNS[0] = "com.sun.star.document.ExtendedTypeDetection";
     return aSNS;
 }
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+
+
 }//rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

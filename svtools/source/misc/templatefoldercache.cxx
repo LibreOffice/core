@@ -55,7 +55,7 @@ namespace svt
     //=====================================================================
     //= helpers
     //=====================================================================
-    //---------------------------------------------------------------------
+
     SvStream& WriteDateTime( SvStream& _rStorage, const util::DateTime& _rDate )
     {
         sal_uInt16 hundredthSeconds = static_cast< sal_uInt16 >( _rDate.NanoSeconds / Time::nanoPerCenti );
@@ -71,7 +71,7 @@ namespace svt
         return _rStorage;
     }
 
-    //---------------------------------------------------------------------
+
     SvStream& operator >> ( SvStream& _rStorage, util::DateTime& _rDate )
     {
         sal_uInt16 hundredthSeconds;
@@ -88,7 +88,7 @@ namespace svt
         return _rStorage;
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool operator == ( const util::DateTime& _rLHS, const util::DateTime& _rRHS )
     {
         return  _rLHS.NanoSeconds == _rRHS.NanoSeconds
@@ -101,7 +101,7 @@ namespace svt
             &&  _rLHS.IsUTC     == _rRHS.IsUTC;
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool operator != ( const util::DateTime& _rLHS, const util::DateTime& _rRHS )
     {
         return !( _rLHS == _rRHS );
@@ -158,10 +158,10 @@ namespace svt
                                                         { m_aSubContents.push_back( _rxNewElement ); }
     };
 
-    //---------------------------------------------------------------------
+
     DBG_NAME( TemplateContent )
 
-    //---------------------------------------------------------------------
+
     TemplateContent::TemplateContent( const INetURLObject& _rURL )
         :m_aURL( _rURL )
     {
@@ -171,7 +171,7 @@ namespace svt
         implResetDate();
     }
 
-    //---------------------------------------------------------------------
+
     TemplateContent::~TemplateContent()
     {
         DBG_DTOR( TemplateContent, NULL );
@@ -180,7 +180,7 @@ namespace svt
     //=====================================================================
     //= stl helpers
     //=====================================================================
-    //---------------------------------------------------------------------
+
     /// compares two TemplateContent by URL
     struct TemplateContentURLLess
         :public ::std::binary_function  <   ::rtl::Reference< TemplateContent >
@@ -196,7 +196,7 @@ namespace svt
         }
     };
 
-    //---------------------------------------------------------------------
+
     /// sorts the sib contents of a TemplateFolderContent
     struct SubContentSort : public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
     {
@@ -225,7 +225,7 @@ namespace svt
             }
         }
     };
-    //---------------------------------------------------------------------
+
     /** does a deep compare of two template contents
     */
     struct TemplateContentEqual
@@ -270,7 +270,7 @@ namespace svt
         }
     };
 
-    //---------------------------------------------------------------------
+
     /// base class for functors which act an an SvStream
     struct StorageHelper
     {
@@ -279,7 +279,7 @@ namespace svt
         StorageHelper( SvStream& _rStorage ) : m_rStorage( _rStorage ) { }
     };
 
-    //---------------------------------------------------------------------
+
     /// functor which allows storing a string
     struct StoreString
             :public ::std::unary_function< OUString, void >
@@ -293,7 +293,7 @@ namespace svt
         }
     };
 
-    //---------------------------------------------------------------------
+
     /// functor which stores the local name of a TemplateContent
     struct StoreLocalContentName
             :public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
@@ -310,7 +310,7 @@ namespace svt
         }
     };
 
-    //---------------------------------------------------------------------
+
     struct StoreContentURL
             :public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
             ,public StoreString
@@ -334,7 +334,7 @@ namespace svt
         }
     };
 
-    //---------------------------------------------------------------------
+
     /// functor which stores the complete content of a TemplateContent
     struct StoreFolderContent
             :public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
@@ -382,7 +382,7 @@ namespace svt
         }
     };
 
-    //---------------------------------------------------------------------
+
     /// functor which reads a complete TemplateContent instance
     struct ReadFolderContent
             :public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
@@ -488,7 +488,7 @@ namespace svt
         uno::Reference< util::XOfficeInstallationDirectories > getOfficeInstDirs();
     };
 
-    //---------------------------------------------------------------------
+
     TemplateFolderCacheImpl::TemplateFolderCacheImpl( sal_Bool _bAutoStoreState )
         :m_pCacheStream         ( NULL )
         ,m_bNeedsUpdate         ( sal_True )
@@ -498,7 +498,7 @@ namespace svt
     {
     }
 
-    //---------------------------------------------------------------------
+
     TemplateFolderCacheImpl::~TemplateFolderCacheImpl( )
     {
         // store the current state if possible and required
@@ -508,7 +508,7 @@ namespace svt
         closeCacheStream( );
     }
 
-    //---------------------------------------------------------------------
+
     sal_Int32 TemplateFolderCacheImpl::getMagicNumber()
     {
         sal_Int32 nMagic = 0;
@@ -519,20 +519,20 @@ namespace svt
         return nMagic;
     }
 
-    //---------------------------------------------------------------------
+
     OUString TemplateFolderCacheImpl::getCacheFileName()
     {
         return OUString(".templdir.cache");
     }
 
 
-    //---------------------------------------------------------------------
+
     void TemplateFolderCacheImpl::normalize( TemplateFolderContent& _rState )
     {
         SubContentSort()( _rState );
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool TemplateFolderCacheImpl::equalStates( const TemplateFolderContent& _rLHS, const TemplateFolderContent& _rRHS )
     {
         if ( _rLHS.size() != _rRHS.size() )
@@ -551,7 +551,7 @@ namespace svt
         return aFirstDifferent.first == _rLHS.end();
     }
 
-    //---------------------------------------------------------------------
+
     void TemplateFolderCacheImpl::storeState( sal_Bool _bForceRetrieval )
     {
         if ( !m_bValidCurrentState || _bForceRetrieval )
@@ -580,7 +580,7 @@ namespace svt
         }
     }
 
-    //---------------------------------------------------------------------
+
     OUString TemplateFolderCacheImpl::implParseSmart( const OUString& _rPath )
     {
         INetURLObject aParser;
@@ -595,13 +595,13 @@ namespace svt
         return aParser.GetMainURL( INetURLObject::DECODE_TO_IURI );
     }
 
-    //---------------------------------------------------------------------
+
     void TemplateFolderCacheImpl::closeCacheStream( )
     {
         DELETEZ( m_pCacheStream );
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool TemplateFolderCacheImpl::implReadFolder( const ::rtl::Reference< TemplateContent >& _rxRoot )
     {
         try
@@ -672,7 +672,7 @@ namespace svt
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool TemplateFolderCacheImpl::readCurrentState()
     {
         // reset
@@ -718,7 +718,7 @@ namespace svt
         return m_bValidCurrentState;
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool TemplateFolderCacheImpl::readPreviousState()
     {
         DBG_ASSERT( m_pCacheStream, "TemplateFolderCacheImpl::readPreviousState: not to be called without stream!" );
@@ -765,7 +765,7 @@ namespace svt
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool TemplateFolderCacheImpl::openCacheStream( sal_Bool _bForRead )
     {
         // close any old stream instance
@@ -798,7 +798,7 @@ namespace svt
         return NULL != m_pCacheStream;
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool TemplateFolderCacheImpl::needsUpdate( sal_Bool _bForceCheck )
     {
         if ( m_bKnowState && !_bForceCheck )
@@ -825,7 +825,7 @@ namespace svt
         return m_bNeedsUpdate;
     }
 
-    //---------------------------------------------------------------------
+
     uno::Reference< util::XOfficeInstallationDirectories >
     TemplateFolderCacheImpl::getOfficeInstDirs()
     {
@@ -845,25 +845,25 @@ namespace svt
     //=====================================================================
     //= TemplateFolderCache
     //=====================================================================
-    //---------------------------------------------------------------------
+
     TemplateFolderCache::TemplateFolderCache( sal_Bool _bAutoStoreState )
         :m_pImpl( new TemplateFolderCacheImpl( _bAutoStoreState ) )
     {
     }
 
-    //---------------------------------------------------------------------
+
     TemplateFolderCache::~TemplateFolderCache( )
     {
         DELETEZ( m_pImpl );
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool TemplateFolderCache::needsUpdate( sal_Bool _bForceCheck )
     {
         return m_pImpl->needsUpdate( _bForceCheck );
     }
 
-    //---------------------------------------------------------------------
+
     void TemplateFolderCache::storeState( sal_Bool _bForceRetrieval )
     {
         m_pImpl->storeState( _bForceRetrieval );

@@ -69,14 +69,14 @@ namespace utl
         OComponentResModuleImpl& operator=( const OComponentResModuleImpl& );   // never implemented
     };
 
-    //--------------------------------------------------------------------
+
     void OComponentResModuleImpl::freeResManager()
     {
         delete m_pResources, m_pResources = NULL;
         m_bInitialized = false;
     }
 
-    //--------------------------------------------------------------------
+
     ResMgr* OComponentResModuleImpl::getResManager()
     {
         if ( !m_pResources && !m_bInitialized )
@@ -98,32 +98,32 @@ namespace utl
     //====================================================================
     //= OComponentResourceModule
     //====================================================================
-    //--------------------------------------------------------------------
+
     OComponentResourceModule::OComponentResourceModule( const OString& _rResFilePrefix )
         :BaseClass()
         ,m_pImpl( new OComponentResModuleImpl( _rResFilePrefix ) )
     {
     }
 
-    //--------------------------------------------------------------------
+
     OComponentResourceModule::~OComponentResourceModule()
     {
     }
 
-    //-------------------------------------------------------------------------
+
     ResMgr* OComponentResourceModule::getResManager()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_pImpl->getResManager();
     }
 
-    //--------------------------------------------------------------------------
+
     void OComponentResourceModule::onFirstClient()
     {
         BaseClass::onFirstClient();
     }
 
-    //--------------------------------------------------------------------------
+
     void OComponentResourceModule::onLastClient()
     {
         m_pImpl->freeResManager();

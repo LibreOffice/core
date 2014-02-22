@@ -28,7 +28,7 @@ module ooo {  module vba  {
 */
 interface XErrObject : ::com::sun::star::uno::XInterface
 {
-  //-----------------------------------------------------------------------
+  
   /**
   */
   [attribute] long Number;

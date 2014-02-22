@@ -488,7 +488,7 @@ struct OptionsGroupInfo
     ~OptionsGroupInfo() { delete m_pInItemSet; delete m_pOutItemSet; }
 };
 
-// -----------------------------------------------------------------------
+
 
 #define INI_LIST() \
     pCurrentPageEntry   ( NULL ),\
@@ -951,7 +951,7 @@ IMPL_LINK( OfaTreeOptionsDialog, ImplHandleTreeLayoutTimerHdl, void*, EMPTYARG )
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 void OfaTreeOptionsDialog::SetPaneSize(Window *pPane)
 {
     //The OfaTreeOptionsDialog is not fully widget layout enabled
@@ -1369,9 +1369,9 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
                 SFX_APP()->SetOptions( aOptSet );
             // get dispatcher anew, because SetOptions() might have destroyed the dispatcher
             SfxViewFrame *pViewFrame = SfxViewFrame::Current();
-// -------------------------------------------------------------------------
+
 //          evaluate Year2000
-// -------------------------------------------------------------------------
+
             sal_uInt16 nY2K = USHRT_MAX;
             if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_YEAR2000, false, &pItem ) )
                 nY2K = ((const SfxUInt16Item*)pItem)->GetValue();
@@ -1385,9 +1385,9 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
                 aMisc.SetYear2000(nY2K);
             }
 
-// -------------------------------------------------------------------------
+
 //          evaluate print
-// -------------------------------------------------------------------------
+
             if(SFX_ITEM_SET == rSet.GetItemState(SID_PRINTER_NOTFOUND_WARN, false, &pItem))
                 aMisc.SetNotFoundWarning(((const SfxBoolItem*)pItem)->GetValue());
 
@@ -1397,9 +1397,9 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
                 aMisc.SetPaperSizeWarning(0 != (pFlag->GetValue() &  SFX_PRINTER_CHG_SIZE ));
                 aMisc.SetPaperOrientationWarning(0 !=  (pFlag->GetValue() & SFX_PRINTER_CHG_ORIENTATION ));
             }
-// -------------------------------------------------------------------------
+
 //          evaluate help options
-// -------------------------------------------------------------------------
+
             if ( SvtHelpOptions().IsHelpTips() != Help::IsQuickHelpEnabled() )
                 SvtHelpOptions().IsHelpTips() ? Help::EnableQuickHelp() : Help::DisableQuickHelp();
             if ( SvtHelpOptions().IsExtendedHelp() != Help::IsBalloonHelpEnabled() )
@@ -2289,7 +2289,7 @@ ExtensionsTabPage::ExtensionsTabPage(
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 ExtensionsTabPage::~ExtensionsTabPage()
 {
@@ -2297,7 +2297,7 @@ ExtensionsTabPage::~ExtensionsTabPage()
     DeactivatePage();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ExtensionsTabPage::CreateDialogWithHandler()
 {
@@ -2342,7 +2342,7 @@ void ExtensionsTabPage::CreateDialogWithHandler()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool ExtensionsTabPage::DispatchAction( const OUString& rAction )
 {
@@ -2361,7 +2361,7 @@ sal_Bool ExtensionsTabPage::DispatchAction( const OUString& rAction )
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ExtensionsTabPage::ActivatePage()
 {
@@ -2389,7 +2389,7 @@ void ExtensionsTabPage::ActivatePage()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ExtensionsTabPage::DeactivatePage()
 {
@@ -2399,7 +2399,7 @@ void ExtensionsTabPage::DeactivatePage()
         m_xPage->setVisible( sal_False );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ExtensionsTabPage::ResetPage()
 {
@@ -2407,7 +2407,7 @@ void ExtensionsTabPage::ResetPage()
     ActivatePage();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ExtensionsTabPage::SavePage()
 {

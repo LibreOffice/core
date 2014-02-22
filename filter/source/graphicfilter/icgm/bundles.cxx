@@ -29,7 +29,7 @@ Bundle& Bundle::operator=( Bundle& rSource )
     return *this;
 };
 
-// ---------------------------------------------------------------
+
 
 void Bundle::SetColor( sal_uInt32 nColor )
 {
@@ -41,7 +41,7 @@ sal_uInt32 Bundle::GetColor() const
     return mnColor;
 }
 
-// ---------------------------------------------------------------
+
 
 LineBundle& LineBundle::operator=( LineBundle& rSource )
 {
@@ -86,7 +86,7 @@ FillBundle& FillBundle::operator=( FillBundle& rSource )
     return *this;
 };
 
-// ---------------------------------------------------------------
+
 
 FontEntry::FontEntry() :
     pFontName       ( NULL ),
@@ -102,7 +102,7 @@ FontEntry::~FontEntry()
     delete pCharSetValue;
 }
 
-// ---------------------------------------------------------------
+
 
 CGMFList::CGMFList() :
     nFontNameCount      ( 0 ),
@@ -117,7 +117,7 @@ CGMFList::~CGMFList()
     ImplDeleteList();
 }
 
-// ---------------------------------------------------------------
+
 
 CGMFList& CGMFList::operator=( CGMFList& rSource )
 {
@@ -148,7 +148,7 @@ CGMFList& CGMFList::operator=( CGMFList& rSource )
     return *this;
 }
 
-// ---------------------------------------------------------------
+
 
 FontEntry* CGMFList::GetFontEntry( sal_uInt32 nIndex )
 {
@@ -158,7 +158,7 @@ FontEntry* CGMFList::GetFontEntry( sal_uInt32 nIndex )
     return ( nInd < aFontEntryList.size() ) ? aFontEntryList[ nInd ] : NULL;
 }
 
-// ---------------------------------------------------------------
+
 
 static sal_Int8* ImplSearchEntry( sal_Int8* pSource, sal_Int8* pDest, sal_uInt32 nComp, sal_uInt32 nSize )
 {
@@ -238,7 +238,7 @@ void CGMFList::InsertName( sal_uInt8* pSource, sal_uInt32 nSize )
     delete[] pBuf;
 }
 
-//--------------------------------------------------------------------------
+
 
 void CGMFList::InsertCharSet( CharSetType eCharSetType, sal_uInt8* pSource, sal_uInt32 nSize )
 {
@@ -260,7 +260,7 @@ void CGMFList::InsertCharSet( CharSetType eCharSetType, sal_uInt8* pSource, sal_
     memcpy( pFontEntry->pCharSetValue, pSource , nSize );
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMFList::ImplDeleteList()
 {

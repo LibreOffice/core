@@ -42,7 +42,7 @@ namespace connectivity
     namespace file
     {
 
-//------------------------------------------------------------------------------
+
 using namespace dbtools;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -52,7 +52,7 @@ using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 DBG_NAME( file_OStatement_Base )
 
-//------------------------------------------------------------------------------
+
 OStatement_Base::OStatement_Base(OConnection* _pConnection )
     :OStatement_BASE(m_aMutex)
     ,::comphelper::OPropertyContainer(OStatement_BASE::rBHelper)
@@ -92,7 +92,7 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
 
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),        PROPERTY_ID_RESULTSETCONCURRENCY,   nAttrib,&m_nResultSetConcurrency,       ::getCppuType(static_cast<sal_Int32*>(0)));
 }
-// -----------------------------------------------------------------------------
+
 OStatement_Base::~OStatement_Base()
 {
     osl_atomic_increment( &m_refCount );
@@ -101,7 +101,7 @@ OStatement_Base::~OStatement_Base()
 
     DBG_DTOR( file_OStatement_Base, NULL );
 }
-//------------------------------------------------------------------------------
+
 void OStatement_BASE2::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -139,24 +139,24 @@ void OStatement_BASE2::disposing()
 
     OStatement_Base::disposing();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OStatement_Base::acquire() throw()
 {
     OStatement_BASE::acquire();
 }
-//-----------------------------------------------------------------------------
+
 void SAL_CALL OStatement_BASE2::release() throw()
 {
     relase_ChildImpl();
 }
-//-----------------------------------------------------------------------------
+
 Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     //SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::queryInterface" );
     const Any aRet = OStatement_BASE::queryInterface(rType);
     return aRet.hasValue() ? aRet : OPropertySetHelper::queryInterface(rType);
 }
-// -------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::getTypes" );
@@ -166,13 +166,13 @@ Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException)
 
     return ::comphelper::concatSequences(aTypes.getTypes(),OStatement_BASE::getTypes());
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OStatement_Base::cancel(  ) throw(RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::cancel" );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OStatement_Base::close(  ) throw(SQLException, RuntimeException)
 {
@@ -183,7 +183,7 @@ void SAL_CALL OStatement_Base::close(  ) throw(SQLException, RuntimeException)
     }
     dispose();
 }
-// -------------------------------------------------------------------------
+
 
 void OStatement_Base::reset() throw (SQLException)
 {
@@ -195,7 +195,7 @@ void OStatement_Base::reset() throw (SQLException)
 
 }
 
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::getWarnings" );
@@ -204,7 +204,7 @@ Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeExcepti
 
     return makeAny(m_aLastWarning);
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::clearWarnings" );
@@ -213,7 +213,7 @@ void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeExce
 
     m_aLastWarning = SQLWarning();
 }
-// -------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* OStatement_Base::createArrayHelper( ) const
 {
     //SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::createArrayHelper" );
@@ -222,31 +222,31 @@ void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeExce
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-// -------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper & OStatement_Base::getInfoHelper()
 {
     //SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::getInfoHelper" );
     return *const_cast<OStatement_Base*>(this)->getArrayHelper();
 }
-// -------------------------------------------------------------------------
+
 OResultSet* OStatement::createResultSet()
 {
     return new OResultSet(this,m_aSQLIterator);
 }
-// -------------------------------------------------------------------------
+
 IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbc.driver.file.Statement","com.sun.star.sdbc.Statement");
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OStatement::acquire() throw()
 {
     OStatement_BASE2::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OStatement::release() throw()
 {
     OStatement_BASE2::release();
 }
-// -----------------------------------------------------------------------------
-// -------------------------------------------------------------------------
+
+
 sal_Bool SAL_CALL OStatement::execute( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -256,7 +256,7 @@ sal_Bool SAL_CALL OStatement::execute( const OUString& sql ) throw(SQLException,
     return m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT;
 }
 
-// -------------------------------------------------------------------------
+
 
 Reference< XResultSet > SAL_CALL OStatement::executeQuery( const OUString& sql ) throw(SQLException, RuntimeException)
 {
@@ -273,12 +273,12 @@ Reference< XResultSet > SAL_CALL OStatement::executeQuery( const OUString& sql )
 
     return xRS;
 }
-// -------------------------------------------------------------------------
+
 Reference< XConnection > SAL_CALL OStatement::getConnection(  ) throw(SQLException, RuntimeException)
 {
     return (Reference< XConnection >)m_pConnection;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OStatement::executeUpdate( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -294,7 +294,7 @@ sal_Int32 SAL_CALL OStatement::executeUpdate( const OUString& sql ) throw(SQLExc
     return pResult->getRowCountResult();
 }
 
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OStatement_Base::disposing(void)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::disposing" );
@@ -306,25 +306,25 @@ void SAL_CALL OStatement_Base::disposing(void)
     delete m_pEvaluationKeySet;
     OStatement_BASE::disposing();
 }
-// -----------------------------------------------------------------------------
+
 Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OStatement_Base::getPropertySetInfo(  ) throw(RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::getPropertySetInfo" );
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
-// -----------------------------------------------------------------------------
+
 Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = OStatement_XStatement::queryInterface( rType);
     return aRet.hasValue() ? aRet : OStatement_BASE2::queryInterface( rType);
 }
-// -----------------------------------------------------------------------------
+
 OSQLAnalyzer* OStatement_Base::createAnalyzer()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::createAnalyzer" );
     return new OSQLAnalyzer(m_pConnection);
 }
-// -----------------------------------------------------------------------------
+
 void OStatement_Base::anylizeSQL()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::anylizeSQL" );
@@ -355,7 +355,7 @@ void OStatement_Base::anylizeSQL()
         }
     }
 }
-//------------------------------------------------------------------
+
 void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
                                         OSQLParseNode* pAscendingDescending)
 {
@@ -388,7 +388,7 @@ void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
     m_aOrderbyAscending.push_back((SQL_ISTOKEN(pAscendingDescending,DESC)) ? SQL_DESC : SQL_ASC);
 }
 
-// -----------------------------------------------------------------------------
+
 void OStatement_Base::construct(const OUString& sql)  throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::construct" );
@@ -467,7 +467,7 @@ void OStatement_Base::construct(const OUString& sql)  throw(SQLException, Runtim
     else
         throw SQLException(aErr,*this,OUString(),0,Any());
 }
-// -----------------------------------------------------------------------------
+
 void OStatement_Base::createColumnMapping()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::createColumnMapping" );
@@ -481,7 +481,7 @@ void OStatement_Base::createColumnMapping()
     // now check which columns are bound
     OResultSet::setBoundedColumns(m_aRow,m_aSelectRow,xColumns,xNames,sal_True,m_xDBMetaData,m_aColMapping);
 }
-// -----------------------------------------------------------------------------
+
 void OStatement_Base::initializeResultSet(OResultSet* _pResult)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::initializeResultSet" );
@@ -500,7 +500,7 @@ void OStatement_Base::initializeResultSet(OResultSet* _pResult)
     m_pEvaluationKeySet = m_pSQLAnalyzer->bindEvaluationRow(m_aEvaluateRow);    // Set values in the code of the Compiler
     _pResult->setEvaluationKeySet(m_pEvaluationKeySet);
 }
-// -----------------------------------------------------------------------------
+
 void OStatement_Base::GetAssignValues()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::GetAssignValues" );
@@ -648,7 +648,7 @@ void OStatement_Base::GetAssignValues()
 
     }
 }
-// -------------------------------------------------------------------------
+
 void OStatement_Base::ParseAssignValues(const ::std::vector< OUString>& aColumnNameList,OSQLParseNode* pRow_Value_Constructor_Elem, sal_Int32 nIndex)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::ParseAssignValues" );
@@ -676,7 +676,7 @@ void OStatement_Base::ParseAssignValues(const ::std::vector< OUString>& aColumnN
         throwFunctionSequenceException(*this);
     }
 }
-//------------------------------------------------------------------
+
 void OStatement_Base::SetAssignValue(const OUString& aColumnName,
                                      const OUString& aValue,
                                      sal_Bool bSetNull,
@@ -742,7 +742,7 @@ void OStatement_Base::SetAssignValue(const OUString& aColumnName,
     if(nParameter != SQL_NO_PARAMETER)
         m_aParameterIndexes[nParameter] = nId;
 }
-// -----------------------------------------------------------------------------
+
 void OStatement_Base::parseParamterElem(const OUString& /*_sColumnName*/,OSQLParseNode* /*pRow_Value_Constructor_Elem*/)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::parseParamterElem" );
@@ -752,6 +752,6 @@ void OStatement_Base::parseParamterElem(const OUString& /*_sColumnName*/,OSQLPar
     } // namespace file
 // =============================================================================
 }// namespace connectivity
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

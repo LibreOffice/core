@@ -82,7 +82,7 @@ namespace psp
 *  class PrinterInfoManager
 */
 
-// -----------------------------------------------------------------
+
 
 PrinterInfoManager& PrinterInfoManager::get()
 {
@@ -110,7 +110,7 @@ void PrinterInfoManager::release()
     pSalData->m_pPIManager = NULL;
 }
 
-// -----------------------------------------------------------------
+
 
 PrinterInfoManager::PrinterInfoManager( Type eType ) :
     m_pQueueInfo( NULL ),
@@ -125,7 +125,7 @@ PrinterInfoManager::PrinterInfoManager( Type eType ) :
     initSystemDefaultPaper();
 }
 
-// -----------------------------------------------------------------
+
 
 PrinterInfoManager::~PrinterInfoManager()
 {
@@ -135,14 +135,14 @@ PrinterInfoManager::~PrinterInfoManager()
     #endif
 }
 
-// -----------------------------------------------------------------
+
 
 bool PrinterInfoManager::isCUPSDisabled() const
 {
     return m_bDisableCUPS;
 }
 
-// -----------------------------------------------------------------
+
 
 void PrinterInfoManager::setCUPSDisabled( bool bDisable )
 {
@@ -153,7 +153,7 @@ void PrinterInfoManager::setCUPSDisabled( bool bDisable )
     checkPrintersChanged( true );
 }
 
-// -----------------------------------------------------------------
+
 
 void PrinterInfoManager::initSystemDefaultPaper()
 {
@@ -162,7 +162,7 @@ void PrinterInfoManager::initSystemDefaultPaper()
         RTL_TEXTENCODING_UTF8);
 }
 
-// -----------------------------------------------------------------
+
 
 bool PrinterInfoManager::checkPrintersChanged( bool bWait )
 {
@@ -212,7 +212,7 @@ bool PrinterInfoManager::checkPrintersChanged( bool bWait )
     return bChanged;
 }
 
-// -----------------------------------------------------------------
+
 
 void PrinterInfoManager::initialize()
 {
@@ -583,7 +583,7 @@ void PrinterInfoManager::initialize()
     }
 }
 
-// -----------------------------------------------------------------
+
 
 void PrinterInfoManager::listPrinters( ::std::list< OUString >& rList ) const
 {
@@ -593,7 +593,7 @@ void PrinterInfoManager::listPrinters( ::std::list< OUString >& rList ) const
         rList.push_back( it->first );
 }
 
-// -----------------------------------------------------------------
+
 
 const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& rPrinter ) const
 {
@@ -605,7 +605,7 @@ const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& rPrinter 
     return it != m_aPrinters.end() ? it->second.m_aInfo : aEmptyInfo;
 }
 
-// -----------------------------------------------------------------
+
 
 void PrinterInfoManager::changePrinterInfo( const OUString& rPrinter, const PrinterInfo& rNewInfo )
 {
@@ -621,7 +621,7 @@ void PrinterInfoManager::changePrinterInfo( const OUString& rPrinter, const Prin
     }
 }
 
-// -----------------------------------------------------------------
+
 
 // need to check writeability / creatability of config files
 static bool checkWriteability( const OUString& rUniPath )
@@ -771,7 +771,7 @@ bool PrinterInfoManager::writePrinterConfig()
     return true;
 }
 
-// -----------------------------------------------------------------
+
 
 bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUString& rDriverName )
 {
@@ -827,7 +827,7 @@ bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUStrin
     return bSuccess;
 }
 
-// -----------------------------------------------------------------
+
 
 bool PrinterInfoManager::removePrinter( const OUString& rPrinterName, bool bCheckOnly )
 {
@@ -881,7 +881,7 @@ bool PrinterInfoManager::removePrinter( const OUString& rPrinterName, bool bChec
     return bSuccess;
 }
 
-// -----------------------------------------------------------------
+
 
 bool PrinterInfoManager::setDefaultPrinter( const OUString& rPrinterName )
 {
@@ -900,13 +900,13 @@ bool PrinterInfoManager::setDefaultPrinter( const OUString& rPrinterName )
     return bSuccess;
 }
 
-// -----------------------------------------------------------------
+
 bool PrinterInfoManager::addOrRemovePossible() const
 {
     return true;
 }
 
-// -----------------------------------------------------------------
+
 
 void PrinterInfoManager::getSystemPrintCommands( std::list< OUString >& rCommands )
 {
@@ -1027,7 +1027,7 @@ void PrinterInfoManager::setDefaultPaper( PPDContext& rContext ) const
     }
 }
 
-// -----------------------------------------------------------------
+
 
 SystemQueueInfo::SystemQueueInfo() :
     m_bChanged( false )

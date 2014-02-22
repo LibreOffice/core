@@ -24,7 +24,7 @@
 #include "svx/fmtools.hxx"
 using namespace ::com::sun::star::uno;
 
-//------------------------------------------------------------------------------
+
 const ::comphelper::StringSequence& getColumnTypes()
 {
     static ::comphelper::StringSequence aColumnTypes(10);
@@ -45,7 +45,7 @@ const ::comphelper::StringSequence& getColumnTypes()
     return aColumnTypes;
 }
 
-//------------------------------------------------------------------
+
 // Vergleichen von PropertyInfo
 extern "C" int SAL_CALL NameCompare(const void* pFirst, const void* pSecond)
 {
@@ -54,7 +54,7 @@ extern "C" int SAL_CALL NameCompare(const void* pFirst, const void* pSecond)
 
 namespace
 {
-    //------------------------------------------------------------------------------
+
     sal_Int32 lcl_findPos(const OUString& aStr, const Sequence< OUString>& rList)
     {
         const OUString* pStrList = rList.getConstArray();
@@ -68,7 +68,7 @@ namespace
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int32 getColumnTypeByModelName(const OUString& aModelName)
 {
     const OUString aModelPrefix("com.sun.star.form.component.");

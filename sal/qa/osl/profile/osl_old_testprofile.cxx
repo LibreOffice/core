@@ -27,7 +27,7 @@
 #include <osl/profile.h>
 
 //==================================================================================================
-// -----------------------------------------------------------------------------
+
 namespace osl_Profile
 {
     class oldtests : public CppUnit::TestFixture
@@ -76,10 +76,10 @@ void oldtests::test_profile(void)
 
 } // namespace osl_Profile
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION( osl_Profile::oldtests );
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

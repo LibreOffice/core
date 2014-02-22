@@ -168,7 +168,7 @@ static bool ImplHandleMouseFloatMode( Window* pChild, const Point& rMousePos,
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleMouseHelpRequest( Window* pChild, const Point& rMousePos )
 {
@@ -200,7 +200,7 @@ static void ImplHandleMouseHelpRequest( Window* pChild, const Point& rMousePos )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplSetMousePointer( Window* pChild )
 {
@@ -211,7 +211,7 @@ static void ImplSetMousePointer( Window* pChild )
         pChild->ImplGetFrame()->SetPointer( pChild->ImplGetMousePointer() );
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplCallCommand( Window* pChild, sal_uInt16 nEvt, void* pData = NULL,
                              bool bMouse = false, Point* pPos = NULL )
@@ -254,7 +254,7 @@ static bool ImplCallCommand( Window* pChild, sal_uInt16 nEvt, void* pData = NULL
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 /*  #i34277# delayed context menu activation;
 *   necessary if there already was a popup menu running.
@@ -854,7 +854,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 static Window* ImplGetKeyInputWindow( Window* pWindow )
 {
@@ -897,7 +897,7 @@ static Window* ImplGetKeyInputWindow( Window* pWindow )
     return pChild;
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
                            sal_uInt16 nKeyCode, sal_uInt16 nCharCode, sal_uInt16 nRepeat, bool bForward )
@@ -1187,7 +1187,7 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplHandleExtTextInput( Window* pWindow,
                                     const OUString& rText,
@@ -1282,7 +1282,7 @@ static bool ImplHandleExtTextInput( Window* pWindow,
     return !ImplCallCommand( pChild, COMMAND_EXTTEXTINPUT, &aData );
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplHandleEndExtTextInput( Window* /* pWindow */ )
 {
@@ -1311,7 +1311,7 @@ static bool ImplHandleEndExtTextInput( Window* /* pWindow */ )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleExtTextInputPos( Window* pWindow,
                                        Rectangle& rRect, long& rInputWidth,
@@ -1359,7 +1359,7 @@ static void ImplHandleExtTextInputPos( Window* pWindow,
             = pChild != 0 && pChild->GetInputContext().GetFont().IsVertical();
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplHandleInputContextChange( Window* pWindow, LanguageType eNewLang )
 {
@@ -1368,7 +1368,7 @@ static bool ImplHandleInputContextChange( Window* pWindow, LanguageType eNewLang
     return !ImplCallCommand( pChild, COMMAND_INPUTCONTEXTCHANGE, &aData );
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplCallWheelCommand( Window* pWindow, const Point& rPos,
                                   const CommandWheelData* pWheelData )
@@ -1392,7 +1392,7 @@ static bool ImplCallWheelCommand( Window* pWindow, const Point& rPos,
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEvt, bool scaleDirectly = false )
 {
@@ -1499,7 +1499,7 @@ static bool ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
     return !bRet;
 }
 
-// -----------------------------------------------------------------------
+
 #define IMPL_PAINT_CHECKRTL         ((sal_uInt16)0x0020)
 
 static void ImplHandlePaint( Window* pWindow, const Rectangle& rBoundRect, bool bImmediateUpdate )
@@ -1532,7 +1532,7 @@ static void ImplHandlePaint( Window* pWindow, const Rectangle& rBoundRect, bool 
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void KillOwnPopups( Window* pWindow )
 {
@@ -1546,7 +1546,7 @@ static void KillOwnPopups( Window* pWindow )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
 {
@@ -1615,7 +1615,7 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
     pWindow->ImplGetWindowImpl()->mpFrameData->mbMinimized = bMinimized;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleMove( Window* pWindow )
 {
@@ -1642,7 +1642,7 @@ static void ImplHandleMove( Window* pWindow )
 
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleMoveResize( Window* pWindow, long nNewWidth, long nNewHeight )
 {
@@ -1650,7 +1650,7 @@ static void ImplHandleMoveResize( Window* pWindow, long nNewWidth, long nNewHeig
     ImplHandleResize( pWindow, nNewWidth, nNewHeight );
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplActivateFloatingWindows( Window* pWindow, bool bActive )
 {
@@ -1671,7 +1671,7 @@ static void ImplActivateFloatingWindows( Window* pWindow, bool bActive )
 }
 
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(Window, ImplAsyncFocusHdl)
 {
@@ -1781,7 +1781,7 @@ IMPL_LINK_NOARG(Window, ImplAsyncFocusHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleGetFocus( Window* pWindow )
 {
@@ -1800,7 +1800,7 @@ static void ImplHandleGetFocus( Window* pWindow )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleLoseFocus( Window* pWindow )
 {
@@ -1840,7 +1840,7 @@ static void ImplHandleLoseFocus( Window* pWindow )
         pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide( true );
 }
 
-// -----------------------------------------------------------------------
+
 struct DelayedCloseEvent
 {
     Window*         pWindow;
@@ -1920,7 +1920,7 @@ void ImplHandleClose( Window* pWindow )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleUserEvent( ImplSVEvent* pSVEvent )
 {
@@ -1964,7 +1964,7 @@ static sal_uInt16 ImplGetMouseMoveMode( SalMouseEvent* pEvent )
     return nMode;
 }
 
-// -----------------------------------------------------------------------
+
 
 static sal_uInt16 ImplGetMouseButtonMode( SalMouseEvent* pEvent )
 {
@@ -1982,7 +1982,7 @@ static sal_uInt16 ImplGetMouseButtonMode( SalMouseEvent* pEvent )
     return nMode;
 }
 
-// -----------------------------------------------------------------------
+
 
 inline bool ImplHandleSalMouseLeave( Window* pWindow, SalMouseEvent* pEvent )
 {
@@ -1992,7 +1992,7 @@ inline bool ImplHandleSalMouseLeave( Window* pWindow, SalMouseEvent* pEvent )
                                  ImplGetMouseMoveMode( pEvent ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 inline bool ImplHandleSalMouseMove( Window* pWindow, SalMouseEvent* pEvent )
 {
@@ -2002,7 +2002,7 @@ inline bool ImplHandleSalMouseMove( Window* pWindow, SalMouseEvent* pEvent )
                                  ImplGetMouseMoveMode( pEvent ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 inline bool ImplHandleSalMouseButtonDown( Window* pWindow, SalMouseEvent* pEvent )
 {
@@ -2017,7 +2017,7 @@ inline bool ImplHandleSalMouseButtonDown( Window* pWindow, SalMouseEvent* pEvent
                                  ImplGetMouseButtonMode( pEvent ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 inline bool ImplHandleSalMouseButtonUp( Window* pWindow, SalMouseEvent* pEvent )
 {
@@ -2032,14 +2032,14 @@ inline bool ImplHandleSalMouseButtonUp( Window* pWindow, SalMouseEvent* pEvent )
                                  ImplGetMouseButtonMode( pEvent ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplHandleSalMouseActivate( Window* /*pWindow*/, SalMouseActivateEvent* /*pEvent*/ )
 {
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplHandleMenuEvent( Window* pWindow, SalMenuEvent* pEvent, sal_uInt16 nEvent )
 {
@@ -2082,7 +2082,7 @@ static bool ImplHandleMenuEvent( Window* pWindow, SalMenuEvent* pEvent, sal_uInt
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleSalKeyMod( Window* pWindow, SalKeyModEvent* pEvent )
 {
@@ -2121,7 +2121,7 @@ static void ImplHandleSalKeyMod( Window* pWindow, SalKeyModEvent* pEvent )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleInputLanguageChange( Window* pWindow )
 {
@@ -2133,7 +2133,7 @@ static void ImplHandleInputLanguageChange( Window* pWindow )
     ImplCallCommand( pChild, COMMAND_INPUTLANGUAGECHANGE );
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleSalSettings( sal_uInt16 nEvent )
 {
@@ -2187,7 +2187,7 @@ static void ImplHandleSalSettings( sal_uInt16 nEvent )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleSalExtTextInputPos( Window* pWindow, SalExtTextInputPosEvent* pEvt )
 {
@@ -2209,7 +2209,7 @@ static void ImplHandleSalExtTextInputPos( Window* pWindow, SalExtTextInputPosEve
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplHandleShowDialog( Window* pWindow, int nDialogId )
 {
@@ -2226,7 +2226,7 @@ static bool ImplHandleShowDialog( Window* pWindow, int nDialogId )
     return ImplCallCommand( pWindow, COMMAND_SHOWDIALOG, &aCmdData );
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleSurroundingTextRequest( Window *pWindow,
                           OUString& rText,
@@ -2249,7 +2249,7 @@ static void ImplHandleSurroundingTextRequest( Window *pWindow,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleSalSurroundingTextRequest( Window *pWindow,
                          SalSurroundingTextRequestEvent *pEvt )
@@ -2274,7 +2274,7 @@ static void ImplHandleSalSurroundingTextRequest( Window *pWindow,
         pEvt->mnEnd = aSelRange.Max();
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleSurroundingTextSelectionChange( Window *pWindow,
                               sal_uLong nStart,
@@ -2288,7 +2288,7 @@ static void ImplHandleSurroundingTextSelectionChange( Window *pWindow,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleStartReconversion( Window *pWindow )
 {
@@ -2297,7 +2297,7 @@ static void ImplHandleStartReconversion( Window *pWindow )
     ImplCallCommand( pChild, COMMAND_PREPARERECONVERSION );
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleSalQueryCharPosition( Window *pWindow,
                                             SalQueryCharPositionEvent *pEvt )
@@ -2342,7 +2342,7 @@ static void ImplHandleSalQueryCharPosition( Window *pWindow,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
                           sal_uInt16 nEvent, const void* pEvent )

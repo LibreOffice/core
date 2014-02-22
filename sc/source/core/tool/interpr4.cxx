@@ -81,9 +81,9 @@ using ::std::auto_ptr;
 
 //-----------------------------static data -----------------
 
-//-------------------------------------------------------------------------
+
 // Funktionen fuer den Zugriff auf das Document
-//-------------------------------------------------------------------------
+
 
 
 void ScInterpreter::ReplaceCell( ScAddress& rPos )
@@ -847,9 +847,9 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 }
 
 
-//-----------------------------------------------------------------------------
+
 // Stack operations
-//-----------------------------------------------------------------------------
+
 
 
 // Also releases a TempToken if appropriate.
@@ -3690,7 +3690,7 @@ void ScInterpreter::ScTTT()
     PushError(errNoValue);
 }
 
-// -------------------------------------------------------------------------
+
 
 
 ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,

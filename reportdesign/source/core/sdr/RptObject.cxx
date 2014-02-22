@@ -81,7 +81,7 @@ using namespace reportdesign;
 using namespace container;
 using namespace script;
 using namespace report;
-//----------------------------------------------------------------------------
+
 sal_uInt16 OObjectBase::getObjectType(const uno::Reference< report::XReportComponent>& _xComponent)
 {
     uno::Reference< lang::XServiceInfo > xServiceInfo( _xComponent , uno::UNO_QUERY );
@@ -315,13 +315,13 @@ OObjectBase::OObjectBase(const uno::Reference< report::XReportComponent>& _xComp
 {
     m_xReportComponent = _xComponent;
 }
-//----------------------------------------------------------------------------
+
 OObjectBase::OObjectBase(const OUString& _sComponentName)
 :m_sComponentName(_sComponentName)
 ,m_bIsListening(sal_False)
 {
 }
-//----------------------------------------------------------------------------
+
 OObjectBase::~OObjectBase()
 {
     m_xMediator.reset();
@@ -348,7 +348,7 @@ uno::Reference< beans::XPropertySet> OObjectBase::getAwtComponent()
 {
     return uno::Reference< beans::XPropertySet>();
 }
-//----------------------------------------------------------------------------
+
 void OObjectBase::StartListening()
 {
     OSL_ENSURE(!isListening(), "OUnoObject::StartListening: already listening!");
@@ -365,7 +365,7 @@ void OObjectBase::StartListening()
         }
     }
 }
-//----------------------------------------------------------------------------
+
 void OObjectBase::EndListening(sal_Bool /*bRemoveListener*/)
 {
     OSL_ENSURE(!m_xReportComponent.is() || isListening(), "OUnoObject::EndListening: not listening currently!");
@@ -389,7 +389,7 @@ void OObjectBase::EndListening(sal_Bool /*bRemoveListener*/)
         m_xPropertyChangeListener.clear();
     }
 }
-//----------------------------------------------------------------------------
+
 void OObjectBase::SetPropsFromRect(const Rectangle& _rRect)
 {
     // set properties
@@ -406,17 +406,17 @@ void OObjectBase::SetPropsFromRect(const Rectangle& _rRect)
         //pModel->GetRefDevice()->Invalidate(INVALIDATE_CHILDREN);
     }
 }
-//----------------------------------------------------------------------------
+
 void OObjectBase::_propertyChange( const  beans::PropertyChangeEvent& /*evt*/ ) throw( uno::RuntimeException)
 {
 }
-//----------------------------------------------------------------------------
+
 void OObjectBase::SetObjectItemHelper(const SfxPoolItem& /*rItem*/)
 {
     // do nothing
 }
 
-//----------------------------------------------------------------------------
+
 sal_Bool OObjectBase::supportsService( const OUString& _sServiceName ) const
 {
     sal_Bool bSupports = sal_False;
@@ -429,7 +429,7 @@ sal_Bool OObjectBase::supportsService( const OUString& _sServiceName ) const
     return bSupports;
 }
 
-//----------------------------------------------------------------------------
+
 void OObjectBase::ensureSdrObjectOwnership( const uno::Reference< uno::XInterface >& _rxShape )
 {
     // UNDO in the report designer is implemented at the level of the XShapes, not
@@ -450,7 +450,7 @@ void OObjectBase::ensureSdrObjectOwnership( const uno::Reference< uno::XInterfac
     }
 }
 
-//----------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > OObjectBase::getUnoShapeOf( SdrObject& _rSdrObject )
 {
     uno::Reference< uno::XInterface > xShape( _rSdrObject.getWeakUnoShape() );
@@ -467,7 +467,7 @@ uno::Reference< uno::XInterface > OObjectBase::getUnoShapeOf( SdrObject& _rSdrOb
     return xShape;
 }
 
-//----------------------------------------------------------------------------
+
 TYPEINIT1(OCustomShape, SdrObjCustomShape);
 OCustomShape::OCustomShape(const uno::Reference< report::XReportComponent>& _xComponent
                            )
@@ -477,7 +477,7 @@ OCustomShape::OCustomShape(const uno::Reference< report::XReportComponent>& _xCo
     impl_setUnoShape( uno::Reference< uno::XInterface >(_xComponent,uno::UNO_QUERY) );
     m_bIsListening = sal_True;
 }
-//----------------------------------------------------------------------------
+
 OCustomShape::OCustomShape(const OUString& _sComponentName)
           :SdrObjCustomShape()
           ,OObjectBase(_sComponentName)
@@ -485,7 +485,7 @@ OCustomShape::OCustomShape(const OUString& _sComponentName)
     m_bIsListening = sal_True;
 }
 
-//----------------------------------------------------------------------------
+
 OCustomShape::~OCustomShape()
 {
 }
@@ -494,22 +494,22 @@ sal_uInt16 OCustomShape::GetObjIdentifier() const
 {
     return sal_uInt16(OBJ_CUSTOMSHAPE);
 }
-//----------------------------------------------------------------------------
+
 sal_uInt32 OCustomShape::GetObjInventor() const
 {
     return ReportInventor;
 }
-//----------------------------------------------------------------------------
+
 SdrPage* OCustomShape::GetImplPage() const
 {
     return GetPage();
 }
-//----------------------------------------------------------------------------
+
 void OCustomShape::SetSnapRectImpl(const Rectangle& _rRect)
 {
     SetSnapRect( _rRect );
 }
-//----------------------------------------------------------------------------
+
 sal_Int32 OCustomShape::GetStep() const
 {
     // get step property
@@ -517,7 +517,7 @@ sal_Int32 OCustomShape::GetStep() const
     OSL_FAIL("Who called me!");
     return nStep;
 }
-//----------------------------------------------------------------------------
+
 void OCustomShape::NbcMove( const Size& rSize )
 {
     if ( m_bIsListening )
@@ -540,20 +540,20 @@ void OCustomShape::NbcMove( const Size& rSize )
     else
         SdrObjCustomShape::NbcMove( rSize );
 }
-//----------------------------------------------------------------------------
+
 void OCustomShape::NbcResize(const Point& rRef, const Fraction& xFract, const Fraction& yFract)
 {
     SdrObjCustomShape::NbcResize( rRef, xFract, yFract );
 
     SetPropsFromRect(GetSnapRect());
 }
-//----------------------------------------------------------------------------
+
 void OCustomShape::NbcSetLogicRect(const Rectangle& rRect)
 {
     SdrObjCustomShape::NbcSetLogicRect(rRect);
     SetPropsFromRect(rRect);
 }
-//----------------------------------------------------------------------------
+
 bool OCustomShape::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     bool bResult = SdrObjCustomShape::EndCreate(rStat, eCmd);
@@ -572,7 +572,7 @@ bool OCustomShape::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     return bResult;
 }
 
-//----------------------------------------------------------------------------
+
 void OCustomShape::SetObjectItemHelper(const SfxPoolItem& rItem)
 {
     SetObjectItem(rItem);
@@ -586,7 +586,7 @@ uno::Reference< beans::XPropertySet> OCustomShape::getAwtComponent()
     return uno::Reference< beans::XPropertySet>(m_xReportComponent,uno::UNO_QUERY);
 }
 
-//----------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > OCustomShape::getUnoShape()
 {
     uno::Reference< uno::XInterface> xShape = OObjectBase::getUnoShapeOf( *this );
@@ -606,10 +606,10 @@ void OCustomShape::impl_setUnoShape( const uno::Reference< uno::XInterface >& rx
     m_xReportComponent.clear();
 }
 
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
+
+
 TYPEINIT1(OUnoObject, SdrUnoObj);
-//----------------------------------------------------------------------------
+
 OUnoObject::OUnoObject(const OUString& _sComponentName
                        ,const OUString& rModelName
                        ,sal_uInt16   _nObjectType)
@@ -620,7 +620,7 @@ OUnoObject::OUnoObject(const OUString& _sComponentName
     if ( !rModelName.isEmpty() )
         impl_initializeModel_nothrow();
 }
-//----------------------------------------------------------------------------
+
 OUnoObject::OUnoObject(const uno::Reference< report::XReportComponent>& _xComponent
                        ,const OUString& rModelName
                        ,sal_uInt16   _nObjectType)
@@ -634,7 +634,7 @@ OUnoObject::OUnoObject(const uno::Reference< report::XReportComponent>& _xCompon
         impl_initializeModel_nothrow();
 
 }
-//----------------------------------------------------------------------------
+
 OUnoObject::~OUnoObject()
 {
 }
@@ -678,22 +678,22 @@ sal_uInt16 OUnoObject::GetObjIdentifier() const
 {
     return sal_uInt16(m_nObjectType);
 }
-//----------------------------------------------------------------------------
+
 sal_uInt32 OUnoObject::GetObjInventor() const
 {
     return ReportInventor;
 }
-//----------------------------------------------------------------------------
+
 SdrPage* OUnoObject::GetImplPage() const
 {
     return GetPage();
 }
-//----------------------------------------------------------------------------
+
 void OUnoObject::SetSnapRectImpl(const Rectangle& _rRect)
 {
     SetSnapRect( _rRect );
 }
-//----------------------------------------------------------------------------
+
 sal_Int32 OUnoObject::GetStep() const
 {
     // get step property
@@ -702,7 +702,7 @@ sal_Int32 OUnoObject::GetStep() const
     return nStep;
 }
 
-//----------------------------------------------------------------------------
+
 void OUnoObject::NbcMove( const Size& rSize )
 {
 
@@ -750,7 +750,7 @@ void OUnoObject::NbcMove( const Size& rSize )
         SdrUnoObj::NbcMove( rSize );
 }
 
-//----------------------------------------------------------------------------
+
 
 void OUnoObject::NbcResize(const Point& rRef, const Fraction& xFract, const Fraction& yFract)
 {
@@ -765,7 +765,7 @@ void OUnoObject::NbcResize(const Point& rRef, const Fraction& xFract, const Frac
     // start listening
     OObjectBase::StartListening();
 }
-//----------------------------------------------------------------------------
+
 void OUnoObject::NbcSetLogicRect(const Rectangle& rRect)
 {
     SdrUnoObj::NbcSetLogicRect(rRect);
@@ -778,7 +778,7 @@ void OUnoObject::NbcSetLogicRect(const Rectangle& rRect)
     // start listening
     OObjectBase::StartListening();
 }
-//----------------------------------------------------------------------------
+
 
 bool OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
@@ -809,7 +809,7 @@ bool OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 
     return bResult;
 }
-//----------------------------------------------------------------------------
+
 OUString OUnoObject::GetDefaultName(const OUnoObject* _pObj)
 {
     sal_uInt16 nResId = 0;
@@ -942,9 +942,9 @@ OUnoObject* OUnoObject::Clone() const
 {
     return CloneHelper< OUnoObject >();
 }
-//----------------------------------------------------------------------------
+
 // OOle2Obj
-//----------------------------------------------------------------------------
+
 TYPEINIT1(OOle2Obj, SdrOle2Obj);
 OOle2Obj::OOle2Obj(const uno::Reference< report::XReportComponent>& _xComponent,sal_uInt16 _nType)
           :SdrOle2Obj()
@@ -956,7 +956,7 @@ OOle2Obj::OOle2Obj(const uno::Reference< report::XReportComponent>& _xComponent,
     impl_setUnoShape( uno::Reference< uno::XInterface >( _xComponent, uno::UNO_QUERY ) );
     m_bIsListening = sal_True;
 }
-//----------------------------------------------------------------------------
+
 OOle2Obj::OOle2Obj(const OUString& _sComponentName,sal_uInt16 _nType)
           :SdrOle2Obj()
           ,OObjectBase(_sComponentName)
@@ -965,7 +965,7 @@ OOle2Obj::OOle2Obj(const OUString& _sComponentName,sal_uInt16 _nType)
 {
     m_bIsListening = sal_True;
 }
-//----------------------------------------------------------------------------
+
 OOle2Obj::~OOle2Obj()
 {
 }
@@ -974,22 +974,22 @@ sal_uInt16 OOle2Obj::GetObjIdentifier() const
 {
     return m_nType;
 }
-//----------------------------------------------------------------------------
+
 sal_uInt32 OOle2Obj::GetObjInventor() const
 {
     return ReportInventor;
 }
-//----------------------------------------------------------------------------
+
 SdrPage* OOle2Obj::GetImplPage() const
 {
     return GetPage();
 }
-//----------------------------------------------------------------------------
+
 void OOle2Obj::SetSnapRectImpl(const Rectangle& _rRect)
 {
     SetSnapRect( _rRect );
 }
-//----------------------------------------------------------------------------
+
 sal_Int32 OOle2Obj::GetStep() const
 {
     // get step property
@@ -998,7 +998,7 @@ sal_Int32 OOle2Obj::GetStep() const
     return nStep;
 }
 
-//----------------------------------------------------------------------------
+
 void OOle2Obj::NbcMove( const Size& rSize )
 {
 
@@ -1051,7 +1051,7 @@ void OOle2Obj::NbcMove( const Size& rSize )
         SdrOle2Obj::NbcMove( rSize );
 }
 
-//----------------------------------------------------------------------------
+
 
 void OOle2Obj::NbcResize(const Point& rRef, const Fraction& xFract, const Fraction& yFract)
 {
@@ -1066,7 +1066,7 @@ void OOle2Obj::NbcResize(const Point& rRef, const Fraction& xFract, const Fracti
     // start listening
     OObjectBase::StartListening();
 }
-//----------------------------------------------------------------------------
+
 void OOle2Obj::NbcSetLogicRect(const Rectangle& rRect)
 {
     SdrOle2Obj::NbcSetLogicRect(rRect);
@@ -1079,7 +1079,7 @@ void OOle2Obj::NbcSetLogicRect(const Rectangle& rRect)
     // start listening
     OObjectBase::StartListening();
 }
-//----------------------------------------------------------------------------
+
 
 bool OOle2Obj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
@@ -1260,7 +1260,7 @@ uno::Reference< style::XStyle> getUsedStyle(const uno::Reference< report::XRepor
     }
     return xReturn;
 }
-//----------------------------------------------------------------------------
+
 //============================================================================
 } // rptui
 //============================================================================

@@ -30,7 +30,7 @@
 
 namespace framework{
 
-//_________________________________________________________________________________________________________________
+
 // XInterface, XTypeProvider, XServiceInfo
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2(MailToDispatcher                   ,
@@ -48,7 +48,7 @@ DEFINE_INIT_SERVICE(MailToDispatcher,
                     }
                    )
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      standard ctor
@@ -65,7 +65,7 @@ MailToDispatcher::MailToDispatcher( const css::uno::Reference< css::uno::XCompon
 {
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      standard dtor
@@ -76,7 +76,7 @@ MailToDispatcher::~MailToDispatcher()
     m_xContext = NULL;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      decide if this dispatch implementation can be used for requested URL or not
@@ -97,7 +97,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL MailToDispatcher::queryDis
     return xDispatcher;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      do the same like dispatch() but for multiple requests at the same time
@@ -117,7 +117,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Mail
     return lDispatcher;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      dispatch URL with arguments
@@ -140,7 +140,7 @@ void SAL_CALL MailToDispatcher::dispatch( const css::util::URL&                 
     // No notification for status listener!
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      dispatch with guaranteed notifications about success
@@ -177,7 +177,7 @@ void SAL_CALL MailToDispatcher::dispatchWithNotification( const css::util::URL& 
     }
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      threadsafe helper for dispatch calls
@@ -226,7 +226,7 @@ sal_Bool MailToDispatcher::implts_dispatch( const css::util::URL&               
     return bSuccess;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      add/remove listener for state events
@@ -245,7 +245,7 @@ void SAL_CALL MailToDispatcher::addStatusListener( const css::uno::Reference< cs
     // not suported yet
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void SAL_CALL MailToDispatcher::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
                                                       const css::util::URL&                                     /*aURL*/      ) throw( css::uno::RuntimeException )

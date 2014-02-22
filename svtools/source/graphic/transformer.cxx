@@ -38,21 +38,21 @@ using namespace com::sun::star;
 
 namespace unographic {
 
-// ----------------------
+
 // - GraphicTransformer -
-// ----------------------
+
 
 GraphicTransformer::GraphicTransformer()
 {
 }
 
-// ------------------------------------------------------------------------------
+
 
 GraphicTransformer::~GraphicTransformer()
 {
 }
 
-// ------------------------------------------------------------------------------
+
 
 void setAlpha( Bitmap& rBitmap, AlphaMask& rAlpha, sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
 {

@@ -20,19 +20,14 @@
 #include "accessibility/extended/accessiblebrowseboxcell.hxx"
 #include <svtools/accessibletableprovider.hxx>
 
-// .................................................................................
 namespace accessibility
 {
-// .................................................................................
-
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::accessibility;
     using namespace ::svt;
 
-    // =============================================================================
-    // = AccessibleBrowseBoxCell
-    // =============================================================================
+    // AccessibleBrowseBoxCell
     AccessibleBrowseBoxCell::AccessibleBrowseBoxCell(
             const Reference< XAccessible >& _rxParent, IAccessibleTableProvider& _rBrowseBox,
             const Reference< XWindow >& _xFocusWindow,
@@ -48,32 +43,25 @@ namespace accessibility
         implSetName( aAccName );
     }
 
-    // -----------------------------------------------------------------------------
     AccessibleBrowseBoxCell::~AccessibleBrowseBoxCell()
     {
     }
 
-    // -----------------------------------------------------------------------------
     void SAL_CALL AccessibleBrowseBoxCell::grabFocus() throw ( RuntimeException )
     {
         SolarMethodGuard aGuard( *this );
         mpBrowseBox->GoToCell( m_nRowPos, m_nColPos );
     }
-    // -----------------------------------------------------------------------------
+
     ::Rectangle AccessibleBrowseBoxCell::implGetBoundingBox()
     {
         return mpBrowseBox->GetFieldRectPixelAbs( m_nRowPos, m_nColPos, sal_False, sal_False );
     }
 
-    // -----------------------------------------------------------------------------
     ::Rectangle AccessibleBrowseBoxCell::implGetBoundingBoxOnScreen()
     {
         return mpBrowseBox->GetFieldRectPixelAbs( m_nRowPos, m_nColPos, sal_False );
     }
-
-// .................................................................................
 }   // namespace accessibility
-// .................................................................................
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

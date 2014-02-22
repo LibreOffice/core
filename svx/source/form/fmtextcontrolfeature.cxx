@@ -33,7 +33,7 @@ namespace svx
     //====================================================================
     //= FmTextControlFeature
     //====================================================================
-    //--------------------------------------------------------------------
+
     FmTextControlFeature::FmTextControlFeature( const Reference< XDispatch >& _rxDispatcher, const URL& _rFeatureURL, SfxSlotId _nSlotId, ISlotInvalidator* _pInvalidator )
         :m_xDispatcher    ( _rxDispatcher )
         ,m_aFeatureURL    ( _rFeatureURL  )
@@ -57,18 +57,18 @@ namespace svx
         osl_atomic_decrement( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
+
     FmTextControlFeature::~FmTextControlFeature( )
     {
     }
 
-    //--------------------------------------------------------------------
+
     void FmTextControlFeature::dispatch() const SAL_THROW(())
     {
         dispatch( Sequence< PropertyValue >( ) );
     }
 
-    //--------------------------------------------------------------------
+
     void FmTextControlFeature::dispatch( const Sequence< PropertyValue >& _rArgs ) const SAL_THROW(())
     {
         try
@@ -82,7 +82,7 @@ namespace svx
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FmTextControlFeature::statusChanged( const FeatureStateEvent& _rState ) throw (RuntimeException)
     {
         m_aFeatureState   = _rState.State;
@@ -92,13 +92,13 @@ namespace svx
             m_pInvalidator->Invalidate( m_nSlotId );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FmTextControlFeature::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
     {
         // nothing to do
     }
 
-    //--------------------------------------------------------------------
+
     void FmTextControlFeature::dispose() SAL_THROW(())
     {
         try

@@ -48,7 +48,7 @@ namespace dbp
     //=====================================================================
     //= OListComboWizard
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OListComboWizard::OListComboWizard( Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
         :OControlWizard(_pParent, ModuleRes(RID_DLG_LISTCOMBOWIZARD), _rxObjectModel, _rxContext)
@@ -70,7 +70,7 @@ namespace dbp
         }
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OListComboWizard::approveControl(sal_Int16 _nClassId)
     {
         switch (_nClassId)
@@ -87,7 +87,7 @@ namespace dbp
         return sal_False;
     }
 
-    //---------------------------------------------------------------------
+
     OWizardPage* OListComboWizard::createPage(WizardState _nState)
     {
         switch (_nState)
@@ -107,7 +107,7 @@ namespace dbp
         return NULL;
     }
 
-    //---------------------------------------------------------------------
+
     WizardTypes::WizardState OListComboWizard::determineNextState( WizardState _nCurrentState ) const
     {
         switch (_nCurrentState)
@@ -123,7 +123,7 @@ namespace dbp
         return WZS_INVALID_STATE;
     }
 
-    //---------------------------------------------------------------------
+
     void OListComboWizard::enterState(WizardState _nState)
     {
         OControlWizard::enterState(_nState);
@@ -137,7 +137,7 @@ namespace dbp
             defaultButton(WZB_FINISH);
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OListComboWizard::leaveState(WizardState _nState)
     {
         if (!OControlWizard::leaveState(_nState))
@@ -149,7 +149,7 @@ namespace dbp
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+
     void OListComboWizard::implApplySettings()
     {
         try
@@ -209,7 +209,7 @@ namespace dbp
         }
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OListComboWizard::onFinish()
     {
         if ( !OControlWizard::onFinish() )
@@ -222,7 +222,7 @@ namespace dbp
     //=====================================================================
     //= OLCPage
     //=====================================================================
-    //---------------------------------------------------------------------
+
     Reference< XNameAccess > OLCPage::getTables(sal_Bool _bNeedIt)
     {
         Reference< XConnection > xConn = getFormConnection();
@@ -239,7 +239,7 @@ namespace dbp
         return xTables;
     }
 
-    //---------------------------------------------------------------------
+
     Sequence< OUString > OLCPage::getTableFields(sal_Bool _bNeedIt)
     {
         Reference< XNameAccess > xTables = getTables(_bNeedIt);
@@ -273,7 +273,7 @@ namespace dbp
     //=====================================================================
     //= OContentTableSelection
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OContentTableSelection::OContentTableSelection( OListComboWizard* _pParent )
         :OLCPage(_pParent, ModuleRes(RID_PAGE_LCW_CONTENTSELECTION_TABLE))
         ,m_aFrame               (this, ModuleRes(FL_FRAME))
@@ -288,14 +288,14 @@ namespace dbp
         m_aSelectTable.SetSelectHdl(LINK(this, OContentTableSelection, OnTableSelected));
     }
 
-    //---------------------------------------------------------------------
+
     void OContentTableSelection::ActivatePage()
     {
         OLCPage::ActivatePage();
         m_aSelectTable.GrabFocus();
     }
 
-    //---------------------------------------------------------------------
+
     bool OContentTableSelection::canAdvance() const
     {
         if (!OLCPage::canAdvance())
@@ -304,14 +304,14 @@ namespace dbp
         return 0 != m_aSelectTable.GetSelectEntryCount();
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK( OContentTableSelection, OnTableSelected, ListBox*, /*_pListBox*/ )
     {
         updateDialogTravelUI();
         return 0L;
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK( OContentTableSelection, OnTableDoubleClicked, ListBox*, _pListBox )
     {
         if (_pListBox->GetSelectEntryCount())
@@ -319,7 +319,7 @@ namespace dbp
         return 0L;
     }
 
-    //---------------------------------------------------------------------
+
     void OContentTableSelection::initializePage()
     {
         OLCPage::initializePage();
@@ -342,7 +342,7 @@ namespace dbp
         m_aSelectTable.SelectEntry(getSettings().sListContentTable);
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OContentTableSelection::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OLCPage::commitPage(_eReason))
@@ -360,7 +360,7 @@ namespace dbp
     //=====================================================================
     //= OContentFieldSelection
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OContentFieldSelection::OContentFieldSelection( OListComboWizard* _pParent )
         :OLCPage(_pParent, ModuleRes(RID_PAGE_LCW_CONTENTSELECTION_FIELD))
         ,m_aFrame               (this, ModuleRes(FL_FRAME))
@@ -376,14 +376,14 @@ namespace dbp
         m_aSelectTableField.SetDoubleClickHdl(LINK(this, OContentFieldSelection, OnTableDoubleClicked));
     }
 
-    //---------------------------------------------------------------------
+
     void OContentFieldSelection::ActivatePage()
     {
         OLCPage::ActivatePage();
         m_aTableFields.GrabFocus();
     }
 
-    //---------------------------------------------------------------------
+
     void OContentFieldSelection::initializePage()
     {
         OLCPage::initializePage();
@@ -395,7 +395,7 @@ namespace dbp
         m_aDisplayedField.SetText(getSettings().sListContentField);
     }
 
-    //---------------------------------------------------------------------
+
     bool OContentFieldSelection::canAdvance() const
     {
         if (!OLCPage::canAdvance())
@@ -404,7 +404,7 @@ namespace dbp
         return 0 != m_aSelectTableField.GetSelectEntryCount();
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK( OContentFieldSelection, OnTableDoubleClicked, ListBox*, /*NOTINTERESTEDIN*/ )
     {
         if (m_aSelectTableField.GetSelectEntryCount())
@@ -412,7 +412,7 @@ namespace dbp
         return 0L;
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK( OContentFieldSelection, OnFieldSelected, ListBox*, /*NOTINTERESTEDIN*/ )
     {
         updateDialogTravelUI();
@@ -420,7 +420,7 @@ namespace dbp
         return 0L;
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OContentFieldSelection::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OLCPage::commitPage(_eReason))
@@ -434,7 +434,7 @@ namespace dbp
     //=====================================================================
     //= OLinkFieldsPage
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OLinkFieldsPage::OLinkFieldsPage( OListComboWizard* _pParent )
         :OLCPage(_pParent, ModuleRes(RID_PAGE_LCW_FIELDLINK))
         ,m_aDescription         (this, ModuleRes(FT_FIELDLINK_DESC))
@@ -452,14 +452,14 @@ namespace dbp
         m_aTableField.SetSelectHdl(LINK(this, OLinkFieldsPage, OnSelectionModified));
     }
 
-    //---------------------------------------------------------------------
+
     void OLinkFieldsPage::ActivatePage()
     {
         OLCPage::ActivatePage();
         m_aValueListField.GrabFocus();
     }
 
-    //---------------------------------------------------------------------
+
     void OLinkFieldsPage::initializePage()
     {
         OLCPage::initializePage();
@@ -476,14 +476,14 @@ namespace dbp
         implCheckFinish();
     }
 
-    //---------------------------------------------------------------------
+
     bool OLinkFieldsPage::canAdvance() const
     {
         // we're on the last page here, no travelNext allowed ...
         return false;
     }
 
-    //---------------------------------------------------------------------
+
     void OLinkFieldsPage::implCheckFinish()
     {
         bool bInvalidSelection = (COMBOBOX_ENTRY_NOTFOUND == m_aValueListField.GetEntryPos(m_aValueListField.GetText()));
@@ -491,14 +491,14 @@ namespace dbp
         getDialog()->enableButtons(WZB_FINISH, !bInvalidSelection);
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK_NOARG(OLinkFieldsPage, OnSelectionModified)
     {
         implCheckFinish();
         return 0L;
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OLinkFieldsPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OLCPage::commitPage(_eReason))
@@ -513,27 +513,27 @@ namespace dbp
     //=====================================================================
     //= OComboDBFieldPage
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OComboDBFieldPage::OComboDBFieldPage( OControlWizard* _pParent )
         :ODBFieldPage(_pParent)
     {
         setDescriptionText(ModuleRes(RID_STR_COMBOWIZ_DBFIELD).toString());
     }
 
-    //---------------------------------------------------------------------
+
     OUString& OComboDBFieldPage::getDBFieldSetting()
     {
         return getSettings().sLinkedFormField;
     }
 
-    //---------------------------------------------------------------------
+
     void OComboDBFieldPage::ActivatePage()
     {
         ODBFieldPage::ActivatePage();
         getDialog()->enableButtons(WZB_FINISH, sal_True);
     }
 
-    //---------------------------------------------------------------------
+
     bool OComboDBFieldPage::canAdvance() const
     {
         // we're on the last page here, no travelNext allowed ...

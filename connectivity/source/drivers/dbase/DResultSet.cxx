@@ -39,19 +39,19 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
-//------------------------------------------------------------------------------
+
 ODbaseResultSet::ODbaseResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator&   _aSQLIterator)
                 : file::OResultSet(pStmt,_aSQLIterator)
                 ,m_bBookmarkable(sal_True)
 {
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),         PROPERTY_ID_ISBOOKMARKABLE,       PropertyAttribute::READONLY,&m_bBookmarkable,                ::getBooleanCppuType());
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ODbaseResultSet::getImplementationName(  ) throw ( RuntimeException)
 {
     return OUString("com.sun.star.sdbcx.dbase.ResultSet");
 }
-// -------------------------------------------------------------------------
+
 Sequence< OUString > SAL_CALL ODbaseResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
 {
      Sequence< OUString > aSupported(2);
@@ -64,19 +64,19 @@ sal_Bool SAL_CALL ODbaseResultSet::supportsService( const OUString& _rServiceNam
 {
     return cppu::supportsService(this, _rServiceName);
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL ODbaseResultSet::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = ODbaseResultSet_BASE::queryInterface(rType);
     return aRet.hasValue() ? aRet : OResultSet::queryInterface(rType);
 }
-// -------------------------------------------------------------------------
+
  Sequence<  Type > SAL_CALL ODbaseResultSet::getTypes(  ) throw( RuntimeException)
 {
     return ::comphelper::concatSequences(OResultSet::getTypes(),ODbaseResultSet_BASE::getTypes());
 }
 
-// -------------------------------------------------------------------------
+
 // XRowLocate
 Any SAL_CALL ODbaseResultSet::getBookmark(  ) throw( SQLException,  RuntimeException)
 {
@@ -86,7 +86,7 @@ Any SAL_CALL ODbaseResultSet::getBookmark(  ) throw( SQLException,  RuntimeExcep
 
     return makeAny((sal_Int32)(m_aRow->get())[0]->getValue());
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODbaseResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -97,7 +97,7 @@ sal_Bool SAL_CALL ODbaseResultSet::moveToBookmark( const  Any& bookmark ) throw(
 
     return m_pTable ? Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),sal_True) : sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODbaseResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows ) throw( SQLException,  RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -111,7 +111,7 @@ sal_Bool SAL_CALL ODbaseResultSet::moveRelativeToBookmark( const  Any& bookmark,
     return relative(rows);
 }
 
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODbaseResultSet::compareBookmarks( const Any& lhs, const Any& rhs ) throw( SQLException,  RuntimeException)
 {
     sal_Int32 nFirst(0),nSecond(0),nResult(0);
@@ -133,12 +133,12 @@ sal_Int32 SAL_CALL ODbaseResultSet::compareBookmarks( const Any& lhs, const Any&
 
     return  nResult;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODbaseResultSet::hasOrderedBookmarks(  ) throw( SQLException,  RuntimeException)
 {
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODbaseResultSet::hashBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -147,7 +147,7 @@ sal_Int32 SAL_CALL ODbaseResultSet::hashBookmark( const  Any& bookmark ) throw( 
 
     return comphelper::getINT32(bookmark);
 }
-// -------------------------------------------------------------------------
+
 // XDeleteRows
 Sequence< sal_Int32 > SAL_CALL ODbaseResultSet::deleteRows( const  Sequence<  Any >& /*rows*/ ) throw( SQLException,  RuntimeException)
 {
@@ -157,7 +157,7 @@ Sequence< sal_Int32 > SAL_CALL ODbaseResultSet::deleteRows( const  Sequence<  An
     ::dbtools::throwFeatureNotImplementedException( "XDeleteRows::deleteRows", *this );
     return Sequence< sal_Int32 >();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_xIndex)
 {
     Reference<XUnoTunnel> xTunnel(_xIndex,UNO_QUERY);
@@ -187,44 +187,44 @@ sal_Bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_x
     }
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper & ODbaseResultSet::getInfoHelper()
 {
     return *ODbaseResultSet_BASE3::getArrayHelper();
 }
-// -----------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* ODbaseResultSet::createArrayHelper() const
 {
     Sequence< Property > aProps;
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL ODbaseResultSet::acquire() throw()
 {
     ODbaseResultSet_BASE2::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL ODbaseResultSet::release() throw()
 {
     ODbaseResultSet_BASE2::release();
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL ODbaseResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
-// -----------------------------------------------------------------------------
+
 OSQLAnalyzer* ODbaseResultSet::createAnalyzer()
 {
     return new OFILEAnalyzer(m_pTable->getConnection());
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 ODbaseResultSet::getCurrentFilePos() const
 {
     return m_pTable->getFilePos();
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

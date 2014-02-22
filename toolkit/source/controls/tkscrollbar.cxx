@@ -35,20 +35,20 @@ namespace toolkit
     //====================================================================
     //= UnoControlScrollBarModel
     //====================================================================
-    //--------------------------------------------------------------------
+
     UnoControlScrollBarModel::UnoControlScrollBarModel( const uno::Reference< uno::XComponentContext >& i_factory )
         :UnoControlModel( i_factory )
     {
         UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXScrollBar );
     }
 
-    //--------------------------------------------------------------------
+
     OUString UnoControlScrollBarModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException)
     {
         return OUString::createFromAscii( szServiceName_UnoControlScrollBarModel );
     }
 
-    //--------------------------------------------------------------------
+
     uno::Any UnoControlScrollBarModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     {
         switch ( nPropId )
@@ -63,7 +63,7 @@ namespace toolkit
         }
     }
 
-    //--------------------------------------------------------------------
+
     ::cppu::IPropertyArrayHelper& UnoControlScrollBarModel::getInfoHelper()
     {
         static UnoPropertyArrayHelper* pHelper = NULL;
@@ -75,7 +75,7 @@ namespace toolkit
         return *pHelper;
     }
 
-    //--------------------------------------------------------------------
+
     uno::Reference< beans::XPropertySetInfo > UnoControlScrollBarModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
     {
         static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );

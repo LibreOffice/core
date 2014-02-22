@@ -32,20 +32,20 @@ using namespace ::com::sun::star::beans;
 //========================================================================
 //= OPropertyChangeListener
 //========================================================================
-//------------------------------------------------------------------------
+
 OPropertyChangeListener::~OPropertyChangeListener()
 {
     if (m_pAdapter)
         m_pAdapter->dispose();
 }
 
-//------------------------------------------------------------------
+
 void OPropertyChangeListener::_disposing(const EventObject&) throw( RuntimeException)
 {
     // nothing to do here
 }
 
-//------------------------------------------------------------------
+
 void OPropertyChangeListener::disposeAdapter()
 {
     if ( m_pAdapter )
@@ -55,7 +55,7 @@ void OPropertyChangeListener::disposeAdapter()
     OSL_ENSURE( !m_pAdapter, "OPropertyChangeListener::disposeAdapter: what did dispose do?" );
 }
 
-//------------------------------------------------------------------
+
 void OPropertyChangeListener::setAdapter(OPropertyChangeMultiplexer* pAdapter)
 {
     if (m_pAdapter)
@@ -76,7 +76,7 @@ void OPropertyChangeListener::setAdapter(OPropertyChangeMultiplexer* pAdapter)
 //========================================================================
 //= OPropertyChangeMultiplexer
 //========================================================================
-//------------------------------------------------------------------
+
 OPropertyChangeMultiplexer::OPropertyChangeMultiplexer(OPropertyChangeListener* _pListener, const  Reference< XPropertySet>& _rxSet, bool _bAutoReleaseSet)
             :m_xSet(_rxSet)
             ,m_pListener(_pListener)
@@ -87,24 +87,24 @@ OPropertyChangeMultiplexer::OPropertyChangeMultiplexer(OPropertyChangeListener* 
     m_pListener->setAdapter(this);
 }
 
-//------------------------------------------------------------------
+
 OPropertyChangeMultiplexer::~OPropertyChangeMultiplexer()
 {
 }
 
-//------------------------------------------------------------------
+
 void OPropertyChangeMultiplexer::lock()
 {
     ++m_nLockCount;
 }
 
-//------------------------------------------------------------------
+
 void OPropertyChangeMultiplexer::unlock()
 {
     --m_nLockCount;
 }
 
-//------------------------------------------------------------------
+
 void OPropertyChangeMultiplexer::dispose()
 {
     if (m_bListening)
@@ -126,7 +126,7 @@ void OPropertyChangeMultiplexer::dispose()
 }
 
 // XEventListener
-//------------------------------------------------------------------
+
 void SAL_CALL OPropertyChangeMultiplexer::disposing( const  EventObject& _rSource) throw( RuntimeException)
 {
     if (m_pListener)
@@ -147,14 +147,14 @@ void SAL_CALL OPropertyChangeMultiplexer::disposing( const  EventObject& _rSourc
 }
 
 // XPropertyChangeListener
-//------------------------------------------------------------------
+
 void SAL_CALL OPropertyChangeMultiplexer::propertyChange( const  PropertyChangeEvent& _rEvent ) throw( RuntimeException)
 {
     if (m_pListener && !locked())
         m_pListener->_propertyChanged(_rEvent);
 }
 
-//------------------------------------------------------------------
+
 void OPropertyChangeMultiplexer::addProperty(const OUString& _sPropertyName)
 {
     if (m_xSet.is())

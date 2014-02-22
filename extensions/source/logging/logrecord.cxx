@@ -35,7 +35,7 @@ namespace logging
     //====================================================================
     //= helper
     //====================================================================
-    //--------------------------------------------------------------------
+
     namespace
     {
         /** returns a string representation of the current thread
@@ -51,7 +51,7 @@ namespace logging
         }
     }
 
-    //--------------------------------------------------------------------
+
     LogRecord createLogRecord( const OUString& _rLoggerName, const OUString& _rClassName,
         const OUString& _rMethodName, const OUString& _rMessage,
         sal_Int32 _nLogLevel, oslInterlockedCount _nEventNumber )

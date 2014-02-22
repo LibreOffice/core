@@ -71,10 +71,10 @@ namespace logging
 
     namespace
     {
-        //----------------------------------------------------------------
+
         typedef void (*SettingTranslation)( const Reference< XLogger >&, const OUString&, Any& );
 
-        //----------------------------------------------------------------
+
         void    lcl_substituteFileHandlerURLVariables_nothrow( const Reference< XLogger >& _rxLogger, OUString& _inout_rFileURL )
         {
             struct Variable
@@ -157,7 +157,7 @@ namespace logging
             }
         }
 
-        //----------------------------------------------------------------
+
         void    lcl_transformFileHandlerSettings_nothrow( const Reference< XLogger >& _rxLogger, const OUString& _rSettingName, Any& _inout_rSettingValue )
         {
             if ( _rSettingName != "FileURL" )
@@ -170,7 +170,7 @@ namespace logging
             _inout_rSettingValue <<= sURL;
         }
 
-        //----------------------------------------------------------------
+
         Reference< XInterface > lcl_createInstanceFromSetting_throw(
                 const Reference<XComponentContext>& _rContext,
                 const Reference< XLogger >& _rxLogger,
@@ -234,7 +234,7 @@ namespace logging
         }
     }
 
-    //--------------------------------------------------------------------
+
     void initializeLoggerFromConfiguration( const Reference<XComponentContext>& _rContext, const Reference< XLogger >& _rxLogger )
     {
         try

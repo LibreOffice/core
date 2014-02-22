@@ -160,7 +160,7 @@ struct UpdateDialog::SpecificError {
     sal_uInt16 m_nID;
 };
 
-//------------------------------------------------------------------------------
+
 struct UpdateDialog::IgnoredUpdate {
     OUString sExtensionID;
     OUString sVersion;
@@ -169,14 +169,14 @@ struct UpdateDialog::IgnoredUpdate {
     IgnoredUpdate( const OUString &rExtensionID, const OUString &rVersion );
 };
 
-//------------------------------------------------------------------------------
+
 UpdateDialog::IgnoredUpdate::IgnoredUpdate( const OUString &rExtensionID, const OUString &rVersion ):
     sExtensionID( rExtensionID ),
     sVersion( rVersion ),
     bRemoved( false )
 {}
 
-//------------------------------------------------------------------------------
+
 struct UpdateDialog::Index
 {
     Kind          m_eKind;
@@ -188,7 +188,7 @@ struct UpdateDialog::Index
     Index( Kind theKind, sal_uInt16 nID, sal_uInt16 nIndex, const OUString &rName );
 };
 
-//------------------------------------------------------------------------------
+
 UpdateDialog::Index::Index( Kind theKind, sal_uInt16 nID, sal_uInt16 nIndex, const OUString &rName ):
     m_eKind( theKind ),
     m_bIgnored( false ),
@@ -197,9 +197,9 @@ UpdateDialog::Index::Index( Kind theKind, sal_uInt16 nID, sal_uInt16 nIndex, con
     m_aName( rName )
 {}
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+
+
+
 class UpdateDialog::Thread: public salhelper::Thread {
 public:
     Thread(
@@ -562,7 +562,7 @@ UpdateDialog::UpdateDialog(
     getIgnoredUpdates();
 }
 
-//------------------------------------------------------------------------------
+
 UpdateDialog::~UpdateDialog()
 {
     storeIgnoredUpdates();
@@ -577,7 +577,7 @@ UpdateDialog::~UpdateDialog()
     }
 }
 
-//------------------------------------------------------------------------------
+
 bool UpdateDialog::Close() {
     m_thread->stop();
     return ModalDialog::Close();
@@ -589,9 +589,9 @@ short UpdateDialog::Execute() {
     return ModalDialog::Execute();
 }
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+
+
+
 UpdateDialog::CheckListBox::CheckListBox( UpdateDialog & dialog, ResId const & resource,
                                           Image const & normalStaticImage ):
     SvxCheckListBox( &dialog, resource, normalStaticImage ),
@@ -601,17 +601,17 @@ UpdateDialog::CheckListBox::CheckListBox( UpdateDialog & dialog, ResId const & r
     m_dialog(dialog)
 {}
 
-//------------------------------------------------------------------------------
+
 UpdateDialog::CheckListBox::~CheckListBox() {}
 
-//------------------------------------------------------------------------------
+
 sal_uInt16 UpdateDialog::CheckListBox::getItemCount() const {
     sal_uLong i = GetEntryCount();
     OSL_ASSERT(i <= std::numeric_limits< sal_uInt16 >::max());
     return sal::static_int_cast< sal_uInt16 >(i);
 }
 
-//------------------------------------------------------------------------------
+
 void UpdateDialog::CheckListBox::MouseButtonDown( MouseEvent const & event )
 {
     // When clicking on a selected entry in an SvxCheckListBox, the entry's
@@ -626,7 +626,7 @@ void UpdateDialog::CheckListBox::MouseButtonDown( MouseEvent const & event )
     m_dialog.enableOk();
 }
 
-//------------------------------------------------------------------------------
+
 void UpdateDialog::CheckListBox::MouseButtonUp(MouseEvent const & event) {
     // When clicking on an entry's checkbox in an SvxCheckListBox, the entry's
     // checkbox is toggled on mouse button up:
@@ -639,7 +639,7 @@ void UpdateDialog::CheckListBox::KeyInput(KeyEvent const & event) {
     m_dialog.enableOk();
 }
 
-//------------------------------------------------------------------------------
+
 void UpdateDialog::CheckListBox::handlePopupMenu( const Point &rPos )
 {
     SvTreeListEntry *pData = GetEntry( rPos );
@@ -690,9 +690,9 @@ void UpdateDialog::CheckListBox::handlePopupMenu( const Point &rPos )
     }
 }
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+
+
+
 sal_uInt16 UpdateDialog::insertItem( UpdateDialog::Index *pEntry, SvLBoxButtonKind kind )
 {
     m_updates.InsertEntry( pEntry->m_aName, LISTBOX_APPEND, static_cast< void * >( pEntry ), kind );
@@ -708,7 +708,7 @@ sal_uInt16 UpdateDialog::insertItem( UpdateDialog::Index *pEntry, SvLBoxButtonKi
     return 0;
 }
 
-//------------------------------------------------------------------------------
+
 void UpdateDialog::addAdditional( UpdateDialog::Index * index, SvLBoxButtonKind kind )
 {
     m_all.Enable();
@@ -722,7 +722,7 @@ void UpdateDialog::addAdditional( UpdateDialog::Index * index, SvLBoxButtonKind 
     }
 }
 
-//------------------------------------------------------------------------------
+
 void UpdateDialog::addEnabledUpdate( OUString const & name,
                                      dp_gui::UpdateData & data )
 {
@@ -749,7 +749,7 @@ void UpdateDialog::addEnabledUpdate( OUString const & name,
     m_descriptions.Enable();
 }
 
-//------------------------------------------------------------------------------
+
 void UpdateDialog::addDisabledUpdate( UpdateDialog::DisabledUpdate & data )
 {
     sal_uInt16 nIndex = sal::static_int_cast< sal_uInt16 >( m_disabledUpdates.size() );
@@ -765,7 +765,7 @@ void UpdateDialog::addDisabledUpdate( UpdateDialog::DisabledUpdate & data )
     addAdditional( pEntry, SvLBoxButtonKind_disabledCheckbox );
 }
 
-//------------------------------------------------------------------------------
+
 void UpdateDialog::addSpecificError( UpdateDialog::SpecificError & data )
 {
     sal_uInt16 nIndex = sal::static_int_cast< sal_uInt16 >( m_specificErrors.size() );
@@ -1045,7 +1045,7 @@ bool UpdateDialog::showDescription( const OUString& rDescription, bool bWithPubl
     return true;
 }
 
-//------------------------------------------------------------------------------
+
 void UpdateDialog::getIgnoredUpdates()
 {
     uno::Reference< lang::XMultiServiceFactory > xConfig(
@@ -1069,7 +1069,7 @@ void UpdateDialog::getIgnoredUpdates()
     }
 }
 
-//------------------------------------------------------------------------------
+
 void UpdateDialog::storeIgnoredUpdates()
 {
     if ( m_bModified && ( !m_ignoredUpdates.empty() ) )
@@ -1108,7 +1108,7 @@ void UpdateDialog::storeIgnoredUpdates()
     m_bModified = false;
 }
 
-//------------------------------------------------------------------------------
+
 bool UpdateDialog::isIgnoredUpdate( UpdateDialog::Index * index )
 {
     bool bIsIgnored = false;
@@ -1153,7 +1153,7 @@ bool UpdateDialog::isIgnoredUpdate( UpdateDialog::Index * index )
     return bIsIgnored;
 }
 
-//------------------------------------------------------------------------------
+
 void UpdateDialog::setIgnoredUpdate( UpdateDialog::Index *pIndex, bool bIgnore, bool bIgnoreAll )
 {
     OUString aExtensionID;
@@ -1200,7 +1200,7 @@ void UpdateDialog::setIgnoredUpdate( UpdateDialog::Index *pIndex, bool bIgnore, 
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(UpdateDialog, selectionHandler)
 {

@@ -44,7 +44,7 @@ void SAL_CALL Mapping_acquire( uno_Mapping * mapping )
     Mapping const * that = static_cast< Mapping const * >( mapping );
      that->m_bridge->acquire();
 }
-//--------------------------------------------------------------------------------------------------
+
 void SAL_CALL Mapping_release( uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
@@ -53,7 +53,7 @@ void SAL_CALL Mapping_release( uno_Mapping * mapping )
 }
 
 
-//--------------------------------------------------------------------------------------------------
+
 void SAL_CALL Mapping_cli2uno(
     uno_Mapping * mapping, void ** ppOut,
     void * pIn, typelib_InterfaceTypeDescription * td )
@@ -93,7 +93,7 @@ void SAL_CALL Mapping_cli2uno(
 #endif
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 void SAL_CALL Mapping_uno2cli(
     uno_Mapping * mapping, void ** ppOut,
     void * pIn, typelib_InterfaceTypeDescription * td )
@@ -153,7 +153,7 @@ void SAL_CALL Mapping_uno2cli(
     }
 }
 
-//__________________________________________________________________________________________________
+
 void SAL_CALL Bridge_free( uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
@@ -167,7 +167,7 @@ void SAL_CALL Bridge_free( uno_Mapping * mapping )
 namespace cli_uno
 {
 
-//__________________________________________________________________________________________________
+
 /** ToDo
     I doubt that the case that the ref count raises from 0 to 1
     can occur.  uno_ext_getMapping returns an acquired mapping. Every time
@@ -195,7 +195,7 @@ void Bridge::acquire()  const SAL_THROW(())
         }
     }
 }
-//__________________________________________________________________________________________________
+
 void Bridge::release() const  SAL_THROW(())
 {
     if (! osl_atomic_decrement( &m_ref ))
@@ -206,7 +206,7 @@ void Bridge::release() const  SAL_THROW(())
             :  const_cast<Mapping*>(&m_uno2cli)  );
    }
 }
-//__________________________________________________________________________________________________
+
 Bridge::Bridge(
     uno_Environment * uno_cli_env, uno_ExtEnvironment * uno_env,
     bool registered_cli2uno )
@@ -232,7 +232,7 @@ Bridge::Bridge(
 
 }
 
-//__________________________________________________________________________________________________
+
 Bridge::~Bridge() SAL_THROW(())
 {
     //System::GC::Collect();
@@ -249,7 +249,7 @@ extern "C"
 
 namespace cli_uno
 {
-//--------------------------------------------------------------------------------------------------
+
 void SAL_CALL cli_env_disposing( uno_Environment * uno_cli_env )
     SAL_THROW_EXTERN_C()
 {

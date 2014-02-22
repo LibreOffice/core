@@ -50,7 +50,7 @@ static bool ImplHasIndirectTabParent( Window* pWindow )
           && ( pNonLayoutParent->ImplGetWindow()->GetStyle() & WB_CHILDDLGCTRL ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 static Window* ImplGetTopParentOfTabHierarchy( Window* pParent )
 {
@@ -73,7 +73,7 @@ static Window* ImplGetTopParentOfTabHierarchy( Window* pParent )
     return pResult;
 }
 
-// -----------------------------------------------------------------------
+
 
 static Window* ImplGetSubChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16& nIndex )
 {
@@ -149,7 +149,7 @@ static Window* ImplGetSubChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16&
     return pFoundWindow;
 }
 
-// -----------------------------------------------------------------------
+
 
 static Window* ImplGetChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16& nIndex, bool bTestEnable )
 {
@@ -183,7 +183,7 @@ static Window* ImplGetChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16& nI
     return pWindow;
 }
 
-// -----------------------------------------------------------------------
+
 
 static Window* ImplGetNextWindow( Window* pParent, sal_uInt16 n, sal_uInt16& nIndex, bool bTestEnable )
 {
@@ -196,7 +196,7 @@ static Window* ImplGetNextWindow( Window* pParent, sal_uInt16 n, sal_uInt16& nIn
     return pWindow;
 }
 
-// -----------------------------------------------------------------------
+
 
 Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, sal_uInt16 nType,
                                   sal_uInt16 nFormStart, sal_uInt16 nFormEnd,
@@ -302,7 +302,7 @@ Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, sal_uInt16 nType,
     return pWindow;
 }
 
-// -----------------------------------------------------------------------
+
 
 static Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, sal_uInt16& rIndex,
                                       sal_uInt16& rFormStart, sal_uInt16& rFormEnd )
@@ -400,7 +400,7 @@ static Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, sal_uInt
     return pSWindow;
 }
 
-// -----------------------------------------------------------------------
+
 
 static Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, sal_Unicode cCharCode,
                                     sal_uInt16 nFormStart, sal_uInt16 nFormEnd, bool bCheckEnable = true )
@@ -492,7 +492,7 @@ static Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, sal_Uni
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::ImplControlFocus( sal_uInt16 nFlags )
 {
@@ -535,7 +535,7 @@ void Window::ImplControlFocus( sal_uInt16 nFlags )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 namespace
 {
@@ -969,7 +969,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 // checks if this window has dialog control
 bool Window::ImplHasDlgCtrl()
@@ -1020,7 +1020,7 @@ if ( !pDlgCtrlParent || (GetStyle() & WB_NODIALOGCONTROL) || ((pDlgCtrlParent->G
         pWindow->ImplControlFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplDlgCtrlUpdateDefButton( Window* pParent, Window* pFocusWindow,
                                         bool bGetFocus )
@@ -1079,7 +1079,7 @@ static void ImplDlgCtrlUpdateDefButton( Window* pParent, Window* pFocusWindow,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::ImplDlgCtrlFocusChanged( Window* pWindow, bool bGetFocus )
 {
@@ -1092,7 +1092,7 @@ void Window::ImplDlgCtrlFocusChanged( Window* pWindow, bool bGetFocus )
     ImplDlgCtrlUpdateDefButton( this, pWindow, bGetFocus );
 }
 
-// -----------------------------------------------------------------------
+
 
 Window* Window::ImplFindDlgCtrlWindow( Window* pWindow )
 {
@@ -1105,21 +1105,21 @@ Window* Window::ImplFindDlgCtrlWindow( Window* pWindow )
 }
 
 
-// -----------------------------------------------------------------------
+
 
 Window* Window::GetParentLabelFor( const Window* ) const
 {
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 Window* Window::GetParentLabeledBy( const Window* ) const
 {
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 static sal_Unicode getAccel( const OUString& rStr )
 {
@@ -1222,7 +1222,7 @@ Window* Window::getLegacyNonLayoutAccessibleRelationLabelFor() const
     return pWindow;
 }
 
-// -----------------------------------------------------------------------
+
 
 static Window* ImplGetLabeledBy( Window* pFrameWindow, WindowType nMyType, Window* pLabeled )
 {
@@ -1364,7 +1364,7 @@ Window* Window::getLegacyNonLayoutAccessibleRelationMemberOf() const
     return pWindow;
 }
 
-// -----------------------------------------------------------------------
+
 
 KeyEvent Window::GetActivationKey() const
 {

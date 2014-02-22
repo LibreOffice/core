@@ -99,7 +99,7 @@ SfxStyleSheet *lcl_findStyle(SdStyleSheetVector& rStyles, OUString aStyleName)
 
 }
 
-// ----------------------------------------------------------
+
 
 SdStyleSheetPool::SdStyleSheetPool(SfxItemPool const& _rPool, SdDrawDocument* pDocument)
 :   SdStyleSheetPoolBase( _rPool )
@@ -127,28 +127,28 @@ SdStyleSheetPool::SdStyleSheetPool(SfxItemPool const& _rPool, SdDrawDocument* pD
     }
 }
 
-// ----------------------------------------------------------
+
 
 SdStyleSheetPool::~SdStyleSheetPool()
 {
     DBG_ASSERT( mpDoc == NULL, "sd::SdStyleSheetPool::~SdStyleSheetPool(), dispose me first!" );
 }
 
-// ----------------------------------------------------------
+
 
 SfxStyleSheetBase* SdStyleSheetPool::Create(const OUString& rName, SfxStyleFamily eFamily, sal_uInt16 _nMask )
 {
     return new SdStyleSheet(rName, *this, eFamily, _nMask);
 }
 
-// ----------------------------------------------------------
+
 
 SfxStyleSheetBase* SdStyleSheetPool::Create(const SdStyleSheet& rStyle)
 {
     return new SdStyleSheet( rStyle );
 }
 
-// ----------------------------------------------------------
+
 
 SfxStyleSheetBase* SdStyleSheetPool::GetTitleSheet(const OUString& rLayoutName)
 {
@@ -1000,9 +1000,9 @@ void SdStyleSheetPool::UpdateStdNames()
     for ( size_t i = 0, n = aEraseList.size(); i < n; ++i )
         Remove( aEraseList[ i ] );
 }
-// --------------------------------------------------------------------
+
 // Set new SvxNumBulletItem for the respective style sheet
-// --------------------------------------------------------------------
+
 
 void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                                          Font& rBulletFont )
@@ -1162,7 +1162,7 @@ Font SdStyleSheetPool::GetBulletFont() const
     return aBulletFont;
 }
 
-// --------------------------------------------------------------------
+
 
 void SdStyleSheetPool::AddStyleFamily( const SdPage* pPage )
 {
@@ -1170,7 +1170,7 @@ void SdStyleSheetPool::AddStyleFamily( const SdPage* pPage )
     maStyleFamilyMap[pPage] = new SdStyleFamily( xPool, pPage );
 }
 
-// --------------------------------------------------------------------
+
 
 void SdStyleSheetPool::RemoveStyleFamily( const SdPage* pPage )
 {
@@ -1190,7 +1190,7 @@ void SdStyleSheetPool::RemoveStyleFamily( const SdPage* pPage )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SdStyleSheetPool::throwIfDisposed() throw(::com::sun::star::uno::RuntimeException)
 {
@@ -1238,7 +1238,7 @@ Any SAL_CALL SdStyleSheetPool::getByName( const OUString& aName ) throw(NoSuchEl
     throw NoSuchElementException();
 }
 
-// --------------------------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL SdStyleSheetPool::getElementNames() throw(RuntimeException)
 {
@@ -1259,7 +1259,7 @@ Sequence< OUString > SAL_CALL SdStyleSheetPool::getElementNames() throw(RuntimeE
     return aNames;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL SdStyleSheetPool::hasByName( const OUString& aName ) throw(RuntimeException)
 {
@@ -1283,9 +1283,9 @@ sal_Bool SAL_CALL SdStyleSheetPool::hasByName( const OUString& aName ) throw(Run
     return sal_False;
 }
 
-// --------------------------------------------------------------------
+
 // XElementAccess
-// --------------------------------------------------------------------
+
 
 Type SAL_CALL SdStyleSheetPool::getElementType() throw(RuntimeException)
 {
@@ -1294,16 +1294,16 @@ Type SAL_CALL SdStyleSheetPool::getElementType() throw(RuntimeException)
     return cppu::UnoType<XNameAccess>::get();
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL SdStyleSheetPool::hasElements() throw(RuntimeException)
 {
     return sal_True;
 }
 
-// --------------------------------------------------------------------
+
 // XIndexAccess
-// --------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL SdStyleSheetPool::getCount() throw(RuntimeException)
 {
@@ -1312,7 +1312,7 @@ sal_Int32 SAL_CALL SdStyleSheetPool::getCount() throw(RuntimeException)
     return maStyleFamilyMap.size() + 3;
 }
 
-// --------------------------------------------------------------------
+
 
 Any SAL_CALL SdStyleSheetPool::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
@@ -1341,9 +1341,9 @@ Any SAL_CALL SdStyleSheetPool::getByIndex( sal_Int32 Index ) throw(IndexOutOfBou
     }
 }
 
-// --------------------------------------------------------------------
+
 // XComponent
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SdStyleSheetPool::dispose() throw (RuntimeException)
 {
@@ -1376,19 +1376,19 @@ void SAL_CALL SdStyleSheetPool::dispose() throw (RuntimeException)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SdStyleSheetPool::addEventListener( const Reference< XEventListener >& /*xListener*/ ) throw (RuntimeException)
 {
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SdStyleSheetPool::removeEventListener( const Reference< XEventListener >& /*aListener*/ ) throw (RuntimeException)
 {
 }
 
-// --------------------------------------------------------------------
+
 
 SdStyleSheetVector SdStyleSheetPool::CreateChildList( SdStyleSheet* pSheet )
 {
@@ -1410,7 +1410,7 @@ SdStyleSheetVector SdStyleSheetPool::CreateChildList( SdStyleSheet* pSheet )
     return aResult;
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SdStyleSheetPool::acquire (void) throw ()
 {
@@ -1422,6 +1422,6 @@ void SAL_CALL SdStyleSheetPool::release (void) throw ()
     SdStyleSheetPoolBase::release();
 }
 
-// --------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

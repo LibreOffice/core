@@ -77,7 +77,7 @@ inline void lclAppendToBuffer( OStringBuffer& rBuffer, const sal_Char* pcBeg, co
     rBuffer.append( pcBeg, static_cast< sal_Int32 >( pcEnd - pcBeg ) );
 }
 
-// ----------------------------------------------------------------------------
+
 
 void lclProcessAttribs( OStringBuffer& rBuffer, const sal_Char* pcBeg, const sal_Char* pcEnd )
 {

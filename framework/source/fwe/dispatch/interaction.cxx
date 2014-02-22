@@ -63,25 +63,25 @@ class ContinuationFilterSelect : public comphelper::OInteraction< ::com::sun::st
 };  // class ContinuationFilterSelect
 
 
-//---------------------------------------------------------------------------------------------------------
+
 // initialize continuation with right start values
-//---------------------------------------------------------------------------------------------------------
+
 ContinuationFilterSelect::ContinuationFilterSelect()
     : m_sFilter( OUString() )
 {
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 // handler should use it after selection to set user specified filter for transport
-//---------------------------------------------------------------------------------------------------------
+
 void SAL_CALL ContinuationFilterSelect::setFilter( const OUString& sFilter ) throw( css::uno::RuntimeException )
 {
     m_sFilter = sFilter;
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 // read access to transported filter
-//---------------------------------------------------------------------------------------------------------
+
 OUString SAL_CALL ContinuationFilterSelect::getFilter() throw( css::uno::RuntimeException )
 {
     return m_sFilter;
@@ -105,10 +105,10 @@ private:
     ContinuationFilterSelect* m_pFilter;
 };
 
-//---------------------------------------------------------------------------------------------------------
+
 // initialize instance with all necessary information
 // We use it without any further checks on our member then ...!
-//---------------------------------------------------------------------------------------------------------
+
 RequestFilterSelect_Impl::RequestFilterSelect_Impl( const OUString& sURL )
 {
     OUString temp;
@@ -126,39 +126,39 @@ RequestFilterSelect_Impl::RequestFilterSelect_Impl( const OUString& sURL )
     m_lContinuations[1] = css::uno::Reference< css::task::XInteractionContinuation >( m_pFilter );
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 // return abort state of interaction
 // If it is true, return value of method "getFilter()" will be unspecified then!
-//---------------------------------------------------------------------------------------------------------
+
 sal_Bool RequestFilterSelect_Impl::isAbort() const
 {
     return m_pAbort->wasSelected();
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 // return user selected filter
 // Return value valid for non aborted interaction only. Please check "isAbort()" before you call these ony!
-//---------------------------------------------------------------------------------------------------------
+
 OUString RequestFilterSelect_Impl::getFilter() const
 {
     return m_pFilter->getFilter();
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 // handler call it to get type of request
 // Is hard coded to "please select filter" here. see ctor for further information.
-//---------------------------------------------------------------------------------------------------------
+
 css::uno::Any SAL_CALL RequestFilterSelect_Impl::getRequest() throw( css::uno::RuntimeException )
 {
     return m_aRequest;
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 // handler call it to get possible continuations
 // We support "abort/select_filter" only here.
 // After interaction we support read access on these continuations on our c++ interface to
 // return user decision.
-//---------------------------------------------------------------------------------------------------------
+
 css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL RequestFilterSelect_Impl::getContinuations() throw( css::uno::RuntimeException )
 {
     return m_lContinuations;
@@ -177,19 +177,19 @@ RequestFilterSelect::~RequestFilterSelect()
 }
 
 
-//---------------------------------------------------------------------------------------------------------
+
 // return abort state of interaction
 // If it is true, return value of method "getFilter()" will be unspecified then!
-//---------------------------------------------------------------------------------------------------------
+
 sal_Bool RequestFilterSelect::isAbort() const
 {
     return pImp->isAbort();
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 // return user selected filter
 // Return value valid for non aborted interaction only. Please check "isAbort()" before you call these ony!
-//---------------------------------------------------------------------------------------------------------
+
 OUString RequestFilterSelect::getFilter() const
 {
     return pImp->getFilter();

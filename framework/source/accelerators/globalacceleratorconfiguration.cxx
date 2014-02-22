@@ -125,7 +125,7 @@ void GlobalAcceleratorConfiguration::fillCache()
         {}
 }
 
-//-----------------------------------------------
+
 //
 // XComponent.dispose(),  #i120029#, to release the cyclic reference
 //

@@ -51,7 +51,7 @@ inline void lclFillAddress( ScAddress& rScPos, sal_uInt16 nXclCol, sal_uInt32 nX
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 XclImpAddressConverter::XclImpAddressConverter( const XclImpRoot& rRoot ) :
     XclAddressConverterBase( rRoot.GetTracer(), rRoot.GetScMaxPos() )
@@ -263,7 +263,7 @@ XclImpHFConverter::XclImpHFPortionInfo::XclImpHFPortionInfo() :
     maSel.nStartPos = maSel.nEndPos = 0;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpHFConverter::XclImpHFConverter( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),

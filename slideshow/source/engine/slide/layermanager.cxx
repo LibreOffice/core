@@ -816,7 +816,7 @@ namespace slideshow
                 {
                     // discontinuity found - current shape needs to
                     // get into a new layer
-                    // --------------------------------------------
+
 
                     // commit changes to previous layer
                     commitLayerChanges(nCurrLayerIndex,

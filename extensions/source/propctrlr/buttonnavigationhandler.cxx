@@ -25,7 +25,7 @@
 #include <com/sun/star/form/inspection/FormComponentPropertyHandler.hpp>
 #include <tools/debug.hxx>
 
-//------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_ButtonNavigationHandler()
 {
     ::pcr::ButtonNavigationHandler::registerImplementation();
@@ -47,7 +47,7 @@ namespace pcr
     //= ButtonNavigationHandler
     //====================================================================
     DBG_NAME( ButtonNavigationHandler )
-    //--------------------------------------------------------------------
+
     ButtonNavigationHandler::ButtonNavigationHandler( const Reference< XComponentContext >& _rxContext )
         :ButtonNavigationHandler_Base( _rxContext )
     {
@@ -56,19 +56,19 @@ namespace pcr
         m_xSlaveHandler = css::form::inspection::FormComponentPropertyHandler::create( m_xContext );
     }
 
-    //--------------------------------------------------------------------
+
     ButtonNavigationHandler::~ButtonNavigationHandler( )
     {
         DBG_DTOR( ButtonNavigationHandler, NULL );
     }
 
-    //--------------------------------------------------------------------
+
     OUString SAL_CALL ButtonNavigationHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
         return OUString( "com.sun.star.comp.extensions.ButtonNavigationHandler" );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL ButtonNavigationHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSupported( 1 );
@@ -76,14 +76,14 @@ namespace pcr
         return aSupported;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ButtonNavigationHandler::inspect( const Reference< XInterface >& _rxIntrospectee ) throw (RuntimeException, NullPointerException)
     {
         ButtonNavigationHandler_Base::inspect( _rxIntrospectee );
         m_xSlaveHandler->inspect( _rxIntrospectee );
     }
 
-    //--------------------------------------------------------------------
+
     PropertyState  SAL_CALL ButtonNavigationHandler::getPropertyState( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -112,7 +112,7 @@ namespace pcr
         return eState;
     }
 
-    //--------------------------------------------------------------------
+
     Any SAL_CALL ButtonNavigationHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -143,7 +143,7 @@ namespace pcr
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ButtonNavigationHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -169,7 +169,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     bool ButtonNavigationHandler::isNavigationCapableButton( const Reference< XPropertySet >& _rxComponent )
     {
         Reference< XPropertySetInfo > xPSI;
@@ -181,7 +181,7 @@ namespace pcr
             && xPSI->hasPropertyByName( PROPERTY_BUTTONTYPE );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< Property > SAL_CALL ButtonNavigationHandler::doDescribeSupportedProperties() const
     {
         ::std::vector< Property > aProperties;
@@ -197,7 +197,7 @@ namespace pcr
         return Sequence< Property >( &(*aProperties.begin()), aProperties.size() );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL ButtonNavigationHandler::getActuatingProperties( ) throw (RuntimeException)
     {
         Sequence< OUString > aActuating( 2 );
@@ -206,7 +206,7 @@ namespace pcr
         return aActuating;
     }
 
-    //--------------------------------------------------------------------
+
     InteractiveSelectionResult SAL_CALL ButtonNavigationHandler::onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool _bPrimary, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -227,7 +227,7 @@ namespace pcr
         return eReturn;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ButtonNavigationHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -253,7 +253,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     LineDescriptor SAL_CALL ButtonNavigationHandler::describePropertyLine( const OUString& _rPropertyName, const Reference< XPropertyControlFactory >& _rxControlFactory ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );

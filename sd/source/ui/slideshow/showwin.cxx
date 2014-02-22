@@ -289,7 +289,7 @@ void ShowWindow::GetFocus()
     Window::GetFocus();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ShowWindow::LoseFocus()
 {
@@ -299,21 +299,21 @@ void ShowWindow::LoseFocus()
         TerminateShow();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ShowWindow::Resize()
 {
     ::sd::Window::Resize();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ShowWindow::Move()
 {
     ::sd::Window::Move();
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool ShowWindow::SetEndMode()
 {
@@ -336,7 +336,7 @@ bool ShowWindow::SetEndMode()
     return( SHOWWINDOWMODE_END == meShowWindowMode );
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool ShowWindow::SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeout, Graphic* pLogo )
 {
@@ -376,7 +376,7 @@ bool ShowWindow::SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeout
     return( SHOWWINDOWMODE_PAUSE == meShowWindowMode );
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool ShowWindow::SetBlankMode( sal_Int32 nPageIndexToRestart, const Color& rBlankColor )
 {
@@ -400,14 +400,14 @@ bool ShowWindow::SetBlankMode( sal_Int32 nPageIndexToRestart, const Color& rBlan
     return( SHOWWINDOWMODE_BLANK == meShowWindowMode );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ShowWindow::SetPreviewMode()
 {
     meShowWindowMode = SHOWWINDOWMODE_PREVIEW;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ShowWindow::TerminateShow()
 {
@@ -435,14 +435,14 @@ void ShowWindow::TerminateShow()
     mnRestartPageIndex = PAGE_NO_END;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ShowWindow::RestartShow()
 {
     RestartShow( mnRestartPageIndex );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
 
@@ -486,7 +486,7 @@ void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
 {
@@ -561,7 +561,7 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ShowWindow::DrawEndScene()
 {
@@ -581,14 +581,14 @@ void ShowWindow::DrawEndScene()
     SetFont( aOldFont );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ShowWindow::DrawBlankScene()
 {
     // just blank through background color => nothing to be done here
 }
 
-// -----------------------------------------------------------------------------
+
 
 IMPL_LINK( ShowWindow, PauseTimeoutHdl, Timer*, pTimer )
 {

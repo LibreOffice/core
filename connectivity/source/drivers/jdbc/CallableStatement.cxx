@@ -47,18 +47,18 @@ java_sql_CallableStatement::java_sql_CallableStatement( JNIEnv * pEnv, java_sql_
     : java_sql_PreparedStatement( pEnv, _rCon, sql )
 {
 }
-// -----------------------------------------------------------------------------
+
 java_sql_CallableStatement::~java_sql_CallableStatement()
 {
 }
-// -----------------------------------------------------------------------------
+
 
 Any SAL_CALL java_sql_CallableStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = java_sql_PreparedStatement::queryInterface(rType);
     return aRet.hasValue() ? aRet : ::cppu::queryInterface(rType,static_cast< starsdbc::XRow*>(this),static_cast< starsdbc::XOutParameters*>(this));
 }
-// -------------------------------------------------------------------------
+
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL java_sql_CallableStatement::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< starsdbc::XRow > *)0 ),
@@ -66,7 +66,7 @@ Any SAL_CALL java_sql_CallableStatement::queryInterface( const Type & rType ) th
 
     return ::comphelper::concatSequences(aTypes.getTypes(),java_sql_PreparedStatement::getTypes());
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL java_sql_CallableStatement::wasNull(  ) throw(starsdbc::SQLException, RuntimeException)
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
@@ -300,17 +300,17 @@ Reference< starsdbc::XRef > SAL_CALL java_sql_CallableStatement::getRef( sal_Int
     // WARNING: the caller becomes the owner of the returned pointer
     return out==0 ? 0 : new java_sql_Ref( t.pEnv, out );
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL java_sql_CallableStatement::acquire() throw()
 {
     java_sql_PreparedStatement::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL java_sql_CallableStatement::release() throw()
 {
     java_sql_PreparedStatement::release();
 }
-// -----------------------------------------------------------------------------
+
 void java_sql_CallableStatement::createStatement(JNIEnv* /*_pEnv*/)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -347,7 +347,7 @@ void java_sql_CallableStatement::createStatement(JNIEnv* /*_pEnv*/)
             object = t.pEnv->NewGlobalRef( out );
     } //t.pEnv
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

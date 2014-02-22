@@ -36,26 +36,26 @@ m_ZipFile( DocumentName )
 {
 }
 
-//------------------------------
+
 
 CBaseReader::CBaseReader(StreamInterface * sw):
 m_ZipFile( sw )
 {
 }
 
-//------------------------------
+
 
 CBaseReader::~CBaseReader()
 {
 }
 
-//------------------------------
+
 
 void CBaseReader::start_document()
 {
 }
 
-//------------------------------
+
 
 void CBaseReader::end_document()
 {

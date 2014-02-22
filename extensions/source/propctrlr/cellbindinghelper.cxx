@@ -78,7 +78,7 @@ namespace pcr
     //========================================================================
     //= CellBindingHelper
     //========================================================================
-    //------------------------------------------------------------------------
+
     CellBindingHelper::CellBindingHelper( const Reference< XPropertySet >& _rxControlModel, const Reference< XModel >& _rxContextDocument )
         :m_xControlModel( _rxControlModel )
     {
@@ -91,13 +91,13 @@ namespace pcr
             "CellBindingHelper::CellBindingHelper: the document cannot convert address representations!" );
     }
 
-    //------------------------------------------------------------------------
+
     sal_Bool CellBindingHelper::isSpreadsheetDocument( const Reference< XModel >& _rxContextDocument )
     {
         return Reference< XSpreadsheetDocument >::query( _rxContextDocument ).is();
     }
 
-    //------------------------------------------------------------------------
+
     sal_Int16 CellBindingHelper::getControlSheetIndex( Reference< XSpreadsheet >& _out_rxSheet ) const
     {
         sal_Int16 nSheetIndex = -1;
@@ -146,7 +146,7 @@ namespace pcr
         return nSheetIndex;
     }
 
-    //------------------------------------------------------------------------
+
     bool CellBindingHelper::convertStringAddress( const OUString& _rAddressDescription, CellAddress& /* [out] */ _rAddress ) const
     {
         Any aAddress;
@@ -160,7 +160,7 @@ namespace pcr
            &&  ( aAddress >>= _rAddress );
     }
 
-    //------------------------------------------------------------------------
+
     bool CellBindingHelper::doConvertAddressRepresentations( const OUString& _rInputProperty, const Any& _rInputValue,
         const OUString& _rOutputProperty, Any& _rOutputValue, bool _bIsRange ) const SAL_THROW(())
     {
@@ -194,7 +194,7 @@ namespace pcr
         return bSuccess;
     }
 
-    //------------------------------------------------------------------------
+
     bool CellBindingHelper::convertStringAddress( const OUString& _rAddressDescription,
                             CellRangeAddress& /* [out] */ _rAddress ) const
     {
@@ -209,7 +209,7 @@ namespace pcr
            &&  ( aAddress >>= _rAddress );
     }
 
-    //------------------------------------------------------------------------
+
     Reference< XValueBinding > CellBindingHelper::createCellBindingFromAddress( const CellAddress& _rAddress, bool _bSupportIntegerExchange ) const
     {
         Reference< XValueBinding > xBinding( createDocumentDependentInstance(
@@ -221,7 +221,7 @@ namespace pcr
         return xBinding;
     }
 
-    //------------------------------------------------------------------------
+
     Reference< XValueBinding > CellBindingHelper::createCellBindingFromStringAddress( const OUString& _rAddress, bool _bSupportIntegerExchange ) const
     {
         Reference< XValueBinding > xBinding;
@@ -237,7 +237,7 @@ namespace pcr
         return createCellBindingFromAddress( aAddress, _bSupportIntegerExchange );
     }
 
-    //------------------------------------------------------------------------
+
     Reference< XListEntrySource > CellBindingHelper::createCellListSourceFromStringAddress( const OUString& _rAddress ) const
     {
         Reference< XListEntrySource > xSource;
@@ -256,7 +256,7 @@ namespace pcr
         return xSource;
     }
 
-    //------------------------------------------------------------------------
+
     Reference< XInterface > CellBindingHelper::createDocumentDependentInstance( const OUString& _rService, const OUString& _rArgumentName,
         const Any& _rArgumentValue ) const
     {
@@ -292,7 +292,7 @@ namespace pcr
         return xReturn;
     }
 
-    //------------------------------------------------------------------------
+
     bool CellBindingHelper::getAddressFromCellBinding(
         const Reference< XValueBinding >& _rxBinding, CellAddress& _rAddress ) const
     {
@@ -321,7 +321,7 @@ namespace pcr
         return bReturn;
     }
 
-    //------------------------------------------------------------------------
+
     OUString CellBindingHelper::getStringAddressFromCellBinding( const Reference< XValueBinding >& _rxBinding ) const
     {
         CellAddress aAddress;
@@ -338,7 +338,7 @@ namespace pcr
         return sAddress;
     }
 
-    //------------------------------------------------------------------------
+
     OUString CellBindingHelper::getStringAddressFromCellListSource( const Reference< XListEntrySource >& _rxSource ) const
     {
         OSL_PRECOND( !_rxSource.is() || isCellRangeListSource( _rxSource ), "CellBindingHelper::getStringAddressFromCellListSource: this is no cell list source!" );
@@ -371,7 +371,7 @@ namespace pcr
         return sAddress;
     }
 
-    //------------------------------------------------------------------------
+
     bool CellBindingHelper::isSpreadsheetDocumentWhichSupplies( const OUString& _rService ) const
     {
         bool bYesItIs = false;
@@ -400,7 +400,7 @@ namespace pcr
         return bYesItIs;
     }
 
-    //------------------------------------------------------------------------
+
     bool CellBindingHelper::isListCellRangeAllowed( ) const
     {
         bool bAllow( false );
@@ -414,7 +414,7 @@ namespace pcr
         return bAllow;
     }
 
-    //------------------------------------------------------------------------
+
     bool CellBindingHelper::isCellIntegerBindingAllowed( ) const
     {
         bool bAllow( true );
@@ -451,7 +451,7 @@ namespace pcr
         return bAllow;
     }
 
-    //------------------------------------------------------------------------
+
     bool CellBindingHelper::isCellBindingAllowed( ) const
     {
         bool bAllow( false );
@@ -485,25 +485,25 @@ namespace pcr
         return bAllow;
     }
 
-    //------------------------------------------------------------------------
+
     bool CellBindingHelper::isCellBinding( const Reference< XValueBinding >& _rxBinding ) const
     {
         return doesComponentSupport( _rxBinding.get(), SERVICE_SHEET_CELL_BINDING );
     }
 
-    //------------------------------------------------------------------------
+
     bool CellBindingHelper::isCellIntegerBinding( const Reference< XValueBinding >& _rxBinding ) const
     {
         return doesComponentSupport( _rxBinding.get(), SERVICE_SHEET_CELL_INT_BINDING );
     }
 
-    //------------------------------------------------------------------------
+
     bool CellBindingHelper::isCellRangeListSource( const Reference< XListEntrySource >& _rxSource ) const
     {
         return doesComponentSupport( _rxSource.get(), SERVICE_SHEET_CELLRANGE_LISTSOURCE );
     }
 
-    //------------------------------------------------------------------------
+
     bool CellBindingHelper::doesComponentSupport( const Reference< XInterface >& _rxComponent, const OUString& _rService ) const
     {
         Reference< XServiceInfo > xSI( _rxComponent, UNO_QUERY );
@@ -511,7 +511,7 @@ namespace pcr
         return bDoes;
     }
 
-    //------------------------------------------------------------------------
+
     Reference< XValueBinding > CellBindingHelper::getCurrentBinding( ) const
     {
         Reference< XValueBinding > xBinding;
@@ -521,7 +521,7 @@ namespace pcr
         return xBinding;
     }
 
-    //------------------------------------------------------------------------
+
     Reference< XListEntrySource > CellBindingHelper::getCurrentListSource( ) const
     {
         Reference< XListEntrySource > xSource;
@@ -531,7 +531,7 @@ namespace pcr
         return xSource;
     }
 
-    //------------------------------------------------------------------------
+
     void CellBindingHelper::setBinding( const Reference< XValueBinding >& _rxBinding )
     {
         Reference< XBindableValue > xBindable( m_xControlModel, UNO_QUERY );
@@ -540,7 +540,7 @@ namespace pcr
             xBindable->setValueBinding( _rxBinding );
     }
 
-    //------------------------------------------------------------------------
+
     void CellBindingHelper::setListSource( const Reference< XListEntrySource >& _rxSource )
     {
         Reference< XListEntrySink > xSink( m_xControlModel, UNO_QUERY );

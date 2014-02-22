@@ -89,7 +89,7 @@ void MorphDlg::LoadSettings()
     m_pCbxAttributes->Check( bAttrib );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void MorphDlg::SaveSettings() const
 {

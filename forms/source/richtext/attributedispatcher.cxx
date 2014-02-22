@@ -35,7 +35,7 @@ namespace frm
     //====================================================================
     //= OAttributeDispatcher
     //====================================================================
-    //--------------------------------------------------------------------
+
     OAttributeDispatcher::OAttributeDispatcher( EditView& _rView, AttributeId _nAttributeId, const URL& _rURL,
             IMultiAttributeDispatcher* _pMasterDispatcher )
         :ORichTextFeatureDispatcher( _rView, _rURL )
@@ -45,21 +45,21 @@ namespace frm
         OSL_ENSURE( m_pMasterDispatcher, "OAttributeDispatcher::OAttributeDispatcher: invalid master dispatcher!" );
     }
 
-    //--------------------------------------------------------------------
+
     OAttributeDispatcher::~OAttributeDispatcher( )
     {
         acquire();
         dispose();
     }
 
-    //--------------------------------------------------------------------
+
     void OAttributeDispatcher::disposing( ::osl::ClearableMutexGuard& _rClearBeforeNotify )
     {
         m_pMasterDispatcher = NULL;
         ORichTextFeatureDispatcher::disposing( _rClearBeforeNotify );
     }
 
-    //--------------------------------------------------------------------
+
     void OAttributeDispatcher::fillFeatureEventFromAttributeState( FeatureStateEvent& _rEvent, const AttributeState& _rState ) const
     {
         if ( _rState.eSimpleState == eChecked )
@@ -68,7 +68,7 @@ namespace frm
             _rEvent.State <<= (sal_Bool)sal_False;
     }
 
-    //--------------------------------------------------------------------
+
     FeatureStateEvent OAttributeDispatcher::buildStatusEvent() const
     {
         FeatureStateEvent aEvent( ORichTextFeatureDispatcher::buildStatusEvent() );
@@ -83,7 +83,7 @@ namespace frm
         return aEvent;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OAttributeDispatcher::dispatch( const URL& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -109,7 +109,7 @@ namespace frm
             m_pMasterDispatcher->executeAttribute( m_nAttributeId, NULL );
     }
 
-    //--------------------------------------------------------------------
+
     void OAttributeDispatcher::onAttributeStateChanged( AttributeId _nAttributeId, const AttributeState& /*_rState*/ )
     {
         OSL_ENSURE( _nAttributeId == m_nAttributeId, "OAttributeDispatcher::onAttributeStateChanged: wrong attribute!" );

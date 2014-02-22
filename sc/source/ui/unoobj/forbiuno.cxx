@@ -24,7 +24,7 @@
 
 using namespace ::com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 static rtl::Reference<SvxForbiddenCharactersTable> lcl_GetForbidden( ScDocShell* pDocSh )
 {

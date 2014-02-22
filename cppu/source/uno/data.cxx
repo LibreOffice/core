@@ -46,7 +46,7 @@ namespace cppu
 uno_Sequence g_emptySeq = { 1, 0, { 0 } };
 typelib_TypeDescriptionReference * g_pVoidType = 0;
 
-//--------------------------------------------------------------------------------------------------
+
 void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * pDestType )
 {
     // init queryInterface() td

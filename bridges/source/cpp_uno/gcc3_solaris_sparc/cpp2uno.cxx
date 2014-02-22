@@ -423,7 +423,7 @@ static void cpp_vtable_call()
     }
 
 }
-//__________________________________________________________________________________________________
+
 
 int const codeSnippetSize = 56;
 unsigned char * codeSnippet(

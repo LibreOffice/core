@@ -52,7 +52,7 @@
 #include <functional>
 #include <sal/macros.h>
 
-//------------------------------------------------------------------------
+
 // !!! outside the namespace !!!
 extern "C" void SAL_CALL createRegistryInfo_OPropertyBrowserController()
 {
@@ -82,7 +82,7 @@ namespace pcr
     //= OPropertyBrowserController
     //========================================================================
     DBG_NAME(OPropertyBrowserController)
-    //------------------------------------------------------------------------
+
     OPropertyBrowserController::OPropertyBrowserController( const Reference< XComponentContext >& _rxContext )
             :m_xContext(_rxContext)
             ,m_aDisposeListeners( m_aMutex )
@@ -96,7 +96,7 @@ namespace pcr
         DBG_CTOR(OPropertyBrowserController,NULL);
     }
 
-    //------------------------------------------------------------------------
+
     OPropertyBrowserController::~OPropertyBrowserController()
     {
         // stop listening for property changes
@@ -105,10 +105,10 @@ namespace pcr
         DBG_DTOR(OPropertyBrowserController,NULL);
     }
 
-    //------------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_REFCOUNT( OPropertyBrowserController, OPropertyBrowserController_Base )
 
-    //------------------------------------------------------------------------
+
     Any SAL_CALL OPropertyBrowserController::queryInterface( const Type& _rType ) throw (RuntimeException)
     {
         Any aReturn = OPropertyBrowserController_Base::queryInterface( _rType );
@@ -120,7 +120,7 @@ namespace pcr
         return aReturn;
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserController::startContainerWindowListening()
     {
         if (m_bContainerFocusListening)
@@ -139,7 +139,7 @@ namespace pcr
         DBG_ASSERT(m_bContainerFocusListening, "OPropertyBrowserController::startContainerWindowListening: unable to start listening (inconsistence)!");
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserController::stopContainerWindowListening()
     {
         if (!m_bContainerFocusListening)
@@ -158,13 +158,13 @@ namespace pcr
         DBG_ASSERT(!m_bContainerFocusListening, "OPropertyBrowserController::stopContainerWindowListening: unable to stop listening (inconsistence)!");
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XObjectInspectorModel > SAL_CALL OPropertyBrowserController::getInspectorModel() throw (RuntimeException)
     {
         return m_xModel;
     }
 
-    //--------------------------------------------------------------------
+
     void OPropertyBrowserController::impl_initializeView_nothrow()
     {
         OSL_PRECOND( haveView(), "OPropertyBrowserController::impl_initializeView_nothrow: not to be called when we have no view!" );
@@ -186,7 +186,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     void OPropertyBrowserController::impl_updateReadOnlyView_nothrow()
     {
         // this is a huge cudgel, admitted.
@@ -198,7 +198,7 @@ namespace pcr
         impl_rebindToInspectee_nothrow( m_aInspectedObjects );
     }
 
-    //--------------------------------------------------------------------
+
     bool OPropertyBrowserController::impl_isReadOnlyModel_throw() const
     {
         if ( !m_xModel.is() )
@@ -207,7 +207,7 @@ namespace pcr
         return m_xModel->getIsReadOnly();
     }
 
-    //--------------------------------------------------------------------
+
     void OPropertyBrowserController::impl_startOrStopModelListening_nothrow( bool _bDoListen ) const
     {
         try
@@ -232,7 +232,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     void OPropertyBrowserController::impl_bindToNewModel_nothrow( const Reference< XObjectInspectorModel >& _rxInspectorModel )
     {
         impl_startOrStopModelListening_nothrow( false );
@@ -248,7 +248,7 @@ namespace pcr
             impl_rebindToInspectee_nothrow( m_aInspectedObjects );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OPropertyBrowserController::setInspectorModel( const Reference< XObjectInspectorModel >& _inspectorModel ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -259,14 +259,14 @@ namespace pcr
         impl_bindToNewModel_nothrow( _inspectorModel );
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XObjectInspectorUI > SAL_CALL OPropertyBrowserController::getInspectorUI() throw (RuntimeException)
     {
         // we're derived from this interface, though we do not expose it in queryInterface and getTypes.
         return this;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OPropertyBrowserController::inspect( const Sequence< Reference< XInterface > >& _rObjects ) throw (com::sun::star::util::VetoException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -287,14 +287,14 @@ namespace pcr
 
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XDispatch > SAL_CALL OPropertyBrowserController::queryDispatch( const URL& /*URL*/, const OUString& /*TargetFrameName*/, ::sal_Int32 /*SearchFlags*/ ) throw (RuntimeException)
     {
         // we don't have any dispatches at all, right now
         return Reference< XDispatch >();
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< Reference< XDispatch > > SAL_CALL OPropertyBrowserController::queryDispatches( const Sequence< DispatchDescriptor >& Requests ) throw (RuntimeException)
     {
         Sequence< Reference< XDispatch > > aReturn;
@@ -311,7 +311,7 @@ namespace pcr
         return aReturn;
     }
 
-    //------------------------------------------------------------------------
+
     void SAL_CALL OPropertyBrowserController::initialize( const Sequence< Any >& _arguments ) throw (Exception, RuntimeException)
     {
         if ( m_bConstructed )
@@ -336,13 +336,13 @@ namespace pcr
         throw IllegalArgumentException( OUString(), *this, 0 );
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserController::createDefault()
     {
         m_bConstructed = true;
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserController::createWithModel( const Reference< XObjectInspectorModel >& _rxModel )
     {
         osl_atomic_increment( &m_refCount );
@@ -354,7 +354,7 @@ namespace pcr
         m_bConstructed = true;
     }
 
-    //------------------------------------------------------------------------
+
     void SAL_CALL OPropertyBrowserController::attachFrame( const Reference< XFrame >& _rxFrame ) throw(RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -396,7 +396,7 @@ namespace pcr
         UpdateUI();
     }
 
-    //------------------------------------------------------------------------
+
     sal_Bool SAL_CALL OPropertyBrowserController::attachModel( const Reference< XModel >& _rxModel ) throw(RuntimeException)
     {
         Reference< XObjectInspectorModel > xModel( _rxModel, UNO_QUERY );
@@ -407,7 +407,7 @@ namespace pcr
         return getInspectorModel() == _rxModel;
     }
 
-    //------------------------------------------------------------------------
+
     sal_Bool OPropertyBrowserController::suspendAll_nothrow()
     {
         // if there is a handle inside its "onInteractivePropertySelection" method,
@@ -426,7 +426,7 @@ namespace pcr
         return sal_True;
     }
 
-    //------------------------------------------------------------------------
+
     sal_Bool OPropertyBrowserController::suspendPropertyHandlers_nothrow( sal_Bool _bSuspend )
     {
         PropertyHandlerArray aAllHandlers;  // will contain every handler exactly once
@@ -462,7 +462,7 @@ namespace pcr
         return sal_True;
     }
 
-    //------------------------------------------------------------------------
+
     sal_Bool SAL_CALL OPropertyBrowserController::suspend( sal_Bool _bSuspend ) throw(RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -489,13 +489,13 @@ namespace pcr
         return sal_True;
     }
 
-    //------------------------------------------------------------------------
+
     Any SAL_CALL OPropertyBrowserController::getViewData(  ) throw(RuntimeException)
     {
         return makeAny( m_sPageSelection );
     }
 
-    //------------------------------------------------------------------------
+
     void SAL_CALL OPropertyBrowserController::restoreViewData( const Any& Data ) throw(RuntimeException)
     {
         OUString sPageSelection;
@@ -506,20 +506,20 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     Reference< XModel > SAL_CALL OPropertyBrowserController::getModel(  ) throw(RuntimeException)
     {
         // have no model
         return Reference< XModel >();
     }
 
-    //------------------------------------------------------------------------
+
     Reference< XFrame > SAL_CALL OPropertyBrowserController::getFrame(  ) throw(RuntimeException)
     {
         return m_xFrame;
     }
 
-    //------------------------------------------------------------------------
+
     void SAL_CALL OPropertyBrowserController::dispose(  ) throw(RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -545,19 +545,19 @@ namespace pcr
         impl_bindToNewModel_nothrow( NULL );
     }
 
-    //------------------------------------------------------------------------
+
     void SAL_CALL OPropertyBrowserController::addEventListener( const Reference< XEventListener >& _rxListener ) throw(RuntimeException)
     {
         m_aDisposeListeners.addInterface(_rxListener);
     }
 
-    //------------------------------------------------------------------------
+
     void SAL_CALL OPropertyBrowserController::removeEventListener( const Reference< XEventListener >& _rxListener ) throw(RuntimeException)
     {
         m_aDisposeListeners.removeInterface(_rxListener);
     }
 
-    //------------------------------------------------------------------------
+
     OUString SAL_CALL OPropertyBrowserController::getImplementationName(  ) throw(RuntimeException)
     {
         return getImplementationName_static();
@@ -568,19 +568,19 @@ namespace pcr
         return cppu::supportsService(this, ServiceName);
     }
 
-    //------------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL OPropertyBrowserController::getSupportedServiceNames(  ) throw(RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
-    //------------------------------------------------------------------------
+
     OUString OPropertyBrowserController::getImplementationName_static(  ) throw(RuntimeException)
     {
         return OUString("org.openoffice.comp.extensions.ObjectInspector");
     }
 
-    //------------------------------------------------------------------------
+
     Sequence< OUString > OPropertyBrowserController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported(1);
@@ -588,13 +588,13 @@ namespace pcr
         return aSupported;
     }
 
-    //------------------------------------------------------------------------
+
     Reference< XInterface > SAL_CALL OPropertyBrowserController::Create(const Reference< XComponentContext >& _rxContext)
     {
         return *(new OPropertyBrowserController( _rxContext ) );
     }
 
-    //------------------------------------------------------------------------
+
     void SAL_CALL OPropertyBrowserController::focusGained( const FocusEvent& _rSource ) throw (RuntimeException)
     {
         Reference< XWindow > xSourceWindow(_rSource.Source, UNO_QUERY);
@@ -609,13 +609,13 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     void SAL_CALL OPropertyBrowserController::focusLost( const FocusEvent& /*_rSource*/ ) throw (RuntimeException)
     {
         // not interested in
     }
 
-    //------------------------------------------------------------------------
+
     void SAL_CALL OPropertyBrowserController::disposing( const EventObject& _rSource ) throw(RuntimeException)
     {
         if ( m_xView.is() && ( m_xView == _rSource.Source ) )
@@ -637,14 +637,14 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(OPropertyBrowserController, OnPageActivation)
     {
         updateViewDataFromActivePage();
         return 0L;
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserController::updateViewDataFromActivePage()
     {
         if (!haveView())
@@ -675,7 +675,7 @@ namespace pcr
             m_sLastValidPageSelection = sOldSelection;
     }
 
-    //------------------------------------------------------------------------
+
     sal_uInt16 OPropertyBrowserController::impl_getPageIdForCategory_nothrow( const OUString& _rCategoryName ) const
     {
         sal_uInt16 nPageId = (sal_uInt16)-1;
@@ -685,7 +685,7 @@ namespace pcr
         return nPageId;
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserController::selectPageFromViewData()
     {
         sal_uInt16 nNewPage = impl_getPageIdForCategory_nothrow( m_sPageSelection );
@@ -697,7 +697,7 @@ namespace pcr
         updateViewDataFromActivePage();
     }
 
-    //------------------------------------------------------------------------
+
     sal_Bool OPropertyBrowserController::Construct(Window* _pParentWin)
     {
         DBG_ASSERT(!haveView(), "OPropertyBrowserController::Construct: already have a view!");
@@ -723,7 +723,7 @@ namespace pcr
         return sal_True;
     }
 
-    //------------------------------------------------------------------------
+
     void SAL_CALL OPropertyBrowserController::propertyChange( const PropertyChangeEvent& _rEvent ) throw (RuntimeException)
     {
         if ( _rEvent.Source == m_xModel )
@@ -761,7 +761,7 @@ namespace pcr
             impl_broadcastPropertyChange_nothrow( _rEvent.PropertyName, aNewValue, _rEvent.OldValue, false );
     }
 
-    //------------------------------------------------------------------------
+
     Reference< XPropertyControl > SAL_CALL OPropertyBrowserController::createPropertyControl( ::sal_Int16 ControlType, ::sal_Bool _CreateReadOnly ) throw (IllegalArgumentException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -833,7 +833,7 @@ namespace pcr
         return xControl;
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserController::impl_toggleInspecteeListening_nothrow( bool _bOn )
     {
         for (   InterfaceArray::const_iterator loop = m_aInspectedObjects.begin();
@@ -859,7 +859,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserController::stopInspection( bool _bCommitModified )
     {
         if ( haveView() )
@@ -929,14 +929,14 @@ namespace pcr
         clearContainer( m_aDependencyHandlers );
     }
 
-    //------------------------------------------------------------------------
+
     bool OPropertyBrowserController::impl_hasPropertyHandlerFor_nothrow( const OUString& _rPropertyName ) const
     {
         PropertyHandlerRepository::const_iterator handlerPos = m_aPropertyHandlers.find( _rPropertyName );
         return ( handlerPos != m_aPropertyHandlers.end() );
     }
 
-    //------------------------------------------------------------------------
+
     OPropertyBrowserController::PropertyHandlerRef OPropertyBrowserController::impl_getHandlerForProperty_throw( const OUString& _rPropertyName ) const
     {
         PropertyHandlerRepository::const_iterator handlerPos = m_aPropertyHandlers.find( _rPropertyName );
@@ -945,14 +945,14 @@ namespace pcr
         return handlerPos->second;
     }
 
-    //------------------------------------------------------------------------
+
     Any OPropertyBrowserController::impl_getPropertyValue_throw( const OUString& _rPropertyName )
     {
         PropertyHandlerRef handler = impl_getHandlerForProperty_throw( _rPropertyName );
         return handler->getPropertyValue( _rPropertyName );
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserController::impl_rebindToInspectee_nothrow( const InterfaceArray& _rObjects )
     {
         try
@@ -974,7 +974,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserController::doInspection()
     {
         try
@@ -1103,7 +1103,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     ::com::sun::star::awt::Size SAL_CALL OPropertyBrowserController::getMinimumSize() throw (::com::sun::star::uno::RuntimeException)
     {
         ::com::sun::star::awt::Size aSize;
@@ -1113,13 +1113,13 @@ namespace pcr
             return aSize;
     }
 
-    //------------------------------------------------------------------------
+
     ::com::sun::star::awt::Size SAL_CALL OPropertyBrowserController::getPreferredSize() throw (::com::sun::star::uno::RuntimeException)
     {
         return getMinimumSize();
     }
 
-    //------------------------------------------------------------------------
+
     ::com::sun::star::awt::Size SAL_CALL OPropertyBrowserController::calcAdjustedSize( const ::com::sun::star::awt::Size& _rNewSize ) throw (::com::sun::star::uno::RuntimeException)
     {
         awt::Size aMinSize = getMinimumSize( );
@@ -1131,7 +1131,7 @@ namespace pcr
         return aAdjustedSize;
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserController::describePropertyLine( const Property& _rProperty, OLineDescriptor& _rDescriptor ) SAL_THROW((Exception))
     {
         try
@@ -1174,7 +1174,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserController::impl_buildCategories_throw()
     {
         OSL_PRECOND( m_aPageIds.empty(), "OPropertyBrowserController::impl_buildCategories_throw: duplicate call!" );
@@ -1196,7 +1196,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserController::UpdateUI()
     {
         try
@@ -1310,7 +1310,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserController::Clicked( const OUString& _rName, sal_Bool _bPrimary )
     {
         try
@@ -1354,7 +1354,7 @@ namespace pcr
         m_xInteractiveHandler = NULL;
     }
 
-    //------------------------------------------------------------------------
+
     sal_Bool SAL_CALL OPropertyBrowserController::hasPropertyByName( const OUString& _rName ) throw (RuntimeException)
     {
         for (   OrderedPropertyMap::const_iterator search = m_aProperties.begin();
@@ -1366,7 +1366,7 @@ namespace pcr
         return false;
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserController::Commit( const OUString& rName, const Any& _rValue )
     {
         try
@@ -1425,24 +1425,24 @@ namespace pcr
         m_sCommittingProperty = "";
     }
 
-    //--------------------------------------------------------------------
+
     namespace
     {
     }
 
-    //--------------------------------------------------------------------
+
     void OPropertyBrowserController::focusGained( const Reference< XPropertyControl >& _Control )
     {
         m_aControlObservers.notifyEach( &XPropertyControlObserver::focusGained, _Control );
     }
 
-    //--------------------------------------------------------------------
+
     void OPropertyBrowserController::valueChanged( const Reference< XPropertyControl >& _Control )
     {
         m_aControlObservers.notifyEach( &XPropertyControlObserver::valueChanged, _Control );
     }
 
-    //------------------------------------------------------------------------
+
     namespace
     {
         Reference< XPropertyHandler > lcl_createHandler( const Reference<XComponentContext>& _rContext, const Any& _rFactoryDescriptor )
@@ -1464,7 +1464,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserController::getPropertyHandlers( const InterfaceArray& _rObjects, PropertyHandlerArray& _rHandlers )
     {
         _rHandlers.resize( 0 );
@@ -1540,7 +1540,7 @@ namespace pcr
         // properties they feel responsible for
     }
 
-    //------------------------------------------------------------------------
+
     bool OPropertyBrowserController::impl_findObjectProperty_nothrow( const OUString& _rName, OrderedPropertyMap::const_iterator* _pProperty )
     {
         OrderedPropertyMap::const_iterator search = m_aProperties.begin();
@@ -1552,7 +1552,7 @@ namespace pcr
         return ( search != m_aProperties.end() );
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserController::rebuildPropertyUI( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -1576,7 +1576,7 @@ namespace pcr
         getPropertyBox().ChangeEntry( aDescriptor );
    }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserController::enablePropertyUI( const OUString& _rPropertyName, sal_Bool _bEnable ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -1589,7 +1589,7 @@ namespace pcr
         getPropertyBox().EnablePropertyLine( _rPropertyName, _bEnable );
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserController::enablePropertyUIElements( const OUString& _rPropertyName, sal_Int16 _nElements, sal_Bool _bEnable ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -1602,7 +1602,7 @@ namespace pcr
         getPropertyBox().EnablePropertyControls( _rPropertyName, _nElements, _bEnable );
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserController::showPropertyUI( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -1652,7 +1652,7 @@ namespace pcr
             aDescriptor, impl_getPageIdForCategory_nothrow( aDescriptor.Category ), nUIPos );
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserController::hidePropertyUI( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -1665,7 +1665,7 @@ namespace pcr
         getPropertyBox().RemoveEntry( _rPropertyName );
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserController::showCategory( const OUString& _rCategory, sal_Bool _bShow ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -1678,7 +1678,7 @@ namespace pcr
         getPropertyBox().ShowPropertyPage( nPageId, _bShow );
     }
 
-    //------------------------------------------------------------------------
+
     Reference< XPropertyControl > SAL_CALL OPropertyBrowserController::getPropertyControl( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -1689,19 +1689,19 @@ namespace pcr
         return xControl;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OPropertyBrowserController::registerControlObserver( const Reference< XPropertyControlObserver >& _Observer ) throw (RuntimeException)
     {
         m_aControlObservers.addInterface( _Observer );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OPropertyBrowserController::revokeControlObserver( const Reference< XPropertyControlObserver >& _Observer ) throw (RuntimeException)
     {
         m_aControlObservers.removeInterface( _Observer );
     }
 
-    //------------------------------------------------------------------------
+
     void SAL_CALL OPropertyBrowserController::setHelpSectionText( const OUString& _rHelpText ) throw (NoSupportException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -1716,7 +1716,7 @@ namespace pcr
         getPropertyBox().SetHelpText( _rHelpText );
     }
 
-    //------------------------------------------------------------------------
+
     void OPropertyBrowserController::impl_broadcastPropertyChange_nothrow( const OUString& _rPropertyName, const Any& _rNewValue, const Any& _rOldValue, bool _bFirstTimeInit ) const
     {
         // are there one or more handlers which are interested in the actuation?

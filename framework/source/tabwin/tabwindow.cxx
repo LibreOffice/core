@@ -36,9 +36,9 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
-//_________________________________________________________________________________________________________________
+
 //  Defines
-//_________________________________________________________________________________________________________________
+
 
 using namespace com::sun::star;
 
@@ -103,9 +103,9 @@ TabWindow::~TabWindow()
 {
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 // Helper
-//---------------------------------------------------------------------------------------------------------
+
 
 void TabWindow::implts_LayoutWindows() const
 {
@@ -232,9 +232,9 @@ void TabWindow::implts_SendNotification( Notification eNotify, sal_Int32 ID, con
     }
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 // Links
-//---------------------------------------------------------------------------------------------------------
+
 
 IMPL_LINK( TabWindow, Activate, TabControl*, pTabControl )
 {
@@ -266,9 +266,9 @@ IMPL_LINK( TabWindow, Deactivate, TabControl*, pTabControl )
     return 1;
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 // XInitilization
-//---------------------------------------------------------------------------------------------------------
+
 
 void SAL_CALL TabWindow::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
 throw (css::uno::Exception, css::uno::RuntimeException)
@@ -423,9 +423,9 @@ throw (css::uno::Exception, css::uno::RuntimeException)
     }
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 //  XComponent
-//---------------------------------------------------------------------------------------------------------
+
 void SAL_CALL TabWindow::dispose() throw (css::uno::RuntimeException)
 {
     // Send message to all listener and forget her references.
@@ -491,17 +491,17 @@ throw (css::uno::RuntimeException)
     m_aListenerContainer.removeInterface( ::getCppuType( ( const css::uno::Reference< css::lang::XEventListener >* ) NULL ), xListener );
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 // XEventListener
-//---------------------------------------------------------------------------------------------------------
+
 void SAL_CALL TabWindow::disposing( const css::lang::EventObject& )
 throw( css::uno::RuntimeException )
 {
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 // XWindowListener
-//---------------------------------------------------------------------------------------------------------
+
 void SAL_CALL TabWindow::windowResized( const css::awt::WindowEvent& )
 throw( css::uno::RuntimeException )
 {
@@ -548,9 +548,9 @@ throw( css::uno::RuntimeException )
         pTabControl->Hide();
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 // XTopWindowListener
-//---------------------------------------------------------------------------------------------------------
+
 void SAL_CALL TabWindow::windowOpened( const css::lang::EventObject& )
 throw (css::uno::RuntimeException)
 {
@@ -589,9 +589,9 @@ throw (css::uno::RuntimeException)
 {
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 //  XSimpleTabController
-//---------------------------------------------------------------------------------------------------------
+
 
 ::sal_Int32 SAL_CALL TabWindow::insertTab()
 throw (css::uno::RuntimeException)
@@ -815,9 +815,9 @@ throw (css::uno::RuntimeException)
         ::getCppuType( ( const css::uno::Reference< css::awt::XTabListener >* ) NULL ), xListener );
 }
 
-//---------------------------------------------------------------------------------------------------------
+
 //  OPropertySetHelper
-//---------------------------------------------------------------------------------------------------------
+
 
 // XPropertySet helper
 sal_Bool SAL_CALL TabWindow::convertFastPropertyValue( css::uno::Any&       aConvertedValue ,

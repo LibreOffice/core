@@ -60,7 +60,7 @@ namespace framework
 
 static uno::WeakReference< util::XMacroExpander > m_xMacroExpander;
 
-// ------------------------------------------------------------------
+
 
 uno::Reference< util::XMacroExpander > GetMacroExpander()
 {
@@ -96,7 +96,7 @@ static void SubstituteVariables( OUString& aURL )
     }
 }
 
-// ------------------------------------------------------------------
+
 
 ImageButtonToolbarController::ImageButtonToolbarController(
     const Reference< XComponentContext >&    rxContext,
@@ -114,13 +114,13 @@ ImageButtonToolbarController::ImageButtonToolbarController(
     m_pToolbar->SetItemImage( m_nID, aImage );
 }
 
-// ------------------------------------------------------------------
+
 
 ImageButtonToolbarController::~ImageButtonToolbarController()
 {
 }
 
-// ------------------------------------------------------------------
+
 
 void SAL_CALL ImageButtonToolbarController::dispose()
 throw ( RuntimeException )
@@ -129,7 +129,7 @@ throw ( RuntimeException )
     ComplexToolbarController::dispose();
 }
 
-// ------------------------------------------------------------------
+
 
 void ImageButtonToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {

@@ -24,35 +24,35 @@
 #include <windows.h>
 #include <ole2.h>
 
-//------------------------------------------------------------------------
+
 // namespace directives
-//------------------------------------------------------------------------
+
 
 
 //============================================================================
 // OTWrapperDataObject
 //============================================================================
 
-//------------------------------------------------------------------------
+
 // ctor
-//------------------------------------------------------------------------
+
 
 CXTDataObject::CXTDataObject( LONG nRefCntInitVal ) :
     m_nRefCnt( nRefCntInitVal )
 {
 }
 
-//------------------------------------------------------------------------
+
 // dtor
-//------------------------------------------------------------------------
+
 
 CXTDataObject::~CXTDataObject( )
 {
 }
 
-//------------------------------------------------------------------------
+
 // IUnknown->QueryInterface
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP CXTDataObject::QueryInterface( REFIID iid, LPVOID* ppvObject )
 {
@@ -75,18 +75,18 @@ STDMETHODIMP CXTDataObject::QueryInterface( REFIID iid, LPVOID* ppvObject )
     return hr;
 }
 
-//------------------------------------------------------------------------
+
 // IUnknown->AddRef
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP_(ULONG) CXTDataObject::AddRef( )
 {
     return static_cast< ULONG >( InterlockedIncrement( &m_nRefCnt ) );
 }
 
-//------------------------------------------------------------------------
+
 // IUnknown->Release
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP_(ULONG) CXTDataObject::Release( )
 {
@@ -103,10 +103,10 @@ STDMETHODIMP_(ULONG) CXTDataObject::Release( )
     return nRefCnt;
 }
 
-//------------------------------------------------------------------------
+
 // IDataObject->GetData
 // warning: 'goto' ahead (to easy error handling without using exceptions)
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP CXTDataObject::GetData(LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium )
 {
@@ -178,9 +178,9 @@ STDMETHODIMP CXTDataObject::GetData(LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium 
     return hr;
 }
 
-//------------------------------------------------------------------------
+
 // IDataObject->EnumFormatEtc
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP CXTDataObject::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC** ppenumFormatetc )
 {
@@ -201,72 +201,72 @@ STDMETHODIMP CXTDataObject::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC** p
     return hr;
 }
 
-//------------------------------------------------------------------------
+
 // IDataObject->QueryGetData
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP CXTDataObject::QueryGetData( LPFORMATETC pFormatetc )
 {
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------
+
 // IDataObject->GetDataHere
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP CXTDataObject::GetDataHere( LPFORMATETC, LPSTGMEDIUM )
 {
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------
+
 // IDataObject->GetCanonicalFormatEtc
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP CXTDataObject::GetCanonicalFormatEtc( LPFORMATETC, LPFORMATETC )
 {
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------
+
 // IDataObject->SetData
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP CXTDataObject::SetData( LPFORMATETC, LPSTGMEDIUM, BOOL )
 {
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------
+
 // IDataObject->DAdvise
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP CXTDataObject::DAdvise( LPFORMATETC, DWORD, LPADVISESINK, DWORD * )
 {
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------
+
 // IDataObject->DUnadvise
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP CXTDataObject::DUnadvise( DWORD )
 {
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------
+
 // IDataObject->EnumDAdvise
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP CXTDataObject::EnumDAdvise( LPENUMSTATDATA * )
 {
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------
+
 // for our convenience
-//------------------------------------------------------------------------
+
 
 CXTDataObject::operator IDataObject*( )
 {
@@ -279,9 +279,9 @@ CXTDataObject::operator IDataObject*( )
 //============================================================================
 
 
-//----------------------------------------------------------------------------
+
 // ctor
-//----------------------------------------------------------------------------
+
 
 CEnumFormatEtc::CEnumFormatEtc( LPUNKNOWN pUnkDataObj ) :
     m_nRefCnt( 0 ),
@@ -292,17 +292,17 @@ CEnumFormatEtc::CEnumFormatEtc( LPUNKNOWN pUnkDataObj ) :
     m_cfFormats[1] = CF_TEXT;
 }
 
-//----------------------------------------------------------------------------
+
 // dtor
-//----------------------------------------------------------------------------
+
 
 CEnumFormatEtc::~CEnumFormatEtc( )
 {
 }
 
-//----------------------------------------------------------------------------
+
 // IUnknown->QueryInterface
-//----------------------------------------------------------------------------
+
 
 STDMETHODIMP CEnumFormatEtc::QueryInterface( REFIID iid, LPVOID* ppvObject )
 {
@@ -323,9 +323,9 @@ STDMETHODIMP CEnumFormatEtc::QueryInterface( REFIID iid, LPVOID* ppvObject )
     return hr;
 }
 
-//----------------------------------------------------------------------------
+
 // IUnknown->AddRef
-//----------------------------------------------------------------------------
+
 
 STDMETHODIMP_(ULONG) CEnumFormatEtc::AddRef( )
 {
@@ -334,9 +334,9 @@ STDMETHODIMP_(ULONG) CEnumFormatEtc::AddRef( )
     return InterlockedIncrement( &m_nRefCnt );
 }
 
-//----------------------------------------------------------------------------
+
 // IUnknown->Release
-//----------------------------------------------------------------------------
+
 
 STDMETHODIMP_(ULONG) CEnumFormatEtc::Release( )
 {
@@ -353,9 +353,9 @@ STDMETHODIMP_(ULONG) CEnumFormatEtc::Release( )
     return nRefCnt;
 }
 
-//----------------------------------------------------------------------------
+
 // IEnumFORMATETC->Next
-//----------------------------------------------------------------------------
+
 
 STDMETHODIMP CEnumFormatEtc::Next( ULONG celt, LPFORMATETC rgelt, ULONG* pceltFetched )
 {
@@ -397,9 +397,9 @@ STDMETHODIMP CEnumFormatEtc::Next( ULONG celt, LPFORMATETC rgelt, ULONG* pceltFe
     return hr;
 }
 
-//----------------------------------------------------------------------------
+
 // IEnumFORMATETC->Skip
-//----------------------------------------------------------------------------
+
 
 STDMETHODIMP CEnumFormatEtc::Skip( ULONG celt )
 {
@@ -414,9 +414,9 @@ STDMETHODIMP CEnumFormatEtc::Skip( ULONG celt )
     return hr;
 }
 
-//----------------------------------------------------------------------------
+
 // IEnumFORMATETC->Reset
-//----------------------------------------------------------------------------
+
 
 STDMETHODIMP CEnumFormatEtc::Reset( )
 {
@@ -424,9 +424,9 @@ STDMETHODIMP CEnumFormatEtc::Reset( )
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
+
 // IEnumFORMATETC->Clone
-//----------------------------------------------------------------------------
+
 
 STDMETHODIMP CEnumFormatEtc::Clone( IEnumFORMATETC** ppenum )
 {

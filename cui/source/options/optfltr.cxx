@@ -36,7 +36,7 @@ enum MSFltrPg2_CheckBoxEntries {
     InvalidCBEntry
 };
 
-// -----------------------------------------------------------------------
+
 
 OfaMSFilterTabPage::OfaMSFilterTabPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage( pParent, "OptFltrPage", "cui/ui/optfltrpage.ui", rSet )

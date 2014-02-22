@@ -61,9 +61,9 @@ using namespace ::com::sun::star::presentation;
 
 namespace sd {
 
-// -------------------
+
 // - PresentationViewShell -
-// -------------------
+
 
 SFX_IMPL_INTERFACE( PresentationViewShell, DrawViewShell, SdResId( STR_PRESVIEWSHELL ) )
 {

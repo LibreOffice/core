@@ -44,7 +44,7 @@ inline void ensure_final_slash(/*inout*/ OUString& path)
 
 } // namespace private
 
-//------------------------------------------------
+
 recently_used_file::recently_used_file() :
     file_(NULL)
 {
@@ -85,7 +85,7 @@ recently_used_file::recently_used_file() :
         throw "Cannot determine user home directory";
 }
 
-//------------------------------------------------
+
 recently_used_file::~recently_used_file()
 {
     int ret = lockf(fileno(file_), F_ULOCK, 0);
@@ -93,20 +93,20 @@ recently_used_file::~recently_used_file()
     fclose(file_);
 }
 
-//------------------------------------------------
+
 void recently_used_file::reset() const
 {
     rewind(file_);
 }
 
-//------------------------------------------------
+
 void recently_used_file::truncate(off_t length)
 {
     if (ftruncate(fileno(file_), length) == -1)
         throw "I/O error: ftruncate failed";
 }
 
-//------------------------------------------------
+
 size_t recently_used_file::read(char* buffer, size_t size) const
 {
     size_t  r = fread(reinterpret_cast<void*>(buffer), sizeof(char), size, file_);
@@ -117,14 +117,14 @@ size_t recently_used_file::read(char* buffer, size_t size) const
     return r;
 }
 
-//----------------------------
+
 void recently_used_file::write(const char* buffer, size_t size) const
 {
     if (size != fwrite(reinterpret_cast<const void*>(buffer), sizeof(char), size, file_))
         throw "I/O error: write failed";
 }
 
-//----------------------------
+
 bool recently_used_file::eof() const
 {
     return feof(file_);

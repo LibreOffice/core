@@ -2716,9 +2716,9 @@ ImplSdPPTImport::ReadFormControl( SotStorageRef& rSrc1, com::sun::star::uno::Ref
     return false;
 }
 
-// ---------------------
+
 // - exported function -
-// ---------------------
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ImportPPT(
         SdDrawDocument* pDocument, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMedium )

@@ -60,7 +60,7 @@ namespace pcr
     //====================================================================
     //= PropertyControlExtender
     //====================================================================
-    //--------------------------------------------------------------------
+
     PropertyControlExtender::PropertyControlExtender( const Reference< XPropertyControl >& _rxObservedControl )
         :m_pData( new PropertyControlExtender_Data )
     {
@@ -76,12 +76,12 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     PropertyControlExtender::~PropertyControlExtender()
     {
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL PropertyControlExtender::keyPressed( const KeyEvent& _event ) throw (RuntimeException)
     {
         OSL_ENSURE( _event.Source == m_pData->xControlWindow, "PropertyControlExtender::keyPressed: where does this come from?" );
@@ -110,13 +110,13 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL PropertyControlExtender::keyReleased( const KeyEvent& /*_event*/ ) throw (RuntimeException)
     {
         // not interested in
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL PropertyControlExtender::disposing( const EventObject& Source ) throw (RuntimeException)
     {
         OSL_ENSURE( Source.Source == m_pData->xControlWindow, "PropertyControlExtender::disposing: where does this come from?" );

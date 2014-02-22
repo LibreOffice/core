@@ -173,7 +173,7 @@ using namespace ::dbaui;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-// -----------------------------------------------------------------------------
+
 namespace
 {
     // comparing two PropertyValue instances
@@ -217,7 +217,7 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------------
+
 static void lcl_getReportControlFormat(const Sequence< PropertyValue >& aArgs,
                                  ODesignView* _pView,
                                  uno::Reference< awt::XWindow>& _xWindow,
@@ -244,30 +244,30 @@ static void lcl_getReportControlFormat(const Sequence< PropertyValue >& aArgs,
     if ( !_xWindow.is() )
         _xWindow = VCLUnoHelper::GetInterface(_pView);
 }
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL OReportController::getImplementationName() throw( RuntimeException )
 {
     return getImplementationName_Static();
 }
 
-//------------------------------------------------------------------------------
+
 OUString OReportController::getImplementationName_Static() throw( RuntimeException )
 {
     return OUString("com.sun.star.report.comp.ReportDesign");
 }
-//------------------------------------------------------------------------------
+
 Sequence< OUString> OReportController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< OUString> aSupported(1);
     aSupported[0] = "com.sun.star.sdb.ReportDesign";
     return aSupported;
 }
-//-------------------------------------------------------------------------
+
 Sequence< OUString> SAL_CALL OReportController::getSupportedServiceNames() throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
-// -------------------------------------------------------------------------
+
 Reference< XInterface > OReportController::create(Reference< XComponentContext > const & xContext)
 {
     return *(new OReportController(xContext));
@@ -275,7 +275,7 @@ Reference< XInterface > OReportController::create(Reference< XComponentContext >
 
 #define PROPERTY_ID_ZOOMVALUE   1
 
-// -----------------------------------------------------------------------------
+
 OReportController::OReportController(Reference< XComponentContext > const & xContext)
     :OReportController_BASE(xContext)
     ,OPropertyStateContainer(OGenericUnoController_Base::rBHelper)
@@ -307,14 +307,14 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
                      &m_nZoomValue, ::getCppuType(static_cast< sal_Int16*>(0)));
 
 }
-// -----------------------------------------------------------------------------
+
 OReportController::~OReportController()
 {
 }
-// -----------------------------------------------------------------------------
+
 IMPLEMENT_FORWARD_XTYPEPROVIDER2(OReportController,OReportController_BASE,OReportController_Listener)
 IMPLEMENT_FORWARD_XINTERFACE2(OReportController,OReportController_BASE,OReportController_Listener)
-// -----------------------------------------------------------------------------
+
 void OReportController::disposing()
 {
 
@@ -393,7 +393,7 @@ void OReportController::disposing()
         EndListening( *getDesignView() );
     clearView();
 }
-// -----------------------------------------------------------------------------
+
 FeatureState OReportController::GetState(sal_uInt16 _nId) const
 {
     FeatureState aReturn;
@@ -955,7 +955,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
     return aReturn;
 }
 
-// -----------------------------------------------------------------------------
+
 namespace
 {
     /** extracts a background color from a dispatched SID_BACKGROUND_COLOR call
@@ -979,7 +979,7 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------------
+
 void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& aArgs)
 {
     SolarMutexGuard aSolarGuard;
@@ -1645,13 +1645,13 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
     }
     InvalidateFeature(_nId,Reference< XStatusListener >(),bForceBroadcast);
 }
-// -----------------------------------------------------------------------------
+
 short OReportController::saveModified()
 {
     return RET_NO;
 }
 
-// -----------------------------------------------------------------------------
+
 void OReportController::impl_initialize( )
 {
     OReportController_BASE::impl_initialize();
@@ -1754,13 +1754,13 @@ void OReportController::impl_initialize( )
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-// -----------------------------------------------------------------------------
+
 IMPL_LINK( OReportController, OnOpenHelpAgent, void* ,/*_pMemfun*/)
 {
     doOpenHelpAgent();
     return 0L;
 }
-// -----------------------------------------------------------------------------
+
 IMPL_LINK( OReportController, OnCreateHdl, OAddFieldWindow* ,_pAddFieldDlg)
 {
     WaitObject aObj( getDesignView() );
@@ -1772,7 +1772,7 @@ IMPL_LINK( OReportController, OnCreateHdl, OAddFieldWindow* ,_pAddFieldDlg)
     }
     return 0L;
 }
-// -----------------------------------------------------------------------------
+
 
 void OReportController::doOpenHelpAgent()
 {
@@ -1787,7 +1787,7 @@ void OReportController::doOpenHelpAgent()
         getView()->PostUserEvent(LINK(this, OReportController, OnOpenHelpAgent));
     }
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OReportController::Construct(Window* pParent)
 {
     ODesignView* pMyOwnView = new ODesignView( pParent, m_xContext, *this );
@@ -1804,7 +1804,7 @@ sal_Bool OReportController::Construct(Window* pParent)
     OReportController_BASE::Construct(pParent);
     return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OReportController::suspend(sal_Bool /*_bSuspend*/) throw( RuntimeException )
 {
     if ( getBroadcastHelper().bInDispose || getBroadcastHelper().bDisposed )
@@ -1819,7 +1819,7 @@ sal_Bool SAL_CALL OReportController::suspend(sal_Bool /*_bSuspend*/) throw( Runt
     // this suspend will be handled in the DBAccess interceptor implementation
     return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::describeSupportedFeatures()
 {
     DBSubComponentController::describeSupportedFeatures();
@@ -2082,7 +2082,7 @@ void OReportController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:CollapseSection",           SID_COLLAPSE_SECTION);
     implDescribeSupportedFeature( ".uno:ExpandSection",             SID_EXPAND_SECTION);
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::impl_onModifyChanged()
 {
     try
@@ -2096,7 +2096,7 @@ void OReportController::impl_onModifyChanged()
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::onLoadedMenu(const Reference< frame::XLayoutManager >& _xLayoutManager)
 {
     if ( _xLayoutManager.is() )
@@ -2118,7 +2118,7 @@ void OReportController::onLoadedMenu(const Reference< frame::XLayoutManager >& _
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::notifyGroupSections(const ContainerEvent& _rEvent,bool _bShow)
 {
     uno::Reference< report::XGroup> xGroup(_rEvent.Element,uno::UNO_QUERY);
@@ -2166,25 +2166,25 @@ void OReportController::notifyGroupSections(const ContainerEvent& _rEvent,bool _
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 // ::container::XContainerListener
 void SAL_CALL OReportController::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
     notifyGroupSections(_rEvent,true);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OReportController::elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
     notifyGroupSections(_rEvent,false);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OReportController::elementReplaced( const ContainerEvent& /*_rEvent*/ ) throw(RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     OSL_FAIL("Not yet implemented!");
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEvent& evt ) throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -2280,14 +2280,14 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
     }
 }
 
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OReportController::disposing( const lang::EventObject& Source ) throw(uno::RuntimeException)
 {
     // simply disambiguate
     OReportController_BASE::disposing(Source);
 }
 
-// -----------------------------------------------------------------------------
+
 static sal_uInt16 lcl_getNonVisbleGroupsBefore( const uno::Reference< report::XGroups>& _xGroups
                           ,sal_Int32 _nGroupPos
                           ,::std::mem_fun_t<sal_Bool,OGroupHelper>&_pGroupMemberFunction)
@@ -2305,7 +2305,7 @@ static sal_uInt16 lcl_getNonVisbleGroupsBefore( const uno::Reference< report::XG
     }
     return nNonVisibleGroups;
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::groupChange( const uno::Reference< report::XGroup>& _xGroup,const OUString& _sPropName,sal_Int32 _nGroupPos,bool _bShow)
 {
     ::std::mem_fun_t<sal_Bool,OGroupHelper> pMemFun = ::std::mem_fun(&OGroupHelper::getHeaderOn);
@@ -2348,25 +2348,25 @@ void OReportController::groupChange( const uno::Reference< report::XGroup>& _xGr
         }
     }
 }
-//------------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(OReportController, OnClipboardChanged)
 {
     OnInvalidateClipboard();
     return 0;
 }
-//------------------------------------------------------------------------------
+
 void OReportController::OnInvalidateClipboard()
 {
     InvalidateFeature(SID_CUT);
     InvalidateFeature(SID_COPY);
     InvalidateFeature(SID_PASTE);
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::openPageDialog(const uno::Reference<report::XSection>& _xSection)
 {
     if ( !m_xReportDefinition.is() )
         return;
-    // ------------
+
     // UNO->ItemSet
     static SfxItemInfo aItemInfos[] =
     {
@@ -2444,7 +2444,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                 : OString("PageDialog"));
             if (RET_OK == aDlg.Execute())
             {
-                // ------------
+
                 // ItemSet->UNO
                 // UNO-properties
                 const SfxItemSet* pSet = aDlg.GetOutputItemSet();
@@ -2512,7 +2512,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
 
 }
 
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OReportController::attachModel(const uno::Reference< frame::XModel > & xModel) throw( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -2529,7 +2529,7 @@ sal_Bool SAL_CALL OReportController::attachModel(const uno::Reference< frame::XM
     return sal_True;
 }
 
-// -----------------------------------------------------------------------------
+
 void OReportController::openSortingAndGroupingDialog()
 {
     if ( !m_xReportDefinition.is() )
@@ -2545,13 +2545,13 @@ void OReportController::openSortingAndGroupingDialog()
     else if ( isUiVisible() )
         m_pGroupsFloater->Show(!m_pGroupsFloater->IsVisible());
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 OReportController::getGroupPosition(const uno::Reference< report::XGroup >& _xGroup)
 {
     return rptui::getPositionInIndexAccess(m_xReportDefinition->getGroups().get(),_xGroup);
 }
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+
+
 IMPL_LINK( OReportController, EventLstHdl, VclWindowEvent*, _pEvent )
 {
     if ( _pEvent && _pEvent->GetId() == VCLEVENT_WINDOW_CLOSE )
@@ -2562,7 +2562,7 @@ IMPL_LINK( OReportController, EventLstHdl, VclWindowEvent*, _pEvent )
     }
     return 1L;
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::Notify(SfxBroadcaster & /* _rBc */, SfxHint const & _rHint)
 {
     if (_rHint.ISA(DlgEdHint)
@@ -2581,7 +2581,7 @@ void OReportController::Notify(SfxBroadcaster & /* _rBc */, SfxHint const & _rHi
 
     }
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::executeMethodWithUndo(sal_uInt16 _nUndoStrId,const ::std::mem_fun_t<void,ODesignView>& _pMemfun)
 {
     const OUString sUndoAction = ModuleRes(_nUndoStrId);
@@ -2590,7 +2590,7 @@ void OReportController::executeMethodWithUndo(sal_uInt16 _nUndoStrId,const ::std
     InvalidateFeature( SID_SAVEDOC );
     InvalidateFeature( SID_UNDO );
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::alignControlsWithUndo(sal_uInt16 _nUndoStrId,sal_Int32 _nControlModification,bool _bAlignAtSection)
 {
     const OUString sUndoAction = ModuleRes(_nUndoStrId);
@@ -2599,7 +2599,7 @@ void OReportController::alignControlsWithUndo(sal_uInt16 _nUndoStrId,sal_Int32 _
     InvalidateFeature( SID_SAVEDOC );
     InvalidateFeature( SID_UNDO );
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::shrinkSectionBottom(uno::Reference<report::XSection> _xSection)
 {
     const sal_Int32 nElements = _xSection->getCount();
@@ -2694,7 +2694,7 @@ void OReportController::shrinkSection(sal_uInt16 _nUndoStrId, uno::Reference<rep
     InvalidateFeature( SID_UNDO );
 }
 
-// -----------------------------------------------------------------------------
+
 uno::Any SAL_CALL OReportController::getViewData(void) throw( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -2760,7 +2760,7 @@ uno::Any SAL_CALL OReportController::getViewData(void) throw( uno::RuntimeExcept
     aViewData.put( "ZoomFactor", m_nZoomValue );
     return uno::makeAny( aViewData.getPropertyValues() );
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OReportController::restoreViewData(const uno::Any& i_data) throw( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -2824,14 +2824,14 @@ void SAL_CALL OReportController::restoreViewData(const uno::Any& i_data) throw( 
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::updateFloater()
 {
        if ( m_pGroupsFloater && m_pGroupsFloater->IsVisible() )
         m_pGroupsFloater->UpdateData();
 }
 
-// -----------------------------------------------------------------------------
+
 Reference<XFrame> OReportController::getXFrame()
 {
     if ( !m_xFrameLoader.is() )
@@ -2844,7 +2844,7 @@ Reference<XFrame> OReportController::getXFrame()
     return xFrame;
 }
 
-// -----------------------------------------------------------------------------
+
 uno::Reference<frame::XModel> OReportController::executeReport()
 {
     OSL_ENSURE(m_xReportDefinition.is(),"Where is my report?");
@@ -2960,12 +2960,12 @@ uno::Reference<frame::XModel> OReportController::executeReport()
     }
     return xModel;
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< frame::XModel >  SAL_CALL OReportController::getModel(void) throw( uno::RuntimeException )
 {
     return m_xReportDefinition.get();
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< sdbc::XRowSet > OReportController::getRowSet()
 {
     OSL_PRECOND( m_xReportDefinition.is(), "OReportController::getRowSet: no report definition?!" );
@@ -3000,7 +3000,7 @@ uno::Reference< sdbc::XRowSet > OReportController::getRowSet()
 
     return m_xRowSet;
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::insertGraphic()
 {
     const OUString sTitle(ModuleRes(RID_STR_IMPORT_GRAPHIC));
@@ -3033,12 +3033,12 @@ void OReportController::insertGraphic()
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-// -----------------------------------------------------------------------------
+
 ::boost::shared_ptr<rptui::OReportModel> OReportController::getSdrModel() const
 {
     return m_aReportModel;
 }
-// -----------------------------------------------------------------------------
+
 ::sal_Bool SAL_CALL OReportController::select( const Any& aSelection ) throw (IllegalArgumentException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -3078,7 +3078,7 @@ void OReportController::insertGraphic()
     }
     return bRet;
 }
-// -----------------------------------------------------------------------------
+
 Any SAL_CALL OReportController::getSelection(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -3091,17 +3091,17 @@ Any SAL_CALL OReportController::getSelection(  ) throw (RuntimeException)
     }
     return aRet;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OReportController::addSelectionChangeListener( const Reference< view::XSelectionChangeListener >& _Listener ) throw (RuntimeException)
 {
     m_aSelectionListeners.addInterface( _Listener );
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OReportController::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& _Listener ) throw (RuntimeException)
 {
     m_aSelectionListeners.removeInterface( _Listener );
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::createNewFunction(const uno::Any& _aValue)
 {
     uno::Reference< container::XIndexContainer> xFunctions(_aValue,uno::UNO_QUERY_THROW);
@@ -3111,13 +3111,13 @@ void OReportController::createNewFunction(const uno::Any& _aValue)
     // the call below will also create an undo action -> listener
     xFunctions->insertByIndex(xFunctions->getCount(),uno::makeAny(xFunction));
 }
-// -----------------------------------------------------------------------------
+
 IMPL_LINK( OReportController, OnExecuteReport, void* ,/*_pMemfun*/)
 {
     executeReport();
     return 0L;
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,const uno::Reference< report::XSection>& _xSection,const OUString& _sFunction,sal_uInt16 _nObjectId)
 {
     SequenceAsHashMap aMap(_aArgs);
@@ -3232,7 +3232,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
 
     correctOverlapping(pNewControl,pSectionWindow->getReportSection());
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::createDateTime(const Sequence< PropertyValue >& _aArgs)
 {
     getDesignView()->unmarkAllObjects(NULL);
@@ -3260,7 +3260,7 @@ void OReportController::createDateTime(const Sequence< PropertyValue >& _aArgs)
         createControl(aMap.getAsConstPropertyValueList(),xSection,sFunction);
     }
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::createPageNumber(const Sequence< PropertyValue >& _aArgs)
 {
     getDesignView()->unmarkAllObjects(NULL);
@@ -3290,7 +3290,7 @@ void OReportController::createPageNumber(const Sequence< PropertyValue >& _aArgs
     createControl(_aArgs,bInPageHeader ? m_xReportDefinition->getPageHeader() : m_xReportDefinition->getPageFooter(),sFunction);
 }
 
-// -----------------------------------------------------------------------------
+
 void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
 {
     getDesignView()->unmarkAllObjects(NULL);
@@ -3606,7 +3606,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
     }
 }
 
-// -----------------------------------------------------------------------------
+
 OSectionView* OReportController::getCurrentSectionView() const
 {
     OSectionView* pSectionView = NULL;
@@ -3615,7 +3615,7 @@ OSectionView* OReportController::getCurrentSectionView() const
         pSectionView = &pSectionWindow->getReportSection().getSectionView();
     return pSectionView;
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::changeZOrder(sal_Int32 _nId)
 {
     OSectionView* pSectionView = getCurrentSectionView();
@@ -3645,7 +3645,7 @@ void OReportController::changeZOrder(sal_Int32 _nId)
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::listen(const bool _bAdd)
 {
     const OUString aProps [] = {    OUString(PROPERTY_REPORTHEADERON),OUString(PROPERTY_REPORTFOOTERON)
@@ -3749,7 +3749,7 @@ void OReportController::listen(const bool _bAdd)
         m_aReportModel->detachController();
     }
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::switchReportSection(const sal_Int16 _nId)
 {
     OSL_ENSURE(_nId == SID_REPORTHEADER_WITHOUT_UNDO || _nId == SID_REPORTFOOTER_WITHOUT_UNDO || _nId == SID_REPORTHEADERFOOTER ,"Illegal id given!");
@@ -3799,7 +3799,7 @@ void OReportController::switchReportSection(const sal_Int16 _nId)
         getView()->Resize();
     }
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::switchPageSection(const sal_Int16 _nId)
 {
     OSL_ENSURE(_nId == SID_PAGEHEADERFOOTER || _nId == SID_PAGEHEADER_WITHOUT_UNDO || _nId == SID_PAGEFOOTER_WITHOUT_UNDO ,"Illegal id given!");
@@ -3848,7 +3848,7 @@ void OReportController::switchPageSection(const sal_Int16 _nId)
         getView()->Resize();
     }
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::modifyGroup(const bool _bAppend, const Sequence< PropertyValue >& _aArgs)
 {
     if ( !m_xReportDefinition.is() )
@@ -3892,7 +3892,7 @@ void OReportController::modifyGroup(const bool _bAppend, const Sequence< Propert
     }
 }
 
-// -----------------------------------------------------------------------------
+
 void OReportController::createGroupSection(const bool _bUndo,const bool _bHeader, const Sequence< PropertyValue >& _aArgs)
 {
     if ( m_xReportDefinition.is() )
@@ -3922,7 +3922,7 @@ void OReportController::createGroupSection(const bool _bUndo,const bool _bHeader
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::collapseSection(const bool _bCollapse)
 {
     ::boost::shared_ptr<OSectionWindow> pSection = getDesignView()->getMarkedSection();
@@ -3931,7 +3931,7 @@ void OReportController::collapseSection(const bool _bCollapse)
         pSection->setCollapsed(_bCollapse);
     }
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::markSection(const bool _bNext)
 {
     ::boost::shared_ptr<OSectionWindow> pSection = getDesignView()->getMarkedSection();
@@ -3951,7 +3951,7 @@ void OReportController::markSection(const bool _bNext)
             select(uno::makeAny(pSection->getReportSection().getSection()));
     }
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::createDefaultControl(const uno::Sequence< beans::PropertyValue>& _aArgs)
 {
     uno::Reference< report::XSection > xSection = getDesignView()->getCurrentSection();
@@ -3973,12 +3973,12 @@ void OReportController::createDefaultControl(const uno::Sequence< beans::Propert
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< util::XNumberFormatter > OReportController::getReportNumberFormatter() const
 {
     return m_xFormatter;
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::checkChartEnabled()
 {
     if ( !m_bChartEnabledAsked )
@@ -4002,7 +4002,7 @@ void OReportController::checkChartEnabled()
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 
 // css.frame.XTitle
 OUString SAL_CALL OReportController::getTitle()
@@ -4015,12 +4015,12 @@ OUString SAL_CALL OReportController::getTitle()
 
     return xTitle->getTitle ();
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, Any& _rDefault ) const
 {
     _rDefault <<= sal_Int16(100);
 }
-// -----------------------------------------------------------------------------
+
 // comphelper::OPropertyArrayUsageHelper
 ::cppu::IPropertyArrayHelper* OReportController::createArrayHelper( ) const
 {
@@ -4028,7 +4028,7 @@ void OReportController::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, Any&
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
-// -------------------------------------------------------------------------
+
 
 // cppu::OPropertySetHelper
 ::cppu::IPropertyArrayHelper& SAL_CALL OReportController::getInfoHelper()
@@ -4036,7 +4036,7 @@ void OReportController::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, Any&
     typedef ::comphelper::OPropertyArrayUsageHelper<OReportController_BASE> OReportController_PROP;
     return *OReportController_PROP::getArrayHelper();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OReportController::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle,const Any& _aValue) throw (Exception)
 {
     if ( _nHandle == PROPERTY_ID_ZOOMVALUE )
@@ -4073,12 +4073,12 @@ OUString SAL_CALL OReportController::getMode(  ) throw (::com::sun::star::uno::R
     }
     return pIter != pEnd;
 }
-// -----------------------------------------------------------------------------
+
 bool OReportController::isUiVisible() const
 {
     return m_sMode != "remote";
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::impl_fillState_nothrow(const OUString& _sProperty,dbaui::FeatureState& _rState) const
 {
     _rState.bEnabled = isEditable();
@@ -4114,7 +4114,7 @@ void OReportController::impl_fillState_nothrow(const OUString& _sProperty,dbaui:
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::impl_zoom_nothrow()
 {
     Fraction aZoom(m_nZoomValue,100);
@@ -4123,7 +4123,7 @@ void OReportController::impl_zoom_nothrow()
     InvalidateFeature(SID_ATTR_ZOOM,Reference< XStatusListener >(),sal_True);
     InvalidateFeature(SID_ATTR_ZOOMSLIDER,Reference< XStatusListener >(),sal_True);
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OReportController::isFormatCommandEnabled(sal_uInt16 _nCommand,const uno::Reference< report::XReportControlFormat>& _xReportControlFormat) const
 {
     sal_Bool bRet = sal_False;
@@ -4154,7 +4154,7 @@ sal_Bool OReportController::isFormatCommandEnabled(sal_uInt16 _nCommand,const un
     }
     return bRet;
 }
-// -----------------------------------------------------------------------------
+
 bool OReportController::impl_setPropertyAtControls_throw(const sal_uInt16 _nUndoResId,const OUString& _sProperty,const uno::Any& _aValue,const Sequence< PropertyValue >& _aArgs)
 {
     ::std::vector< uno::Reference< uno::XInterface > > aSelection;
@@ -4174,14 +4174,14 @@ bool OReportController::impl_setPropertyAtControls_throw(const sal_uInt16 _nUndo
 
     return !aSelection.empty();
 }
-// -----------------------------------------------------------------------------
+
 void OReportController::impl_fillCustomShapeState_nothrow(const char* _pCustomShapeType,dbaui::FeatureState& _rState) const
 {
     _rState.bEnabled = isEditable();
     _rState.bChecked = getDesignView()->GetInsertObj() == OBJ_CUSTOMSHAPE && getDesignView()->GetInsertObjString().equalsAscii(_pCustomShapeType);
 }
 
-// -----------------------------------------------------------------------------
+
 ::boost::shared_ptr<OSectionWindow> OReportController::getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const
 {
     if ( getDesignView() )
@@ -4195,7 +4195,7 @@ void OReportController::impl_fillCustomShapeState_nothrow(const char* _pCustomSh
 }
 
 
-// -----------------------------------------------------------------------------
+
 void OReportController::openZoomDialog()
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -4254,8 +4254,8 @@ void OReportController::openZoomDialog()
             delete pDefaults[i];
     }
 }
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+
+
 // XVisualObject
 void SAL_CALL OReportController::setVisualAreaSize( ::sal_Int64 _nAspect, const awt::Size& _aSize ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException)
 {
@@ -4268,13 +4268,13 @@ void SAL_CALL OReportController::setVisualAreaSize( ::sal_Int64 _nAspect, const 
             setModified( sal_True );
     m_nAspect = _nAspect;
 }
-// -----------------------------------------------------------------------------
+
 awt::Size SAL_CALL OReportController::getVisualAreaSize( ::sal_Int64 /*nAspect*/ ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     return m_aVisualAreaSize;
 }
-// -----------------------------------------------------------------------------
+
 embed::VisualRepresentation SAL_CALL OReportController::getPreferredVisualRepresentation( ::sal_Int64 _nAspect ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -4312,12 +4312,12 @@ embed::VisualRepresentation SAL_CALL OReportController::getPreferredVisualRepres
     }
     return aResult;
 }
-// -----------------------------------------------------------------------------
+
 ::sal_Int32 SAL_CALL OReportController::getMapUnit( ::sal_Int64 /*nAspect*/ ) throw (uno::Exception, uno::RuntimeException)
 {
     return embed::EmbedMapUnits::ONE_100TH_MM;
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< container::XNameAccess > OReportController::getColumns() const
 {
     if ( !m_xColumns.is() && m_xReportDefinition.is() && !m_xReportDefinition->getCommand().isEmpty() )
@@ -4326,7 +4326,7 @@ uno::Reference< container::XNameAccess > OReportController::getColumns() const
     }
     return m_xColumns;
 }
-// -----------------------------------------------------------------------------
+
 OUString OReportController::getColumnLabel_throw(const OUString& i_sColumnName) const
 {
     OUString sLabel;
@@ -4340,7 +4340,7 @@ OUString OReportController::getColumnLabel_throw(const OUString& i_sColumnName) 
     return sLabel;
 }
 
-// -----------------------------------------------------------------------------
+
 SfxUndoManager& OReportController::getUndoManager() const
 {
     DBG_TESTSOLARMUTEX();
@@ -4355,13 +4355,13 @@ SfxUndoManager& OReportController::getUndoManager() const
     return *pUndoManager;
 }
 
-// -----------------------------------------------------------------------------
+
 void OReportController::clearUndoManager() const
 {
     getUndoManager().Clear();
 }
 
-// -----------------------------------------------------------------------------
+
 void OReportController::addUndoAction( SfxUndoAction* i_pAction )
 {
     getUndoManager().AddUndoAction( i_pAction );

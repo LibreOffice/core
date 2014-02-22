@@ -272,9 +272,9 @@ void SvxChartOptions::Notify( const com::sun::star::uno::Sequence< OUString >& )
 {
 }
 
-// --------------------
+
 // class SvxChartColorTableItem
-// --------------------
+
 
 SvxChartColorTableItem::SvxChartColorTableItem( sal_uInt16 nWhich_, const SvxChartColorTable& aTable ) :
     SfxPoolItem( nWhich_ ),

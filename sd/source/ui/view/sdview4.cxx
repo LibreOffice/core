@@ -268,7 +268,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     return pNewGrafObj;
 }
 
-// -----------------------------------------------------------------------------
+
 
 SdrMediaObj* View::InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
                                    const Point& rPos, const Size& rSize,

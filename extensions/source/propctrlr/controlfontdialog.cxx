@@ -41,7 +41,7 @@ namespace pcr
     //====================================================================
     //= OControlFontDialog
     //====================================================================
-    //---------------------------------------------------------------------
+
     OControlFontDialog::OControlFontDialog(const Reference< XComponentContext >& _rxContext )
         :OGenericUnoDialog( _rxContext )
         ,m_pFontItems(NULL)
@@ -53,7 +53,7 @@ namespace pcr
             &m_xControlModel, ::getCppuType(&m_xControlModel));
     }
 
-    //---------------------------------------------------------------------
+
     OControlFontDialog::~OControlFontDialog()
     {
         if (m_pDialog)
@@ -64,38 +64,38 @@ namespace pcr
         }
     }
 
-    //---------------------------------------------------------------------
+
     Sequence<sal_Int8> SAL_CALL OControlFontDialog::getImplementationId(  ) throw(RuntimeException)
     {
         static ::cppu::OImplementationId aId;
         return aId.getImplementationId();
     }
 
-    //---------------------------------------------------------------------
+
     Reference< XInterface > SAL_CALL OControlFontDialog::Create( const Reference< XComponentContext >& _rxContext )
     {
         return *( new OControlFontDialog( _rxContext ) );
     }
 
-    //---------------------------------------------------------------------
+
     OUString SAL_CALL OControlFontDialog::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_static();
     }
 
-    //---------------------------------------------------------------------
+
     OUString OControlFontDialog::getImplementationName_static() throw(RuntimeException)
     {
         return OUString("org.openoffice.comp.form.ui.OControlFontDialog");
     }
 
-    //---------------------------------------------------------------------
+
     ::comphelper::StringSequence SAL_CALL OControlFontDialog::getSupportedServiceNames() throw(RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
-    //---------------------------------------------------------------------
+
     ::comphelper::StringSequence OControlFontDialog::getSupportedServiceNames_static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
@@ -119,20 +119,20 @@ namespace pcr
             OControlFontDialog_DBase::initialize(aArguments);
     }
 
-    //---------------------------------------------------------------------
+
     Reference<XPropertySetInfo>  SAL_CALL OControlFontDialog::getPropertySetInfo() throw(RuntimeException)
     {
         Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
     }
 
-    //---------------------------------------------------------------------
+
     ::cppu::IPropertyArrayHelper& OControlFontDialog::getInfoHelper()
     {
         return *const_cast<OControlFontDialog*>(this)->getArrayHelper();
     }
 
-    //--------------------------------------------------------------------------
+
     ::cppu::IPropertyArrayHelper* OControlFontDialog::createArrayHelper( ) const
     {
         Sequence< Property > aProps;
@@ -140,7 +140,7 @@ namespace pcr
         return new ::cppu::OPropertyArrayHelper(aProps);
     }
 
-    //--------------------------------------------------------------------------
+
     Dialog* OControlFontDialog::createDialog(Window* _pParent)
     {
         ControlCharacterDialog::createItemSet(m_pFontItems, m_pItemPool, m_pItemPoolDefaults);
@@ -156,14 +156,14 @@ namespace pcr
         return pDialog;
     }
 
-    //-------------------------------------------------------------------------
+
     void OControlFontDialog::destroyDialog()
     {
         OGenericUnoDialog::destroyDialog();
         ControlCharacterDialog::destroyItemSet(m_pFontItems, m_pItemPool, m_pItemPoolDefaults);
     }
 
-    //-------------------------------------------------------------------------
+
     void OControlFontDialog::executedDialog(sal_Int16 _nExecutionResult)
     {
         OSL_ENSURE(m_pDialog, "OControlFontDialog::executedDialog: no dialog anymore?!!");

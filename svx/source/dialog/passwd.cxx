@@ -55,7 +55,7 @@ IMPL_LINK_NOARG(SvxPasswordDialog, ButtonHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxPasswordDialog, EditModifyHdl)
 {
@@ -72,7 +72,7 @@ IMPL_LINK_NOARG(SvxPasswordDialog, EditModifyHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxPasswordDialog::SvxPasswordDialog(Window* pParent, sal_Bool bAllowEmptyPasswords, sal_Bool bDisableOldPassword)
     : SfxModalDialog(pParent, "PasswordDialog", "svx/ui/passwd.ui")
@@ -100,13 +100,13 @@ SvxPasswordDialog::SvxPasswordDialog(Window* pParent, sal_Bool bAllowEmptyPasswo
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxPasswordDialog::~SvxPasswordDialog()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

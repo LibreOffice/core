@@ -2271,9 +2271,9 @@ sal_Int32 TextView::GetLineNumberOfCursorInSelection() const
 }
 
 
-// -------------------------------------------------------------------------
+
 // (+) class TextSelFunctionSet
-// -------------------------------------------------------------------------
+
 TextSelFunctionSet::TextSelFunctionSet( TextView* pView )
 {
     mpView = pView;

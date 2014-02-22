@@ -48,7 +48,7 @@ namespace frm
     //====================================================================
     //= RichTextControl
     //====================================================================
-    //--------------------------------------------------------------------
+
     RichTextControl::RichTextControl( RichTextEngine* _pEngine, Window* _pParent, WinBits _nStyle,
         ITextAttributeListener* _pTextAttribListener, ITextSelectionListener* _pSelectionListener )
         :Control( _pParent, implInitStyle( _nStyle ) )
@@ -57,26 +57,26 @@ namespace frm
         implInit( _pEngine, _pTextAttribListener, _pSelectionListener );
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControl::implInit( RichTextEngine* _pEngine, ITextAttributeListener* _pTextAttribListener, ITextSelectionListener* _pSelectionListener )
     {
         m_pImpl = new RichTextControlImpl( this, _pEngine, _pTextAttribListener, _pSelectionListener );
         SetCompoundControl( true );
     }
 
-    //--------------------------------------------------------------------
+
     RichTextControl::~RichTextControl( )
     {
         delete m_pImpl;
     }
 
-    //--------------------------------------------------------------------
+
     AttributeState RichTextControl::getState( AttributeId _nAttributeId ) const
     {
         return m_pImpl->getAttributeState( _nAttributeId );
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControl::executeAttribute( AttributeId _nAttributeId, const SfxPoolItem* _pArgument )
     {
         SfxItemSet aToApplyAttributes( getView().GetEmptyItemSet() );
@@ -89,7 +89,7 @@ namespace frm
         applyAttributes( aToApplyAttributes );
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControl::applyAttributes( const SfxItemSet& _rAttributesToApply )
     {
         // apply
@@ -112,19 +112,19 @@ namespace frm
             // (the handler for the just executed attribute should know)
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControl::enableAttributeNotification( AttributeId _nAttributeId, ITextAttributeListener* _pListener )
     {
         m_pImpl->enableAttributeNotification( _nAttributeId, _pListener );
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControl::disableAttributeNotification( AttributeId _nAttributeId )
     {
         m_pImpl->disableAttributeNotification( _nAttributeId );
     }
 
-    //--------------------------------------------------------------------
+
     bool RichTextControl::isMappableSlot( SfxSlotId _nSlotId )
     {
         switch ( _nSlotId )
@@ -152,20 +152,20 @@ namespace frm
         return false;
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControl::Resize()
     {
         m_pImpl->layoutWindow();
         Invalidate();
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControl::GetFocus()
     {
         getViewport().GrabFocus();
     }
 
-    //--------------------------------------------------------------------
+
     WinBits RichTextControl::implInitStyle( WinBits nStyle )
     {
         if ( !( nStyle & WB_NOTABSTOP ) )
@@ -173,7 +173,7 @@ namespace frm
         return nStyle;
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControl::StateChanged( StateChangedType _nStateChange )
     {
         if ( _nStateChange == STATE_CHANGE_STYLE )
@@ -192,7 +192,7 @@ namespace frm
         Control::StateChanged( _nStateChange );
     }
 
-    //--------------------------------------------------------------------
+
     bool RichTextControl::PreNotify( NotifyEvent& _rNEvt )
     {
         if ( IsWindowOrChild( _rNEvt.GetWindow() ) )
@@ -285,7 +285,7 @@ namespace frm
         return Control::PreNotify( _rNEvt );
     }
 
-    //--------------------------------------------------------------------
+
     bool RichTextControl::Notify( NotifyEvent& _rNEvt )
     {
         bool nDone = false;
@@ -297,67 +297,67 @@ namespace frm
         return nDone || Control::Notify( _rNEvt );
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControl::Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, sal_uLong _nFlags )
     {
         m_pImpl->Draw( _pDev, _rPos, _rSize, _nFlags );
     }
 
-    //--------------------------------------------------------------------
+
     EditView& RichTextControl::getView()
     {
         return *m_pImpl->getView( RichTextControlImpl::GrantAccess() );
     }
 
-    //--------------------------------------------------------------------
+
     const EditView& RichTextControl::getView() const
     {
         return *m_pImpl->getView( RichTextControlImpl::GrantAccess() );
     }
 
-    //--------------------------------------------------------------------
+
     EditEngine& RichTextControl::getEngine() const
     {
         return *m_pImpl->getEngine( RichTextControlImpl::GrantAccess() );
     }
 
-    //--------------------------------------------------------------------
+
     Window& RichTextControl::getViewport() const
     {
         return *m_pImpl->getViewport( RichTextControlImpl::GrantAccess() );
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControl::SetReadOnly( bool _bReadOnly )
     {
         m_pImpl->SetReadOnly( _bReadOnly );
     }
 
-    //--------------------------------------------------------------------
+
     bool RichTextControl::IsReadOnly() const
     {
         return m_pImpl->IsReadOnly();
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControl::SetBackgroundColor( )
     {
         m_pImpl->SetBackgroundColor( );
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControl::SetBackgroundColor( const Color& _rColor )
     {
         m_pImpl->SetBackgroundColor( _rColor );
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControl::SetHideInactiveSelection( bool _bHide )
     {
         m_pImpl->SetHideInactiveSelection( _bHide );
     }
 
-    //--------------------------------------------------------------------
+
     bool RichTextControl::GetHideInactiveSelection() const
     {
         return m_pImpl->GetHideInactiveSelection( );

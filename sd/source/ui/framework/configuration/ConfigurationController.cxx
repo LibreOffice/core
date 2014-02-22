@@ -627,7 +627,7 @@ void SAL_CALL ConfigurationController::initialize (const Sequence<Any>& aArgumen
 
 
 
-//-----------------------------------------------------------------------------
+
 
 void ConfigurationController::ThrowIfDisposed (void) const
     throw (::com::sun::star::lang::DisposedException)

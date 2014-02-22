@@ -37,7 +37,7 @@ using ::com::sun::star::task::XStatusIndicator;
 
 namespace pwp {
 
-// -----------------------------------------------------------------------------
+
 
 class PlaceWareExportFilter : public cppu::WeakImplHelper4
 <
@@ -69,14 +69,14 @@ public:
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw(RuntimeException);
 };
 
-// -----------------------------------------------------------------------------
+
 
 PlaceWareExportFilter::PlaceWareExportFilter(const Reference< XComponentContext > &rxContext)
 :   mxContext( rxContext )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL PlaceWareExportFilter::filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException)
@@ -116,14 +116,14 @@ sal_Bool SAL_CALL PlaceWareExportFilter::filter( const ::com::sun::star::uno::Se
     return aExporter.doExport( mxDoc, xOutputStream, sURL, xInteractionHandler, xStatusIndicator );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL PlaceWareExportFilter::cancel(  )
     throw (RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 // XExporter
 void SAL_CALL PlaceWareExportFilter::setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
@@ -132,7 +132,7 @@ void SAL_CALL PlaceWareExportFilter::setSourceDocument( const ::com::sun::star::
     mxDoc = xDoc;
 }
 
-// -----------------------------------------------------------------------------
+
 
 // XInitialization
 void SAL_CALL PlaceWareExportFilter::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& /* aArguments */ )
@@ -180,7 +180,7 @@ sal_Bool SAL_CALL PlaceWareExportFilter::supportsService( const OUString& rServi
     return PlaceWareExportFilter_getSupportedServiceNames();
 }
 
-// -----------------------------------------------------------------------------
+
 
 }
 

@@ -31,18 +31,18 @@
 DBG_NAME(SfxRectangleItem)
 
 
-// -----------------------------------------------------------------------
+
 
 TYPEINIT1_AUTOFACTORY(SfxRectangleItem, SfxPoolItem);
 
-// -----------------------------------------------------------------------
+
 
 SfxRectangleItem::SfxRectangleItem()
 {
     DBG_CTOR(SfxRectangleItem, 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxRectangleItem::SfxRectangleItem( sal_uInt16 nW, const Rectangle& rVal ) :
     SfxPoolItem( nW ),
@@ -51,7 +51,7 @@ SfxRectangleItem::SfxRectangleItem( sal_uInt16 nW, const Rectangle& rVal ) :
     DBG_CTOR(SfxRectangleItem, 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxRectangleItem::SfxRectangleItem( const SfxRectangleItem& rItem ) :
     SfxPoolItem( rItem ),
@@ -60,7 +60,7 @@ SfxRectangleItem::SfxRectangleItem( const SfxRectangleItem& rItem ) :
     DBG_CTOR(SfxRectangleItem, 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxItemPresentation SfxRectangleItem::GetPresentation
 (
@@ -79,7 +79,7 @@ SfxItemPresentation SfxRectangleItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxRectangleItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -88,7 +88,7 @@ bool SfxRectangleItem::operator==( const SfxPoolItem& rItem ) const
     return ((SfxRectangleItem&)rItem).aVal == aVal;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SfxRectangleItem::Clone(SfxItemPool *) const
 {
@@ -96,7 +96,7 @@ SfxPoolItem* SfxRectangleItem::Clone(SfxItemPool *) const
     return new SfxRectangleItem( *this );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SfxRectangleItem::Create(SvStream &rStream, sal_uInt16 ) const
 {
@@ -106,7 +106,7 @@ SfxPoolItem* SfxRectangleItem::Create(SvStream &rStream, sal_uInt16 ) const
     return new SfxRectangleItem(Which(), aStr);
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SfxRectangleItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
@@ -116,7 +116,7 @@ SvStream& SfxRectangleItem::Store(SvStream &rStream, sal_uInt16 ) const
 }
 
 
-// -----------------------------------------------------------------------
+
 bool SfxRectangleItem::QueryValue( com::sun::star::uno::Any& rVal,
                                    sal_uInt8 nMemberId) const
 {
@@ -141,7 +141,7 @@ bool SfxRectangleItem::QueryValue( com::sun::star::uno::Any& rVal,
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 bool SfxRectangleItem::PutValue( const com::sun::star::uno::Any& rVal,
                                  sal_uInt8 nMemberId  )
 {

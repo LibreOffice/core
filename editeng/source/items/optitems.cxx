@@ -47,7 +47,7 @@ SfxSpellCheckItem::SfxSpellCheckItem
     xSpellCheck = xChecker;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxSpellCheckItem::SfxSpellCheckItem( const SfxSpellCheckItem& rItem ) :
 
@@ -56,7 +56,7 @@ SfxSpellCheckItem::SfxSpellCheckItem( const SfxSpellCheckItem& rItem ) :
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SfxSpellCheckItem::GetPresentation
 (
@@ -83,14 +83,14 @@ SfxItemPresentation SfxSpellCheckItem::GetPresentation
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SfxSpellCheckItem::Clone( SfxItemPool* ) const
 {
     return new SfxSpellCheckItem( *this );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxSpellCheckItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -107,7 +107,7 @@ SfxHyphenRegionItem::SfxHyphenRegionItem( const sal_uInt16 nId ) :
     nMinLead = nMinTrail = 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxHyphenRegionItem::SfxHyphenRegionItem( const SfxHyphenRegionItem& rItem ) :
 
@@ -118,7 +118,7 @@ SfxHyphenRegionItem::SfxHyphenRegionItem( const SfxHyphenRegionItem& rItem ) :
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxHyphenRegionItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -128,14 +128,14 @@ bool SfxHyphenRegionItem::operator==( const SfxPoolItem& rAttr ) const
              ( ( (SfxHyphenRegionItem&)rAttr ).nMinTrail == nMinTrail ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SfxHyphenRegionItem::Clone( SfxItemPool* ) const
 {
     return new SfxHyphenRegionItem( *this );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SfxHyphenRegionItem::GetPresentation
 (
@@ -166,7 +166,7 @@ SfxItemPresentation SfxHyphenRegionItem::GetPresentation
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SfxHyphenRegionItem::Create(SvStream& rStrm, sal_uInt16 ) const
 {
@@ -178,7 +178,7 @@ SfxPoolItem* SfxHyphenRegionItem::Create(SvStream& rStrm, sal_uInt16 ) const
     return pAttr;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SfxHyphenRegionItem::Store( SvStream& rStrm, sal_uInt16 ) const
 {

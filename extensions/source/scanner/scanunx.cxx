@@ -40,7 +40,7 @@ BitmapTransporter::~BitmapTransporter()
 #endif
 }
 
-// -----------------------------------------------------------------------------
+
 
 Any SAL_CALL BitmapTransporter::queryInterface( const Type& rType ) throw( RuntimeException )
 {
@@ -49,7 +49,7 @@ Any SAL_CALL BitmapTransporter::queryInterface( const Type& rType ) throw( Runti
     return( aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 css::awt::Size BitmapTransporter::getSize() throw()
 {
@@ -73,7 +73,7 @@ css::awt::Size BitmapTransporter::getSize() throw()
     return aRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< sal_Int8 > BitmapTransporter::getDIB() throw()
 {
@@ -92,9 +92,9 @@ Sequence< sal_Int8 > BitmapTransporter::getDIB() throw()
     return aValue;
 }
 
-// --------------
+
 // - SaneHolder -
-// --------------
+
 
 struct SaneHolder
 {
@@ -139,9 +139,9 @@ namespace
     struct theSanes : public rtl::Static<allSanes, theSanes> {};
 }
 
-// -----------------
+
 // - ScannerThread -
-// -----------------
+
 
 class ScannerThread : public osl::Thread
 {
@@ -159,7 +159,7 @@ public:
     virtual ~ScannerThread();
 };
 
-// -----------------------------------------------------------------------------
+
 
 ScannerThread::ScannerThread(
                              boost::shared_ptr<SaneHolder> pHolder,
@@ -207,9 +207,9 @@ void ScannerThread::run()
     m_pHolder->m_bBusy = false;
 }
 
-// ------------------
+
 // - ScannerManager -
-// ------------------
+
 
 void ScannerManager::AcquireData()
 {
@@ -223,7 +223,7 @@ void ScannerManager::ReleaseData()
     theSanes::get().release();
 }
 
-// -----------------------------------------------------------------------------
+
 
 css::awt::Size ScannerManager::getSize() throw()
 {
@@ -232,14 +232,14 @@ css::awt::Size ScannerManager::getSize() throw()
     return aRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< sal_Int8 > ScannerManager::getDIB() throw()
 {
     return Sequence< sal_Int8 >();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< ScannerContext > ScannerManager::getAvailableScanners() throw()
 {
@@ -264,7 +264,7 @@ Sequence< ScannerContext > ScannerManager::getAvailableScanners() throw()
     return Sequence< ScannerContext >();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_context,
                                                   const Reference< com::sun::star::lang::XEventListener >& listener ) throw( ScannerException )
@@ -306,7 +306,7 @@ sal_Bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_contex
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ScannerManager::startScan( const ScannerContext& scanner_context,
                                 const Reference< com::sun::star::lang::XEventListener >& listener ) throw( ScannerException )
@@ -337,7 +337,7 @@ void ScannerManager::startScan( const ScannerContext& scanner_context,
     pThread->create();
 }
 
-// -----------------------------------------------------------------------------
+
 
 ScanError ScannerManager::getError( const ScannerContext& scanner_context ) throw( ScannerException )
 {
@@ -356,7 +356,7 @@ ScanError ScannerManager::getError( const ScannerContext& scanner_context ) thro
     return pHolder->m_nError;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< css::awt::XBitmap > ScannerManager::getBitmap( const ScannerContext& scanner_context ) throw( ScannerException )
 {

@@ -55,7 +55,7 @@ namespace pcr
     //====================================================================
     namespace
     {
-        //--------------------------------------------------------------------
+
         OUString composeModelElementUIName( const OUString& _rModelName, const OUString& _rElementName )
         {
             OUStringBuffer aBuffer;
@@ -70,7 +70,7 @@ namespace pcr
     //====================================================================
     //= EFormsHelper
     //====================================================================
-    //--------------------------------------------------------------------
+
     EFormsHelper::EFormsHelper( ::osl::Mutex& _rMutex, const Reference< XPropertySet >& _rxControlModel, const Reference< frame::XModel >& _rxContextDocument )
         :m_xControlModel( _rxControlModel )
         ,m_aPropertyListeners( _rMutex )
@@ -83,7 +83,7 @@ namespace pcr
 
     }
 
-    //--------------------------------------------------------------------
+
     bool EFormsHelper::isEForm( const Reference< frame::XModel >& _rxContextDocument )
     {
         try
@@ -101,7 +101,7 @@ namespace pcr
         return false;
     }
 
-    //--------------------------------------------------------------------
+
     bool EFormsHelper::canBindToDataType( sal_Int32 _nDataType ) const SAL_THROW(())
     {
         if ( !m_xBindableControl.is() )
@@ -195,7 +195,7 @@ namespace pcr
         return bCan;
     }
 
-    //--------------------------------------------------------------------
+
     bool EFormsHelper::isListEntrySink() const SAL_THROW(())
     {
         bool bIs = false;
@@ -211,7 +211,7 @@ namespace pcr
         return bIs;
     }
 
-    //--------------------------------------------------------------------
+
     void EFormsHelper::impl_switchBindingListening_throw( bool _bDoListening, const Reference< XPropertyChangeListener >& _rxListener )
     {
         Reference< XPropertySet > xBindingProps;
@@ -230,7 +230,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     void EFormsHelper::registerBindingListener( const Reference< XPropertyChangeListener >& _rxBindingListener )
     {
         if ( !_rxBindingListener.is() )
@@ -238,7 +238,7 @@ namespace pcr
         impl_toggleBindingPropertyListening_throw( true, _rxBindingListener );
     }
 
-    //--------------------------------------------------------------------
+
     void EFormsHelper::impl_toggleBindingPropertyListening_throw( bool _bDoListen, const Reference< XPropertyChangeListener >& _rxConcreteListenerOrNull )
     {
         if ( !_bDoListen )
@@ -291,13 +291,13 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     void EFormsHelper::revokeBindingListener( const Reference< XPropertyChangeListener >& _rxBindingListener )
     {
         impl_toggleBindingPropertyListening_throw( false, _rxBindingListener );
     }
 
-    //--------------------------------------------------------------------
+
     void EFormsHelper::getFormModelNames( ::std::vector< OUString >& /* [out] */ _rModelNames ) const SAL_THROW(())
     {
         if ( m_xDocument.is() )
@@ -324,7 +324,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     void EFormsHelper::getBindingNames( const OUString& _rModelName, ::std::vector< OUString >& /* [out] */ _rBindingNames ) const SAL_THROW(())
     {
         _rBindingNames.resize( 0 );
@@ -349,7 +349,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     Reference< xforms::XModel > EFormsHelper::getFormModelByName( const OUString& _rModelName ) const SAL_THROW(())
     {
         Reference< xforms::XModel > xReturn;
@@ -367,7 +367,7 @@ namespace pcr
         return xReturn;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< xforms::XModel > EFormsHelper::getCurrentFormModel() const SAL_THROW(())
     {
         Reference< xforms::XModel > xModel;
@@ -386,7 +386,7 @@ namespace pcr
         return xModel;
     }
 
-    //--------------------------------------------------------------------
+
     OUString EFormsHelper::getCurrentFormModelName() const SAL_THROW(())
     {
         OUString sModelName;
@@ -403,7 +403,7 @@ namespace pcr
         return sModelName;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XPropertySet > EFormsHelper::getCurrentBinding() const SAL_THROW(())
     {
         Reference< XPropertySet > xBinding;
@@ -421,7 +421,7 @@ namespace pcr
         return xBinding;
     }
 
-    //--------------------------------------------------------------------
+
     OUString EFormsHelper::getCurrentBindingName() const SAL_THROW(())
     {
         OUString sBindingName;
@@ -438,7 +438,7 @@ namespace pcr
         return sBindingName;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XListEntrySource > EFormsHelper::getCurrentListSourceBinding() const SAL_THROW(())
     {
         Reference< XListEntrySource > xReturn;
@@ -456,7 +456,7 @@ namespace pcr
         return xReturn;
     }
 
-    //--------------------------------------------------------------------
+
     void EFormsHelper::setListSourceBinding( const Reference< XListEntrySource >& _rxListSource ) SAL_THROW(())
     {
         try
@@ -472,7 +472,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     void EFormsHelper::setBinding( const Reference< ::com::sun::star::beans::XPropertySet >& _rxBinding ) SAL_THROW(())
     {
         if ( !m_xBindableControl.is() )
@@ -498,14 +498,14 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XPropertySet > EFormsHelper::getOrCreateBindingForModel( const OUString& _rTargetModel, const OUString& _rBindingName ) const SAL_THROW(())
     {
         OSL_ENSURE( !_rBindingName.isEmpty(), "EFormsHelper::getOrCreateBindingForModel: invalid binding name!" );
         return implGetOrCreateBinding( _rTargetModel, _rBindingName );
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XPropertySet > EFormsHelper::implGetOrCreateBinding( const OUString& _rTargetModel, const OUString& _rBindingName ) const SAL_THROW(())
     {
         OSL_ENSURE( !( _rTargetModel.isEmpty() && !_rBindingName.isEmpty() ), "EFormsHelper::implGetOrCreateBinding: no model, but a binding name?" );
@@ -573,7 +573,7 @@ namespace pcr
         return xBinding;
     }
 
-    //--------------------------------------------------------------------
+
     namespace
     {
         //................................................................
@@ -608,7 +608,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     OUString EFormsHelper::getModelElementUIName( const EFormsHelper::ModelElementType _eType, const Reference< XPropertySet >& _rxElement ) const SAL_THROW(())
     {
         OUString sUIName;
@@ -634,7 +634,7 @@ namespace pcr
         return sUIName;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XPropertySet > EFormsHelper::getModelElementFromUIName( const EFormsHelper::ModelElementType _eType, const OUString& _rUIName ) const SAL_THROW(())
     {
         const MapStringToPropertySet& rMapUINameToElement( ( _eType == Submission ) ? m_aSubmissionUINames : m_aBindingUINames );
@@ -644,7 +644,7 @@ namespace pcr
         return ( pos != rMapUINameToElement.end() ) ? pos->second : Reference< XPropertySet >();
     }
 
-    //--------------------------------------------------------------------
+
     void EFormsHelper::getAllElementUINames( const ModelElementType _eType, ::std::vector< OUString >& /* [out] */ _rElementNames, bool _bPrepentEmptyEntry )
     {
         MapStringToPropertySet& rMapUINameToElement( ( _eType == Submission ) ? m_aSubmissionUINames : m_aBindingUINames );
@@ -710,7 +710,7 @@ namespace pcr
         ::std::transform( rMapUINameToElement.begin(), rMapUINameToElement.end(), _rElementNames.begin(), ::o3tl::select1st< MapStringToPropertySet::value_type >() );
     }
 
-    //--------------------------------------------------------------------
+
     void EFormsHelper::firePropertyChange( const OUString& _rName, const Any& _rOldValue, const Any& _rNewValue ) const
     {
         if ( m_aPropertyListeners.empty() )
@@ -736,7 +736,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     void EFormsHelper::firePropertyChanges( const Reference< XPropertySet >& _rxOldProps, const Reference< XPropertySet >& _rxNewProps, ::std::set< OUString >& _rFilter ) const
     {
         if ( m_aPropertyListeners.empty() )

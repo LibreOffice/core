@@ -60,7 +60,7 @@ namespace vclcanvas
                          "CanvasCustomSprite::CanvasCustomSprite(): Invalid sprite canvas" );
 
         // setup back buffer
-        // -----------------
+
 
         const ::Size aSize(
             static_cast<sal_Int32>( ::std::max( 1.0,
@@ -94,7 +94,7 @@ namespace vclcanvas
 
 
         // setup canvas helper
-        // -------------------
+
 
         // always render into back buffer, don't preserve state (it's
         // our private VDev, after all), have notion of alpha
@@ -106,7 +106,7 @@ namespace vclcanvas
 
 
         // setup sprite helper
-        // -------------------
+
 
         maSpriteHelper.init( rSpriteSize,
                              rOwningSpriteCanvas,

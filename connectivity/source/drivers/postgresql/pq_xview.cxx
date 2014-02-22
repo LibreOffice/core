@@ -226,7 +226,7 @@ void View::setName( const OUString& aName ) throw (::com::sun::star::uno::Runtim
     rename( aName );
 }
 
-//____________________________________________________________________________________________
+
 
 ViewDescriptor::ViewDescriptor(
     const ::rtl::Reference< RefCountedMutex > & refMutex,

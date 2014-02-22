@@ -130,7 +130,7 @@ void SAL_CALL OslOutputStreamWrapper::closeOutput(  ) throw (::com::sun::star::i
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 class FlashExportFilter : public cppu::WeakImplHelper4
 <
@@ -167,7 +167,7 @@ public:
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw(RuntimeException);
 };
 
-// -----------------------------------------------------------------------------
+
 
 FlashExportFilter::FlashExportFilter(const Reference< XComponentContext > &rxContext)
 :   mxContext( rxContext )
@@ -175,7 +175,7 @@ FlashExportFilter::FlashExportFilter(const Reference< XComponentContext > &rxCon
 }
 
 
-// -----------------------------------------------------------------------------
+
 
 OUString exportBackground(FlashExporter &aFlashExporter, Reference< XDrawPage > xDrawPage, OUString sPath, sal_uInt32 nPage, const char* suffix)
 {
@@ -425,14 +425,14 @@ sal_Bool FlashExportFilter::ExportAsSingleFile(const Sequence< PropertyValue >& 
     return aFlashExporter.exportAll( mxDoc, xOutputStream, mxStatusIndicator );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL FlashExportFilter::cancel(  )
     throw (RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 // XExporter
 void SAL_CALL FlashExportFilter::setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
@@ -441,7 +441,7 @@ void SAL_CALL FlashExportFilter::setSourceDocument( const ::com::sun::star::uno:
     mxDoc = xDoc;
 }
 
-// -----------------------------------------------------------------------------
+
 
 // XInitialization
 void SAL_CALL FlashExportFilter::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& /* aArguments */ )

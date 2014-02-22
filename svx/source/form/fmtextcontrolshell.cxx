@@ -184,9 +184,9 @@ namespace svx
         virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException);
     };
 
-    //--------------------------------------------------------------------
+
     DBG_NAME( FmFocusListenerAdapter )
-    //--------------------------------------------------------------------
+
     FmFocusListenerAdapter::FmFocusListenerAdapter( const Reference< XControl >& _rxControl, IFocusObserver* _pObserver )
         :m_pObserver( _pObserver )
         ,m_xWindow( _rxControl, UNO_QUERY )
@@ -209,7 +209,7 @@ namespace svx
         osl_atomic_decrement( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
+
     FmFocusListenerAdapter::~FmFocusListenerAdapter()
     {
         acquire();
@@ -218,7 +218,7 @@ namespace svx
         DBG_DTOR( FmFocusListenerAdapter, NULL );
     }
 
-    //--------------------------------------------------------------------
+
     void FmFocusListenerAdapter::dispose()
     {
         if ( m_xWindow.is() )
@@ -228,21 +228,21 @@ namespace svx
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FmFocusListenerAdapter::focusGained( const FocusEvent& e ) throw (RuntimeException)
     {
         if ( m_pObserver )
             m_pObserver->focusGained( e );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FmFocusListenerAdapter::focusLost( const FocusEvent& e ) throw (RuntimeException)
     {
         if ( m_pObserver )
             m_pObserver->focusLost( e );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FmFocusListenerAdapter::disposing( const EventObject& Source ) throw (RuntimeException)
     {
         (void)Source;
@@ -281,9 +281,9 @@ namespace svx
     //====================================================================
     //= FmMouseListenerAdapter
     //====================================================================
-    //--------------------------------------------------------------------
+
     DBG_NAME( FmMouseListenerAdapter )
-    //--------------------------------------------------------------------
+
     FmMouseListenerAdapter::FmMouseListenerAdapter( const Reference< XControl >& _rxControl, IContextRequestObserver* _pObserver )
         :m_pObserver( _pObserver )
         ,m_xWindow( _rxControl, UNO_QUERY )
@@ -306,7 +306,7 @@ namespace svx
         osl_atomic_decrement( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
+
     FmMouseListenerAdapter::~FmMouseListenerAdapter()
     {
         acquire();
@@ -315,7 +315,7 @@ namespace svx
         DBG_DTOR( FmMouseListenerAdapter, NULL );
     }
 
-    //--------------------------------------------------------------------
+
     void FmMouseListenerAdapter::dispose()
     {
         if ( m_xWindow.is() )
@@ -325,7 +325,7 @@ namespace svx
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FmMouseListenerAdapter::mousePressed( const awt::MouseEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -337,25 +337,25 @@ namespace svx
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FmMouseListenerAdapter::mouseReleased( const awt::MouseEvent& /*e*/ ) throw (::com::sun::star::uno::RuntimeException)
     {
         // not interested in
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FmMouseListenerAdapter::mouseEntered( const awt::MouseEvent& /*e*/ ) throw (::com::sun::star::uno::RuntimeException)
     {
         // not interested in
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FmMouseListenerAdapter::mouseExited( const awt::MouseEvent& /*e*/ ) throw (::com::sun::star::uno::RuntimeException)
     {
         // not interested in
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FmMouseListenerAdapter::disposing( const EventObject& Source ) throw (RuntimeException)
     {
         (void)Source;
@@ -366,7 +366,7 @@ namespace svx
     //====================================================================
     //= FmTextControlShell
     //====================================================================
-    //------------------------------------------------------------------------
+
     namespace
     {
         //....................................................................
@@ -545,7 +545,7 @@ namespace svx
         }
     }
 
-    //------------------------------------------------------------------------
+
     FmTextControlShell::FmTextControlShell( SfxViewFrame* _pFrame )
         :m_bActiveControl( false )
         ,m_bActiveControlIsReadOnly( true )
@@ -558,13 +558,13 @@ namespace svx
         m_aClipboardInvalidation.SetTimeout( 200 );
     }
 
-    //------------------------------------------------------------------------
+
     FmTextControlShell::~FmTextControlShell()
     {
         dispose();
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK( FmTextControlShell, OnInvalidateClipboard, void*, /*_pNotInterestedIn*/ )
     {
         if ( m_bNeedClipboardInvalidation )
@@ -578,7 +578,7 @@ namespace svx
         return 0L;
     }
 
-    //------------------------------------------------------------------------
+
     void FmTextControlShell::transferFeatureStatesToItemSet( ControlFeatures& _rDispatchers, SfxAllItemSet& _rSet, bool _bTranslateLatin )
     {
         SfxItemPool& rPool = *_rSet.GetPool();
@@ -650,7 +650,7 @@ namespace svx
         }
     }
 
-    //------------------------------------------------------------------------
+
     void FmTextControlShell::executeAttributeDialog( AttributeSet _eSet, SfxRequest& _rReq )
     {
         const SvxFontListItem* pFontList = PTR_CAST( SvxFontListItem, m_pViewFrame->GetObjectShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) );
@@ -764,7 +764,7 @@ namespace svx
         SfxItemPool::Free(pPool);
     }
 
-    //------------------------------------------------------------------------
+
     bool FmTextControlShell::executeSelectAll( )
     {
         try
@@ -783,7 +783,7 @@ namespace svx
         return false;   // not handled
     }
 
-    //------------------------------------------------------------------------
+
     bool FmTextControlShell::executeClipboardSlot( SfxSlotId _nSlot )
     {
         try
@@ -825,7 +825,7 @@ namespace svx
         return false;   // not handled
     }
 
-    //------------------------------------------------------------------------
+
     void FmTextControlShell::ExecuteTextAttribute( SfxRequest& _rReq )
     {
         SfxSlotId nSlot = _rReq.GetSlot();
@@ -931,7 +931,7 @@ namespace svx
         _rReq.Done();
     }
 
-    //------------------------------------------------------------------------
+
     void FmTextControlShell::GetTextAttributeState( SfxItemSet& _rSet )
     {
         SfxWhichIter aIter( _rSet );
@@ -1034,7 +1034,7 @@ namespace svx
         }
     }
 
-    //------------------------------------------------------------------------
+
     bool FmTextControlShell::IsActiveControl( bool _bCountRichTextOnly ) const
     {
         if ( _bCountRichTextOnly && !m_bActiveControlIsRichText )
@@ -1043,7 +1043,7 @@ namespace svx
         return m_bActiveControl;
     }
 
-    //------------------------------------------------------------------------
+
     void FmTextControlShell::dispose()
     {
         if ( IsActiveControl() )
@@ -1052,13 +1052,13 @@ namespace svx
             stopControllerListening();
     }
 
-    //------------------------------------------------------------------------
+
     void FmTextControlShell::designModeChanged( bool /*_bNewDesignMode*/ )
     {
         m_rBindings.Invalidate( pTextControlSlots );
     }
 
-    //------------------------------------------------------------------------
+
     void FmTextControlShell::formActivated( const Reference< XFormController >& _rxController )
     {
 #if OSL_DEBUG_LEVEL > 0
@@ -1086,7 +1086,7 @@ namespace svx
         }
     }
 
-    //------------------------------------------------------------------------
+
     void FmTextControlShell::formDeactivated( const Reference< XFormController >& _rxController )
     {
 #if OSL_DEBUG_LEVEL > 0
@@ -1102,7 +1102,7 @@ namespace svx
             stopControllerListening();
     }
 
-    //------------------------------------------------------------------------
+
     void FmTextControlShell::startControllerListening( const Reference< XFormController >& _rxController )
     {
         OSL_PRECOND( _rxController.is(), "FmTextControlShell::startControllerListening: invalid controller!" );
@@ -1135,7 +1135,7 @@ namespace svx
         m_xActiveController = _rxController;
     }
 
-    //------------------------------------------------------------------------
+
     void FmTextControlShell::stopControllerListening( )
     {
         OSL_PRECOND( isControllerListening(), "FmTextControlShell::stopControllerListening: inconsistence!" );
@@ -1155,7 +1155,7 @@ namespace svx
         m_xActiveController.clear();
     }
 
-    //------------------------------------------------------------------------
+
     void FmTextControlShell::implClearActiveControlRef()
     {
         // no more features for this control
@@ -1189,7 +1189,7 @@ namespace svx
         m_bActiveControl = false;
     }
 
-    //------------------------------------------------------------------------
+
     void FmTextControlShell::controlDeactivated( )
     {
         DBG_ASSERT( IsActiveControl(), "FmTextControlShell::controlDeactivated: no active control!" );
@@ -1199,7 +1199,7 @@ namespace svx
         m_rBindings.Invalidate( pTextControlSlots );
     }
 
-    //------------------------------------------------------------------------
+
     void FmTextControlShell::controlActivated( const Reference< XControl >& _rxControl )
     {
         // ensure that all knittings with the previously active control are lost
@@ -1276,7 +1276,7 @@ namespace svx
         m_bNeedClipboardInvalidation = true;
     }
 
-    //------------------------------------------------------------------------
+
     void FmTextControlShell::fillFeatureDispatchers(  const Reference< XControl > _rxControl, SfxSlotId* _pZeroTerminatedSlots,
             ControlFeatures& _rDispatchers )
     {
@@ -1297,7 +1297,7 @@ namespace svx
         }
     }
 
-    //------------------------------------------------------------------------
+
     void FmTextControlShell::impl_parseURL_nothrow( URL& _rURL )
     {
         try
@@ -1315,7 +1315,7 @@ namespace svx
         }
     }
 
-    //------------------------------------------------------------------------
+
     FmTextControlFeature* FmTextControlShell::implGetFeatureDispatcher( const Reference< XDispatchProvider >& _rxProvider, SfxApplication* _pApplication, SfxSlotId _nSlot )
     {
         OSL_PRECOND( _rxProvider.is() && _pApplication, "FmTextControlShell::implGetFeatureDispatcher: invalid arg(s)!" );
@@ -1328,7 +1328,7 @@ namespace svx
         return NULL;
     }
 
-    //------------------------------------------------------------------------
+
     void FmTextControlShell::Invalidate( SfxSlotId _nSlot )
     {
         m_rBindings.Invalidate( _nSlot );
@@ -1337,7 +1337,7 @@ namespace svx
         m_rBindings.Update( _nSlot );
     }
 
-    //------------------------------------------------------------------------
+
     void FmTextControlShell::focusGained( const ::com::sun::star::awt::FocusEvent& _rEvent )
     {
         Reference< XControl > xControl( _rEvent.Source, UNO_QUERY );
@@ -1353,7 +1353,7 @@ namespace svx
             controlActivated( xControl );
     }
 
-    //------------------------------------------------------------------------
+
     void FmTextControlShell::focusLost( const ::com::sun::star::awt::FocusEvent& _rEvent )
     {
         Reference< XControl > xControl( _rEvent.Source, UNO_QUERY );
@@ -1367,13 +1367,13 @@ namespace svx
         m_bActiveControl = false;
     }
 
-    //------------------------------------------------------------------------
+
     void FmTextControlShell::ForgetActiveControl()
     {
         implClearActiveControlRef();
     }
 
-    //------------------------------------------------------------------------
+
     void FmTextControlShell::contextMenuRequested( const awt::MouseEvent& /*_rEvent*/ )
     {
         m_rBindings.GetDispatcher()->ExecutePopup( SVX_RES( RID_FM_TEXTATTRIBUTE_MENU ) );

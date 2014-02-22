@@ -48,7 +48,7 @@
 
 using namespace com::sun::star;
 
-// -----------------------------------------------------------------------
+
 
 /*
  * Since the settings on the second Tab Page (Options) effects
@@ -116,13 +116,13 @@ void ScTabPageSortFields::SetPosPixel(const Point& rAllocPos)
     maSortKeyCtrl.setScrollRange();
 }
 
-// -----------------------------------------------------------------------
+
 
 ScTabPageSortFields::~ScTabPageSortFields()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTabPageSortFields::Init()
 {
@@ -144,7 +144,7 @@ void ScTabPageSortFields::Init()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* ScTabPageSortFields::Create( Window*    pParent,
                                          const SfxItemSet&  rArgSet )
@@ -152,7 +152,7 @@ SfxTabPage* ScTabPageSortFields::Create( Window*    pParent,
     return ( new ScTabPageSortFields( pParent, rArgSet ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
 {
@@ -236,7 +236,7 @@ void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
         SetLastSortKey( nSortKeyCount );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
 {
@@ -302,7 +302,7 @@ sal_Bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 // for data exchange without dialogue detour:
 void ScTabPageSortFields::ActivatePage( const SfxItemSet& rSet )
@@ -328,7 +328,7 @@ void ScTabPageSortFields::ActivatePage( const SfxItemSet& rSet )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 int ScTabPageSortFields::DeactivatePage( SfxItemSet* pSetP )
 {
@@ -347,7 +347,7 @@ int ScTabPageSortFields::DeactivatePage( SfxItemSet* pSetP )
     return SfxTabPage::LEAVE_PAGE;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
 {
@@ -417,7 +417,7 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 ScTabPageSortFields::GetFieldSelPos( SCCOLROW nField )
 {
@@ -455,9 +455,9 @@ void ScTabPageSortFields::SetLastSortKey( sal_uInt16 nItem )
     maSortKeyItems[nItem].m_pLbSort->SelectEntryPos( 0 );
 }
 
-// -----------------------------------------------------------------------
+
 // Handler:
-//---------
+
 
 IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox *, pLb )
 {
@@ -542,7 +542,7 @@ ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
     m_pLbSortUser->SetAccessibleName(m_pBtnSortUser->GetText());
 }
 
-// -----------------------------------------------------------------------
+
 
 ScTabPageSortOptions::~ScTabPageSortOptions()
 {
@@ -555,7 +555,7 @@ ScTabPageSortOptions::~ScTabPageSortOptions()
     delete pColWrap;        //! not if from document
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTabPageSortOptions::Init()
 {
@@ -640,7 +640,7 @@ void ScTabPageSortOptions::Init()
     m_pLbLanguage->InsertLanguage( LANGUAGE_SYSTEM );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* ScTabPageSortOptions::Create(
                                             Window*             pParent,
@@ -649,7 +649,7 @@ SfxTabPage* ScTabPageSortOptions::Create(
     return ( new ScTabPageSortOptions( pParent, rArgSet ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
 {
@@ -718,7 +718,7 @@ void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
 {
@@ -767,7 +767,7 @@ sal_Bool ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 // for data exchange without dialogue detour:
 void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
@@ -793,7 +793,7 @@ void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 int ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
 {
@@ -847,7 +847,7 @@ int ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
     return bPosInputOk ? SfxTabPage::LEAVE_PAGE : SfxTabPage::KEEP_PAGE;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTabPageSortOptions::FillUserSortListBox()
 {
@@ -863,7 +863,7 @@ void ScTabPageSortOptions::FillUserSortListBox()
     }
 }
 
-// -----------------------------------------------------------------------
+
 // Handler:
 
 IMPL_LINK( ScTabPageSortOptions, EnableHdl, CheckBox *, pBox )
@@ -895,7 +895,7 @@ IMPL_LINK( ScTabPageSortOptions, EnableHdl, CheckBox *, pBox )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( ScTabPageSortOptions, SelOutPosHdl, ListBox *, pLb )
 {
@@ -912,7 +912,7 @@ IMPL_LINK( ScTabPageSortOptions, SelOutPosHdl, ListBox *, pLb )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( ScTabPageSortOptions, SortDirHdl, RadioButton *, pBtn )
 {
@@ -927,7 +927,7 @@ IMPL_LINK( ScTabPageSortOptions, SortDirHdl, RadioButton *, pBtn )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
 {
@@ -957,7 +957,7 @@ void ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScTabPageSortOptions, FillAlgorHdl)
 {

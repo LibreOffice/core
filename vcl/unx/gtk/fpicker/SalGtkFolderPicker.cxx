@@ -47,9 +47,9 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-//-----------------------------------------------------------------------------------------
+
 // constructor
-//-----------------------------------------------------------------------------------------
+
 SalGtkFolderPicker::SalGtkFolderPicker( const uno::Reference< uno::XComponentContext >& xContext ) :
     SalGtkPicker( xContext )
 {
@@ -65,9 +65,9 @@ SalGtkFolderPicker::SalGtkFolderPicker( const uno::Reference< uno::XComponentCon
     gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER( m_pDialog ), sal_False );
 }
 
-// -------------------------------------------------
+
 // XEventListener
-// -------------------------------------------------
+
 
 void SAL_CALL SalGtkFolderPicker::disposing( const lang::EventObject& )
     throw( uno::RuntimeException )
@@ -128,9 +128,9 @@ void SAL_CALL SalGtkFolderPicker::setDescription( const OUString& /*rDescription
 {
 }
 
-//-----------------------------------------------------------------------------------------
+
 // XExecutableDialog functions
-//-----------------------------------------------------------------------------------------
+
 
 void SAL_CALL SalGtkFolderPicker::setTitle( const OUString& aTitle ) throw( uno::RuntimeException )
 {
@@ -177,9 +177,9 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute() throw( uno::RuntimeException )
     return retVal;
 }
 
-//------------------------------------------------------------------------------------
+
 // XCancellable
-//------------------------------------------------------------------------------------
+
 
 void SAL_CALL SalGtkFolderPicker::cancel() throw( uno::RuntimeException )
 {

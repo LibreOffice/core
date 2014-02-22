@@ -34,7 +34,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-// -------------------------------------------------------------------------
+
 sdbcx::ObjectType MacabColumns::createObject(const OUString& _rName)
 {
     const Any aCatalog;
@@ -77,12 +77,12 @@ sdbcx::ObjectType MacabColumns::createObject(const OUString& _rName)
 
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 void MacabColumns::impl_refresh() throw(RuntimeException)
 {
     m_pTable->refreshColumns();
 }
-// -------------------------------------------------------------------------
+
 MacabColumns::MacabColumns( MacabTable* _pTable,
                         ::osl::Mutex& _rMutex,
                         const TStringVector &_rVector)

@@ -46,9 +46,9 @@
 
 #include <process.h>
 
-//-------------------------------------------------------------
+
 // my defines
-//-------------------------------------------------------------
+
 
 #define TEST_CLIPBOARD
 #define RDB_SYSPATH  "d:\\projects\\src623\\dtrans\\wntmsci7\\bin\\applicat.rdb"
@@ -58,9 +58,9 @@
 #define EVT_INIT_NONSIGNALED FALSE
 #define EVT_NONAME           ""
 
-//------------------------------------------------------------
+
 //  namesapces
-//------------------------------------------------------------
+
 
 using namespace ::rtl;
 using namespace ::std;
@@ -71,25 +71,25 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 
-//------------------------------------------------------------
+
 //  globales
-//------------------------------------------------------------
+
 
 Reference< XTransferable > rXTransfRead;
 HANDLE  g_hEvtThreadWakeup;
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 class CClipboardListener : public WeakImplHelper1 < XClipboardListener >
 {
 public:
     ~CClipboardListener( );
 
-    //-------------------------------------------------
+
     // XClipboardListener
-    //-------------------------------------------------
+
 
     virtual void SAL_CALL disposing( const EventObject& Source ) throw(RuntimeException);
     virtual void SAL_CALL changedContents( const ClipboardEvent& event ) throw( RuntimeException );
@@ -109,18 +109,18 @@ void SAL_CALL CClipboardListener::changedContents( const ClipboardEvent& event )
     //MessageBox( NULL, TEXT("Clipboard content changed"), TEXT("Info"), MB_OK | MB_ICONINFORMATION );
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 class CTransferable : public WeakImplHelper2< XClipboardOwner, XTransferable >
 {
 public:
     CTransferable( );
 
-    //-------------------------------------------------
+
     // XTransferable
-    //-------------------------------------------------
+
 
     virtual Any SAL_CALL getTransferData( const DataFlavor& aFlavor )
         throw(UnsupportedFlavorException, IOException, RuntimeException);
@@ -129,9 +129,9 @@ public:
 
     virtual sal_Bool SAL_CALL isDataFlavorSupported( const DataFlavor& aFlavor ) throw(RuntimeException);
 
-    //-------------------------------------------------
+
     // XClipboardOwner
-    //-------------------------------------------------
+
 
     virtual void SAL_CALL lostOwnership( const Reference< XClipboard >& xClipboard, const Reference< XTransferable >& xTrans )
         throw(RuntimeException);
@@ -141,9 +141,9 @@ private:
     OUString               m_Data;
 };
 
-//----------------------------------------------------------------
+
 //  ctor
-//----------------------------------------------------------------
+
 
 CTransferable::CTransferable( ) :
     m_FlavorList( 1 ),
@@ -160,9 +160,9 @@ CTransferable::CTransferable( ) :
     m_FlavorList[0] = df;
 }
 
-//----------------------------------------------------------------
+
 //  getTransferData
-//----------------------------------------------------------------
+
 
 Any SAL_CALL CTransferable::getTransferData( const DataFlavor& aFlavor )
     throw(UnsupportedFlavorException, IOException, RuntimeException)
@@ -192,9 +192,9 @@ Any SAL_CALL CTransferable::getTransferData( const DataFlavor& aFlavor )
     return anyData;
 }
 
-//----------------------------------------------------------------
+
 //  getTransferDataFlavors
-//----------------------------------------------------------------
+
 
 Sequence< DataFlavor > SAL_CALL CTransferable::getTransferDataFlavors(  )
     throw(RuntimeException)
@@ -202,9 +202,9 @@ Sequence< DataFlavor > SAL_CALL CTransferable::getTransferDataFlavors(  )
     return m_FlavorList;
 }
 
-//----------------------------------------------------------------
+
 //  isDataFlavorSupported
-//----------------------------------------------------------------
+
 
 sal_Bool SAL_CALL CTransferable::isDataFlavorSupported( const DataFlavor& aFlavor )
     throw(RuntimeException)
@@ -218,9 +218,9 @@ sal_Bool SAL_CALL CTransferable::isDataFlavorSupported( const DataFlavor& aFlavo
     return sal_False;
 }
 
-//----------------------------------------------------------------
+
 //  lostOwnership
-//----------------------------------------------------------------
+
 
 void SAL_CALL CTransferable::lostOwnership(
     const Reference< XClipboard >& xClipboard, const Reference< XTransferable >& xTrans )
@@ -229,9 +229,9 @@ void SAL_CALL CTransferable::lostOwnership(
     //MessageBox( NULL, TEXT("No longer clipboard owner"), TEXT("Info"), MB_OK | MB_ICONINFORMATION );
 }
 
-//----------------------------------------------------------------
+
 //  main
-//----------------------------------------------------------------
+
 
 int SAL_CALL main( int nArgc, char* Argv[] )
 {
@@ -249,9 +249,9 @@ int SAL_CALL main( int nArgc, char* Argv[] )
     BOOL bValid = IsValidLocale( lcid, LCID_SUPPORTED );
     GetLocaleInfoA( lcid, LOCALE_IDEFAULTANSICODEPAGE, buff, sizeof( buff ) );
 
-    //-------------------------------------------------
+
     // get the global service-manager
-    //-------------------------------------------------
+
 
     OUString rdbName = OUString(  RDB_SYSPATH  );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
@@ -263,9 +263,9 @@ int SAL_CALL main( int nArgc, char* Argv[] )
         return(-1);
     }
 
-    //-------------------------------------------------
+
     // try to get an Interface to a XFilePicker Service
-    //-------------------------------------------------
+
 
     Reference< XTransferable > rXTransf( static_cast< XTransferable* >( new CTransferable ) );
 
@@ -305,9 +305,9 @@ int SAL_CALL main( int nArgc, char* Argv[] )
     rXClipListener.clear();
     xClipNotifier.clear();
 
-    //--------------------------------------------------
+
     // shutdown the service manager
-    //--------------------------------------------------
+
 
     // Cast factory to XComponent
     Reference< XComponent > xComponent( g_xFactory, UNO_QUERY );

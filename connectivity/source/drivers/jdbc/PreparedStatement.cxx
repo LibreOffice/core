@@ -53,13 +53,13 @@ java_sql_PreparedStatement::java_sql_PreparedStatement( JNIEnv * pEnv, java_sql_
 {
     m_sSqlStatement = sql;
 }
-// -----------------------------------------------------------------------------
+
 jclass java_sql_PreparedStatement::theClass = 0;
 
 java_sql_PreparedStatement::~java_sql_PreparedStatement()
 {
 }
-// -----------------------------------------------------------------------------
+
 
 jclass java_sql_PreparedStatement::getMyClass() const
 {
@@ -68,7 +68,7 @@ jclass java_sql_PreparedStatement::getMyClass() const
         theClass = findMyClass("java/sql/PreparedStatement");
     return theClass;
 }
-// -------------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Any SAL_CALL java_sql_PreparedStatement::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -79,7 +79,7 @@ jclass java_sql_PreparedStatement::getMyClass() const
                                         static_cast< XResultSetMetaDataSupplier*>(this),
                                         static_cast< XPreparedBatchExecution*>(this));
 }
-// -------------------------------------------------------------------------
+
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL java_sql_PreparedStatement::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< XPreparedStatement > *)0 ),
@@ -89,7 +89,7 @@ jclass java_sql_PreparedStatement::getMyClass() const
 
     return ::comphelper::concatSequences(aTypes.getTypes(),OStatement_BASE2::getTypes());
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL java_sql_PreparedStatement::execute(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -102,7 +102,7 @@ sal_Bool SAL_CALL java_sql_PreparedStatement::execute(  ) throw(::com::sun::star
     static jmethodID mID(NULL);
     return callBooleanMethod( "execute", mID );
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL java_sql_PreparedStatement::executeUpdate(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -115,7 +115,7 @@ sal_Int32 SAL_CALL java_sql_PreparedStatement::executeUpdate(  ) throw(::com::su
     static jmethodID mID(NULL);
     return callIntMethod("executeUpdate",mID);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, const OUString& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -137,13 +137,13 @@ void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, c
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     } //t.pEnv
 }
-// -------------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL java_sql_PreparedStatement::getConnection(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     return (Reference< XConnection >)m_pConnection;
 }
-// -------------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL java_sql_PreparedStatement::executeQuery(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -158,7 +158,7 @@ void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, c
 
     return out==0 ? 0 : new java_sql_ResultSet( t.pEnv, out, m_aLogger, *m_pConnection,this);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_PreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -171,7 +171,7 @@ void SAL_CALL java_sql_PreparedStatement::setBoolean( sal_Int32 parameterIndex, 
     static jmethodID mID(NULL);
     callVoidMethod("setBoolean", "(IZ)V", mID, parameterIndex, x);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_PreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -184,7 +184,7 @@ void SAL_CALL java_sql_PreparedStatement::setByte( sal_Int32 parameterIndex, sal
     static jmethodID mID(NULL);
     callVoidMethod("setByte", "(IB)V", mID, parameterIndex, x);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_PreparedStatement::setDate( sal_Int32 parameterIndex, const ::com::sun::star::util::Date& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -198,7 +198,7 @@ void SAL_CALL java_sql_PreparedStatement::setDate( sal_Int32 parameterIndex, con
     static jmethodID mID(NULL);
     callVoidMethod("setDate", "(ILjava/sql/Date;)V", mID, parameterIndex, aT.getJavaObject());
 }
-// -------------------------------------------------------------------------
+
 
 
 void SAL_CALL java_sql_PreparedStatement::setTime( sal_Int32 parameterIndex, const ::com::sun::star::util::Time& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
@@ -213,7 +213,7 @@ void SAL_CALL java_sql_PreparedStatement::setTime( sal_Int32 parameterIndex, con
     static jmethodID mID(NULL);
     callVoidMethod("setTime", "(ILjava/sql/Time;)V", mID, parameterIndex, aT.getJavaObject());
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_PreparedStatement::setTimestamp( sal_Int32 parameterIndex, const ::com::sun::star::util::DateTime& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -227,7 +227,7 @@ void SAL_CALL java_sql_PreparedStatement::setTimestamp( sal_Int32 parameterIndex
     java_sql_Timestamp aD(x);
     callVoidMethod("setTimestamp", "(ILjava/sql/Timestamp;)V", mID, parameterIndex, aD.getJavaObject());
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL java_sql_PreparedStatement::setDouble( sal_Int32 parameterIndex, double x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     m_aLogger.log( LogLevel::FINER, STR_LOG_DOUBLE_PARAMETER, parameterIndex, x );
@@ -239,7 +239,7 @@ void SAL_CALL java_sql_PreparedStatement::setDouble( sal_Int32 parameterIndex, d
     static jmethodID mID(NULL);
     callVoidMethod("setDouble", "(ID)V", mID, parameterIndex, x);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_PreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -252,7 +252,7 @@ void SAL_CALL java_sql_PreparedStatement::setFloat( sal_Int32 parameterIndex, fl
     static jmethodID mID(NULL);
     callVoidMethod("setFloat", "(IF)V", mID, parameterIndex, x);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_PreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -265,7 +265,7 @@ void SAL_CALL java_sql_PreparedStatement::setInt( sal_Int32 parameterIndex, sal_
     static jmethodID mID(NULL);
     callVoidMethod("setInt", "(II)V", mID, parameterIndex, x);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_PreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -278,7 +278,7 @@ void SAL_CALL java_sql_PreparedStatement::setLong( sal_Int32 parameterIndex, sal
     static jmethodID mID(NULL);
     callVoidMethod("setLong", "(IJ)V", mID, parameterIndex, x);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_PreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 sqlType ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -291,31 +291,31 @@ void SAL_CALL java_sql_PreparedStatement::setNull( sal_Int32 parameterIndex, sal
     static jmethodID mID(NULL);
     callVoidMethod("setNull", "(II)V", mID, parameterIndex, sqlType);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_PreparedStatement::setClob( sal_Int32 /*parameterIndex*/, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XClob >& /*x*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XParameters::setClob", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_PreparedStatement::setBlob( sal_Int32 /*parameterIndex*/, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob >& /*x*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XParameters::setBlob", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_PreparedStatement::setArray( sal_Int32 /*parameterIndex*/, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XArray >& /*x*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XParameters::setArray", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_PreparedStatement::setRef( sal_Int32 /*parameterIndex*/, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRef >& /*x*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XParameters::setRef", *this );
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_PreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const ::com::sun::star::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -374,7 +374,7 @@ void SAL_CALL java_sql_PreparedStatement::setObjectWithInfo( sal_Int32 parameter
         } //mID
     } //t.pEnv
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_PreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 /*sqlType*/, const OUString& /*typeName*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -387,7 +387,7 @@ void SAL_CALL java_sql_PreparedStatement::setObjectNull( sal_Int32 parameterInde
     static jmethodID mID(NULL);
     callVoidMethod<jobject>("setObject", "(ILjava/lang/Object;)V", mID, parameterIndex, NULL);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_PreparedStatement::setObject( sal_Int32 parameterIndex, const ::com::sun::star::uno::Any& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -400,7 +400,7 @@ void SAL_CALL java_sql_PreparedStatement::setObject( sal_Int32 parameterIndex, c
         ::dbtools::throwGenericSQLException(sError,*this);
     }
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_PreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -413,7 +413,7 @@ void SAL_CALL java_sql_PreparedStatement::setShort( sal_Int32 parameterIndex, sa
     static jmethodID mID(NULL);
     callVoidMethod("setShort", "(IS)V", mID, parameterIndex, x);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_PreparedStatement::setBytes( sal_Int32 parameterIndex, const ::com::sun::star::uno::Sequence< sal_Int8 >& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -438,7 +438,7 @@ void SAL_CALL java_sql_PreparedStatement::setBytes( sal_Int32 parameterIndex, co
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     } //t.pEnv
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_PreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -486,7 +486,7 @@ void SAL_CALL java_sql_PreparedStatement::setCharacterStream( sal_Int32 paramete
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     } //t.pEnv
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_PreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -535,7 +535,7 @@ void SAL_CALL java_sql_PreparedStatement::setBinaryStream( sal_Int32 parameterIn
         }
     } //t.pEnv
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_PreparedStatement::clearParameters(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -551,7 +551,7 @@ void SAL_CALL java_sql_PreparedStatement::clearParameters(  ) throw(::com::sun::
         callVoidMethod("clearParameters",mID);
     } //t.pEnv
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL java_sql_PreparedStatement::clearBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -563,7 +563,7 @@ void SAL_CALL java_sql_PreparedStatement::clearBatch(  ) throw(::com::sun::star:
         callVoidMethod("clearBatch",mID);
     } //t.pEnv
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL java_sql_PreparedStatement::addBatch( ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -576,7 +576,7 @@ void SAL_CALL java_sql_PreparedStatement::addBatch( ) throw(::com::sun::star::sd
         callVoidMethod("addBatch",mID);
     } //t.pEnv
 }
-// -------------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL java_sql_PreparedStatement::executeBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -596,7 +596,7 @@ void SAL_CALL java_sql_PreparedStatement::addBatch( ) throw(::com::sun::star::sd
     }
     return aSeq;
 }
-// -------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > SAL_CALL java_sql_PreparedStatement::getMetaData(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -608,17 +608,17 @@ void SAL_CALL java_sql_PreparedStatement::addBatch( ) throw(::com::sun::star::sd
 
     return out==0 ? 0 : new java_sql_ResultSetMetaData( t.pEnv, out, m_aLogger,*m_pConnection );
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL java_sql_PreparedStatement::acquire() throw()
 {
     OStatement_BASE2::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL java_sql_PreparedStatement::release() throw()
 {
     OStatement_BASE2::release();
 }
-// -----------------------------------------------------------------------------
+
 void java_sql_PreparedStatement::createStatement(JNIEnv* _pEnv)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -656,7 +656,7 @@ void java_sql_PreparedStatement::createStatement(JNIEnv* _pEnv)
             object = _pEnv->NewGlobalRef( out );
     } //t.pEnv
 }
-// -----------------------------------------------------------------------------
+
 
 
 

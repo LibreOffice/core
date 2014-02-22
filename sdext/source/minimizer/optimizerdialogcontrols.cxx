@@ -20,9 +20,9 @@
 
 #include "optimizerdialog.hxx"
 
-// -------------------
+
 // - OptimizerDialog -
-// -------------------
+
 #include "pppoptimizer.hxx"
 #include "graphiccollector.hxx"
 #include "pagecollector.hxx"
@@ -46,7 +46,7 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::presentation;
 
-// -----------------------------------------------------------------------------
+
 
 void SetBold( OptimizerDialog& rOptimizerDialog, const OUString& rControl )
 {
@@ -58,7 +58,7 @@ void SetBold( OptimizerDialog& rOptimizerDialog, const OUString& rControl )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString InsertSeparator( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, sal_Int32 nOrientation,
                         sal_Int32 nPosX, sal_Int32 nPosY, sal_Int32 nWidth, sal_Int32 nHeight )
@@ -89,7 +89,7 @@ OUString InsertSeparator( OptimizerDialog& rOptimizerDialog, const OUString& rCo
     return rControlName;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString InsertButton( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, Reference< XActionListener >& xActionListener,
     sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex, sal_Bool bEnabled, PPPOptimizerTokenEnum nResID, sal_Int16 nPushButtonType )
@@ -126,7 +126,7 @@ OUString InsertButton( OptimizerDialog& rOptimizerDialog, const OUString& rContr
     return rControlName;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString InsertFixedText( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, const OUString& rLabel,
                                 sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Bool bMultiLine, sal_Bool bBold, sal_Int16 nTabIndex )
@@ -162,7 +162,7 @@ OUString InsertFixedText( OptimizerDialog& rOptimizerDialog, const OUString& rCo
     return rControlName;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString InsertCheckBox( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
     const Reference< XItemListener > xItemListener, const OUString& rLabel,
@@ -199,7 +199,7 @@ OUString InsertCheckBox( OptimizerDialog& rOptimizerDialog, const OUString& rCon
     return rControlName;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString InsertFormattedField( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
         const Reference< XTextListener > xTextListener, const Reference< XSpinListener > xSpinListener, sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth,
@@ -247,7 +247,7 @@ OUString InsertFormattedField( OptimizerDialog& rOptimizerDialog, const OUString
     return rControlName;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString InsertComboBox( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
     const Reference< XTextListener > xTextListener, const sal_Bool bEnabled, const Sequence< OUString >& rItemList,
@@ -288,7 +288,7 @@ OUString InsertComboBox( OptimizerDialog& rOptimizerDialog, const OUString& rCon
     return rControlName;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString InsertRadioButton( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, const Reference< XItemListener > xItemListener,
     const OUString& rLabel, sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Bool bMultiLine, sal_Int16 nTabIndex )
@@ -324,7 +324,7 @@ OUString InsertRadioButton( OptimizerDialog& rOptimizerDialog, const OUString& r
     return rControlName;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString InsertListBox( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
     const Reference< XActionListener > xActionListener, const sal_Bool bEnabled, const Sequence< OUString >& rItemList,
@@ -367,7 +367,7 @@ OUString InsertListBox( OptimizerDialog& rOptimizerDialog, const OUString& rCont
     return rControlName;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizerDialog::InitNavigationBar()
 {
@@ -387,7 +387,7 @@ void OptimizerDialog::InitNavigationBar()
     setControlProperty( "btnNavNext", "DefaultButton", Any( sal_True ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizerDialog::UpdateControlStatesPage0()
 {
@@ -436,7 +436,7 @@ void OptimizerDialog::InitPage0()
     UpdateControlStatesPage0();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizerDialog::UpdateControlStatesPage1()
 {
@@ -476,7 +476,7 @@ void OptimizerDialog::InitPage1()
     UpdateControlStatesPage1();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizerDialog::UpdateControlStatesPage2()
 {
@@ -541,7 +541,7 @@ void OptimizerDialog::InitPage2()
     UpdateControlStatesPage2();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizerDialog::UpdateControlStatesPage3()
 {
@@ -583,7 +583,7 @@ void OptimizerDialog::InitPage3()
     UpdateControlStatesPage3();
 }
 
-// -----------------------------------------------------------------------------
+
 
 static OUString ImpValueOfInMB( const sal_Int64& rVal, sal_Unicode nSeparator = '.' )
 {
@@ -917,7 +917,7 @@ void OptimizerDialog::InitPage4()
     UpdateControlStatesPage4();
 }
 
-// -----------------------------------------------------------------------------
+
 void OptimizerDialog::EnablePage( sal_Int16 nStep )
 {
     std::vector< OUString >::iterator aBeg( maControlPages[ nStep ].begin() );

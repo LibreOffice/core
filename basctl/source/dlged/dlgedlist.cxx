@@ -23,87 +23,57 @@
 namespace basctl
 {
 
-//============================================================================
 // DlgEdPropListenerImpl
-//============================================================================
-
-//----------------------------------------------------------------------------
-
 DlgEdPropListenerImpl::DlgEdPropListenerImpl (DlgEdObj& rObj) :
     rDlgEdObj(rObj)
 {
 }
-
-//----------------------------------------------------------------------------
 
 DlgEdPropListenerImpl::~DlgEdPropListenerImpl()
 {
 }
 
 // XEventListener
-//----------------------------------------------------------------------------
-
 void SAL_CALL DlgEdPropListenerImpl::disposing( const ::com::sun::star::lang::EventObject& ) throw( ::com::sun::star::uno::RuntimeException)
 {
 }
 
 // XPropertyChangeListener
-//----------------------------------------------------------------------------
-
 void SAL_CALL DlgEdPropListenerImpl::propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException)
 {
     rDlgEdObj._propertyChange( evt );
 }
 
-//----------------------------------------------------------------------------
-
-//============================================================================
 // DlgEdEvtContListenerImpl
-//============================================================================
-
-//----------------------------------------------------------------------------
-
 DlgEdEvtContListenerImpl::DlgEdEvtContListenerImpl (DlgEdObj& rObj) :
     rDlgEdObj(rObj)
 {
 }
-
-//----------------------------------------------------------------------------
 
 DlgEdEvtContListenerImpl::~DlgEdEvtContListenerImpl()
 {
 }
 
 // XEventListener
-//----------------------------------------------------------------------------
-
 void SAL_CALL DlgEdEvtContListenerImpl::disposing( const  ::com::sun::star::lang::EventObject& ) throw( ::com::sun::star::uno::RuntimeException)
 {
 }
 
 // XContainerListener
-//----------------------------------------------------------------------------
-
 void SAL_CALL DlgEdEvtContListenerImpl::elementInserted(const ::com::sun::star::container::ContainerEvent& Event) throw(::com::sun::star::uno::RuntimeException)
 {
     rDlgEdObj._elementInserted( Event );
 }
-
-//----------------------------------------------------------------------------
 
 void SAL_CALL DlgEdEvtContListenerImpl::elementReplaced(const ::com::sun::star::container::ContainerEvent& Event) throw(::com::sun::star::uno::RuntimeException)
 {
     rDlgEdObj._elementReplaced( Event );
 }
 
-//----------------------------------------------------------------------------
-
 void SAL_CALL DlgEdEvtContListenerImpl::elementRemoved(const ::com::sun::star::container::ContainerEvent& Event) throw(::com::sun::star::uno::RuntimeException)
 {
     rDlgEdObj._elementRemoved( Event );
 }
-
-//----------------------------------------------------------------------------
 
 } // namespace basctl
 

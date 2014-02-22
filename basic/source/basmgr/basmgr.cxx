@@ -104,7 +104,7 @@ DBG_NAME( BasicManager );
 StreamMode eStreamReadMode = STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYALL;
 StreamMode eStorageReadMode = STREAM_READ | STREAM_SHARE_DENYWRITE;
 
-//----------------------------------------------------------------------------
+
 // BasicManager impl data
 struct BasicManagerImpl
 {
@@ -242,7 +242,7 @@ void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager* pMgr,
 
 
 // XEventListener
-//----------------------------------------------------------------------------
+
 
 void SAL_CALL BasMgrContainerListenerImpl::disposing( const lang::EventObject& Source )
     throw( uno::RuntimeException )
@@ -251,7 +251,7 @@ void SAL_CALL BasMgrContainerListenerImpl::disposing( const lang::EventObject& S
 }
 
 // XContainerListener
-//----------------------------------------------------------------------------
+
 
 void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const container::ContainerEvent& Event )
     throw( uno::RuntimeException )
@@ -298,7 +298,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const container::Con
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 void SAL_CALL BasMgrContainerListenerImpl::elementReplaced( const container::ContainerEvent& Event )
     throw( uno::RuntimeException )
@@ -328,7 +328,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementReplaced( const container::Con
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 void SAL_CALL BasMgrContainerListenerImpl::elementRemoved( const container::ContainerEvent& Event )
     throw( uno::RuntimeException )

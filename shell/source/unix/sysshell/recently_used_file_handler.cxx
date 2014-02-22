@@ -47,7 +47,7 @@ namespace /* private */ {
     #define TAG_GROUPS       "Groups"
     #define TAG_GROUP        "Group"
 
-    //------------------------------------------------
+
     // compare two string_t's case insensitive, may also be done
     // by specifying special traits for the string type but in this
     // case it's easier to do it this way
@@ -58,7 +58,7 @@ namespace /* private */ {
         { return (0 == strcasecmp(s1.c_str(), s2.c_str())); }
     };
 
-    //------------------------------------------------
+
     struct recently_used_item
     {
         recently_used_item() :
@@ -282,7 +282,7 @@ namespace /* private */ {
         recently_used_file_filter& operator=(const recently_used_file_filter&);
     };
 
-    //------------------------------------------------
+
     void read_recently_used_items(
         recently_used_file& file,
         recently_used_item_list_t& item_list)
@@ -300,7 +300,7 @@ namespace /* private */ {
         }
     }
 
-    //------------------------------------------------
+
     // The file ~/.recently_used shall not contain more than 500
     // entries (see www.freedesktop.org)
     const int MAX_RECENTLY_USED_ITEMS = 500;
@@ -327,11 +327,11 @@ namespace /* private */ {
         int items_written_;
     };
 
-    //------------------------------------------------
+
     const char* XML_HEADER = "<?xml version=\"1.0\"?>\n<RecentFiles>\n";
     const char* XML_FOOTER = "</RecentFiles>";
 
-    //------------------------------------------------
+
     // assumes that the list is ordered decreasing
     void write_recently_used_items(
         recently_used_file& file,
@@ -353,14 +353,14 @@ namespace /* private */ {
         }
     }
 
-    //------------------------------------------------
+
     struct delete_recently_used_item
     {
         void operator() (const recently_used_item* item) const
         { delete item; }
     };
 
-    //------------------------------------------------
+
     void recently_used_item_list_clear(recently_used_item_list_t& item_list)
     {
         std::for_each(
@@ -370,7 +370,7 @@ namespace /* private */ {
         item_list.clear();
     }
 
-    //------------------------------------------------
+
     class find_item_predicate
     {
     public:
@@ -384,19 +384,19 @@ namespace /* private */ {
         string_t uri_;
     };
 
-    //------------------------------------------------
+
     struct greater_recently_used_item
     {
         bool operator ()(const recently_used_item* lhs, const recently_used_item* rhs) const
         { return (lhs->timestamp_ > rhs->timestamp_); }
     };
 
-    //------------------------------------------------
+
     const char* GROUP_OOO         = "openoffice.org";
     const char* GROUP_STAR_OFFICE = "staroffice";
     const char* GROUP_STAR_SUITE  = "starsuite";
 
-    //------------------------------------------------
+
     void recently_used_item_list_add(
         recently_used_item_list_t& item_list, const OUString& file_url, const OUString& mime_type)
     {
@@ -443,7 +443,7 @@ namespace /* private */ {
             greater_recently_used_item());
     }
 
-    //------------------------------------------------
+
     struct cleanup_guard
     {
         cleanup_guard(recently_used_item_list_t& item_list) :

@@ -18,9 +18,9 @@
  */
 
 
-//------------------------------------------------------------------------
+
 // include files
-//------------------------------------------------------------------------
+
 #include <osl_Condition_Const.h>
 #include <stdlib.h>
 
@@ -28,9 +28,9 @@ using namespace osl;
 using namespace rtl;
 
 
-//------------------------------------------------------------------------
+
 // helper functions and classes
-//------------------------------------------------------------------------
+
 
 /** print Boolean value.
 */
@@ -93,9 +93,9 @@ protected:
 };
 
 
-//------------------------------------------------------------------------
+
 // test code start here
-//------------------------------------------------------------------------
+
 
 namespace osl_Condition
 {
@@ -339,18 +339,18 @@ namespace osl_Condition
     }; // class check
 
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::set);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::reset);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::wait);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::check);
-// -----------------------------------------------------------------------------
+
 
 } // namespace osl_Condition
 
 
-// -----------------------------------------------------------------------------
+
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

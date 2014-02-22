@@ -71,7 +71,7 @@ XMLFilterTabDialog::XMLFilterTabDialog(Window *pParent, ResMgr& rResMgr,
     ActivatePageHdl(m_pTabCtrl);
 }
 
-// -----------------------------------------------------------------------
+
 
 XMLFilterTabDialog::~XMLFilterTabDialog()
 {
@@ -80,7 +80,7 @@ XMLFilterTabDialog::~XMLFilterTabDialog()
     delete mpNewInfo;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool XMLFilterTabDialog::onOk()
 {
@@ -271,14 +271,14 @@ bool XMLFilterTabDialog::onOk()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 filter_info_impl* XMLFilterTabDialog::getNewFilterInfo() const
 {
     return mpNewInfo;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(XMLFilterTabDialog, OkHdl)
 {
@@ -288,7 +288,7 @@ IMPL_LINK_NOARG(XMLFilterTabDialog, OkHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( XMLFilterTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 {
@@ -299,7 +299,7 @@ IMPL_LINK( XMLFilterTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( XMLFilterTabDialog, DeactivatePageHdl, TabControl *, /* pTabCtrl */ )
 {

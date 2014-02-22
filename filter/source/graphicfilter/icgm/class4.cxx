@@ -39,7 +39,7 @@ double CGM::ImplGetOrientation( FloatPoint& rCenter, FloatPoint& rPoint )
     return fOrientation;
 }
 
-// ---------------------------------------------------------------
+
 
 void CGM::ImplSwitchStartEndAngle( double& rStartAngle, double& rEndAngle )
 {
@@ -49,7 +49,7 @@ void CGM::ImplSwitchStartEndAngle( double& rStartAngle, double& rEndAngle )
     rEndAngle = nTemp;
 }
 
-// ---------------------------------------------------------------
+
 
 void CGM::ImplGetVector( double* pVector )
 {
@@ -73,7 +73,7 @@ void CGM::ImplGetVector( double* pVector )
     pVector[ 3 ] *= mnVDCYmul;
 }
 
-// ---------------------------------------------------------------
+
 sal_Bool CGM::ImplGetEllipse( FloatPoint& rCenter, FloatPoint& rRadius, double& rAngle )
 {
     FloatPoint  aPoint1, aPoint2;

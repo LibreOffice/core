@@ -40,7 +40,7 @@
 
 namespace sdr { namespace table {
 
-// --------------------------------------------------------------------
+
 
 class OverlayTableEdge : public sdr::overlay::OverlayObject
 {
@@ -56,7 +56,7 @@ public:
     virtual ~OverlayTableEdge();
 };
 
-// --------------------------------------------------------------------
+
 
 TableEdgeHdl::TableEdgeHdl( const Point& rPnt, bool bHorizontal, sal_Int32 nMin, sal_Int32 nMax, sal_Int32 nEdges )
 : SdrHdl( rPnt, HDL_USER )

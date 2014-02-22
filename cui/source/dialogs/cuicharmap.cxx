@@ -104,34 +104,34 @@ SvxCharacterMap::SvxCharacterMap( Window* pParent, sal_Bool bOne_, const SfxItem
     CreateOutputItemSet( pSet ? *pSet->GetPool() : SFX_APP()->GetPool() );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxCharacterMap::~SvxCharacterMap()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 const Font& SvxCharacterMap::GetCharFont() const
 {
     return aFont;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxCharacterMap::SetChar( sal_UCS4 c )
 {
     m_pShowSet->SelectCharacter( c );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_UCS4 SvxCharacterMap::GetChar() const
 {
     return m_pShowSet->GetSelectCharacter();
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString SvxCharacterMap::GetCharacters() const
 {
@@ -139,7 +139,7 @@ OUString SvxCharacterMap::GetCharacters() const
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void SvxCharacterMap::DisableFontSelection()
 {
@@ -182,7 +182,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxShowText(Window *pParent
     return new SvxShowText(pParent);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowText::Paint( const Rectangle& )
 {
@@ -266,7 +266,7 @@ void SvxShowText::Paint( const Rectangle& )
         Control::SetFont(aOrigFont);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowText::SetFont( const Font& rFont )
 {
@@ -296,7 +296,7 @@ void SvxShowText::Resize()
     SetFont(GetFont()); //force recalculation of size
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowText::SetText( const OUString& rText )
 {
@@ -304,7 +304,7 @@ void SvxShowText::SetText( const OUString& rText )
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxShowText::~SvxShowText()
 {}
@@ -382,7 +382,7 @@ void SvxCharacterMap::init()
         m_pOKBtn->Enable();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxCharacterMap::SetCharFont( const Font& rFont )
 {
@@ -401,7 +401,7 @@ void SvxCharacterMap::SetCharFont( const Font& rFont )
     ModalDialog::SetFont( aFont );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxCharacterMap, OKHdl)
 {
@@ -430,7 +430,7 @@ void SvxCharacterMap::fillAllSubsets(ListBox &rListBox)
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl)
 {
@@ -485,7 +485,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl)
 {
@@ -500,7 +500,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxCharacterMap, CharDoubleClickHdl)
 {
@@ -513,7 +513,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharDoubleClickHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxCharacterMap, CharSelectHdl)
 {
@@ -535,7 +535,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharSelectHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl)
 {
@@ -574,7 +574,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxCharacterMap, CharPreSelectHdl)
 {
@@ -591,7 +591,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharPreSelectHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxCharacterMap, DeleteLastHdl)
 {

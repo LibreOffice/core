@@ -249,9 +249,9 @@ namespace
     }
 }
 
-//________________________________________________________________________________________________________
+
 //  XPrintable
-//________________________________________________________________________________________________________
+
 
 uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() throw(::com::sun::star::uno::RuntimeException)
 {
@@ -308,9 +308,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() thro
     return aPrinter;
 }
 
-//________________________________________________________________________________________________________
+
 //  XPrintable
-//________________________________________________________________________________________________________
+
 
 void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >& rPrinter,SfxPrinter*& pPrinter,sal_uInt16& nChangeFlags,SfxViewShell*& pViewSh)
 
@@ -462,9 +462,9 @@ void SAL_CALL SfxPrintHelper::setPrinter(const uno::Sequence< beans::PropertyVal
         pViewSh->SetPrinter( pPrinter, nChangeFlags, false );
 }
 
-//________________________________________________________________________________________________________
+
 //  ImplPrintWatch thread for asynchronous printing with moving temp. file to ucb location
-//________________________________________________________________________________________________________
+
 
 /* This implements a thread which will be started to wait for asynchronous
    print jobs to temp. localy files. If they finish we move the temp. files
@@ -575,11 +575,11 @@ class ImplUCBPrintWatcher : public ::osl::Thread
         }
 };
 
-//------------------------------------------------
 
-//________________________________________________________________________________________________________
+
+
 //  XPrintable
-//________________________________________________________________________________________________________
+
 void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >& rOptions)
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {

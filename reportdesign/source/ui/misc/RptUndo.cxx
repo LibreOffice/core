@@ -46,7 +46,7 @@ namespace rptui
     using namespace container;
     using namespace report;
 
-//----------------------------------------------------------------------------
+
 namespace
 {
     void lcl_collectElements(const uno::Reference< report::XSection >& _xSection,::std::vector< uno::Reference< drawing::XShape> >& _rControls)
@@ -64,7 +64,7 @@ namespace
             }
         }
     }
-    //----------------------------------------------------------------------------
+
     void lcl_insertElements(const uno::Reference< report::XSection >& _xSection,const ::std::vector< uno::Reference< drawing::XShape> >& _aControls)
     {
         if ( _xSection.is() )
@@ -88,7 +88,7 @@ namespace
             }
         }
     }
-    //----------------------------------------------------------------------------
+
     void lcl_setValues(const uno::Reference< report::XSection >& _xSection,const ::std::vector< ::std::pair< OUString ,uno::Any> >& _aValues)
     {
         if ( _xSection.is() )
@@ -109,9 +109,9 @@ namespace
         }
     }
 }
-//----------------------------------------------------------------------------
+
 TYPEINIT1( OSectionUndo,         OCommentUndoAction );
-//----------------------------------------------------------------------------
+
 OSectionUndo::OSectionUndo(OReportModel& _rMod
                            ,sal_uInt16 _nSlot
                            ,Action _eAction
@@ -122,7 +122,7 @@ OSectionUndo::OSectionUndo(OReportModel& _rMod
 ,m_bInserted(false)
 {
 }
-// -----------------------------------------------------------------------------
+
 OSectionUndo::~OSectionUndo()
 {
     if ( !m_bInserted )
@@ -151,7 +151,7 @@ OSectionUndo::~OSectionUndo()
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void OSectionUndo::collectControls(const uno::Reference< report::XSection >& _xSection)
 {
     m_aControls.clear();
@@ -173,7 +173,7 @@ void OSectionUndo::collectControls(const uno::Reference< report::XSection >& _xS
     {
     }
 }
-//----------------------------------------------------------------------------
+
 void OSectionUndo::Undo()
 {
     try
@@ -194,7 +194,7 @@ void OSectionUndo::Undo()
         OSL_FAIL( "OSectionUndo::Undo: caught an exception!" );
     }
 }
-//----------------------------------------------------------------------------
+
 void OSectionUndo::Redo()
 {
     try
@@ -215,9 +215,9 @@ void OSectionUndo::Redo()
         OSL_FAIL( "OSectionUndo::Redo: caught an exception!" );
     }
 }
-//----------------------------------------------------------------------------
+
 TYPEINIT1( OReportSectionUndo,         OSectionUndo );
-//----------------------------------------------------------------------------
+
 OReportSectionUndo::OReportSectionUndo(OReportModel& _rMod,sal_uInt16 _nSlot
                                        ,::std::mem_fun_t< uno::Reference< report::XSection >
                                             ,OReportHelper> _pMemberFunction
@@ -231,11 +231,11 @@ OReportSectionUndo::OReportSectionUndo(OReportModel& _rMod,sal_uInt16 _nSlot
     if( m_eAction == Removed )
         collectControls(m_pMemberFunction(&m_aReportHelper));
 }
-// -----------------------------------------------------------------------------
+
 OReportSectionUndo::~OReportSectionUndo()
 {
 }
-//----------------------------------------------------------------------------
+
 void OReportSectionUndo::implReInsert( )
 {
     const uno::Sequence< beans::PropertyValue > aArgs;
@@ -245,7 +245,7 @@ void OReportSectionUndo::implReInsert( )
     lcl_setValues(xSection,m_aValues);
     m_bInserted = true;
 }
-//----------------------------------------------------------------------------
+
 void OReportSectionUndo::implReRemove( )
 {
     if( m_eAction == Removed )
@@ -254,9 +254,9 @@ void OReportSectionUndo::implReRemove( )
     m_pController->executeChecked(m_nSlot,aArgs);
     m_bInserted = false;
 }
-//----------------------------------------------------------------------------
+
 TYPEINIT1( OGroupSectionUndo,         OSectionUndo );
-//----------------------------------------------------------------------------
+
 OGroupSectionUndo::OGroupSectionUndo(OReportModel& _rMod,sal_uInt16 _nSlot
                                        ,::std::mem_fun_t< uno::Reference< report::XSection >
                                             ,OGroupHelper> _pMemberFunction
@@ -275,7 +275,7 @@ OGroupSectionUndo::OGroupSectionUndo(OReportModel& _rMod,sal_uInt16 _nSlot
         collectControls(xSection);
     }
 }
-//----------------------------------------------------------------------------
+
 OUString OGroupSectionUndo::GetComment() const
 {
     if ( m_sName.isEmpty() )
@@ -293,7 +293,7 @@ OUString OGroupSectionUndo::GetComment() const
     }
     return m_strComment + m_sName;
 }
-//----------------------------------------------------------------------------
+
 void OGroupSectionUndo::implReInsert( )
 {
     uno::Sequence< beans::PropertyValue > aArgs(2);
@@ -309,7 +309,7 @@ void OGroupSectionUndo::implReInsert( )
     lcl_setValues(xSection,m_aValues);
     m_bInserted = true;
 }
-//----------------------------------------------------------------------------
+
 void OGroupSectionUndo::implReRemove( )
 {
     if( m_eAction == Removed )
@@ -325,9 +325,9 @@ void OGroupSectionUndo::implReRemove( )
     m_pController->executeChecked(m_nSlot,aArgs);
     m_bInserted = false;
 }
-//----------------------------------------------------------------------------
+
 TYPEINIT1( OGroupUndo,         OCommentUndoAction );
-//----------------------------------------------------------------------------
+
 OGroupUndo::OGroupUndo(OReportModel& _rMod
                        ,sal_uInt16 nCommentID
                        ,Action  _eAction
@@ -340,7 +340,7 @@ OGroupUndo::OGroupUndo(OReportModel& _rMod
 {
     m_nLastPosition = getPositionInIndexAccess(m_xReportDefinition->getGroups().get(),m_xGroup);
 }
-//----------------------------------------------------------------------------
+
 void OGroupUndo::implReInsert( )
 {
     try
@@ -352,7 +352,7 @@ void OGroupUndo::implReInsert( )
         OSL_FAIL("Exception catched while undoing remove group");
     }
 }
-//----------------------------------------------------------------------------
+
 void OGroupUndo::implReRemove( )
 {
     try
@@ -364,7 +364,7 @@ void OGroupUndo::implReRemove( )
         OSL_FAIL("Exception catched while redoing remove group");
     }
 }
-//----------------------------------------------------------------------------
+
 void OGroupUndo::Undo()
 {
     switch ( m_eAction )
@@ -379,7 +379,7 @@ void OGroupUndo::Undo()
     }
 
 }
-//----------------------------------------------------------------------------
+
 void OGroupUndo::Redo()
 {
     switch ( m_eAction )
@@ -393,7 +393,7 @@ void OGroupUndo::Redo()
         break;
     }
 }
-//----------------------------------------------------------------------------
+
 //============================================================================
 } // rptui
 //============================================================================

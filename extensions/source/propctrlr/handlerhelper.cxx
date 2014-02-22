@@ -57,7 +57,7 @@ namespace pcr
     //====================================================================
     //= PropertyHandlerHelper
     //====================================================================
-    //--------------------------------------------------------------------
+
     void PropertyHandlerHelper::describePropertyLine( const Property& _rProperty,
         LineDescriptor& /* [out] */ _out_rDescriptor, const Reference< XPropertyControlFactory >& _rxControlFactory )
     {
@@ -111,7 +111,7 @@ namespace pcr
         _out_rDescriptor.Control = _rxControlFactory->createPropertyControl( nControlType, bReadOnlyControl );
     }
 
-    //--------------------------------------------------------------------
+
     namespace
     {
         Reference< XPropertyControl > lcl_implCreateListLikeControl(
@@ -142,21 +142,21 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XPropertyControl > PropertyHandlerHelper::createListBoxControl( const Reference< XPropertyControlFactory >& _rxControlFactory,
                 const ::std::vector< OUString >& _rInitialListEntries, sal_Bool _bReadOnlyControl, sal_Bool _bSorted )
     {
         return lcl_implCreateListLikeControl( _rxControlFactory, _rInitialListEntries, _bReadOnlyControl, _bSorted, sal_True );
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XPropertyControl > PropertyHandlerHelper::createComboBoxControl( const Reference< XPropertyControlFactory >& _rxControlFactory,
                 const ::std::vector< OUString >& _rInitialListEntries, sal_Bool _bReadOnlyControl, sal_Bool _bSorted )
     {
         return lcl_implCreateListLikeControl( _rxControlFactory, _rInitialListEntries, _bReadOnlyControl, _bSorted, sal_False );
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XPropertyControl > PropertyHandlerHelper::createNumericControl( const Reference< XPropertyControlFactory >& _rxControlFactory,
             sal_Int16 _nDigits, const Optional< double >& _rMinValue, const Optional< double >& _rMaxValue, sal_Bool _bReadOnlyControl )
     {
@@ -172,7 +172,7 @@ namespace pcr
         return xNumericControl.get();
     }
 
-    //--------------------------------------------------------------------
+
     Any PropertyHandlerHelper::convertToPropertyValue( const Reference< XComponentContext >& _rxContext,const Reference< XTypeConverter >& _rxTypeConverter,
         const Property& _rProperty, const Any& _rControlValue )
     {
@@ -209,7 +209,7 @@ namespace pcr
         return aPropertyValue;
     }
 
-    //--------------------------------------------------------------------
+
     Any PropertyHandlerHelper::convertToControlValue( const Reference< XComponentContext >& _rxContext,const Reference< XTypeConverter >& _rxTypeConverter,
         const Any& _rPropertyValue, const Type& _rControlValueType )
     {
@@ -239,7 +239,7 @@ namespace pcr
         return aControlValue;
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyHandlerHelper::setContextDocumentModified( const Reference<XComponentContext> & _rContext )
     {
         try
@@ -275,7 +275,7 @@ namespace pcr
         return xI;
     }
 
-    //--------------------------------------------------------------------
+
     Window* PropertyHandlerHelper::getDialogParentWindow( const Reference<XComponentContext>& _rContext )
     {
         Window* pInspectorWindow = NULL;

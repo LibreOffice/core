@@ -51,25 +51,25 @@ using namespace ::com::sun::star::lang;
 //==================================================================
 //= OTimeControl
 //==================================================================
-//------------------------------------------------------------------
+
 OTimeControl::OTimeControl(const Reference<XComponentContext>& _rxFactory)
                :OBoundControl(_rxFactory, VCL_CONTROL_TIMEFIELD)
 {
 }
 
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OTimeControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OTimeControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> OTimeControl::_getTypes()
 {
     return OBoundControl::_getTypes();
 }
 
-//------------------------------------------------------------------------------
+
 StringSequence SAL_CALL OTimeControl::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
@@ -83,14 +83,14 @@ StringSequence SAL_CALL OTimeControl::getSupportedServiceNames() throw()
 //==================================================================
 //= OTimeModel
 //==================================================================
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OTimeModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OTimeModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
 // XServiceInfo
-//------------------------------------------------------------------------------
+
 StringSequence SAL_CALL OTimeModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
@@ -113,14 +113,14 @@ StringSequence SAL_CALL OTimeModel::getSupportedServiceNames() throw()
     return aSupported;
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> OTimeModel::_getTypes()
 {
     return OBoundControlModel::_getTypes();
 }
 
-//------------------------------------------------------------------
-//------------------------------------------------------------------
+
+
 OTimeModel::OTimeModel(const Reference<XComponentContext>& _rxFactory)
     : OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_TIMEFIELD,
         FRM_SUN_CONTROL_TIMEFIELD, sal_True, sal_True)
@@ -134,7 +134,7 @@ OTimeModel::OTimeModel(const Reference<XComponentContext>& _rxFactory)
     setAggregateSet(m_xAggregateFastSet, getOriginalHandle(PROPERTY_ID_TIMEFORMAT));
 }
 
-//------------------------------------------------------------------------------
+
 OTimeModel::OTimeModel(const OTimeModel* _pOriginal, const Reference<XComponentContext>& _rxFactory)
     : OEditBaseModel(_pOriginal, _rxFactory)
     , OLimitedFormats(_rxFactory, FormComponentType::TIMEFIELD)
@@ -143,24 +143,24 @@ OTimeModel::OTimeModel(const OTimeModel* _pOriginal, const Reference<XComponentC
     setAggregateSet( m_xAggregateFastSet, getOriginalHandle( PROPERTY_ID_TIMEFORMAT ) );
 }
 
-//------------------------------------------------------------------------------
+
 OTimeModel::~OTimeModel( )
 {
     setAggregateSet(Reference< XFastPropertySet >(), -1);
 }
 
 // XCloneable
-//------------------------------------------------------------------------------
+
 IMPLEMENT_DEFAULT_CLONING( OTimeModel )
 
-//------------------------------------------------------------------------------
+
 OUString SAL_CALL OTimeModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return OUString(FRM_COMPONENT_TIMEFIELD); // old (non-sun) name for compatibility !
 }
 
 // XPropertySet
-//------------------------------------------------------------------------------
+
 void OTimeModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 4, OEditBaseModel )
@@ -171,7 +171,7 @@ void OTimeModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     END_DESCRIBE_PROPERTIES();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OTimeModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle ) const
 {
     switch (_nHandle)
@@ -188,7 +188,7 @@ void SAL_CALL OTimeModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle 
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OTimeModel::convertFastPropertyValue(Any& _rConvertedValue, Any& _rOldValue,
         sal_Int32 _nHandle, const Any& _rValue ) throw(IllegalArgumentException)
 {
@@ -198,7 +198,7 @@ sal_Bool SAL_CALL OTimeModel::convertFastPropertyValue(Any& _rConvertedValue, An
         return OEditBaseModel::convertFastPropertyValue(_rConvertedValue, _rOldValue, _nHandle, _rValue );
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OTimeModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw ( ::com::sun::star::uno::Exception)
 {
     if (PROPERTY_ID_FORMATKEY == _nHandle)
@@ -208,7 +208,7 @@ void SAL_CALL OTimeModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, c
 }
 
 // XLoadListener
-//------------------------------------------------------------------------------
+
 void OTimeModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 {
     OBoundControlModel::onConnectedDbColumn( _rxForm );
@@ -228,7 +228,7 @@ void OTimeModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OTimeModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
@@ -270,25 +270,25 @@ sal_Bool OTimeModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     return sal_True;
 }
 
-//------------------------------------------------------------------------------
+
 Any OTimeModel::translateControlValueToExternalValue( ) const
 {
     return getControlValue();
 }
 
-//------------------------------------------------------------------------------
+
 Any OTimeModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
 {
     return _rExternalValue;
 }
 
-//------------------------------------------------------------------------------
+
 Any OTimeModel::translateControlValueToValidatableValue( ) const
 {
     return getControlValue();
 }
 
-//------------------------------------------------------------------------------
+
 Any OTimeModel::translateDbColumnToControlValue()
 {
     util::Time aTime = m_xColumn->getTime();
@@ -300,20 +300,20 @@ Any OTimeModel::translateDbColumnToControlValue()
     return m_aSaveValue;
 }
 
-//------------------------------------------------------------------------------
+
 Any OTimeModel::getDefaultForReset() const
 {
     return m_aDefault;
 }
 
-//------------------------------------------------------------------------------
+
 void OTimeModel::resetNoBroadcast()
 {
     OEditBaseModel::resetNoBroadcast();
     m_aSaveValue.clear();
 }
 
-//------------------------------------------------------------------------------
+
 Sequence< Type > OTimeModel::getSupportedBindingTypes()
 {
     return Sequence< Type >( &::getCppuType( static_cast< util::Time* >( NULL ) ), 1 );

@@ -793,7 +793,7 @@ private:
     DECL_LINK( implMenuHdl, Menu* );
 };
 
-// -----------------------------------------------------------------------
+
 
 void MSViewerWorkWindow::onView()
 {
@@ -870,7 +870,7 @@ PPTDocumentPtr MSViewerWorkWindow::Load()
     return pDocument;
 }
 
-// -----------------------------------------------------------------------
+
 
 MSViewerWorkWindow::MSViewerWorkWindow() :
     WorkWindow( 0, WB_APP | WB_STDWORK | WB_3DLOOK ),mbSelectHdlGuard(false)
@@ -909,7 +909,7 @@ MSViewerWorkWindow::MSViewerWorkWindow() :
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static String GetAtomText( const Atom* pAtom )
 {
@@ -1035,7 +1035,7 @@ IMPL_LINK( MSViewerWorkWindow, implMenuHdl, Menu*, pMenu )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 MSViewerWorkWindow::~MSViewerWorkWindow()
 {
@@ -1050,7 +1050,7 @@ MSViewerWorkWindow::~MSViewerWorkWindow()
     delete mpMenuBar;
 }
 
-// -----------------------------------------------------------------------
+
 
 void MSViewerWorkWindow::Resize()
 {
@@ -1076,9 +1076,9 @@ void MSViewerWorkWindow::Resize()
     }
 }
 
-// -----------------------------------------------------------------------
 
-// -----------------------------------------------------------------------
+
+
 
     SAL_IMPLEMENT_MAIN()
 {

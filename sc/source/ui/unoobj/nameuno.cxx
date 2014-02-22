@@ -46,7 +46,7 @@ using ::com::sun::star::uno::Any;
 
 #include "scui_def.hxx"
 
-//------------------------------------------------------------------------
+
 
 static const SfxItemPropertyMapEntry* lcl_GetNamedRangeMap()
 {
@@ -71,7 +71,7 @@ static const SfxItemPropertyMapEntry* lcl_GetNamedRangesMap()
     return aNamedRangesMap_Impl;
 }
 
-//------------------------------------------------------------------------
+
 
 #define SCNAMEDRANGEOBJ_SERVICE     "com.sun.star.sheet.NamedRange"
 
@@ -468,7 +468,7 @@ const uno::Sequence<sal_Int8>& ScNamedRangeObj::getUnoTunnelId()
     return theScNamedRangeObjUnoTunnelId::get().getSeq();
 }
 
-//------------------------------------------------------------------------
+
 
 ScNamedRangesObj::ScNamedRangesObj(ScDocShell* pDocSh) :
     mbModifyAndBroadcast(true),
@@ -823,7 +823,7 @@ sal_Int16 ScNamedRangesObj::resetActionLocks() throw(uno::RuntimeException)
     return nLockCount;
 }
 
-//------------------------------------------------------------------------
+
 
 ScGlobalNamedRangesObj::ScGlobalNamedRangesObj(ScDocShell* pDocSh)
     : ScNamedRangesObj(pDocSh)
@@ -876,7 +876,7 @@ SCTAB ScGlobalNamedRangesObj::GetTab_Impl()
     return -1;
 }
 
-//------------------------------------------------------------------------
+
 
 ScLocalNamedRangesObj::ScLocalNamedRangesObj( ScDocShell* pDocSh, uno::Reference<container::XNamed> xSheet )
     : ScNamedRangesObj(pDocSh),
@@ -939,7 +939,7 @@ SCTAB ScLocalNamedRangesObj::GetTab_Impl()
     return nTab;
 }
 
-//------------------------------------------------------------------------
+
 
 ScLabelRangeObj::ScLabelRangeObj(ScDocShell* pDocSh, bool bCol, const ScRange& rR) :
     pDocShell( pDocSh ),
@@ -1060,7 +1060,7 @@ void SAL_CALL ScLabelRangeObj::setDataArea( const table::CellRangeAddress& aData
     Modify_Impl( NULL, &aDataRange );
 }
 
-//------------------------------------------------------------------------
+
 
 ScLabelRangesObj::ScLabelRangesObj(ScDocShell* pDocSh, bool bCol) :
     pDocShell( pDocSh ),
@@ -1224,7 +1224,7 @@ sal_Bool SAL_CALL ScLabelRangesObj::hasElements() throw(uno::RuntimeException)
     return ( getCount() != 0 );
 }
 
-//------------------------------------------------------------------------
+
 
 
 

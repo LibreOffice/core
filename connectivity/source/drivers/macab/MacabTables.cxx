@@ -67,12 +67,12 @@ sdbcx::ObjectType MacabTables::createObject(const OUString& _rName)
 
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 void MacabTables::impl_refresh(  ) throw(RuntimeException)
 {
     static_cast<MacabCatalog&>(m_rParent).refreshTables();
 }
-// -------------------------------------------------------------------------
+
 void MacabTables::disposing(void)
 {
 m_xMetaData.clear();

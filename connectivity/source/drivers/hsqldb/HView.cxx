@@ -58,7 +58,7 @@ namespace connectivity { namespace hsqldb
     //====================================================================
     //= HView
     //====================================================================
-    //--------------------------------------------------------------------
+
     HView::HView( const Reference< XConnection >& _rxConnection, sal_Bool _bCaseSensitive,
         const OUString& _rSchemaName, const OUString& _rName )
         :HView_Base( _bCaseSensitive, _rName, _rxConnection->getMetaData(), 0, OUString(), _rSchemaName, OUString() )
@@ -66,16 +66,16 @@ namespace connectivity { namespace hsqldb
     {
     }
 
-    //--------------------------------------------------------------------
+
     HView::~HView()
     {
     }
 
-    //--------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XINTERFACE2( HView, HView_Base, HView_IBASE )
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( HView, HView_Base, HView_IBASE )
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL HView::alterCommand( const OUString& _rNewCommand ) throw (SQLException, RuntimeException)
     {
         // not really atomic ... as long as we do not have something like
@@ -143,7 +143,7 @@ namespace connectivity { namespace hsqldb
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL HView::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         if ( _nHandle == PROPERTY_ID_COMMAND )
@@ -157,7 +157,7 @@ namespace connectivity { namespace hsqldb
         HView_Base::getFastPropertyValue( _rValue, _nHandle );
     }
 
-    //--------------------------------------------------------------------
+
     OUString HView::impl_getCommand_throw( bool _bAllowSQLException ) const
     {
         OUString sCommand;

@@ -20,20 +20,20 @@
 
 #include "cellrange.hxx"
 
-// -----------------------------------------------------------------------------
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::table;
 
-// -----------------------------------------------------------------------------
+
 
 namespace sdr { namespace table {
 
-// -----------------------------------------------------------------------------
+
 // CellRange
-// -----------------------------------------------------------------------------
+
 
 CellRange::CellRange( const TableModelRef & xTable, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
 : mxTable( xTable )
@@ -44,15 +44,15 @@ CellRange::CellRange( const TableModelRef & xTable, sal_Int32 nLeft, sal_Int32 n
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 CellRange::~CellRange()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 // ICellRange
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 CellRange::getLeft()
 {
@@ -79,16 +79,16 @@ Reference< XTable > CellRange::getTable()
     return mxTable.get();
 }
 
-// -----------------------------------------------------------------------------
+
 // XCellRange
-// -----------------------------------------------------------------------------
+
 
 Reference< XCell > SAL_CALL CellRange::getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     return mxTable->getCellByPosition( mnLeft + nColumn, mnTop + nRow );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XCellRange > SAL_CALL CellRange::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -109,14 +109,14 @@ Reference< XCellRange > SAL_CALL CellRange::getCellRangeByPosition( sal_Int32 nL
     throw IndexOutOfBoundsException();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XCellRange > SAL_CALL CellRange::getCellRangeByName( const OUString& /*aRange*/ ) throw (RuntimeException)
 {
     return Reference< XCellRange >();
 }
 
-// -----------------------------------------------------------------------------
+
 
 } }
 

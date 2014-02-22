@@ -27,11 +27,11 @@
 
 using namespace ::com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 SC_SIMPLE_SERVICE_INFO( ScSheetEventsObj, "ScSheetEventsObj", "com.sun.star.document.Events" )
 
-//------------------------------------------------------------------------
+
 
 ScSheetEventsObj::ScSheetEventsObj(ScDocShell* pDocSh, SCTAB nT) :
     mpDocShell( pDocSh ),

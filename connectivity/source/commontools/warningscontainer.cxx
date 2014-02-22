@@ -35,7 +35,7 @@ namespace dbtools
     //====================================================================
     //= WarningsContainer
     //====================================================================
-    //--------------------------------------------------------------------
+
     static void lcl_concatWarnings( Any& _rChainLeft, const Any& _rChainRight )
     {
         if ( !_rChainLeft.hasValue() )
@@ -58,30 +58,30 @@ namespace dbtools
         }
     }
 
-    //--------------------------------------------------------------------
+
     WarningsContainer::~WarningsContainer()
     {
     }
 
-    //--------------------------------------------------------------------
+
     void WarningsContainer::appendWarning(const SQLException& _rWarning)
     {
         lcl_concatWarnings( m_aOwnWarnings, makeAny( _rWarning ) );
     }
 
-    //--------------------------------------------------------------------
+
     void WarningsContainer::appendWarning( const SQLContext& _rContext )
     {
         lcl_concatWarnings( m_aOwnWarnings, makeAny( _rContext ));
     }
 
-    //--------------------------------------------------------------------
+
     void WarningsContainer::appendWarning(const SQLWarning& _rWarning)
     {
         lcl_concatWarnings( m_aOwnWarnings, makeAny( _rWarning ) );
     }
 
-    //--------------------------------------------------------------------
+
     Any SAL_CALL WarningsContainer::getWarnings(  ) const
     {
         Any aAllWarnings;
@@ -94,7 +94,7 @@ namespace dbtools
         return aAllWarnings;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL WarningsContainer::clearWarnings(  )
     {
         if ( m_xExternalWarnings.is() )
@@ -102,7 +102,7 @@ namespace dbtools
         m_aOwnWarnings.clear();
     }
 
-    //--------------------------------------------------------------------
+
     void WarningsContainer::appendWarning( const OUString& _rWarning, const sal_Char* _pAsciiSQLState, const Reference< XInterface >& _rxContext )
     {
         appendWarning( SQLWarning( _rWarning, _rxContext, OUString::createFromAscii( _pAsciiSQLState ), 0, Any() ) );

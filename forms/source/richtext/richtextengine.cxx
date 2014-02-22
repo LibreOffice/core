@@ -44,7 +44,7 @@ namespace frm
     //====================================================================
     //= RichTextEngine
     //====================================================================
-    //--------------------------------------------------------------------
+
     RichTextEngine* RichTextEngine::Create()
     {
         SolarMutexGuard g;
@@ -79,7 +79,7 @@ namespace frm
         return pReturn;
     }
 
-    //--------------------------------------------------------------------
+
     RichTextEngine* RichTextEngine::Clone()
     {
         RichTextEngine* pClone( NULL );
@@ -98,19 +98,19 @@ namespace frm
         return pClone;
     }
 
-    //--------------------------------------------------------------------
+
     RichTextEngine::RichTextEngine( SfxItemPool* _pPool )
         :EditEngine( _pPool )
         ,m_pEnginePool( _pPool )
     {
     }
 
-    //--------------------------------------------------------------------
+
     RichTextEngine::~RichTextEngine( )
     {
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextEngine::registerEngineStatusListener( IEngineStatusListener* _pListener )
     {
         OSL_ENSURE( _pListener, "RichTextEngine::registerEngineStatusListener: invalid listener!" );
@@ -118,7 +118,7 @@ namespace frm
             m_aStatusListeners.push_back( _pListener );
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextEngine::revokeEngineStatusListener( IEngineStatusListener* _pListener )
     {
         ::std::vector< IEngineStatusListener* >::iterator aPos = ::std::find_if(
@@ -131,7 +131,7 @@ namespace frm
             m_aStatusListeners.erase( aPos );
     }
 
-    //--------------------------------------------------------------------
+
     IMPL_LINK( RichTextEngine, EditEngineStatusChanged, EditStatus*, _pStatus )
     {
         for ( ::std::vector< IEngineStatusListener* >::const_iterator aLoop = m_aStatusListeners.begin();

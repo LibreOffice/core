@@ -39,22 +39,22 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-// -----------------------------------------------------------------------------
+
 // VCLXAccessibleButton
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleButton::VCLXAccessibleButton( VCLXWindow* pVCLWindow )
     :VCLXAccessibleTextComponent( pVCLWindow )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleButton::~VCLXAccessibleButton()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
@@ -79,7 +79,7 @@ void VCLXAccessibleButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowE
    }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleButton::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
@@ -108,28 +108,28 @@ void VCLXAccessibleButton::FillAccessibleStateSet( utl::AccessibleStateSetHelper
     }
 }
 
-// -----------------------------------------------------------------------------
+
 // XInterface
-// -----------------------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleButton, VCLXAccessibleTextComponent, VCLXAccessibleButton_BASE )
 
-// -----------------------------------------------------------------------------
+
 // XTypeProvider
-// -----------------------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleButton, VCLXAccessibleTextComponent, VCLXAccessibleButton_BASE )
 
-// -----------------------------------------------------------------------------
+
 // XServiceInfo
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleButton::getImplementationName() throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleButton" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > VCLXAccessibleButton::getSupportedServiceNames() throw (RuntimeException)
 {
@@ -138,9 +138,9 @@ Sequence< OUString > VCLXAccessibleButton::getSupportedServiceNames() throw (Run
     return aNames;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleContext
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleButton::getAccessibleName(  ) throw (RuntimeException)
 {
@@ -176,9 +176,9 @@ OUString VCLXAccessibleButton::getAccessibleName(  ) throw (RuntimeException)
     return aName;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleAction
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleButton::getAccessibleActionCount( ) throw (RuntimeException)
 {
@@ -187,7 +187,7 @@ sal_Int32 VCLXAccessibleButton::getAccessibleActionCount( ) throw (RuntimeExcept
     return 1;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleButton::doAccessibleAction ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -203,7 +203,7 @@ sal_Bool VCLXAccessibleButton::doAccessibleAction ( sal_Int32 nIndex ) throw (In
     return sal_True;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleButton::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -215,7 +215,7 @@ OUString VCLXAccessibleButton::getAccessibleActionDescription ( sal_Int32 nIndex
     return OUString( TK_RES_STRING( RID_STR_ACC_ACTION_CLICK ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessibleKeyBinding > VCLXAccessibleButton::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -254,9 +254,9 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleButton::getAccessibleActionKeyB
     return xKeyBinding;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleValue
-// -----------------------------------------------------------------------------
+
 
 Any VCLXAccessibleButton::getCurrentValue(  ) throw (RuntimeException)
 {
@@ -271,7 +271,7 @@ Any VCLXAccessibleButton::getCurrentValue(  ) throw (RuntimeException)
     return aValue;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleButton::setCurrentValue( const Any& aNumber ) throw (RuntimeException)
 {
@@ -297,7 +297,7 @@ sal_Bool VCLXAccessibleButton::setCurrentValue( const Any& aNumber ) throw (Runt
     return bReturn;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Any VCLXAccessibleButton::getMaximumValue(  ) throw (RuntimeException)
 {
@@ -309,7 +309,7 @@ Any VCLXAccessibleButton::getMaximumValue(  ) throw (RuntimeException)
     return aValue;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Any VCLXAccessibleButton::getMinimumValue(  ) throw (RuntimeException)
 {
@@ -321,6 +321,6 @@ Any VCLXAccessibleButton::getMinimumValue(  ) throw (RuntimeException)
     return aValue;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -54,7 +54,7 @@ using namespace comphelper;
 
 #define CFG_PAGE_AND_GROUP          OUString("General"), OUString("LoadSave")
 
-// ----------------------------------------------------------------------
+
 
 struct SvxSaveTabPage_Impl
 {
@@ -196,14 +196,14 @@ SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
     DetectHiddenControls();
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxSaveTabPage::~SfxSaveTabPage()
 {
     delete pImpl;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SfxSaveTabPage::Create( Window* pParent,
                                     const SfxItemSet& rAttrSet )
@@ -211,7 +211,7 @@ SfxTabPage* SfxSaveTabPage::Create( Window* pParent,
     return ( new SfxSaveTabPage( pParent, rAttrSet ) );
 }
 
-// -----------------------------------------------------------------------
+
 void SfxSaveTabPage::DetectHiddenControls()
 {
     SvtOptionsDialogOptions aOptionsDlgOpt;
@@ -237,7 +237,7 @@ void SfxSaveTabPage::DetectHiddenControls()
     }
 
 }
-// -----------------------------------------------------------------------
+
 sal_Bool SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
 {
     sal_Bool bModified = sal_False;
@@ -343,7 +343,7 @@ sal_Bool SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
     return bModified;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool isODFFormat( OUString sFilter )
 {
@@ -497,7 +497,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
     aODFVersionLB->SaveValue();
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SfxSaveTabPage, AutoClickHdl_Impl, CheckBox *, pBox )
 {

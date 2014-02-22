@@ -42,11 +42,11 @@ namespace connectivity
             static void Shutdown();
         };
 
-        // ---------------------------------------------------------------
+
         KApplication* KDEInit::s_pKApplication = NULL;
         bool          KDEInit::s_bDidInsertCatalogue = false;
 
-        // ---------------------------------------------------------------
+
         void KDEInit::Init()
         {
             // TODO: All this is not thread-safe
@@ -77,7 +77,7 @@ namespace connectivity
             s_bDidInsertCatalogue = true;
         }
 
-        // ---------------------------------------------------------------
+
         void KDEInit::Shutdown()
         {
             if ( s_bDidInsertCatalogue )
@@ -103,18 +103,18 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------
+
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL initKApplication()
 {
     ::connectivity::kab::KDEInit::Init();
 }
 
-// -----------------------------------------------------------------------
+
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL shutdownKApplication()
 {
     ::connectivity::kab::KDEInit::Shutdown();
 }
-// -----------------------------------------------------------------------
+
 /** checks whether the KDE version on the system we're running at is supported
     by the driver
 

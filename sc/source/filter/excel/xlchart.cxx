@@ -71,7 +71,7 @@ XclChRectangle::XclChRectangle() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChDataPointPos::XclChDataPointPos( sal_uInt16 nSeriesIdx, sal_uInt16 nPointIdx ) :
     mnSeriesIdx( nSeriesIdx ),
@@ -85,7 +85,7 @@ bool operator<( const XclChDataPointPos& rL, const XclChDataPointPos& rR )
         ((rL.mnSeriesIdx == rR.mnSeriesIdx) && (rL.mnPointIdx < rR.mnPointIdx));
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChFrBlock::XclChFrBlock( sal_uInt16 nType ) :
     mnType( nType ),
@@ -103,7 +103,7 @@ XclChFramePos::XclChFramePos() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChLineFormat::XclChLineFormat() :
     maColor( COL_BLACK ),
@@ -113,7 +113,7 @@ XclChLineFormat::XclChLineFormat() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChAreaFormat::XclChAreaFormat() :
     maPattColor( COL_WHITE ),
@@ -123,7 +123,7 @@ XclChAreaFormat::XclChAreaFormat() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChEscherFormat::XclChEscherFormat()
 {
@@ -133,7 +133,7 @@ XclChEscherFormat::~XclChEscherFormat()
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChPicFormat::XclChPicFormat() :
     mnBmpMode( EXC_CHPICFORMAT_NONE ),
@@ -142,7 +142,7 @@ XclChPicFormat::XclChPicFormat() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChFrame::XclChFrame() :
     mnFormat( EXC_CHFRAME_STANDARD ),
@@ -167,14 +167,14 @@ XclChObjectLink::XclChObjectLink() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChFrLabelProps::XclChFrLabelProps() :
     mnFlags( 0 )
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChText::XclChText() :
     maTextColor( COL_BLACK ),
@@ -198,7 +198,7 @@ XclChMarkerFormat::XclChMarkerFormat() :
 {
 };
 
-// ----------------------------------------------------------------------------
+
 
 XclCh3dDataFormat::XclCh3dDataFormat() :
     mnBase( EXC_CH3DDATAFORMAT_RECT ),
@@ -206,7 +206,7 @@ XclCh3dDataFormat::XclCh3dDataFormat() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChDataFormat::XclChDataFormat() :
     mnFormatIdx( EXC_CHDATAFORMAT_DEFAULT ),
@@ -214,7 +214,7 @@ XclChDataFormat::XclChDataFormat() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChSerTrendLine::XclChSerTrendLine() :
     mfForecastFor( 0.0 ),
@@ -231,7 +231,7 @@ XclChSerTrendLine::XclChSerTrendLine() :
     pDouble->w32_parts.msw = pDouble->w32_parts.lsw = 0xFFFFFFFF;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChSerErrorBar::XclChSerErrorBar() :
     mfValue( 0.0 ),
@@ -242,7 +242,7 @@ XclChSerErrorBar::XclChSerErrorBar() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChSeries::XclChSeries() :
     mnCategType( EXC_CHSERIES_NUMERIC ),
@@ -267,7 +267,7 @@ XclChType::XclChType() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChChart3d::XclChChart3d() :
     mnRotation( 20 ),
@@ -280,7 +280,7 @@ XclChChart3d::XclChChart3d() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChLegend::XclChLegend() :
     mnDockMode( EXC_CHLEGEND_RIGHT ),
@@ -290,7 +290,7 @@ XclChLegend::XclChLegend() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChTypeGroup::XclChTypeGroup() :
     mnFlags( 0 ),
@@ -298,7 +298,7 @@ XclChTypeGroup::XclChTypeGroup() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChProperties::XclChProperties() :
     mnFlags( 0 ),
@@ -316,7 +316,7 @@ XclChLabelRange::XclChLabelRange() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChDateRange::XclChDateRange() :
     mnMinDate( 0 ),
@@ -334,7 +334,7 @@ XclChDateRange::XclChDateRange() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChValueRange::XclChValueRange() :
     mfMin( 0.0 ),
@@ -348,7 +348,7 @@ XclChValueRange::XclChValueRange() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChTick::XclChTick() :
     maTextColor( COL_BLACK ),
@@ -361,7 +361,7 @@ XclChTick::XclChTick() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChAxis::XclChAxis() :
     mnType( EXC_CHAXIS_NONE )
@@ -380,7 +380,7 @@ sal_Int32 XclChAxis::GetApiAxisDimension() const
     return nApiAxisDim;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChAxesSet::XclChAxesSet() :
     mnAxesSetId( EXC_CHAXESSET_PRIMARY )
@@ -492,7 +492,7 @@ static const XclChFormatInfo spFmtInfos[] =
 
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChFormatInfoProvider::XclChFormatInfoProvider()
 {
@@ -561,7 +561,7 @@ void XclChExtTypeInfo::Set( const XclChTypeInfo& rTypeInfo, bool b3dChart, bool 
     mbSpline = bSpline;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChTypeInfoProvider::XclChTypeInfoProvider()
 {
@@ -694,7 +694,7 @@ const sal_Char* const sppcBitmapNames[] = { "FillStyle", "FillBitmapName", "Fill
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 XclChPropSetHelper::XclChPropSetHelper() :
     maLineHlpCommon( sppcLineNamesCommon ),
@@ -1273,7 +1273,7 @@ EXC_DEFINEFUNC_GETAXISTITLESHAPE( lclGetSecYAxisTitleShape, XSecondAxisTitleSupp
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 XclChRootData::XclChRootData() :
     mxTypeInfoProv( new XclChTypeInfoProvider ),

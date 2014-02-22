@@ -174,9 +174,9 @@ int closeCallback(void* )
 
 bool m_bNameDumped;
 
-// ----------------------------------------
+
 // ---------- FillProperties.idl ----------
-// ----------------------------------------
+
 void dumpFillStyleAsAttribute(drawing::FillStyle eFillStyle, xmlTextWriterPtr xmlWriter)
 {
     switch(eFillStyle)
@@ -431,9 +431,9 @@ void dumpFillBitmapTileAsAttribute(sal_Bool bBitmapTile, xmlTextWriterPtr xmlWri
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapTile"), "%s", "false");
 }
 
-// ----------------------------------------
+
 // ---------- LineProperties.idl ----------
-// ----------------------------------------
+
 
 void dumpLineStyleAsAttribute(drawing::LineStyle eLineStyle, xmlTextWriterPtr xmlWriter)
 {
@@ -583,9 +583,9 @@ void dumpLineEndWidthAsAttribute(sal_Int32 aLineEndWidth, xmlTextWriterPtr xmlWr
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineEndWidth"), "%" SAL_PRIdINT32, aLineEndWidth);
 }
 
-// -----------------------------------------------
+
 // ---------- PolyPolygonDescriptor.idl ----------
-// -----------------------------------------------
+
 
 void dumpPolygonKindAsAttribute(drawing::PolygonKind ePolygonKind, xmlTextWriterPtr xmlWriter)
 {
@@ -698,9 +698,9 @@ void dumpCharColorAsAttribute(sal_Int32 aColor, xmlTextWriterPtr xmlWriter)
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fontColor"), "%06x", (unsigned int) aColor);
 }
 
-// ----------------------------------------
+
 // ---------- TextProperties.idl ----------
-// ----------------------------------------
+
 
 void dumpIsNumberingAsAttribute(sal_Bool bIsNumbering, xmlTextWriterPtr xmlWriter)
 {
@@ -931,9 +931,9 @@ void dumpTextWritingModeAsAttribute(text::WritingMode eTextWritingMode, xmlTextW
     }
 }
 
-// ------------------------------------------
+
 // ---------- ShadowProperties.idl ----------
-// ------------------------------------------
+
 
 void dumpShadowAsAttribute(sal_Bool bShadow, xmlTextWriterPtr xmlWriter)
 {
@@ -963,9 +963,9 @@ void dumpShadowYDistanceAsAttribute(sal_Int32 aShadowYDistance, xmlTextWriterPtr
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowYDistance"), "%" SAL_PRIdINT32, aShadowYDistance);
 }
 
-// -------------------------------
+
 // ---------- Shape.idl ----------
-// -------------------------------
+
 
 void dumpZOrderAsAttribute(sal_Int32 aZOrder, xmlTextWriterPtr xmlWriter)
 {
@@ -1070,9 +1070,9 @@ void dumpInteropGrabBagAsElement(uno::Sequence< beans::PropertyValue> aInteropGr
     xmlTextWriterEndElement( xmlWriter );
 }
 
-// --------------------------------
+
 // ---------- XShape.idl ----------
-// --------------------------------
+
 
 void dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
 {
@@ -1092,9 +1092,9 @@ void dumpShapeDescriptorAsAttribute( uno::Reference< drawing::XShapeDescriptor >
         OUStringToOString(xDescr->getShapeType(), RTL_TEXTENCODING_UTF8).getStr());
 }
 
-// -------------------------------------
+
 // ---------- CustomShape.idl ----------
-// -------------------------------------
+
 
 void dumpCustomShapeEngineAsAttribute(OUString sCustomShapeEngine, xmlTextWriterPtr xmlWriter)
 {

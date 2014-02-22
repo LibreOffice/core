@@ -151,7 +151,7 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
 {
@@ -172,7 +172,7 @@ WinSalVirtualDevice::WinSalVirtualDevice()
     mbForeignDC = FALSE;        // uses a foreign DC instead of a bitmap
 }
 
-// -----------------------------------------------------------------------
+
 
 WinSalVirtualDevice::~WinSalVirtualDevice()
 {
@@ -197,7 +197,7 @@ WinSalVirtualDevice::~WinSalVirtualDevice()
     mpGraphics = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 SalGraphics* WinSalVirtualDevice::GetGraphics()
 {
@@ -210,14 +210,14 @@ SalGraphics* WinSalVirtualDevice::GetGraphics()
     return mpGraphics;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 {
     mbGraphics = FALSE;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool WinSalVirtualDevice::SetSize( long nDX, long nDY )
 {

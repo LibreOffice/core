@@ -33,7 +33,7 @@ namespace connectivity { namespace java { namespace sql {
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
 
-    //--------------------------------------------------------------------
+
     namespace
     {
         sal_Int32 lcl_getFreeID( ConnectionLog::ObjectType _eType )
@@ -46,21 +46,21 @@ namespace connectivity { namespace java { namespace sql {
     //====================================================================
     //= ConnectionLog
     //====================================================================
-    //--------------------------------------------------------------------
+
     ConnectionLog::ConnectionLog( const ::comphelper::ResourceBasedEventLogger& _rDriverLog )
         :ConnectionLog_Base( _rDriverLog )
         ,m_nObjectID( lcl_getFreeID( CONNECTION ) )
     {
     }
 
-    //--------------------------------------------------------------------
+
     ConnectionLog::ConnectionLog( const ConnectionLog& _rSourceLog )
         :ConnectionLog_Base( _rSourceLog )
         ,m_nObjectID( _rSourceLog.m_nObjectID )
     {
     }
 
-    //--------------------------------------------------------------------
+
     ConnectionLog::ConnectionLog( const ConnectionLog& _rSourceLog, ConnectionLog::ObjectType _eType )
         :ConnectionLog_Base( _rSourceLog )
         ,m_nObjectID( lcl_getFreeID( _eType ) )
@@ -82,7 +82,7 @@ namespace comphelper { namespace log { namespace convert
     using ::com::sun::star::util::Time;
     using ::com::sun::star::util::DateTime;
 
-    //--------------------------------------------------------------------
+
     OUString convertLogArgToString( const Date& _rDate )
     {
         char buffer[ 30 ];
@@ -92,7 +92,7 @@ namespace comphelper { namespace log { namespace convert
         return OUString::createFromAscii( buffer );
     }
 
-    //--------------------------------------------------------------------
+
     OUString convertLogArgToString( const Time& _rTime )
     {
         char buffer[ 30 ];
@@ -102,7 +102,7 @@ namespace comphelper { namespace log { namespace convert
         return OUString::createFromAscii( buffer );
     }
 
-    //--------------------------------------------------------------------
+
     OUString convertLogArgToString( const DateTime& _rDateTime )
     {
         char buffer[ 30 ];

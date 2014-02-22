@@ -28,7 +28,7 @@ namespace reportdesign
 {
 // =============================================================================
     using namespace com::sun::star;
-// -----------------------------------------------------------------------------
+
 OGroups::OGroups(const uno::Reference< report::XReportDefinition >& _xParent,const uno::Reference< uno::XComponentContext >& context)
 :GroupsBase(m_aMutex)
 ,m_aContainerListeners(m_aMutex)
@@ -36,13 +36,13 @@ OGroups::OGroups(const uno::Reference< report::XReportDefinition >& _xParent,con
 ,m_xParent(_xParent)
 {
 }
-//--------------------------------------------------------------------------
+
 // TODO: VirtualFunctionFinder: This is virtual function!
 //
 OGroups::~OGroups()
 {
 }
-//--------------------------------------------------------------------------
+
 void OGroups::copyGroups(const uno::Reference< report::XGroups >& _xSource)
 {
     sal_Int32 nCount = _xSource->getCount();
@@ -54,12 +54,12 @@ void OGroups::copyGroups(const uno::Reference< report::XGroups >& _xSource)
         pGroup->copyGroup(xGroup);
     }
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OGroups::dispose() throw(uno::RuntimeException)
 {
     cppu::WeakComponentImplHelperBase::dispose();
 }
-// -----------------------------------------------------------------------------
+
 // TODO: VirtualFunctionFinder: This is virtual function!
 //
 void SAL_CALL OGroups::disposing()
@@ -70,18 +70,18 @@ void SAL_CALL OGroups::disposing()
     m_aContainerListeners.disposeAndClear( aDisposeEvent );
     m_xContext.clear();
 }
-// -----------------------------------------------------------------------------
+
 // XGroups
 uno::Reference< report::XReportDefinition > SAL_CALL OGroups::getReportDefinition() throw (uno::RuntimeException)
 {
     return m_xParent;
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< report::XGroup > SAL_CALL OGroups::createGroup(  ) throw (uno::RuntimeException)
 {
     return new OGroup(this,m_xContext);
 }
-// -----------------------------------------------------------------------------
+
 // XIndexContainer
 void SAL_CALL OGroups::insertByIndex( ::sal_Int32 Index, const uno::Any& aElement ) throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -108,7 +108,7 @@ void SAL_CALL OGroups::insertByIndex( ::sal_Int32 Index, const uno::Any& aElemen
     m_aContainerListeners.notifyEach(&container::XContainerListener::elementInserted,aEvent);
 }
 
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OGroups::removeByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Reference< report::XGroup > xGroup;
@@ -123,7 +123,7 @@ void SAL_CALL OGroups::removeByIndex( ::sal_Int32 Index ) throw (lang::IndexOutO
     container::ContainerEvent aEvent(static_cast<container::XContainer*>(this), uno::makeAny(Index), uno::makeAny(xGroup), uno::Any());
     m_aContainerListeners.notifyEach(&container::XContainerListener::elementRemoved,aEvent);
 }
-// -----------------------------------------------------------------------------
+
 // XIndexReplace
 void SAL_CALL OGroups::replaceByIndex( ::sal_Int32 Index, const uno::Any& Element ) throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -143,14 +143,14 @@ void SAL_CALL OGroups::replaceByIndex( ::sal_Int32 Index, const uno::Any& Elemen
     container::ContainerEvent aEvent(static_cast<container::XContainer*>(this), uno::makeAny(Index), Element, aOldElement);
     m_aContainerListeners.notifyEach(&container::XContainerListener::elementReplaced,aEvent);
 }
-// -----------------------------------------------------------------------------
+
 // XIndexAccess
 ::sal_Int32 SAL_CALL OGroups::getCount(  ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aGroups.size();
 }
-// -----------------------------------------------------------------------------
+
 uno::Any SAL_CALL OGroups::getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -159,41 +159,41 @@ uno::Any SAL_CALL OGroups::getByIndex( ::sal_Int32 Index ) throw (lang::IndexOut
     ::std::advance(aPos,Index);
     return uno::makeAny(*aPos);
 }
-// -----------------------------------------------------------------------------
+
 // XElementAccess
 uno::Type SAL_CALL OGroups::getElementType(  ) throw (uno::RuntimeException)
 {
     return ::getCppuType(static_cast< uno::Reference<report::XGroup>*>(NULL));
 }
-// -----------------------------------------------------------------------------
+
 ::sal_Bool SAL_CALL OGroups::hasElements(  ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return !m_aGroups.empty();
 }
-// -----------------------------------------------------------------------------
+
 // XChild
 uno::Reference< uno::XInterface > SAL_CALL OGroups::getParent(  ) throw (uno::RuntimeException)
 {
     return m_xParent;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OGroups::setParent( const uno::Reference< uno::XInterface >& /*Parent*/ ) throw (lang::NoSupportException, uno::RuntimeException)
 {
     throw lang::NoSupportException();
 }
-// -----------------------------------------------------------------------------
+
 // XContainer
 void SAL_CALL OGroups::addContainerListener( const uno::Reference< container::XContainerListener >& xListener ) throw (uno::RuntimeException)
 {
     m_aContainerListeners.addInterface(xListener);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OGroups::removeContainerListener( const uno::Reference< container::XContainerListener >& xListener ) throw (uno::RuntimeException)
 {
     m_aContainerListeners.removeInterface(xListener);
 }
-// -----------------------------------------------------------------------------
+
 void OGroups::checkIndex(sal_Int32 _nIndex)
 {
     if ( _nIndex < 0 || static_cast<sal_Int32>(m_aGroups.size()) <= _nIndex )

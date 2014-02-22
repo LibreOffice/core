@@ -29,9 +29,9 @@
 
 #include "foptmgr.hxx"
 
-//----------------------------------------------------------------------------
+
 // ScFilterOptionsMgr (.ui's option helper)
-//----------------------------------------------------------------------------
+
 
 ScFilterOptionsMgr::ScFilterOptionsMgr(
                                 ScViewData*         ptrViewData,
@@ -69,7 +69,7 @@ ScFilterOptionsMgr::ScFilterOptionsMgr(
 }
 
 
-//----------------------------------------------------------------------------
+
 
 ScFilterOptionsMgr::~ScFilterOptionsMgr()
 {
@@ -81,7 +81,7 @@ ScFilterOptionsMgr::~ScFilterOptionsMgr()
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScFilterOptionsMgr::Init()
 {
@@ -171,7 +171,7 @@ void ScFilterOptionsMgr::Init()
             pFtDbArea->SetText( OUString() );
         }
 
-        //------------------------------------------------------
+
         // Kopierposition:
 
         if ( !rQueryData.bInplace )
@@ -204,7 +204,7 @@ void ScFilterOptionsMgr::Init()
         pEdCopyArea->SetText( EMPTY_OUSTRING );
 }
 
-//----------------------------------------------------------------------------
+
 
 bool ScFilterOptionsMgr::VerifyPosStr( const OUString& rPosStr ) const
 {
@@ -219,10 +219,10 @@ bool ScFilterOptionsMgr::VerifyPosStr( const OUString& rPosStr ) const
     return ( SCA_VALID == (nResult & SCA_VALID) );
 }
 
-//----------------------------------------------------------------------------
+
 // Handler:
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScFilterOptionsMgr, LbAreaSelHdl, ListBox*, pLb )
 {
@@ -241,7 +241,7 @@ IMPL_LINK( ScFilterOptionsMgr, LbAreaSelHdl, ListBox*, pLb )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScFilterOptionsMgr, EdAreaModifyHdl, Edit*, pEd )
 {
@@ -276,7 +276,7 @@ IMPL_LINK( ScFilterOptionsMgr, EdAreaModifyHdl, Edit*, pEd )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScFilterOptionsMgr, BtnCopyResultHdl, CheckBox*, pBox )
 {

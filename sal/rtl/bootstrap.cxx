@@ -116,7 +116,7 @@ rtl::OUString recursivelyExpandMacros(
 
 }
 
-//----------------------------------------------------------------------------
+
 
 struct rtl_bootstrap_NameValue
 {
@@ -156,7 +156,7 @@ namespace {
         public rtl::Static< NameValueList, rtl_bootstrap_set_list > {};
 }
 
-//----------------------------------------------------------------------------
+
 
 static bool getFromCommandLineArgs(
     rtl::OUString const & key, rtl::OUString * value )
@@ -219,7 +219,7 @@ static bool getFromCommandLineArgs(
     return found;
 }
 
-//----------------------------------------------------------------------------
+
 
 extern "C" oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
     rtl_uString ** ppFileURL) SAL_THROW_EXTERN_C();
@@ -229,7 +229,7 @@ inline void getExecutableFile_Impl (rtl_uString ** ppFileURL)
     osl_bootstrap_getExecutableFile_Impl (ppFileURL);
 }
 
-//----------------------------------------------------------------------------
+
 
 static void getExecutableDirectory_Impl (rtl_uString ** ppDirURL)
 {
@@ -242,7 +242,7 @@ static void getExecutableDirectory_Impl (rtl_uString ** ppDirURL)
     rtl_uString_newFromStr_WithLength(ppDirURL,fileName.getStr(),nDirEnd);
 }
 
-//----------------------------------------------------------------------------
+
 
 static OUString & getIniFileName_Impl()
 {
@@ -309,7 +309,7 @@ static OUString & getIniFileName_Impl()
     return *pStaticName;
 }
 
-//----------------------------------------------------------------------------
+
 // #111772#
 // ensure the given file url has no final slash
 
@@ -353,7 +353,7 @@ struct Bootstrap_Impl
         ExpandRequestLink const * requestStack) const;
 };
 
-//----------------------------------------------------------------------------
+
 
 Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
     : _nRefCount( 0 ),
@@ -420,7 +420,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
 #endif /* OSL_DEBUG_LEVEL > 1 */
 }
 
-//----------------------------------------------------------------------------
+
 
 Bootstrap_Impl::~Bootstrap_Impl()
 {
@@ -428,7 +428,7 @@ Bootstrap_Impl::~Bootstrap_Impl()
         rtl_bootstrap_args_close( _base_ini );
 }
 
-//----------------------------------------------------------------------------
+
 
 namespace {
 
@@ -657,7 +657,7 @@ bootstrap_map::t * bootstrap_map::m_map = NULL;
 
 }
 
-//----------------------------------------------------------------------------
+
 
 rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open (
     rtl_uString * pIniName
@@ -713,7 +713,7 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open (
     return static_cast< rtlBootstrapHandle >( that );
 }
 
-//----------------------------------------------------------------------------
+
 
 void SAL_CALL rtl_bootstrap_args_close (
     rtlBootstrapHandle handle
@@ -750,7 +750,7 @@ void SAL_CALL rtl_bootstrap_args_close (
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(
     rtlBootstrapHandle handle,
@@ -773,7 +773,7 @@ sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(
     return found;
 }
 
-//----------------------------------------------------------------------------
+
 
 void SAL_CALL rtl_bootstrap_get_iniName_from_handle (
     rtlBootstrapHandle handle,
@@ -795,7 +795,7 @@ void SAL_CALL rtl_bootstrap_get_iniName_from_handle (
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 void SAL_CALL rtl_bootstrap_setIniFileName (
     rtl_uString * pName
@@ -806,7 +806,7 @@ void SAL_CALL rtl_bootstrap_setIniFileName (
     file = pName;
 }
 
-//----------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL rtl_bootstrap_get (
     rtl_uString  * pName,
@@ -817,7 +817,7 @@ sal_Bool SAL_CALL rtl_bootstrap_get (
     return rtl_bootstrap_get_from_handle(0, pName, ppValue, pDefault);
 }
 
-//----------------------------------------------------------------------------
+
 
 void SAL_CALL rtl_bootstrap_set (
     rtl_uString * pName,
@@ -852,7 +852,7 @@ void SAL_CALL rtl_bootstrap_set (
     r_rtl_bootstrap_set_list.push_back( rtl_bootstrap_NameValue( name, value ) );
 }
 
-//----------------------------------------------------------------------------
+
 
 void SAL_CALL rtl_bootstrap_expandMacros_from_handle (
     rtlBootstrapHandle handle,
@@ -868,7 +868,7 @@ void SAL_CALL rtl_bootstrap_expandMacros_from_handle (
     rtl_uString_assign( macro, expanded.pData );
 }
 
-//----------------------------------------------------------------------------
+
 
 void SAL_CALL rtl_bootstrap_expandMacros(
     rtl_uString ** macro )

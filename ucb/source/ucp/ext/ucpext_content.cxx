@@ -100,7 +100,7 @@ namespace ucb { namespace ucp { namespace ext
     //==================================================================================================================
     namespace
     {
-        //--------------------------------------------------------------------------------------------------------------
+
         OUString lcl_compose( const OUString& i_rBaseURL, const OUString& i_rRelativeURL )
         {
             ENSURE_OR_RETURN( !i_rBaseURL.isEmpty(), "illegal base URL", i_rRelativeURL );
@@ -112,7 +112,7 @@ namespace ucb { namespace ucp { namespace ext
             return aComposer.makeStringAndClear();
         }
 
-        //--------------------------------------------------------------------------------------------------------------
+
         struct SelectPropertyName : public ::std::unary_function< Property, OUString >
         {
             const OUString& operator()( const Property& i_rProperty ) const
@@ -125,7 +125,7 @@ namespace ucb { namespace ucp { namespace ext
     //==================================================================================================================
     //= Content
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     Content::Content( const Reference< XComponentContext >& rxContext, ::ucbhelper::ContentProviderImplHelper* i_pProvider,
                       const Reference< XContentIdentifier >& i_rIdentifier )
         :Content_Base( rxContext, i_pProvider, i_rIdentifier )
@@ -169,18 +169,18 @@ namespace ucb { namespace ucp { namespace ext
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Content::~Content()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     OUString SAL_CALL Content::getImplementationName() throw( RuntimeException )
     {
         return OUString(  "org.openoffice.comp.ucp.ext.Content"  );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL Content::getSupportedServiceNames() throw( RuntimeException )
     {
         Sequence< OUString > aServiceNames(2);
@@ -189,14 +189,14 @@ namespace ucb { namespace ucp { namespace ext
         return aServiceNames;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     OUString SAL_CALL Content::getContentType() throw( RuntimeException )
     {
         impl_determineContentType();
         return *m_aContentType;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Any SAL_CALL Content::execute( const Command& aCommand, sal_Int32 /* CommandId */, const Reference< XCommandEnvironment >& i_rEvironment )
         throw( Exception, CommandAbortedException, RuntimeException )
     {
@@ -288,25 +288,25 @@ namespace ucb { namespace ucp { namespace ext
         return aRet;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL Content::abort( sal_Int32 ) throw( RuntimeException )
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     OUString Content::encodeIdentifier( const OUString& i_rIdentifier )
     {
         return ::rtl::Uri::encode( i_rIdentifier, rtl_UriCharClassRegName, rtl_UriEncodeIgnoreEscapes,
             RTL_TEXTENCODING_UTF8 );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     OUString Content::decodeIdentifier( const OUString& i_rIdentifier )
     {
         return ::rtl::Uri::decode( i_rIdentifier, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool Content::denotesRootContent( const OUString& i_rContentIdentifier )
     {
         const OUString sRootURL( ContentProvider::getRootURL() );
@@ -323,7 +323,7 @@ namespace ucb { namespace ucp { namespace ext
         return false;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     OUString Content::getParentURL()
     {
         const OUString sRootURL( ContentProvider::getRootURL() );
@@ -389,7 +389,7 @@ namespace ucb { namespace ucp { namespace ext
         return OUString();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XRow > Content::getArtificialNodePropertyValues( const Reference< XComponentContext >& rxContext,
         const Sequence< Property >& i_rProperties, const OUString& i_rTitle )
     {
@@ -458,7 +458,7 @@ namespace ucb { namespace ucp { namespace ext
         return Reference< XRow >( xRow.get() );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     OUString Content::getPhysicalURL() const
     {
         ENSURE_OR_RETURN( m_eExtContentType != E_ROOT, "illegal call", OUString() );
@@ -472,7 +472,7 @@ namespace ucb { namespace ucp { namespace ext
         return lcl_compose( sPackageLocation, m_sPathIntoExtension );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XRow > Content::getPropertyValues( const Sequence< Property >& i_rProperties, const Reference< XCommandEnvironment >& i_rEnv )
     {
         ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
@@ -518,7 +518,7 @@ namespace ucb { namespace ucp { namespace ext
         return NULL;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Sequence< Any > Content::setPropertyValues( const Sequence< PropertyValue >& i_rValues, const Reference< XCommandEnvironment >& /* xEnv */)
     {
         ::osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
@@ -542,7 +542,7 @@ namespace ucb { namespace ucp { namespace ext
         return aRet;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Sequence< CommandInfo > Content::getCommands( const Reference< XCommandEnvironment > & /*xEnv*/ )
     {
         sal_uInt32 nCommandCount = 5;
@@ -586,7 +586,7 @@ namespace ucb { namespace ucp { namespace ext
         return Sequence< CommandInfo >( aCommandInfoTable, nCommandCount );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Sequence< Property > Content::getProperties( const Reference< XCommandEnvironment > & /*xEnv*/ )
     {
         static const Property aProperties[] =
@@ -619,7 +619,7 @@ namespace ucb { namespace ucp { namespace ext
         return Sequence< Property >( aProperties, sizeof( aProperties ) / sizeof( aProperties[0] ) );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool Content::impl_isFolder()
     {
         if ( !!m_aIsFolder )
@@ -641,7 +641,7 @@ namespace ucb { namespace ucp { namespace ext
         return *m_aIsFolder;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void Content::impl_determineContentType()
     {
         if ( !!m_aContentType )

@@ -18,11 +18,11 @@
  */
 
 
-//------------------------------------------------------------------------
+
 //
 // Global header
 //
-//------------------------------------------------------------------------
+
 
 #include <limits.h>
 #include <vector>
@@ -55,11 +55,11 @@
 #include <editeng/outliner.hxx>
 #include <svl/intitem.hxx>
 
-//------------------------------------------------------------------------
+
 //
 // Project-local header
 //
-//------------------------------------------------------------------------
+
 
 #include <com/sun/star/beans/PropertyState.hpp>
 
@@ -78,11 +78,11 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::accessibility;
 
-//------------------------------------------------------------------------
+
 //
 // AccessibleEditableTextPara implementation
 //
-//------------------------------------------------------------------------
+
 
 namespace accessibility
 {
@@ -2888,6 +2888,6 @@ namespace accessibility
 
 }  // end of namespace accessibility
 
-//------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

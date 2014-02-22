@@ -20,7 +20,7 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-//------------------------------------------------------------------------
+
 
 #include "textimportoptions.hxx"
 #include "vcl/svapp.hxx"

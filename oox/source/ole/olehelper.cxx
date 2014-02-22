@@ -96,7 +96,7 @@ inline sal_Int32 lclDecodeBgrColor( sal_uInt32 nOleColor )
     return static_cast< sal_Int32 >( lclSwapRedBlue( nOleColor ) & 0xFFFFFF );
 }
 
-// ----------------------------------------------------------------------------
+
 
 const sal_uInt32 OLE_STDPIC_ID              = 0x0000746C;
 
@@ -197,7 +197,7 @@ GUIDCNamePairMap& classIdToGUIDCNamePairMap::get()
     return theInst.mnIdToGUIDCNamePairMap;
 }
 
-// ----------------------------------------------------------------------------
+
 
 template< typename Type >
 void lclAppendHex( OUStringBuffer& orBuffer, Type nValue )

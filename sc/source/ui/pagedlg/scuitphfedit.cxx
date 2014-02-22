@@ -20,7 +20,7 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-//------------------------------------------------------------------
+
 
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
@@ -156,7 +156,7 @@ IMPL_LINK( ScHFEditPage, ObjectSelectHdl, ScEditWindow*, pEdit )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 ScHFEditPage::~ScHFEditPage()
 {
@@ -206,7 +206,7 @@ sal_Bool ScHFEditPage::FillItemSet( SfxItemSet& rCoreSet )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 #define SET_CMD(i,id) \
     aCmd  = aDel;                           \
@@ -214,7 +214,7 @@ sal_Bool ScHFEditPage::FillItemSet( SfxItemSet& rCoreSet )
     aCmd += aDel;                           \
     aCmdArr[i] = aCmd;
 
-// -----------------------------------------------------------------------
+
 
 void ScHFEditPage::FillCmdArr()
 {
@@ -759,9 +759,9 @@ void ScHFEditPage::ClearTextAreas()
     m_pWndRight->Invalidate();
 }
 
-//-----------------------------------------------------------------------
+
 // Handler:
-//-----------------------------------------------------------------------
+
 
 IMPL_LINK( ScHFEditPage, ListHdl_Impl, ListBox*, pList )
 {
@@ -857,7 +857,7 @@ ScRightHeaderEditPage::ScRightHeaderEditPage( Window* pParent, const SfxItemSet&
                     true )
     {}
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* ScRightHeaderEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScRightHeaderEditPage( pParent, rCoreSet ) ); };
@@ -873,7 +873,7 @@ ScLeftHeaderEditPage::ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& r
                     true )
     {}
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* ScLeftHeaderEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScLeftHeaderEditPage( pParent, rCoreSet ) ); };
@@ -889,7 +889,7 @@ ScRightFooterEditPage::ScRightFooterEditPage( Window* pParent, const SfxItemSet&
                     false )
     {}
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* ScRightFooterEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScRightFooterEditPage( pParent, rCoreSet ) ); };
@@ -905,7 +905,7 @@ ScLeftFooterEditPage::ScLeftFooterEditPage( Window* pParent, const SfxItemSet& r
                     false )
     {}
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* ScLeftFooterEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScLeftFooterEditPage( pParent, rCoreSet ) ); };

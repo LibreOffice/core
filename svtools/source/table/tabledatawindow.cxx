@@ -37,7 +37,7 @@ namespace svt { namespace table
     //==================================================================================================================
     //= TableDataWindow
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     TableDataWindow::TableDataWindow( TableControl_Impl& _rTableControl )
         :Window( &_rTableControl.getAntiImpl() )
         ,m_rTableControl( _rTableControl )
@@ -49,34 +49,34 @@ namespace svt { namespace table
         SetFillColor( aWindowColor );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     TableDataWindow::~TableDataWindow()
     {
         impl_hideTipWindow();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void TableDataWindow::Paint( const Rectangle& rUpdateRect )
     {
         m_rTableControl.doPaintContent( rUpdateRect );
     }
-    //------------------------------------------------------------------------------------------------------------------
+
     void TableDataWindow::SetBackground( const Wallpaper& rColor )
     {
         Window::SetBackground( rColor );
     }
-    //------------------------------------------------------------------------------------------------------------------
+
     void TableDataWindow::SetControlBackground( const Color& rColor )
     {
         Window::SetControlBackground( rColor );
     }
-    //------------------------------------------------------------------------------------------------------------------
+
     void TableDataWindow::SetControlBackground()
     {
         Window::SetControlBackground();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void TableDataWindow::RequestHelp( const HelpEvent& rHEvt )
     {
         sal_uInt16 const nHelpMode = rHEvt.GetMode();
@@ -155,7 +155,7 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void TableDataWindow::impl_hideTipWindow()
     {
         if ( m_nTipWindowHandle != 0 )
@@ -165,7 +165,7 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void TableDataWindow::MouseMove( const MouseEvent& rMEvt )
     {
         if ( rMEvt.IsLeaveWindow() )
@@ -176,7 +176,7 @@ namespace svt { namespace table
             Window::MouseMove( rMEvt );
         }
     }
-    //------------------------------------------------------------------------------------------------------------------
+
     void TableDataWindow::MouseButtonDown( const MouseEvent& rMEvt )
     {
         impl_hideTipWindow();
@@ -200,7 +200,7 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void TableDataWindow::MouseButtonUp( const MouseEvent& rMEvt )
     {
         if ( !m_rTableControl.getInputHandler()->MouseButtonUp( m_rTableControl, rMEvt ) )
@@ -209,7 +209,7 @@ namespace svt { namespace table
         m_rTableControl.getAntiImpl().GrabFocus();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool TableDataWindow::Notify(NotifyEvent& rNEvt )
     {
         bool nDone = false;

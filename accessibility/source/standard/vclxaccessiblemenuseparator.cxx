@@ -28,31 +28,31 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 
-// -----------------------------------------------------------------------------
+
 // class VCLXAccessibleMenuSeparator
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleMenuSeparator::VCLXAccessibleMenuSeparator( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu )
     :OAccessibleMenuItemComponent( pParent, nItemPos, pMenu )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleMenuSeparator::~VCLXAccessibleMenuSeparator()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 // XServiceInfo
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleMenuSeparator::getImplementationName() throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleMenuSeparator" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > VCLXAccessibleMenuSeparator::getSupportedServiceNames() throw (RuntimeException)
 {
@@ -61,9 +61,9 @@ Sequence< OUString > VCLXAccessibleMenuSeparator::getSupportedServiceNames() thr
     return aNames;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleContext
-// -----------------------------------------------------------------------------
+
 
 sal_Int16 VCLXAccessibleMenuSeparator::getAccessibleRole(  ) throw (RuntimeException)
 {
@@ -72,6 +72,6 @@ sal_Int16 VCLXAccessibleMenuSeparator::getAccessibleRole(  ) throw (RuntimeExcep
     return AccessibleRole::SEPARATOR;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

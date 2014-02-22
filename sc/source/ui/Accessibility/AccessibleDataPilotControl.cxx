@@ -803,9 +803,9 @@ Rectangle ScAccessibleDataPilotButton::GetBoundingBox(void) const
         return Rectangle();
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleAction
-// -----------------------------------------------------------------------------
+
 sal_Int32 ScAccessibleDataPilotButton::getAccessibleActionCount( ) throw (uno::RuntimeException)
 {
     return 1;

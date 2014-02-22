@@ -41,13 +41,13 @@ SvxInsertStatusBarControl::SvxInsertStatusBarControl( sal_uInt16 _nSlotId,
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxInsertStatusBarControl::~SvxInsertStatusBarControl()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxInsertStatusBarControl::StateChanged( sal_uInt16 , SfxItemState eState,
                                               const SfxPoolItem* pState )
@@ -69,7 +69,7 @@ void SvxInsertStatusBarControl::StateChanged( sal_uInt16 , SfxItemState eState,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxInsertStatusBarControl::Click()
 {
@@ -90,14 +90,14 @@ void SvxInsertStatusBarControl::Click()
     execute( aArgs );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxInsertStatusBarControl::Paint( const UserDrawEvent& )
 {
     DrawItemText_Impl();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxInsertStatusBarControl::DrawItemText_Impl()
 {

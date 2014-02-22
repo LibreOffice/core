@@ -23,7 +23,7 @@
 #include "connectivity/dbtools.hxx"
 #include "TConnection.hxx"
 
-// -------------------------------------------------------------------------
+
 using namespace connectivity;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
@@ -33,7 +33,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 IMPLEMENT_SERVICE_INFO(OView,"com.sun.star.sdbcx.VView","com.sun.star.sdbcx.View");
-// -------------------------------------------------------------------------
+
 OView::OView(sal_Bool _bCase,
             const OUString& _Name,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData,
@@ -51,18 +51,18 @@ OView::OView(sal_Bool _bCase,
     m_Name = _Name;
     construct();
 }
-// -------------------------------------------------------------------------
+
 OView::OView(sal_Bool _bCase,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData)
     : ODescriptor(::comphelper::OMutexAndBroadcastHelper::m_aBHelper,_bCase,sal_True)
     ,m_xMetaData(_xMetaData)
 {
     construct();
 }
-// -------------------------------------------------------------------------
+
 OView::~OView()
 {
 }
-// -------------------------------------------------------------------------
+
 void OView::construct()
 {
     ODescriptor::construct();
@@ -74,35 +74,35 @@ void OView::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND),         PROPERTY_ID_COMMAND,    nAttrib,&m_Command,     ::getCppuType(static_cast< OUString*>(0)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CHECKOPTION),     PROPERTY_ID_CHECKOPTION,nAttrib,&m_CheckOption, ::getCppuType(static_cast< sal_Int32*>(0)));
 }
-// -------------------------------------------------------------------------
+
 void OView::disposing(void)
 {
     OPropertySetHelper::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
 }
-// -------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OView::getTypes(  ) throw(RuntimeException)
 {
     return ::comphelper::concatSequences(ODescriptor::getTypes(),OView_BASE::getTypes());
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OView::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = OView_BASE::queryInterface( rType);
     return aRet.hasValue() ? aRet : ODescriptor::queryInterface( rType);
 }
-// -------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* OView::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {
     return doCreateArrayHelper();
 }
-// -------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper & OView::getInfoHelper()
 {
     return *const_cast<OView*>(this)->getArrayHelper(isNew() ? 1 : 0);
 }
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL OView::getName() throw(::com::sun::star::uno::RuntimeException)
 {
     OUString sComposedName;
@@ -116,26 +116,26 @@ OUString SAL_CALL OView::getName() throw(::com::sun::star::uno::RuntimeException
     }
     return sComposedName;
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OView::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OView::setName( const OUString& ) throw(::com::sun::star::uno::RuntimeException)
 {
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OView::acquire() throw()
 {
     OView_BASE::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OView::release() throw()
 {
     OView_BASE::release();
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

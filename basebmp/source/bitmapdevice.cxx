@@ -207,13 +207,13 @@ namespace
                                alphamask_accessorselector_type,
                                Masks>                                      alphamask_bitmap_type;
 
-        // -------------------------------------------------------
+
 
         typedef AccessorTraits< raw_accessor_type >                        raw_accessor_traits;
         typedef typename uInt32Converter<
             typename raw_accessor_type::value_type>::to                    to_uint32_functor;
 
-        // -------------------------------------------------------
+
 
         typedef typename raw_accessor_traits::xor_accessor                 raw_xor_accessor_type;
         typedef AccessorTraits<raw_xor_accessor_type>                      raw_xor_accessor_traits;
@@ -221,7 +221,7 @@ namespace
             raw_xor_accessor_type >::type                                  xor_accessor_type;
         typedef AccessorTraits<xor_accessor_type>                          xor_accessor_traits;
 
-        // -------------------------------------------------------
+
 
         typedef typename raw_accessor_traits::template masked_accessor<
             mask_rawaccessor_type,
@@ -235,7 +235,7 @@ namespace
         typedef typename accessor_selector::template wrap_accessor<
             raw_maskedxor_accessor_type >::type                            masked_xoraccessor_type;
 
-        // -------------------------------------------------------
+
 
         // ((iter,mask),mask) special case (e.g. for clipped
         // drawMaskedColor())
@@ -250,7 +250,7 @@ namespace
             composite_iterator_type,
             mask_iterator_type>                                            composite_composite_mask_iterator_type;
 
-        // -------------------------------------------------------
+
 
         typedef ConstantColorBlendSetterAccessorAdapter<
             dest_accessor_type,
@@ -263,7 +263,7 @@ namespace
             mask_iterator_type,
             Masks::clipmask_polarity>::type                                masked_colorblend_accessor_type;
 
-        // -------------------------------------------------------
+
 
         typedef ConstantColorBlendSetterAccessorAdapter<
             dest_accessor_type,
@@ -276,14 +276,14 @@ namespace
             mask_iterator_type,
             Masks::clipmask_polarity>::type                                masked_colorblend_generic_accessor_type;
 
-        // -------------------------------------------------------
+
 
         typedef JoinImageAccessorAdapter< dest_accessor_type,
                                           mask_rawaccessor_type >          joined_image_accessor_type;
         typedef JoinImageAccessorAdapter< GenericColorImageAccessor,
                                           GenericColorImageAccessor >      joined_generic_image_accessor_type;
 
-        // -------------------------------------------------------
+
 
         dest_iterator_type                      maBegin;
         typename accessor_traits::color_lookup  maColorLookup;
@@ -304,7 +304,7 @@ namespace
         raw_maskedmask_accessor_type            maRawMaskedMaskAccessor;
 
 
-        // -------------------------------------------------------
+
 
         BitmapRenderer( const basegfx::B2IBox&                     rBounds,
                         const basegfx::B2IVector&                  rBufferSize,
@@ -1609,7 +1609,7 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
         if( isSharedBuffer(rAlphaMask) )
         {
             // src == dest, copy rAlphaMask beforehand
-            // ---------------------------------------------------
+
 
             const basegfx::B2ITuple aSize( aSrcRange.getWidth(),
                                            aSrcRange.getHeight() );
@@ -1662,7 +1662,7 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
             if( isSharedBuffer(rAlphaMask) )
             {
                 // src == dest, copy rAlphaMask beforehand
-                // ---------------------------------------------------
+
 
                 const basegfx::B2ITuple aSize( aSrcRange.getWidth(),
                                                aSrcRange.getHeight() );
@@ -2002,7 +2002,7 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
 
     switch( nScanlineFormat )
     {
-        // ----------------------------------------------------------------------
+
         // one bit formats
 
         case FORMAT_ONE_BIT_MSB_GREY:
@@ -2028,7 +2028,7 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
                 bitsPerPixel[nScanlineFormat], rDamage );
 
 
-        // ----------------------------------------------------------------------
+
         // four bit formats
 
         case FORMAT_FOUR_BIT_MSB_GREY:
@@ -2054,7 +2054,7 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
                 bitsPerPixel[nScanlineFormat], rDamage );
 
 
-        // ----------------------------------------------------------------------
+
         // eight bit formats
 
         case FORMAT_EIGHT_BIT_GREY:
@@ -2069,7 +2069,7 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
                 bitsPerPixel[nScanlineFormat], rDamage );
 
 
-        // ----------------------------------------------------------------------
+
         // sixteen bit formats
 
         case FORMAT_SIXTEEN_BIT_LSB_TC_MASK:
@@ -2083,7 +2083,7 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
                 pFirstScanline, pMem, pPal, rDamage );
 
 
-        // ----------------------------------------------------------------------
+
         // twentyfour bit formats
         case FORMAT_TWENTYFOUR_BIT_TC_MASK:
             return createRenderer<PixelFormatTraits_BGR24,StdMasks>(
@@ -2091,7 +2091,7 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
                 pFirstScanline, pMem, pPal, rDamage );
 
 
-        // ----------------------------------------------------------------------
+
         // thirtytwo bit formats
 
         case FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA:

@@ -44,9 +44,9 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 
-// -----------------------------------------------------------------------------
+
 // class VCLXAccessibleTabPage
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleTabPage::VCLXAccessibleTabPage( TabControl* pTabControl, sal_uInt16 nPageId )
     :AccessibleTextHelper_BASE( new VCLExternalSolarLock() )
@@ -59,7 +59,7 @@ VCLXAccessibleTabPage::VCLXAccessibleTabPage( TabControl* pTabControl, sal_uInt1
     m_sPageText = GetPageText();
 }
 
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleTabPage::~VCLXAccessibleTabPage()
 {
@@ -67,7 +67,7 @@ VCLXAccessibleTabPage::~VCLXAccessibleTabPage()
     m_pExternalLock = NULL;
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool VCLXAccessibleTabPage::IsFocused()
 {
@@ -79,7 +79,7 @@ bool VCLXAccessibleTabPage::IsFocused()
     return bFocused;
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool VCLXAccessibleTabPage::IsSelected()
 {
@@ -91,7 +91,7 @@ bool VCLXAccessibleTabPage::IsSelected()
     return bSelected;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTabPage::SetFocused( bool bFocused )
 {
@@ -107,7 +107,7 @@ void VCLXAccessibleTabPage::SetFocused( bool bFocused )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTabPage::SetSelected( bool bSelected )
 {
@@ -123,7 +123,7 @@ void VCLXAccessibleTabPage::SetSelected( bool bSelected )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTabPage::SetPageText( const OUString& sPageText )
 {
@@ -139,7 +139,7 @@ void VCLXAccessibleTabPage::SetPageText( const OUString& sPageText )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleTabPage::GetPageText()
 {
@@ -150,7 +150,7 @@ OUString VCLXAccessibleTabPage::GetPageText()
     return sText;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTabPage::Update( bool bNew )
 {
@@ -173,7 +173,7 @@ void VCLXAccessibleTabPage::Update( bool bNew )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTabPage::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
@@ -195,9 +195,9 @@ void VCLXAccessibleTabPage::FillAccessibleStateSet( utl::AccessibleStateSetHelpe
         rStateSet.AddState( AccessibleStateType::SELECTED );
 }
 
-// -----------------------------------------------------------------------------
+
 // OCommonAccessibleComponent
-// -----------------------------------------------------------------------------
+
 
 awt::Rectangle VCLXAccessibleTabPage::implGetBounds() throw (RuntimeException)
 {
@@ -209,23 +209,23 @@ awt::Rectangle VCLXAccessibleTabPage::implGetBounds() throw (RuntimeException)
     return aBounds;
 }
 
-// -----------------------------------------------------------------------------
+
 // OCommonAccessibleText
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleTabPage::implGetText()
 {
     return GetPageText();
 }
 
-// -----------------------------------------------------------------------------
+
 
 lang::Locale VCLXAccessibleTabPage::implGetLocale()
 {
     return Application::GetSettings().GetLanguageTag().getLocale();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTabPage::implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex )
 {
@@ -233,21 +233,21 @@ void VCLXAccessibleTabPage::implGetSelection( sal_Int32& nStartIndex, sal_Int32&
     nEndIndex = 0;
 }
 
-// -----------------------------------------------------------------------------
+
 // XInterface
-// -----------------------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleTabPage, AccessibleTextHelper_BASE, VCLXAccessibleTabPage_BASE )
 
-// -----------------------------------------------------------------------------
+
 // XTypeProvider
-// -----------------------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleTabPage, AccessibleTextHelper_BASE, VCLXAccessibleTabPage_BASE )
 
-// -----------------------------------------------------------------------------
+
 // XComponent
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTabPage::disposing()
 {
@@ -257,23 +257,23 @@ void VCLXAccessibleTabPage::disposing()
     m_sPageText = OUString();
 }
 
-// -----------------------------------------------------------------------------
+
 // XServiceInfo
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleTabPage::getImplementationName() throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleTabPage" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleTabPage::supportsService( const OUString& rServiceName ) throw (RuntimeException)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > VCLXAccessibleTabPage::getSupportedServiceNames() throw (RuntimeException)
 {
@@ -282,9 +282,9 @@ Sequence< OUString > VCLXAccessibleTabPage::getSupportedServiceNames() throw (Ru
     return aNames;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessible
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessibleContext > VCLXAccessibleTabPage::getAccessibleContext(  ) throw (RuntimeException)
 {
@@ -293,9 +293,9 @@ Reference< XAccessibleContext > VCLXAccessibleTabPage::getAccessibleContext(  ) 
     return this;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleContext
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleTabPage::getAccessibleChildCount() throw (RuntimeException)
 {
@@ -312,7 +312,7 @@ sal_Int32 VCLXAccessibleTabPage::getAccessibleChildCount() throw (RuntimeExcepti
     return nCount;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -332,7 +332,7 @@ Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleChild( sal_Int32 i 
     return xChild;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleParent(  ) throw (RuntimeException)
 {
@@ -345,7 +345,7 @@ Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleParent(  ) throw (R
     return xParent;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleTabPage::getAccessibleIndexInParent(  ) throw (RuntimeException)
 {
@@ -358,7 +358,7 @@ sal_Int32 VCLXAccessibleTabPage::getAccessibleIndexInParent(  ) throw (RuntimeEx
     return nIndexInParent;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int16 VCLXAccessibleTabPage::getAccessibleRole(  ) throw (RuntimeException)
 {
@@ -367,7 +367,7 @@ sal_Int16 VCLXAccessibleTabPage::getAccessibleRole(  ) throw (RuntimeException)
     return AccessibleRole::PAGE_TAB;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleTabPage::getAccessibleDescription(    ) throw (RuntimeException)
 {
@@ -380,7 +380,7 @@ OUString VCLXAccessibleTabPage::getAccessibleDescription(    ) throw (RuntimeExc
     return sDescription;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleTabPage::getAccessibleName(  ) throw (RuntimeException)
 {
@@ -389,7 +389,7 @@ OUString VCLXAccessibleTabPage::getAccessibleName(  ) throw (RuntimeException)
     return GetPageText();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessibleRelationSet > VCLXAccessibleTabPage::getAccessibleRelationSet(  ) throw (RuntimeException)
 {
@@ -400,7 +400,7 @@ Reference< XAccessibleRelationSet > VCLXAccessibleTabPage::getAccessibleRelation
     return xSet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessibleStateSet > VCLXAccessibleTabPage::getAccessibleStateSet(  ) throw (RuntimeException)
 {
@@ -421,7 +421,7 @@ Reference< XAccessibleStateSet > VCLXAccessibleTabPage::getAccessibleStateSet(  
     return xSet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Locale VCLXAccessibleTabPage::getLocale(  ) throw (IllegalAccessibleComponentStateException, RuntimeException)
 {
@@ -430,9 +430,9 @@ Locale VCLXAccessibleTabPage::getLocale(  ) throw (IllegalAccessibleComponentSta
     return Application::GetSettings().GetLanguageTag().getLocale();
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleComponent
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleAtPoint( const awt::Point& rPoint ) throw (RuntimeException)
 {
@@ -461,7 +461,7 @@ Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleAtPoint( const awt:
     return xChild;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTabPage::grabFocus(  ) throw (RuntimeException)
 {
@@ -474,7 +474,7 @@ void VCLXAccessibleTabPage::grabFocus(  ) throw (RuntimeException)
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleTabPage::getForeground( ) throw (RuntimeException)
 {
@@ -492,7 +492,7 @@ sal_Int32 VCLXAccessibleTabPage::getForeground( ) throw (RuntimeException)
     return nColor;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleTabPage::getBackground(  ) throw (RuntimeException)
 {
@@ -510,9 +510,9 @@ sal_Int32 VCLXAccessibleTabPage::getBackground(  ) throw (RuntimeException)
     return nColor;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleExtendedComponent
-// -----------------------------------------------------------------------------
+
 
 Reference< awt::XFont > VCLXAccessibleTabPage::getFont(  ) throw (RuntimeException)
 {
@@ -530,7 +530,7 @@ Reference< awt::XFont > VCLXAccessibleTabPage::getFont(  ) throw (RuntimeExcepti
     return xFont;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleTabPage::getTitledBorderText(  ) throw (RuntimeException)
 {
@@ -539,7 +539,7 @@ OUString VCLXAccessibleTabPage::getTitledBorderText(  ) throw (RuntimeException)
     return OUString();
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleTabPage::getToolTipText(  ) throw (RuntimeException)
 {
@@ -548,9 +548,9 @@ OUString VCLXAccessibleTabPage::getToolTipText(  ) throw (RuntimeException)
     return OUString();
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleText
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleTabPage::getCaretPosition() throw (RuntimeException)
 {
@@ -559,7 +559,7 @@ sal_Int32 VCLXAccessibleTabPage::getCaretPosition() throw (RuntimeException)
     return -1;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleTabPage::setCaretPosition( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -571,7 +571,7 @@ sal_Bool VCLXAccessibleTabPage::setCaretPosition( sal_Int32 nIndex ) throw (Inde
     return sal_False;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< PropertyValue > VCLXAccessibleTabPage::getCharacterAttributes( sal_Int32 nIndex, const Sequence< OUString >& aRequestedAttributes ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -595,7 +595,7 @@ Sequence< PropertyValue > VCLXAccessibleTabPage::getCharacterAttributes( sal_Int
     return aValues;
 }
 
-// -----------------------------------------------------------------------------
+
 
 awt::Rectangle VCLXAccessibleTabPage::getCharacterBounds( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -616,7 +616,7 @@ awt::Rectangle VCLXAccessibleTabPage::getCharacterBounds( sal_Int32 nIndex ) thr
     return aBounds;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleTabPage::getIndexAtPoint( const awt::Point& aPoint ) throw (RuntimeException)
 {
@@ -637,7 +637,7 @@ sal_Int32 VCLXAccessibleTabPage::getIndexAtPoint( const awt::Point& aPoint ) thr
     return nIndex;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleTabPage::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -649,7 +649,7 @@ sal_Bool VCLXAccessibleTabPage::setSelection( sal_Int32 nStartIndex, sal_Int32 n
     return sal_False;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleTabPage::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -681,6 +681,6 @@ sal_Bool VCLXAccessibleTabPage::copyText( sal_Int32 nStartIndex, sal_Int32 nEndI
     return bReturn;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -38,7 +38,7 @@ void ScrollableWindow::ImpInitialize( ScrollableWindowFlags nFlags )
     nColumnPixW = nLinePixH = GetSettings().GetStyleSettings().GetScrollBarSize();
 }
 
-//-------------------------------------------------------------------
+
 
 ScrollableWindow::ScrollableWindow( Window* pParent, WinBits nBits,
                                     ScrollableWindowFlags nFlags ) :
@@ -50,7 +50,7 @@ ScrollableWindow::ScrollableWindow( Window* pParent, WinBits nBits,
     ImpInitialize( nFlags );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScrollableWindow::Command( const CommandEvent& rCEvt )
 {
@@ -75,7 +75,7 @@ void ScrollableWindow::Command( const CommandEvent& rCEvt )
     Window::Command( rCEvt );
 }
 
-//-------------------------------------------------------------------
+
 
 void ScrollableWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -89,7 +89,7 @@ void ScrollableWindow::DataChanged( const DataChangedEvent& rDCEvt )
     Window::DataChanged( rDCEvt );
 }
 
-//-------------------------------------------------------------------
+
 
 Size ScrollableWindow::GetOutputSizePixel() const
 {
@@ -103,7 +103,7 @@ Size ScrollableWindow::GetOutputSizePixel() const
     return aSz;
 }
 
-//-------------------------------------------------------------------
+
 
 IMPL_LINK( ScrollableWindow, EndScrollHdl, ScrollBar *, pScroll )
 {
@@ -129,7 +129,7 @@ IMPL_LINK( ScrollableWindow, EndScrollHdl, ScrollBar *, pScroll )
     return 0;
 }
 
-//-------------------------------------------------------------------
+
 
 IMPL_LINK( ScrollableWindow, ScrollHdl, ScrollBar *, pScroll )
 {
@@ -150,7 +150,7 @@ IMPL_LINK( ScrollableWindow, ScrollHdl, ScrollBar *, pScroll )
     return 0;
 }
 
-//-------------------------------------------------------------------
+
 
 void ScrollableWindow::Resize()
 {
@@ -272,19 +272,19 @@ void ScrollableWindow::Resize()
     }
 }
 
-//-------------------------------------------------------------------
+
 
 void ScrollableWindow::StartScroll()
 {
 }
 
-//-------------------------------------------------------------------
+
 
 void ScrollableWindow::EndScroll( long, long )
 {
 }
 
-//-------------------------------------------------------------------
+
 
 void ScrollableWindow::SetMapMode( const MapMode& rNewMapMode )
 {
@@ -293,7 +293,7 @@ void ScrollableWindow::SetMapMode( const MapMode& rNewMapMode )
     Window::SetMapMode( aMap );
 }
 
-//-------------------------------------------------------------------
+
 
 MapMode ScrollableWindow::GetMapMode() const
 {
@@ -302,7 +302,7 @@ MapMode ScrollableWindow::GetMapMode() const
     return aMap;
 }
 
-//-------------------------------------------------------------------
+
 
 void ScrollableWindow::SetTotalSize( const Size& rNewSize )
 {
@@ -310,7 +310,7 @@ void ScrollableWindow::SetTotalSize( const Size& rNewSize )
     ScrollableWindow::Resize();
 }
 
-//-------------------------------------------------------------------
+
 
 void ScrollableWindow::Scroll( long nDeltaX, long nDeltaY, sal_uInt16 )
 {

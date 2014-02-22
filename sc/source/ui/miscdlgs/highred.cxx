@@ -39,7 +39,7 @@
 //============================================================================
 //  class ScHighlightChgDlg
 
-//----------------------------------------------------------------------------
+
 ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                       ScViewData*       ptrViewData)
     : ScAnyRefDlg(pB, pCW, pParent, "ShowChangesDialog",
@@ -133,7 +133,7 @@ void ScHighlightChgDlg::Init()
     HighlightHandle(m_pHighlightBox);
 }
 
-//----------------------------------------------------------------------------
+
 // Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
 // neue Selektion im Referenz-Edit angezeigt wird.
 
@@ -149,7 +149,7 @@ void ScHighlightChgDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     }
 }
 
-//----------------------------------------------------------------------------
+
 bool ScHighlightChgDlg::Close()
 {
     return DoClose( ScHighlightChgDlgWrapper::GetChildWindowId() );

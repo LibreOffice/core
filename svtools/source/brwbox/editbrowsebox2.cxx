@@ -31,7 +31,7 @@ namespace svt
     using namespace com::sun::star::uno;
     using namespace ::com::sun::star::accessibility::AccessibleEventId;
 
-// -----------------------------------------------------------------------------
+
 Reference< XAccessible > EditBrowseBox::CreateAccessibleCheckBoxCell(long _nRow, sal_uInt16 _nColumnPos,const TriState& eState)
 {
     Reference< XAccessible > xAccessible( GetAccessible() );
@@ -54,17 +54,17 @@ Reference< XAccessible > EditBrowseBox::CreateAccessibleCheckBoxCell(long _nRow,
     }
     return xReturn;
 }
-// -----------------------------------------------------------------------------
+
 Reference< XAccessible > EditBrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
 {
     return BrowseBox::CreateAccessibleCell( _nRow, _nColumnPos );
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 EditBrowseBox::GetAccessibleControlCount() const
 {
     return IsEditing() ? 1 : 0;
 }
-// -----------------------------------------------------------------------------
+
 void EditBrowseBox::implCreateActiveAccessible( )
 {
     DBG_ASSERT( IsEditing(), "EditBrowseBox::implCreateActiveAccessible: not to be called if we're not editing currently!" );
@@ -90,7 +90,7 @@ void EditBrowseBox::implCreateActiveAccessible( )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 Reference< XAccessible > EditBrowseBox::CreateAccessibleControl( sal_Int32
 #ifdef DBG_UTIL
 _nIndex
@@ -107,12 +107,12 @@ _nIndex
 
     return m_aImpl->m_xActiveCell;
 }
-// -----------------------------------------------------------------------------
+
 Reference<XAccessible > EditBrowseBox::CreateAccessibleRowHeader( sal_Int32 _nRow )
 {
     return BrowseBox::CreateAccessibleRowHeader( _nRow );
 }
-// -----------------------------------------------------------------------------
+
 void EditBrowseBoxImpl::clearActiveCell()
 {
     try
@@ -126,13 +126,13 @@ void EditBrowseBoxImpl::clearActiveCell()
 
     m_xActiveCell = NULL;
 }
-// -----------------------------------------------------------------------------
+
 void EditBrowseBox::GrabTableFocus()
 {
     if ( aController.Is() )
         aController->GetWindow().GrabFocus();
 }
-//------------------------------------------------------------------------------
+
 void EditBrowseBox::DetermineFocus( const sal_uInt16 _nGetFocusFlags )
 {
     sal_Bool bFocus = sal_False;
@@ -177,7 +177,7 @@ void EditBrowseBox::DetermineFocus( const sal_uInt16 _nGetFocusFlags )
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 Rectangle EditBrowseBox::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 _nIndex)
 {
     Rectangle aRect;
@@ -190,7 +190,7 @@ Rectangle EditBrowseBox::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nCol
     }
     return aRect;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 EditBrowseBox::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint)
 {
     sal_Int32 nRet = -1;
@@ -203,10 +203,10 @@ sal_Int32 EditBrowseBox::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumn
     }
     return nRet;
 }
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+
+
 } // namespace svt
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

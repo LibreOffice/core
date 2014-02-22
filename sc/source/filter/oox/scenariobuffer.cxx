@@ -50,7 +50,7 @@ ScenarioCellModel::ScenarioCellModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScenarioModel::ScenarioModel() :
     mbLocked( false ),
@@ -58,7 +58,7 @@ ScenarioModel::ScenarioModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 Scenario::Scenario( const WorkbookHelper& rHelper, sal_Int16 nSheet ) :
     WorkbookHelper( rHelper ),
@@ -166,7 +166,7 @@ SheetScenariosModel::SheetScenariosModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 SheetScenarios::SheetScenarios( const WorkbookHelper& rHelper, sal_Int16 nSheet ) :
     WorkbookHelper( rHelper ),

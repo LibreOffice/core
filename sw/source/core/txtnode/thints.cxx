@@ -3218,7 +3218,7 @@ bool SwpHints::TryInsertHint(
         return true;
     }
 
-    // ----------------------------------------------------------------
+
     // Ab hier gibt es nur noch pHint mit einem EndIdx !!!
 
     if( *pHtEnd < nHtStart )

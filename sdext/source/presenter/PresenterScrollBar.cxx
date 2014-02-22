@@ -474,7 +474,7 @@ void SAL_CALL PresenterScrollBar::disposing (const css::lang::EventObject& rEven
         mxWindow = NULL;
 }
 
-//-----------------------------------------------------------------------------
+
 
 geometry::RealRectangle2D PresenterScrollBar::GetRectangle (const Area eArea) const
 {

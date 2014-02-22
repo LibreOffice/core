@@ -36,7 +36,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-// -------------------------------------------------------------------------
+
 OKeyColumnsHelper::OKeyColumnsHelper(   OTableKeyHelper* _pKey,
                 ::osl::Mutex& _rMutex,
                 const ::std::vector< OUString> &_rVector)
@@ -44,7 +44,7 @@ OKeyColumnsHelper::OKeyColumnsHelper(   OTableKeyHelper* _pKey,
             ,m_pKey(_pKey)
 {
 }
-// -------------------------------------------------------------------------
+
 sdbcx::ObjectType OKeyColumnsHelper::createObject(const OUString& _rName)
 {
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
@@ -123,17 +123,17 @@ sdbcx::ObjectType OKeyColumnsHelper::createObject(const OUString& _rName)
 
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OKeyColumnsHelper::createDescriptor()
 {
     return new OKeyColumn(isCaseSensitive());
 }
-// -------------------------------------------------------------------------
+
 void OKeyColumnsHelper::impl_refresh() throw(::com::sun::star::uno::RuntimeException)
 {
     m_pKey->refreshColumns();
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

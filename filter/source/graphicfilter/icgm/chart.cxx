@@ -21,7 +21,7 @@
 #include <main.hxx>
 #include <chart.hxx>
 
-// ---------------------------------------------------------------
+
 
 CGMChart::CGMChart( CGM& rCGM ) :
     mpCGM       ( &rCGM )
@@ -35,7 +35,7 @@ CGMChart::CGMChart( CGM& rCGM ) :
     }
 };
 
-// ---------------------------------------------------------------
+
 
 CGMChart::~CGMChart()
 {
@@ -47,7 +47,7 @@ CGMChart::~CGMChart()
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMChart::DeleteTextEntry( TextEntry* pTextEntry )
 {
@@ -73,22 +73,22 @@ void CGMChart::DeleteTextEntry( TextEntry* pTextEntry )
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMChart::InsertTextEntry( TextEntry* pTextEntry )
 {
     maTextEntryList.push_back( pTextEntry );
 };
 
-// ---------------------------------------------------------------
 
-// ---------------------------------------------------------------
+
+
 void CGMChart::ResetAnnotation()
 {
     mDataNode[ 0 ].nZoneEnum = 0;
 }
 
-// ---------------------------------------------------------------
+
 
 sal_Bool CGMChart::IsAnnotation()
 {

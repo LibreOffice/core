@@ -135,7 +135,7 @@ void thread_sleep_tenth_sec(sal_Int32 _nTenthSec)
 #endif
 }
 
-// -----------------------------------------------------------------------------
+
 
 namespace rtl_Bootstrap
 {
@@ -767,7 +767,7 @@ namespace rtl_Bootstrap
 
 } // namespace rtl_Bootstrap
 
-// -----------------------------------------------------------------------------
+
 
 static void removeAndCreateFile(rtl::OUString const& _suFileURL, rtl::OString const& _sContent)
 {
@@ -800,7 +800,7 @@ static void removeAndCreateFile(rtl::OUString const& _suFileURL, rtl::OString co
     OSL_ASSERT(t_fileExist(_suFileURL) == true);
 }
 
-// -----------------------------------------------------------------------------
+
 static void create_rtlrc()
 {
     rtl::OUString aFileURL(getExecutableDirectory());
@@ -823,7 +823,7 @@ static void create_rtlrc()
     removeAndCreateFile(aFileURL, sLines);
 }
 
-// -----------------------------------------------------------------------------
+
 static void create_testshl2rc()
 {
     rtl::OUString aFileURL(getExecutableDirectory());
@@ -862,7 +862,7 @@ static void create_testshl2rc()
         SAL_CONFIGFILE("rtl"));
 }
 
-// -----------------------------------------------------------------------------
+
 
 static void create_pseudorc()
 {
@@ -880,7 +880,7 @@ static void create_pseudorc()
     removeAndCreateFile(aFileURL, sLines);
 }
 
-// -----------------------------------------------------------------------------
+
 void create_bootstrap_processrc()
 {
     rtl::OUString aDirURL(getModulePath());
@@ -896,7 +896,7 @@ void create_bootstrap_processrc()
 
     removeAndCreateFile(aDirURL, sLines);
 }
-// -----------------------------------------------------------------------------
+
 
 void RegisterAdditionalFunctions(FktRegFuncPtr _pFunc)
 {

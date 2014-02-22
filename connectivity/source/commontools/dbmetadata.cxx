@@ -94,7 +94,7 @@ namespace dbtools
         }
     };
 
-    //--------------------------------------------------------------------
+
     namespace
     {
         //................................................................
@@ -183,26 +183,26 @@ namespace dbtools
     //====================================================================
     //= DatabaseMetaData
     //====================================================================
-    //--------------------------------------------------------------------
+
     DatabaseMetaData::DatabaseMetaData()
         :m_pImpl( new DatabaseMetaData_Impl )
     {
     }
 
-    //--------------------------------------------------------------------
+
     DatabaseMetaData::DatabaseMetaData( const Reference< XConnection >& _connection )
         :m_pImpl( new DatabaseMetaData_Impl )
     {
         lcl_construct( *m_pImpl, _connection );
     }
 
-    //--------------------------------------------------------------------
+
     DatabaseMetaData::DatabaseMetaData( const DatabaseMetaData& _copyFrom )
         :m_pImpl( new DatabaseMetaData_Impl( *_copyFrom.m_pImpl ) )
     {
     }
 
-    //--------------------------------------------------------------------
+
     DatabaseMetaData& DatabaseMetaData::operator=( const DatabaseMetaData& _copyFrom )
     {
         if ( this == &_copyFrom )
@@ -212,18 +212,18 @@ namespace dbtools
         return *this;
     }
 
-    //--------------------------------------------------------------------
+
     DatabaseMetaData::~DatabaseMetaData()
     {
     }
 
-    //--------------------------------------------------------------------
+
     bool DatabaseMetaData::isConnected() const
     {
         return m_pImpl->xConnection.is();
     }
 
-    //--------------------------------------------------------------------
+
     bool DatabaseMetaData::supportsSubqueriesInFrom() const
     {
         lcl_checkConnected( *m_pImpl );
@@ -243,7 +243,7 @@ namespace dbtools
         return supportsSubQueries;
     }
 
-    //--------------------------------------------------------------------
+
     bool DatabaseMetaData::supportsPrimaryKeys() const
     {
         lcl_checkConnected( *m_pImpl );
@@ -264,19 +264,19 @@ namespace dbtools
         return doesSupportPrimaryKeys;
     }
 
-    //--------------------------------------------------------------------
+
     const OUString&  DatabaseMetaData::getIdentifierQuoteString() const
     {
         return lcl_getConnectionStringSetting( *m_pImpl, m_pImpl->sCachedIdentifierQuoteString, &XDatabaseMetaData::getIdentifierQuoteString );
     }
 
-    //--------------------------------------------------------------------
+
     const OUString&  DatabaseMetaData::getCatalogSeparator() const
     {
         return lcl_getConnectionStringSetting( *m_pImpl, m_pImpl->sCachedCatalogSeparator, &XDatabaseMetaData::getCatalogSeparator );
     }
 
-    //--------------------------------------------------------------------
+
     bool DatabaseMetaData::restrictIdentifiersToSQL92() const
     {
         lcl_checkConnected( *m_pImpl );
@@ -288,7 +288,7 @@ namespace dbtools
         return restrict;
     }
 
-    //--------------------------------------------------------------------
+
     bool DatabaseMetaData::generateASBeforeCorrelationName() const
     {
         bool doGenerate( true );
@@ -297,7 +297,7 @@ namespace dbtools
             OSL_VERIFY( setting >>= doGenerate );
         return doGenerate;
     }
-    //--------------------------------------------------------------------
+
     bool DatabaseMetaData::shouldEscapeDateTime() const
     {
         bool doGenerate( true );
@@ -306,7 +306,7 @@ namespace dbtools
             OSL_VERIFY( setting >>= doGenerate );
         return doGenerate;
     }
-    //--------------------------------------------------------------------
+
     bool DatabaseMetaData::isAutoIncrementPrimaryKey() const
     {
         bool is( true );
@@ -315,7 +315,7 @@ namespace dbtools
             OSL_VERIFY( setting >>= is );
         return is;
     }
-    //--------------------------------------------------------------------
+
     sal_Int32 DatabaseMetaData::getBooleanComparisonMode() const
     {
         sal_Int32 mode( BooleanComparisonMode::EQUAL_INTEGER );
@@ -324,7 +324,7 @@ namespace dbtools
             OSL_VERIFY( setting >>= mode );
         return mode;
     }
-    //--------------------------------------------------------------------
+
     bool DatabaseMetaData::supportsRelations() const
     {
         lcl_checkConnected( *m_pImpl );
@@ -353,7 +353,7 @@ namespace dbtools
         return bSupport;
     }
 
-    //--------------------------------------------------------------------
+
     bool DatabaseMetaData::supportsColumnAliasInOrderBy() const
     {
         bool doGenerate( true );
@@ -363,7 +363,7 @@ namespace dbtools
         return doGenerate;
     }
 
-    //--------------------------------------------------------------------
+
     bool DatabaseMetaData::supportsUserAdministration( const Reference<XComponentContext>& _rContext ) const
     {
         lcl_checkConnected( *m_pImpl  );
@@ -392,7 +392,7 @@ namespace dbtools
         return isSupported;
     }
 
-    //--------------------------------------------------------------------
+
     bool DatabaseMetaData::displayEmptyTableFolders() const
     {
         bool doDisplay( true );
@@ -414,7 +414,7 @@ namespace dbtools
 #endif
         return doDisplay;
     }
-    //--------------------------------------------------------------------
+
     bool DatabaseMetaData::supportsThreads() const
     {
         bool bSupported( true );

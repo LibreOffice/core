@@ -90,7 +90,7 @@ namespace pcr
     //====================================================================
     //= InspectorModelProperties
     //====================================================================
-    //--------------------------------------------------------------------
+
     InspectorModelProperties::InspectorModelProperties( ::osl::Mutex& _rMutex )
         :m_rMutex( _rMutex )
         ,m_bHasHelpSection( sal_False )
@@ -124,7 +124,7 @@ namespace pcr
         );
     }
 
-    //--------------------------------------------------------------------
+
     void InspectorModelProperties::constructWithHelpSection( sal_Int32 _nMinHelpTextLines, sal_Int32 _nMaxHelpTextLines )
     {
         m_bHasHelpSection = sal_True;
@@ -134,7 +134,7 @@ namespace pcr
         // only be used during construction phase, where we don't expect to have any listeners.
     }
 
-    //--------------------------------------------------------------------
+
     ::cppu::IPropertyArrayHelper& InspectorModelProperties::getInfoHelper()
     {
         ::osl::MutexGuard aGuard( m_rMutex );
@@ -148,7 +148,7 @@ namespace pcr
         return *m_pPropertyInfo;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XPropertySetInfo > InspectorModelProperties::getPropertySetInfo()
     {
         return ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
@@ -163,72 +163,72 @@ namespace pcr
     {
     }
 
-    //--------------------------------------------------------------------
+
     ImplInspectorModel::~ImplInspectorModel()
     {
     }
 
-    //--------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XINTERFACE2( ImplInspectorModel, ImplInspectorModel_Base, ImplInspectorModel_PBase )
 
-    //--------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ImplInspectorModel, ImplInspectorModel_Base, ImplInspectorModel_PBase )
 
-    //--------------------------------------------------------------------
+
     Reference< XPropertySetInfo > SAL_CALL ImplInspectorModel::getPropertySetInfo(  ) throw (RuntimeException)
     {
         return m_pProperties->getPropertySetInfo();
     }
 
-    //--------------------------------------------------------------------
+
     ::cppu::IPropertyArrayHelper& SAL_CALL ImplInspectorModel::getInfoHelper()
     {
         return m_pProperties->getInfoHelper();
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool SAL_CALL ImplInspectorModel::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue ) throw (IllegalArgumentException)
     {
         return m_pProperties->convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ImplInspectorModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
     {
         m_pProperties->setFastPropertyValue( nHandle, rValue );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ImplInspectorModel::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
     {
         m_pProperties->getFastPropertyValue( rValue, nHandle );
     }
 
-    //--------------------------------------------------------------------
+
     ::sal_Bool SAL_CALL ImplInspectorModel::getHasHelpSection() throw (RuntimeException)
     {
         return m_pProperties->hasHelpSection();
     }
 
-    //--------------------------------------------------------------------
+
     ::sal_Int32 SAL_CALL ImplInspectorModel::getMinHelpTextLines() throw (RuntimeException)
     {
         return m_pProperties->getMinHelpTextLines();
     }
 
-    //--------------------------------------------------------------------
+
     ::sal_Int32 SAL_CALL ImplInspectorModel::getMaxHelpTextLines() throw (RuntimeException)
     {
         return m_pProperties->getMaxHelpTextLines();
     }
 
-    //--------------------------------------------------------------------
+
     ::sal_Bool SAL_CALL ImplInspectorModel::getIsReadOnly() throw (::com::sun::star::uno::RuntimeException)
     {
         return m_pProperties->isReadOnly();
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ImplInspectorModel::setIsReadOnly( ::sal_Bool _IsReadOnly ) throw (::com::sun::star::uno::RuntimeException)
     {
         setFastPropertyValue( MODEL_PROPERTY_ID_IS_READ_ONLY, makeAny( _IsReadOnly ) );
@@ -239,7 +239,7 @@ namespace pcr
         return cppu::supportsService(this, ServiceName);
     }
 
-    //--------------------------------------------------------------------
+
     void ImplInspectorModel::enableHelpSectionProperties( sal_Int32 _nMinHelpTextLines, sal_Int32 _nMaxHelpTextLines )
     {
         m_pProperties->constructWithHelpSection( _nMinHelpTextLines, _nMaxHelpTextLines );

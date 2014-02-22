@@ -78,7 +78,7 @@ using ::com::sun::star::sdb::XRowSetSupplier;
 using ::com::sun::star::awt::XVclWindowPeer;
 
 
-//------------------------------------------------------------------
+
 ::com::sun::star::awt::FontDescriptor ImplCreateFontDescriptor( const Font& rFont )
 {
     ::com::sun::star::awt::FontDescriptor aFD;
@@ -101,7 +101,7 @@ using ::com::sun::star::awt::XVclWindowPeer;
     return aFD;
 }
 
-//------------------------------------------------------------------
+
 Font ImplCreateFont( const ::com::sun::star::awt::FontDescriptor& rDescr )
 {
     Font aFont;
@@ -125,14 +125,14 @@ Font ImplCreateFont( const ::com::sun::star::awt::FontDescriptor& rDescr )
 //==================================================================
 //= FmXModifyMultiplexer
 //==================================================================
-//------------------------------------------------------------------
+
 FmXModifyMultiplexer::FmXModifyMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
                     :OWeakSubObject( rSource )
                     ,OInterfaceContainerHelper( _rMutex )
 {
 }
 
-//------------------------------------------------------------------
+
 Any SAL_CALL FmXModifyMultiplexer::queryInterface(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn;
@@ -147,12 +147,12 @@ Any SAL_CALL FmXModifyMultiplexer::queryInterface(const Type& _rType) throw (Run
     return aReturn;
 }
 
-//------------------------------------------------------------------
+
 void FmXModifyMultiplexer::disposing(const EventObject& ) throw( RuntimeException )
 {
 }
 
-//------------------------------------------------------------------
+
 void FmXModifyMultiplexer::modified(const EventObject& e) throw( RuntimeException )
 {
     EventObject aMulti( e);
@@ -163,14 +163,14 @@ void FmXModifyMultiplexer::modified(const EventObject& e) throw( RuntimeExceptio
 //==================================================================
 //= FmXUpdateMultiplexer
 //==================================================================
-//------------------------------------------------------------------
+
 FmXUpdateMultiplexer::FmXUpdateMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
                     :OWeakSubObject( rSource )
                     ,OInterfaceContainerHelper( _rMutex )
 {
 }
 
-//------------------------------------------------------------------
+
 Any SAL_CALL FmXUpdateMultiplexer::queryInterface(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn;
@@ -185,12 +185,12 @@ Any SAL_CALL FmXUpdateMultiplexer::queryInterface(const Type& _rType) throw (Run
     return aReturn;
 }
 
-//------------------------------------------------------------------
+
 void FmXUpdateMultiplexer::disposing(const EventObject& ) throw( RuntimeException )
 {
 }
 
-//------------------------------------------------------------------
+
 sal_Bool FmXUpdateMultiplexer::approveUpdate(const EventObject &e) throw( RuntimeException )
 {
     EventObject aMulti( e );
@@ -207,7 +207,7 @@ sal_Bool FmXUpdateMultiplexer::approveUpdate(const EventObject &e) throw( Runtim
     return bResult;
 }
 
-//------------------------------------------------------------------
+
 void FmXUpdateMultiplexer::updated(const EventObject &e) throw( RuntimeException )
 {
     EventObject aMulti( e );
@@ -219,14 +219,14 @@ void FmXUpdateMultiplexer::updated(const EventObject &e) throw( RuntimeException
 //==================================================================
 //= FmXSelectionMultiplexer
 //==================================================================
-//------------------------------------------------------------------
+
 FmXSelectionMultiplexer::FmXSelectionMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
     :OWeakSubObject( rSource )
     ,OInterfaceContainerHelper( _rMutex )
 {
 }
 
-//------------------------------------------------------------------
+
 Any SAL_CALL FmXSelectionMultiplexer::queryInterface(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn;
@@ -241,12 +241,12 @@ Any SAL_CALL FmXSelectionMultiplexer::queryInterface(const Type& _rType) throw (
     return aReturn;
 }
 
-//------------------------------------------------------------------
+
 void FmXSelectionMultiplexer::disposing(const EventObject& ) throw( RuntimeException )
 {
 }
 
-//------------------------------------------------------------------
+
 void SAL_CALL FmXSelectionMultiplexer::selectionChanged( const EventObject& _rEvent ) throw (RuntimeException)
 {
     EventObject aMulti(_rEvent);
@@ -257,14 +257,14 @@ void SAL_CALL FmXSelectionMultiplexer::selectionChanged( const EventObject& _rEv
 //==================================================================
 //= FmXContainerMultiplexer
 //==================================================================
-//------------------------------------------------------------------
+
 FmXContainerMultiplexer::FmXContainerMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
                         :OWeakSubObject( rSource )
                         ,OInterfaceContainerHelper( _rMutex )
 {
 }
 
-//------------------------------------------------------------------
+
 Any SAL_CALL FmXContainerMultiplexer::queryInterface(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn;
@@ -279,11 +279,11 @@ Any SAL_CALL FmXContainerMultiplexer::queryInterface(const Type& _rType) throw (
     return aReturn;
 }
 
-//------------------------------------------------------------------
+
 void FmXContainerMultiplexer::disposing(const EventObject& ) throw( RuntimeException )
 {
 }
-//------------------------------------------------------------------
+
 void FmXContainerMultiplexer::elementInserted(const ContainerEvent& e) throw( RuntimeException )
 {
     ContainerEvent aMulti( e );
@@ -291,7 +291,7 @@ void FmXContainerMultiplexer::elementInserted(const ContainerEvent& e) throw( Ru
     notifyEach( &XContainerListener::elementInserted, aMulti );
 }
 
-//------------------------------------------------------------------
+
 void FmXContainerMultiplexer::elementRemoved(const ContainerEvent& e) throw( RuntimeException )
 {
     ContainerEvent aMulti( e );
@@ -300,7 +300,7 @@ void FmXContainerMultiplexer::elementRemoved(const ContainerEvent& e) throw( Run
 }
 
 
-//------------------------------------------------------------------
+
 void FmXContainerMultiplexer::elementReplaced(const ContainerEvent& e) throw( RuntimeException )
 {
     ContainerEvent aMulti( e );
@@ -311,14 +311,14 @@ void FmXContainerMultiplexer::elementReplaced(const ContainerEvent& e) throw( Ru
 //==================================================================
 //= FmXGridControlMultiplexer
 //==================================================================
-//------------------------------------------------------------------
+
 FmXGridControlMultiplexer::FmXGridControlMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
     :OWeakSubObject( rSource )
     ,OInterfaceContainerHelper( _rMutex )
 {
 }
 
-//------------------------------------------------------------------
+
 Any SAL_CALL FmXGridControlMultiplexer::queryInterface(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn;
@@ -332,12 +332,12 @@ Any SAL_CALL FmXGridControlMultiplexer::queryInterface(const Type& _rType) throw
     return aReturn;
 }
 
-//------------------------------------------------------------------
+
 void FmXGridControlMultiplexer::disposing( const EventObject& ) throw( RuntimeException )
 {
 }
 
-//------------------------------------------------------------------
+
 void SAL_CALL FmXGridControlMultiplexer::columnChanged( const EventObject& _event ) throw (RuntimeException)
 {
     EventObject aForwardedEvent( _event );
@@ -349,13 +349,13 @@ void SAL_CALL FmXGridControlMultiplexer::columnChanged( const EventObject& _even
 //= FmXGridControl
 //==================================================================
 
-//------------------------------------------------------------------
+
 Reference< XInterface > SAL_CALL FmXGridControl_NewInstance_Impl(const Reference< XMultiServiceFactory>& _rxFactory)
 {
     return *(new FmXGridControl( comphelper::getComponentContext(_rxFactory) ));
 }
 DBG_NAME(FmXGridControl )
-//------------------------------------------------------------------------------
+
 FmXGridControl::FmXGridControl(const Reference< XComponentContext >& _rxContext)
                :UnoControl()
                ,m_aModifyListeners(*this, GetMutex())
@@ -370,13 +370,13 @@ FmXGridControl::FmXGridControl(const Reference< XComponentContext >& _rxContext)
     DBG_CTOR(FmXGridControl ,NULL);
 }
 
-//------------------------------------------------------------------------------
+
 FmXGridControl::~FmXGridControl()
 {
     DBG_DTOR(FmXGridControl ,NULL);
 }
 
-//------------------------------------------------------------------
+
 Any SAL_CALL FmXGridControl::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn = FmXGridControl_BASE::queryInterface(_rType);
@@ -386,13 +386,13 @@ Any SAL_CALL FmXGridControl::queryAggregation(const Type& _rType) throw (Runtime
     return aReturn;
 }
 
-//------------------------------------------------------------------
+
 Sequence< Type> SAL_CALL FmXGridControl::getTypes(  ) throw(RuntimeException)
 {
     return comphelper::concatSequences(UnoControl::getTypes(),FmXGridControl_BASE::getTypes());
 }
 
-//------------------------------------------------------------------
+
 Sequence<sal_Int8> SAL_CALL FmXGridControl::getImplementationId(  ) throw(RuntimeException)
 {
     static ::cppu::OImplementationId* pId = 0;
@@ -427,7 +427,7 @@ OUString SAL_CALL FmXGridControl::getImplementationName() throw()
     return aServiceNames;
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXGridControl::dispose() throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -441,14 +441,14 @@ void SAL_CALL FmXGridControl::dispose() throw( RuntimeException )
     UnoControl::dispose();
 }
 
-//------------------------------------------------------------------------------
+
 OUString FmXGridControl::GetComponentServiceName()
 {
     OUString aName("DBGrid");
     return aName;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL FmXGridControl::setModel(const Reference< ::com::sun::star::awt::XControlModel >& rModel) throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -465,7 +465,7 @@ sal_Bool SAL_CALL FmXGridControl::setModel(const Reference< ::com::sun::star::aw
     return sal_True;
 }
 
-//------------------------------------------------------------------------------
+
 FmXGridPeer* FmXGridControl::imp_CreatePeer(Window* pParent)
 {
     FmXGridPeer* pReturn = new FmXGridPeer(m_xContext);
@@ -490,7 +490,7 @@ FmXGridPeer* FmXGridControl::imp_CreatePeer(Window* pParent)
     return pReturn;
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt::XToolkit >& /*rToolkit*/, const Reference< ::com::sun::star::awt::XWindowPeer >& rParentPeer) throw( RuntimeException )
 {
     if ( !mxModel.is() )
@@ -647,7 +647,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridControl::addModifyListener(const Reference< ::com::sun::star::util::XModifyListener >& l) throw( RuntimeException )
 {
     m_aModifyListeners.addInterface( l );
@@ -658,7 +658,7 @@ void FmXGridControl::addModifyListener(const Reference< ::com::sun::star::util::
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL FmXGridControl::select( const Any& _rSelection ) throw (IllegalArgumentException, RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -666,7 +666,7 @@ sal_Bool SAL_CALL FmXGridControl::select( const Any& _rSelection ) throw (Illega
     return xPeer->select(_rSelection);
 }
 
-//------------------------------------------------------------------------------
+
 Any SAL_CALL FmXGridControl::getSelection(  ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -674,7 +674,7 @@ Any SAL_CALL FmXGridControl::getSelection(  ) throw (RuntimeException)
     return xPeer->getSelection();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXGridControl::addSelectionChangeListener( const Reference< XSelectionChangeListener >& _rxListener ) throw (RuntimeException)
 {
     m_aSelectionListeners.addInterface( _rxListener );
@@ -685,7 +685,7 @@ void SAL_CALL FmXGridControl::addSelectionChangeListener( const Reference< XSele
     }
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXGridControl::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& _rxListener ) throw (RuntimeException)
 {
     if( getPeer().is() && 1 == m_aSelectionListeners.getLength() )
@@ -696,7 +696,7 @@ void SAL_CALL FmXGridControl::removeSelectionChangeListener( const Reference< XS
     m_aSelectionListeners.removeInterface( _rxListener );
 }
 
-//------------------------------------------------------------------------------
+
 Sequence< sal_Bool > SAL_CALL FmXGridControl::queryFieldDataType( const Type& xType ) throw(RuntimeException)
 {
     if (getPeer().is())
@@ -709,7 +709,7 @@ Sequence< sal_Bool > SAL_CALL FmXGridControl::queryFieldDataType( const Type& xT
     return Sequence<sal_Bool>();
 }
 
-//------------------------------------------------------------------------------
+
 Sequence< Any > SAL_CALL FmXGridControl::queryFieldData( sal_Int32 nRow, const Type& xType ) throw(RuntimeException)
 {
     if (getPeer().is())
@@ -722,7 +722,7 @@ Sequence< Any > SAL_CALL FmXGridControl::queryFieldData( sal_Int32 nRow, const T
     return Sequence< Any>();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXGridControl::removeModifyListener(const Reference< ::com::sun::star::util::XModifyListener >& l) throw( RuntimeException )
 {
     if( getPeer().is() && m_aModifyListeners.getLength() == 1 )
@@ -733,7 +733,7 @@ void SAL_CALL FmXGridControl::removeModifyListener(const Reference< ::com::sun::
     m_aModifyListeners.removeInterface( l );
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXGridControl::draw( sal_Int32 x, sal_Int32 y ) throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -742,7 +742,7 @@ void SAL_CALL FmXGridControl::draw( sal_Int32 x, sal_Int32 y ) throw( RuntimeExc
     m_bInDraw = sal_False;
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn) throw( RuntimeException )
 {
     ::com::sun::star::util::ModeChangeEvent aModeChangeEvent;
@@ -794,7 +794,7 @@ void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn) throw( RuntimeExceptio
 }
 
 // XBoundComponent
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXGridControl::addUpdateListener(const Reference< XUpdateListener >& l) throw( RuntimeException )
 {
     m_aUpdateListeners.addInterface( l );
@@ -805,7 +805,7 @@ void SAL_CALL FmXGridControl::addUpdateListener(const Reference< XUpdateListener
     }
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXGridControl::removeUpdateListener(const Reference< XUpdateListener >& l) throw( RuntimeException )
 {
     if( getPeer().is() && m_aUpdateListeners.getLength() == 1 )
@@ -816,7 +816,7 @@ void SAL_CALL FmXGridControl::removeUpdateListener(const Reference< XUpdateListe
     m_aUpdateListeners.removeInterface( l );
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL FmXGridControl::commit() throw( RuntimeException )
 {
     Reference< XBoundComponent >  xBound(getPeer(), UNO_QUERY);
@@ -827,7 +827,7 @@ sal_Bool SAL_CALL FmXGridControl::commit() throw( RuntimeException )
 }
 
 // XContainer
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXGridControl::addContainerListener(const Reference< XContainerListener >& l) throw( RuntimeException )
 {
     m_aContainerListeners.addInterface( l );
@@ -838,7 +838,7 @@ void SAL_CALL FmXGridControl::addContainerListener(const Reference< XContainerLi
     }
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXGridControl::removeContainerListener(const Reference< XContainerListener >& l) throw( RuntimeException )
 {
     if( getPeer().is() && m_aContainerListeners.getLength() == 1 )
@@ -849,7 +849,7 @@ void SAL_CALL FmXGridControl::removeContainerListener(const Reference< XContaine
     m_aContainerListeners.removeInterface( l );
 }
 
-//------------------------------------------------------------------------------
+
 Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL FmXGridControl::queryDispatch(const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
 {
     Reference< ::com::sun::star::frame::XDispatchProvider >  xPeerProvider(getPeer(), UNO_QUERY);
@@ -859,7 +859,7 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL FmXGridControl::queryD
         return Reference< ::com::sun::star::frame::XDispatch > ();
 }
 
-//------------------------------------------------------------------------------
+
 Sequence< Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL FmXGridControl::queryDispatches(const Sequence< ::com::sun::star::frame::DispatchDescriptor>& aDescripts) throw( RuntimeException )
 {
     Reference< ::com::sun::star::frame::XDispatchProvider >  xPeerProvider(getPeer(), UNO_QUERY);
@@ -869,7 +869,7 @@ Sequence< Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL FmXGridCont
         return Sequence< Reference< ::com::sun::star::frame::XDispatch > >();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXGridControl::registerDispatchProviderInterceptor(const Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& _xInterceptor) throw( RuntimeException )
 {
     Reference< ::com::sun::star::frame::XDispatchProviderInterception >  xPeerInterception(getPeer(), UNO_QUERY);
@@ -877,7 +877,7 @@ void SAL_CALL FmXGridControl::registerDispatchProviderInterceptor(const Referenc
         xPeerInterception->registerDispatchProviderInterceptor(_xInterceptor);
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXGridControl::releaseDispatchProviderInterceptor(const Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& _xInterceptor) throw( RuntimeException )
 {
     Reference< ::com::sun::star::frame::XDispatchProviderInterception >  xPeerInterception(getPeer(), UNO_QUERY);
@@ -885,7 +885,7 @@ void SAL_CALL FmXGridControl::releaseDispatchProviderInterceptor(const Reference
         xPeerInterception->releaseDispatchProviderInterceptor(_xInterceptor);
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXGridControl::addGridControlListener( const Reference< XGridControlListener >& _listener ) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( GetMutex() );
@@ -899,7 +899,7 @@ void SAL_CALL FmXGridControl::addGridControlListener( const Reference< XGridCont
     }
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXGridControl::removeGridControlListener( const Reference< XGridControlListener >& _listener ) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( GetMutex() );
@@ -914,14 +914,14 @@ void SAL_CALL FmXGridControl::removeGridControlListener( const Reference< XGridC
     m_aGridControlListeners.removeInterface( _listener );
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int16 SAL_CALL FmXGridControl::getCurrentColumnPosition() throw( RuntimeException )
 {
     Reference< XGridControl > xGrid( getPeer(), UNO_QUERY );
     return xGrid.is() ? xGrid->getCurrentColumnPosition() : -1;
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXGridControl::setCurrentColumnPosition(sal_Int16 nPos) throw( RuntimeException )
 {
     Reference< XGridControl > xGrid( getPeer(), UNO_QUERY );
@@ -933,21 +933,21 @@ void SAL_CALL FmXGridControl::setCurrentColumnPosition(sal_Int16 nPos) throw( Ru
 }
 
 // XElementAccess
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL FmXGridControl::hasElements() throw( RuntimeException )
 {
     Reference< XElementAccess >  xPeer(getPeer(), UNO_QUERY);
     return xPeer.is() ? xPeer->hasElements() : 0;
 }
 
-//------------------------------------------------------------------------------
+
 Type SAL_CALL FmXGridControl::getElementType(  ) throw(RuntimeException)
 {
     return ::getCppuType((const Reference< ::com::sun::star::awt::XTextComponent >*)NULL);
 }
 
 // XEnumerationAccess
-//------------------------------------------------------------------------------
+
 Reference< XEnumeration >  SAL_CALL FmXGridControl::createEnumeration() throw( RuntimeException )
 {
     Reference< XEnumerationAccess >  xPeer(getPeer(), UNO_QUERY);
@@ -958,14 +958,14 @@ Reference< XEnumeration >  SAL_CALL FmXGridControl::createEnumeration() throw( R
 }
 
 // XIndexAccess
-//------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL FmXGridControl::getCount() throw( RuntimeException )
 {
     Reference< XIndexAccess >  xPeer(getPeer(), UNO_QUERY);
     return xPeer.is() ? xPeer->getCount() : 0;
 }
 
-//------------------------------------------------------------------------------
+
 Any SAL_CALL FmXGridControl::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
     Reference< XIndexAccess >  xPeer(getPeer(), UNO_QUERY);
@@ -976,7 +976,7 @@ Any SAL_CALL FmXGridControl::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoun
 }
 
 // ::com::sun::star::util::XModeSelector
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXGridControl::setMode(const OUString& Mode) throw( NoSupportException, RuntimeException )
 {
     Reference< ::com::sun::star::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
@@ -986,21 +986,21 @@ void SAL_CALL FmXGridControl::setMode(const OUString& Mode) throw( NoSupportExce
     xPeer->setMode(Mode);
 }
 
-//------------------------------------------------------------------------------
+
 OUString SAL_CALL FmXGridControl::getMode() throw( RuntimeException )
 {
     Reference< ::com::sun::star::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
     return xPeer.is() ? xPeer->getMode() : OUString();
 }
 
-//------------------------------------------------------------------------------
+
 ::comphelper::StringSequence SAL_CALL FmXGridControl::getSupportedModes() throw( RuntimeException )
 {
     Reference< ::com::sun::star::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
     return xPeer.is() ? xPeer->getSupportedModes() : ::comphelper::StringSequence();
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL FmXGridControl::supportsMode(const OUString& Mode) throw( RuntimeException )
 {
     Reference< ::com::sun::star::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
@@ -1025,7 +1025,7 @@ protected:
     virtual void columnChanged();
 };
 
-//------------------------------------------------------------------
+
 FmXGridPeer::GridListenerDelegator::GridListenerDelegator(FmXGridPeer* _pPeer)
     :m_pPeer(_pPeer)
 {
@@ -1036,20 +1036,20 @@ FmXGridPeer::GridListenerDelegator::~GridListenerDelegator()
 {
 }
 
-//------------------------------------------------------------------
+
 void FmXGridPeer::GridListenerDelegator::selectionChanged()
 {
     m_pPeer->selectionChanged();
 }
 
-//------------------------------------------------------------------
+
 void FmXGridPeer::GridListenerDelegator::columnChanged()
 {
     m_pPeer->columnChanged();
 }
 
 //==============================================================================
-//------------------------------------------------------------------
+
 Reference< XInterface >  FmXGridPeer_CreateInstance(const Reference< XMultiServiceFactory>& _rxFactory)
 {
     FmXGridPeer* pNewObject = new FmXGridPeer( comphelper::getComponentContext(_rxFactory) );
@@ -1057,13 +1057,13 @@ Reference< XInterface >  FmXGridPeer_CreateInstance(const Reference< XMultiServi
     return *pNewObject;
 }
 
-//------------------------------------------------------------------
+
 Sequence< Type> SAL_CALL FmXGridPeer::getTypes(  ) throw(RuntimeException)
 {
     return comphelper::concatSequences( VCLXWindow::getTypes(), FmXGridPeer_BASE::getTypes() );
 }
 
-//------------------------------------------------------------------
+
 Sequence<sal_Int8> SAL_CALL FmXGridPeer::getImplementationId(  ) throw(RuntimeException)
 {
     static ::cppu::OImplementationId* pId = 0;
@@ -1079,7 +1079,7 @@ Sequence<sal_Int8> SAL_CALL FmXGridPeer::getImplementationId(  ) throw(RuntimeEx
     return pId->getImplementationId();
 }
 
-//------------------------------------------------------------------
+
 Any SAL_CALL FmXGridPeer::queryInterface(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn = FmXGridPeer_BASE::queryInterface(_rType);
@@ -1090,7 +1090,7 @@ Any SAL_CALL FmXGridPeer::queryInterface(const Type& _rType) throw (RuntimeExcep
     return aReturn;
 }
 
-//------------------------------------------------------------------
+
 void FmXGridPeer::selectionChanged()
 {
     EventObject aSource;
@@ -1098,14 +1098,14 @@ void FmXGridPeer::selectionChanged()
     m_aSelectionListeners.notifyEach( &XSelectionChangeListener::selectionChanged, aSource);
 }
 
-//------------------------------------------------------------------
+
 void FmXGridPeer::columnChanged()
 {
     EventObject aEvent( *this );
     m_aGridControlListeners.notifyEach( &XGridControlListener::columnChanged, aEvent );
 }
 
-//------------------------------------------------------------------
+
 namespace fmgridif
 {
     const OUString getDataModeIdentifier()
@@ -1115,7 +1115,7 @@ namespace fmgridif
 }
 using namespace fmgridif;
 
-//------------------------------------------------------------------
+
 FmXGridPeer::FmXGridPeer(const Reference< XComponentContext >& _rxContext)
             :m_aModifyListeners(m_aMutex)
             ,m_aUpdateListeners(m_aMutex)
@@ -1134,13 +1134,13 @@ FmXGridPeer::FmXGridPeer(const Reference< XComponentContext >& _rxContext)
     m_pGridListener = new GridListenerDelegator( this );
 }
 
-//------------------------------------------------------------------------------
+
 FmGridControl* FmXGridPeer::imp_CreateControl(Window* pParent, WinBits nStyle)
 {
     return new FmGridControl(m_xContext, pParent, this, nStyle);
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::Create(Window* pParent, WinBits nStyle)
 {
     FmGridControl* pWin = imp_CreateControl(pParent, nStyle);
@@ -1159,7 +1159,7 @@ void FmXGridPeer::Create(Window* pParent, WinBits nStyle)
     getSupportedURLs();
 }
 
-//------------------------------------------------------------------------------
+
 FmXGridPeer::~FmXGridPeer()
 {
     setRowSet(Reference< XRowSet > ());
@@ -1178,7 +1178,7 @@ const Sequence< sal_Int8 >& FmXGridPeer::getUnoTunnelImplementationId() throw()
     return theFmXGridPeerImplementationId::get().getSeq();
 }
 
-//------------------------------------------------------------------------------
+
 FmXGridPeer* FmXGridPeer::getImplementation( const Reference< XInterface >& _rxIFace ) throw()
 {
     FmXGridPeer* pReturn = NULL;
@@ -1189,7 +1189,7 @@ FmXGridPeer* FmXGridPeer::getImplementation( const Reference< XInterface >& _rxI
     return pReturn;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int64 SAL_CALL FmXGridPeer::getSomething( const Sequence< sal_Int8 >& _rIdentifier ) throw(RuntimeException)
 {
     sal_Int64 nReturn(0);
@@ -1207,7 +1207,7 @@ sal_Int64 SAL_CALL FmXGridPeer::getSomething( const Sequence< sal_Int8 >& _rIden
 }
 
 // XEventListener
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::disposing(const EventObject& e) throw( RuntimeException )
 {
 using namespace ::com::sun::star::util;
@@ -1249,19 +1249,19 @@ using namespace ::com::sun::star::util;
         VCLXWindow::disposing(e);
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::addModifyListener(const Reference< ::com::sun::star::util::XModifyListener >& l) throw( RuntimeException )
 {
     m_aModifyListeners.addInterface( l );
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::removeModifyListener(const Reference< ::com::sun::star::util::XModifyListener >& l) throw( RuntimeException )
 {
     m_aModifyListeners.removeInterface( l );
 }
 
-//------------------------------------------------------------------------------
+
 #define LAST_KNOWN_TYPE     FormComponentType::PATTERNFIELD
 Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType ) throw(RuntimeException)
 {
@@ -1358,7 +1358,7 @@ Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType
     return aReturnSequence;
 }
 
-//------------------------------------------------------------------------------
+
 Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type& xType ) throw(RuntimeException)
 {
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
@@ -1438,7 +1438,7 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
     return aReturnSequence;
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::CellModified()
 {
     EventObject aEvt;
@@ -1447,7 +1447,7 @@ void FmXGridPeer::CellModified()
 }
 
 // XPropertyChangeListener
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt) throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -1560,19 +1560,19 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt) throw( RuntimeE
 }
 
 // XBoundComponent
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::addUpdateListener(const Reference< XUpdateListener >& l) throw( RuntimeException )
 {
     m_aUpdateListeners.addInterface(l);
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::removeUpdateListener(const Reference< XUpdateListener >& l) throw( RuntimeException )
 {
     m_aUpdateListeners.removeInterface(l);
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool FmXGridPeer::commit() throw( RuntimeException )
 {
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
@@ -1595,7 +1595,7 @@ sal_Bool FmXGridPeer::commit() throw( RuntimeException )
 }
 
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::cursorMoved(const EventObject& _rEvent) throw( RuntimeException )
 {
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
@@ -1605,7 +1605,7 @@ void FmXGridPeer::cursorMoved(const EventObject& _rEvent) throw( RuntimeExceptio
         pGrid->positioned(_rEvent);
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::rowChanged(const EventObject& _rEvent) throw( RuntimeException )
 {
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
@@ -1618,7 +1618,7 @@ void FmXGridPeer::rowChanged(const EventObject& _rEvent) throw( RuntimeException
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::rowSetChanged(const EventObject& /*event*/) throw( RuntimeException )
 {
     // not interested in ...
@@ -1626,46 +1626,46 @@ void FmXGridPeer::rowSetChanged(const EventObject& /*event*/) throw( RuntimeExce
 }
 
 // XLoadListener
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::loaded(const EventObject& /*rEvent*/) throw( RuntimeException )
 {
     updateGrid(m_xCursor);
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::unloaded(const EventObject& /*rEvent*/) throw( RuntimeException )
 {
     updateGrid( Reference< XRowSet > (NULL) );
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::reloading(const EventObject& /*aEvent*/) throw( RuntimeException )
 {
     // empty the grid
     updateGrid( Reference< XRowSet > (NULL) );
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::unloading(const EventObject& /*aEvent*/) throw( RuntimeException )
 {
     // empty the grid
     updateGrid( Reference< XRowSet > (NULL) );
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::reloaded(const EventObject& /*aEvent*/) throw( RuntimeException )
 {
     updateGrid(m_xCursor);
 }
 
 // XGridPeer
-//------------------------------------------------------------------------------
+
 Reference< XIndexContainer >  FmXGridPeer::getColumns() throw( RuntimeException )
 {
     return m_xColumns;
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::addColumnListeners(const Reference< XPropertySet >& xCol)
 {
     static const OUString aPropsListenedTo[] =
@@ -1690,7 +1690,7 @@ void FmXGridPeer::addColumnListeners(const Reference< XPropertySet >& xCol)
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::removeColumnListeners(const Reference< XPropertySet >& xCol)
 {
     // the same props as in addColumnListeners ... linux has problems with global static UStrings, so
@@ -1706,7 +1706,7 @@ void FmXGridPeer::removeColumnListeners(const Reference< XPropertySet >& xCol)
             xCol->removePropertyChangeListener(aPropsListenedTo[i], this);
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::setColumns(const Reference< XIndexContainer >& Columns) throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -1763,7 +1763,7 @@ void FmXGridPeer::setColumns(const Reference< XIndexContainer >& Columns) throw(
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::setDesignMode(sal_Bool bOn) throw( RuntimeException )
 {
     if (bOn != isDesignMode())
@@ -1779,7 +1779,7 @@ void FmXGridPeer::setDesignMode(sal_Bool bOn) throw( RuntimeException )
         UpdateDispatches(); // will connect if not already connected and just update else
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool FmXGridPeer::isDesignMode() throw( RuntimeException )
 {
     Window* pWin = GetWindow();
@@ -1789,7 +1789,7 @@ sal_Bool FmXGridPeer::isDesignMode() throw( RuntimeException )
         return sal_False;
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::elementInserted(const ContainerEvent& evt) throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -1823,7 +1823,7 @@ void FmXGridPeer::elementInserted(const ContainerEvent& evt) throw( RuntimeExcep
     FormControlFactory( m_xContext ).initializeTextFieldLineEnds( xNewColumn );
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::elementReplaced(const ContainerEvent& evt) throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -1879,7 +1879,7 @@ void FmXGridPeer::elementReplaced(const ContainerEvent& evt) throw( RuntimeExcep
         pGrid->ActivateCell();
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::elementRemoved(const ContainerEvent& evt) throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -1897,7 +1897,7 @@ void FmXGridPeer::elementRemoved(const ContainerEvent& evt) throw( RuntimeExcept
     removeColumnListeners(xOldColumn);
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value) throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -2081,7 +2081,7 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value) t
         VCLXWindow::setProperty( PropertyName, Value );
 }
 
-//------------------------------------------------------------------------------
+
 Reference< XAccessibleContext > FmXGridPeer::CreateAccessibleContext()
 {
     Reference< XAccessibleContext > xContext;
@@ -2110,7 +2110,7 @@ Reference< XAccessibleContext > FmXGridPeer::CreateAccessibleContext()
     return xContext;
 }
 
-//------------------------------------------------------------------------------
+
 Any FmXGridPeer::getProperty( const OUString& _rPropertyName ) throw( RuntimeException )
 {
     Any aProp;
@@ -2159,7 +2159,7 @@ Any FmXGridPeer::getProperty( const OUString& _rPropertyName ) throw( RuntimeExc
     return aProp;
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::dispose() throw( RuntimeException )
 {
     EventObject aEvt;
@@ -2191,19 +2191,19 @@ void FmXGridPeer::dispose() throw( RuntimeException )
 }
 
 // XContainer
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::addContainerListener(const Reference< XContainerListener >& l) throw( RuntimeException )
 {
     m_aContainerListeners.addInterface( l );
 }
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::removeContainerListener(const Reference< XContainerListener >& l) throw( RuntimeException )
 {
     m_aContainerListeners.removeInterface( l );
 }
 
 // ::com::sun::star::data::XDatabaseCursorSupplier
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::startCursorListening()
 {
     if (!m_nCursorListening)
@@ -2227,7 +2227,7 @@ void FmXGridPeer::startCursorListening()
     m_nCursorListening++;
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::stopCursorListening()
 {
     if (!--m_nCursorListening)
@@ -2249,7 +2249,7 @@ void FmXGridPeer::stopCursorListening()
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::updateGrid(const Reference< XRowSet >& _rxCursor)
 {
     FmGridControl* pGrid = (FmGridControl*)GetWindow();
@@ -2257,13 +2257,13 @@ void FmXGridPeer::updateGrid(const Reference< XRowSet >& _rxCursor)
         pGrid->setDataSource(_rxCursor);
 }
 
-//------------------------------------------------------------------------------
+
 Reference< XRowSet >  FmXGridPeer::getRowSet() throw( RuntimeException )
 {
     return m_xCursor;
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::setRowSet(const Reference< XRowSet >& _rDatabaseCursor) throw( RuntimeException )
 {
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
@@ -2300,26 +2300,26 @@ void FmXGridPeer::setRowSet(const Reference< XRowSet >& _rDatabaseCursor) throw(
     }
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXGridPeer::addGridControlListener( const Reference< XGridControlListener >& _listener ) throw( RuntimeException )
 {
     m_aGridControlListeners.addInterface( _listener );
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXGridPeer::removeGridControlListener( const Reference< XGridControlListener >& _listener ) throw( RuntimeException )
 {
     m_aGridControlListeners.removeInterface( _listener );
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int16 FmXGridPeer::getCurrentColumnPosition() throw( RuntimeException )
 {
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
     return pGrid ? pGrid->GetViewColumnPos(pGrid->GetCurColumnId()) : -1;
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::setCurrentColumnPosition(sal_Int16 nPos) throw( RuntimeException )
 {
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
@@ -2327,7 +2327,7 @@ void FmXGridPeer::setCurrentColumnPosition(sal_Int16 nPos) throw( RuntimeExcepti
         pGrid->GoToColumnId(pGrid->GetColumnIdFromViewPos(nPos));
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::selectionChanged(const EventObject& evt) throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -2377,27 +2377,27 @@ void FmXGridPeer::selectionChanged(const EventObject& evt) throw( RuntimeExcepti
 }
 
 // XElementAccess
-//------------------------------------------------------------------------------
+
 sal_Bool FmXGridPeer::hasElements() throw( RuntimeException )
 {
     return getCount() != 0;
 }
 
-//------------------------------------------------------------------------------
+
 Type SAL_CALL FmXGridPeer::getElementType(  ) throw(RuntimeException)
 {
     return ::getCppuType((Reference< ::com::sun::star::awt::XControl> *)NULL);
 }
 
 // XEnumerationAccess
-//------------------------------------------------------------------------------
+
 Reference< XEnumeration >  FmXGridPeer::createEnumeration() throw( RuntimeException )
 {
     return new ::comphelper::OEnumerationByIndex(this);
 }
 
 // XIndexAccess
-//------------------------------------------------------------------------------
+
 sal_Int32 FmXGridPeer::getCount() throw( RuntimeException )
 {
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
@@ -2407,7 +2407,7 @@ sal_Int32 FmXGridPeer::getCount() throw( RuntimeException )
         return 0;
 }
 
-//------------------------------------------------------------------------------
+
 Any FmXGridPeer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
@@ -2432,7 +2432,7 @@ Any FmXGridPeer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException,
 }
 
 // ::com::sun::star::util::XModeSelector
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::setMode(const OUString& Mode) throw( NoSupportException, RuntimeException )
 {
     if (!supportsMode(Mode))
@@ -2453,13 +2453,13 @@ void FmXGridPeer::setMode(const OUString& Mode) throw( NoSupportException, Runti
     }
 }
 
-//------------------------------------------------------------------------------
+
 OUString FmXGridPeer::getMode() throw( RuntimeException )
 {
     return m_aMode;
 }
 
-//------------------------------------------------------------------------------
+
 ::comphelper::StringSequence FmXGridPeer::getSupportedModes() throw( RuntimeException )
 {
     static ::comphelper::StringSequence aModes;
@@ -2473,7 +2473,7 @@ OUString FmXGridPeer::getMode() throw( RuntimeException )
     return aModes;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool FmXGridPeer::supportsMode(const OUString& Mode) throw( RuntimeException )
 {
     ::comphelper::StringSequence aModes(getSupportedModes());
@@ -2486,7 +2486,7 @@ sal_Bool FmXGridPeer::supportsMode(const OUString& Mode) throw( RuntimeException
     return sal_False;
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::columnVisible(DbGridColumn* pColumn)
 {
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
@@ -2501,7 +2501,7 @@ void FmXGridPeer::columnVisible(DbGridColumn* pColumn)
     m_aContainerListeners.notifyEach( &XContainerListener::elementInserted, aEvt );
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::columnHidden(DbGridColumn* pColumn)
 {
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
@@ -2516,7 +2516,7 @@ void FmXGridPeer::columnHidden(DbGridColumn* pColumn)
     m_aContainerListeners.notifyEach( &XContainerListener::elementRemoved, aEvt );
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::draw( sal_Int32 x, sal_Int32 y ) throw( RuntimeException )
 {
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
@@ -2528,7 +2528,7 @@ void FmXGridPeer::draw( sal_Int32 x, sal_Int32 y ) throw( RuntimeException )
     pGrid->SetBrowserFlags(nOldFlags);
 }
 
-//------------------------------------------------------------------------------
+
 Reference< ::com::sun::star::frame::XDispatch >  FmXGridPeer::queryDispatch(const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
 {
     Reference< ::com::sun::star::frame::XDispatch >  xResult;
@@ -2547,7 +2547,7 @@ Reference< ::com::sun::star::frame::XDispatch >  FmXGridPeer::queryDispatch(cons
     return xResult;
 }
 
-//------------------------------------------------------------------------------
+
 Sequence< Reference< ::com::sun::star::frame::XDispatch > > FmXGridPeer::queryDispatches(const Sequence< ::com::sun::star::frame::DispatchDescriptor>& aDescripts) throw( RuntimeException )
 {
     if (m_xFirstDispatchInterceptor.is())
@@ -2557,7 +2557,7 @@ Sequence< Reference< ::com::sun::star::frame::XDispatch > > FmXGridPeer::queryDi
     return Sequence< Reference< ::com::sun::star::frame::XDispatch > >();
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::registerDispatchProviderInterceptor(const Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& _xInterceptor) throw( RuntimeException )
 {
     if (_xInterceptor.is())
@@ -2586,7 +2586,7 @@ void FmXGridPeer::registerDispatchProviderInterceptor(const Reference< ::com::su
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::releaseDispatchProviderInterceptor(const Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& _xInterceptor) throw( RuntimeException )
 {
     if (!_xInterceptor.is())
@@ -2640,7 +2640,7 @@ void FmXGridPeer::releaseDispatchProviderInterceptor(const Reference< ::com::sun
         UpdateDispatches();
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event) throw( RuntimeException )
 {
     DBG_ASSERT(m_pStateCache, "FmXGridPeer::statusChanged : invalid call !");
@@ -2668,13 +2668,13 @@ void FmXGridPeer::statusChanged(const ::com::sun::star::frame::FeatureStateEvent
     DBG_ASSERT(i<aUrls.getLength(), "FmXGridPeer::statusChanged : got a call for an unknown url !");
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool FmXGridPeer::approveReset(const EventObject& /*rEvent*/) throw( RuntimeException )
 {
     return sal_True;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL FmXGridPeer::select( const Any& _rSelection ) throw (IllegalArgumentException, RuntimeException)
 {
     Sequence< Any > aBookmarks;
@@ -2692,7 +2692,7 @@ sal_Bool SAL_CALL FmXGridPeer::select( const Any& _rSelection ) throw (IllegalAr
     // deal with selection at all.
 }
 
-//------------------------------------------------------------------------------
+
 Any SAL_CALL FmXGridPeer::getSelection(  ) throw (RuntimeException)
 {
     FmGridControl* pVclControl = static_cast<FmGridControl*>(GetWindow());
@@ -2700,19 +2700,19 @@ Any SAL_CALL FmXGridPeer::getSelection(  ) throw (RuntimeException)
     return makeAny(aSelectionBookmarks);
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXGridPeer::addSelectionChangeListener( const Reference< XSelectionChangeListener >& _rxListener ) throw (RuntimeException)
 {
     m_aSelectionListeners.addInterface( _rxListener );
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXGridPeer::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& _rxListener ) throw (RuntimeException)
 {
     m_aSelectionListeners.removeInterface( _rxListener );
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::resetted(const EventObject& rEvent) throw( RuntimeException )
 {
     if (m_xColumns == rEvent.Source)
@@ -2733,7 +2733,7 @@ void FmXGridPeer::resetted(const EventObject& rEvent) throw( RuntimeException )
     }
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<sal_uInt16>& FmXGridPeer::getSupportedGridSlots()
 {
     static Sequence<sal_uInt16> aSupported;
@@ -2755,7 +2755,7 @@ Sequence<sal_uInt16>& FmXGridPeer::getSupportedGridSlots()
     return aSupported;
 }
 
-//------------------------------------------------------------------------------
+
 Sequence< ::com::sun::star::util::URL>& FmXGridPeer::getSupportedURLs()
 {
     static Sequence< ::com::sun::star::util::URL> aSupported;
@@ -2787,7 +2787,7 @@ Sequence< ::com::sun::star::util::URL>& FmXGridPeer::getSupportedURLs()
     return aSupported;
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::UpdateDispatches()
 {
     if (!m_pStateCache)
@@ -2824,7 +2824,7 @@ void FmXGridPeer::UpdateDispatches()
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::ConnectToDispatcher()
 {
     DBG_ASSERT((m_pStateCache != NULL) == (m_pDispatchers != NULL), "FmXGridPeer::ConnectToDispatcher : inconsistent !");
@@ -2862,7 +2862,7 @@ void FmXGridPeer::ConnectToDispatcher()
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXGridPeer::DisConnectFromDispatcher()
 {
     if (!m_pStateCache || !m_pDispatchers)
@@ -2883,7 +2883,7 @@ void FmXGridPeer::DisConnectFromDispatcher()
     m_pDispatchers = NULL;
 }
 
-//------------------------------------------------------------------------------
+
 IMPL_LINK(FmXGridPeer, OnQueryGridSlotState, void*, pSlot)
 {
     if (!m_pStateCache)
@@ -2908,7 +2908,7 @@ IMPL_LINK(FmXGridPeer, OnQueryGridSlotState, void*, pSlot)
     return  -1;
 }
 
-//------------------------------------------------------------------------------
+
 IMPL_LINK(FmXGridPeer, OnExecuteGridSlot, void*, pSlot)
 {
     if (!m_pDispatchers)

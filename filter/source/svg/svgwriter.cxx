@@ -3611,9 +3611,9 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
     mpVDev->Pop();
 }
 
-// -------------
+
 // - SVGWriter -
-// -------------
+
 
 SVGWriter::SVGWriter( const Sequence<Any>& args, const Reference< XComponentContext >& rxCtx )
     : mxContext(rxCtx)
@@ -3622,13 +3622,13 @@ SVGWriter::SVGWriter( const Sequence<Any>& args, const Reference< XComponentCont
         args[0]>>=maFilterData;
 }
 
-// -----------------------------------------------------------------------------
+
 
 SVGWriter::~SVGWriter()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL SVGWriter::write( const Reference<XDocumentHandler>& rxDocHandler,
                                 const Sequence<sal_Int8>& rMtfSeq ) throw( RuntimeException )

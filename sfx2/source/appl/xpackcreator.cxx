@@ -53,7 +53,7 @@ public:
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException);
 };
 
-//-------------------------------------------------------------------------
+
 void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolderUrl,
                                                           const uno::Reference< io::XOutputStream >& xTargetStream )
         throw ( io::IOException,

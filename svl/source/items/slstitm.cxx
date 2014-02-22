@@ -28,7 +28,7 @@
 
 DBG_NAME(SfxStringListItem)
 
-// -----------------------------------------------------------------------
+
 
 TYPEINIT1_AUTOFACTORY(SfxStringListItem, SfxPoolItem);
 

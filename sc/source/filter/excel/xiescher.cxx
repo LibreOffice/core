@@ -961,7 +961,7 @@ void XclImpDrawObjBase::ImplReadObj8( XclImpStream& rStrm )
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 void XclImpDrawObjVector::InsertGrouped( XclImpDrawObjRef xDrawObj )
 {
@@ -980,7 +980,7 @@ sal_Size XclImpDrawObjVector::GetProgressSize() const
     return nProgressSize;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpPhObj::XclImpPhObj( const XclImpRoot& rRoot ) :
     XclImpDrawObjBase( rRoot )
@@ -988,7 +988,7 @@ XclImpPhObj::XclImpPhObj( const XclImpRoot& rRoot ) :
     SetProcessSdrObj( false );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpGroupObj::XclImpGroupObj( const XclImpRoot& rRoot ) :
     XclImpDrawObjBase( rRoot ),
@@ -1046,7 +1046,7 @@ SdrObject* XclImpGroupObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const R
     return xSdrObj.release();
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpLineObj::XclImpLineObj( const XclImpRoot& rRoot ) :
     XclImpDrawObjBase( rRoot ),
@@ -1175,7 +1175,7 @@ SdrObject* XclImpLineObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const Re
     return xSdrObj.release();
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpRectObj::XclImpRectObj( const XclImpRoot& rRoot ) :
     XclImpDrawObjBase( rRoot ),
@@ -1223,7 +1223,7 @@ SdrObject* XclImpRectObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const Re
     return xSdrObj.release();
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpOvalObj::XclImpOvalObj( const XclImpRoot& rRoot ) :
     XclImpRectObj( rRoot )
@@ -1238,7 +1238,7 @@ SdrObject* XclImpOvalObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const Re
     return xSdrObj.release();
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpArcObj::XclImpArcObj( const XclImpRoot& rRoot ) :
     XclImpDrawObjBase( rRoot ),
@@ -1310,7 +1310,7 @@ SdrObject* XclImpArcObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rec
     return xSdrObj.release();
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpPolygonObj::XclImpPolygonObj( const XclImpRoot& rRoot ) :
     XclImpRectObj( rRoot ),
@@ -1389,7 +1389,7 @@ SdrObject* XclImpPolygonObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const
     return xSdrObj.release();
 }
 
-// ----------------------------------------------------------------------------
+
 
 void XclImpObjTextData::ReadByteString( XclImpStream& rStrm )
 {
@@ -1410,7 +1410,7 @@ void XclImpObjTextData::ReadFormats( XclImpStream& rStrm )
         rStrm.Ignore( maData.mnFormatSize );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpTextObj::XclImpTextObj( const XclImpRoot& rRoot ) :
     XclImpRectObj( rRoot )
@@ -1613,7 +1613,7 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
     XclImpRectObj::DoPreProcessSdrObj( rDffConv, rSdrObj );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpChartObj::XclImpChartObj( const XclImpRoot& rRoot, bool bOwnTab ) :
     XclImpRectObj( rRoot ),
@@ -1797,7 +1797,7 @@ void XclImpChartObj::FinalizeTabChart()
     SetAnchor( aAnchor );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpNoteObj::XclImpNoteObj( const XclImpRoot& rRoot ) :
     XclImpTextObj( rRoot ),
@@ -1833,7 +1833,7 @@ void XclImpNoteObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpControlHelper::XclImpControlHelper( const XclImpRoot& rRoot, XclCtrlBindMode eBindMode ) :
     mrRoot( rRoot ),
@@ -2011,7 +2011,7 @@ void XclImpControlHelper::ReadRangeList( ScRangeList& rScRanges, XclImpStream& r
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpTbxObjBase::XclImpTbxObjBase( const XclImpRoot& rRoot ) :
     XclImpTextObj( rRoot ),
@@ -2107,7 +2107,7 @@ void XclImpTbxObjBase::DoPreProcessSdrObj( XclImpDffConverter& /*rDffConv*/, Sdr
     ProcessControl( *this );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpButtonObj::XclImpButtonObj( const XclImpRoot& rRoot ) :
     XclImpTbxObjBase( rRoot )
@@ -2171,7 +2171,7 @@ XclTbxEventType XclImpButtonObj::DoGetEventType() const
     return EXC_TBX_EVENT_ACTION;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpCheckBoxObj::XclImpCheckBoxObj( const XclImpRoot& rRoot ) :
     XclImpTbxObjBase( rRoot ),
@@ -2260,7 +2260,7 @@ XclTbxEventType XclImpCheckBoxObj::DoGetEventType() const
     return EXC_TBX_EVENT_ACTION;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpOptionButtonObj::XclImpOptionButtonObj( const XclImpRoot& rRoot ) :
     XclImpCheckBoxObj( rRoot ),
@@ -2351,7 +2351,7 @@ XclTbxEventType XclImpOptionButtonObj::DoGetEventType() const
     return EXC_TBX_EVENT_ACTION;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpLabelObj::XclImpLabelObj( const XclImpRoot& rRoot ) :
     XclImpTbxObjBase( rRoot )
@@ -2382,7 +2382,7 @@ XclTbxEventType XclImpLabelObj::DoGetEventType() const
     return EXC_TBX_EVENT_MOUSE;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpGroupBoxObj::XclImpGroupBoxObj( const XclImpRoot& rRoot ) :
     XclImpTbxObjBase( rRoot ),
@@ -2431,7 +2431,7 @@ XclTbxEventType XclImpGroupBoxObj::DoGetEventType() const
     return EXC_TBX_EVENT_MOUSE;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpDialogObj::XclImpDialogObj( const XclImpRoot& rRoot ) :
     XclImpTbxObjBase( rRoot )
@@ -2455,7 +2455,7 @@ XclTbxEventType XclImpDialogObj::DoGetEventType() const
     return EXC_TBX_EVENT_MOUSE;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpEditObj::XclImpEditObj( const XclImpRoot& rRoot ) :
     XclImpTbxObjBase( rRoot ),
@@ -2529,7 +2529,7 @@ XclTbxEventType XclImpEditObj::DoGetEventType() const
     return EXC_TBX_EVENT_TEXT;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpTbxObjScrollableBase::XclImpTbxObjScrollableBase( const XclImpRoot& rRoot ) :
     XclImpTbxObjBase( rRoot ),
@@ -2565,7 +2565,7 @@ void XclImpTbxObjScrollableBase::DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpSpinButtonObj::XclImpSpinButtonObj( const XclImpRoot& rRoot ) :
     XclImpTbxObjScrollableBase( rRoot )
@@ -2604,7 +2604,7 @@ XclTbxEventType XclImpSpinButtonObj::DoGetEventType() const
     return EXC_TBX_EVENT_VALUE;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpScrollBarObj::XclImpScrollBarObj( const XclImpRoot& rRoot ) :
     XclImpTbxObjScrollableBase( rRoot )
@@ -2646,7 +2646,7 @@ XclTbxEventType XclImpScrollBarObj::DoGetEventType() const
     return EXC_TBX_EVENT_VALUE;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpTbxObjListBase::XclImpTbxObjListBase( const XclImpRoot& rRoot ) :
     XclImpTbxObjScrollableBase( rRoot ),
@@ -2678,7 +2678,7 @@ void XclImpTbxObjListBase::SetBoxFormatting( ScfPropertySet& rPropSet ) const
         GetFontBuffer().WriteDefaultCtrlFontProperties( rPropSet );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpListBoxObj::XclImpListBoxObj( const XclImpRoot& rRoot ) :
     XclImpTbxObjListBase( rRoot )
@@ -2765,7 +2765,7 @@ XclTbxEventType XclImpListBoxObj::DoGetEventType() const
     return EXC_TBX_EVENT_CHANGE;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpDropDownObj::XclImpDropDownObj( const XclImpRoot& rRoot ) :
     XclImpTbxObjListBase( rRoot ),
@@ -2861,7 +2861,7 @@ XclTbxEventType XclImpDropDownObj::DoGetEventType() const
     return (GetDropDownType() == EXC_OBJ_DROPDOWN_COMBOBOX) ? EXC_TBX_EVENT_TEXT : EXC_TBX_EVENT_CHANGE;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpPictureObj::XclImpPictureObj( const XclImpRoot& rRoot ) :
     XclImpRectObj( rRoot ),
@@ -3235,7 +3235,7 @@ void XclImpSolverContainer::UpdateConnection( sal_uInt32 nDffShapeId, SdrObject*
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpSimpleDffConverter::XclImpSimpleDffConverter( const XclImpRoot& rRoot, SvStream& rDffStrm ) :
     SvxMSDffManager( rDffStrm, rRoot.GetBasePath(), 0, 0, rRoot.GetDoc().GetDrawLayer(), 1440, COL_DEFAULT, 24, 0 ),
@@ -3268,7 +3268,7 @@ XclImpDffConverter::XclImpDffConvData::XclImpDffConvData(
     mbHasCtrlForm( false )
 {
 }
-// ----------------------------------------------------------------------------
+
 
 XclImpDffConverter::XclImpDffConverter( const XclImpRoot& rRoot, SvStream& rDffStrm ) :
     XclImpSimpleDffConverter( rRoot, rDffStrm ),
@@ -4100,7 +4100,7 @@ void XclImpDrawing::ReadTxo( XclImpStream& rStrm )
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpSheetDrawing::XclImpSheetDrawing( const XclImpRoot& rRoot, SCTAB nScTab ) :
     XclImpDrawing( rRoot, true ),

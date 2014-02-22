@@ -41,9 +41,9 @@ namespace accessibility
     using namespace ::com::sun::star;
     using namespace ::comphelper;
 
-    // -----------------------------------------------------------------------------
+
     // class AccessibleTabBarPage
-    // -----------------------------------------------------------------------------
+
 
     AccessibleTabBarPage::AccessibleTabBarPage( TabBar* pTabBar, sal_uInt16 nPageId, const Reference< XAccessible >& rxParent )
         :AccessibleTabBarBase( pTabBar )
@@ -58,13 +58,13 @@ namespace accessibility
             m_sPageText = m_pTabBar->GetPageText( m_nPageId );
     }
 
-    // -----------------------------------------------------------------------------
+
 
     AccessibleTabBarPage::~AccessibleTabBarPage()
     {
     }
 
-    // -----------------------------------------------------------------------------
+
 
     sal_Bool AccessibleTabBarPage::IsEnabled()
     {
@@ -77,7 +77,7 @@ namespace accessibility
         return bEnabled;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     sal_Bool AccessibleTabBarPage::IsShowing()
     {
@@ -89,7 +89,7 @@ namespace accessibility
         return bShowing;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     sal_Bool AccessibleTabBarPage::IsSelected()
     {
@@ -101,7 +101,7 @@ namespace accessibility
         return bSelected;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     void AccessibleTabBarPage::SetEnabled( sal_Bool bEnabled )
     {
@@ -125,7 +125,7 @@ namespace accessibility
         }
     }
 
-    // -----------------------------------------------------------------------------
+
 
     void AccessibleTabBarPage::SetShowing( sal_Bool bShowing )
     {
@@ -141,7 +141,7 @@ namespace accessibility
         }
     }
 
-    // -----------------------------------------------------------------------------
+
 
     void AccessibleTabBarPage::SetSelected( sal_Bool bSelected )
     {
@@ -157,7 +157,7 @@ namespace accessibility
         }
     }
 
-    // -----------------------------------------------------------------------------
+
 
     void AccessibleTabBarPage::SetPageText( const OUString& sPageText )
     {
@@ -171,7 +171,7 @@ namespace accessibility
         }
     }
 
-    // -----------------------------------------------------------------------------
+
 
     void AccessibleTabBarPage::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
     {
@@ -192,9 +192,9 @@ namespace accessibility
             rStateSet.AddState( AccessibleStateType::SELECTED );
     }
 
-    // -----------------------------------------------------------------------------
+
     // OCommonAccessibleComponent
-    // -----------------------------------------------------------------------------
+
 
     awt::Rectangle AccessibleTabBarPage::implGetBounds() throw (RuntimeException)
     {
@@ -223,21 +223,21 @@ namespace accessibility
         return aBounds;
     }
 
-    // -----------------------------------------------------------------------------
+
     // XInterface
-    // -----------------------------------------------------------------------------
+
 
     IMPLEMENT_FORWARD_XINTERFACE2( AccessibleTabBarPage, AccessibleExtendedComponentHelper_BASE, AccessibleTabBarPage_BASE )
 
-    // -----------------------------------------------------------------------------
+
     // XTypeProvider
-    // -----------------------------------------------------------------------------
+
 
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccessibleTabBarPage, AccessibleExtendedComponentHelper_BASE, AccessibleTabBarPage_BASE )
 
-    // -----------------------------------------------------------------------------
+
     // XComponent
-    // -----------------------------------------------------------------------------
+
 
     void AccessibleTabBarPage::disposing()
     {
@@ -245,23 +245,23 @@ namespace accessibility
         m_sPageText = OUString();
     }
 
-    // -----------------------------------------------------------------------------
+
     // XServiceInfo
-    // -----------------------------------------------------------------------------
+
 
     OUString AccessibleTabBarPage::getImplementationName() throw (RuntimeException)
     {
         return OUString( "com.sun.star.comp.svtools.AccessibleTabBarPage" );
     }
 
-    // -----------------------------------------------------------------------------
+
 
     sal_Bool AccessibleTabBarPage::supportsService( const OUString& rServiceName ) throw (RuntimeException)
     {
         return cppu::supportsService(this, rServiceName);
     }
 
-    // -----------------------------------------------------------------------------
+
 
     Sequence< OUString > AccessibleTabBarPage::getSupportedServiceNames() throw (RuntimeException)
     {
@@ -270,9 +270,9 @@ namespace accessibility
         return aNames;
     }
 
-    // -----------------------------------------------------------------------------
+
     // XAccessible
-    // -----------------------------------------------------------------------------
+
 
     Reference< XAccessibleContext > AccessibleTabBarPage::getAccessibleContext(  ) throw (RuntimeException)
     {
@@ -281,9 +281,9 @@ namespace accessibility
         return this;
     }
 
-    // -----------------------------------------------------------------------------
+
     // XAccessibleContext
-    // -----------------------------------------------------------------------------
+
 
     sal_Int32 AccessibleTabBarPage::getAccessibleChildCount() throw (RuntimeException)
     {
@@ -292,7 +292,7 @@ namespace accessibility
         return 0;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     Reference< XAccessible > AccessibleTabBarPage::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException)
     {
@@ -304,7 +304,7 @@ namespace accessibility
         return Reference< XAccessible >();
     }
 
-    // -----------------------------------------------------------------------------
+
 
     Reference< XAccessible > AccessibleTabBarPage::getAccessibleParent(  ) throw (RuntimeException)
     {
@@ -313,7 +313,7 @@ namespace accessibility
         return m_xParent;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     sal_Int32 AccessibleTabBarPage::getAccessibleIndexInParent(  ) throw (RuntimeException)
     {
@@ -326,7 +326,7 @@ namespace accessibility
         return nIndexInParent;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     sal_Int16 AccessibleTabBarPage::getAccessibleRole(  ) throw (RuntimeException)
     {
@@ -335,7 +335,7 @@ namespace accessibility
         return AccessibleRole::PAGE_TAB;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     OUString AccessibleTabBarPage::getAccessibleDescription( ) throw (RuntimeException)
     {
@@ -348,7 +348,7 @@ namespace accessibility
         return sDescription;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     OUString AccessibleTabBarPage::getAccessibleName(  ) throw (RuntimeException)
     {
@@ -357,7 +357,7 @@ namespace accessibility
         return m_sPageText;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     Reference< XAccessibleRelationSet > AccessibleTabBarPage::getAccessibleRelationSet(  ) throw (RuntimeException)
     {
@@ -368,7 +368,7 @@ namespace accessibility
         return xSet;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     Reference< XAccessibleStateSet > AccessibleTabBarPage::getAccessibleStateSet(  ) throw (RuntimeException)
     {
@@ -389,7 +389,7 @@ namespace accessibility
         return xSet;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     Locale AccessibleTabBarPage::getLocale(  ) throw (IllegalAccessibleComponentStateException, RuntimeException)
     {
@@ -398,9 +398,9 @@ namespace accessibility
         return Application::GetSettings().GetLanguageTag().getLocale();
     }
 
-    // -----------------------------------------------------------------------------
+
     // XAccessibleComponent
-    // -----------------------------------------------------------------------------
+
 
     Reference< XAccessible > AccessibleTabBarPage::getAccessibleAtPoint( const awt::Point& ) throw (RuntimeException)
     {
@@ -409,14 +409,14 @@ namespace accessibility
         return Reference< XAccessible >();
     }
 
-    // -----------------------------------------------------------------------------
+
 
     void AccessibleTabBarPage::grabFocus(  ) throw (RuntimeException)
     {
         // no focus
     }
 
-    // -----------------------------------------------------------------------------
+
 
     sal_Int32 AccessibleTabBarPage::getForeground(  ) throw (RuntimeException)
     {
@@ -434,7 +434,7 @@ namespace accessibility
         return nColor;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     sal_Int32 AccessibleTabBarPage::getBackground(  ) throw (RuntimeException)
     {
@@ -452,9 +452,9 @@ namespace accessibility
         return nColor;
     }
 
-    // -----------------------------------------------------------------------------
+
     // XAccessibleExtendedComponent
-    // -----------------------------------------------------------------------------
+
 
     Reference< awt::XFont > AccessibleTabBarPage::getFont(  ) throw (RuntimeException)
     {
@@ -472,7 +472,7 @@ namespace accessibility
         return xFont;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     OUString AccessibleTabBarPage::getTitledBorderText(  ) throw (RuntimeException)
     {
@@ -481,7 +481,7 @@ namespace accessibility
         return m_sPageText;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     OUString AccessibleTabBarPage::getToolTipText(  ) throw (RuntimeException)
     {
@@ -490,7 +490,7 @@ namespace accessibility
         return OUString();
     }
 
-    // -----------------------------------------------------------------------------
+
 
 //.........................................................................
 }   // namespace accessibility

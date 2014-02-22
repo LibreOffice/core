@@ -20,14 +20,14 @@
 
 #include "modulepcr.hxx"
 
-//---------------------------------------------------------------------------------------
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
-//---------------------------------------------------------------------------------------
+
 
 extern "C" void SAL_CALL createRegistryInfo_OPropertyBrowserController();
 extern "C" void SAL_CALL createRegistryInfo_FormController();
@@ -49,7 +49,7 @@ extern "C" void SAL_CALL createRegistryInfo_StringRepresentation();
 extern "C" void SAL_CALL createRegistryInfo_MasterDetailLinkDialog();
 extern "C" void SAL_CALL createRegistryInfo_FormGeometryHandler();
 
-//---------------------------------------------------------------------------------------
+
 
 extern "C" void SAL_CALL pcr_initializeModule()
 {
@@ -79,7 +79,7 @@ extern "C" void SAL_CALL pcr_initializeModule()
     }
 }
 
-//---------------------------------------------------------------------------------------
+
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL pcr_component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,

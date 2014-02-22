@@ -33,7 +33,7 @@
 #include "postit.hxx"
 #include "stringutil.hxx"
 
-//--------------------------------------------------------------------------
+
 
 
 using ::com::sun::star::util::SearchOptions;

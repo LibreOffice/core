@@ -84,7 +84,7 @@ SvMemoryStream* GraphicHelper::getFormatStrFromGDI_Impl( const GDIMetaFile* pGDI
     return pResult;
 }
 
-//---------------------------------------------------------------
+
 // static
 void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
 {
@@ -121,7 +121,7 @@ void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
     return pResult;
 }
 
-//---------------------------------------------------------------
+
 // static
 void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, const Size& aMetaSize )
 {
@@ -193,7 +193,7 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
     return pResult;
 }
 
-//---------------------------------------------------------------
+
 // static
 sal_Bool GraphicHelper::supportsMetaFileHandle_Impl()
 {
@@ -204,7 +204,7 @@ sal_Bool GraphicHelper::supportsMetaFileHandle_Impl()
 #endif
 }
 
-//---------------------------------------------------------------
+
 // static
 sal_Bool GraphicHelper::mergeBitmaps_Impl( const BitmapEx& rBmpEx, const BitmapEx& rOverlay,
                    const Rectangle& rOverlayRect, BitmapEx& rReturn )
@@ -325,7 +325,7 @@ sal_Bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, const un
     return bResult;
 }
 
-//---------------------------------------------------------------
+
 // static
 sal_uInt16 GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl( const OUString& aFactoryShortName, sal_Bool /*bIsTemplate*/ )
 {

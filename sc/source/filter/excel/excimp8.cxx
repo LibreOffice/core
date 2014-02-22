@@ -420,7 +420,7 @@ void ImportExcel8::LoadDocumentProperties()
     }
 }
 
-//___________________________________________________________________
+
 // autofilter
 
 void ImportExcel8::FilterMode( void )

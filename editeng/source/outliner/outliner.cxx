@@ -56,9 +56,9 @@
 #include <cassert>
 using ::std::advance;
 
-// ----------------------------------------------------------------------
+
 // Outliner
-// ----------------------------------------------------------------------
+
 
 void Outliner::ImplCheckDepth( sal_Int16& rnDepth ) const
 {

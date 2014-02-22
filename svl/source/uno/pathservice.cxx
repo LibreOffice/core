@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 
-// -----------------------------------------------------------------------
+
 
 class PathService : public ::cppu::WeakImplHelper2< css::frame::XConfigManager, css::lang::XServiceInfo >
 {
@@ -79,7 +79,7 @@ public:
         {}
 };
 
-// -----------------------------------------------------------------------
+
 
 css::uno::Reference< css::uno::XInterface > PathService_CreateInstance (
     SAL_UNUSED_PARAMETER const css::uno::Reference<
@@ -89,6 +89,6 @@ css::uno::Reference< css::uno::XInterface > PathService_CreateInstance (
         static_cast< cppu::OWeakObject* >(new PathService()));
 }
 
-// -----------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

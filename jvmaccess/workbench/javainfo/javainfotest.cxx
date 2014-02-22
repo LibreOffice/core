@@ -95,7 +95,7 @@ bool test_constructor2()
     JavaInfo a("file:///d:/java/j2sdk1.4.1_01");
 //    -----------------------------------------------------
 //    JavaInfo a("file:///usr/local2/jl/java/j2sdk1.4.0");
-//------------------------------------------------------------
+
 //    JavaInfo a("file:///local/jl/java/j2sdk1.4.0");
     try{
         JavaInfo info= JavaInfo(OUString(), 0);
@@ -300,7 +300,7 @@ bool test_isEqual()
 
     JavaInfo c("file:///c:/local/r/j2sdk1.4.0");// not Accessible
     JavaInfo d("file:///d:/java/copy_j2sdk1.4.0");
-//-------------------------------------------------------------------
+
 //     JavaInfo a("file:///usr/local2/jl/java/j2re1_3_1_02");
 //     JavaInfo b("file:///usr/local2/jl/java/j2re1_3_1_02");
 

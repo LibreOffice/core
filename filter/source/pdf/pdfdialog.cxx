@@ -32,13 +32,13 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
-// -----------------------
+
 // - PDFDialog functions -
-// -----------------------
+
 
 #define SERVICE_NAME "com.sun.star.document.PDFDialog"
 
-// -----------------------------------------------------------------------------
+
 
 OUString PDFDialog_getImplementationName ()
     throw (RuntimeException)
@@ -46,7 +46,7 @@ OUString PDFDialog_getImplementationName ()
     return OUString ( "com.sun.star.comp.PDF.PDFDialog" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< sal_Int8 > SAL_CALL PDFDialog_getImplementationId()
     throw(RuntimeException)
@@ -55,7 +55,7 @@ Sequence< sal_Int8 > SAL_CALL PDFDialog_getImplementationId()
     return aId.getImplementationId();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL PDFDialog_getSupportedServiceNames()
     throw (RuntimeException)
@@ -66,7 +66,7 @@ Sequence< OUString > SAL_CALL PDFDialog_getSupportedServiceNames()
     return aRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XInterface > SAL_CALL PDFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
@@ -74,26 +74,26 @@ Reference< XInterface > SAL_CALL PDFDialog_createInstance( const Reference< XMul
     return (cppu::OWeakObject*) new PDFDialog( comphelper::getComponentContext(rSMgr) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 #undef SERVICE_NAME
 
-// -------------
+
 // - PDFDialog -
-// -------------
+
 
 PDFDialog::PDFDialog( const Reference< XComponentContext > &rxContext )
 : PDFDialog_Base( rxContext )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 PDFDialog::~PDFDialog()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< sal_Int8 > SAL_CALL PDFDialog::getImplementationId()
     throw(RuntimeException)
@@ -101,7 +101,7 @@ Sequence< sal_Int8 > SAL_CALL PDFDialog::getImplementationId()
     return PDFDialog_getImplementationId();
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString SAL_CALL PDFDialog::getImplementationName()
     throw (RuntimeException)
@@ -109,7 +109,7 @@ OUString SAL_CALL PDFDialog::getImplementationName()
     return PDFDialog_getImplementationName();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL PDFDialog::getSupportedServiceNames()
     throw (RuntimeException)
@@ -117,7 +117,7 @@ Sequence< OUString > SAL_CALL PDFDialog::getSupportedServiceNames()
     return PDFDialog_getSupportedServiceNames();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Dialog* PDFDialog::createDialog( Window* pParent )
 {
@@ -132,7 +132,7 @@ Dialog* PDFDialog::createDialog( Window* pParent )
     return pRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void PDFDialog::executedDialog( sal_Int16 nExecutionResult )
 {
@@ -141,7 +141,7 @@ void PDFDialog::executedDialog( sal_Int16 nExecutionResult )
     destroyDialog();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XPropertySetInfo > SAL_CALL PDFDialog::getPropertySetInfo()
     throw(RuntimeException)
@@ -150,13 +150,13 @@ Reference< XPropertySetInfo > SAL_CALL PDFDialog::getPropertySetInfo()
     return xInfo;
 }
 
-//-------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper& PDFDialog::getInfoHelper()
 {
     return *const_cast<PDFDialog*>(this)->getArrayHelper();
 }
 
-//------------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* PDFDialog::createArrayHelper() const
 {
     Sequence< Property > aProps;
@@ -164,7 +164,7 @@ Reference< XPropertySetInfo > SAL_CALL PDFDialog::getPropertySetInfo()
     return new ::cppu::OPropertyArrayHelper( aProps );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< PropertyValue > SAL_CALL PDFDialog::getPropertyValues()
     throw ( RuntimeException )
@@ -186,7 +186,7 @@ Sequence< PropertyValue > SAL_CALL PDFDialog::getPropertyValues()
     return maMediaDescriptor;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL PDFDialog::setPropertyValues( const Sequence< PropertyValue >& rProps )
     throw ( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException )
@@ -203,7 +203,7 @@ void SAL_CALL PDFDialog::setPropertyValues( const Sequence< PropertyValue >& rPr
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL PDFDialog::setSourceDocument( const Reference< XComponent >& xDoc )
     throw(IllegalArgumentException, RuntimeException)

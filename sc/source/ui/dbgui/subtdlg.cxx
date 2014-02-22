@@ -42,7 +42,7 @@ ScSubTotalDlg::ScSubTotalDlg(Window* pParent, const SfxItemSet* pArgSet)
     m_pBtnRemove->SetClickHdl( LINK( this, ScSubTotalDlg, RemoveHdl ) );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_INLINE_START( ScSubTotalDlg, RemoveHdl, PushButton *, pBtn )
 {

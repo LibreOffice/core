@@ -50,7 +50,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::connectivity::hsqldb;
 
-// -----------------------------------------------------------------------------
+
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream
  * Method:    openStream
@@ -84,7 +84,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
     write_to_storage_stream_from_buffer( env, obj_this, name, key, buffer, off, len );
 #endif
 }
-// -----------------------------------------------------------------------------
+
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream
  * Method:    write
@@ -102,7 +102,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
     write_to_storage_stream_from_buffer( env, obj_this, name, key, buffer, 0, env->GetArrayLength( buffer ) );
 #endif
 }
-// -----------------------------------------------------------------------------
+
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream
  * Method:    close
@@ -134,7 +134,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
 #endif
     StorageContainer::revokeStream(env,name,key);
 }
-// -----------------------------------------------------------------------------
+
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream
  * Method:    write
@@ -152,7 +152,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
     write_to_storage_stream( env, obj_this, name, key, b );
 #endif
 }
-// -----------------------------------------------------------------------------
+
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream
  * Method:    flush
@@ -171,7 +171,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
     OUString sName = StorageContainer::jstring2ustring(env,name);
 #endif
 }
-// -----------------------------------------------------------------------------
+
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream
  * Method:    sync
@@ -198,6 +198,6 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

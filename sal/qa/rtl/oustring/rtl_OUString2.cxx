@@ -237,9 +237,9 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class number
 
-//------------------------------------------------------------------------
+
 // testing the method toDouble()
-//------------------------------------------------------------------------
+
 template<class T>
 sal_Int16 SAL_CALL checkPrecisionSize()
 {
@@ -977,7 +977,7 @@ void convertToString::test() {
 }
 
 // - string construction & interning (tests)
-// -----------------------------------------------------------------------------
+
 class construction : public CppUnit::TestFixture
 {
 public:

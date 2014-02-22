@@ -38,7 +38,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::std::vector;
 
-// ---------------------------------------------------------------------------
+
 
 ScDPTableData::CalcInfo::CalcInfo() :
     pInitState( NULL ),
@@ -48,7 +48,7 @@ ScDPTableData::CalcInfo::CalcInfo() :
 {
 }
 
-// ---------------------------------------------------------------------------
+
 
 ScDPTableData::ScDPTableData(ScDocument* pDoc) :
     mpDoc(pDoc)
@@ -251,7 +251,7 @@ void ScDPTableData::GetItemData(const ScDPFilteredCache& rCacheTable, sal_Int32 
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 long ScDPTableData::GetMembersCount( long nDim )
 {

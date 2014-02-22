@@ -1601,7 +1601,7 @@ const sal_uInt16 VBA_FORMSITE_CLASSTABLEMASK    = 0x7FFF;
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 VbaFormSiteObject::VbaFormSiteObject( const InputObjectBase& rParent, VbaFormSharedData& rFormData ) :
     mrFormData( rFormData )
@@ -1674,7 +1674,7 @@ const sal_uInt8 AX_FORM_SITECOUNTTYPE_MASK      = 0x7F;
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 VbaFStreamObject::VbaFStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName, VbaFormSharedData& rFormData ) :
     mrFormData( rFormData )

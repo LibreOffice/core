@@ -1839,11 +1839,11 @@ void PrintDialog::previewBackward()
     mpPageEdit->Down();
 }
 
-// -----------------------------------------------------------------------------
+
 //
 // PrintProgressDialog
 //
-// -----------------------------------------------------------------------------
+
 
 PrintProgressDialog::PrintProgressDialog(Window* i_pParent, int i_nMax)
     : ModelessDialog(i_pParent, "PrintProgressDialog",

@@ -66,9 +66,9 @@ namespace accessibility
     using namespace ::com::sun::star;
     using namespace ::comphelper;
 
-    // -----------------------------------------------------------------------------
+
     // Ctor() and Dtor()
-    // -----------------------------------------------------------------------------
+
     AccessibleListBoxEntry::AccessibleListBoxEntry( SvTreeListBox& _rListBox,
                                                     SvTreeListEntry* _pEntry,
                                                     const Reference< XAccessible >& _xParent ) :
@@ -83,7 +83,7 @@ namespace accessibility
     {
         _rListBox.FillEntryPath( _pEntry, m_aEntryPath );
     }
-    // -----------------------------------------------------------------------------
+
     AccessibleListBoxEntry::~AccessibleListBoxEntry()
     {
         if ( IsAlive_Impl() )
@@ -106,7 +106,7 @@ namespace accessibility
     }
 
 
-    // -----------------------------------------------------------------------------
+
     Rectangle AccessibleListBoxEntry::GetBoundingBox_Impl() const
     {
         Rectangle aRect;
@@ -126,7 +126,7 @@ namespace accessibility
 
         return aRect;
     }
-    // -----------------------------------------------------------------------------
+
     Rectangle AccessibleListBoxEntry::GetBoundingBoxOnScreen_Impl() const
     {
         Rectangle aRect;
@@ -141,12 +141,12 @@ namespace accessibility
 
         return aRect;
     }
-    // -----------------------------------------------------------------------------
+
     sal_Bool AccessibleListBoxEntry::IsAlive_Impl() const
     {
         return ( !rBHelper.bDisposed && !rBHelper.bInDispose && isAlive() );
     }
-    // -----------------------------------------------------------------------------
+
     sal_Bool AccessibleListBoxEntry::IsShowing_Impl() const
     {
         Reference< XAccessible > xParent = implGetParentAccessible( );
@@ -163,7 +163,7 @@ namespace accessibility
 
         return bShowing;
     }
-    // -----------------------------------------------------------------------------
+
     Rectangle AccessibleListBoxEntry::GetBoundingBox()
         throw (lang::DisposedException, uno::RuntimeException)
     {
@@ -173,7 +173,7 @@ namespace accessibility
         EnsureIsAlive();
         return GetBoundingBox_Impl();
     }
-    // -----------------------------------------------------------------------------
+
     Rectangle AccessibleListBoxEntry::GetBoundingBoxOnScreen()
         throw (lang::DisposedException, uno::RuntimeException)
     {
@@ -183,13 +183,13 @@ namespace accessibility
         EnsureIsAlive();
         return GetBoundingBoxOnScreen_Impl();
     }
-    // -----------------------------------------------------------------------------
+
     void AccessibleListBoxEntry::EnsureIsAlive() const throw ( lang::DisposedException )
     {
         if ( !IsAlive_Impl() )
             throw lang::DisposedException();
     }
-    // -----------------------------------------------------------------------------
+
     OUString AccessibleListBoxEntry::implGetText()
     {
         OUString sRet;
@@ -198,7 +198,7 @@ namespace accessibility
             sRet = getListBox()->SearchEntryTextWithHeadTitle( pEntry );
         return sRet;
     }
-    // -----------------------------------------------------------------------------
+
     Locale AccessibleListBoxEntry::implGetLocale()
     {
         Locale aLocale;
@@ -211,10 +211,10 @@ namespace accessibility
         nStartIndex = 0;
         nEndIndex = 0;
     }
-    // -----------------------------------------------------------------------------
+
     // XTypeProvider
-    // -----------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------
+
+
     Sequence< sal_Int8 > AccessibleListBoxEntry::getImplementationId() throw (RuntimeException)
     {
         static ::cppu::OImplementationId* pId = NULL;
@@ -232,17 +232,17 @@ namespace accessibility
         return pId->getImplementationId();
     }
 
-    // -----------------------------------------------------------------------------
+
     // XComponent/ListBoxAccessibleBase
-    // -----------------------------------------------------------------------------
+
     void SAL_CALL AccessibleListBoxEntry::dispose() throw ( uno::RuntimeException )
     {
         AccessibleListBoxEntry_BASE::dispose();
     }
 
-    // -----------------------------------------------------------------------------
+
     // XComponent
-    // -----------------------------------------------------------------------------
+
     void SAL_CALL AccessibleListBoxEntry::disposing()
     {
         SolarMutexGuard();
@@ -265,26 +265,26 @@ namespace accessibility
         }
         m_aParent = WeakReference< XAccessible >();
     }
-    // -----------------------------------------------------------------------------
+
     // XServiceInfo
-    // -----------------------------------------------------------------------------
+
     OUString SAL_CALL AccessibleListBoxEntry::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_Static();
     }
-    // -----------------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL AccessibleListBoxEntry::getSupportedServiceNames() throw(RuntimeException)
     {
         return getSupportedServiceNames_Static();
     }
-    // -----------------------------------------------------------------------------
+
     sal_Bool SAL_CALL AccessibleListBoxEntry::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
     {
         return cppu::supportsService(this, _rServiceName);
     }
-    // -----------------------------------------------------------------------------
+
     // XServiceInfo - static methods
-    // -----------------------------------------------------------------------------
+
     Sequence< OUString > AccessibleListBoxEntry::getSupportedServiceNames_Static(void) throw( RuntimeException )
     {
         Sequence< OUString > aSupported(3);
@@ -293,22 +293,22 @@ namespace accessibility
         aSupported[2] = "com.sun.star.awt.AccessibleTreeListBoxEntry";
         return aSupported;
     }
-    // -----------------------------------------------------------------------------
+
     OUString AccessibleListBoxEntry::getImplementationName_Static(void) throw( RuntimeException )
     {
         return OUString( "com.sun.star.comp.svtools.AccessibleTreeListBoxEntry" );
     }
-    // -----------------------------------------------------------------------------
+
     // XAccessible
-    // -----------------------------------------------------------------------------
+
     Reference< XAccessibleContext > SAL_CALL AccessibleListBoxEntry::getAccessibleContext(  ) throw (RuntimeException)
     {
         EnsureIsAlive();
         return this;
     }
-    // -----------------------------------------------------------------------------
+
     // XAccessibleContext
-    // -----------------------------------------------------------------------------
+
     sal_Int32 SAL_CALL AccessibleListBoxEntry::getAccessibleChildCount(  ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -322,7 +322,7 @@ namespace accessibility
 
         return nCount;
     }
-    // -----------------------------------------------------------------------------
+
     Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException,RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -336,7 +336,7 @@ namespace accessibility
         return new AccessibleListBoxEntry( *getListBox(), pEntry, this );
     }
 
-    // -----------------------------------------------------------------------------
+
     Reference< XAccessible > AccessibleListBoxEntry::implGetParentAccessible( ) const
     {
         Reference< XAccessible > xParent = (Reference< XAccessible >)m_aParent;
@@ -373,7 +373,7 @@ namespace accessibility
         return xParent;
     }
 
-    // -----------------------------------------------------------------------------
+
     Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleParent(  ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -382,7 +382,7 @@ namespace accessibility
 
         return implGetParentAccessible( );
     }
-    // -----------------------------------------------------------------------------
+
     sal_Int32 SAL_CALL AccessibleListBoxEntry::getAccessibleIndexInParent(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -390,7 +390,7 @@ namespace accessibility
         OSL_ENSURE( !m_aEntryPath.empty(), "empty path" );
         return m_aEntryPath.empty() ? -1 : m_aEntryPath.back();
     }
-    // -----------------------------------------------------------------------------
+
     sal_Int32 AccessibleListBoxEntry::GetRoleType()
     {
         sal_Int32 nCase = 0;
@@ -419,7 +419,7 @@ namespace accessibility
         }
         return nCase;
     }
-    // -----------------------------------------------------------------------------
+
     sal_Int16 SAL_CALL AccessibleListBoxEntry::getAccessibleRole(  ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -457,7 +457,7 @@ namespace accessibility
         }
         return AccessibleRole::UNKNOWN;
     }
-    // -----------------------------------------------------------------------------
+
     OUString SAL_CALL AccessibleListBoxEntry::getAccessibleDescription(  ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -492,7 +492,7 @@ namespace accessibility
             return getListBox()->SearchEntryTextWithHeadTitle( pEntry );
         }
     }
-    // -----------------------------------------------------------------------------
+
     OUString SAL_CALL AccessibleListBoxEntry::getAccessibleName(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -512,7 +512,7 @@ namespace accessibility
 
         return sRet;
     }
-    // -----------------------------------------------------------------------------
+
     Reference< XAccessibleRelationSet > SAL_CALL AccessibleListBoxEntry::getAccessibleRelationSet(  ) throw (RuntimeException)
     {
         Reference< XAccessibleRelationSet > xRelSet;
@@ -530,7 +530,7 @@ namespace accessibility
         }
         return xRelSet;
     }
-    // -----------------------------------------------------------------------------
+
     Reference< XAccessibleStateSet > SAL_CALL AccessibleListBoxEntry::getAccessibleStateSet(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -567,7 +567,7 @@ namespace accessibility
 
         return xStateSet;
     }
-    // -----------------------------------------------------------------------------
+
     Locale SAL_CALL AccessibleListBoxEntry::getLocale(  ) throw (IllegalAccessibleComponentStateException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -575,14 +575,14 @@ namespace accessibility
 
         return implGetLocale();
     }
-    // -----------------------------------------------------------------------------
+
     // XAccessibleComponent
-    // -----------------------------------------------------------------------------
+
     sal_Bool SAL_CALL AccessibleListBoxEntry::containsPoint( const awt::Point& rPoint ) throw (RuntimeException)
     {
         return Rectangle( Point(), GetBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
     }
-    // -----------------------------------------------------------------------------
+
     Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleAtPoint( const awt::Point& _aPoint ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -600,32 +600,32 @@ namespace accessibility
             xAcc = pAccEntry;
         return xAcc;
     }
-    // -----------------------------------------------------------------------------
+
     awt::Rectangle SAL_CALL AccessibleListBoxEntry::getBounds(  ) throw (RuntimeException)
     {
         return AWTRectangle( GetBoundingBox() );
     }
-    // -----------------------------------------------------------------------------
+
     awt::Point SAL_CALL AccessibleListBoxEntry::getLocation(  ) throw (RuntimeException)
     {
         return AWTPoint( GetBoundingBox().TopLeft() );
     }
-    // -----------------------------------------------------------------------------
+
     awt::Point SAL_CALL AccessibleListBoxEntry::getLocationOnScreen(  ) throw (RuntimeException)
     {
         return AWTPoint( GetBoundingBoxOnScreen().TopLeft() );
     }
-    // -----------------------------------------------------------------------------
+
     awt::Size SAL_CALL AccessibleListBoxEntry::getSize(  ) throw (RuntimeException)
     {
         return AWTSize( GetBoundingBox().GetSize() );
     }
-    // -----------------------------------------------------------------------------
+
     void SAL_CALL AccessibleListBoxEntry::grabFocus(  ) throw (RuntimeException)
     {
         // do nothing, because no focus for each item
     }
-    // -----------------------------------------------------------------------------
+
     sal_Int32 AccessibleListBoxEntry::getForeground(    ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -642,7 +642,7 @@ namespace accessibility
 
         return nColor;
     }
-    // -----------------------------------------------------------------------------
+
     sal_Int32 AccessibleListBoxEntry::getBackground(  ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -659,10 +659,10 @@ namespace accessibility
 
         return nColor;
     }
-    // -----------------------------------------------------------------------------
+
     // XAccessibleText
-    // -----------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------
+
+
     awt::Rectangle SAL_CALL AccessibleListBoxEntry::getCharacterBounds( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -687,7 +687,7 @@ namespace accessibility
 
         return aBounds;
     }
-    // -----------------------------------------------------------------------------
+
     sal_Int32 SAL_CALL AccessibleListBoxEntry::getIndexAtPoint( const awt::Point& aPoint ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -709,7 +709,7 @@ namespace accessibility
 
         return nIndex;
     }
-    // -----------------------------------------------------------------------------
+
     sal_Bool SAL_CALL AccessibleListBoxEntry::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -726,9 +726,9 @@ namespace accessibility
 
         return sal_True;
     }
-    // -----------------------------------------------------------------------------
+
     // XAccessibleEventBroadcaster
-    // -----------------------------------------------------------------------------
+
     void SAL_CALL AccessibleListBoxEntry::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
     {
         if (xListener.is())
@@ -739,7 +739,7 @@ namespace accessibility
             comphelper::AccessibleEventNotifier::addEventListener( m_nClientId, xListener );
         }
     }
-    // -----------------------------------------------------------------------------
+
     void SAL_CALL AccessibleListBoxEntry::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
     {
         if (xListener.is())
@@ -760,9 +760,9 @@ namespace accessibility
             }
         }
     }
-    // -----------------------------------------------------------------------------
+
     // XAccessibleAction
-    // -----------------------------------------------------------------------------
+
     sal_Int32 SAL_CALL AccessibleListBoxEntry::getAccessibleActionCount(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -783,7 +783,7 @@ namespace accessibility
             return ACCESSIBLE_ACTION_COUNT;
         return 0;
     }
-    // -----------------------------------------------------------------------------
+
     sal_Bool SAL_CALL AccessibleListBoxEntry::doAccessibleAction( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -821,7 +821,7 @@ namespace accessibility
 
         return bRet;
     }
-    // -----------------------------------------------------------------------------
+
     OUString SAL_CALL AccessibleListBoxEntry::getAccessibleActionDescription( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -861,7 +861,7 @@ namespace accessibility
         }
         throw IndexOutOfBoundsException();
     }
-    // -----------------------------------------------------------------------------
+
     Reference< XAccessibleKeyBinding > AccessibleListBoxEntry::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -871,9 +871,9 @@ namespace accessibility
         // ... which key?
         return xRet;
     }
-    // -----------------------------------------------------------------------------
+
     // XAccessibleSelection
-    // -----------------------------------------------------------------------------
+
     void SAL_CALL AccessibleListBoxEntry::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -887,7 +887,7 @@ namespace accessibility
 
         getListBox()->Select( pEntry, sal_True );
     }
-    // -----------------------------------------------------------------------------
+
     sal_Bool SAL_CALL AccessibleListBoxEntry::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -902,7 +902,7 @@ namespace accessibility
 
         return getListBox()->IsSelected( pEntry );
     }
-    // -----------------------------------------------------------------------------
+
     void SAL_CALL AccessibleListBoxEntry::clearAccessibleSelection(  ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -921,7 +921,7 @@ namespace accessibility
                 getListBox()->Select( pEntry, sal_False );
         }
     }
-    // -----------------------------------------------------------------------------
+
     void SAL_CALL AccessibleListBoxEntry::selectAllAccessibleChildren(  ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -940,7 +940,7 @@ namespace accessibility
                 getListBox()->Select( pEntry, sal_True );
         }
     }
-    // -----------------------------------------------------------------------------
+
     sal_Int32 SAL_CALL AccessibleListBoxEntry::getSelectedAccessibleChildCount(  ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -963,7 +963,7 @@ namespace accessibility
 
         return nSelCount;
     }
-    // -----------------------------------------------------------------------------
+
     Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -996,7 +996,7 @@ namespace accessibility
 
         return xChild;
     }
-    // -----------------------------------------------------------------------------
+
     void SAL_CALL AccessibleListBoxEntry::deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -1122,9 +1122,9 @@ namespace accessibility
 
         return OCommonAccessibleText::getTextBehindIndex( nIndex ,aTextType);
     }
-    // -----------------------------------------------------------------------------
+
     // XAccessibleValue
-    // -----------------------------------------------------------------------------
+
 
     Any AccessibleListBoxEntry::getCurrentValue(  ) throw (RuntimeException)
     {
@@ -1136,7 +1136,7 @@ namespace accessibility
         return aValue;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     sal_Bool AccessibleListBoxEntry::setCurrentValue( const Any& aNumber ) throw (RuntimeException)
     {
@@ -1168,7 +1168,7 @@ namespace accessibility
         return bReturn;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     Any AccessibleListBoxEntry::getMaximumValue(  ) throw (RuntimeException)
     {
@@ -1189,7 +1189,7 @@ namespace accessibility
         return aValue;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     Any AccessibleListBoxEntry::getMinimumValue(  ) throw (RuntimeException)
     {
@@ -1210,7 +1210,7 @@ namespace accessibility
         return aValue;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     SvTreeListEntry* AccessibleListBoxEntry::GetRealChild(sal_Int32 nIndex)
     {

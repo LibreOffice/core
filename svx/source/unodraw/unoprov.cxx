@@ -851,7 +851,7 @@ namespace {
   }
 }
 
-//----------------------------------------------------------------------
+
 OUString UHashMap::getNameFromId(sal_uInt32 nId)
 {
     const UHashMapImpl &rMap = GetUHashImpl();
@@ -903,7 +903,7 @@ SvxUnoPropertyMapProvider& getSvxMapProvider()
     return theSvxMapProvider::get();
 }
 
-// ---------------------------------------------------------------------
+
 
 SvxUnoPropertyMapProvider::SvxUnoPropertyMapProvider()
 {
@@ -920,7 +920,7 @@ SvxUnoPropertyMapProvider::~SvxUnoPropertyMapProvider()
         delete aSetArr[i];
 }
 
-// ---------------------------------------------------------------------
+
 
 const SfxItemPropertyMapEntry* SvxUnoPropertyMapProvider::GetMap(sal_uInt16 nPropertyId)
 {

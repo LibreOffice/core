@@ -175,7 +175,7 @@ void FrameListAnalyzer::impl_analyze()
                 SAL_INFO("fwk", "FrameListAnalyzer::impl_analyze(): ZOMBIE!");
             }
 
-            // -------------------------------------------------
+
             // a) Is it the special help task?
             //    Return it separated from any return list.
             if (
@@ -187,7 +187,7 @@ void FrameListAnalyzer::impl_analyze()
                 continue;
             }
 
-            // -------------------------------------------------
+
             // b) Or is includes this task the special backing component?
             //    Return it separated from any return list.
             //    But check if the reference task itself is the backing frame.
@@ -210,7 +210,7 @@ void FrameListAnalyzer::impl_analyze()
                 }
             }
 
-            // -------------------------------------------------
+
             // c) Or is it the a task, which uses the specified model?
             //    Add it to the list of "model frames".
             if ((m_eDetectMode & E_MODEL) == E_MODEL)
@@ -227,11 +227,11 @@ void FrameListAnalyzer::impl_analyze()
                 }
             }
 
-            // -------------------------------------------------
+
             // d) Or is it the a task, which use another or no model at all?
             //    Add it to the list of "other frames". But look for it's
             //    visible state ... if it's allowed to do so.
-            // -------------------------------------------------
+
             sal_Bool bHidden = sal_False;
             if ((m_eDetectMode & E_HIDDEN) == E_HIDDEN )
             {

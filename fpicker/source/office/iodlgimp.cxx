@@ -98,7 +98,7 @@ SvtFileDialogFilter_Impl::~SvtFileDialogFilter_Impl()
 //= SvtFileDialogURLSelector
 //=============================================================================
 
-//-----------------------------------------------------------------------------
+
 SvtFileDialogURLSelector::SvtFileDialogURLSelector( SvtFileDialog* _pParent, const ResId& _rResId, sal_uInt16 _nButtonId )
     :MenuButton ( _pParent, _rResId )
     ,m_pParent  ( _pParent )
@@ -110,13 +110,13 @@ SvtFileDialogURLSelector::SvtFileDialogURLSelector( SvtFileDialog* _pParent, con
     SetDropDown( PUSHBUTTON_DROPDOWN_TOOLBOX );
 }
 
-//-----------------------------------------------------------------------------
+
 SvtFileDialogURLSelector::~SvtFileDialogURLSelector()
 {
     delete m_pMenu;
 }
 
-//-----------------------------------------------------------------------------
+
 void SvtFileDialogURLSelector::Activate()
 {
     m_pMenu->Clear();
@@ -130,18 +130,18 @@ void SvtFileDialogURLSelector::Activate()
 //= SvtUpButton_Impl
 //=============================================================================
 
-//-----------------------------------------------------------------------------
+
 SvtUpButton_Impl::SvtUpButton_Impl( SvtFileDialog* pParent, const ResId& rResId )
     :SvtFileDialogURLSelector( pParent, rResId, IMG_FILEDLG_BTN_UP )
 {
 }
 
-//-----------------------------------------------------------------------------
+
 SvtUpButton_Impl::~SvtUpButton_Impl()
 {
 }
 
-//-----------------------------------------------------------------------------
+
 void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
 {
     SvtFileView* pBox = GetDialogParent()->GetView();
@@ -184,7 +184,7 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
     }
 }
 
-//-----------------------------------------------------------------------------
+
 void SvtUpButton_Impl::Select()
 {
     sal_uInt16 nId = GetCurItemId();
@@ -198,7 +198,7 @@ void SvtUpButton_Impl::Select()
     }
 }
 
-//-----------------------------------------------------------------------------
+
 void SvtUpButton_Impl::Click()
 {
     GetDialogParent()->PrevLevel_Impl();
@@ -287,7 +287,7 @@ void SvtExpFileDlg_Impl::SetStandardDir( const OUString& _rDir )
 
 //*****************************************************************************
 #if defined DBG_UTIL
-//-----------------------------------------------------------------------------
+
 namespace {
     OUString lcl_DecoratedFilter( const OUString& _rOriginalFilter )
     {
@@ -299,14 +299,14 @@ namespace {
     }
 }
 #endif
-//-----------------------------------------------------------------------------
+
 
 void SvtExpFileDlg_Impl::ClearFilterList( )
 {
     _pLbFilter->Clear();
 }
 
-//-----------------------------------------------------------------------------
+
 void SvtExpFileDlg_Impl::SetCurFilter( SvtFileDialogFilter_Impl* pFilter, const OUString& rDisplayName )
 {
     DBG_ASSERT( pFilter, "SvtExpFileDlg_Impl::SetCurFilter: invalid filter!" );
@@ -318,7 +318,7 @@ void SvtExpFileDlg_Impl::SetCurFilter( SvtFileDialogFilter_Impl* pFilter, const 
     m_sCurrentFilterDisplayName = rDisplayName;
 }
 
-//-----------------------------------------------------------------------------
+
 void SvtExpFileDlg_Impl::InsertFilterListEntry( const SvtFileDialogFilter_Impl* _pFilterDesc )
 {
     OUString sName = _pFilterDesc->GetName();
@@ -332,7 +332,7 @@ void SvtExpFileDlg_Impl::InsertFilterListEntry( const SvtFileDialogFilter_Impl* 
     _pLbFilter->SetEntryData( nPos, const_cast< void* >( static_cast< const void* >( _pFilterDesc ) ) );
 }
 
-//-----------------------------------------------------------------------------
+
 
 void SvtExpFileDlg_Impl::InitFilterList( )
 {
@@ -351,7 +351,7 @@ void SvtExpFileDlg_Impl::InitFilterList( )
         InsertFilterListEntry( &(*_pFilter)[ nPos-- ] );
 }
 
-//-----------------------------------------------------------------------------
+
 
 void SvtExpFileDlg_Impl::CreateFilterListControl( Window* _pParent, const ResId& _rId )
 {

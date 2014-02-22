@@ -84,7 +84,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
     for( nLauf = 0 ; nLauf < nAnz ; nLauf++ )
         aStack >> eParam[ nLauf ];
 
-    // Spezialfaelle...
+    // special cases...
     switch( eOc )
     {
         case ocIndex:
@@ -118,7 +118,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
         case ocFind:
         case ocHLookup:
         case ocVLookup:
-        {// letzten Parameter ++
+        {// last parameter ++
             IncToken( eParam[ 0 ] );
         }
             break;
@@ -131,20 +131,18 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
             break;
         case ocZins:
         {
-            // neue Anzahl = 4!
+            // new quantity = 4!
             OSL_ENSURE( nAnz == 3,
                 "*LotusToSc::DoFunc(): ZINS() hat 3 Parameter!" );
             nAnz = 4;
             eParam[ 3 ] = eParam[ 0 ];  // 3. -> 1.
             eParam[ 0 ] = eParam[ 2 ];  // 1. -> 4.
             NegToken( eParam[ 1 ] );    // 2. -> -2. (+ 2. -> 3.)
-            eParam[ 2 ] = n0Token;      //    -> 2. als Default
+            eParam[ 2 ] = n0Token;      //    -> 2. as Default
         }
             break;
         default:;
     }
-    // ................
-
 
     if( !bAddIn )
         aPool << eOc;
@@ -153,7 +151,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
 
     if( nAnz > 0 )
     {
-            // ACHTUNG: 0 ist der letzte Parameter, nAnz-1 der erste
+            // ATTENTION: 0 is the last parameter, nAnz-1 the first one
 
         sal_Int16 nLast = nAnz - 1;
 
@@ -197,8 +195,6 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
     }
 
     aPool << ocClose;
-
-    // ................
 
     aPool >> aStack;
 
@@ -522,7 +518,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest,
                 break;
             case FT_NOP:
                 break;
-            // ------------------------------------------ fuer > WK3 -
+            // for > WK3
             case FT_Cref:
                 Read( nRelBits );
                 ReadSRD( rR, nRelBits );
@@ -688,7 +684,7 @@ FUNC_TYPE LotusToSc::IndexToType( sal_uInt8 nIndex )
         FT_FuncFix1,        //   39 Sinus
         FT_FuncFix1,        //   40 Cosinus
         FT_FuncFix1,        //   41 Tangens
-        FT_FuncFix2,        //   42 Arcus-Tangens 2 (4.Quadrant)   <----- richtig? -
+        FT_FuncFix2,        //   42 Arcus-Tangens 2 (4.Quadrant) <- correct?
         FT_FuncFix1,        //   43 Arcus-Tangens (2.Quadrant)
         FT_FuncFix1,        //   44 Arcus-Sinus
         FT_FuncFix1,        //   45 Arcus-Cosinus
@@ -744,7 +740,7 @@ FUNC_TYPE LotusToSc::IndexToType( sal_uInt8 nIndex )
         FT_FuncFix3,        //   95 ?
         FT_FuncFix3,        //   96 ?
         FT_FuncFix3,        //   97 ?
-        FT_FuncFix3,        //   98 Index()                         <- richtig? -
+        FT_FuncFix3,        //   98 Index() <- correct?
         FT_FuncFix1,        //   99 Cols()
         FT_FuncFix1,        //  100 Rows()
         FT_FuncFix2,        //  101 Repeat()
@@ -758,7 +754,7 @@ FUNC_TYPE LotusToSc::IndexToType( sal_uInt8 nIndex )
         FT_FuncFix1,        //  109 Trim()
         FT_FuncFix1,        //  110 Clean()
         FT_FuncFix1,        //  111 F()
-        FT_FuncFix1,        //  112 Wert() (oder W()?)
+        FT_FuncFix1,        //  112 Wert() (or W()?)
         FT_FuncFix2,        //  113 Exact()
         FT_NotImpl,         //  114 Call()
         FT_FuncFix1,        //  115 @@()
@@ -1203,16 +1199,16 @@ FUNC_TYPE LotusToSc::IndexToTypeWK123( sal_uInt8 nIndex )
         FT_Op,              //   23 Groesser-gleich
         FT_Op,              //   24 Kleiner
         FT_Op,              //   25 Groesser
-        FT_Op,              //   26 And (logisch)
-        FT_Op,              //   27 Or (logisch)
-        FT_FuncFix1,        //   28 Not (logisch)
-        FT_NOP,             //   29 unaeres Plus
+        FT_Op,              //   26 And (logical)
+        FT_Op,              //   27 Or (logical)
+        FT_FuncFix1,        //   28 Not (logical)
+        FT_NOP,             //   29 unary plus
         FT_Op,              //   30 Concatenation
         FT_FuncFix0,        //   31 Not applicable
         FT_FuncFix0,        //   32 Error
-        FT_FuncFix1,        //   33 Betrag ABS()
-        FT_FuncFix1,        //   34 Ganzzahl INT()
-        FT_FuncFix1,        //   35 Quadratwurzel
+        FT_FuncFix1,        //   33 Absolute value ABS()
+        FT_FuncFix1,        //   34 Integer INT()
+        FT_FuncFix1,        //   35 Square root
         FT_FuncFix1,        //   36 Zehnerlogarithmus
         FT_FuncFix1,        //   37 Natuerlicher Logarithmus
         FT_FuncFix0,        //   38 PI
@@ -1225,7 +1221,7 @@ FUNC_TYPE LotusToSc::IndexToTypeWK123( sal_uInt8 nIndex )
         FT_FuncFix1,        //   45 Arcus-Cosinus
         FT_FuncFix1,        //   46 Exponentialfunktion
         FT_FuncFix2,        //   47 Modulo
-        FT_FuncVar,         //   48 Auswahl
+        FT_FuncVar,         //   48 Selection
         FT_FuncFix1,        //   49 Is not applicable?
         FT_FuncFix1,        //   50 Is Error?
         FT_FuncFix0,        //   51 FALSE
@@ -1268,81 +1264,81 @@ FUNC_TYPE LotusToSc::IndexToTypeWK123( sal_uInt8 nIndex )
         FT_FuncVar,         //   88 Std()
         FT_FuncFix2,        //   89 Irr()
         FT_FuncFix3,        //   90 Hlookup()
-        FT_FuncVar,         //   91 Dsum                 <-------- neu! -
-        FT_FuncVar,         //   92 Davg                 <-------- neu! -
-        FT_FuncVar,         //   93 Dcnt                 <-------- neu! -
-        FT_FuncVar,         //   94 Dmin                 <-------- neu! -
-        FT_FuncVar,         //   95 Dmax                 <-------- neu! -
-        FT_FuncVar,         //   96 Dvar                 <-------- neu! -
-        FT_FuncVar,         //   97 Dstd                 <-------- neu! -
-        FT_FuncVar,         //   98 Index()              <-------- change! -
-        FT_FuncFix1,        //   99 Cols()               <-------- neu! -
-        FT_FuncFix1,        //  100 Rows()               <-------- neu! -
-        FT_FuncFix2,        //  101 Repeat()             <-------- neu! -
-        FT_FuncFix1,        //  102 Upper()              <-------- neu! -
-        FT_FuncFix1,        //  103 Lower()              <-------- neu! -
-        FT_FuncFix2,        //  104 Left()               <-------- neu! -
-        FT_FuncFix2,        //  105 Right()              <-------- neu! -
-        FT_FuncFix4,        //  106 Replace()            <-------- neu! -
-        FT_FuncFix1,        //  107 Proper()             <-------- neu! -
-        FT_FuncFix2,        //  108 Cell()               <-------- neu! -
-        FT_FuncFix1,        //  109 Trim()               <-------- neu! -
-        FT_FuncFix1,        //  110 Clean()              <-------- neu! -
-        FT_FuncFix1,        //  111 S()                  <--------- change in Bez. -
-        FT_FuncFix1,        //  112 N()                  <--------- change in Bez. -
-        FT_FuncFix2,        //  113 Exact()              <-------- neu! -
-        FT_NotImpl,         //  114 App                  <--------- change in Bez. -
-        FT_FuncFix1,        //  115 @@()                 <-------- neu! -
-        FT_FuncFix3,        //  116 Rate()               <-------- neu! -
-        FT_FuncFix3,        //  117 Term()               <--------- change in Anz.
-        FT_FuncFix3,        //  118 Cterm()              <--------- change in Anz.
-        FT_FuncFix3,        //  119 Sln()                <-------- neu! -
-        FT_FuncFix4,        //  120 Syd()                <-------- neu! -
-        FT_FuncFix4,        //  121 Ddb()                <-------- neu! -
-        FT_Splfunc,         //  122 Splfunc              <-------- neu! -
-        FT_FuncFix1,        //  123 Sheets               <-------- neu! -
-        FT_FuncFix1,        //  124 Info                 <-------- neu! -
-        FT_FuncVar,         //  125 Sumproduct           <-------- neu! -
-        FT_FuncFix1,        //  126 Isrange              <-------- neu! -
-        FT_FuncVar,         //  127 Dget                 <-------- neu! -
-        FT_FuncVar,         //  128 Dquery               <-------- neu! -
-        FT_FuncFix4,        //  129 Coord                <-------- neu! -
-        FT_NOP,             //  130 Reserved (internal)  <-------- neu! -
-        FT_FuncFix0,        //  131 Today                <-------- neu! -
-        FT_FuncVar,         //  132 Vdb                  <-------- neu! -
-        FT_FuncVar,         //  133 Dvars                <-------- neu! -
-        FT_FuncVar,         //  134 Dstds                <-------- neu! -
-        FT_FuncVar,         //  135 Vars                 <-------- neu! -
-        FT_FuncVar,         //  136 Stds                 <-------- neu! -
-        FT_FuncFix2,        //  137 D360                 <-------- neu! -
-        FT_NOP,             //  138 Reserved (internal)  <-------- neu! -
-        FT_FuncFix0,        //  139 Isapp                <-------- neu! - Anzahl ? -
-        FT_FuncVar,         //  140 Isaaf                <-------- neu! - Anzahl ? -
-        FT_FuncFix1,        //  141 Weekday              <-------- neu! -
-        FT_FuncFix3,        //  142 Datedif              <-------- neu! -
-        FT_FuncVar,         //  143 Rank                 <-------- neu! -
-        FT_FuncFix2,        //  144 Numberstring         <-------- neu! -
-        FT_FuncFix1,        //  145 Datestring           <-------- neu! -
-        FT_FuncFix1,        //  146 Decimal              <-------- neu! -
-        FT_FuncFix1,        //  147 Hex                  <-------- neu! -
-        FT_FuncFix4,        //  148 Db                   <-------- neu! -
-        FT_FuncFix4,        //  149 Pmti                 <-------- neu! -
-        FT_FuncFix4,        //  150 Spi                  <-------- neu! -
-        FT_FuncFix1,        //  151 Fullp                <-------- neu! -
-        FT_FuncFix1,        //  152 Halfp                <-------- neu! -
-        FT_FuncVar,         //  153 Pureavg              <-------- neu! -
-        FT_FuncVar,         //  154 Purecount            <-------- neu! -
-        FT_FuncVar,         //  155 Puremax              <-------- neu! -
-        FT_FuncVar,         //  156 Puremin              <-------- neu! -
-        FT_FuncVar,         //  157 Purestd              <-------- neu! -
-        FT_FuncVar,         //  158 Purevar              <-------- neu! -
-        FT_FuncVar,         //  159 Purestds             <-------- neu! -
-        FT_FuncVar,         //  160 Purevars             <-------- neu! -
-        FT_FuncFix3,        //  161 Pmt2                 <-------- neu! -
-        FT_FuncFix3,        //  162 Pv2                  <-------- neu! -
-        FT_FuncFix3,        //  163 Fv2                  <-------- neu! -
-        FT_FuncFix3,        //  164 Term2                <-------- neu! -
-        FT_NotImpl,         //  165 ---                  <-------- neu! - Anzahl ? -
+        FT_FuncVar,         //   91 Dsum                 <- new
+        FT_FuncVar,         //   92 Davg                 <- new
+        FT_FuncVar,         //   93 Dcnt                 <- new
+        FT_FuncVar,         //   94 Dmin                 <- new
+        FT_FuncVar,         //   95 Dmax                 <- new
+        FT_FuncVar,         //   96 Dvar                 <- new
+        FT_FuncVar,         //   97 Dstd                 <- new
+        FT_FuncVar,         //   98 Index()              <- change!
+        FT_FuncFix1,        //   99 Cols()               <- new
+        FT_FuncFix1,        //  100 Rows()               <- new
+        FT_FuncFix2,        //  101 Repeat()             <- new
+        FT_FuncFix1,        //  102 Upper()              <- new
+        FT_FuncFix1,        //  103 Lower()              <- new
+        FT_FuncFix2,        //  104 Left()               <- new
+        FT_FuncFix2,        //  105 Right()              <- new
+        FT_FuncFix4,        //  106 Replace()            <- new
+        FT_FuncFix1,        //  107 Proper()             <- new
+        FT_FuncFix2,        //  108 Cell()               <- new
+        FT_FuncFix1,        //  109 Trim()               <- new
+        FT_FuncFix1,        //  110 Clean()              <- new
+        FT_FuncFix1,        //  111 S()                  <- change in Bez.
+        FT_FuncFix1,        //  112 N()                  <- change in Bez.
+        FT_FuncFix2,        //  113 Exact()              <- new
+        FT_NotImpl,         //  114 App                  <- change in Bez.
+        FT_FuncFix1,        //  115 @@()                 <- new
+        FT_FuncFix3,        //  116 Rate()               <- new
+        FT_FuncFix3,        //  117 Term()               <- change in Anz.
+        FT_FuncFix3,        //  118 Cterm()              <- change in Anz.
+        FT_FuncFix3,        //  119 Sln()                <- new
+        FT_FuncFix4,        //  120 Syd()                <- new
+        FT_FuncFix4,        //  121 Ddb()                <- new
+        FT_Splfunc,         //  122 Splfunc              <- new
+        FT_FuncFix1,        //  123 Sheets               <- new
+        FT_FuncFix1,        //  124 Info                 <- new
+        FT_FuncVar,         //  125 Sumproduct           <- new
+        FT_FuncFix1,        //  126 Isrange              <- new
+        FT_FuncVar,         //  127 Dget                 <- new
+        FT_FuncVar,         //  128 Dquery               <- new
+        FT_FuncFix4,        //  129 Coord                <- new
+        FT_NOP,             //  130 Reserved (internal)  <- new
+        FT_FuncFix0,        //  131 Today                <- new
+        FT_FuncVar,         //  132 Vdb                  <- new
+        FT_FuncVar,         //  133 Dvars                <- new
+        FT_FuncVar,         //  134 Dstds                <- new
+        FT_FuncVar,         //  135 Vars                 <- new
+        FT_FuncVar,         //  136 Stds                 <- new
+        FT_FuncFix2,        //  137 D360                 <- new
+        FT_NOP,             //  138 Reserved (internal)  <- new
+        FT_FuncFix0,        //  139 Isapp                <- new quantity ?
+        FT_FuncVar,         //  140 Isaaf                <- new quantity ?
+        FT_FuncFix1,        //  141 Weekday              <- new
+        FT_FuncFix3,        //  142 Datedif              <- new
+        FT_FuncVar,         //  143 Rank                 <- new
+        FT_FuncFix2,        //  144 Numberstring         <- new
+        FT_FuncFix1,        //  145 Datestring           <- new
+        FT_FuncFix1,        //  146 Decimal              <- new
+        FT_FuncFix1,        //  147 Hex                  <- new
+        FT_FuncFix4,        //  148 Db                   <- new
+        FT_FuncFix4,        //  149 Pmti                 <- new
+        FT_FuncFix4,        //  150 Spi                  <- new
+        FT_FuncFix1,        //  151 Fullp                <- new
+        FT_FuncFix1,        //  152 Halfp                <- new
+        FT_FuncVar,         //  153 Pureavg              <- new
+        FT_FuncVar,         //  154 Purecount            <- new
+        FT_FuncVar,         //  155 Puremax              <- new
+        FT_FuncVar,         //  156 Puremin              <- new
+        FT_FuncVar,         //  157 Purestd              <- new
+        FT_FuncVar,         //  158 Purevar              <- new
+        FT_FuncVar,         //  159 Purestds             <- new
+        FT_FuncVar,         //  160 Purevars             <- new
+        FT_FuncFix3,        //  161 Pmt2                 <- new
+        FT_FuncFix3,        //  162 Pv2                  <- new
+        FT_FuncFix3,        //  163 Fv2                  <- new
+        FT_FuncFix3,        //  164 Term2                <- new
+        FT_NotImpl,         //  165--                    <- new quantity ?
         FT_FuncFix2,        //  166 D360 (US-Version)
         FT_NotImpl,         //  167
         FT_NotImpl,         //  168
@@ -1363,7 +1359,7 @@ FUNC_TYPE LotusToSc::IndexToTypeWK123( sal_uInt8 nIndex )
         FT_NotImpl,         //  183
         FT_NotImpl,         //  184
         FT_NotImpl,         //  185
-        FT_FuncVar,         //  186 Solver               <-------- neu! -
+        FT_FuncVar,         //  186 Solver               <- new
         FT_NotImpl,         //  187
         FT_NotImpl,         //  188
         FT_NotImpl,         //  189
@@ -1441,7 +1437,7 @@ FUNC_TYPE LotusToSc::IndexToTypeWK123( sal_uInt8 nIndex )
 DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
 {
     static const DefTokenId pToken[ 256 ] =
-    {                       // Code Bezeichnung
+    {                       // Code Description
         ocPush,             //    0 8-Byte-IEEE-Long-Numbers
         ocPush,             //    1 Variable
         ocPush,             //    2 Bereich
@@ -1462,8 +1458,8 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
         ocMul,              //   17 Multiplikation
         ocDiv,              //   18 Division
         ocPow,              //   19 Potenzierung
-        ocEqual,            //   20 Gleichheit
-        ocNotEqual,         //   21 Ungleich
+        ocEqual,            //   20 Equality
+        ocNotEqual,         //   21 Inequality
         ocLessEqual,        //   22 Kleiner-gleich
         ocGreaterEqual,     //   23 Groesser-gleich
         ocLess,             //   24 Kleiner
@@ -1480,7 +1476,7 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
         ocSqrt,             //   35 Quadratwurzel
         ocLog10,            //   36 Zehnerlogarithmus
         ocLn,               //   37 Natuerlicher Logarithmus
-        ocPi,               //   38 PI
+        ocPi,               //   38 Pi
         ocSin,              //   39 Sinus
         ocCos,              //   40 Cosinus
         ocTan,              //   41 Tangens
@@ -1490,7 +1486,7 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
         ocArcCos,           //   45 Arcus-Cosinus
         ocExp,              //   46 Exponentialfunktion
         ocMod,              //   47 Modulo
-        ocChose,            //   48 Auswahl
+        ocChose,            //   48 Selection
         ocIsNA,             //   49 Is not available?
         ocIsError,          //   50 Is Error?
         ocFalse,            //   51 FALSE
@@ -1501,17 +1497,17 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
         ocRMZ,              //   56 Payment
         ocBW,               //   57 Present Value
         ocZW,               //   58 Future Value
-        ocIf,               //   59 If ... then ... else ...
+        ocIf,               //   59 If... then... else...
         ocGetDay,           //   60 Tag des Monats
-        ocGetMonth,         //   61 Monat
-        ocGetYear,          //   62 Jahr
-        ocRound,            //   63 Runden
-        ocGetTime,          //   64 Zeit
-        ocGetHour,          //   65 Stunde
+        ocGetMonth,         //   61 Month
+        ocGetYear,          //   62 Year
+        ocRound,            //   63 Round
+        ocGetTime,          //   64 Time
+        ocGetHour,          //   65 Hour
         ocGetMin,           //   66 Minute
-        ocGetSec,           //   67 Sekunde
-        ocIsValue,          //   68 Ist Zahl?
-        ocIsString,         //   69 Ist Text?
+        ocGetSec,           //   67 Second
+        ocIsValue,          //   68 Is number?
+        ocIsString,         //   69 Is text?
         ocLen,              //   70 Len()
         ocValue,            //   71 Val()
         ocFixed,            //   72 String()    ocFixed ersatzweise + Spezialfall
@@ -1607,7 +1603,7 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
         ocNoName,           //  162 Pv2
         ocNoName,           //  163 Fv2
         ocNoName,           //  164 Term2
-        ocNoName,           //  165 ---                  <-------- neu! - Anzahl ? -
+        ocNoName,           //  165--                  <- new quantity ?
         ocGetDiffDate360,   //  166 D360 (US-Version, ersatzweise wie ander D360-Funktion)
         ocNoName,           //  167
         ocNoName,           //  168
@@ -1714,7 +1710,7 @@ const sal_Char* GetAddInName( const sal_uInt8 n )
         NULL,                       //    1 Variable
         NULL,                       //    2 Bereich
         NULL,                       //    3 return
-        NULL,                       //    4 Klammer
+        NULL,                       //    4 Bracket
         NULL,                       //    5 2-Byte-Integer
         NULL,                       //    6 ASCII-String
         NULL,                       //    7 Named range reference
@@ -1864,7 +1860,7 @@ const sal_Char* GetAddInName( const sal_uInt8 n )
         NULL,                       //  151 Fullp
         NULL,                       //  152 Halfp
         "PURMITTELWERT",            //  153 Pureavg
-        "PURANZAHL",                //  154 Purecount
+        "PURquantity",                //  154 Purecount
         "PURMAX",                   //  155 Puremax
         "PURMIN",                   //  156 Puremin
         "PURSTDABW",                //  157 Purestd
@@ -1875,7 +1871,7 @@ const sal_Char* GetAddInName( const sal_uInt8 n )
         NULL,                       //  162 Pv2
         NULL,                       //  163 Fv2
         NULL,                       //  164 Term2
-        NULL,                       //  165 ---                  <-------- neu! - Anzahl ? -
+        NULL,                       //  165--                  <- new quantity ?
         NULL,                       //  166 D360 (US-Version, ersatzweise wie ander D360-Funktion)
         NULL,                       //  167
         NULL,                       //  168

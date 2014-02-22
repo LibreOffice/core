@@ -98,17 +98,17 @@ namespace pcr
         SharedNotifier& operator=( const SharedNotifier& ); // never implemented
     };
 
-    //------------------------------------------------------------------
+
     ::rtl::Reference< ::comphelper::AsyncEventNotifier > SharedNotifier::s_pNotifier;
 
-    //------------------------------------------------------------------
+
     ::osl::Mutex& SharedNotifier::getMutex()
     {
         static ::osl::Mutex s_aMutex;
         return s_aMutex;
     }
 
-    //------------------------------------------------------------------
+
     const ::rtl::Reference< ::comphelper::AsyncEventNotifier >& SharedNotifier::getNotifier()
     {
         ::osl::MutexGuard aGuard( getMutex() );
@@ -211,28 +211,28 @@ namespace pcr
         void impl_notify_throw( const Reference< XPropertyControl >& _rxControl, ControlEventType _eType );
     };
 
-    //--------------------------------------------------------------------
+
     PropertyControlContext_Impl::PropertyControlContext_Impl( IControlContext& _rContextImpl )
         :m_pContext( &_rContextImpl )
         ,m_eMode( eAsynchronously )
     {
     }
 
-    //--------------------------------------------------------------------
+
     PropertyControlContext_Impl::~PropertyControlContext_Impl()
     {
         if ( !impl_isDisposed_nothrow() )
             dispose();
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyControlContext_Impl::impl_checkAlive_throw() const
     {
         if ( impl_isDisposed_nothrow() )
             throw DisposedException( OUString(), *const_cast< PropertyControlContext_Impl* >( this ) );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL PropertyControlContext_Impl::dispose()
     {
         SolarMutexGuard aGuard;
@@ -243,14 +243,14 @@ namespace pcr
         m_pContext = NULL;
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyControlContext_Impl::setNotificationMode( NotifcationMode _eMode )
     {
         SolarMutexGuard aGuard;
         m_eMode = _eMode;
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyControlContext_Impl::impl_notify_throw( const Reference< XPropertyControl >& _rxControl, ControlEventType _eType )
     {
         ::comphelper::AnyEventRef pEvent;
@@ -270,40 +270,40 @@ namespace pcr
         SharedNotifier::getNotifier()->addEvent( pEvent, this );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL PropertyControlContext_Impl::focusGained( const Reference< XPropertyControl >& Control ) throw (RuntimeException)
     {
         OSL_TRACE( "PropertyControlContext_Impl: FOCUS_GAINED" );
         impl_notify_throw( Control, FOCUS_GAINED );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL PropertyControlContext_Impl::valueChanged( const Reference< XPropertyControl >& Control ) throw (RuntimeException)
     {
         OSL_TRACE( "PropertyControlContext_Impl: VALUE_CHANGED" );
         impl_notify_throw( Control, VALUE_CHANGED );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL PropertyControlContext_Impl::activateNextControl( const Reference< XPropertyControl >& CurrentControl ) throw (RuntimeException)
     {
         OSL_TRACE( "PropertyControlContext_Impl: ACTIVATE_NEXT" );
         impl_notify_throw( CurrentControl, ACTIVATE_NEXT );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL PropertyControlContext_Impl::acquire() throw()
     {
         PropertyControlContext_Impl_Base::acquire();
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL PropertyControlContext_Impl::release() throw()
     {
         PropertyControlContext_Impl_Base::release();
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyControlContext_Impl::processEvent( const ::comphelper::AnyEvent& _rEvent )
     {
         SolarMutexGuard aGuard;
@@ -322,7 +322,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyControlContext_Impl::impl_processEvent_throw( const ::comphelper::AnyEvent& _rEvent )
     {
         const ControlEvent& rControlEvent = static_cast< const ControlEvent& >( _rEvent );
@@ -347,7 +347,7 @@ namespace pcr
     //= OBrowserListBox
     //==================================================================
     DBG_NAME(OBrowserListBox)
-    //------------------------------------------------------------------
+
     OBrowserListBox::OBrowserListBox( Window* pParent, WinBits nWinStyle)
             :Control(pParent, nWinStyle| WB_CLIPCHILDREN)
             ,m_aLinesPlayground(this,WB_DIALOGCONTROL | WB_CLIPCHILDREN)
@@ -377,7 +377,7 @@ namespace pcr
         m_aVScroll.SetScrollHdl(LINK(this, OBrowserListBox, ScrollHdl));
     }
 
-    //------------------------------------------------------------------
+
     OBrowserListBox::~OBrowserListBox()
     {
         OSL_ENSURE( !IsModified(), "OBrowserListBox::~OBrowserListBox: still modified - should have been committed before!" );
@@ -394,7 +394,7 @@ namespace pcr
         DBG_DTOR(OBrowserListBox,NULL);
     }
 
-    //------------------------------------------------------------------
+
     sal_Bool OBrowserListBox::IsModified( ) const
     {
         sal_Bool bModified = sal_False;
@@ -405,7 +405,7 @@ namespace pcr
         return bModified;
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserListBox::CommitModified( )
     {
         if ( IsModified() && m_xActiveControl.is() )
@@ -425,7 +425,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserListBox::ActivateListBox(sal_Bool _bActive)
     {
         m_bIsActive = _bActive;
@@ -438,13 +438,13 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+
     long OBrowserListBox::impl_getPrefererredHelpHeight()
     {
         return HasHelpSection() ? m_pHelpWindow->GetOptimalHeightPixel() : 0;
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserListBox::Resize()
     {
         Rectangle aPlayground( Point( 0, 0 ), GetOutputSizePixel() );
@@ -507,32 +507,32 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserListBox::SetListener( IPropertyLineListener* _pListener )
     {
         m_pLineListener = _pListener;
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserListBox::SetObserver( IPropertyControlObserver* _pObserver )
     {
         m_pControlObserver = _pObserver;
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserListBox::EnableHelpSection( bool _bEnable )
     {
         m_pHelpWindow->Show( _bEnable );
         Resize();
     }
 
-    //------------------------------------------------------------------
+
     bool OBrowserListBox::HasHelpSection() const
     {
         return m_pHelpWindow->IsVisible();
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserListBox::SetHelpText( const OUString& _rHelpText )
     {
         OSL_ENSURE( HasHelpSection(), "OBrowserListBox::SetHelpText: help section not visible!" );
@@ -541,13 +541,13 @@ namespace pcr
             Resize();
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserListBox::SetHelpLineLimites( sal_Int32 _nMinLines, sal_Int32 _nMaxLines )
     {
         m_pHelpWindow->SetLimits( _nMinLines, _nMaxLines );
     }
 
-    //------------------------------------------------------------------
+
     sal_uInt16 OBrowserListBox::CalcVisibleLines()
     {
         Size aSize(m_aLinesPlayground.GetOutputSizePixel());
@@ -558,7 +558,7 @@ namespace pcr
         return nResult;
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserListBox::UpdateVScroll()
     {
         sal_uInt16 nLines = CalcVisibleLines();
@@ -578,7 +578,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserListBox::PositionLine( sal_uInt16 _nIndex )
     {
         Size aSize(m_aLinesPlayground.GetOutputSizePixel());
@@ -601,7 +601,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserListBox::UpdatePosNSize()
     {
         for  (  ::std::set< sal_uInt16 >::const_iterator aLoop = m_aOutOfDateLines.begin();
@@ -616,7 +616,7 @@ namespace pcr
         m_aOutOfDateLines.clear();
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserListBox::UpdatePlayGround()
     {
         sal_Int32 nThumbPos = m_aVScroll.GetThumbPos();
@@ -634,26 +634,26 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserListBox::UpdateAll()
     {
         Resize();
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserListBox::DisableUpdate()
     {
         m_bUpdate = sal_False;
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserListBox::EnableUpdate()
     {
         m_bUpdate = sal_True;
         UpdateAll();
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserListBox::SetPropertyValue(const OUString& _rEntryName, const Any& _rValue, bool _bUnknownValue )
     {
         ListBoxLines::iterator line = m_aLines.begin();
@@ -674,7 +674,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     sal_uInt16 OBrowserListBox::GetPropertyPos( const OUString& _rEntryName ) const
     {
         sal_uInt16 nRet = LISTBOX_ENTRY_NOTFOUND;
@@ -693,7 +693,7 @@ namespace pcr
         return nRet;
     }
 
-    //------------------------------------------------------------------------
+
     bool OBrowserListBox::impl_getBrowserLineForName( const OUString& _rEntryName, BrowserLinePointer& _out_rpLine ) const
     {
         ListBoxLines::const_iterator line = m_aLines.begin();
@@ -707,7 +707,7 @@ namespace pcr
         return ( NULL != _out_rpLine.get() );
     }
 
-    //------------------------------------------------------------------------
+
     void OBrowserListBox::EnablePropertyControls( const OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable )
     {
         BrowserLinePointer pLine;
@@ -715,7 +715,7 @@ namespace pcr
             pLine->EnablePropertyControls( _nControls, _bEnable );
     }
 
-    //------------------------------------------------------------------------
+
     void OBrowserListBox::EnablePropertyLine( const OUString& _rEntryName, bool _bEnable )
     {
         BrowserLinePointer pLine;
@@ -723,7 +723,7 @@ namespace pcr
             pLine->EnablePropertyLine( _bEnable );
     }
 
-    //------------------------------------------------------------------------
+
     Reference< XPropertyControl > OBrowserListBox::GetPropertyControl( const OUString& _rEntryName )
     {
         BrowserLinePointer pLine;
@@ -732,7 +732,7 @@ namespace pcr
         return NULL;
     }
 
-    //------------------------------------------------------------------
+
     sal_uInt16 OBrowserListBox::InsertEntry(const OLineDescriptor& _rPropertyData, sal_uInt16 _nPos)
     {
         // create a new line
@@ -773,13 +773,13 @@ namespace pcr
         return nInsertPos;
     }
 
-    //------------------------------------------------------------------
+
     sal_Int32 OBrowserListBox::GetMinimumWidth()
     {
         return m_nTheNameSize + 2 * FRAME_OFFSET + (m_nRowHeight - 4) * 8;
     }
 
-    //------------------------------------------------------------------
+
     sal_Int32 OBrowserListBox::GetMinimumHeight()
     {
         // assume that we want to display 5 rows, at least
@@ -796,7 +796,7 @@ namespace pcr
         return nMinHeight;
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserListBox::ShowEntry(sal_uInt16 _nPos)
     {
         if ( _nPos < m_aLines.size() )
@@ -815,7 +815,7 @@ namespace pcr
 
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserListBox::MoveThumbTo(sal_Int32 _nNewThumbPos)
     {
         // disable painting to prevent flicker
@@ -852,7 +852,7 @@ namespace pcr
         m_aLinesPlayground.Invalidate(INVALIDATE_CHILDREN);
     }
 
-    //------------------------------------------------------------------
+
     IMPL_LINK(OBrowserListBox, ScrollHdl, ScrollBar*, _pScrollBar )
     {
         DBG_ASSERT(_pScrollBar == &m_aVScroll, "OBrowserListBox::ScrollHdl: where does this come from?");
@@ -888,7 +888,7 @@ namespace pcr
         return 0;
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserListBox::buttonClicked( OBrowserLine* _pLine, sal_Bool _bPrimary )
     {
         DBG_ASSERT( _pLine, "OBrowserListBox::buttonClicked: invalid browser line!" );
@@ -898,7 +898,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserListBox::impl_setControlAsPropertyValue( const ListBoxLine& _rLine, const Any& _rPropertyValue )
     {
         Reference< XPropertyControl > xControl( _rLine.pLine->getControl() );
@@ -934,7 +934,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+
     Any OBrowserListBox::impl_getControlAsPropertyValue( const ListBoxLine& _rLine ) const
     {
         Reference< XPropertyControl > xControl( _rLine.pLine->getControl() );
@@ -963,7 +963,7 @@ namespace pcr
         return aPropertyValue;
     }
 
-    //------------------------------------------------------------------
+
     sal_uInt16 OBrowserListBox::impl_getControlPos( const Reference< XPropertyControl >& _rxControl ) const
     {
         for ( ListBoxLines::const_iterator search = m_aLines.begin(); search != m_aLines.end(); ++search )
@@ -974,7 +974,7 @@ namespace pcr
         return (sal_uInt16)-1;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OBrowserListBox::focusGained( const Reference< XPropertyControl >& _rxControl ) throw (RuntimeException)
     {
         DBG_TESTSOLARMUTEX();
@@ -990,7 +990,7 @@ namespace pcr
         ShowEntry( impl_getControlPos( m_xActiveControl ) );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OBrowserListBox::valueChanged( const Reference< XPropertyControl >& _rxControl ) throw (RuntimeException)
     {
         DBG_TESTSOLARMUTEX();
@@ -1012,7 +1012,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OBrowserListBox::activateNextControl( const Reference< XPropertyControl >& _rxCurrentControl ) throw (RuntimeException)
     {
         DBG_TESTSOLARMUTEX();
@@ -1033,7 +1033,7 @@ namespace pcr
             m_aLines[0].pLine->GrabFocus();
     }
 
-    //------------------------------------------------------------------
+
     namespace
     {
         //..............................................................
@@ -1055,7 +1055,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserListBox::Clear()
     {
         for ( ListBoxLines::iterator loop = m_aLines.begin(); loop != m_aLines.end(); ++loop )
@@ -1069,7 +1069,7 @@ namespace pcr
         clearContainer( m_aLines );
     }
 
-    //------------------------------------------------------------------
+
     sal_Bool OBrowserListBox::RemoveEntry( const OUString& _rName )
     {
         sal_uInt16 nPos = 0;
@@ -1091,7 +1091,7 @@ namespace pcr
         return sal_True;
     }
 
-    //------------------------------------------------------------------
+
     void OBrowserListBox::ChangeEntry( const OLineDescriptor& _rPropertyData, sal_uInt16 nPos )
     {
         OSL_PRECOND( _rPropertyData.Control.is(), "OBrowserListBox::ChangeEntry: invalid control!" );
@@ -1206,7 +1206,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+
     bool OBrowserListBox::PreNotify( NotifyEvent& _rNEvt )
     {
         switch ( _rNEvt.GetType() )
@@ -1264,7 +1264,7 @@ namespace pcr
         return Control::PreNotify( _rNEvt );
     }
 
-    //------------------------------------------------------------------
+
     bool OBrowserListBox::Notify( NotifyEvent& _rNEvt )
     {
         switch ( _rNEvt.GetType() )

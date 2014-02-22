@@ -45,19 +45,19 @@ using namespace ::com::sun::star::form::binding;
 //= OCheckBoxControl
 //==================================================================
 
-//------------------------------------------------------------------
+
 OCheckBoxControl::OCheckBoxControl(const Reference<XComponentContext>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_CHECKBOX)
 {
 }
 
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OCheckBoxControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return *(new OCheckBoxControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 StringSequence SAL_CALL OCheckBoxControl::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
@@ -78,8 +78,8 @@ InterfaceRef SAL_CALL OCheckBoxModel_CreateInstance(const Reference<XMultiServic
     return *(new OCheckBoxModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------
-//------------------------------------------------------------------
+
+
 OCheckBoxModel::OCheckBoxModel(const Reference<XComponentContext>& _rxFactory)
     :OReferenceValueComponent( _rxFactory, VCL_CONTROLMODEL_CHECKBOX, FRM_SUN_CONTROL_CHECKBOX, sal_True )
                     // use the old control name for compytibility reasons
@@ -89,22 +89,22 @@ OCheckBoxModel::OCheckBoxModel(const Reference<XComponentContext>& _rxFactory)
     initValueProperty( PROPERTY_STATE, PROPERTY_ID_STATE );
 }
 
-//------------------------------------------------------------------
+
 OCheckBoxModel::OCheckBoxModel( const OCheckBoxModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OReferenceValueComponent( _pOriginal, _rxFactory )
 {
 }
 
-//------------------------------------------------------------------------------
+
 OCheckBoxModel::~OCheckBoxModel()
 {
 }
 
-//------------------------------------------------------------------------------
+
 IMPLEMENT_DEFAULT_CLONING( OCheckBoxModel )
 
 // XServiceInfo
-//------------------------------------------------------------------------------
+
 StringSequence SAL_CALL OCheckBoxModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
 {
     StringSequence aSupported = OReferenceValueComponent::getSupportedServiceNames();
@@ -127,7 +127,7 @@ StringSequence SAL_CALL OCheckBoxModel::getSupportedServiceNames() throw(::com::
     return aSupported;
 }
 
-//------------------------------------------------------------------------------
+
 void OCheckBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 1, OReferenceValueComponent )
@@ -135,13 +135,13 @@ void OCheckBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) co
     END_DESCRIBE_PROPERTIES();
 }
 
-//------------------------------------------------------------------------------
+
 OUString SAL_CALL OCheckBoxModel::getServiceName() throw(RuntimeException)
 {
     return OUString(FRM_COMPONENT_CHECKBOX);  // old (non-sun) name for compatibility !
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OCheckBoxModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream)
     throw(stario::IOException, RuntimeException)
 {
@@ -157,7 +157,7 @@ void SAL_CALL OCheckBoxModel::write(const Reference<stario::XObjectOutputStream>
     writeCommonProperties(_rxOutStream);
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OCheckBoxModel::read(const Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, RuntimeException)
 {
     OReferenceValueComponent::read(_rxInStream);
@@ -206,7 +206,7 @@ bool OCheckBoxModel::DbUseBool()
     return true;
 }
 
-//------------------------------------------------------------------------------
+
 Any OCheckBoxModel::translateDbColumnToControlValue()
 {
     Any aValue;
@@ -247,7 +247,7 @@ Any OCheckBoxModel::translateDbColumnToControlValue()
     return aValue;
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool OCheckBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     OSL_PRECOND( m_xColumnUpdate.is(), "OCheckBoxModel::commitControlValueToDbColumn: not bound!" );

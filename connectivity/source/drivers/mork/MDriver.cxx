@@ -38,13 +38,13 @@ MorkDriver::MorkDriver(css::uno::Reference< css::uno::XComponentContext > const 
 }
 
 // static ServiceInfo
-//------------------------------------------------------------------------------
+
 OUString MorkDriver::getImplementationName_Static(  ) throw(css::uno::RuntimeException)
 {
     return OUString(MORK_DRIVER_IMPL_NAME);
 }
 
-//------------------------------------------------------------------------------
+
 css::uno::Sequence< OUString > MorkDriver::getSupportedServiceNames_Static(  ) throw (css::uno::RuntimeException)
 {
     css::uno::Sequence< OUString > aSNS(1);

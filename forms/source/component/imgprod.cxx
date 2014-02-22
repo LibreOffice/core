@@ -30,9 +30,9 @@
 #include "svtools/imageresourceaccess.hxx"
 #include <comphelper/processfactory.hxx>
 
-// --------------------
+
 // - ImgProdLockBytes -
-// --------------------
+
 
 class ImgProdLockBytes : public SvLockBytes
 {
@@ -54,14 +54,14 @@ public:
     virtual ErrCode     Stat( SvLockBytesStat*, SvLockBytesStatFlag ) const;
 };
 
-// ------------------------------------------------------------------------
+
 
 ImgProdLockBytes::ImgProdLockBytes( SvStream* pStm, sal_Bool bOwner ) :
         SvLockBytes( pStm, bOwner )
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 ImgProdLockBytes::ImgProdLockBytes( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > & rStmRef ) :
         xStmRef( rStmRef )
@@ -88,13 +88,13 @@ ImgProdLockBytes::ImgProdLockBytes( ::com::sun::star::uno::Reference< ::com::sun
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 ImgProdLockBytes::~ImgProdLockBytes()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 ErrCode ImgProdLockBytes::ReadAt( sal_Size nPos, void* pBuffer, sal_Size nCount, sal_Size* pRead ) const
 {
@@ -125,7 +125,7 @@ ErrCode ImgProdLockBytes::ReadAt( sal_Size nPos, void* pBuffer, sal_Size nCount,
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 ErrCode ImgProdLockBytes::WriteAt( sal_Size nPos, const void* pBuffer, sal_Size nCount, sal_Size* pWritten )
 {
@@ -138,14 +138,14 @@ ErrCode ImgProdLockBytes::WriteAt( sal_Size nPos, const void* pBuffer, sal_Size 
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 ErrCode ImgProdLockBytes::Flush() const
 {
     return ERRCODE_NONE;
 }
 
-// ------------------------------------------------------------------------
+
 
 ErrCode ImgProdLockBytes::SetSize( sal_Size nSize )
 {
@@ -158,7 +158,7 @@ ErrCode ImgProdLockBytes::SetSize( sal_Size nSize )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 ErrCode ImgProdLockBytes::Stat( SvLockBytesStat* pStat, SvLockBytesStatFlag eFlag ) const
 {
@@ -172,9 +172,9 @@ ErrCode ImgProdLockBytes::Stat( SvLockBytesStat* pStat, SvLockBytesStatFlag eFla
     }
 }
 
-// -----------------
+
 // - ImageProducer -
-// -----------------
+
 
 ImageProducer::ImageProducer() :
     mpStm       ( NULL ),
@@ -183,7 +183,7 @@ ImageProducer::ImageProducer() :
     mpGraphic = new Graphic;
 }
 
-// ------------------------------------------------------------
+
 
 ImageProducer::~ImageProducer()
 {
@@ -194,7 +194,7 @@ ImageProducer::~ImageProducer()
     mpStm = NULL;
 }
 
-// ------------------------------------------------------------
+
 
 // ::com::sun::star::uno::XInterface
 ::com::sun::star::uno::Any ImageProducer::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
@@ -205,7 +205,7 @@ ImageProducer::~ImageProducer()
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 
-// ------------------------------------------------------------
+
 
 void ImageProducer::addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& rxConsumer )
     throw(::com::sun::star::uno::RuntimeException,
@@ -216,7 +216,7 @@ void ImageProducer::addConsumer( const ::com::sun::star::uno::Reference< ::com::
         maConsList.push_back( new ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > ( rxConsumer ));
 }
 
-// ------------------------------------------------------------
+
 
 void ImageProducer::removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& rxConsumer ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -226,7 +226,7 @@ void ImageProducer::removeConsumer( const ::com::sun::star::uno::Reference< ::co
         maConsList.erase(riter.base()-1);
 }
 
-// ------------------------------------------------------------
+
 
 void ImageProducer::SetImage( const OUString& rPath )
 {
@@ -248,7 +248,7 @@ void ImageProducer::SetImage( const OUString& rPath )
         mpStm = NULL;
 }
 
-// ------------------------------------------------------------
+
 
 void ImageProducer::SetImage( SvStream& rStm )
 {
@@ -260,7 +260,7 @@ void ImageProducer::SetImage( SvStream& rStm )
     mpStm = new SvStream( new ImgProdLockBytes( &rStm, sal_False ) );
 }
 
-// ------------------------------------------------------------
+
 
 void ImageProducer::setImage( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > & rInputStmRef )
 {
@@ -275,7 +275,7 @@ void ImageProducer::setImage( ::com::sun::star::uno::Reference< ::com::sun::star
         mpStm = NULL;
 }
 
-// ------------------------------------------------------------
+
 
 void ImageProducer::NewDataAvailable()
 {
@@ -283,7 +283,7 @@ void ImageProducer::NewDataAvailable()
         startProduction();
 }
 
-// ------------------------------------------------------------
+
 
 void ImageProducer::startProduction() throw(::com::sun::star::uno::RuntimeException)
 {
@@ -329,7 +329,7 @@ void ImageProducer::startProduction() throw(::com::sun::star::uno::RuntimeExcept
     }
 }
 
-// ------------------------------------------------------------
+
 
 sal_Bool ImageProducer::ImplImportGraphic( Graphic& rGraphic )
 {
@@ -349,7 +349,7 @@ sal_Bool ImageProducer::ImplImportGraphic( Graphic& rGraphic )
     return bRet;
 }
 
-// ------------------------------------------------------------
+
 
 void ImageProducer::ImplUpdateData( const Graphic& rGraphic )
 {
@@ -369,7 +369,7 @@ void ImageProducer::ImplUpdateData( const Graphic& rGraphic )
     }
 }
 
-// ------------------------------------------------------------
+
 
 void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
 {
@@ -440,7 +440,7 @@ void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
     }
 }
 
-// ------------------------------------------------------------
+
 
 void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
 {

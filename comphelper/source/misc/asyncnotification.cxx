@@ -36,24 +36,24 @@ namespace comphelper
     //====================================================================
     //= AnyEvent
     //====================================================================
-    //--------------------------------------------------------------------
+
     AnyEvent::AnyEvent()
         :m_refCount( 0 )
     {
     }
 
-    //--------------------------------------------------------------------
+
     AnyEvent::~AnyEvent()
     {
     }
 
-    //--------------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL AnyEvent::acquire()
     {
         return osl_atomic_increment( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL AnyEvent::release()
     {
         if ( 0 == osl_atomic_decrement( &m_refCount ) )
@@ -132,18 +132,18 @@ namespace comphelper
     //====================================================================
     //= AsyncEventNotifier
     //====================================================================
-    //--------------------------------------------------------------------
+
     AsyncEventNotifier::AsyncEventNotifier(char const * name):
         Thread(name), m_pImpl(new EventNotifierImpl)
     {
     }
 
-    //--------------------------------------------------------------------
+
     AsyncEventNotifier::~AsyncEventNotifier()
     {
     }
 
-    //--------------------------------------------------------------------
+
     void AsyncEventNotifier::removeEventsForProcessor( const ::rtl::Reference< IEventProcessor >& _xProcessor )
     {
         ::osl::MutexGuard aGuard( m_pImpl->aMutex );
@@ -156,7 +156,7 @@ namespace comphelper
         m_pImpl->m_aDeadProcessors.insert( _xProcessor );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL AsyncEventNotifier::terminate()
     {
         ::osl::MutexGuard aGuard( m_pImpl->aMutex );
@@ -168,7 +168,7 @@ namespace comphelper
         m_pImpl->aPendingActions.set();
     }
 
-    //--------------------------------------------------------------------
+
     void AsyncEventNotifier::addEvent( const AnyEventRef& _rEvent, const ::rtl::Reference< IEventProcessor >& _xProcessor )
     {
         ::osl::MutexGuard aGuard( m_pImpl->aMutex );
@@ -181,7 +181,7 @@ namespace comphelper
         m_pImpl->aPendingActions.set();
     }
 
-    //--------------------------------------------------------------------
+
     void AsyncEventNotifier::execute()
     {
         do

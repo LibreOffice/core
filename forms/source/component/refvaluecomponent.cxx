@@ -36,7 +36,7 @@ namespace frm
     //====================================================================
     //=
     //====================================================================
-    //--------------------------------------------------------------------
+
     OReferenceValueComponent::OReferenceValueComponent( const Reference< XComponentContext >& _rxFactory, const OUString& _rUnoControlModelTypeName, const OUString& _rDefault, sal_Bool _bSupportNoCheckRefValue )
         :OBoundControlModel( _rxFactory, _rUnoControlModelTypeName, _rDefault, sal_False, sal_True, sal_True )
         ,m_eDefaultChecked( STATE_NOCHECK )
@@ -44,7 +44,7 @@ namespace frm
     {
     }
 
-    //--------------------------------------------------------------------
+
     OReferenceValueComponent::OReferenceValueComponent( const OReferenceValueComponent* _pOriginal, const Reference< XComponentContext>& _rxFactory )
         :OBoundControlModel( _pOriginal, _rxFactory )
     {
@@ -56,19 +56,19 @@ namespace frm
         calculateExternalValueType();
     }
 
-    //--------------------------------------------------------------------
+
     OReferenceValueComponent::~OReferenceValueComponent()
     {
     }
 
-    //--------------------------------------------------------------------
+
     void OReferenceValueComponent::setReferenceValue( const OUString& _rRefValue )
     {
         m_sReferenceValue = _rRefValue;
         calculateExternalValueType();
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OReferenceValueComponent::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         switch ( _nHandle )
@@ -86,7 +86,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OReferenceValueComponent::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw (Exception)
     {
         switch ( _nHandle )
@@ -115,7 +115,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool SAL_CALL OReferenceValueComponent::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue ) throw (IllegalArgumentException)
     {
         sal_Bool bModified = sal_False;
@@ -141,13 +141,13 @@ namespace frm
         return bModified;
     }
 
-    //------------------------------------------------------------------------------
+
     Any OReferenceValueComponent::getDefaultForReset() const
     {
         return makeAny( (sal_Int16)m_eDefaultChecked );
     }
 
-    //--------------------------------------------------------------------
+
     void OReferenceValueComponent::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
         BEGIN_DESCRIBE_PROPERTIES( m_bSupportSecondRefValue ? 3 : 2, OBoundControlModel )
@@ -160,7 +160,7 @@ namespace frm
         END_DESCRIBE_PROPERTIES();
     }
 
-    //-----------------------------------------------------------------------------
+
     Sequence< Type > OReferenceValueComponent::getSupportedBindingTypes()
     {
         ::std::list< Type > aTypes;
@@ -175,7 +175,7 @@ namespace frm
         return aTypesRet;
     }
 
-    //-----------------------------------------------------------------------------
+
     Any OReferenceValueComponent::translateExternalValueToControlValue( const Any& _rExternalValue ) const
     {
         sal_Int16 nState = STATE_DONTKNOW;
@@ -210,7 +210,7 @@ namespace frm
         return makeAny( nState );
     }
 
-    //-----------------------------------------------------------------------------
+
     Any OReferenceValueComponent::translateControlValueToExternalValue( ) const
     {
         Any aExternalValue;
@@ -259,7 +259,7 @@ namespace frm
         return aExternalValue;
     }
 
-    //-----------------------------------------------------------------------------
+
     Any OReferenceValueComponent::translateControlValueToValidatableValue( ) const
     {
         if ( !m_xAggregateSet.is() )

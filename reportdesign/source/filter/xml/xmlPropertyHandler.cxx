@@ -23,10 +23,10 @@
 #include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>
 
-//--------------------------------------------------------------------------
+
 namespace rptxml
 {
-//--------------------------------------------------------------------------
+
     using namespace ::com::sun::star;
     using namespace xmloff;
     using namespace ::com::sun::star::report;
@@ -35,12 +35,12 @@ namespace rptxml
 OXMLRptPropHdlFactory::OXMLRptPropHdlFactory()
 {
 }
-// -----------------------------------------------------------------------------
+
 OXMLRptPropHdlFactory::~OXMLRptPropHdlFactory()
 {
 }
-// -----------------------------------------------------------------------------
+
 }// rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

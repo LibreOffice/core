@@ -80,7 +80,7 @@ public:
     static void         SetCaptionItems( SdrCaptionObj& rCaption, const SfxItemSet& rItemSet );
 };
 
-// ----------------------------------------------------------------------------
+
 
 void ScCaptionUtil::SetCaptionLayer( SdrCaptionObj& rCaption, bool bShown )
 {
@@ -206,7 +206,7 @@ private:
     bool                mbNegPage;
 };
 
-// ----------------------------------------------------------------------------
+
 
 ScCaptionCreator::ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, bool bShown, bool bTailFront ) :
     mrDoc( rDoc ),
@@ -416,7 +416,7 @@ public:
     explicit            ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, SdrCaptionObj& rCaption, bool bShown );
 };
 
-// ----------------------------------------------------------------------------
+
 
 ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, ScNoteData& rNoteData ) :
     ScCaptionCreator( rDoc, rPos )  // use helper c'tor that does not create the caption yet
@@ -475,7 +475,7 @@ struct ScCaptionInitData
     explicit            ScCaptionInitData();
 };
 
-// ----------------------------------------------------------------------------
+
 
 ScCaptionInitData::ScCaptionInitData() :
     mbDefaultPosSize( true )

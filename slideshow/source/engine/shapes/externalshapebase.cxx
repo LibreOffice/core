@@ -54,7 +54,7 @@ namespace slideshow
 
         private:
             // ViewEventHandler
-            // -------------------------------------------------
+
 
             virtual void viewAdded( const UnoViewSharedPtr& ) {}
             virtual void viewRemoved( const UnoViewSharedPtr& ) {}
@@ -69,7 +69,7 @@ namespace slideshow
 
 
             // IntrinsicAnimationEventHandler
-            // -------------------------------------------------
+
 
             virtual bool enableAnimations()
             {
@@ -101,7 +101,7 @@ namespace slideshow
             mrEventMultiplexer.addViewHandler( mpListener );
         }
 
-        // ---------------------------------------------------------------------
+
 
         ExternalShapeBase::~ExternalShapeBase()
         {
@@ -119,56 +119,56 @@ namespace slideshow
             }
         }
 
-        // ---------------------------------------------------------------------
+
 
         uno::Reference< drawing::XShape > ExternalShapeBase::getXShape() const
         {
             return mxShape;
         }
 
-        // ---------------------------------------------------------------------
+
 
         void ExternalShapeBase::play()
         {
             implStartIntrinsicAnimation();
         }
 
-        // ---------------------------------------------------------------------
+
 
         void ExternalShapeBase::stop()
         {
             implEndIntrinsicAnimation();
         }
 
-        // ---------------------------------------------------------------------
+
 
         void ExternalShapeBase::pause()
         {
             implPauseIntrinsicAnimation();
         }
 
-        // ---------------------------------------------------------------------
+
 
         bool ExternalShapeBase::isPlaying() const
         {
             return implIsIntrinsicAnimationPlaying();
         }
 
-        // ---------------------------------------------------------------------
+
 
         void ExternalShapeBase::setMediaTime(double fTime)
         {
             implSetIntrinsicAnimationTime(fTime);
         }
 
-        // ---------------------------------------------------------------------
+
 
         bool ExternalShapeBase::update() const
         {
             return render();
         }
 
-        // ---------------------------------------------------------------------
+
 
         bool ExternalShapeBase::render() const
         {
@@ -182,49 +182,49 @@ namespace slideshow
             return implRender( maBounds );
         }
 
-        // ---------------------------------------------------------------------
+
 
         bool ExternalShapeBase::isContentChanged() const
         {
             return true;
         }
 
-        // ---------------------------------------------------------------------
+
 
         ::basegfx::B2DRectangle ExternalShapeBase::getBounds() const
         {
             return maBounds;
         }
 
-        // ---------------------------------------------------------------------
+
 
         ::basegfx::B2DRectangle ExternalShapeBase::getDomBounds() const
         {
             return maBounds;
         }
 
-        // ---------------------------------------------------------------------
+
 
         ::basegfx::B2DRectangle ExternalShapeBase::getUpdateArea() const
         {
             return maBounds;
         }
 
-        // ---------------------------------------------------------------------
+
 
         bool ExternalShapeBase::isVisible() const
         {
             return true;
         }
 
-        // ---------------------------------------------------------------------
+
 
         double ExternalShapeBase::getPriority() const
         {
             return mnPriority;
         }
 
-        // ---------------------------------------------------------------------
+
 
         bool ExternalShapeBase::isBackgroundDetached() const
         {

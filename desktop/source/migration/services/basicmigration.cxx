@@ -45,7 +45,7 @@ namespace migration
         return OUString("com.sun.star.comp.desktop.migration.Basic");
     }
 
-    // -----------------------------------------------------------------------------
+
 
     Sequence< OUString > BasicMigration_getSupportedServiceNames()
     {
@@ -62,13 +62,13 @@ namespace migration
     {
     }
 
-    // -----------------------------------------------------------------------------
+
 
     BasicMigration::~BasicMigration()
     {
     }
 
-    // -----------------------------------------------------------------------------
+
 
     TStringVectorPtr BasicMigration::getFiles( const OUString& rBaseURL ) const
     {
@@ -105,7 +105,7 @@ namespace migration
         return aResult;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     ::osl::FileBase::RC BasicMigration::checkAndCreateDirectory( INetURLObject& rDirURL )
     {
@@ -123,7 +123,7 @@ namespace migration
         }
     }
 
-    // -----------------------------------------------------------------------------
+
 
     void BasicMigration::copyFiles()
     {
@@ -158,16 +158,16 @@ namespace migration
         }
     }
 
-    // -----------------------------------------------------------------------------
+
     // XServiceInfo
-    // -----------------------------------------------------------------------------
+
 
     OUString BasicMigration::getImplementationName() throw (RuntimeException)
     {
         return BasicMigration_getImplementationName();
     }
 
-    // -----------------------------------------------------------------------------
+
 
     sal_Bool BasicMigration::supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException)
@@ -175,16 +175,16 @@ namespace migration
         return cppu::supportsService(this, ServiceName);
     }
 
-    // -----------------------------------------------------------------------------
+
 
     Sequence< OUString > BasicMigration::getSupportedServiceNames() throw (RuntimeException)
     {
         return BasicMigration_getSupportedServiceNames();
     }
 
-    // -----------------------------------------------------------------------------
+
     // XInitialization
-    // -----------------------------------------------------------------------------
+
 
     void BasicMigration::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
     {
@@ -208,9 +208,9 @@ namespace migration
         }
     }
 
-    // -----------------------------------------------------------------------------
+
     // XJob
-    // -----------------------------------------------------------------------------
+
 
     Any BasicMigration::execute( const Sequence< beans::NamedValue >& )
         throw (lang::IllegalArgumentException, Exception, RuntimeException)
@@ -233,7 +233,7 @@ namespace migration
         return static_cast< lang::XTypeProvider * >( new BasicMigration() );
     }
 
-    // -----------------------------------------------------------------------------
+
 
 //.........................................................................
 }   // namespace migration

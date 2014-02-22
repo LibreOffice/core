@@ -32,7 +32,7 @@ using namespace ::osl;
 //==================================================================
 //= OOutputStreamWrapper
 //==================================================================
-//------------------------------------------------------------------------------
+
 void SAL_CALL OOutputStreamWrapper::writeBytes(const staruno::Sequence< sal_Int8 >& aData) throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException )
 {
     sal_uInt64 nWritten = 0;
@@ -43,12 +43,12 @@ void SAL_CALL OOutputStreamWrapper::writeBytes(const staruno::Sequence< sal_Int8
     }
 }
 
-//------------------------------------------------------------------
+
 void SAL_CALL OOutputStreamWrapper::flush() throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException )
 {
 }
 
-//------------------------------------------------------------------
+
 void SAL_CALL OOutputStreamWrapper::closeOutput() throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException )
 {
 }

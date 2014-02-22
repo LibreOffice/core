@@ -18,11 +18,11 @@
  */
 
 
-//------------------------------------------------------------------------
+
 //
 // Global header
 //
-//------------------------------------------------------------------------
+
 
 #include <limits.h>
 #include <vector>
@@ -33,11 +33,11 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
-//------------------------------------------------------------------------
+
 //
 // Project-local header
 //
-//------------------------------------------------------------------------
+
 #include "editeng/unoedprx.hxx"
 #include <editeng/unotext.hxx>
 #include <editeng/unoedhlp.hxx>
@@ -300,7 +300,7 @@ sal_Bool SvxAccessibleTextIndex::IsEditableRange( const SvxAccessibleTextIndex& 
     return sal_True;
 }
 
-//---------------------------------------------------------------------------------
+
 
 SvxEditSourceAdapter::SvxEditSourceAdapter() : mbEditSourceValid( sal_False )
 {
@@ -428,7 +428,7 @@ sal_Bool SvxEditSourceAdapter::IsValid() const
 }
 
 
-//--------------------------------------------------------------------------------------
+
 
 SvxAccessibleTextAdapter::SvxAccessibleTextAdapter() : mpTextForwarder( NULL )
 {
@@ -1173,7 +1173,7 @@ void        SvxAccessibleTextAdapter::CopyText(const SvxTextForwarder&)
 
 
 
-//---------------------------------------------------------------------------------------
+
 
 SvxAccessibleTextEditViewAdapter::SvxAccessibleTextEditViewAdapter()
     : mpViewForwarder(NULL)

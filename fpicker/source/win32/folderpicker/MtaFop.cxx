@@ -71,10 +71,10 @@ namespace
         CloseHandle( aRequestContext->hEvent );
     }
 
-    //-------------------------------
+
     // Determine if current thread is
     // an MTA or STA thread
-    //-------------------------------
+
     bool IsMTA()
     {
         HRESULT hr = CoInitialize(NULL);
@@ -89,17 +89,17 @@ namespace
     }
 }
 
-//----------------------------------------------------------------
+
 //  static member initialization
-//----------------------------------------------------------------
+
 
 ATOM CMtaFolderPicker::s_ClassAtom = 0;
 osl::Mutex CMtaFolderPicker::s_Mutex;
 sal_Int32 CMtaFolderPicker::s_StaRequestWndRegisterCount = 0;
 
-//--------------------------------------------------------------------
+
 // ctor
-//--------------------------------------------------------------------
+
 
 CMtaFolderPicker::CMtaFolderPicker( sal_uInt32 Flags ) :
     m_hStaThread( NULL ),
@@ -139,7 +139,7 @@ CMtaFolderPicker::CMtaFolderPicker( sal_uInt32 Flags ) :
     m_bi.lpfn    = CMtaFolderPicker::FolderPickerCallback;
     m_bi.lParam  = reinterpret_cast< LPARAM >( this );
 
-    //---------------------------------------
+
     // read the default strings for title and
     // description from a resource file
 
@@ -172,9 +172,9 @@ CMtaFolderPicker::CMtaFolderPicker( sal_uInt32 Flags ) :
     OSL_ASSERT( m_hEvtThrdReady );
 }
 
-//--------------------------------------------------------------------
+
 // dtor
-//--------------------------------------------------------------------
+
 
 CMtaFolderPicker::~CMtaFolderPicker( )
 {
@@ -225,9 +225,9 @@ CMtaFolderPicker::~CMtaFolderPicker( )
     }
 }
 
-//--------------------------------------------------------------------
+
 //
-//--------------------------------------------------------------------
+
 
 sal_Bool CMtaFolderPicker::browseForFolder( )
 {
@@ -309,63 +309,63 @@ sal_Bool CMtaFolderPicker::browseForFolder( )
     return bRet;
 }
 
-//--------------------------------------------------------------------
+
 //
-//--------------------------------------------------------------------
+
 
 void SAL_CALL CMtaFolderPicker::setDisplayDirectory( const OUString& aDirectory )
 {
     m_displayDir = aDirectory;
 }
 
-//--------------------------------------------------------------------
+
 //
-//--------------------------------------------------------------------
+
 
 OUString SAL_CALL CMtaFolderPicker::getDisplayDirectory( )
 {
     return m_displayDir;
 }
 
-//--------------------------------------------------------------------
+
 //
-//--------------------------------------------------------------------
+
 
 OUString SAL_CALL CMtaFolderPicker::getDirectory( )
 {
     return m_SelectedDir;
 }
 
-//--------------------------------------------------------------------
+
 //
-//--------------------------------------------------------------------
+
 
 void SAL_CALL CMtaFolderPicker::setDescription( const OUString& aDescription )
 {
     m_Description = aDescription;
 }
 
-//--------------------------------------------------------------------
+
 //
-//--------------------------------------------------------------------
+
 
 void SAL_CALL CMtaFolderPicker::setTitle( const OUString& aTitle )
 {
     m_dialogTitle = aTitle;
 }
 
-//--------------------------------------------------------------------
+
 //
-//--------------------------------------------------------------------
+
 
 OUString SAL_CALL CMtaFolderPicker::getTitle( )
 {
     return m_dialogTitle;
 }
 
-//-----------------------------------------------------
+
 // XCancellable
-//-----------------------------------------------------
+
 
 void SAL_CALL CMtaFolderPicker::cancel( )
 {
@@ -381,9 +381,9 @@ void SAL_CALL CMtaFolderPicker::cancel( )
     }
 }
 
-//--------------------------------------------------------------------
+
 //
-//--------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL CMtaFolderPicker::onBrowseForFolder( )
 {
@@ -409,9 +409,9 @@ sal_Bool SAL_CALL CMtaFolderPicker::onBrowseForFolder( )
     return bRet;
 }
 
-//--------------------------------------------------------------------
+
 //
-//--------------------------------------------------------------------
+
 
 void SAL_CALL CMtaFolderPicker::releaseItemIdList( LPITEMIDLIST lpItemIdList )
 {
@@ -424,9 +424,9 @@ void SAL_CALL CMtaFolderPicker::releaseItemIdList( LPITEMIDLIST lpItemIdList )
     }
 }
 
-//--------------------------------------------------------------------
+
 //
-//--------------------------------------------------------------------
+
 
 LPITEMIDLIST SAL_CALL CMtaFolderPicker::getItemIdListFromPath( const OUString& aDirectory )
 {
@@ -453,9 +453,9 @@ LPITEMIDLIST SAL_CALL CMtaFolderPicker::getItemIdListFromPath( const OUString& a
     return lpItemIdList;
 }
 
-//--------------------------------------------------------------------
+
 //
-//--------------------------------------------------------------------
+
 
 OUString SAL_CALL CMtaFolderPicker::getPathFromItemIdList( LPCITEMIDLIST lpItemIdList )
 {
@@ -471,9 +471,9 @@ OUString SAL_CALL CMtaFolderPicker::getPathFromItemIdList( LPCITEMIDLIST lpItemI
     return path;
 }
 
-//--------------------------------------------------------------------
+
 //
-//--------------------------------------------------------------------
+
 
 void SAL_CALL CMtaFolderPicker::enableOk( sal_Bool bEnable )
 {
@@ -486,9 +486,9 @@ void SAL_CALL CMtaFolderPicker::enableOk( sal_Bool bEnable )
         static_cast< LPARAM >( bEnable ) );
 }
 
-//--------------------------------------------------------------------
+
 //
-//--------------------------------------------------------------------
+
 
 void SAL_CALL CMtaFolderPicker::setSelection( const OUString& aDirectory )
 {
@@ -501,9 +501,9 @@ void SAL_CALL CMtaFolderPicker::setSelection( const OUString& aDirectory )
         reinterpret_cast< LPARAM >( aDirectory.getStr( ) ) );
 }
 
-//--------------------------------------------------------------------
+
 //
-//--------------------------------------------------------------------
+
 
 void SAL_CALL CMtaFolderPicker::setStatusText( const OUString& aStatusText )
 {
@@ -516,9 +516,9 @@ void SAL_CALL CMtaFolderPicker::setStatusText( const OUString& aStatusText )
         reinterpret_cast< LPARAM >( aStatusText.getStr( ) ) );
 }
 
-//--------------------------------------------------------------------
+
 //
-//--------------------------------------------------------------------
+
 
 void SAL_CALL CMtaFolderPicker::onInitialized( )
 {
@@ -536,9 +536,9 @@ void SAL_CALL CMtaFolderPicker::onInitialized( )
     }
 }
 
-//--------------------------------------------------------------------
+
 //
-//--------------------------------------------------------------------
+
 
 sal_uInt32 CMtaFolderPicker::onValidateFailed()
 {
@@ -546,9 +546,9 @@ sal_uInt32 CMtaFolderPicker::onValidateFailed()
     return 1;
 }
 
-//--------------------------------------------------------------------
+
 //
-//--------------------------------------------------------------------
+
 
 int CALLBACK CMtaFolderPicker::FolderPickerCallback( HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData )
 {
@@ -583,9 +583,9 @@ int CALLBACK CMtaFolderPicker::FolderPickerCallback( HWND hwnd, UINT uMsg, LPARA
     return nRC;
 }
 
-//--------------------------------------------------------------------
+
 // the window proc
-//--------------------------------------------------------------------
+
 
 LRESULT CALLBACK CMtaFolderPicker::StaWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -657,9 +657,9 @@ LRESULT CALLBACK CMtaFolderPicker::StaWndProc( HWND hWnd, UINT uMsg, WPARAM wPar
     return lResult;
 }
 
-//--------------------------------------------------------------------
+
 //
-//--------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL CMtaFolderPicker::createStaRequestWindow( )
 {
@@ -688,9 +688,9 @@ sal_Bool SAL_CALL CMtaFolderPicker::createStaRequestWindow( )
     return bIsWnd;
 }
 
-//--------------------------------------------------------------------
+
 //
-//--------------------------------------------------------------------
+
 
 unsigned int CMtaFolderPicker::run( )
 {
@@ -732,9 +732,9 @@ unsigned int CMtaFolderPicker::run( )
     return nRet;
 }
 
-//--------------------------------------------------------------------
+
 //
-//--------------------------------------------------------------------
+
 
 unsigned int WINAPI CMtaFolderPicker::StaThreadProc( LPVOID pParam )
 {
@@ -753,9 +753,9 @@ unsigned int WINAPI CMtaFolderPicker::StaThreadProc( LPVOID pParam )
     return result;
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 ATOM SAL_CALL CMtaFolderPicker::RegisterStaRequestWindowClass( )
 {
@@ -793,9 +793,9 @@ ATOM SAL_CALL CMtaFolderPicker::RegisterStaRequestWindowClass( )
     return s_ClassAtom;
 }
 
-//---------------------------------------------------
+
 //
-//---------------------------------------------------
+
 
 void SAL_CALL CMtaFolderPicker::UnregisterStaRequestWindowClass( )
 {

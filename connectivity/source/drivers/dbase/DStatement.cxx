@@ -24,12 +24,12 @@ using namespace connectivity::dbase;
 using namespace connectivity::file;
 using namespace com::sun::star::uno;
 
-// -------------------------------------------------------------------------
+
 OResultSet* ODbaseStatement::createResultSet()
 {
     return new ODbaseResultSet(this,m_aSQLIterator);
 }
-// -------------------------------------------------------------------------
+
 IMPLEMENT_SERVICE_INFO(ODbaseStatement,"com.sun.star.sdbc.driver.dbase.Statement","com.sun.star.sdbc.Statement");
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

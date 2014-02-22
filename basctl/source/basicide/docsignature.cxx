@@ -23,11 +23,8 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/signaturestate.hxx>
 
-//........................................................................
 namespace basctl
 {
-//........................................................................
-
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
@@ -35,9 +32,8 @@ namespace basctl
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::frame::XModel;
 
-    //====================================================================
-    //= DocumentSignature::Impl
-    //====================================================================
+    // DocumentSignature::Impl
+
     struct DocumentSignature::Impl
     {
         SfxObjectShell* pShell;
@@ -45,10 +41,8 @@ namespace basctl
         Impl () : pShell(0) { }
     };
 
-    //====================================================================
-    //= DocumentSignature
-    //====================================================================
-    //--------------------------------------------------------------------
+    // DocumentSignature
+
     DocumentSignature::DocumentSignature (ScriptDocument const& rDocument) :
         m_pImpl(new Impl)
     {
@@ -67,18 +61,15 @@ namespace basctl
         }
     }
 
-    //--------------------------------------------------------------------
     DocumentSignature::~DocumentSignature()
     {
     }
 
-    //--------------------------------------------------------------------
     bool DocumentSignature::supportsSignatures() const
     {
         return ( m_pImpl->pShell != NULL );
     }
 
-    //--------------------------------------------------------------------
     void DocumentSignature::signScriptingContent() const
     {
         OSL_PRECOND( supportsSignatures(), "DocumentSignature::signScriptingContent: signatures not supported by this document!" );
@@ -86,7 +77,6 @@ namespace basctl
             m_pImpl->pShell->SignScriptingContent();
     }
 
-    //--------------------------------------------------------------------
     sal_uInt16 DocumentSignature::getScriptingSignatureState() const
     {
         if ( m_pImpl->pShell )
@@ -94,8 +84,6 @@ namespace basctl
         return SIGNATURESTATE_NOSIGNATURES;
     }
 
-//........................................................................
 } // namespace basctl
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

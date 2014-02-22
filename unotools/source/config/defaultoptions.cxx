@@ -214,7 +214,7 @@ OUString SvtDefaultOptions_Impl::GetDefaultPath( sal_uInt16 nId ) const
     return aRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( "Office.Common/Path/Default" )
 {
@@ -324,7 +324,7 @@ SvtDefaultOptions::SvtDefaultOptions()
     pImp = pOptions;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvtDefaultOptions::~SvtDefaultOptions()
 {
@@ -338,7 +338,7 @@ SvtDefaultOptions::~SvtDefaultOptions()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString SvtDefaultOptions::GetDefaultPath( sal_uInt16 nId ) const
 {

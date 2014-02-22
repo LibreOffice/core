@@ -365,7 +365,7 @@ bool implCreateIteratedNodes(
         else
         {
             // setup iteration parameters
-            // --------------------------
+
 
             // iterate target is the whole shape (or the
             // whole parent subshape), thus, can save
@@ -399,7 +399,7 @@ bool implCreateIteratedNodes(
 
 
             // iterate node, generate copies of the children for each subset
-            // -------------------------------------------------------------
+
 
             // NodeContext::mnStartDelay contains additional node delay.
             // This will make the duplicated nodes for each iteration start

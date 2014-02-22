@@ -24,9 +24,9 @@
 #define _XPMPRIVATE
 #include "xpmread.hxx"
 
-// -------------
+
 // - XPMReader -
-// -------------
+
 
 XPMReader::XPMReader( SvStream& rStm ) :
             mrIStm          ( rStm ),
@@ -49,7 +49,7 @@ XPMReader::XPMReader( SvStream& rStm ) :
 
 }
 
-// ------------------------------------------------------------------------
+
 
 XPMReader::~XPMReader()
 {
@@ -57,7 +57,7 @@ XPMReader::~XPMReader()
         maBmp.ReleaseAccess( mpAcc );
 }
 
-// ------------------------------------------------------------------------
+
 
 ReadState XPMReader::ReadXPM( Graphic& rGraphic )
 {
@@ -214,7 +214,7 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
     return eReadState;
 }
 
-// ------------------------------------------------------------------------
+
 // ImplGetColor returns variouls colour values,
 // returns TRUE if various colours could be assigned
 
@@ -233,7 +233,7 @@ bool XPMReader::ImplGetColor( sal_uLong nNumb )
     return bStatus;
 }
 
-// ------------------------------------------------------------------------
+
 // ImpGetScanLine reads the string mpBufSize and writes the pixel in the
 // Bitmap. Parameter nY is the horizontal position.
 
@@ -299,7 +299,7 @@ bool XPMReader::ImplGetScanLine( sal_uLong nY )
     return bStatus;
 }
 
-// ------------------------------------------------------------------------
+
 // tries to determine a colour value from mpStringBuf
 // if a colour was found the RGB value is written a pDest[1]..pDest[2]
 // pDest[0] contains 0xFF if the colour is transparent otherwise 0
@@ -367,7 +367,7 @@ bool XPMReader::ImplGetColSub( sal_uInt8* pDest )
     return bColStatus;
 }
 
-// ------------------------------------------------------------------------
+
 // ImplGetColKey searches string mpStringBuf for a parameter 'nKey'
 // and returns a boolean. (if TRUE mpPara and mnParaSize will be set)
 
@@ -411,7 +411,7 @@ bool XPMReader::ImplGetColKey( sal_uInt8 nKey )
     return ( mnParaSize ) ? true : false;
 }
 
-// ------------------------------------------------------------------------
+
 // ImplGetRGBHex translates the ASCII-Hexadecimalvalue belonging to mpPara
 // in a RGB value and writes this to pDest
 // below formats should be contained in mpPara:
@@ -441,7 +441,7 @@ void XPMReader::ImplGetRGBHex( sal_uInt8* pDest,sal_uLong  nAdd )
     }
 }
 
-// ------------------------------------------------------------------------
+
 // ImplGetUlong returns the value of a up to 6-digit long ASCII-decimal number.
 
 sal_uLong XPMReader::ImplGetULONG( sal_uLong nPara )
@@ -464,7 +464,7 @@ sal_uLong XPMReader::ImplGetULONG( sal_uLong nPara )
     else return 0;
 }
 
-// ------------------------------------------------------------------------
+
 
 bool XPMReader::ImplCompare( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nSize, sal_uLong nMode )
 {
@@ -495,7 +495,7 @@ bool XPMReader::ImplCompare( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nSi
     return bRet;
 }
 
-// ------------------------------------------------------------------------
+
 // ImplGetPara tries to retrieve nNumb (0...x) parameters from mpStringBuf.
 // Parameters are separated by spaces or tabs.
 // If a parameter was found then the return value is TRUE and mpPara + mnParaSize
@@ -551,7 +551,7 @@ bool XPMReader::ImplGetPara ( sal_uLong nNumb )
     return ( ( nCount == nNumb ) && ( mpPara ) );
 }
 
-// ------------------------------------------------------------------------
+
 // The next string is read and stored in mpStringBuf (terminated with 0);
 // mnStringSize contains the size of the string read.
 // Comments like '//' and '/*....*/' are skipped.
@@ -650,9 +650,9 @@ bool XPMReader::ImplGetString( void )
     return mbStatus;
 }
 
-// -------------
+
 // - ImportXPM -
-// -------------
+
 
 bool ImportXPM( SvStream& rStm, Graphic& rGraphic )
 {

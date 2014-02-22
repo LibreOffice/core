@@ -77,7 +77,7 @@ CellModel::CellModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 CellFormulaModel::CellFormulaModel() :
     mnFormulaType( XML_TOKEN_INVALID ),
@@ -101,7 +101,7 @@ bool CellFormulaModel::isValidSharedRef( const CellAddress& rCellAddr )
         (maFormulaRef.StartRow <= rCellAddr.Row) && (rCellAddr.Row <= maFormulaRef.EndRow);
 }
 
-// ----------------------------------------------------------------------------
+
 
 DataTableModel::DataTableModel() :
     mb2dTable( false ),
@@ -551,7 +551,7 @@ bool SheetDataBuffer::MergedRange::tryExpand( const CellAddress& rAddress, sal_I
     return false;
 }
 
-// ----------------------------------------------------------------------------
+
 
 void SheetDataBuffer::setCellFormula( const CellAddress& rCellAddr, const ApiTokenSequence& rTokens )
 {
