@@ -66,7 +66,7 @@ OTableFieldDescWin::OTableFieldDescWin( Window* pParent)
 
 OTableFieldDescWin::~OTableFieldDescWin()
 {
-    // Children zerstoeren
+    // destroy children
     m_pHelpBar->Hide();
     getGenPage()->Hide();
     m_pHeader->Hide();
@@ -108,13 +108,13 @@ void OTableFieldDescWin::SaveData( OFieldDescription* pFieldDescr )
 
 void OTableFieldDescWin::Paint( const Rectangle& /*rRect*/ )
 {
-    // 3D-Linie am oberen Fensterrand
+    // 3D-line at the top window border
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
     SetLineColor( rStyleSettings.GetLightColor() );
     DrawLine( Point(0,0), Point(GetSizePixel().Width(),0) );
 
-    // 3D-Linie zum Abtrennen des Headers
+    // 3D-line for the separation of the header
     DrawLine( Point(3, DETAILS_HEADER_HEIGHT), Point(GetSizePixel().Width()-6, DETAILS_HEADER_HEIGHT) );
     SetLineColor( rStyleSettings.GetShadowColor() );
     DrawLine( Point(3, DETAILS_HEADER_HEIGHT-1), Point(GetSizePixel().Width()-6, DETAILS_HEADER_HEIGHT-1) );
@@ -122,56 +122,56 @@ void OTableFieldDescWin::Paint( const Rectangle& /*rRect*/ )
 
 void OTableFieldDescWin::Resize()
 {
-    // Abmessungen parent window
+    // dimensions of the parent window
     Size aOutputSize( GetOutputSizePixel() );
     long nOutputWidth = aOutputSize.Width();
     long nOutputHeight = aOutputSize.Height();
 
-    // da die GenPage scrollen kann, ich selber aber nicht, positioniere ich das HelpFenster, wenn ich zu schmal werde,
-    // _unter_ der Genpage, nicht rechts daneben. Zuvor versuche ich aber noch, es etwas schmaler zu machen
+    // since the GenPage can scroll, but I can't, I position the HelpWindow, in case I become too slim,
+    // _below_ the Genpage, not on the right side. But before that I try to make it a bit smaller
 
     long nHelpX, nHelpY;
     long nHelpWidth, nHelpHeight;
     long nPageWidth, nPageHeight;
 
-    // passen beide nebeneinander (Rand + Page + Rand + Help) ?
+    // do both fit next to each other (margin + page + margin + help)?
     if (STANDARD_MARGIN + DETAILS_OPT_PAGE_WIDTH + STANDARD_MARGIN + DETAILS_MIN_HELP_WIDTH <= nOutputWidth)
-    {   // ja -> dann ist die Frage, ob man der Hilfe ihre Optimal-Breite geben kann
+    {   // yes -> then we wonder if can give the help its optimum width
         nHelpWidth = DETAILS_OPT_HELP_WIDTH;
         nPageWidth = nOutputWidth - nHelpWidth - STANDARD_MARGIN - STANDARD_MARGIN;
         if (nPageWidth < DETAILS_OPT_PAGE_WIDTH)
-        {   // dann doch lieber die Hilfe von ihrer optimalen in Richtung auf die minimale Groesse
+        {   // rather resize the help from its optimal width to it's minimum width
             long nTransfer = DETAILS_OPT_PAGE_WIDTH - nPageWidth;
             nPageWidth += nTransfer;
             nHelpWidth -= nTransfer;
         }
         nHelpX = nOutputWidth - nHelpWidth;
-        // die Hoehen sind dann einfach ...
+        // the heights are simple in that case...
         nHelpY = DETAILS_HEADER_HEIGHT + 1;
         nHelpHeight = nOutputHeight - nHelpY;
         nPageHeight = nOutputHeight - STANDARD_MARGIN - DETAILS_HEADER_HEIGHT - STANDARD_MARGIN;
     }
     else
-    {   // nebeneinander geht nicht, also untereinander (Rand + Header + Page + Help)
+    {   // doesn't work next to each other, thus below each other (margin + header + page + help)
         if (STANDARD_MARGIN + DETAILS_HEADER_HEIGHT + DETAILS_OPT_PAGE_HEIGHT + DETAILS_MIN_HELP_HEIGHT <= nOutputHeight)
-        {   // es reicht zumindest, um beide untereinander (Page optimal, Help minimal) unterzubringen
+        {   // it's at least enough, to fit both below each other (page optimal, help minimal)
             nHelpHeight = DETAILS_OPT_HELP_HEIGHT;
             nPageHeight = nOutputHeight - nHelpHeight - DETAILS_HEADER_HEIGHT - STANDARD_MARGIN;
             if (nPageHeight < DETAILS_OPT_PAGE_HEIGHT)
-            {   // wie oben : Page optimal, Hilfe soviel wie eben bleibt (das ist groesser/gleich ihrem Minimum)
+            {   // like above: page optimal, help gets whatever is left (which is bigger/equal to its minimum)
                 long nTransfer = DETAILS_OPT_PAGE_HEIGHT - nPageHeight;
                 nPageHeight += nTransfer;
                 nHelpHeight -= nTransfer;
             }
             nHelpY = nOutputHeight - nHelpHeight;
-            // und ueber die ganze Breite
-            nHelpX = 0;                 // ohne Margin, da das HelpCtrl einen eigenen hat
+            // and across the entire width
+            nHelpX = 0;                 // without margin, since the HelpCtrl has its own one
             nHelpWidth = nOutputWidth;  // dito
             nPageWidth = nOutputWidth - STANDARD_MARGIN - STANDARD_MARGIN;
         }
         else
-        {   // dummerweise reicht es nicht mal, um Page optimal und Help minimal zu zeigen
-            nHelpX = nHelpY = nHelpWidth = nHelpHeight = 0; // -> kein Help-Fenster
+        {   // unfortunately that's not even enough, to show page at its optimum and help with minimum widthn
+            nHelpX = nHelpY = nHelpWidth = nHelpHeight = 0; // thus no help window
             nPageWidth = nOutputWidth - STANDARD_MARGIN - STANDARD_MARGIN;
             nPageHeight = nOutputHeight - STANDARD_MARGIN - DETAILS_HEADER_HEIGHT - STANDARD_MARGIN;
         }
