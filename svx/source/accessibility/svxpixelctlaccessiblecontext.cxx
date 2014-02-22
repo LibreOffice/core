@@ -64,7 +64,7 @@ SvxPixelCtlAccessible::~SvxPixelCtlAccessible()
 {
     if( IsAlive() )
     {
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         dispose();      // set mpRepr = NULL & release all childs
     }
 }
@@ -727,7 +727,7 @@ SvxPixelCtlAccessibleChild::~SvxPixelCtlAccessibleChild()
 
     if( IsAlive() )
     {
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         dispose();      // set mpRepr = NULL & release all childs
     }
 }

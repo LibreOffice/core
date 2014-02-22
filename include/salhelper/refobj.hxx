@@ -71,13 +71,13 @@ public:
      */
     virtual oslInterlockedCount SAL_CALL acquire() SAL_THROW(())
     {
-        return ::osl_incrementInterlockedCount (&m_nReferenceCount);
+        return osl_atomic_increment (&m_nReferenceCount);
     }
 
     virtual oslInterlockedCount SAL_CALL release() SAL_THROW(())
     {
         oslInterlockedCount result;
-        result = ::osl_decrementInterlockedCount (&m_nReferenceCount);
+        result = ::osl_atomic_decrement (&m_nReferenceCount);
         if (result == 0)
         {
             // Last reference released.
