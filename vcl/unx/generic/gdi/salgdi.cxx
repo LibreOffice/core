@@ -484,12 +484,8 @@ void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // cons
 
     rDPIX = pDisplay->GetResolution().A();
     rDPIY = pDisplay->GetResolution().B();
-    if( !pDisplay->GetExactResolution() && rDPIY < 96 )
-    {
-        rDPIX = Divide( rDPIX * 96, rDPIY );
-            rDPIY = 96;
-    }
-    else if ( rDPIY > 200 )
+
+    if ( rDPIY > 200 )
     {
         rDPIX = Divide( rDPIX * 200, rDPIY );
         rDPIY = 200;

@@ -252,7 +252,6 @@ protected:
     std::vector< ScreenData >    m_aScreens;
     ScreenData      m_aInvalidScreenData;
     Pair            aResolution_;       // [dpi]
-    bool            mbExactResolution;
     sal_uLong       nMaxRequestSize_;   // [byte]
 
     srv_vendor_t    meServerVendor;
@@ -353,7 +352,6 @@ public:
     const SalVisual&      GetVisual( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aVisual; }
     RenderEntryMap&       GetRenderEntries( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aRenderData; }
     const Pair     &GetResolution() const { return aResolution_; }
-    bool            GetExactResolution() const { return mbExactResolution; }
     sal_uLong       GetProperties() const { return PROPERTY_DEFAULT; }
     sal_uLong       GetMaxRequestSize() const { return nMaxRequestSize_; }
     XLIB_Time       GetLastUserEventTime( bool bAlwaysReget = false ) const;
