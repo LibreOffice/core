@@ -287,16 +287,15 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
 {
     ImplSVData* pSVData = ImplGetSVData();
     Point       aMousePos( nX, nY );
-    Window*     pChild;
-    bool        nRet;
-    sal_uInt16      nClicks;
+    Window*     pChild(NULL);
+    bool        bRet(false);
+    sal_uInt16  nClicks(0);
     ImplFrameData* pWinFrameData = pWindow->ImplGetFrameData();
     sal_uInt16      nOldCode = pWinFrameData->mnMouseCode;
 
     // we need a mousemove event, befor we get a mousebuttondown or a
     // mousebuttonup event
-    if ( (nSVEvent == EVENT_MOUSEBUTTONDOWN) ||
-         (nSVEvent == EVENT_MOUSEBUTTONUP) )
+    if ( (nSVEvent == EVENT_MOUSEBUTTONDOWN) || (nSVEvent == EVENT_MOUSEBUTTONUP) )
     {
         if ( (nSVEvent == EVENT_MOUSEBUTTONUP) && pSVData->maHelpData.mbExtHelpMode )
             Help::EndExtHelp();
@@ -595,47 +594,53 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
     }
     else
     {
-        // mouse click
-        if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
+        if (pChild)
         {
-            const MouseSettings& rMSettings = pChild->GetSettings().GetMouseSettings();
-            sal_uLong   nDblClkTime = rMSettings.GetDoubleClickTime();
-            long    nDblClkW    = rMSettings.GetDoubleClickWidth();
-            long    nDblClkH    = rMSettings.GetDoubleClickHeight();
-            //long    nMouseX     = nX;
-            //long    nMouseY     = nY;
-            long nMouseX = aMousePos.X();   // #106074# use the possibly re-mirrored coordinates (RTL) ! nX,nY are unmodified !
-            long nMouseY = aMousePos.Y();
+            // mouse click
+            if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
+            {
+                const MouseSettings& rMSettings = pChild->GetSettings().GetMouseSettings();
+                sal_uLong   nDblClkTime = rMSettings.GetDoubleClickTime();
+                long    nDblClkW    = rMSettings.GetDoubleClickWidth();
+                long    nDblClkH    = rMSettings.GetDoubleClickHeight();
+                //long    nMouseX     = nX;
+                //long    nMouseY     = nY;
+                long nMouseX = aMousePos.X();   // #106074# use the possibly re-mirrored coordinates (RTL) ! nX,nY are unmodified !
+                long nMouseY = aMousePos.Y();
 
-            if ( (pChild == pChild->ImplGetFrameData()->mpMouseDownWin) &&
-                 (nCode == pChild->ImplGetFrameData()->mnFirstMouseCode) &&
-                 ((nMsgTime-pChild->ImplGetFrameData()->mnMouseDownTime) < nDblClkTime) &&
-                 ((nMouseX-nDblClkW) <= pChild->ImplGetFrameData()->mnFirstMouseX) &&
-                 ((nMouseX+nDblClkW) >= pChild->ImplGetFrameData()->mnFirstMouseX) &&
-                 ((nMouseY-nDblClkH) <= pChild->ImplGetFrameData()->mnFirstMouseY) &&
-                 ((nMouseY+nDblClkH) >= pChild->ImplGetFrameData()->mnFirstMouseY) )
-            {
-                pChild->ImplGetFrameData()->mnClickCount++;
-                pChild->ImplGetFrameData()->mbStartDragCalled  = true;
+                if ( (pChild == pChild->ImplGetFrameData()->mpMouseDownWin) &&
+                     (nCode == pChild->ImplGetFrameData()->mnFirstMouseCode) &&
+                     ((nMsgTime-pChild->ImplGetFrameData()->mnMouseDownTime) < nDblClkTime) &&
+                     ((nMouseX-nDblClkW) <= pChild->ImplGetFrameData()->mnFirstMouseX) &&
+                     ((nMouseX+nDblClkW) >= pChild->ImplGetFrameData()->mnFirstMouseX) &&
+                     ((nMouseY-nDblClkH) <= pChild->ImplGetFrameData()->mnFirstMouseY) &&
+                     ((nMouseY+nDblClkH) >= pChild->ImplGetFrameData()->mnFirstMouseY) )
+                {
+                    pChild->ImplGetFrameData()->mnClickCount++;
+                    pChild->ImplGetFrameData()->mbStartDragCalled  = true;
+                }
+                else
+                {
+                    pChild->ImplGetFrameData()->mpMouseDownWin     = pChild;
+                    pChild->ImplGetFrameData()->mnClickCount       = 1;
+                    pChild->ImplGetFrameData()->mnFirstMouseX      = nMouseX;
+                    pChild->ImplGetFrameData()->mnFirstMouseY      = nMouseY;
+                    pChild->ImplGetFrameData()->mnFirstMouseCode   = nCode;
+                    pChild->ImplGetFrameData()->mbStartDragCalled  = !((nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) ==
+                                                                (rMSettings.GetStartDragCode() & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)));
+                }
+                pChild->ImplGetFrameData()->mnMouseDownTime = nMsgTime;
             }
-            else
-            {
-                pChild->ImplGetFrameData()->mpMouseDownWin     = pChild;
-                pChild->ImplGetFrameData()->mnClickCount       = 1;
-                pChild->ImplGetFrameData()->mnFirstMouseX      = nMouseX;
-                pChild->ImplGetFrameData()->mnFirstMouseY      = nMouseY;
-                pChild->ImplGetFrameData()->mnFirstMouseCode   = nCode;
-                pChild->ImplGetFrameData()->mbStartDragCalled  = !((nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) ==
-                                                            (rMSettings.GetStartDragCode() & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)));
-            }
-            pChild->ImplGetFrameData()->mnMouseDownTime = nMsgTime;
+            nClicks = pChild->ImplGetFrameData()->mnClickCount;
         }
-        nClicks = pChild->ImplGetFrameData()->mnClickCount;
 
         pSVData->maAppData.mnLastInputTime = Time::GetSystemTicks();
     }
 
     DBG_ASSERT( pChild, "ImplHandleMouseEvent: pChild == NULL" );
+
+    if (!pChild)
+        return false;
 
     // create mouse event
     Point aChildPos = pChild->ImplFrameToOutput( aMousePos );
@@ -668,6 +673,9 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
     bool bCallHelpRequest = true;
     DBG_ASSERT( pChild, "ImplHandleMouseEvent: pChild is NULL" );
 
+    if (!pChild)
+        return false;
+
     ImplDelData aDelData;
     NotifyEvent aNEvt( nSVEvent, pChild, &aMEvt );
     pChild->ImplAddDel( &aDelData );
@@ -685,10 +693,10 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
     }
 
     if ( ImplCallPreNotify( aNEvt ) || aDelData.IsDead() )
-        nRet = true;
+        bRet = true;
     else
     {
-        nRet = false;
+        bRet = false;
         if ( nSVEvent == EVENT_MOUSEMOVE )
         {
             if ( pSVData->maWinData.mpTrackWin )
@@ -703,7 +711,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
                         pSVData->maWinData.mpTrackTimer->Start();
                 }
                 bCallHelpRequest = false;
-                nRet = true;
+                bRet = true;
             }
             else
             {
@@ -730,7 +738,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
         {
             if ( pSVData->maWinData.mpTrackWin &&
                  !(pSVData->maWinData.mnTrackFlags & STARTTRACK_MOUSEBUTTONDOWN) )
-                nRet = true;
+                bRet = true;
             else
             {
                 pChild->ImplGetWindowImpl()->mbMouseButtonDown = false;
@@ -742,7 +750,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
             if ( pSVData->maWinData.mpTrackWin )
             {
                 pChild->EndTracking();
-                nRet = true;
+                bRet = true;
             }
             else
             {
@@ -767,19 +775,19 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
     {
         if ( bCallHelpRequest && !pSVData->maHelpData.mbKeyboardHelp )
             ImplHandleMouseHelpRequest( pChild, pChild->OutputToScreenPixel( aMEvt.GetPosPixel() ) );
-        nRet = true;
+        bRet = true;
     }
-    else if ( !nRet )
+    else if ( !bRet )
     {
         if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
         {
             if ( !pChild->ImplGetWindowImpl()->mbMouseButtonDown )
-                nRet = true;
+                bRet = true;
         }
         else
         {
             if ( !pChild->ImplGetWindowImpl()->mbMouseButtonUp )
-                nRet = true;
+                bRet = true;
         }
     }
 
@@ -796,14 +804,14 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
         if ( !bDrag )
         {
             // Command-Events
-            if ( /*!nRet &&*/ (nClicks == 1) && (nSVEvent == EVENT_MOUSEBUTTONDOWN) &&
+            if ( /*!bRet &&*/ (nClicks == 1) && (nSVEvent == EVENT_MOUSEBUTTONDOWN) &&
                  (nCode == MOUSE_MIDDLE) )
             {
                 sal_uInt16 nMiddleAction = pChild->GetSettings().GetMouseSettings().GetMiddleButtonAction();
                 if ( nMiddleAction == MOUSE_MIDDLE_AUTOSCROLL )
-                    nRet = !ImplCallCommand( pChild, COMMAND_STARTAUTOSCROLL, NULL, true, &aChildPos );
+                    bRet = !ImplCallCommand( pChild, COMMAND_STARTAUTOSCROLL, NULL, true, &aChildPos );
                 else if ( nMiddleAction == MOUSE_MIDDLE_PASTESELECTION )
-                    nRet = !ImplCallCommand( pChild, COMMAND_PASTESELECTION, NULL, true, &aChildPos );
+                    bRet = !ImplCallCommand( pChild, COMMAND_PASTESELECTION, NULL, true, &aChildPos );
             }
             else
             {
@@ -836,14 +844,14 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
                             Application::PostUserEvent( Link( pEv, ContextMenuEventLink ) );
                         }
                         else
-                            nRet = ! ImplCallCommand( pChild, COMMAND_CONTEXTMENU, NULL, true, &aChildPos );
+                            bRet = ! ImplCallCommand( pChild, COMMAND_CONTEXTMENU, NULL, true, &aChildPos );
                     }
                 }
             }
         }
     }
 
-    return nRet;
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
