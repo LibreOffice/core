@@ -743,6 +743,9 @@ sal_Int32               SvtMiscOptions::m_nRefCount = 0     ;
 //*****************************************************************************************************************
 SvtMiscOptions::SvtMiscOptions()
 {
+    // SvtMiscOptions_Impl ctor indirectly calls code that requires locked
+    // SolarMutex; lock it first:
+    SolarMutexGuard g;
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetInitMutex() );
     // Increase our refcount ...
