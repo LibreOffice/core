@@ -179,7 +179,7 @@ public class UCB  {
 
     @Test public void checkWrongFtpConnection() {
         try {
-            String acountUrl = "ftp://noname:nopasswd@nohost";
+            String acountUrl = "ftp://noname:nopasswd@*nohost.invalid";
             System.out.println(acountUrl);
             init();
             Object content = getContent(acountUrl);
