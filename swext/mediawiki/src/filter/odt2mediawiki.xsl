@@ -1129,21 +1129,12 @@
 		<param name="text"/>
 		
 		<choose>
-			<when test="contains($text, '&lt;') or contains($text, '[') or starts-with($text, '----') or starts-with($text, '=') or starts-with($text, '*')  or starts-with($text, ';')  or starts-with($text, '#')">
-				<choose>
-					<when test="contains($text, '&lt;/nowiki&gt;')">
-				                <text>&lt;nowiki&gt;</text>
-						<call-template name="render-escaped-text">
-							<with-param name="text" select="$text"/>
-						</call-template>
-				                <text>&lt;/nowiki&gt;</text>			
-					</when>
-					<otherwise>
-						<call-template name="render-encoded-text">
-							<with-param name="text" select="$text"/>
-						</call-template>
-					</otherwise>
-				</choose>
+			<when test="contains($text, '[[') or starts-with($text, '----') or starts-with($text, '=') or starts-with($text, '*')  or starts-with($text, ';')  or starts-with($text, '#')">
+				<text>&lt;nowiki&gt;</text>
+					<call-template name="render-encoded-text">
+						<with-param name="text" select="$text"/>
+					</call-template>
+				<text>&lt;/nowiki&gt;</text>			
 			</when>
 			<otherwise>
 				<call-template name="render-encoded-text">
