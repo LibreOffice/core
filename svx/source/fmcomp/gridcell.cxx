@@ -546,6 +546,7 @@ TYPEINIT1( DbFilterField, DbCellControl )
 //------------------------------------------------------------------------------
 DbCellControl::DbCellControl( DbGridColumn& _rColumn, sal_Bool /*_bText*/ )
     :OPropertyChangeListener(m_aMutex)
+    ,m_pModelChangeBroadcaster(NULL)
     ,m_pFieldChangeBroadcaster(NULL)
     ,m_bTransparent( sal_False )
     ,m_bAlignedController( sal_True )
