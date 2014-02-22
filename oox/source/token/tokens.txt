@@ -1224,6 +1224,7 @@ cmd
 cmpd
 cnfStyle
 cnt
+cntxtAlts
 code
 codeName
 codePage
@@ -3015,6 +3016,7 @@ lgDashDotDot
 lgGrid
 license
 lid
+ligatures
 light1
 light2
 lightBulb
@@ -3544,6 +3546,7 @@ numCol
 numFmt
 numFmtId
 numFmts
+numForm
 numId
 numIdMacAtCleanup
 numLit
@@ -3553,6 +3556,7 @@ numPr
 numRef
 numRestart
 numSld
+numSpacing
 numStart
 numStyleLink
 numTab
@@ -4026,6 +4030,7 @@ proofErr
 proofState
 property
 propertyName
+props3d
 prot
 protected
 protectedRange
@@ -4914,6 +4919,7 @@ stylePaneFormatFilter
 stylePaneSortMethod
 styleSheet
 styles
+stylisticSets
 sub
 subDoc
 subFontBySize
@@ -5123,6 +5129,7 @@ textInflateTop
 textInput
 textLength
 textNoShape
+textOutline
 textPlain
 textPr
 textRingInside
