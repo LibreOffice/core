@@ -46,7 +46,7 @@ End
 File gid_File_PostgresqlSdbc_Xcd
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Share_Registry;
-    Name = "postgresqlsdbc.xcd";
+    Name = "postgresql.xcd";
     Styles = (PACKED);
 End
 

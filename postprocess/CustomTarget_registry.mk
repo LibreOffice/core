@@ -431,9 +431,9 @@ postprocess_FILES_xsltfilter := \
 	$(call gb_XcuFilterTypesTarget_get_target,fcfg_xslt_types.xcu)
 
 ifeq ($(BUILD_POSTGRESQL_SDBC),YES)
-postprocess_XCDS += postgresqlsdbc.xcd
-postprocess_DEPS_postgresqlsdbc := main
-postprocess_FILES_postgresqlsdbc := $(call gb_XcuModuleTarget_get_target,connectivity/registry/postgresql)/org/openoffice/Office/DataAccess/Drivers-postgresql.xcu
+postprocess_XCDS += postgresql.xcd
+postprocess_DEPS_postgresql := main
+postprocess_FILES_postgresql := $(call gb_XcuModuleTarget_get_target,connectivity/registry/postgresql)/org/openoffice/Office/DataAccess/Drivers-postgresql.xcu
 postprocess_DRIVERS += postgresql
 endif
 
