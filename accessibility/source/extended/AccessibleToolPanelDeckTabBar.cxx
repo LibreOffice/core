@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "accessibility/extended/AccessibleToolPanelDeckTabBar.hxx"
 #include "accessibility/extended/AccessibleToolPanelDeckTabBarItem.hxx"
 #include "accessibility/helper/accresmgr.hxx"
@@ -40,11 +39,8 @@
 
 #include <vector>
 
-//......................................................................................................................
 namespace accessibility
 {
-//......................................................................................................................
-
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -67,9 +63,7 @@ namespace accessibility
 
     typedef ::com::sun::star::awt::Point        UnoPoint;
 
-    //==================================================================================================================
-    //= AccessibleWrapper
-    //==================================================================================================================
+    // AccessibleWrapper
     typedef ::cppu::WeakImplHelper1< XAccessible > AccessibleWrapper_Base;
     class AccessibleWrapper : public AccessibleWrapper_Base
     {
@@ -89,9 +83,7 @@ namespace accessibility
         const Reference< XAccessibleContext >   m_xContext;
     };
 
-    //==================================================================================================================
-    //= AccessibleToolPanelTabBar_Impl
-    //==================================================================================================================
+    // AccessibleToolPanelTabBar_Impl
     class AccessibleToolPanelTabBar_Impl    :public ::boost::noncopyable
                                             ,public ::svt::IToolPanelDeckListener
     {
@@ -132,7 +124,6 @@ namespace accessibility
         ::std::vector< Reference< XAccessible > >   m_aChildren;
     };
 
-    //------------------------------------------------------------------------------------------------------------------
     AccessibleToolPanelTabBar_Impl::AccessibleToolPanelTabBar_Impl( AccessibleToolPanelTabBar& i_rAntiImpl,
             const Reference< XAccessible >& i_rAccessibleParent, ::svt::IToolPanelDeck& i_rPanelDeck, ::svt::PanelTabBar& i_rTabBar )
         :m_rAntiImpl( i_rAntiImpl )
@@ -152,21 +143,18 @@ namespace accessibility
         i_rTabBar.GetScrollButton( false ).AddEventListener( LINK( this, AccessibleToolPanelTabBar_Impl, OnWindowEvent ) );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelTabBar_Impl::checkDisposed()
     {
         if ( isDisposed() )
             throw DisposedException( OUString(), *&m_rAntiImpl );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     AccessibleToolPanelTabBar_Impl::~AccessibleToolPanelTabBar_Impl()
     {
         if ( !isDisposed() )
             dispose();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelTabBar_Impl::dispose()
     {
         ENSURE_OR_RETURN_VOID( !isDisposed(), "disposed twice" );
@@ -180,7 +168,6 @@ namespace accessibility
         m_xAccessibleParent.clear();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessible > AccessibleToolPanelTabBar_Impl::getAccessiblePanelItem( size_t i_nPosition )
     {
         ENSURE_OR_RETURN( !isDisposed(), "AccessibleToolPanelTabBar_Impl::getAccessiblePanelItem: already disposed!", NULL );
@@ -197,7 +184,6 @@ namespace accessibility
         return rAccessibleChild;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessible > AccessibleToolPanelTabBar_Impl::getOwnAccessible() const
     {
         Reference< XAccessible > xOwnAccessible( static_cast< XAccessible* >( m_rAntiImpl.GetVCLXWindow() ) );
@@ -206,7 +192,6 @@ namespace accessibility
         return xOwnAccessible;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelTabBar_Impl::PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition )
     {
         ENSURE_OR_RETURN_VOID( i_nPosition <= m_aChildren.size(), "AccessibleToolPanelTabBar_Impl::PanelInserted: illegal position (or invalid cache!)" );
@@ -215,7 +200,6 @@ namespace accessibility
         m_rAntiImpl.NotifyAccessibleEvent( AccessibleEventId::CHILD, Any(), makeAny( getAccessiblePanelItem( i_nPosition ) ) );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelTabBar_Impl::PanelRemoved( const size_t i_nPosition )
     {
         ENSURE_OR_RETURN_VOID( i_nPosition < m_aChildren.size(), "AccessibleToolPanelTabBar_Impl::PanelInserted: illegal position (or invalid cache!)" );
@@ -225,27 +209,23 @@ namespace accessibility
         m_rAntiImpl.NotifyAccessibleEvent( AccessibleEventId::CHILD, makeAny( xOldChild ), Any() );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelTabBar_Impl::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive )
     {
         (void)i_rOldActive;
         (void)i_rNewActive;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelTabBar_Impl::LayouterChanged( const ::svt::PDeckLayouter& i_rNewLayouter )
     {
         (void)i_rNewLayouter;
         m_rAntiImpl.dispose();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelTabBar_Impl::Dying()
     {
         m_rAntiImpl.dispose();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     IMPL_LINK( AccessibleToolPanelTabBar_Impl, OnWindowEvent, const VclSimpleEvent*, i_pEvent )
     {
         ENSURE_OR_RETURN( !isDisposed(), "AccessibleToolPanelTabBar_Impl::OnWindowEvent: already disposed!", 0L );
@@ -272,9 +252,7 @@ namespace accessibility
         return 1L;
     }
 
-    //==================================================================================================================
-    //= MethodGuard
-    //==================================================================================================================
+    // MethodGuard
     namespace
     {
         class MethodGuard
@@ -294,10 +272,7 @@ namespace accessibility
         };
     }
 
-    //==================================================================================================================
-    //= AccessibleToolPanelTabBar
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    // AccessibleToolPanelTabBar
     AccessibleToolPanelTabBar::AccessibleToolPanelTabBar( const Reference< XAccessible >& i_rAccessibleParent,
             ::svt::IToolPanelDeck& i_rPanelDeck, ::svt::PanelTabBar& i_rTabBar )
         :AccessibleToolPanelTabBar_Base( i_rTabBar.GetWindowPeer() )
@@ -305,12 +280,10 @@ namespace accessibility
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     AccessibleToolPanelTabBar::~AccessibleToolPanelTabBar()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     sal_Int32 SAL_CALL AccessibleToolPanelTabBar::getAccessibleChildCount(  ) throw (RuntimeException)
     {
         MethodGuard aGuard( *m_pImpl );
@@ -323,7 +296,6 @@ namespace accessibility
             +   ( bHasScrollForward ? 1 : 0 );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessible > SAL_CALL AccessibleToolPanelTabBar::getAccessibleChild( sal_Int32 i_nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         MethodGuard aGuard( *m_pImpl );
@@ -351,21 +323,18 @@ namespace accessibility
         return m_pImpl->getAccessiblePanelItem( i_nIndex - ( bHasScrollBack ? 1 : 0 ) );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessible > SAL_CALL AccessibleToolPanelTabBar::getAccessibleParent(  ) throw (RuntimeException)
     {
         MethodGuard aGuard( *m_pImpl );
         return m_pImpl->getAccessibleParent();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     sal_Int16 SAL_CALL AccessibleToolPanelTabBar::getAccessibleRole(  ) throw (RuntimeException)
     {
         MethodGuard aGuard( *m_pImpl );
         return AccessibleRole::PAGE_TAB_LIST;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     namespace
     {
         bool lcl_covers( const ::Window& i_rWindow, const ::Point& i_rPoint )
@@ -375,7 +344,6 @@ namespace accessibility
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessible > SAL_CALL AccessibleToolPanelTabBar::getAccessibleAtPoint( const UnoPoint& i_rPoint ) throw (RuntimeException)
     {
         MethodGuard aGuard( *m_pImpl );
@@ -406,14 +374,12 @@ namespace accessibility
         return NULL;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL AccessibleToolPanelTabBar::disposing()
     {
         AccessibleToolPanelTabBar_Base::disposing();
         m_pImpl->dispose();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessible > AccessibleToolPanelTabBar::GetChildAccessible( const VclWindowEvent& i_rVclWindowEvent )
     {
         // don't let the base class generate any A11Y events from VclWindowEvent, we completely manage those
@@ -422,7 +388,6 @@ namespace accessibility
         return NULL;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelTabBar::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& i_rStateSet )
     {
         AccessibleToolPanelTabBar_Base::FillAccessibleStateSet( i_rStateSet );
@@ -434,9 +399,6 @@ namespace accessibility
         else
             i_rStateSet.AddState( AccessibleStateType::HORIZONTAL );
     }
-
-//......................................................................................................................
 } // namespace accessibility
-//......................................................................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
