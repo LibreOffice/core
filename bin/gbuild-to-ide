@@ -20,6 +20,8 @@ import xml.etree.ElementTree as ET
 
 class GbuildParserState:
     def __init__(self):
+        self.target = None
+        self.ilib = None
         self.include = []
         self.defs = {}
         self.cxxobjects = []
@@ -43,25 +45,32 @@ class GbuildLinkTarget:
 
 
 class GbuildLib(GbuildLinkTarget):
-    def __init__(self, name, location, include, defs, cxxobjects, linked_libs):
+    def __init__(self, name, library, location, include, defs, cxxobjects, linked_libs):
         GbuildLinkTarget.__init__(self, name, location, include, defs, cxxobjects, linked_libs)
+        self.library = library
 
     def short_name(self):
+        """Return the short name of target based on the Library_* makefile name"""
         return 'Library %s' % self.name
 
-    def target(self):
-        return 'Library_%s' % self.name
+    def target_name(self):
+        return 'Library_%s' % self.library
+
+    def library_name(self):
+        return self.library
 
 
 class GbuildExe(GbuildLinkTarget):
-    def __init__(self, name, location, include, defs, cxxobjects, linked_libs):
+    def __init__(self, name, executable, location, include, defs, cxxobjects, linked_libs):
         GbuildLinkTarget.__init__(self, name, location, include, defs, cxxobjects, linked_libs)
+        self.executable = executable
 
     def short_name(self):
+        """Return the short name of target based on the Executable_* makefile name"""
         return 'Executable %s' % self.name
 
-    def target(self):
-        return 'Executable_%s' % self.name
+    def target_name(self):
+        return 'Executable_%s' % self.executable
 
 
 class GbuildParser:
@@ -70,15 +79,27 @@ class GbuildParser:
     builddirpattern = re.compile('^BUILDDIR = (.*)')
     instdirpattern = re.compile('^INSTDIR = (.*)')
     binpathpattern = re.compile('^LS = (.*)ls(.exe)?')
+    libnamespattern = re.compile('^gb_Library_ILIBFILENAMES := (.*)')
+    exenamepattern = re.compile('^gb_Executable_FILENAMES_FOR_BUILD := (.*)')
+    rulepattern = re.compile('^(.+?):( .*)?$')
     libpattern = re.compile('#  [a-z]+ to execute \(from [\'`](.*)/Library_(.*)\.mk\', line [0-9]*\):')
     exepattern = re.compile('#  [a-z]+ to execute \(from [\'`](.*)/Executable_(.*)\.mk\', line [0-9]*\):')
     includepattern = re.compile('# INCLUDE := (.*)')
     defspattern = re.compile('# DEFS := (.*)')
     cxxpattern = re.compile('# CXXOBJECTS := (.*)')
     linkedlibspattern = re.compile('# LINKED_LIBS := (.*)')
+    ilibpattern = re.compile('# ILIBTARGET := (.*)')
 
     def __init__(self):
-        (self.makecmd, self.srcdir, self.builddir, self.instdir, self.libs, self.exes) = ('', '', '', '', [], [])
+        (self.makecmd, self.srcdir, self.builddir, self.instdir, self.libs,
+         self.exes, self.libnames, self.exenames) = ('', '', '', '', [], [], {}, {})
+
+    def __mapping_to_dict(self, mapping):
+        mapping_dict = {}
+        for item in mapping.split(' '):
+            library,target = item.split(':')
+            mapping_dict[target] = library
+        return mapping_dict
 
     def parse(self, gbuildstate):
         state = GbuildParserState()
@@ -107,19 +128,35 @@ class GbuildParser:
                 if binpathmatch:
                     self.binpath = binpathmatch.group(1)
                     continue
+                rulematch = self.rulepattern.match(line)
+                if rulematch:
+                    state.target = os.path.basename(rulematch.group(1))
+                    continue
+                libnamesmatch = GbuildParser.libnamespattern.match(line)
+                if libnamesmatch:
+                    self.libnames = self.__mapping_to_dict(libnamesmatch.group(1))
+                    continue
+                exenamesmatch = GbuildParser.exenamepattern.match(line)
+                if exenamesmatch:
+                    self.exenames = self.__mapping_to_dict(exenamesmatch.group(1))
+                    continue
                 state = GbuildParserState()
                 continue
             libmatch = GbuildParser.libpattern.match(line)
             if libmatch:
+                libname = self.libnames.get(state.ilib, None)
                 self.libs.append(
-                    GbuildLib(libmatch.group(2), libmatch.group(1), state.include, state.defs, state.cxxobjects,
+                    GbuildLib(libmatch.group(2), libname, libmatch.group(1),
+                              state.include, state.defs, state.cxxobjects,
                               state.linked_libs))
                 state = GbuildParserState()
                 continue
             exematch = GbuildParser.exepattern.match(line)
             if exematch:
+                exename = self.exenames.get(state.target, None)
                 self.exes.append(
-                    GbuildExe(exematch.group(2), exematch.group(1), state.include, state.defs, state.cxxobjects,
+                    GbuildExe(exematch.group(2), exename, exematch.group(1),
+                              state.include, state.defs, state.cxxobjects,
                               state.linked_libs))
                 state = GbuildParserState()
                 continue
@@ -145,6 +182,9 @@ class GbuildParser:
             if linkedlibsmatch:
                 state.linked_libs = linkedlibsmatch.group(1).strip().split(' ')
                 continue
+            ilibmatch = GbuildParser.ilibpattern.match(line)
+            if ilibmatch:
+                state.ilib = os.path.basename(ilibmatch.group(1))
             #we could match a lot of other stuff here if needed for integration rpaths etc.
         return self
 
@@ -583,16 +623,17 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
     def get_project_directory(self, target):
         return os.path.join(self.solution_directory, target.location.split('/')[-1])
 
-    def get_dependency_libs(self, linked_libs, projects):
+    def get_dependency_libs(self, linked_libs, library_projects):
         dependency_libs = {}
         for linked_lib in linked_libs:
-            for project in projects:
-                if project.target.name == linked_lib:
-                    dependency_libs[project.guid] = project
+            for library_project in library_projects:
+                if library_project.target.library_name() == linked_lib:
+                    dependency_libs[library_project.guid] = library_project
         return dependency_libs
 
     def write_solution(self, solution_path, projects):
         print('Solution %s:' % os.path.splitext(os.path.basename(solution_path))[0], end='')
+        library_projects = [project for project in projects if project.target in self.gbuildparser.libs]
         with open(solution_path, 'w') as f:
             f.write('Microsoft Visual Studio Solution File, Format Version 12.00\n')
             for project in projects:
@@ -603,7 +644,8 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
                 f.write('Project("{%s}") = "%s", "%s", "{%s}"\n' %
                         (VisualStudioIntegrationGenerator.nmake_project_guid,
                         target.short_name(), proj_path, project.guid))
-                libs_in_solution = self.get_dependency_libs(target.linked_libs, projects)
+                libs_in_solution = self.get_dependency_libs(target.linked_libs,
+                                                            library_projects)
                 if libs_in_solution:
                     f.write('\tProjectSection(ProjectDependencies) = postProject\n')
                     for lib_guid in libs_in_solution.keys():
@@ -683,7 +725,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
                 'sh': os.path.join(self.gbuildparser.binpath, 'dash.exe'),
                 'location': target.location,
                 'makecmd': self.gbuildparser.makecmd,
-                'target': target.target()}
+                'target': target.target_name()}
             nmake_build_node = ET.SubElement(conf_node, '{%s}NMakeBuildCommandLine' % ns)
             nmake_build_node.text = cfg_targets['build'] % nmake_params
             nmake_clean_node = ET.SubElement(conf_node, '{%s}NMakeCleanCommandLine' % ns)
