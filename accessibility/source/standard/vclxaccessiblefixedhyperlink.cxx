@@ -21,29 +21,29 @@
 
 using namespace ::com::sun::star;
 
-// -----------------------------------------------------------------------------
+
 // VCLXAccessibleFixedHyperlink
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleFixedHyperlink::VCLXAccessibleFixedHyperlink( VCLXWindow* pVCLWindow )
     :VCLXAccessibleTextComponent( pVCLWindow )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleFixedHyperlink::~VCLXAccessibleFixedHyperlink()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleFixedHyperlink::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
     VCLXAccessibleTextComponent::FillAccessibleStateSet( rStateSet );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleFixedHyperlink::implGetLineBoundary( i18n::Boundary& rBoundary, sal_Int32 nIndex )
 {
@@ -51,16 +51,16 @@ void VCLXAccessibleFixedHyperlink::implGetLineBoundary( i18n::Boundary& rBoundar
     OCommonAccessibleText::implGetLineBoundary( rBoundary, nIndex );
 }
 
-// -----------------------------------------------------------------------------
+
 // XServiceInfo
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleFixedHyperlink::getImplementationName() throw (uno::RuntimeException)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleFixedHyperlink" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 uno::Sequence< OUString > VCLXAccessibleFixedHyperlink::getSupportedServiceNames() throw (uno::RuntimeException)
 {
@@ -69,6 +69,6 @@ uno::Sequence< OUString > VCLXAccessibleFixedHyperlink::getSupportedServiceNames
     return aNames;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

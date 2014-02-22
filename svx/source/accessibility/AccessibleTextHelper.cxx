@@ -18,11 +18,11 @@
  */
 
 
-//------------------------------------------------------------------------
+
 //
 // Global header
 //
-//------------------------------------------------------------------------
+
 
 #include <limits.h>
 #include <memory>
@@ -48,11 +48,11 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 
-//------------------------------------------------------------------------
+
 //
 // Project-local header
 //
-//------------------------------------------------------------------------
+
 #include "AccessibleTextEventQueue.hxx"
 #include <svx/AccessibleTextHelper.hxx>
 #include <svx/unoshape.hxx>
@@ -77,11 +77,11 @@ using namespace ::com::sun::star::accessibility;
 namespace accessibility
 {
 
-//------------------------------------------------------------------------
+
 //
 // AccessibleTextHelper_Impl declaration
 //
-//------------------------------------------------------------------------
+
 
     DBG_NAME( AccessibleTextHelper_Impl )
 
@@ -254,11 +254,11 @@ namespace accessibility
         int mnNotifierClientId;
     };
 
-    //------------------------------------------------------------------------
+
     //
     // AccessibleTextHelper_Impl implementation
     //
-    //------------------------------------------------------------------------
+
 
     AccessibleTextHelper_Impl::AccessibleTextHelper_Impl() :
         mxFrontEnd( NULL ),
@@ -1732,11 +1732,11 @@ namespace accessibility
         return NULL;
     }
 
-    //------------------------------------------------------------------------
+
     //
     // AccessibleTextHelper implementation (simply forwards to impl)
     //
-    //------------------------------------------------------------------------
+
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     AccessibleTextHelper::AccessibleTextHelper( ::std::auto_ptr< SvxEditSource > pEditSource ) :
@@ -2072,6 +2072,6 @@ namespace accessibility
 
 } // end of namespace accessibility
 
-//------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

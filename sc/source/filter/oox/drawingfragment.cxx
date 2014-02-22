@@ -320,7 +320,7 @@ private:
     sal_Int32           mnRow;
 };
 
-// ----------------------------------------------------------------------------
+
 
 VmlFindNoteFunc::VmlFindNoteFunc( const CellAddress& rPos ) :
     mnCol( rPos.Column ),

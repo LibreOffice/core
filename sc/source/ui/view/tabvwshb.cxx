@@ -487,7 +487,7 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
 }
 
 
-//------------------------------------------------------------------
+
 
 void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
 {

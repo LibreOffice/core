@@ -49,7 +49,7 @@
 #include <svx/svdpage.hxx>
 #include <fuconcustomshape.hxx>
 
-// -----------------------------------------------------------------------
+
 
 SdrView* ScTabViewShell::GetDrawView() const
 {

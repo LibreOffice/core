@@ -54,7 +54,7 @@ namespace rptui
     //====================================================================
     //= FormatNormalizer
     //====================================================================
-    //--------------------------------------------------------------------
+
     FormatNormalizer::FormatNormalizer( const OReportModel& _rModel )
         :m_rModel( _rModel )
         ,m_xReportDefinition( )
@@ -62,12 +62,12 @@ namespace rptui
     {
     }
 
-    //--------------------------------------------------------------------
+
     FormatNormalizer::~FormatNormalizer()
     {
     }
 
-    //--------------------------------------------------------------------
+
     void FormatNormalizer::notifyPropertyChange( const ::com::sun::star::beans::PropertyChangeEvent& _rEvent )
     {
         if ( !impl_lateInit() )
@@ -84,7 +84,7 @@ namespace rptui
             impl_onFormattedProperttyChange( xFormatted, _rEvent.PropertyName );
     }
 
-    //--------------------------------------------------------------------
+
     void FormatNormalizer::notifyElementInserted( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement )
     {
         if ( !impl_lateInit() )
@@ -97,7 +97,7 @@ namespace rptui
         impl_adjustFormatToDataFieldType_nothrow( xFormatted );
     }
 
-    //--------------------------------------------------------------------
+
     bool FormatNormalizer::impl_lateInit()
     {
         if ( m_xReportDefinition.is() )
@@ -107,7 +107,7 @@ namespace rptui
         return m_xReportDefinition.is();
     }
 
-    //--------------------------------------------------------------------
+
     void FormatNormalizer::impl_onDefinitionPropertyChange( const OUString& _rChangedPropName )
     {
         if  ( _rChangedPropName != "Command" && _rChangedPropName != "CommandType" && _rChangedPropName != "EscapeProcessing" )
@@ -116,7 +116,7 @@ namespace rptui
         m_bFieldListDirty = true;
     }
 
-    //--------------------------------------------------------------------
+
     void FormatNormalizer::impl_onFormattedProperttyChange( const Reference< XFormattedField >& _rxFormatted, const OUString& _rChangedPropName )
     {
         if  ( _rChangedPropName != "DataField" )
@@ -126,7 +126,7 @@ namespace rptui
         impl_adjustFormatToDataFieldType_nothrow( _rxFormatted );
     }
 
-    //--------------------------------------------------------------------
+
     namespace
     {
         void lcl_collectFields_throw( const Reference< XIndexAccess >& _rxColumns, FormatNormalizer::FieldList& _inout_rFields )
@@ -156,7 +156,7 @@ namespace rptui
         }
     }
 
-    //--------------------------------------------------------------------
+
     bool FormatNormalizer::impl_ensureUpToDateFieldList_nothrow()
     {
         if ( !m_bFieldListDirty )
@@ -204,7 +204,7 @@ namespace rptui
         return true;
     }
 
-    //--------------------------------------------------------------------
+
     void FormatNormalizer::impl_adjustFormatToDataFieldType_nothrow( const Reference< XFormattedField >& _rxFormatted )
     {
         if ( !impl_ensureUpToDateFieldList_nothrow() )

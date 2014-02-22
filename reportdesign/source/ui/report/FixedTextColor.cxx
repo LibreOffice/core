@@ -55,11 +55,11 @@ namespace rptui
     {
     }
 
-    //--------------------------------------------------------------------
+
     FixedTextColor::~FixedTextColor()
     {
     }
-    // -----------------------------------------------------------------------------
+
 
     void FixedTextColor::notifyPropertyChange( const beans::PropertyChangeEvent& _rEvent )
     {
@@ -80,19 +80,19 @@ namespace rptui
         }
     }
 
-    // -----------------------------------------------------------------------------
+
     void FixedTextColor::setPropertyTextColor(const uno::Reference< awt::XVclWindowPeer >& _xVclWindowPeer, sal_Int32 _nTextColor)
     {
         _xVclWindowPeer->setProperty(PROPERTY_TEXTCOLOR, uno::makeAny(sal_Int32(_nTextColor)));
     }
 
-    // -----------------------------------------------------------------------------
+
     void FixedTextColor::notifyElementInserted( const uno::Reference< uno::XInterface >& _rxElement )
     {
         handle(_rxElement);
     }
 
-// -----------------------------------------------------------------------------
+
     void FixedTextColor::handle( const uno::Reference< uno::XInterface >& _rxElement )
     {
         uno::Reference< report::XFixedText > xFixedText( _rxElement, uno::UNO_QUERY );
@@ -151,7 +151,7 @@ namespace rptui
     }
 
 
-// -----------------------------------------------------------------------------
+
     // XPropertyChangeListener
     uno::Reference<awt::XControl> FixedTextColor::getXControl(const uno::Reference< report::XFixedText >& _xFixedText) throw(uno::RuntimeException)
     {
@@ -185,7 +185,7 @@ namespace rptui
         return xControl;
     }
 
-// -----------------------------------------------------------------------------
+
     uno::Reference<awt::XVclWindowPeer> FixedTextColor::getVclWindowPeer(const uno::Reference< report::XFixedText >& _xComponent) throw(uno::RuntimeException)
     {
         uno::Reference<awt::XVclWindowPeer> xVclWindowPeer;

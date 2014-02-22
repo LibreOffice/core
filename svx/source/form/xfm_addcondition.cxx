@@ -43,13 +43,13 @@ namespace svxform
     //====================================================================
     //= OAddConditionDialog
     //====================================================================
-    //--------------------------------------------------------------------
+
     Reference< XInterface > SAL_CALL OAddConditionDialog_Create( const Reference< XMultiServiceFactory > & _rxORB )
     {
         return OAddConditionDialog::Create( _rxORB );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL OAddConditionDialog_GetSupportedServiceNames()
     {
         ::comphelper::StringSequence aSupported( 1 );
@@ -57,7 +57,7 @@ namespace svxform
         return aSupported;
     }
 
-    //--------------------------------------------------------------------
+
     OUString SAL_CALL OAddConditionDialog_GetImplementationName()
     {
         return OUString("org.openoffice.comp.svx.OAddConditionDialog");
@@ -66,7 +66,7 @@ namespace svxform
     //====================================================================
     //= OAddConditionDialog
     //====================================================================
-    //--------------------------------------------------------------------
+
     OAddConditionDialog::OAddConditionDialog( const Reference< XComponentContext >& _rxORB )
         :OAddConditionDialogBase( _rxORB )
     {
@@ -103,7 +103,7 @@ namespace svxform
         );
     }
 
-    //-------------------------------------------------------------------------
+
     Sequence<sal_Int8> SAL_CALL OAddConditionDialog::getImplementationId(  ) throw(RuntimeException)
     {
         static ::cppu::OImplementationId * pId = 0;
@@ -119,37 +119,37 @@ namespace svxform
         return pId->getImplementationId();
     }
 
-    //-------------------------------------------------------------------------
+
     Reference< XInterface > SAL_CALL OAddConditionDialog::Create( const Reference< XMultiServiceFactory >& _rxFactory )
     {
         return *( new OAddConditionDialog( comphelper::getComponentContext(_rxFactory) ) );
     }
 
-    //-------------------------------------------------------------------------
+
     OUString SAL_CALL OAddConditionDialog::getImplementationName() throw(RuntimeException)
     {
         return OAddConditionDialog_GetImplementationName();
     }
 
-    //-------------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL OAddConditionDialog::getSupportedServiceNames() throw(RuntimeException)
     {
         return OAddConditionDialog_GetSupportedServiceNames();
     }
 
-    //-------------------------------------------------------------------------
+
     Reference<XPropertySetInfo>  SAL_CALL OAddConditionDialog::getPropertySetInfo() throw(RuntimeException)
     {
         return createPropertySetInfo( getInfoHelper() );
     }
 
-    //-------------------------------------------------------------------------
+
     ::cppu::IPropertyArrayHelper& OAddConditionDialog::getInfoHelper()
     {
         return *const_cast< OAddConditionDialog* >( this )->getArrayHelper();
     }
 
-    //------------------------------------------------------------------------------
+
     ::cppu::IPropertyArrayHelper* OAddConditionDialog::createArrayHelper( ) const
     {
         Sequence< Property > aProperties;
@@ -157,7 +157,7 @@ namespace svxform
         return new ::cppu::OPropertyArrayHelper( aProperties );
     }
 
-    //------------------------------------------------------------------------------
+
     Dialog* OAddConditionDialog::createDialog(Window* _pParent)
     {
         if ( !m_xBinding.is() || m_sFacetName.isEmpty() )
@@ -166,7 +166,7 @@ namespace svxform
         return new AddConditionDialog( _pParent, m_sFacetName, m_xBinding );
     }
 
-    //------------------------------------------------------------------------------
+
     void OAddConditionDialog::executedDialog( sal_Int16 _nExecutionResult )
     {
         OAddConditionDialogBase::executedDialog( _nExecutionResult );

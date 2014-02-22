@@ -40,35 +40,35 @@ OMySQLColumns::OMySQLColumns(   ::cppu::OWeakObject& _rParent
             ) : OColumnsHelper(_rParent,_bCase,_rMutex,_rVector,_bUseHardRef)
 {
 }
-// -----------------------------------------------------------------------------
+
 Reference< XPropertySet > OMySQLColumns::createDescriptor()
 {
     return new OMySQLColumn(sal_True);
 }
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+
+
 OMySQLColumn::OMySQLColumn( sal_Bool    _bCase)
     : connectivity::sdbcx::OColumn( _bCase )
 {
     construct();
 }
-// -------------------------------------------------------------------------
+
 void OMySQLColumn::construct()
 {
     m_sAutoIncrement = "auto_increment";
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION),PROPERTY_ID_AUTOINCREMENTCREATION,0,&m_sAutoIncrement, ::getCppuType(&m_sAutoIncrement));
 }
-// -----------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* OMySQLColumn::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {
     return doCreateArrayHelper();
 }
-// -----------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper & SAL_CALL OMySQLColumn::getInfoHelper()
 {
     return *OMySQLColumn_PROP::getArrayHelper(isNew() ? 1 : 0);
 }
-// -----------------------------------------------------------------------------
+
 Sequence< OUString > SAL_CALL OMySQLColumn::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     Sequence< OUString > aSupported(1);
@@ -76,6 +76,6 @@ Sequence< OUString > SAL_CALL OMySQLColumn::getSupportedServiceNames(  ) throw(R
 
     return aSupported;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

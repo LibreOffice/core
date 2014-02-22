@@ -49,11 +49,11 @@ ODbaseDatabaseMetaData::ODbaseDatabaseMetaData(::connectivity::file::OConnection
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::ODbaseDatabaseMetaData" );
 }
-// -------------------------------------------------------------------------
+
 ODbaseDatabaseMetaData::~ODbaseDatabaseMetaData()
 {
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > ODbaseDatabaseMetaData::impl_getTypeInfo_throw(  )
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::impl_getTypeInfo_throw" );
@@ -153,7 +153,7 @@ Reference< XResultSet > ODbaseDatabaseMetaData::impl_getTypeInfo_throw(  )
     pResult->setRows(aRows);
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
     const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& tableNamePattern,
         const OUString& columnNamePattern ) throw(SQLException, RuntimeException)
@@ -244,7 +244,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
 
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
     const Any& /*catalog*/, const OUString& /*schema*/, const OUString& table,
         sal_Bool unique, sal_Bool /*approximate*/ ) throw(SQLException, RuntimeException)
@@ -321,56 +321,56 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
     pResult->setRows(aRows);
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ODbaseDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::getURL" );
     ::osl::MutexGuard aGuard( m_aMutex );
     return OUString("sdbc:dbase:") + m_pConnection->getURL();
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::getMaxBinaryLiteralLength" );
     return SAL_MAX_INT32;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxCharLiteralLength(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::getMaxCharLiteralLength" );
     return 254;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxColumnNameLength(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::getMaxColumnNameLength" );
     return 10;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxColumnsInIndex(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::getMaxColumnsInIndex" );
     return 1;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::getMaxColumnsInTable" );
     return 128;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODbaseDatabaseMetaData::supportsAlterTableWithAddColumn(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::supportsAlterTableWithAddColumn" );
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODbaseDatabaseMetaData::supportsAlterTableWithDropColumn(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::supportsAlterTableWithDropColumn" );
     return sal_False;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODbaseDatabaseMetaData::isReadOnly(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::isReadOnly" );
@@ -383,19 +383,19 @@ sal_Bool SAL_CALL ODbaseDatabaseMetaData::isReadOnly(  ) throw(SQLException, Run
 
     return bReadOnly;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ODbaseDatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw" );
     return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ODbaseDatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw" );
     return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

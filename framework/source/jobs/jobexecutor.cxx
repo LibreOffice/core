@@ -188,7 +188,7 @@ void JobExecutor::disposing() {
     }
 }
 
-//________________________________
+
 
 /**
     @short  implementation of XJobExecutor interface
@@ -246,7 +246,7 @@ void SAL_CALL JobExecutor::trigger( const OUString& sEvent ) throw(css::uno::Run
     }
 }
 
-//________________________________
+
 
 void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent ) throw(css::uno::RuntimeException)
 {
@@ -335,7 +335,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
     }
 }
 
-//________________________________
+
 
 void SAL_CALL JobExecutor::elementInserted( const css::container::ContainerEvent& aEvent ) throw(css::uno::RuntimeException)
 {
@@ -372,7 +372,7 @@ void SAL_CALL JobExecutor::elementReplaced( const css::container::ContainerEvent
     // I'm not interested on changed items :-)
 }
 
-//________________________________
+
 
 /** @short  the used cfg changes notifier wish to be released in its reference.
 

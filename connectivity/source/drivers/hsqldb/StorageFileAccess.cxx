@@ -85,7 +85,7 @@ SAL_JNI_EXPORT jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileA
     }
     return JNI_FALSE;
 }
-// -----------------------------------------------------------------------------
+
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess
@@ -120,7 +120,7 @@ SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAcces
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess
@@ -163,6 +163,6 @@ SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAcces
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

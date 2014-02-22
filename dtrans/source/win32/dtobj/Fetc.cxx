@@ -21,9 +21,9 @@
 #include "Fetc.hxx"
 #include "../misc/ImplHelper.hxx"
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 CFormatEtc::CFormatEtc(  )
 {
@@ -34,27 +34,27 @@ CFormatEtc::CFormatEtc(  )
     m_FormatEtc.tymed    = TYMED_NULL;
 }
 
-//------------------------------------------------------------------------
+
 // transfer of ownership
-//------------------------------------------------------------------------
+
 
 CFormatEtc::CFormatEtc( const FORMATETC& aFormatEtc )
 {
     CopyFormatEtc( &m_FormatEtc, &const_cast< FORMATETC& >( aFormatEtc ) );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 CFormatEtc::~CFormatEtc( )
 {
     DeleteTargetDevice( m_FormatEtc.ptd );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 CFormatEtc::CFormatEtc( CLIPFORMAT cf, DWORD tymed, DVTARGETDEVICE* ptd, DWORD dwAspect, LONG lindex )
 {
@@ -65,9 +65,9 @@ CFormatEtc::CFormatEtc( CLIPFORMAT cf, DWORD tymed, DVTARGETDEVICE* ptd, DWORD d
     m_FormatEtc.tymed    = tymed;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 CFormatEtc::CFormatEtc( const CFormatEtc& theOther )
 {
@@ -78,9 +78,9 @@ CFormatEtc::CFormatEtc( const CFormatEtc& theOther )
     m_FormatEtc.tymed    = theOther.m_FormatEtc.tymed;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 CFormatEtc& CFormatEtc::operator=( const CFormatEtc& theOther )
 {
@@ -98,27 +98,27 @@ CFormatEtc& CFormatEtc::operator=( const CFormatEtc& theOther )
     return *this;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 CFormatEtc::operator FORMATETC*( )
 {
     return &m_FormatEtc;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 CFormatEtc::operator FORMATETC( )
 {
     return m_FormatEtc;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void CFormatEtc::getFORMATETC( LPFORMATETC lpFormatEtc )
 {
@@ -128,27 +128,27 @@ void CFormatEtc::getFORMATETC( LPFORMATETC lpFormatEtc )
     CopyFormatEtc( lpFormatEtc, &m_FormatEtc );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 CLIPFORMAT CFormatEtc::getClipformat( ) const
 {
     return m_FormatEtc.cfFormat;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 DWORD CFormatEtc::getTymed( ) const
 {
     return m_FormatEtc.tymed;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void CFormatEtc::getTargetDevice( DVTARGETDEVICE** lpDvTargetDevice ) const
 {
@@ -161,45 +161,45 @@ void CFormatEtc::getTargetDevice( DVTARGETDEVICE** lpDvTargetDevice ) const
         *lpDvTargetDevice = CopyTargetDevice( m_FormatEtc.ptd );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 DWORD CFormatEtc::getDvAspect( ) const
 {
     return m_FormatEtc.dwAspect;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 LONG CFormatEtc::getLindex( ) const
 {
     return m_FormatEtc.lindex;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void CFormatEtc::setClipformat( CLIPFORMAT cf )
 {
     m_FormatEtc.cfFormat = cf;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void CFormatEtc::setTymed( DWORD tymed )
 {
     m_FormatEtc.tymed = tymed;
 }
 
-//------------------------------------------------------------------------
+
 // transfer of ownership!
-//------------------------------------------------------------------------
+
 
 void CFormatEtc::setTargetDevice( DVTARGETDEVICE* ptd )
 {
@@ -207,36 +207,36 @@ void CFormatEtc::setTargetDevice( DVTARGETDEVICE* ptd )
     m_FormatEtc.ptd = ptd;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void CFormatEtc::setDvAspect( DWORD dwAspect )
 {
     m_FormatEtc.dwAspect = dwAspect;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void CFormatEtc::setLindex( LONG lindex )
 {
     m_FormatEtc.lindex = lindex;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 sal_Int32 operator==( const CFormatEtc& lhs, const CFormatEtc& rhs )
 {
     return CompareFormatEtc( &lhs.m_FormatEtc, &rhs.m_FormatEtc );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 sal_Int32 operator!=( const CFormatEtc& lhs, const CFormatEtc& rhs )
 {

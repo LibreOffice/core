@@ -32,18 +32,18 @@ namespace comphelper
     //=====================================================================
     //= OCommonAccessibleComponent
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OCommonAccessibleComponent::OCommonAccessibleComponent( IMutex* _pExternalLock )
         :OAccessibleContextHelper( _pExternalLock )
     {
     }
 
-    //---------------------------------------------------------------------
+
     OCommonAccessibleComponent::~OCommonAccessibleComponent( )
     {
     }
 
-    //--------------------------------------------------------------------
+
     bool SAL_CALL OCommonAccessibleComponent::containsPoint( const Point& _rPoint ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
@@ -54,7 +54,7 @@ namespace comphelper
             &&  ( _rPoint.Y < aBounds.Height );
     }
 
-    //--------------------------------------------------------------------
+
     Point SAL_CALL OCommonAccessibleComponent::getLocation(  ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
@@ -62,7 +62,7 @@ namespace comphelper
         return Point( aBounds.X, aBounds.Y );
     }
 
-    //--------------------------------------------------------------------
+
     Point SAL_CALL OCommonAccessibleComponent::getLocationOnScreen(  ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
@@ -82,7 +82,7 @@ namespace comphelper
         return aScreenLoc;
     }
 
-    //--------------------------------------------------------------------
+
     Size SAL_CALL OCommonAccessibleComponent::getSize(  ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
@@ -90,7 +90,7 @@ namespace comphelper
         return Size( aBounds.Width, aBounds.Height );
     }
 
-    //--------------------------------------------------------------------
+
     Rectangle SAL_CALL OCommonAccessibleComponent::getBounds(  ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
@@ -100,42 +100,42 @@ namespace comphelper
     //=====================================================================
     //= OAccessibleComponentHelper
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OAccessibleComponentHelper::OAccessibleComponentHelper( IMutex* _pExternalLock )
         :OCommonAccessibleComponent( _pExternalLock )
     {
     }
 
-    //--------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XINTERFACE2( OAccessibleComponentHelper, OCommonAccessibleComponent, OAccessibleComponentHelper_Base )
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleComponentHelper, OCommonAccessibleComponent, OAccessibleComponentHelper_Base )
         // (order matters: the first is the class name, the second is the class doing the ref counting)
 
-    //--------------------------------------------------------------------
+
     sal_Bool SAL_CALL OAccessibleComponentHelper::containsPoint( const Point& _rPoint ) throw (RuntimeException)
     {
         return OCommonAccessibleComponent::containsPoint( _rPoint );
     }
 
-    //--------------------------------------------------------------------
+
     Point SAL_CALL OAccessibleComponentHelper::getLocation(  ) throw (RuntimeException)
     {
         return OCommonAccessibleComponent::getLocation( );
     }
 
-    //--------------------------------------------------------------------
+
     Point SAL_CALL OAccessibleComponentHelper::getLocationOnScreen(  ) throw (RuntimeException)
     {
         return OCommonAccessibleComponent::getLocationOnScreen( );
     }
 
-    //--------------------------------------------------------------------
+
     Size SAL_CALL OAccessibleComponentHelper::getSize(  ) throw (RuntimeException)
     {
         return OCommonAccessibleComponent::getSize( );
     }
 
-    //--------------------------------------------------------------------
+
     Rectangle SAL_CALL OAccessibleComponentHelper::getBounds(  ) throw (RuntimeException)
     {
         return OCommonAccessibleComponent::getBounds( );
@@ -144,42 +144,42 @@ namespace comphelper
     //=====================================================================
     //= OAccessibleExtendedComponentHelper
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OAccessibleExtendedComponentHelper::OAccessibleExtendedComponentHelper( IMutex* _pExternalLock )
         :OCommonAccessibleComponent( _pExternalLock )
     {
     }
 
-    //--------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XINTERFACE2( OAccessibleExtendedComponentHelper, OCommonAccessibleComponent, OAccessibleExtendedComponentHelper_Base )
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleExtendedComponentHelper, OCommonAccessibleComponent, OAccessibleExtendedComponentHelper_Base )
         // (order matters: the first is the class name, the second is the class doing the ref counting)
 
-    //--------------------------------------------------------------------
+
     sal_Bool SAL_CALL OAccessibleExtendedComponentHelper::containsPoint( const Point& _rPoint ) throw (RuntimeException)
     {
         return OCommonAccessibleComponent::containsPoint( _rPoint );
     }
 
-    //--------------------------------------------------------------------
+
     Point SAL_CALL OAccessibleExtendedComponentHelper::getLocation(  ) throw (RuntimeException)
     {
         return OCommonAccessibleComponent::getLocation( );
     }
 
-    //--------------------------------------------------------------------
+
     Point SAL_CALL OAccessibleExtendedComponentHelper::getLocationOnScreen(  ) throw (RuntimeException)
     {
         return OCommonAccessibleComponent::getLocationOnScreen( );
     }
 
-    //--------------------------------------------------------------------
+
     Size SAL_CALL OAccessibleExtendedComponentHelper::getSize(  ) throw (RuntimeException)
     {
         return OCommonAccessibleComponent::getSize( );
     }
 
-    //--------------------------------------------------------------------
+
     Rectangle SAL_CALL OAccessibleExtendedComponentHelper::getBounds(  ) throw (RuntimeException)
     {
         return OCommonAccessibleComponent::getBounds( );

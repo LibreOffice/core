@@ -48,7 +48,7 @@ namespace pcr
     //====================================================================
     //= XSDValidationHelper
     //====================================================================
-    //--------------------------------------------------------------------
+
     XSDValidationHelper::XSDValidationHelper( ::osl::Mutex& _rMutex, const Reference< XPropertySet >& _rxIntrospectee, const Reference< frame::XModel >& _rxContextDocument )
         :EFormsHelper( _rMutex, _rxIntrospectee, _rxContextDocument )
         ,m_bInspectingFormattedField( false )
@@ -73,7 +73,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     void XSDValidationHelper::getAvailableDataTypeNames( ::std::vector< OUString >& /* [out] */ _rNames ) const SAL_THROW(())
     {
         _rNames.resize( 0 );
@@ -94,7 +94,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XDataTypeRepository > XSDValidationHelper::getDataTypeRepository() const SAL_THROW((Exception))
     {
         Reference< XDataTypeRepository > xRepository;
@@ -106,7 +106,7 @@ namespace pcr
         return xRepository;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XDataTypeRepository > XSDValidationHelper::getDataTypeRepository( const OUString& _rModelName ) const SAL_THROW((Exception))
     {
         Reference< XDataTypeRepository > xRepository;
@@ -118,7 +118,7 @@ namespace pcr
         return xRepository;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XDataType > XSDValidationHelper::getDataType( const OUString& _rName ) const SAL_THROW((Exception))
     {
         Reference< XDataType > xDataType;
@@ -132,7 +132,7 @@ namespace pcr
         return xDataType;
     }
 
-    //--------------------------------------------------------------------
+
     OUString XSDValidationHelper::getValidatingDataTypeName( ) const SAL_THROW(())
     {
         OUString sDataTypeName;
@@ -152,7 +152,7 @@ namespace pcr
         return sDataTypeName;
     }
 
-    //--------------------------------------------------------------------
+
     ::rtl::Reference< XSDDataType > XSDValidationHelper::getDataTypeByName( const OUString& _rName ) const SAL_THROW(())
     {
         ::rtl::Reference< XSDDataType > pReturn;
@@ -175,13 +175,13 @@ namespace pcr
         return pReturn;
     }
 
-    //--------------------------------------------------------------------
+
     ::rtl::Reference< XSDDataType > XSDValidationHelper::getValidatingDataType( ) const SAL_THROW(())
     {
         return getDataTypeByName( getValidatingDataTypeName() );
     }
 
-    //--------------------------------------------------------------------
+
     bool XSDValidationHelper::cloneDataType( const ::rtl::Reference< XSDDataType >& _pDataType, const OUString& _rNewName ) const SAL_THROW(())
     {
         OSL_ENSURE( _pDataType.is(), "XSDValidationHelper::removeDataTypeFromRepository: invalid data type!" );
@@ -209,7 +209,7 @@ namespace pcr
         return true;
     }
 
-    //--------------------------------------------------------------------
+
     bool XSDValidationHelper::removeDataTypeFromRepository( const OUString& _rName ) const SAL_THROW(())
     {
         try
@@ -235,7 +235,7 @@ namespace pcr
         return true;
     }
 
-    //--------------------------------------------------------------------
+
     void XSDValidationHelper::setValidatingDataTypeByName( const OUString& _rName ) const SAL_THROW(())
     {
         try
@@ -273,7 +273,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     void XSDValidationHelper::copyDataType( const OUString& _rFromModel, const OUString& _rToModel,
                 const OUString& _rDataTypeName ) const SAL_THROW(())
     {
@@ -313,7 +313,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     void XSDValidationHelper::findDefaultFormatForIntrospectee() SAL_THROW(())
     {
         try
@@ -365,13 +365,13 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     OUString XSDValidationHelper::getBasicTypeNameForClass( sal_Int16 _nClass ) const SAL_THROW(())
     {
         return getBasicTypeNameForClass( _nClass, getDataTypeRepository() );
     }
 
-    //--------------------------------------------------------------------
+
     OUString XSDValidationHelper::getBasicTypeNameForClass( sal_Int16 _nClass, Reference< XDataTypeRepository > _rxRepository ) const SAL_THROW(())
     {
         OUString sReturn;

@@ -285,7 +285,7 @@ Reference< com::sun::star::container::XIndexAccess > Keys::create(
 
     return ret;
 }
-//_________________________________________________________________________________________
+
 KeyDescriptors::KeyDescriptors(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,

@@ -44,11 +44,11 @@ KabDatabaseMetaData::KabDatabaseMetaData(KabConnection* _pCon)
     m_bUseCatalog   = !(usesLocalFiles() || usesLocalFilePerTable());
     osl_atomic_decrement( &m_refCount );
 }
-// -------------------------------------------------------------------------
+
 KabDatabaseMetaData::~KabDatabaseMetaData()
 {
 }
-// -------------------------------------------------------------------------
+
 const OUString & KabDatabaseMetaData::getAddressBookTableName()
 {
     static const OUString aAddressBookTableName
@@ -56,7 +56,7 @@ const OUString & KabDatabaseMetaData::getAddressBookTableName()
 
     return aAddressBookTableName;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL KabDatabaseMetaData::getCatalogSeparator(  ) throw(SQLException, RuntimeException)
 {
     OUString aVal;
@@ -66,73 +66,73 @@ OUString SAL_CALL KabDatabaseMetaData::getCatalogSeparator(  ) throw(SQLExceptio
 
     return aVal;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue = 0; // 0 means no limit
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxRowSize(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue = 0; // 0 means no limit
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxCatalogNameLength(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue = 0; // 0 means no limit
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxCharLiteralLength(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue = 0; // 0 means no limit
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxColumnNameLength(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue = 0; // 0 means no limit
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxColumnsInIndex(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue = 0; // 0 means no limit
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxCursorNameLength(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue = 0; // 0 means no limit
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxConnections(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue = 0; // 0 means no limit
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue = 0; // 0 means no limit
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxStatementLength(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue = 0; // 0 means no limit
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxTableNameLength(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue = 0; // 0 means no limit
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxTablesInSelect(  ) throw(SQLException, RuntimeException)
 {
     // MaxTablesInSelect describes how many tables can participate in the FROM part of a given SELECT statement,
@@ -140,63 +140,63 @@ sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxTablesInSelect(  ) throw(SQLExcept
     sal_Int32 nValue = 1;
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::doesMaxRowSizeIncludeBlobs(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::storesLowerCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::storesLowerCaseIdentifiers(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::storesMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::storesMixedCaseIdentifiers(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::storesUpperCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::storesUpperCaseIdentifiers(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsAlterTableWithAddColumn(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsAlterTableWithDropColumn(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxIndexLength(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue = 0; // 0 means no limit
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL KabDatabaseMetaData::getCatalogTerm(  ) throw(SQLException, RuntimeException)
 {
     OUString aVal;
@@ -205,25 +205,25 @@ OUString SAL_CALL KabDatabaseMetaData::getCatalogTerm(  ) throw(SQLException, Ru
     }
     return aVal;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL KabDatabaseMetaData::getIdentifierQuoteString(  ) throw(SQLException, RuntimeException)
 {
     // normally this is "
     OUString aVal("\"");
     return aVal;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL KabDatabaseMetaData::getExtraNameCharacters(  ) throw(SQLException, RuntimeException)
 {
     OUString aVal;
     return aVal;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsDifferentTableCorrelationNames(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::isCatalogAtStart(  ) throw(SQLException, RuntimeException)
 {
     sal_Bool bValue = sal_False;
@@ -232,326 +232,326 @@ sal_Bool SAL_CALL KabDatabaseMetaData::isCatalogAtStart(  ) throw(SQLException, 
     }
     return bValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw(SQLException, RuntimeException)
 {
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::dataDefinitionCausesTransactionCommit(  ) throw(SQLException, RuntimeException)
 {
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsDataManipulationTransactionsOnly(  ) throw(SQLException, RuntimeException)
 {
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions(  ) throw(SQLException, RuntimeException)
 {
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsPositionedDelete(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsPositionedUpdate(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsOpenStatementsAcrossRollback(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsOpenStatementsAcrossCommit(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsOpenCursorsAcrossCommit(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsOpenCursorsAcrossRollback(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsSchemasInDataManipulation(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsANSI92FullSQL(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsANSI92EntryLevelSQL(  ) throw(SQLException, RuntimeException)
 {
     return sal_True; // should be supported at least
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsIntegrityEnhancementFacility(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsSchemasInIndexDefinitions(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsSchemasInTableDefinitions(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsCatalogsInTableDefinitions(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsCatalogsInDataManipulation(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsOuterJoins(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxStatements(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue = 0; // 0 means no limit
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxProcedureNameLength(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue = 0; // 0 means no limit
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxSchemaNameLength(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue = 0; // 0 means no limit
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsTransactions(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::allProceduresAreCallable(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsStoredProcedures(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsSelectForUpdate(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::allTablesAreSelectable(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::isReadOnly(  ) throw(SQLException, RuntimeException)
 {
     // for the moment, we have read-only addresses, but this might change in the future
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::usesLocalFiles(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::usesLocalFilePerTable(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsTypeConversion(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::nullPlusNonNullIsNull(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsColumnAliasing(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsTableCorrelationNames(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsConvert( sal_Int32, sal_Int32 ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsExpressionsInOrderBy(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsGroupBy(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsGroupByBeyondSelect(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsGroupByUnrelated(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsMultipleTransactions(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsMultipleResultSets(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsLikeEscapeClause(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsOrderByUnrelated(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsUnion(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsUnionAll(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsMixedCaseIdentifiers(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::nullsAreSortedAtEnd(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::nullsAreSortedAtStart(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::nullsAreSortedHigh(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::nullsAreSortedLow(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsSchemasInProcedureCalls(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsCatalogsInProcedureCalls(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsCorrelatedSubqueries(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsSubqueriesInComparisons(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsSubqueriesInExists(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsSubqueriesInIns(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsSubqueriesInQuantifieds(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL KabDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
     // if someday we support more than the default address book,
@@ -559,145 +559,145 @@ OUString SAL_CALL KabDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeExc
     OUString aValue(  "sdbc:address:kab:" );
     return aValue;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL KabDatabaseMetaData::getUserName(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     return aValue;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL KabDatabaseMetaData::getDriverName(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue(  "kab" );
     return aValue;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL KabDatabaseMetaData::getDriverVersion() throw(SQLException, RuntimeException)
 {
     OUString aValue(KAB_DRIVER_VERSION);
     return aValue;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL KabDatabaseMetaData::getDatabaseProductVersion(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     return aValue;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL KabDatabaseMetaData::getDatabaseProductName(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     return aValue;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL KabDatabaseMetaData::getProcedureTerm(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     return aValue;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL KabDatabaseMetaData::getSchemaTerm(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     return aValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL KabDatabaseMetaData::getDriverMajorVersion(  ) throw(RuntimeException)
 {
     return KAB_DRIVER_VERSION_MAJOR;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL KabDatabaseMetaData::getDefaultTransactionIsolation(  ) throw(SQLException, RuntimeException)
 {
     return TransactionIsolation::NONE;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL KabDatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeException)
 {
     return KAB_DRIVER_VERSION_MINOR;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL KabDatabaseMetaData::getSQLKeywords(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     return aValue;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL KabDatabaseMetaData::getSearchStringEscape(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     return aValue;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL KabDatabaseMetaData::getStringFunctions(  ) throw(SQLException, RuntimeException)
 {
     return OUString();
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL KabDatabaseMetaData::getTimeDateFunctions(  ) throw(SQLException, RuntimeException)
 {
     return OUString();
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL KabDatabaseMetaData::getSystemFunctions(  ) throw(SQLException, RuntimeException)
 {
     return OUString();
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL KabDatabaseMetaData::getNumericFunctions(  ) throw(SQLException, RuntimeException)
 {
     return OUString();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsExtendedSQLGrammar(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsCoreSQLGrammar(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsMinimumSQLGrammar(  ) throw(SQLException, RuntimeException)
 {
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsFullOuterJoins(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsLimitedOuterJoins(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxColumnsInGroupBy(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue = 0; // 0 means no limit
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxColumnsInOrderBy(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue = 0; // 0 means no limit
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxColumnsInSelect(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue = 0; // 0 means no limit
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxUserNameLength(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue = 0; // 0 means no limit
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsResultSetType( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
     switch (setType)
@@ -708,7 +708,7 @@ sal_Bool SAL_CALL KabDatabaseMetaData::supportsResultSetType( sal_Int32 setType 
     }
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsResultSetConcurrency( sal_Int32 setType, sal_Int32 ) throw(SQLException, RuntimeException)
 {
     switch (setType)
@@ -719,62 +719,62 @@ sal_Bool SAL_CALL KabDatabaseMetaData::supportsResultSetConcurrency( sal_Int32 s
     }
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::ownUpdatesAreVisible( sal_Int32 ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::ownDeletesAreVisible( sal_Int32 ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::ownInsertsAreVisible( sal_Int32 ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::othersUpdatesAreVisible( sal_Int32 ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::othersDeletesAreVisible( sal_Int32 ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::othersInsertsAreVisible( sal_Int32 ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::updatesAreDetected( sal_Int32 ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::deletesAreDetected( sal_Int32 ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::insertsAreDetected( sal_Int32 ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsBatchUpdates(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 Reference< XConnection > SAL_CALL KabDatabaseMetaData::getConnection(  ) throw(SQLException, RuntimeException)
 {
     return (Reference< XConnection >) m_xConnection.get();
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTableTypes(  ) throw(SQLException, RuntimeException)
 {
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTableTypes);
@@ -793,7 +793,7 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTableTypes(  ) throw(SQ
     pResult->setRows(aRows);
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
 {
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
@@ -830,24 +830,24 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTypeInfo(  ) throw(SQLE
     pResult->setRows(aRows);
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getCatalogs(  ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eCatalogs );
 }
-// -----------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getSchemas(  ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eSchemas );
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumnPrivileges(
     const Any&, const OUString&, const OUString&,
     const OUString& ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eColumnPrivileges );
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumns(
     const Any&,
     const OUString&,
@@ -917,7 +917,7 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumns(
     pResult->setRows(aRows);
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTables(
     const Any&,
     const OUString&,
@@ -968,21 +968,21 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTables(
     pResult->setRows(aRows);
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getProcedureColumns(
     const Any&, const OUString&,
     const OUString&, const OUString& ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eProcedureColumns );
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getProcedures(
     const Any&, const OUString&,
     const OUString& ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eProcedures );
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getVersionColumns(
     const Any&, const OUString&, const OUString& table ) throw(SQLException, RuntimeException)
 {
@@ -1015,45 +1015,45 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getVersionColumns(
     pResult->setRows(aRows);
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getExportedKeys(
     const Any&, const OUString&, const OUString& ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eExportedKeys );
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getImportedKeys(
     const Any&, const OUString&, const OUString& ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eImportedKeys );
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getPrimaryKeys(
     const Any&, const OUString&, const OUString& ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::ePrimaryKeys );
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getIndexInfo(
     const Any&, const OUString&, const OUString&,
     sal_Bool, sal_Bool ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eIndexInfo );
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getBestRowIdentifier(
     const Any&, const OUString&, const OUString&, sal_Int32,
     sal_Bool ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eBestRowIdentifier );
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTablePrivileges(
     const Any&, const OUString&, const OUString& ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTablePrivileges );
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getCrossReference(
     const Any&, const OUString&,
     const OUString&, const Any&,
@@ -1061,12 +1061,12 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getCrossReference(
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eCrossReference );
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getUDTs( const Any&, const OUString&, const OUString&, const Sequence< sal_Int32 >& ) throw(SQLException, RuntimeException)
 {
     OSL_FAIL("Not implemented yet!");
     throw SQLException();
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

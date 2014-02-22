@@ -32,13 +32,13 @@
 namespace framework
 {
 
-//-----------------------------------------------
+
 AcceleratorCache::AcceleratorCache()
     : ThreadHelpBase(&Application::GetSolarMutex())
 {
 }
 
-//-----------------------------------------------
+
 AcceleratorCache::AcceleratorCache(const AcceleratorCache& rCopy)
     : ThreadHelpBase(&Application::GetSolarMutex())
 {
@@ -46,14 +46,14 @@ AcceleratorCache::AcceleratorCache(const AcceleratorCache& rCopy)
     m_lKey2Commands = rCopy.m_lKey2Commands;
 }
 
-//-----------------------------------------------
+
 AcceleratorCache::~AcceleratorCache()
 {
     // Dont save anything automaticly here.
     // The user has to do that explicitly!
 }
 
-//-----------------------------------------------
+
 void AcceleratorCache::takeOver(const AcceleratorCache& rCopy)
 {
     // SAFE -> ----------------------------------
@@ -66,14 +66,14 @@ void AcceleratorCache::takeOver(const AcceleratorCache& rCopy)
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+
 AcceleratorCache& AcceleratorCache::operator=(const AcceleratorCache& rCopy)
 {
     takeOver(rCopy);
     return *this;
 }
 
-//-----------------------------------------------
+
 sal_Bool AcceleratorCache::hasKey(const css::awt::KeyEvent& aKey) const
 {
     // SAFE -> ----------------------------------
@@ -83,7 +83,7 @@ sal_Bool AcceleratorCache::hasKey(const css::awt::KeyEvent& aKey) const
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+
 sal_Bool AcceleratorCache::hasCommand(const OUString& sCommand) const
 {
     // SAFE -> ----------------------------------
@@ -93,7 +93,7 @@ sal_Bool AcceleratorCache::hasCommand(const OUString& sCommand) const
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+
 AcceleratorCache::TKeyList AcceleratorCache::getAllKeys() const
 {
     TKeyList lKeys;
@@ -117,7 +117,7 @@ AcceleratorCache::TKeyList AcceleratorCache::getAllKeys() const
     return lKeys;
 }
 
-//-----------------------------------------------
+
 void AcceleratorCache::setKeyCommandPair(const css::awt::KeyEvent& aKey    ,
                                          const OUString&    sCommand)
 {
@@ -135,7 +135,7 @@ void AcceleratorCache::setKeyCommandPair(const css::awt::KeyEvent& aKey    ,
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+
 AcceleratorCache::TKeyList AcceleratorCache::getKeysByCommand(const OUString& sCommand) const
 {
     TKeyList lKeys;
@@ -155,7 +155,7 @@ AcceleratorCache::TKeyList AcceleratorCache::getKeysByCommand(const OUString& sC
     return lKeys;
 }
 
-//-----------------------------------------------
+
 OUString AcceleratorCache::getCommandByKey(const css::awt::KeyEvent& aKey) const
 {
     OUString sCommand;
@@ -175,7 +175,7 @@ OUString AcceleratorCache::getCommandByKey(const css::awt::KeyEvent& aKey) const
     return sCommand;
 }
 
-//-----------------------------------------------
+
 void AcceleratorCache::removeKey(const css::awt::KeyEvent& aKey)
 {
     // SAFE -> ----------------------------------
@@ -202,7 +202,7 @@ void AcceleratorCache::removeKey(const css::awt::KeyEvent& aKey)
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+
 void AcceleratorCache::removeCommand(const OUString& sCommand)
 {
     // SAFE -> ----------------------------------

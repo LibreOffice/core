@@ -175,7 +175,7 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInpu
         if ( xTargetModel.is() )
             xTargetModel->lockControllers();
 
-        // -------------------------------------
+
 
         pGraphicHelper = SvXMLGraphicHelper::Create( GRAPHICHELPER_MODE_READ );
         xGraphicResolver = pGraphicHelper;
@@ -189,7 +189,7 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInpu
             xObjectResolver = pObjectHelper;
         }
 
-        // -------------------------------------
+
 
         if( 0 == nRet )
         {

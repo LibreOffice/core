@@ -588,7 +588,7 @@ Any OPropertySetHelper::getFastPropertyValue( sal_Int32 nHandle )
     return aRet;
 }
 
-//--------------------------------------------------------------------------
+
 void OPropertySetHelper::impl_fireAll( sal_Int32* i_handles, const Any* i_newValues, const Any* i_oldValues, sal_Int32 i_count )
 {
     ClearableMutexGuard aGuard( rBHelper.rMutex );
@@ -624,7 +624,7 @@ void OPropertySetHelper::impl_fireAll( sal_Int32* i_handles, const Any* i_newVal
     fire( &allHandles[0], &allNewValues[0], &allOldValues[0], additionalEvents + i_count, sal_False );
 }
 
-//--------------------------------------------------------------------------
+
 void OPropertySetHelper::fire
 (
     sal_Int32 * pnHandles,

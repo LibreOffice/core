@@ -67,7 +67,7 @@ public:
 };
 
 
-// --------------------------------------------------------------------
+
 
 class ImplContextGraphicItem : public SvLBoxContextBmp
 {
@@ -79,7 +79,7 @@ public:
     OUString msCollapsedGraphicURL;
 };
 
-// --------------------------------------------------------------------
+
 
 class UnoTreeListBoxImpl : public SvTreeListBox
 {
@@ -102,7 +102,7 @@ private:
     rtl::Reference< TreeControlPeer > mxPeer;
 };
 
-// --------------------------------------------------------------------
+
 
 class UnoTreeListItem : public SvLBoxString
 {
@@ -125,7 +125,7 @@ private:
     Image           maImage;
 };
 
-// --------------------------------------------------------------------
+
 
 class UnoTreeListEntry : public SvTreeListEntry
 {
@@ -148,7 +148,7 @@ TreeControlPeer::TreeControlPeer()
 {
 }
 
-// --------------------------------------------------------------------
+
 
 TreeControlPeer::~TreeControlPeer()
 {
@@ -157,7 +157,7 @@ TreeControlPeer::~TreeControlPeer()
     delete mpTreeNodeMap;
 }
 
-// --------------------------------------------------------------------
+
 
 void TreeControlPeer::addEntry( UnoTreeListEntry* pEntry )
 {
@@ -172,7 +172,7 @@ void TreeControlPeer::addEntry( UnoTreeListEntry* pEntry )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void TreeControlPeer::removeEntry( UnoTreeListEntry* pEntry )
 {
@@ -186,7 +186,7 @@ void TreeControlPeer::removeEntry( UnoTreeListEntry* pEntry )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 UnoTreeListEntry* TreeControlPeer::getEntry( const Reference< XTreeNode >& xNode, bool bThrow /* = true */ ) throw( IllegalArgumentException )
 {
@@ -203,7 +203,7 @@ UnoTreeListEntry* TreeControlPeer::getEntry( const Reference< XTreeNode >& xNode
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 Window* TreeControlPeer::createVclControl( Window* pParent, sal_Int64 nWinStyle )
 {
@@ -211,7 +211,7 @@ Window* TreeControlPeer::createVclControl( Window* pParent, sal_Int64 nWinStyle 
     return mpTreeImpl;
 }
 
-// --------------------------------------------------------------------
+
 
 /** called from the UnoTreeListBoxImpl when it gets deleted */
 void TreeControlPeer::disposeControl()
@@ -221,14 +221,14 @@ void TreeControlPeer::disposeControl()
     mpTreeImpl = 0;
 }
 
-// --------------------------------------------------------------------
+
 
 void TreeControlPeer::SetWindow( Window* pWindow )
 {
     VCLXWindow::SetWindow( pWindow );
 }
 
-// --------------------------------------------------------------------
+
 
 UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xNode, UnoTreeListEntry* pParent, sal_uLong nPos /* = LIST_APPEND */ )
 {
@@ -267,7 +267,7 @@ UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xN
     return pEntry;
 }
 
-// --------------------------------------------------------------------
+
 
 bool TreeControlPeer::updateEntry( UnoTreeListEntry* pEntry )
 {
@@ -335,7 +335,7 @@ bool TreeControlPeer::updateEntry( UnoTreeListEntry* pEntry )
     return bChanged;
 }
 
-// --------------------------------------------------------------------
+
 
 void TreeControlPeer::onSelectionChanged()
 {
@@ -344,7 +344,7 @@ void TreeControlPeer::onSelectionChanged()
     maSelectionListeners.selectionChanged( aEvent );
 }
 
-// --------------------------------------------------------------------
+
 
 void TreeControlPeer::onRequestChildNodes( const Reference< XTreeNode >& xNode )
 {
@@ -359,7 +359,7 @@ void TreeControlPeer::onRequestChildNodes( const Reference< XTreeNode >& xNode )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 bool TreeControlPeer::onExpanding( const Reference< XTreeNode >& xNode, bool bExpanding )
 {
@@ -383,7 +383,7 @@ bool TreeControlPeer::onExpanding( const Reference< XTreeNode >& xNode, bool bEx
     return true;
 }
 
-// --------------------------------------------------------------------
+
 
 void TreeControlPeer::onExpanded( const Reference< XTreeNode >& xNode, bool bExpanding )
 {
@@ -406,7 +406,7 @@ void TreeControlPeer::onExpanded( const Reference< XTreeNode >& xNode, bool bExp
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void TreeControlPeer::fillTree( UnoTreeListBoxImpl& rTree, const Reference< XTreeDataModel >& xDataModel )
 {
@@ -431,7 +431,7 @@ void TreeControlPeer::fillTree( UnoTreeListBoxImpl& rTree, const Reference< XTre
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void TreeControlPeer::addNode( UnoTreeListBoxImpl& rTree, const Reference< XTreeNode >& xNode, UnoTreeListEntry* pParentEntry )
 {
@@ -444,7 +444,7 @@ void TreeControlPeer::addNode( UnoTreeListBoxImpl& rTree, const Reference< XTree
     }
 }
 
-// --------------------------------------------------------------------
+
 
 UnoTreeListBoxImpl& TreeControlPeer::getTreeListBoxOrThrow() const throw (RuntimeException )
 {
@@ -453,7 +453,7 @@ UnoTreeListBoxImpl& TreeControlPeer::getTreeListBoxOrThrow() const throw (Runtim
     return *mpTreeImpl;
 }
 
-// --------------------------------------------------------------------
+
 
 void TreeControlPeer::ChangeNodesSelection( const Any& rSelection, bool bSelect, bool bSetSelection ) throw( RuntimeException, IllegalArgumentException )
 {
@@ -512,9 +512,9 @@ void TreeControlPeer::ChangeNodesSelection( const Any& rSelection, bool bSelect,
     }
 }
 
-// -------------------------------------------------------------------
+
 // ::com::sun::star::view::XSelectionSupplier
-// -------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL TreeControlPeer::select( const Any& rSelection ) throw (IllegalArgumentException, RuntimeException)
 {
@@ -523,7 +523,7 @@ sal_Bool SAL_CALL TreeControlPeer::select( const Any& rSelection ) throw (Illega
     return sal_True;
 }
 
-// -------------------------------------------------------------------
+
 
 Any SAL_CALL TreeControlPeer::getSelection() throw (RuntimeException)
 {
@@ -559,23 +559,23 @@ Any SAL_CALL TreeControlPeer::getSelection() throw (RuntimeException)
     return aRet;
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL TreeControlPeer::addSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) throw (RuntimeException)
 {
     maSelectionListeners.addInterface( xListener );
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL TreeControlPeer::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) throw (RuntimeException)
 {
     maSelectionListeners.addInterface( xListener );
 }
 
-// -------------------------------------------------------------------
+
 // ::com::sun::star::view::XMultiSelectionSupplier
-// -------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL TreeControlPeer::addSelection( const Any& rSelection ) throw (IllegalArgumentException, RuntimeException)
 {
@@ -583,14 +583,14 @@ sal_Bool SAL_CALL TreeControlPeer::addSelection( const Any& rSelection ) throw (
     return sal_True;
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL TreeControlPeer::removeSelection( const Any& rSelection ) throw (IllegalArgumentException, RuntimeException)
 {
     ChangeNodesSelection( rSelection, false, false );
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL TreeControlPeer::clearSelection() throw (RuntimeException)
 {
@@ -598,7 +598,7 @@ void SAL_CALL TreeControlPeer::clearSelection() throw (RuntimeException)
     getTreeListBoxOrThrow().SelectAll( sal_False );
 }
 
-// -------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL TreeControlPeer::getSelectionCount() throw (RuntimeException)
 {
@@ -606,7 +606,7 @@ sal_Int32 SAL_CALL TreeControlPeer::getSelectionCount() throw (RuntimeException)
     return getTreeListBoxOrThrow().GetSelectionCount();
 }
 
-// -------------------------------------------------------------------
+
 
 class TreeSelectionEnumeration : public ::cppu::WeakImplHelper1< XEnumeration >
 {
@@ -619,7 +619,7 @@ public:
     std::list< Any >::iterator maIter;
 };
 
-// -------------------------------------------------------------------
+
 
 TreeSelectionEnumeration::TreeSelectionEnumeration( std::list< Any >& rSelection )
 {
@@ -627,14 +627,14 @@ TreeSelectionEnumeration::TreeSelectionEnumeration( std::list< Any >& rSelection
     maIter = maSelection.begin();
 }
 
-// -------------------------------------------------------------------
+
 
 ::sal_Bool SAL_CALL TreeSelectionEnumeration::hasMoreElements() throw (RuntimeException)
 {
     return maIter != maSelection.end();
 }
 
-// -------------------------------------------------------------------
+
 
 Any SAL_CALL TreeSelectionEnumeration::nextElement() throw (NoSuchElementException, WrappedTargetException, RuntimeException)
 {
@@ -644,7 +644,7 @@ Any SAL_CALL TreeSelectionEnumeration::nextElement() throw (NoSuchElementExcepti
     return (*maIter++);
 }
 
-// -------------------------------------------------------------------
+
 
 Reference< XEnumeration > SAL_CALL TreeControlPeer::createSelectionEnumeration() throw (RuntimeException)
 {
@@ -668,7 +668,7 @@ Reference< XEnumeration > SAL_CALL TreeControlPeer::createSelectionEnumeration()
     return Reference< XEnumeration >( new TreeSelectionEnumeration( aSelection ) );
 }
 
-// -------------------------------------------------------------------
+
 
 Reference< XEnumeration > SAL_CALL TreeControlPeer::createReverseSelectionEnumeration() throw (RuntimeException)
 {
@@ -692,9 +692,9 @@ Reference< XEnumeration > SAL_CALL TreeControlPeer::createReverseSelectionEnumer
     return Reference< XEnumeration >( new TreeSelectionEnumeration( aSelection ) );
 }
 
-// --------------------------------------------------------------------
+
 // ::com::sun::star::awt::XTreeControl
-// --------------------------------------------------------------------
+
 
 OUString SAL_CALL TreeControlPeer::getDefaultExpandedGraphicURL() throw (::com::sun::star::uno::RuntimeException)
 {
@@ -702,7 +702,7 @@ OUString SAL_CALL TreeControlPeer::getDefaultExpandedGraphicURL() throw (::com::
     return msDefaultExpandedGraphicURL;
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL TreeControlPeer::setDefaultExpandedGraphicURL( const OUString& sDefaultExpandedGraphicURL ) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -732,7 +732,7 @@ void SAL_CALL TreeControlPeer::setDefaultExpandedGraphicURL( const OUString& sDe
     }
 }
 
-// --------------------------------------------------------------------
+
 
 OUString SAL_CALL TreeControlPeer::getDefaultCollapsedGraphicURL() throw (::com::sun::star::uno::RuntimeException)
 {
@@ -740,7 +740,7 @@ OUString SAL_CALL TreeControlPeer::getDefaultCollapsedGraphicURL() throw (::com:
     return msDefaultCollapsedGraphicURL;
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL TreeControlPeer::setDefaultCollapsedGraphicURL( const OUString& sDefaultCollapsedGraphicURL ) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -770,7 +770,7 @@ void SAL_CALL TreeControlPeer::setDefaultCollapsedGraphicURL( const OUString& sD
     }
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL TreeControlPeer::isNodeExpanded( const Reference< XTreeNode >& xNode ) throw (RuntimeException, IllegalArgumentException)
 {
@@ -781,7 +781,7 @@ sal_Bool SAL_CALL TreeControlPeer::isNodeExpanded( const Reference< XTreeNode >&
     return ( pEntry && rTree.IsExpanded( pEntry ) ) ? sal_True : sal_False;
 }
 
-// -------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL TreeControlPeer::isNodeCollapsed( const Reference< XTreeNode >& xNode ) throw (RuntimeException, IllegalArgumentException)
 {
@@ -789,7 +789,7 @@ sal_Bool SAL_CALL TreeControlPeer::isNodeCollapsed( const Reference< XTreeNode >
     return !isNodeExpanded( xNode );
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL TreeControlPeer::makeNodeVisible( const Reference< XTreeNode >& xNode ) throw (RuntimeException, ExpandVetoException, IllegalArgumentException)
 {
@@ -801,7 +801,7 @@ void SAL_CALL TreeControlPeer::makeNodeVisible( const Reference< XTreeNode >& xN
         rTree.MakeVisible( pEntry );
 }
 
-// -------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL TreeControlPeer::isNodeVisible( const Reference< XTreeNode >& xNode ) throw (RuntimeException, IllegalArgumentException)
 {
@@ -812,7 +812,7 @@ sal_Bool SAL_CALL TreeControlPeer::isNodeVisible( const Reference< XTreeNode >& 
     return ( pEntry && rTree.IsEntryVisible( pEntry ) ) ? sal_True : sal_False;
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL TreeControlPeer::expandNode( const Reference< XTreeNode >& xNode ) throw (RuntimeException, ExpandVetoException, IllegalArgumentException)
 {
@@ -824,7 +824,7 @@ void SAL_CALL TreeControlPeer::expandNode( const Reference< XTreeNode >& xNode )
         rTree.Expand( pEntry );
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL TreeControlPeer::collapseNode( const Reference< XTreeNode >& xNode ) throw (RuntimeException, ExpandVetoException, IllegalArgumentException)
 {
@@ -836,21 +836,21 @@ void SAL_CALL TreeControlPeer::collapseNode( const Reference< XTreeNode >& xNode
         rTree.Collapse( pEntry );
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL TreeControlPeer::addTreeExpansionListener( const Reference< XTreeExpansionListener >& xListener ) throw (RuntimeException)
 {
     maTreeExpansionListeners.addInterface( xListener );
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL TreeControlPeer::removeTreeExpansionListener( const Reference< XTreeExpansionListener >& xListener ) throw (RuntimeException)
 {
     maTreeExpansionListeners.removeInterface( xListener );
 }
 
-// -------------------------------------------------------------------
+
 
 Reference< XTreeNode > SAL_CALL TreeControlPeer::getNodeForLocation( sal_Int32 x, sal_Int32 y ) throw (RuntimeException)
 {
@@ -868,7 +868,7 @@ Reference< XTreeNode > SAL_CALL TreeControlPeer::getNodeForLocation( sal_Int32 x
     return xNode;
 }
 
-// -------------------------------------------------------------------
+
 
 Reference< XTreeNode > SAL_CALL TreeControlPeer::getClosestNodeForLocation( sal_Int32 x, sal_Int32 y ) throw (RuntimeException)
 {
@@ -886,7 +886,7 @@ Reference< XTreeNode > SAL_CALL TreeControlPeer::getClosestNodeForLocation( sal_
     return xNode;
 }
 
-// -------------------------------------------------------------------
+
 
 awt::Rectangle SAL_CALL TreeControlPeer::getNodeRect( const Reference< XTreeNode >& i_Node ) throw (IllegalArgumentException, RuntimeException)
 {
@@ -899,7 +899,7 @@ awt::Rectangle SAL_CALL TreeControlPeer::getNodeRect( const Reference< XTreeNode
     return VCLUnoHelper::ConvertToAWTRect( aEntryRect );
 }
 
-// -------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL TreeControlPeer::isEditing(  ) throw (RuntimeException)
 {
@@ -909,7 +909,7 @@ sal_Bool SAL_CALL TreeControlPeer::isEditing(  ) throw (RuntimeException)
     return rTree.IsEditingActive() ? sal_True : sal_False;
 }
 
-// -------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL TreeControlPeer::stopEditing() throw (RuntimeException)
 {
@@ -927,7 +927,7 @@ sal_Bool SAL_CALL TreeControlPeer::stopEditing() throw (RuntimeException)
     }
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL TreeControlPeer::cancelEditing(  ) throw (RuntimeException)
 {
@@ -937,7 +937,7 @@ void SAL_CALL TreeControlPeer::cancelEditing(  ) throw (RuntimeException)
     rTree.EndEditing(false);
 }
 
-// -------------------------------------------------------------------
+
 
 void SAL_CALL TreeControlPeer::startEditingAtNode( const Reference< XTreeNode >& xNode ) throw (IllegalArgumentException, RuntimeException)
 {
@@ -1004,9 +1004,9 @@ bool TreeControlPeer::onEditedEntry( UnoTreeListEntry* pEntry, const OUString& r
     return true;
 }
 
-// --------------------------------------------------------------------
+
 // ::com::sun::star::awt::tree::TreeDataModelListener
-// --------------------------------------------------------------------
+
 
 void SAL_CALL TreeControlPeer::treeNodesChanged( const ::com::sun::star::awt::tree::TreeDataModelEvent& rEvent ) throw (RuntimeException)
 {
@@ -1234,9 +1234,9 @@ void TreeControlPeer::onChangeDataModel( UnoTreeListBoxImpl& rTree, const Refere
         mxDataModel->addTreeDataModelListener( xListener );
 }
 
-// --------------------------------------------------------------------
+
 // ::com::sun::star::awt::XLayoutConstrains
-// --------------------------------------------------------------------
+
 
 ::com::sun::star::awt::Size TreeControlPeer::getMinimumSize() throw(RuntimeException)
 {
@@ -1269,9 +1269,9 @@ void TreeControlPeer::onChangeDataModel( UnoTreeListBoxImpl& rTree, const Refere
     return aSz;
 }
 
-// --------------------------------------------------------------------
+
 // ::com::sun::star::awt::XVclWindowPeer
-// --------------------------------------------------------------------
+
 
 void TreeControlPeer::setProperty( const OUString& PropertyName, const Any& aValue) throw(RuntimeException)
 {
@@ -1492,7 +1492,7 @@ UnoTreeListBoxImpl::UnoTreeListBoxImpl( TreeControlPeer* pPeer, Window* pParent,
 
 }
 
-// --------------------------------------------------------------------
+
 
 UnoTreeListBoxImpl::~UnoTreeListBoxImpl()
 {
@@ -1500,7 +1500,7 @@ UnoTreeListBoxImpl::~UnoTreeListBoxImpl()
         mxPeer->disposeControl();
 }
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(UnoTreeListBoxImpl, OnSelectionChangeHdl)
 {
@@ -1509,7 +1509,7 @@ IMPL_LINK_NOARG(UnoTreeListBoxImpl, OnSelectionChangeHdl)
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(UnoTreeListBoxImpl, OnExpandingHdl)
 {
@@ -1522,7 +1522,7 @@ IMPL_LINK_NOARG(UnoTreeListBoxImpl, OnExpandingHdl)
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(UnoTreeListBoxImpl, OnExpandedHdl)
 {
@@ -1534,7 +1534,7 @@ IMPL_LINK_NOARG(UnoTreeListBoxImpl, OnExpandedHdl)
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_uInt32 UnoTreeListBoxImpl::insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uLong nPos )
 {
@@ -1544,7 +1544,7 @@ sal_uInt32 UnoTreeListBoxImpl::insert( SvTreeListEntry* pEntry,SvTreeListEntry* 
         return SvTreeListBox::Insert( pEntry, nPos );
 }
 
-// --------------------------------------------------------------------
+
 
 void UnoTreeListBoxImpl::RequestingChildren( SvTreeListEntry* pParent )
 {
@@ -1553,14 +1553,14 @@ void UnoTreeListBoxImpl::RequestingChildren( SvTreeListEntry* pParent )
         mxPeer->onRequestChildNodes( pEntry->mxNode );
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool UnoTreeListBoxImpl::EditingEntry( SvTreeListEntry* pEntry, Selection& )
 {
     return mxPeer.is() ? mxPeer->onEditingEntry( dynamic_cast< UnoTreeListEntry* >( pEntry ) ) : false;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool UnoTreeListBoxImpl::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
 {
@@ -1576,20 +1576,20 @@ UnoTreeListItem::UnoTreeListItem( SvTreeListEntry* pEntry )
 {
 }
 
-// --------------------------------------------------------------------
+
 
 UnoTreeListItem::UnoTreeListItem()
 : SvLBoxString()
 {
 }
 
-// --------------------------------------------------------------------
+
 
 UnoTreeListItem::~UnoTreeListItem()
 {
 }
 
-// --------------------------------------------------------------------
+
 
 void UnoTreeListItem::Paint(
     const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
@@ -1618,14 +1618,14 @@ void UnoTreeListItem::Paint(
     }
 }
 
-// --------------------------------------------------------------------
+
 
 SvLBoxItem* UnoTreeListItem::Create() const
 {
     return new UnoTreeListItem;
 }
 
-// --------------------------------------------------------------------
+
 
 void UnoTreeListItem::Clone( SvLBoxItem* pSource )
 {
@@ -1637,28 +1637,28 @@ void UnoTreeListItem::Clone( SvLBoxItem* pSource )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void UnoTreeListItem::SetImage( const Image& rImage )
 {
     maImage = rImage;
 }
 
-// --------------------------------------------------------------------
+
 
 OUString UnoTreeListItem::GetGraphicURL() const
 {
     return maGraphicURL;
 }
 
-// --------------------------------------------------------------------
+
 
 void UnoTreeListItem::SetGraphicURL( const OUString& rGraphicURL )
 {
     maGraphicURL = rGraphicURL;
 }
 
-// --------------------------------------------------------------------
+
 
 void UnoTreeListItem::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* pViewData)
 {
@@ -1680,7 +1680,7 @@ void UnoTreeListItem::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry
     }
 }
 
-// --------------------------------------------------------------------
+
 
 UnoTreeListEntry::UnoTreeListEntry( const Reference< XTreeNode >& xNode, TreeControlPeer* pPeer )
 : SvTreeListEntry()
@@ -1691,7 +1691,7 @@ UnoTreeListEntry::UnoTreeListEntry( const Reference< XTreeNode >& xNode, TreeCon
         mpPeer->addEntry( this );
 }
 
-// --------------------------------------------------------------------
+
 
 UnoTreeListEntry::~UnoTreeListEntry()
 {

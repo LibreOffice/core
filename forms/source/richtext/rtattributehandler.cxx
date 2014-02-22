@@ -42,19 +42,19 @@ namespace frm
     //====================================================================
     //= ReferenceBase
     //====================================================================
-    //--------------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL ReferenceBase::acquire()
     {
         return osl_atomic_increment( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL ReferenceBase::release()
     {
         return osl_atomic_decrement( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
+
     ReferenceBase::~ReferenceBase()
     {
     }
@@ -62,44 +62,44 @@ namespace frm
     //====================================================================
     //= AttributeHandler
     //====================================================================
-    //--------------------------------------------------------------------
+
     AttributeHandler::AttributeHandler( AttributeId _nAttributeId, WhichId _nWhichId )
         :m_nAttribute( _nAttributeId )
         ,m_nWhich    ( _nWhichId     )
     {
     }
 
-    //--------------------------------------------------------------------
+
     AttributeHandler::~AttributeHandler()
     {
     }
 
-    //--------------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL AttributeHandler::acquire()
     {
         return ReferenceBase::acquire();
     }
 
-    //--------------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL AttributeHandler::release()
     {
         return ReferenceBase::release();
     }
 
-    //--------------------------------------------------------------------
+
     AttributeId AttributeHandler::getAttributeId( ) const
     {
         return getAttribute();
     }
 
-    //--------------------------------------------------------------------
+
     AttributeCheckState AttributeHandler::implGetCheckState( const SfxPoolItem& /*_rItem*/ ) const
     {
         OSL_FAIL( "AttributeHandler::implGetCheckState: not to be called!" );
         return eIndetermined;
     }
 
-    //--------------------------------------------------------------------
+
     void AttributeHandler::putItemForScript( SfxItemSet& _rAttribs, const SfxPoolItem& _rItem, ScriptType _nForScriptType ) const
     {
         SvxScriptSetItem aSetItem( (WhichId)getAttributeId(), *_rAttribs.GetPool() );
@@ -107,7 +107,7 @@ namespace frm
         _rAttribs.Put( aSetItem.GetItemSet(), false );
     }
 
-    //--------------------------------------------------------------------
+
     AttributeCheckState AttributeHandler::getCheckState( const SfxItemSet& _rAttribs ) const
     {
         AttributeCheckState eSimpleState( eIndetermined );
@@ -117,7 +117,7 @@ namespace frm
         return eSimpleState;
     }
 
-    //--------------------------------------------------------------------
+
     AttributeState AttributeHandler::getState( const SfxItemSet& _rAttribs ) const
     {
         AttributeState aState( eIndetermined );
@@ -128,7 +128,7 @@ namespace frm
     //====================================================================
     //= AttributeHandlerFactory
     //====================================================================
-    //--------------------------------------------------------------------
+
     namespace
     {
         static WhichId lcl_implGetWhich( const SfxItemPool& _rPool, AttributeId _nAttributeId )
@@ -148,7 +148,7 @@ namespace frm
             return nWhich;
         }
     }
-    //--------------------------------------------------------------------
+
     ::rtl::Reference< IAttributeHandler > AttributeHandlerFactory::getHandlerFor( AttributeId _nAttributeId, const SfxItemPool& _rEditEnginePool )
     {
         ::rtl::Reference< IAttributeHandler > pReturn;
@@ -202,7 +202,7 @@ namespace frm
     //====================================================================
     //= ParaAlignmentHandler
     //====================================================================
-    //--------------------------------------------------------------------
+
     ParaAlignmentHandler::ParaAlignmentHandler( AttributeId _nAttributeId )
         :AttributeHandler( _nAttributeId, EE_PARA_JUST )
         ,m_eAdjust( SVX_ADJUST_CENTER )
@@ -219,7 +219,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     AttributeCheckState ParaAlignmentHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
     {
         OSL_ENSURE( _rItem.ISA( SvxAdjustItem ), "ParaAlignmentHandler::implGetCheckState: invalid pool item!" );
@@ -227,7 +227,7 @@ namespace frm
         return ( eAdjust == m_eAdjust ) ? eChecked : eUnchecked;
     }
 
-    //--------------------------------------------------------------------
+
     void ParaAlignmentHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType /*_nForScriptType*/ ) const
     {
         OSL_ENSURE( !_pAdditionalArg, "ParaAlignmentHandler::executeAttribute: this is a simple toggle attribute - no args possible!" );
@@ -238,7 +238,7 @@ namespace frm
     //====================================================================
     //= LineSpacingHandler
     //====================================================================
-    //--------------------------------------------------------------------
+
     LineSpacingHandler::LineSpacingHandler( AttributeId _nAttributeId )
         :AttributeHandler( _nAttributeId, EE_PARA_SBL )
         ,m_nLineSpace( 100 )
@@ -254,7 +254,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     AttributeCheckState LineSpacingHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
     {
         OSL_ENSURE( _rItem.ISA( SvxLineSpacingItem ), "LineSpacingHandler::implGetCheckState: invalid pool item!" );
@@ -262,7 +262,7 @@ namespace frm
         return ( nLineSpace == m_nLineSpace ) ? eChecked : eUnchecked;
     }
 
-    //--------------------------------------------------------------------
+
     void LineSpacingHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType /*_nForScriptType*/ ) const
     {
         OSL_ENSURE( !_pAdditionalArg, "LineSpacingHandler::executeAttribute: this is a simple toggle attribute - no args possible!" );
@@ -281,7 +281,7 @@ namespace frm
     //====================================================================
     //= EscapementHandler
     //====================================================================
-    //--------------------------------------------------------------------
+
     EscapementHandler::EscapementHandler( AttributeId _nAttributeId )
         :AttributeHandler( _nAttributeId, EE_CHAR_ESCAPEMENT )
         ,m_eEscapement( SVX_ESCAPEMENT_OFF )
@@ -296,7 +296,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     AttributeCheckState EscapementHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
     {
         OSL_ENSURE( _rItem.ISA( SvxEscapementItem ), "EscapementHandler::getState: invalid pool item!" );
@@ -304,7 +304,7 @@ namespace frm
         return ( eEscapement == m_eEscapement ) ? eChecked : eUnchecked;
     }
 
-    //--------------------------------------------------------------------
+
     void EscapementHandler::executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType /*_nForScriptType*/ ) const
     {
         OSL_ENSURE( !_pAdditionalArg, "EscapementHandler::executeAttribute: this is a simple toggle attribute - no args possible!" );
@@ -318,7 +318,7 @@ namespace frm
     //====================================================================
     //= SlotHandler
     //====================================================================
-    //--------------------------------------------------------------------
+
     SlotHandler::SlotHandler( AttributeId _nAttributeId, WhichId _nWhichId )
         :AttributeHandler( _nAttributeId, _nWhichId )
         ,m_bScriptDependent( false )
@@ -328,7 +328,7 @@ namespace frm
                          ||  ( SID_ATTR_CHAR_FONT == _nAttributeId );
     }
 
-    //--------------------------------------------------------------------
+
     AttributeState SlotHandler::getState( const SfxItemSet& _rAttribs ) const
     {
         AttributeState aState( eIndetermined );
@@ -340,7 +340,7 @@ namespace frm
         return aState;
     }
 
-    //--------------------------------------------------------------------
+
     void SlotHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const
     {
         if ( _pAdditionalArg )
@@ -361,7 +361,7 @@ namespace frm
     //====================================================================
     //= FontSizeHandler
     //====================================================================
-    //--------------------------------------------------------------------
+
     FontSizeHandler::FontSizeHandler( AttributeId _nAttributeId, WhichId _nWhichId )
         :AttributeHandler( _nAttributeId, _nWhichId )
     {
@@ -370,7 +370,7 @@ namespace frm
             "FontSizeHandler::FontSizeHandler: invalid attribute id!" );
     }
 
-    //--------------------------------------------------------------------
+
     AttributeState FontSizeHandler::getState( const SfxItemSet& _rAttribs ) const
     {
         AttributeState aState( eIndetermined );
@@ -399,7 +399,7 @@ namespace frm
         return aState;
     }
 
-    //--------------------------------------------------------------------
+
     void FontSizeHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const
     {
         const SvxFontHeightItem* pFontHeightItem = PTR_CAST( SvxFontHeightItem, _pAdditionalArg );
@@ -432,7 +432,7 @@ namespace frm
     //====================================================================
     //= ParagraphDirectionHandler
     //====================================================================
-    //--------------------------------------------------------------------
+
     ParagraphDirectionHandler::ParagraphDirectionHandler( AttributeId _nAttributeId )
         :AttributeHandler( _nAttributeId, EE_PARA_WRITINGDIR )
         ,m_eParagraphDirection( FRMDIR_HORI_LEFT_TOP )
@@ -453,7 +453,7 @@ namespace frm
             m_eOppositeDefaultAdjustment = SVX_ADJUST_RIGHT;
     }
 
-    //--------------------------------------------------------------------
+
     AttributeCheckState ParagraphDirectionHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
     {
         OSL_ENSURE( _rItem.ISA( SvxFrameDirectionItem ), "ParagraphDirectionHandler::implGetCheckState: invalid pool item!" );
@@ -461,7 +461,7 @@ namespace frm
         return ( eDirection == m_eParagraphDirection ) ? eChecked : eUnchecked;
     }
 
-    //--------------------------------------------------------------------
+
     void ParagraphDirectionHandler::executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* /*_pAdditionalArg*/, ScriptType /*_nForScriptType*/ ) const
     {
         _rNewAttribs.Put( SvxFrameDirectionItem( m_eParagraphDirection, getWhich() ) );
@@ -480,13 +480,13 @@ namespace frm
     //====================================================================
     //= BooleanHandler
     //====================================================================
-    //--------------------------------------------------------------------
+
     BooleanHandler::BooleanHandler( AttributeId _nAttributeId, WhichId _nWhichId )
         :AttributeHandler( _nAttributeId, _nWhichId )
     {
     }
 
-    //--------------------------------------------------------------------
+
     AttributeCheckState BooleanHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
     {
         OSL_ENSURE( _rItem.ISA( SfxBoolItem ), "BooleanHandler::implGetCheckState: invalid item!" );
@@ -496,7 +496,7 @@ namespace frm
         return eIndetermined;
     }
 
-    //--------------------------------------------------------------------
+
     void BooleanHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType /*_nForScriptType*/ ) const
     {
         OSL_ENSURE( _pAdditionalArg && _pAdditionalArg->ISA( SfxBoolItem ), "BooleanHandler::executeAttribute: invalid argument!" );

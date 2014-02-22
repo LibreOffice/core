@@ -23,7 +23,7 @@
 
 using namespace ::com::sun::star;
 
-// ---------------------------------------------------------------
+
 
 CGMOutAct::CGMOutAct( CGM& rCGM )
 {
@@ -38,7 +38,7 @@ CGMOutAct::CGMOutAct( CGM& rCGM )
     mpGradient = NULL;
 };
 
-// ---------------------------------------------------------------
+
 
 CGMOutAct::~CGMOutAct()
 {
@@ -50,7 +50,7 @@ CGMOutAct::~CGMOutAct()
         delete mpGradient;
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMOutAct::BeginFigure()
 {
@@ -61,7 +61,7 @@ void CGMOutAct::BeginFigure()
     mnIndex = 0;
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMOutAct::CloseRegion()
 {
@@ -73,7 +73,7 @@ void CGMOutAct::CloseRegion()
     }
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMOutAct::NewRegion()
 {
@@ -85,7 +85,7 @@ void CGMOutAct::NewRegion()
     mnIndex = 0;
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMOutAct::EndFigure()
 {
@@ -96,7 +96,7 @@ void CGMOutAct::EndFigure()
     mnIndex = 0;
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMOutAct::RegPolyLine( Polygon& rPolygon, sal_Bool bReverse )
 {
@@ -123,7 +123,7 @@ void CGMOutAct::RegPolyLine( Polygon& rPolygon, sal_Bool bReverse )
     }
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMOutAct::SetGradientOffset( long nHorzOfs, long nVertOfs, sal_uInt32 /*nType*/ )
 {
@@ -133,7 +133,7 @@ void CGMOutAct::SetGradientOffset( long nHorzOfs, long nVertOfs, sal_uInt32 /*nT
     mpGradient->YOffset = ( (sal_uInt16)nVertOfs & 0x7f );
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMOutAct::SetGradientAngle( long nAngle )
 {
@@ -142,7 +142,7 @@ void CGMOutAct::SetGradientAngle( long nAngle )
     mpGradient->Angle = sal::static_int_cast< sal_Int16 >(nAngle);
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMOutAct::SetGradientDescriptor( sal_uInt32 nColorFrom, sal_uInt32 nColorTo )
 {
@@ -152,7 +152,7 @@ void CGMOutAct::SetGradientDescriptor( sal_uInt32 nColorFrom, sal_uInt32 nColorT
     mpGradient->EndColor = nColorTo;
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMOutAct::SetGradientStyle( sal_uInt32 nStyle, double /*fRatio*/ )
 {

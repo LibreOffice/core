@@ -53,14 +53,14 @@ BaseCommandEnv::~BaseCommandEnv()
 {
 }
 // XCommandEnvironment
-//______________________________________________________________________________
+
 Reference<task::XInteractionHandler> BaseCommandEnv::getInteractionHandler()
 throw (uno::RuntimeException)
 {
     return this;
 }
 
-//______________________________________________________________________________
+
 Reference<ucb::XProgressHandler> BaseCommandEnv::getProgressHandler()
 throw (uno::RuntimeException)
 {

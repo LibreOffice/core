@@ -69,20 +69,14 @@ class SoundHandler  :   // interfaces
                     ,   private ThreadHelpBase
                     ,   public  ::cppu::OWeakObject
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+    // public methods
     public:
 
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
+        // constructor / destructor
                  SoundHandler( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
         virtual ~SoundHandler(                                                                        );
 
-        //---------------------------------------------------------------------------------------------------------
         //  XInterface, XTypeProvider, XServiceInfo
-        //---------------------------------------------------------------------------------------------------------
         virtual css::uno::Any  SAL_CALL queryInterface( const css::uno::Type& aType   ) throw( css::uno::RuntimeException );
         virtual void SAL_CALL acquire() throw();
         virtual void SAL_CALL release() throw();
@@ -102,16 +96,12 @@ class SoundHandler  :   // interfaces
     /* Helper for initialization of service by using own reference! */
        virtual void                                                   SAL_CALL impl_initService                   (                                                                               );
 
-        //---------------------------------------------------------------------------------------------------------
         //  XNotifyingDispatch
-        //---------------------------------------------------------------------------------------------------------
         virtual void SAL_CALL dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                        const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
                                                        const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw(css::uno::RuntimeException);
 
-        //---------------------------------------------------------------------------------------------------------
         //  XDispatch
-        //---------------------------------------------------------------------------------------------------------
         virtual void SAL_CALL dispatch              (   const   css::util::URL&                                     aURL        ,
                                                         const   css::uno::Sequence< css::beans::PropertyValue >&    lArguments  ) throw( css::uno::RuntimeException );
         // not supported !
@@ -120,32 +110,24 @@ class SoundHandler  :   // interfaces
         virtual void SAL_CALL removeStatusListener  (   const   css::uno::Reference< css::frame::XStatusListener >& /*xListener*/   ,
                                                         const   css::util::URL&                                     /*aURL*/        ) throw( css::uno::RuntimeException ) {};
 
-        //---------------------------------------------------------------------------------------------------------
         //  XExtendedFilterDetection
-        //---------------------------------------------------------------------------------------------------------
         virtual OUString SAL_CALL detect           (           css::uno::Sequence< css::beans::PropertyValue >&    lDescriptor ) throw( css::uno::RuntimeException );
 
-    //-------------------------------------------------------------------------------------------------------------
     //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
     protected:
 
-    //-------------------------------------------------------------------------------------------------------------
     //  private methods
-    //-------------------------------------------------------------------------------------------------------------
     private:
         DECL_LINK( implts_PlayerNotify, void* );
 
-    //-------------------------------------------------------------------------------------------------------------
     //  variables
     //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
     private:
 
         bool m_bError;
-        css::uno::Reference< css::lang::XMultiServiceFactory >     m_xFactory          ;   /// global uno service factory to create new services
-        css::uno::Reference< css::uno::XInterface >                m_xSelfHold         ;   /// we must protect us against dieing during async(!) dispatch() call!
-        css::uno::Reference< css::media::XPlayer >                 m_xPlayer           ;   /// uses avmedia player to play sounds ...
+        css::uno::Reference< css::lang::XMultiServiceFactory >     m_xFactory          ;   // global uno service factory to create new services
+        css::uno::Reference< css::uno::XInterface >                m_xSelfHold         ;   // we must protect us against dieing during async(!) dispatch() call!
+        css::uno::Reference< css::media::XPlayer >                 m_xPlayer           ;   // uses avmedia player to play sounds...
 
         css::uno::Reference< css::frame::XDispatchResultListener > m_xListener         ;
         Timer m_aUpdateTimer;

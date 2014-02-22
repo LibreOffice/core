@@ -115,7 +115,7 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
     }
     return pBackend;
 }
-//______________________________________________________________________________
+
 OUString BackendImpl::PackageImpl::getDescription() throw (RuntimeException)
 {
     if (m_descr.isEmpty())
@@ -124,13 +124,13 @@ OUString BackendImpl::PackageImpl::getDescription() throw (RuntimeException)
         return m_descr;
 }
 
-//______________________________________________________________________________
+
 OUString BackendImpl::PackageImpl::getLicenseText() throw (RuntimeException)
 {
     return Package::getDescription();
 }
 
-//______________________________________________________________________________
+
 BackendImpl::PackageImpl::PackageImpl(
     ::rtl::Reference<BackendImpl> const & myBackend,
     OUString const & url, OUString const & libType, bool bRemoved,
@@ -156,7 +156,7 @@ BackendImpl::PackageImpl::PackageImpl(
     dp_misc::TRACE("PakageImpl displayName is " + m_displayName);
 }
 
-//______________________________________________________________________________
+
 BackendImpl::BackendImpl(
     Sequence<Any> const & args,
     Reference<XComponentContext> const & xComponentContext )
@@ -175,7 +175,7 @@ BackendImpl::BackendImpl(
 
 
 // XPackageRegistry
-//______________________________________________________________________________
+
 Sequence< Reference<deployment::XPackageTypeInfo> >
 BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 {
@@ -189,7 +189,7 @@ void BackendImpl::packageRemoved(OUString const & /*url*/, OUString const & /*me
 }
 
 // PackageRegistryBackend
-//______________________________________________________________________________
+
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString const & url, OUString const & mediaType_, sal_Bool bRemoved,
     OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
@@ -314,7 +314,7 @@ void BackendImpl::PackageImpl:: initPackageHandler()
 }
 
 // Package
-//______________________________________________________________________________
+
 beans::Optional< beans::Ambiguous<sal_Bool> >
 BackendImpl::PackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard &,
@@ -329,7 +329,7 @@ BackendImpl::PackageImpl::isRegistered_(
             false /* IsAmbiguous */ ) );
 }
 
-//______________________________________________________________________________
+
 void BackendImpl::PackageImpl::processPackage_(
     ::osl::ResettableMutexGuard &,
     bool doRegisterPackage,

@@ -62,13 +62,13 @@ PPMWriter::PPMWriter(SvStream &rStrm)
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 PPMWriter::~PPMWriter()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool PPMWriter::WritePPM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
 {
@@ -111,7 +111,7 @@ sal_Bool PPMWriter::WritePPM( const Graphic& rGraphic, FilterConfigItem* pFilter
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool PPMWriter::ImplWriteHeader()
 {
@@ -137,7 +137,7 @@ sal_Bool PPMWriter::ImplWriteHeader()
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 void PPMWriter::ImplWriteBody()
 {
@@ -207,7 +207,7 @@ void PPMWriter::ImplWriteBody()
     }
 }
 
-// ------------------------------------------------------------------------
+
 // a decimal number in ASCII format is being written into the stream
 
 void PPMWriter::ImplWriteNumber(sal_Int32 nNumber)
@@ -216,11 +216,11 @@ void PPMWriter::ImplWriteNumber(sal_Int32 nNumber)
     m_rOStm.WriteCharPtr( aNum.getStr() );
 }
 
-// ------------------------------------------------------------------------
 
-// ---------------------
+
+
 // - exported function -
-// ---------------------
+
 
 // this needs to be kept in sync with
 // ImpFilterLibCacheEntry::GetImportFunction() from
@@ -236,7 +236,7 @@ GraphicExport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterCon
     return aPPMWriter.WritePPM( rGraphic, pFilterConfigItem );
 }
 
-// ------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,7 +25,7 @@
 #include <vcl/gdimetafiletools.hxx>
 #include <comphelper/scopeguard.hxx>
 
-// -----------------------------------------------------------------------------
+
 
 bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, FilterConfigItem* pConfigItem, WMF_EXTERNALHEADER *pExtHeader )
 {
@@ -56,7 +56,7 @@ bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile,
     return !rStreamWMF.GetError();
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem* pFilterConfigItem )
 {
@@ -90,7 +90,7 @@ bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem*
     return rStream.good();
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
                               FilterConfigItem* pConfigItem, bool bPlaceable)
@@ -109,7 +109,7 @@ bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream
     return aWMFWriter.WriteWMF( aGdiMetaFile, rTargetStream, pConfigItem, bPlaceable );
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool ConvertGDIMetaFileToEMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
                               FilterConfigItem* pConfigItem )
@@ -128,7 +128,7 @@ bool ConvertGDIMetaFileToEMF( const GDIMetaFile & rMTF, SvStream & rTargetStream
     return aEMFWriter.WriteEMF( aGdiMetaFile, pConfigItem );
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool WriteWindowMetafileBits( SvStream& rStream, const GDIMetaFile& rMTF )
 {

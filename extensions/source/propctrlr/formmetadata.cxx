@@ -56,7 +56,7 @@ namespace pcr
                         sal_uInt32                  _nUIFlags);
     };
 
-    //------------------------------------------------------------------------
+
     OPropertyInfoImpl::OPropertyInfoImpl(const OUString& _rName, sal_Int32 _nId,
                                    const OUString& aString, sal_uInt16 nP, const OString& sHid, sal_uInt32 _nUIFlags)
        :sName(_rName)
@@ -68,7 +68,7 @@ namespace pcr
     {
     }
 
-    //------------------------------------------------------------------------
+
     // Compare PropertyInfo
     struct PropertyInfoLessByName : public ::std::binary_function< OPropertyInfoImpl, OPropertyInfoImpl, bool >
     {
@@ -99,7 +99,7 @@ namespace pcr
 
     sal_uInt16              OPropertyInfoService::s_nCount = 0;
     OPropertyInfoImpl*      OPropertyInfoService::s_pPropertyInfos = NULL;
-    //------------------------------------------------------------------------
+
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo()
     {
         if ( s_pPropertyInfos )
@@ -362,49 +362,49 @@ namespace pcr
         return s_pPropertyInfos;
     }
 
-    //------------------------------------------------------------------------
+
     sal_Int32 OPropertyInfoService::getPropertyId(const OUString& _rName) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_rName);
         return pInfo ? pInfo->nId : -1;
     }
 
-    //------------------------------------------------------------------------
+
     OUString OPropertyInfoService::getPropertyName( sal_Int32 _nPropId )
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nPropId);
         return pInfo ? pInfo->sName : OUString();
     }
 
-    //------------------------------------------------------------------------
+
     OUString OPropertyInfoService::getPropertyTranslation(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->sTranslation : OUString();
     }
 
-    //------------------------------------------------------------------------
+
     OString OPropertyInfoService::getPropertyHelpId(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->sHelpId : OString();
     }
 
-    //------------------------------------------------------------------------
+
     sal_Int16 OPropertyInfoService::getPropertyPos(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->nPos : 0xFFFF;
     }
 
-    //------------------------------------------------------------------------
+
     sal_uInt32 OPropertyInfoService::getPropertyUIFlags(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->nUIFlags : 0;
     }
 
-    //------------------------------------------------------------------------
+
     ::std::vector< OUString > OPropertyInfoService::getPropertyEnumRepresentations(sal_Int32 _nId) const
     {
         OSL_ENSURE( ( ( getPropertyUIFlags( _nId ) & PROP_FLAG_ENUM ) != 0 ) || ( _nId == PROPERTY_ID_TARGET_FRAME ),
@@ -528,7 +528,7 @@ namespace pcr
         return aReturn;
     }
 
-    //------------------------------------------------------------------------
+
     sal_Bool OPropertyInfoService::isComposeable( const OUString& _rPropertyName ) const
     {
         sal_Int32 nId = getPropertyId( _rPropertyName );
@@ -539,7 +539,7 @@ namespace pcr
         return ( nFlags & PROP_FLAG_COMPOSEABLE ) != 0;
     }
 
-    //------------------------------------------------------------------------
+
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(const OUString& _rName)
     {
         // Initialization
@@ -560,7 +560,7 @@ namespace pcr
     }
 
 
-    //------------------------------------------------------------------------
+
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(sal_Int32 _nId)
     {
         // Initialization
@@ -579,7 +579,7 @@ namespace pcr
     //= DefaultEnumRepresentation
     //====================================================================
     DBG_NAME( DefaultEnumRepresentation )
-    //--------------------------------------------------------------------
+
     DefaultEnumRepresentation::DefaultEnumRepresentation( const IPropertyInfoService& _rInfo, const Type& _rType, sal_Int32 _nPropertyId )
         :m_refCount( 0 )
         ,m_rMetaData( _rInfo )
@@ -589,19 +589,19 @@ namespace pcr
         DBG_CTOR( DefaultEnumRepresentation, NULL );
     }
 
-    //--------------------------------------------------------------------
+
     DefaultEnumRepresentation::~DefaultEnumRepresentation()
     {
         DBG_DTOR( DefaultEnumRepresentation, NULL );
     }
 
-    //--------------------------------------------------------------------
+
     ::std::vector< OUString > SAL_CALL DefaultEnumRepresentation::getDescriptions() const
     {
         return m_rMetaData.getPropertyEnumRepresentations( m_nPropertyId );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL DefaultEnumRepresentation::getValueFromDescription( const OUString& _rDescription, Any& _out_rValue ) const
     {
         sal_uInt32  nPropertyUIFlags = m_rMetaData.getPropertyUIFlags( m_nPropertyId );
@@ -644,7 +644,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     OUString SAL_CALL DefaultEnumRepresentation::getDescriptionForValue( const Any& _rEnumValue ) const
     {
         OUString sReturn;
@@ -668,13 +668,13 @@ namespace pcr
         return sReturn;
     }
 
-    //--------------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL DefaultEnumRepresentation::acquire()
     {
         return osl_atomic_increment( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL DefaultEnumRepresentation::release()
     {
         if ( 0 == osl_atomic_decrement( &m_refCount ) )

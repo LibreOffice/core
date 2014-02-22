@@ -109,7 +109,7 @@ void XclPCItem::SetBool( bool bValue )
     mbValue = bValue;
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool XclPCItem::IsEqual( const XclPCItem& rItem ) const
 {
@@ -413,7 +413,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTCachedName& rCachedNam
     return rStrm;
 }
 
-// ----------------------------------------------------------------------------
+
 
 const OUString* XclPTVisNameInfo::GetVisName() const
 {

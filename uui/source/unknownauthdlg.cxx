@@ -28,7 +28,7 @@
 
 using namespace css;
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(UnknownAuthDialog, OKHdl_Impl)
 {
@@ -43,7 +43,7 @@ IMPL_LINK_NOARG(UnknownAuthDialog, OKHdl_Impl)
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(UnknownAuthDialog, ViewCertHdl_Impl)
 {
@@ -57,7 +57,7 @@ IMPL_LINK_NOARG(UnknownAuthDialog, ViewCertHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 UnknownAuthDialog::UnknownAuthDialog(Window* pParent,
     const css::uno::Reference< css::security::XCertificate >& rXCert,

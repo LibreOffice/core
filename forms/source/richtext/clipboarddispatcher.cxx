@@ -60,7 +60,7 @@ namespace frm
     //====================================================================
     //= OClipboardDispatcher
     //====================================================================
-    //--------------------------------------------------------------------
+
     OClipboardDispatcher::OClipboardDispatcher( EditView& _rView, ClipboardFunc _eFunc )
         :ORichTextFeatureDispatcher( _rView, createClipboardURL( _eFunc ) )
         ,m_eFunc( _eFunc )
@@ -68,7 +68,7 @@ namespace frm
     {
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool OClipboardDispatcher::implIsEnabled( ) const
     {
         sal_Bool bEnabled = sal_False;
@@ -89,7 +89,7 @@ namespace frm
         return bEnabled;
     }
 
-    //--------------------------------------------------------------------
+
     FeatureStateEvent OClipboardDispatcher::buildStatusEvent() const
     {
         FeatureStateEvent aEvent( ORichTextFeatureDispatcher::buildStatusEvent() );
@@ -97,7 +97,7 @@ namespace frm
         return aEvent;
     }
 
-    //--------------------------------------------------------------------
+
     void OClipboardDispatcher::invalidateFeatureState_Broadcast()
     {
         sal_Bool bEnabled = implIsEnabled();
@@ -109,7 +109,7 @@ namespace frm
         ORichTextFeatureDispatcher::invalidateFeatureState_Broadcast();
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OClipboardDispatcher::dispatch( const URL& /*_rURL*/, const Sequence< PropertyValue >& /*Arguments*/ ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -135,7 +135,7 @@ namespace frm
     //====================================================================
     //= OPasteClipboardDispatcher
     //====================================================================
-    //--------------------------------------------------------------------
+
     OPasteClipboardDispatcher::OPasteClipboardDispatcher( EditView& _rView )
         :OClipboardDispatcher( _rView, ePaste )
         ,m_pClipListener( NULL )
@@ -150,7 +150,7 @@ namespace frm
         m_bPastePossible = ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) || aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
     }
 
-    //--------------------------------------------------------------------
+
     OPasteClipboardDispatcher::~OPasteClipboardDispatcher()
     {
         if ( !isDisposed() )
@@ -160,7 +160,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     IMPL_LINK( OPasteClipboardDispatcher, OnClipboardChanged, TransferableDataHelper*, _pDataHelper )
     {
         OSL_ENSURE( _pDataHelper, "OPasteClipboardDispatcher::OnClipboardChanged: ooops!" );
@@ -172,7 +172,7 @@ namespace frm
         return 0L;
     }
 
-    //--------------------------------------------------------------------
+
     void OPasteClipboardDispatcher::disposing( ::osl::ClearableMutexGuard& _rClearBeforeNotify )
     {
         OSL_ENSURE( getEditView() && getEditView()->GetWindow(), "OPasteClipboardDispatcher::disposing: EditView should not (yet) be disfunctional here!" );
@@ -184,7 +184,7 @@ namespace frm
         OClipboardDispatcher::disposing( _rClearBeforeNotify );
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool OPasteClipboardDispatcher::implIsEnabled( ) const
     {
         return m_bPastePossible && OClipboardDispatcher::implIsEnabled();

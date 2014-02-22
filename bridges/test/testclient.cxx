@@ -65,7 +65,7 @@ void doPerformanceTest( const Reference < XPerformanceTest > & /* xBench */)
     printf( "not implemented\n" );
 //      sal_Int32 i,nLoop = 2000;
 //      sal_Int32 tStart, tEnd , tEnd2;
-//      //------------------------------------
+//
 //      // oneway calls
 //      i = nLoop;
 //      tStart = GetTickCount();

@@ -92,13 +92,13 @@ namespace svx
     //====================================================================
     //= PropertyValueProvider
     //====================================================================
-    //--------------------------------------------------------------------
+
     OUString PropertyValueProvider::getPropertyName() const
     {
         return m_sPropertyName;
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyValueProvider::getCurrentValue( Any& _out_rValue ) const
     {
         Reference< XPropertySet > xContextProps( const_cast< PropertyValueProvider* >( this )->m_rContext, UNO_QUERY_THROW );
@@ -108,18 +108,18 @@ namespace svx
     //====================================================================
     //= PropertyChangeNotifier
     //====================================================================
-    //--------------------------------------------------------------------
+
     PropertyChangeNotifier::PropertyChangeNotifier( ::cppu::OWeakObject& _rOwner, ::osl::Mutex& _rMutex )
         :m_pData( new PropertyChangeNotifier_Data( _rOwner, _rMutex ) )
     {
     }
 
-    //--------------------------------------------------------------------
+
     PropertyChangeNotifier::~PropertyChangeNotifier()
     {
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyChangeNotifier::registerProvider( const ShapeProperty _eProperty, const PPropertyValueProvider _pProvider )
     {
         ENSURE_OR_THROW( _eProperty != eInvalidShapeProperty, "Illegal ShapeProperty value!" );
@@ -131,7 +131,7 @@ namespace svx
         m_pData->m_aProviders[ _eProperty ] = _pProvider;
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyChangeNotifier::notifyPropertyChange( const ShapeProperty _eProperty ) const
     {
         ENSURE_OR_THROW( _eProperty != eInvalidShapeProperty, "Illegal ShapeProperty value!" );
@@ -167,19 +167,19 @@ namespace svx
         }
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyChangeNotifier::addPropertyChangeListener( const OUString& _rPropertyName, const Reference< XPropertyChangeListener >& _rxListener )
     {
         m_pData->m_aPropertyChangeListeners.addInterface( _rPropertyName, _rxListener );
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyChangeNotifier::removePropertyChangeListener( const OUString& _rPropertyName, const Reference< XPropertyChangeListener >& _rxListener )
     {
         m_pData->m_aPropertyChangeListeners.removeInterface( _rPropertyName, _rxListener );
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyChangeNotifier::disposing()
     {
         EventObject aEvent;

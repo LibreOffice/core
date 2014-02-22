@@ -27,7 +27,7 @@
 using namespace ::com::sun::star;
 
 
-// -----------------------------------------------------------------------
+
 
 static void lcl_Move( Window &rWin, long nOffset )
 {
@@ -36,7 +36,7 @@ static void lcl_Move( Window &rWin, long nOffset )
     rWin.SetPosPixel( aTmp );
 }
 
-// -----------------------------------------------------------------------
+
 
 PasswordDialog::PasswordDialog(
     Window* _pParent,

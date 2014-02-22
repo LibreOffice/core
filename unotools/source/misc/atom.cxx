@@ -54,7 +54,7 @@ const OUString& AtomProvider::getString( int nAtom ) const
     return it == m_aStringMap.end() ? aEmpty : it->second;
 }
 
-// -----------------------------------------------------------------------
+
 
 MultiAtomProvider::MultiAtomProvider()
 {

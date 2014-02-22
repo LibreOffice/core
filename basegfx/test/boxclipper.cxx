@@ -428,7 +428,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::boxclipper);
 } // namespace basegfx2d
 

@@ -86,7 +86,7 @@ namespace frm
         void    impl_ensureEnabledState_nothrow_nolck();
     };
 
-    //--------------------------------------------------------------------
+
     WindowStateGuard_Impl::WindowStateGuard_Impl( const Reference< XWindow2 >& _rxWindow, const Reference< XPropertySet >& _rxMdelProps )
         :m_xWindow( _rxWindow )
         ,m_xModelProps( _rxMdelProps )
@@ -101,7 +101,7 @@ namespace frm
         osl_atomic_decrement( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
+
     void WindowStateGuard_Impl::dispose()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -113,7 +113,7 @@ namespace frm
         m_xWindow.clear();
     }
 
-    //--------------------------------------------------------------------
+
     void WindowStateGuard_Impl::impl_ensureEnabledState_nothrow_nolck()
     {
         try
@@ -142,43 +142,43 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL WindowStateGuard_Impl::windowEnabled( const EventObject& /*e*/ ) throw (RuntimeException)
     {
         impl_ensureEnabledState_nothrow_nolck();
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL WindowStateGuard_Impl::windowDisabled( const EventObject& /*e*/ ) throw (RuntimeException)
     {
         impl_ensureEnabledState_nothrow_nolck();
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL WindowStateGuard_Impl::windowResized( const WindowEvent& /*e*/ ) throw (RuntimeException)
     {
         // not interested in
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL WindowStateGuard_Impl::windowMoved( const WindowEvent& /*e*/ ) throw (RuntimeException)
     {
         // not interested in
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL WindowStateGuard_Impl::windowShown( const EventObject& /*e*/ ) throw (RuntimeException)
     {
         // not interested in
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL WindowStateGuard_Impl::windowHidden( const EventObject& /*e*/ ) throw (RuntimeException)
     {
         // not interested in
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL WindowStateGuard_Impl::disposing( const EventObject& Source ) throw (RuntimeException)
     {
         OSL_ENSURE( Source.Source == m_xWindow, "WindowStateGuard_Impl::disposing: where does this come from?" );
@@ -189,17 +189,17 @@ namespace frm
     //====================================================================
     //= WindowStateGuard
     //====================================================================
-    //--------------------------------------------------------------------
+
     WindowStateGuard::WindowStateGuard()
     {
     }
 
-    //--------------------------------------------------------------------
+
     WindowStateGuard::~WindowStateGuard()
     {
     }
 
-    //--------------------------------------------------------------------
+
     void WindowStateGuard::attach( const Reference< XWindow2 >& _rxWindow, const Reference< XControlModel >& _rxModel )
     {
         if ( m_pImpl.is() )

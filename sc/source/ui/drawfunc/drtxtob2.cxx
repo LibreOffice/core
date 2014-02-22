@@ -45,7 +45,7 @@
 #include "drwtrans.hxx"
 #include "drwlayer.hxx"
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 ScGetFontWorkId()
 {

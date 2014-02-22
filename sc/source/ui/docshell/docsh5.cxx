@@ -61,7 +61,7 @@ using com::sun::star::uno::UNO_QUERY;
 using ::std::auto_ptr;
 using ::std::vector;
 
-// ---------------------------------------------------------------------------
+
 
 //
 //  former viewfunc/dbfunc methods

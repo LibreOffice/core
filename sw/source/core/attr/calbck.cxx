@@ -27,9 +27,9 @@ static SwClientIter* pClientIters = 0;
 
 TYPEINIT0( SwClient );
 
-// ----------
+
 // SwClient
-// ----------
+
 
 SwClient::SwClient( SwModify* pToRegisterIn )
     : pLeft( 0 ), pRight( 0 ), pRegisteredIn( 0 ), mbIsAllowedToBeRemovedInModifyCall( false )
@@ -84,9 +84,9 @@ bool SwClient::GetInfo( SfxPoolItem& ) const
     return true;
 }
 
-// ----------
+
 // SwModify
-// ----------
+
 
 SwModify::SwModify()
     : SwClient(0), pRoot(0)
@@ -359,9 +359,9 @@ void SwModify::ModifyBroadcast( const SfxPoolItem* pOldValue, const SfxPoolItem*
     }
 }
 
-// ----------
+
 // SwDepend
-// ----------
+
 
 SwDepend::SwDepend( SwClient* pTellHim, SwModify* pDepend )
     : SwClient( pDepend )
@@ -388,9 +388,9 @@ bool SwDepend::GetInfo( SfxPoolItem& rInfo ) const
     return pToTell ? pToTell->GetInfo( rInfo ) : true;
 }
 
-// ------------
+
 // SwClientIter
-// ------------
+
 
 SwClientIter::SwClientIter( const SwModify& rModify )
     : rRoot( rModify )

@@ -51,14 +51,14 @@ void ServerFontLayout::DrawText( SalGraphics& rSalGraphics ) const
     rSalGraphics.DrawServerFontLayout( *this );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ServerFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
     return mrServerFont.GetLayoutEngine()->layout(*this, rArgs);
 }
 
-// -----------------------------------------------------------------------
+
 void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
     GenericSalLayout::AdjustLayout( rArgs );

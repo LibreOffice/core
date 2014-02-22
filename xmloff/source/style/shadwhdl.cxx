@@ -21,7 +21,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustrbuf.hxx>
 
-// --
+
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <tools/color.hxx>
 #include <sax/tools/converter.hxx>

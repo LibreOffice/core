@@ -99,7 +99,7 @@ public:
     virtual void SAL_CALL pop() throw (uno::RuntimeException);
 };
 
-//-----------------------------------------------------------------------------
+
 SilentCommandEnv::SilentCommandEnv(
     uno::Reference<uno::XComponentContext> const & xContext,
     Desktop* pDesktop ):
@@ -109,27 +109,27 @@ SilentCommandEnv::SilentCommandEnv(
     mnProgress( 25 )
 {}
 
-//-----------------------------------------------------------------------------
+
 SilentCommandEnv::~SilentCommandEnv()
 {
     mpDesktop->SetSplashScreenText( OUString() );
 }
 
-//-----------------------------------------------------------------------------
+
 Reference<task::XInteractionHandler> SilentCommandEnv::getInteractionHandler()
     throw (uno::RuntimeException)
 {
     return this;
 }
 
-//-----------------------------------------------------------------------------
+
 Reference<ucb::XProgressHandler> SilentCommandEnv::getProgressHandler()
     throw (uno::RuntimeException)
 {
     return this;
 }
 
-//-----------------------------------------------------------------------------
+
 // XInteractionHandler
 void SilentCommandEnv::handle( Reference< task::XInteractionRequest> const & xRequest )
     throw (uno::RuntimeException)
@@ -178,7 +178,7 @@ void SilentCommandEnv::handle( Reference< task::XInteractionRequest> const & xRe
     }
 }
 
-//-----------------------------------------------------------------------------
+
 // XProgressHandler
 void SilentCommandEnv::push( uno::Any const & rStatus )
     throw (uno::RuntimeException)
@@ -195,7 +195,7 @@ void SilentCommandEnv::push( uno::Any const & rStatus )
     }
 }
 
-//-----------------------------------------------------------------------------
+
 void SilentCommandEnv::update( uno::Any const & rStatus )
     throw (uno::RuntimeException)
 {
@@ -206,7 +206,7 @@ void SilentCommandEnv::update( uno::Any const & rStatus )
     }
 }
 
-//-----------------------------------------------------------------------------
+
 void SilentCommandEnv::pop() throw (uno::RuntimeException)
 {
     mnLevel -= 1;
@@ -236,9 +236,9 @@ static sal_Int16 impl_showExtensionDialog( uno::Reference< uno::XComponentContex
     return nRet;
 }
 
-//------------------------------------------------------------------------------
+
 // Check dependencies of all packages
-//------------------------------------------------------------------------------
+
 static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext > &xContext )
 {
     uno::Sequence< uno::Sequence< uno::Reference< deployment::XPackage > > > xAllPackages;
@@ -314,9 +314,9 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
     return true;
 }
 
-//------------------------------------------------------------------------------
+
 // resets the 'check needed' flag (needed, if aborted)
-//------------------------------------------------------------------------------
+
 static void impl_setNeedsCompatCheck()
 {
     try {
@@ -339,10 +339,10 @@ static void impl_setNeedsCompatCheck()
     catch (const Exception&) {}
 }
 
-//------------------------------------------------------------------------------
+
 // to check if we need checking the dependencies of the extensions again, we compare
 // the build id of the office with the one of the last check
-//------------------------------------------------------------------------------
+
 static bool impl_needsCompatCheck()
 {
     bool bNeedsCheck = false;
@@ -381,7 +381,7 @@ static bool impl_needsCompatCheck()
     return bNeedsCheck;
 }
 
-//------------------------------------------------------------------------------
+
 // Do we need to check the dependencies of the extensions?
 // When there are unresolved issues, we can't continue with startup
 sal_Bool Desktop::CheckExtensionDependencies()

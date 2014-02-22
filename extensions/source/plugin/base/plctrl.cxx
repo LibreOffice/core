@@ -38,7 +38,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 
-//--------------------------------------------------------------------------------------------------
+
 PluginControl_Impl::PluginControl_Impl() :
     _pMultiplexer( NULL )
     , _nX( 0 )
@@ -52,7 +52,7 @@ PluginControl_Impl::PluginControl_Impl() :
 {
 }
 
-//--------------------------------------------------------------------------------------------------
+
 PluginControl_Impl::~PluginControl_Impl()
 {
 }
@@ -140,7 +140,7 @@ void PluginControl_Impl::setFocus(void) throw( RuntimeException )
 }
 
 
-//--------------------------------------------------------------------------------------------------
+
 void PluginControl_Impl::releasePeer()
 {
     if (_xPeer.is())

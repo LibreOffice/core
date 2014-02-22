@@ -100,11 +100,11 @@ using namespace ::com::sun::star::office;
 
 namespace sd {
 
-// --------------------------------------------------------------------
+
 
 extern TextApiObject* getTextApiObject( const Reference< XAnnotation >& xAnnotation );
 
-// --------------------------------------------------------------------
+
 
 SfxItemPool* GetAnnotationPool()
 {
@@ -121,7 +121,7 @@ SfxItemPool* GetAnnotationPool()
     return mpAnnotationPool;
 }
 
-// --------------------------------------------------------------------
+
 
 static SfxBindings* getBindings( ViewShellBase& rBase )
 {
@@ -131,7 +131,7 @@ static SfxBindings* getBindings( ViewShellBase& rBase )
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 static SfxDispatcher* getDispatcher( ViewShellBase& rBase )
 {
@@ -176,7 +176,7 @@ OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotatio
     return sRet;
 }
 
-// --------------------------------------------------------------------
+
 
 AnnotationManagerImpl::AnnotationManagerImpl( ViewShellBase& rViewShellBase )
 : AnnotationManagerImplBase( m_aMutex )
@@ -190,7 +190,7 @@ AnnotationManagerImpl::AnnotationManagerImpl( ViewShellBase& rViewShellBase )
         mbShowAnnotations = pOptions->IsShowComments() == sal_True;
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::init()
 {
@@ -216,7 +216,7 @@ void AnnotationManagerImpl::init()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 // WeakComponentImplHelper1
 void SAL_CALL AnnotationManagerImpl::disposing ()
@@ -244,7 +244,7 @@ void SAL_CALL AnnotationManagerImpl::disposing ()
     mxCurrentPage.clear();
 }
 
-// --------------------------------------------------------------------
+
 
 // XEventListener
 void SAL_CALL AnnotationManagerImpl::notifyEvent( const ::com::sun::star::document::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException)
@@ -274,7 +274,7 @@ void AnnotationManagerImpl::ShowAnnotations( bool bShow )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::ExecuteAnnotation(SfxRequest& rReq )
 {
@@ -301,7 +301,7 @@ void AnnotationManagerImpl::ExecuteAnnotation(SfxRequest& rReq )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::ExecuteInsertAnnotation(SfxRequest& /*rReq*/)
 {
@@ -309,7 +309,7 @@ void AnnotationManagerImpl::ExecuteInsertAnnotation(SfxRequest& /*rReq*/)
     InsertAnnotation();
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
 {
@@ -358,7 +358,7 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
     UpdateTags();
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::InsertAnnotation()
 {
@@ -437,7 +437,7 @@ void AnnotationManagerImpl::InsertAnnotation()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
 {
@@ -504,7 +504,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::DeleteAnnotation( Reference< XAnnotation > xAnnotation )
 {
@@ -582,7 +582,7 @@ void AnnotationManagerImpl::DeleteAllAnnotations()
         mpDoc->EndUndo();
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::GetAnnotationState(SfxItemSet& rSet)
 {
@@ -628,7 +628,7 @@ void AnnotationManagerImpl::GetAnnotationState(SfxItemSet& rSet)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
 {
@@ -737,7 +737,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
     while( true );
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::onTagSelected( AnnotationTag& rTag )
 {
@@ -745,7 +745,7 @@ void AnnotationManagerImpl::onTagSelected( AnnotationTag& rTag )
     invalidateSlots();
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::onTagDeselected( AnnotationTag& rTag )
 {
@@ -756,7 +756,7 @@ void AnnotationManagerImpl::onTagDeselected( AnnotationTag& rTag )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::SelectAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > xAnnotation, bool bEdit /* = sal_False */ )
 {
@@ -776,7 +776,7 @@ void AnnotationManagerImpl::SelectAnnotation( ::com::sun::star::uno::Reference< 
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::GetSelectedAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation )
 {
@@ -798,7 +798,7 @@ void AnnotationManagerImpl::invalidateSlots()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::onSelectionChanged()
 {
@@ -892,7 +892,7 @@ void AnnotationManagerImpl::CreateTags()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::DisposeTags()
 {
@@ -909,7 +909,7 @@ void AnnotationManagerImpl::DisposeTags()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::addListener()
 {
@@ -922,7 +922,7 @@ void AnnotationManagerImpl::addListener()
         | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED);
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::removeListener()
 {
@@ -930,7 +930,7 @@ void AnnotationManagerImpl::removeListener()
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK(AnnotationManagerImpl,EventMultiplexerListener,
     tools::EventMultiplexerEvent*,pEvent)

@@ -77,17 +77,17 @@ namespace utl
             virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
         };
 
-        //--------------------------------------------------------------------
+
         OObserverImpl::OObserverImpl()
         {
         }
 
-        //--------------------------------------------------------------------
+
         OObserverImpl::~OObserverImpl()
         {
         }
 
-        //--------------------------------------------------------------------
+
         void OObserverImpl::ensureObservation()
         {
             {
@@ -111,7 +111,7 @@ namespace utl
             }
         }
 
-        //--------------------------------------------------------------------
+
         void SAL_CALL OObserverImpl::queryTermination( const EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException)
         {
             Listeners aToNotify;
@@ -130,7 +130,7 @@ namespace utl
             }
         }
 
-        //--------------------------------------------------------------------
+
         void SAL_CALL OObserverImpl::notifyTermination( const EventObject& /*Event*/ ) throw (RuntimeException)
         {
             // get the listeners
@@ -158,7 +158,7 @@ namespace utl
             }
         }
 
-        //--------------------------------------------------------------------
+
         void SAL_CALL OObserverImpl::disposing( const EventObject& /*Event*/ ) throw (RuntimeException)
         {
 #if OSL_DEBUG_LEVEL > 0
@@ -172,7 +172,7 @@ namespace utl
     //====================================================================
     //= DesktopTerminationObserver
     //====================================================================
-    //--------------------------------------------------------------------
+
     void DesktopTerminationObserver::registerTerminationListener( ITerminationListener* _pListener )
     {
         if ( !_pListener )
@@ -192,7 +192,7 @@ namespace utl
         OObserverImpl::ensureObservation();
     }
 
-    //--------------------------------------------------------------------
+
     void DesktopTerminationObserver::revokeTerminationListener( ITerminationListener* _pListener )
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );

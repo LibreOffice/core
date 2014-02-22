@@ -84,7 +84,7 @@ SvCompatWeakHdl* SfxFrame::GetHdl()
     return pImp->GetHdl();
 }
 
-//--------------------------------------------------------------------
+
 void SfxFrame::Construct_Impl()
 {
     pImp = new SfxFrame_Impl( this );
@@ -93,7 +93,7 @@ void SfxFrame::Construct_Impl()
     pFramesArr_Impl->push_back( this );
 }
 
-//--------------------------------------------------------------------
+
 
 SfxFrame::~SfxFrame()
 {
@@ -240,7 +240,7 @@ bool SfxFrame::PrepareClose_Impl( sal_Bool bUI )
     return nRet;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxFrame* SfxFrame::GetChildFrame( sal_uInt16 nPos ) const
 {
@@ -458,7 +458,7 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
     pSet->Put( SfxStringItem( SID_FILTER_NAME, aFilter ));
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxFrameDescriptor* SfxFrame::GetDescriptor() const
 {
@@ -475,7 +475,7 @@ SfxFrameDescriptor* SfxFrame::GetDescriptor() const
     return pImp->pDescr;
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxFrame::GetTargetList( TargetList& rList ) const
 {
@@ -501,7 +501,7 @@ void SfxFrame::GetTargetList( TargetList& rList ) const
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxFrame::IsParent( SfxFrame *pFrame ) const
 {
@@ -554,7 +554,7 @@ bool SfxFrameItem::operator==( const SfxPoolItem &rItem ) const
          ((SfxFrameItem&)rItem).wFrame == wFrame;
 }
 
-//--------------------------------------------------------------------
+
 
 OUString SfxFrameItem::GetValueText() const
 {

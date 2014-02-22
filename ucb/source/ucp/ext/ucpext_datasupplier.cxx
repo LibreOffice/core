@@ -98,7 +98,7 @@ namespace ucb { namespace ucp { namespace ext
         ~DataSupplier_Impl();
     };
 
-    //------------------------------------------------------------------------------------------------------------------
+
     DataSupplier_Impl::~DataSupplier_Impl()
     {
     }
@@ -124,7 +124,7 @@ namespace ucb { namespace ucp { namespace ext
     //==================================================================================================================
     //= DataSupplier
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     DataSupplier::DataSupplier( const Reference< XComponentContext >& rxContext,
                                 const ::rtl::Reference< Content >& i_rContent,
                                 const sal_Int32 i_nOpenMode )
@@ -132,7 +132,7 @@ namespace ucb { namespace ucp { namespace ext
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void DataSupplier::fetchData()
     {
         try
@@ -195,12 +195,12 @@ namespace ucb { namespace ucp { namespace ext
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     DataSupplier::~DataSupplier()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     OUString DataSupplier::queryContentIdentifierString( sal_uInt32 i_nIndex )
     {
         ::osl::Guard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -216,7 +216,7 @@ namespace ucb { namespace ucp { namespace ext
         return OUString();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XContentIdentifier > DataSupplier::queryContentIdentifier( sal_uInt32 i_nIndex )
     {
         ::osl::Guard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -239,7 +239,7 @@ namespace ucb { namespace ucp { namespace ext
         return Reference< XContentIdentifier >();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XContent > DataSupplier::queryContent( sal_uInt32 i_nIndex )
     {
         ::osl::Guard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -271,7 +271,7 @@ namespace ucb { namespace ucp { namespace ext
         return Reference< XContent >();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool DataSupplier::getResult( sal_uInt32 i_nIndex )
     {
         ::osl::ClearableGuard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -283,26 +283,26 @@ namespace ucb { namespace ucp { namespace ext
         return false;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     sal_uInt32 DataSupplier::totalCount()
     {
         ::osl::ClearableGuard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
         return m_pImpl->m_aResults.size();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     sal_uInt32 DataSupplier::currentCount()
     {
         return m_pImpl->m_aResults.size();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool DataSupplier::isCountFinal()
     {
         return true;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XRow > DataSupplier::queryPropertyValues( sal_uInt32 i_nIndex  )
     {
         ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
@@ -343,7 +343,7 @@ namespace ucb { namespace ucp { namespace ext
         return xRow;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void DataSupplier::releasePropertyValues( sal_uInt32 i_nIndex )
     {
         ::osl::Guard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -352,12 +352,12 @@ namespace ucb { namespace ucp { namespace ext
             m_pImpl->m_aResults[ i_nIndex ].xRow.clear();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void DataSupplier::close()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void DataSupplier::validate() throw( ResultSetException )
     {
     }

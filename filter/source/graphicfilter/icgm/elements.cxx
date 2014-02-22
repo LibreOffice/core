@@ -20,7 +20,7 @@
 
 #include "elements.hxx"
 
-// ---------------------------------------------------------------
+
 
 
 CGMElements::CGMElements( CGM& rCGM ) :
@@ -29,7 +29,7 @@ CGMElements::CGMElements( CGM& rCGM ) :
     Init();
 };
 
-// ---------------------------------------------------------------
+
 
 CGMElements::~CGMElements()
 {
@@ -40,7 +40,7 @@ CGMElements::~CGMElements()
     DeleteAllBundles( aFillList );
 }
 
-// ---------------------------------------------------------------
+
 
 CGMElements& CGMElements::operator=( CGMElements& rSource )
 {
@@ -139,7 +139,7 @@ CGMElements& CGMElements::operator=( CGMElements& rSource )
     return (*this);
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMElements::Init()
 {
@@ -283,7 +283,7 @@ void CGMElements::Init()
     bSegmentCount = sal_False;
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMElements::ImplInsertHatch( sal_Int32 nKey, int nStyle, long nDistance, long nAngle )
 {
@@ -293,7 +293,7 @@ void CGMElements::ImplInsertHatch( sal_Int32 nKey, int nStyle, long nDistance, l
     rEntry.HatchAngle = nAngle;
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMElements::DeleteAllBundles( BundleList& rList )
 {
@@ -304,7 +304,7 @@ void CGMElements::DeleteAllBundles( BundleList& rList )
 };
 
 
-// ---------------------------------------------------------------
+
 
 void CGMElements::CopyAllBundles( BundleList& rSource, BundleList& rDest )
 {
@@ -318,7 +318,7 @@ void CGMElements::CopyAllBundles( BundleList& rSource, BundleList& rDest )
     }
 };
 
-// ---------------------------------------------------------------
+
 
 Bundle* CGMElements::GetBundleIndex( long nIndex, BundleList& rList, Bundle& rBundle )
 {
@@ -329,7 +329,7 @@ Bundle* CGMElements::GetBundleIndex( long nIndex, BundleList& rList, Bundle& rBu
     return pBundle;
 }
 
-// ---------------------------------------------------------------
+
 
 Bundle* CGMElements::GetBundle( BundleList& rList, long nIndex )
 {
@@ -341,7 +341,7 @@ Bundle* CGMElements::GetBundle( BundleList& rList, long nIndex )
     return NULL;
 }
 
-// ---------------------------------------------------------------
+
 
 Bundle* CGMElements::InsertBundle( BundleList& rList, Bundle& rBundle )
 {

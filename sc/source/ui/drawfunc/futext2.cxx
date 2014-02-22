@@ -24,7 +24,7 @@
 #include "futext.hxx"
 #include "tabvwsh.hxx"
 
-//------------------------------------------------------------------------
+
 
 SdrOutliner* FuText::MakeOutliner()
 {

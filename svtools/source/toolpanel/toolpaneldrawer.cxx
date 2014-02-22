@@ -45,7 +45,7 @@ namespace svt
     //==================================================================================================================
     //= DrawerVisualization
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     DrawerVisualization::DrawerVisualization( ToolPanelDrawer& i_rParent )
         :Window( &i_rParent )
         ,m_rDrawer( i_rParent )
@@ -55,12 +55,12 @@ namespace svt
         SetAccessibleRole( AccessibleRole::LABEL );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     DrawerVisualization::~DrawerVisualization()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void DrawerVisualization::Paint( const Rectangle& i_rBoundingBox )
     {
         Window::Paint( i_rBoundingBox );
@@ -70,7 +70,7 @@ namespace svt
     //==================================================================================================================
     //= ToolPanelDrawer
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     ToolPanelDrawer::ToolPanelDrawer( Window& i_rParent, const OUString& i_rTitle )
         :Window( &i_rParent, WB_TABSTOP )
         ,m_pPaintDevice( new VirtualDevice( *this ) )
@@ -92,19 +92,19 @@ namespace svt
         m_aVisualization.SetAccessibleDescription( i_rTitle );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     ToolPanelDrawer::~ToolPanelDrawer()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     long ToolPanelDrawer::GetPreferredHeightPixel() const
     {
         Rectangle aTitleBarBox( impl_calcTitleBarBox( impl_calcTextBoundingBox() ) );
         return aTitleBarBox.GetHeight();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void ToolPanelDrawer::Paint()
     {
         m_pPaintDevice->SetMapMode( GetMapMode() );
@@ -130,7 +130,7 @@ namespace svt
         );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Rectangle ToolPanelDrawer::impl_paintExpansionIndicator( const Rectangle& i_rTextBox )
     {
         Rectangle aExpansionIndicatorArea;
@@ -175,7 +175,7 @@ namespace svt
         return nBasicStyle | TEXT_DRAW_DISABLE;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void ToolPanelDrawer::impl_paintBackground( const Rectangle& i_rTitleBarBox )
     {
         m_pPaintDevice->SetFillColor( GetSettings().GetStyleSettings().GetDialogColor() );
@@ -191,7 +191,7 @@ namespace svt
         m_pPaintDevice->DrawLine( i_rTitleBarBox.TopRight(), i_rTitleBarBox.BottomRight() );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void ToolPanelDrawer::impl_paintFocusIndicator( const Rectangle& i_rTextBox )
     {
         if ( m_bFocused )
@@ -221,28 +221,28 @@ namespace svt
             HideFocus();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void ToolPanelDrawer::GetFocus()
     {
         m_bFocused = true;
         Invalidate();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void ToolPanelDrawer::LoseFocus()
     {
         m_bFocused = false;
         Invalidate();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void ToolPanelDrawer::Resize()
     {
         Window::Resize();
         m_aVisualization.SetPosSizePixel( Point(), GetOutputSizePixel() );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void ToolPanelDrawer::MouseButtonDown( const MouseEvent& i_rMouseEvent )
     {
         // consume this event, and do not forward to the base class - it would sent a NotifyEvent, which in turn, when
@@ -250,7 +250,7 @@ namespace svt
         (void)i_rMouseEvent;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void ToolPanelDrawer::DataChanged( const DataChangedEvent& i_rEvent )
     {
         Window::DataChanged( i_rEvent );
@@ -291,7 +291,7 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< XWindowPeer > ToolPanelDrawer::GetComponentInterface( sal_Bool i_bCreate )
     {
         Reference< XWindowPeer > xWindowPeer( Window::GetComponentInterface( sal_False ) );
@@ -303,7 +303,7 @@ namespace svt
         return xWindowPeer;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Rectangle ToolPanelDrawer::impl_calcTextBoundingBox() const
     {
         Font aFont( GetFont() );
@@ -328,7 +328,7 @@ namespace svt
         return aTextBox;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Rectangle ToolPanelDrawer::impl_calcTitleBarBox( const Rectangle& i_rTextBox ) const
     {
         Rectangle aTitleBarBox( i_rTextBox );
@@ -343,7 +343,7 @@ namespace svt
         return aTitleBarBox;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void ToolPanelDrawer::SetExpanded( const bool i_bExpanded )
     {
         if ( m_bExpanded != i_bExpanded )

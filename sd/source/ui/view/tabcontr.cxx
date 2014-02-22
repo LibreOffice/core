@@ -45,29 +45,29 @@
 
 namespace sd {
 
-// -----------------------------------------
+
 // - SdTabControl::SdPageObjsTransferable -
-// -----------------------------------------
+
 
 TabControl::TabControlTransferable::~TabControlTransferable()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TabControl::TabControlTransferable::AddSupportedFormats()
 {
     AddFormat( SOT_FORMATSTR_ID_STARDRAW_TABBAR );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TabControl::TabControlTransferable::GetData( const ::com::sun::star::datatransfer::DataFlavor& )
 {
     return sal_False;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TabControl::TabControlTransferable::DragFinished( sal_Int8 nDropAction )
 {

@@ -37,9 +37,9 @@
 #define PAGE_WIDTH      ( DIALOG_WIDTH - PAGE_POS_X ) - 6
 
 
-// ---------------------
+
 // - INFORMATIONDIALOG -
-// ---------------------
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -56,7 +56,7 @@ using namespace ::com::sun::star::container;
 
 
 
-// -----------------------------------------------------------------------------
+
 
 OUString InsertFixedText( InformationDialog& rInformationDialog, const OUString& rControlName, const OUString& rLabel,
                                 sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Bool bMultiLine, sal_Int16 nTabIndex )
@@ -311,7 +311,7 @@ void InformationDialog::InitDialog()
     setControlProperty( "OpenNewDocument", "State", Any( (sal_Int16)bOpenNewDocument ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 InformationDialog::InformationDialog( const Reference< XComponentContext > &rxContext, Reference< XFrame >& rxFrame, const OUString& rSaveAsURL, sal_Bool& rbOpenNewDocument, const sal_Int64& rSourceSize, const sal_Int64& rDestSize, const sal_Int64& rApproxSize ) :
     UnoDialog( rxContext, rxFrame ),
@@ -333,13 +333,13 @@ InformationDialog::InformationDialog( const Reference< XComponentContext > &rxCo
     InitDialog();
 }
 
-// -----------------------------------------------------------------------------
+
 
 InformationDialog::~InformationDialog()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool InformationDialog::execute()
 {
@@ -358,7 +358,7 @@ sal_Bool InformationDialog::execute()
     return mbStatus;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OKActionListener::actionPerformed( const ActionEvent& rEvent )
     throw ( com::sun::star::uno::RuntimeException )

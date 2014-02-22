@@ -169,7 +169,7 @@ bool PersistentMap::open()
     return readAll();
 }
 
-//______________________________________________________________________________
+
 bool PersistentMap::readAll()
 {
     // prepare for re-reading the map-file
@@ -293,7 +293,7 @@ void PersistentMap::add( OString const & key, OString const & value )
     m_bIsDirty = r.second;
 }
 
-//______________________________________________________________________________
+
 void PersistentMap::put( OString const & key, OString const & value )
 {
     add( key, value);

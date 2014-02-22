@@ -175,7 +175,7 @@ namespace comphelper
         }
     };
 
-    //------------------------------------------------------------------------------------------------------------------
+
     ::std::auto_ptr< IKeyPredicateLess > getStandardLessPredicate( Type const & i_type, Reference< XCollator > const & i_collator )
     {
 	SAL_WNODEPRECATED_DECLARATIONS_PUSH

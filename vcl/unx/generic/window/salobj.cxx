@@ -364,7 +364,7 @@ X11SalObject::GetClipRegionType()
     return maClipRegion.GetClipRegionType();
 }
 
-// -----------------------------------------------------------------------
+
 
 void
 X11SalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
@@ -410,7 +410,7 @@ void X11SalObject::GrabFocus()
                          CurrentTime );
 }
 
-// -----------------------------------------------------------------------
+
 
 const SystemEnvData* X11SalObject::GetSystemData() const
 {

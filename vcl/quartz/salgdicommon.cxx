@@ -1676,7 +1676,7 @@ void AquaSalGraphics::updateResolution()
 
 #endif
 
-// -----------------------------------------------------------
+
 
 XorEmulation::XorEmulation()
 :   m_xTargetLayer( NULL )

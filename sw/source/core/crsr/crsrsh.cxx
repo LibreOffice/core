@@ -113,9 +113,9 @@ void CheckRange( SwCursor* pCurCrsr )
     }
 }
 
-// -----------
+
 // SwCrsrShell
-// -----------
+
 
 SwPaM * SwCrsrShell::CreateCrsr()
 {

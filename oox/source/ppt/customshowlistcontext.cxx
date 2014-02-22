@@ -65,7 +65,7 @@ CustomShowContext::~CustomShowContext( )
     return this;
 }
 
-//---------------------------------------------------------------------------
+
 
 CustomShowListContext::CustomShowListContext( FragmentHandler2& rParent,
     std::vector< CustomShow >& rCustomShowList )

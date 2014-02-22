@@ -53,7 +53,7 @@ using namespace ::com::sun::star;
 
 namespace svt {
 
-// ----------------------------------------------------------------------
+
 LockFileCommon::LockFileCommon( const OUString& aOrigURL, const OUString& aPrefix )
 {
     INetURLObject aDocURL = ResolveLinks( INetURLObject( aOrigURL ) );
@@ -65,12 +65,12 @@ LockFileCommon::LockFileCommon( const OUString& aOrigURL, const OUString& aPrefi
     m_aURL = INetURLObject( aShareURLString ).GetMainURL( INetURLObject::NO_DECODE );
 }
 
-// ----------------------------------------------------------------------
+
 LockFileCommon::~LockFileCommon()
 {
 }
 
-// ----------------------------------------------------------------------
+
 INetURLObject LockFileCommon::ResolveLinks( const INetURLObject& aDocURL )
 {
     if ( aDocURL.HasError() )
@@ -94,7 +94,7 @@ INetURLObject LockFileCommon::ResolveLinks( const INetURLObject& aDocURL )
     return INetURLObject( aURLToCheck );
 }
 
-// ----------------------------------------------------------------------
+
 uno::Sequence< uno::Sequence< OUString > > LockFileCommon::ParseList( const uno::Sequence< sal_Int8 >& aBuffer )
 {
     sal_Int32 nCurPos = 0;
@@ -113,7 +113,7 @@ uno::Sequence< uno::Sequence< OUString > > LockFileCommon::ParseList( const uno:
     return aResult;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Sequence< OUString > LockFileCommon::ParseEntry( const uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& io_nCurPos )
 {
     uno::Sequence< OUString > aResult( LOCKFILE_ENTRYSIZE );
@@ -130,7 +130,7 @@ uno::Sequence< OUString > LockFileCommon::ParseEntry( const uno::Sequence< sal_I
     return aResult;
 }
 
-// ----------------------------------------------------------------------
+
 OUString LockFileCommon::ParseName( const uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& io_nCurPos )
 {
     OStringBuffer aResult;
@@ -168,7 +168,7 @@ OUString LockFileCommon::ParseName( const uno::Sequence< sal_Int8 >& aBuffer, sa
     return OStringToOUString( aResult.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
 }
 
-// ----------------------------------------------------------------------
+
 OUString LockFileCommon::EscapeCharacters( const OUString& aSource )
 {
     OUStringBuffer aBuffer;
@@ -183,7 +183,7 @@ OUString LockFileCommon::EscapeCharacters( const OUString& aSource )
     return aBuffer.makeStringAndClear();
 }
 
-// ----------------------------------------------------------------------
+
 OUString LockFileCommon::GetOOOUserName()
 {
     SvtUserOptions aUserOpt;
@@ -195,7 +195,7 @@ OUString LockFileCommon::GetOOOUserName()
     return aName;
 }
 
-// ----------------------------------------------------------------------
+
 OUString LockFileCommon::GetCurrentLocalTime()
 {
     OUString aTime;
@@ -219,7 +219,7 @@ OUString LockFileCommon::GetCurrentLocalTime()
     return aTime;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Sequence< OUString > LockFileCommon::GenerateOwnEntry()
 {
     uno::Sequence< OUString > aResult( LOCKFILE_ENTRYSIZE );

@@ -200,7 +200,7 @@ void SAL_CALL PDFIHybridAdaptor::setTargetDocument( const uno::Reference< lang::
         throw lang::IllegalArgumentException();
 }
 
-//---------------------------------------------------------------------------------------
+
 
 PDFIRawAdaptor::PDFIRawAdaptor( const uno::Reference< uno::XComponentContext >& xContext ) :
     PDFIAdaptorBase( m_aMutex ),

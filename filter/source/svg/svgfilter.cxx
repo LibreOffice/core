@@ -47,9 +47,9 @@
 
 using namespace ::com::sun::star;
 
-// -------------
+
 // - SVGFilter -
-// -------------
+
 
 SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mxContext( rxCtx ),
@@ -66,7 +66,7 @@ SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 SVGFilter::~SVGFilter()
 {
@@ -77,7 +77,7 @@ SVGFilter::~SVGFilter()
     DBG_ASSERT( mpObjects == NULL, "mpObjects not destroyed" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
@@ -242,13 +242,13 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL SVGFilter::cancel( ) throw (RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL SVGFilter::setSourceDocument( const Reference< XComponent >& xDoc )
     throw (IllegalArgumentException, RuntimeException)
@@ -256,7 +256,7 @@ void SAL_CALL SVGFilter::setSourceDocument( const Reference< XComponent >& xDoc 
     mxSrcDoc = xDoc;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL SVGFilter::setTargetDocument( const Reference< XComponent >& xDoc )
     throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
@@ -264,7 +264,7 @@ void SAL_CALL SVGFilter::setTargetDocument( const Reference< XComponent >& xDoc 
     mxDstDoc = xDoc;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString SAL_CALL SVGFilter::detect( Sequence< PropertyValue >& io_rDescriptor ) throw (RuntimeException)
 {
@@ -305,7 +305,7 @@ OUString SAL_CALL SVGFilter::detect( Sequence< PropertyValue >& io_rDescriptor )
     return OUString();
 }
 
-// -----------------------------------------------------------------------------
+
 
 #define SVG_FILTER_IMPL_NAME "com.sun.star.comp.Draw.SVGFilter"
 #define SVG_WRITER_IMPL_NAME "com.sun.star.comp.Draw.SVGWriter"

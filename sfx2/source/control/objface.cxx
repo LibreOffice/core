@@ -286,7 +286,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
 #endif
 }
 
-//--------------------------------------------------------------------
+
 
 SfxInterface::~SfxInterface()
 {
@@ -303,7 +303,7 @@ SfxInterface::~SfxInterface()
     }
 }
 
-//--------------------------------------------------------------------
+
 
 // searches for the specified func
 
@@ -341,7 +341,7 @@ const SfxSlot* SfxInterface::GetSlot( const OUString& rCommand ) const
     return pGenoType ? pGenoType->GetSlot( aCommand ) : NULL;
 }
 
-//--------------------------------------------------------------------
+
 
 const SfxSlot* SfxInterface::GetRealSlot( const SfxSlot *pSlot ) const
 {
@@ -361,7 +361,7 @@ const SfxSlot* SfxInterface::GetRealSlot( const SfxSlot *pSlot ) const
     return pSlot->pLinkedSlot;
 }
 
-//--------------------------------------------------------------------
+
 
 const SfxSlot* SfxInterface::GetRealSlot( sal_uInt16 nSlotId ) const
 {
@@ -382,7 +382,7 @@ const SfxSlot* SfxInterface::GetRealSlot( sal_uInt16 nSlotId ) const
     return pSlot->pLinkedSlot;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxInterface::RegisterPopupMenu( const ResId& rResId )
 {
@@ -391,7 +391,7 @@ void SfxInterface::RegisterPopupMenu( const ResId& rResId )
     pImpData->aPopupRes = rResId;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxInterface::RegisterObjectBar( sal_uInt16 nPos, const ResId& rResId,
         const OUString *pStr )
@@ -451,7 +451,7 @@ const ResId& SfxInterface::GetObjectBarResId( sal_uInt16 nNo ) const
     return pImpData->aObjectBars[nNo]->aResId;
 }
 
-//--------------------------------------------------------------------
+
 
 
 sal_uInt16 SfxInterface::GetObjectBarPos( sal_uInt16 nNo ) const
@@ -473,7 +473,7 @@ sal_uInt16 SfxInterface::GetObjectBarPos( sal_uInt16 nNo ) const
     return pImpData->aObjectBars[nNo]->nPos;
 }
 
-//--------------------------------------------------------------------
+
 
 
 sal_uInt16 SfxInterface::GetObjectBarCount() const
@@ -484,7 +484,7 @@ sal_uInt16 SfxInterface::GetObjectBarCount() const
         return pImpData->aObjectBars.size();
 }
 
-//--------------------------------------------------------------------
+
 void SfxInterface::RegisterChildWindow(sal_uInt16 nId, sal_Bool bContext, const OUString* pChildWinName)
 {
     RegisterChildWindow( nId, bContext, 0UL, pChildWinName );
@@ -542,7 +542,7 @@ sal_uInt32 SfxInterface::GetChildWindowFeature (sal_uInt16 nNo) const
     return pImpData->aChildWindows[nNo]->nFeature;
 }
 
-//--------------------------------------------------------------------
+
 
 
 sal_uInt16 SfxInterface::GetChildWindowCount() const

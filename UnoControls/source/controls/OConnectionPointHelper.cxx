@@ -21,9 +21,9 @@
 
 #include "OConnectionPointContainerHelper.hxx"
 
-//______________________________________________________________________________________________________________
+
 //  namespaces
-//______________________________________________________________________________________________________________
+
 
 using namespace ::rtl                   ;
 using namespace ::osl                   ;
@@ -33,9 +33,9 @@ using namespace ::com::sun::star::lang  ;
 
 namespace unocontrols{
 
-//______________________________________________________________________________________________________________
+
 //  construct/destruct
-//______________________________________________________________________________________________________________
+
 
 OConnectionPointHelper::OConnectionPointHelper(
     Mutex&                              aMutex                      ,
@@ -52,9 +52,9 @@ OConnectionPointHelper::~OConnectionPointHelper()
 {
 }
 
-//____________________________________________________________________________________________________________
+
 //  XInterface
-//____________________________________________________________________________________________________________
+
 
 Any SAL_CALL OConnectionPointHelper::queryInterface( const Type& aType ) throw( RuntimeException )
 {
@@ -77,9 +77,9 @@ Any SAL_CALL OConnectionPointHelper::queryInterface( const Type& aType ) throw( 
     return aReturn ;
 }
 
-//____________________________________________________________________________________________________________
+
 //  XInterface
-//____________________________________________________________________________________________________________
+
 
 void SAL_CALL OConnectionPointHelper::acquire() throw()
 {
@@ -90,9 +90,9 @@ void SAL_CALL OConnectionPointHelper::acquire() throw()
     OWeakObject::acquire();
 }
 
-//____________________________________________________________________________________________________________
+
 //  XInterface
-//____________________________________________________________________________________________________________
+
 
 void SAL_CALL OConnectionPointHelper::release() throw()
 {
@@ -103,9 +103,9 @@ void SAL_CALL OConnectionPointHelper::release() throw()
     OWeakObject::release();
 }
 
-//______________________________________________________________________________________________________________
+
 //  XConnectionPoint
-//______________________________________________________________________________________________________________
+
 
 Type SAL_CALL OConnectionPointHelper::getConnectionType() throw( RuntimeException )
 {
@@ -127,9 +127,9 @@ Type SAL_CALL OConnectionPointHelper::getConnectionType() throw( RuntimeExceptio
     return aReturnType;
 }
 
-//______________________________________________________________________________________________________________
+
 //  XConnectionPoint
-//______________________________________________________________________________________________________________
+
 
 Reference< XConnectionPointContainer > SAL_CALL OConnectionPointHelper::getConnectionPointContainer() throw( RuntimeException )
 {
@@ -139,9 +139,9 @@ Reference< XConnectionPointContainer > SAL_CALL OConnectionPointHelper::getConne
     return Reference< XConnectionPointContainer >( m_oContainerWeakReference.get(), UNO_QUERY );
 }
 
-//______________________________________________________________________________________________________________
+
 //  XConnectionPoint
-//______________________________________________________________________________________________________________
+
 
 void SAL_CALL OConnectionPointHelper::advise( const Reference< XInterface >& xListener ) throw( ListenerExistException      ,
                                                                                                 InvalidListenerException    ,
@@ -174,9 +174,9 @@ void SAL_CALL OConnectionPointHelper::advise( const Reference< XInterface >& xLi
     impl_UnlockContainer();
 }
 
-//______________________________________________________________________________________________________________
+
 //  XConnectionPoint
-//______________________________________________________________________________________________________________
+
 
 void SAL_CALL OConnectionPointHelper::unadvise( const Reference< XInterface >& xListener ) throw( RuntimeException )
 {
@@ -195,9 +195,9 @@ void SAL_CALL OConnectionPointHelper::unadvise( const Reference< XInterface >& x
     impl_UnlockContainer();
 }
 
-//______________________________________________________________________________________________________________
+
 //  XConnectionPoint
-//______________________________________________________________________________________________________________
+
 
 Sequence< Reference< XInterface > > SAL_CALL OConnectionPointHelper::getConnections() throw( RuntimeException )
 {
@@ -226,9 +226,9 @@ Sequence< Reference< XInterface > > SAL_CALL OConnectionPointHelper::getConnecti
     return seqReturnConnections;
 }
 
-//______________________________________________________________________________________________________________
+
 //  private method
-//______________________________________________________________________________________________________________
+
 
 bool OConnectionPointHelper::impl_LockContainer()
 {
@@ -239,9 +239,9 @@ bool OConnectionPointHelper::impl_LockContainer()
     return m_xLock.is();
 }
 
-//______________________________________________________________________________________________________________
+
 //  private method
-//______________________________________________________________________________________________________________
+
 
 void OConnectionPointHelper::impl_UnlockContainer()
 {

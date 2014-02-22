@@ -65,7 +65,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, SelectHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxMultiPathDialog, CheckHdl_Impl, svx::SvxRadioButtonListBox *, pBox )
 {
@@ -76,7 +76,7 @@ IMPL_LINK( SvxMultiPathDialog, CheckHdl_Impl, svx::SvxRadioButtonListBox *, pBox
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl)
 {
@@ -128,7 +128,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxMultiPathDialog, DelHdl_Impl)
 {
@@ -174,7 +174,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, DelHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxMultiPathDialog::SvxMultiPathDialog( Window* pParent, sal_Bool bEmptyAllowed ) :
 
@@ -214,7 +214,7 @@ SvxMultiPathDialog::SvxMultiPathDialog( Window* pParent, sal_Bool bEmptyAllowed 
     aDelBtn.SetAccessibleRelationMemberOf(&aPathLB);
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxMultiPathDialog::~SvxMultiPathDialog()
 {
@@ -230,7 +230,7 @@ SvxMultiPathDialog::~SvxMultiPathDialog()
     delete pImpl;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString SvxMultiPathDialog::GetPath() const
 {
@@ -268,7 +268,7 @@ OUString SvxMultiPathDialog::GetPath() const
     return sNewPath;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxMultiPathDialog::SetPath( const OUString& rPath )
 {
@@ -313,7 +313,7 @@ void SvxMultiPathDialog::SetPath( const OUString& rPath )
     SelectHdl_Impl( NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxMultiPathDialog::SetClassPathMode()
 {
@@ -322,14 +322,14 @@ void SvxMultiPathDialog::SetClassPathMode()
     aPathFL.SetText( CUI_RES( RID_SVXSTR_ARCHIVE_HEADLINE ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxMultiPathDialog::IsClassPathMode() const
 {
     return pImpl->bIsClassPathMode;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxMultiPathDialog::EnableRadioButtonMode()
 {

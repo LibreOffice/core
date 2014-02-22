@@ -69,13 +69,13 @@ SdPagesField::SdPagesField( Window* pParent,
     Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 SdPagesField::~SdPagesField()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdPagesField::UpdatePagesField( const SfxUInt16Item* pItem )
 {
@@ -92,7 +92,7 @@ void SdPagesField::UpdatePagesField( const SfxUInt16Item* pItem )
         SetText( OUString() );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdPagesField::Modify()
 {

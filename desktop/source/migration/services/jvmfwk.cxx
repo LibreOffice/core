@@ -196,7 +196,7 @@ public:
 
 
 
-    //----------------
+
     ~JavaMigration();
 
 private:
@@ -340,7 +340,7 @@ void SAL_CALL JavaMigration::startLayer()
     throw(css::lang::WrappedTargetException)
 {
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL JavaMigration::endLayer()
     throw(
@@ -348,7 +348,7 @@ void SAL_CALL JavaMigration::endLayer()
         WrappedTargetException )
 {
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL JavaMigration::overrideNode(
         const OUString&,
@@ -361,7 +361,7 @@ void SAL_CALL JavaMigration::overrideNode(
 {
 
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL JavaMigration::addOrReplaceNode(
         const OUString&,
@@ -378,7 +378,7 @@ void SAL_CALL  JavaMigration::endNode()
         WrappedTargetException )
 {
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL  JavaMigration::dropNode(
         const OUString& )
@@ -387,7 +387,7 @@ void SAL_CALL  JavaMigration::dropNode(
         WrappedTargetException )
 {
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL  JavaMigration::overrideProperty(
         const OUString& aName,
@@ -403,7 +403,7 @@ void SAL_CALL  JavaMigration::overrideProperty(
     else if ( aName == "UserClassPath" )
         m_aStack.push(TElementStack::value_type(aName, USER_CLASS_PATH));
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL  JavaMigration::setPropertyValue(
         const Any& aValue )
@@ -448,7 +448,7 @@ void SAL_CALL  JavaMigration::setPropertyValue(
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL JavaMigration::setPropertyValueForLocale(
         const Any&,
@@ -458,7 +458,7 @@ void SAL_CALL JavaMigration::setPropertyValueForLocale(
         WrappedTargetException )
 {
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL  JavaMigration::endProperty()
     throw(
@@ -468,7 +468,7 @@ void SAL_CALL  JavaMigration::endProperty()
             if (!m_aStack.empty())
                 m_aStack.pop();
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL  JavaMigration::addProperty(
         const OUString&,
@@ -479,7 +479,7 @@ void SAL_CALL  JavaMigration::addProperty(
         WrappedTargetException )
 {
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL  JavaMigration::addPropertyWithValue(
         const OUString&,
@@ -501,7 +501,7 @@ void SAL_CALL JavaMigration::addOrReplaceNodeFromTemplate(
 {
 }
 
-// -----------------------------------------------------------------------------
+
 //ToDo enable java, user class path
 
 } //end namespace jfw

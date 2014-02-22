@@ -89,7 +89,7 @@ ScTpUserLists::ScTpUserLists( Window*               pParent,
     Reset(rCoreAttrs);
 }
 
-// -----------------------------------------------------------------------
+
 
 ScTpUserLists::~ScTpUserLists()
 {
@@ -97,7 +97,7 @@ ScTpUserLists::~ScTpUserLists()
     delete pRangeUtil;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTpUserLists::Init()
 {
@@ -146,14 +146,14 @@ void ScTpUserLists::Init()
 
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* ScTpUserLists::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return ( new ScTpUserLists( pParent, rAttrSet ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTpUserLists::Reset( const SfxItemSet& rCoreAttrs )
 {
@@ -205,7 +205,7 @@ void ScTpUserLists::Reset( const SfxItemSet& rCoreAttrs )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool ScTpUserLists::FillItemSet( SfxItemSet& rCoreAttrs )
 {
@@ -246,7 +246,7 @@ sal_Bool ScTpUserLists::FillItemSet( SfxItemSet& rCoreAttrs )
     return bDataModified;
 }
 
-// -----------------------------------------------------------------------
+
 
 int ScTpUserLists::DeactivatePage( SfxItemSet* pSetP )
 {
@@ -256,7 +256,7 @@ int ScTpUserLists::DeactivatePage( SfxItemSet* pSetP )
     return LEAVE_PAGE;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ScTpUserLists::UpdateUserListBox()
 {
@@ -264,7 +264,7 @@ sal_uInt16 ScTpUserLists::UpdateUserListBox()
 
     if ( !pUserLists ) return 0;
 
-    //----------------------------------------------------------
+
 
     size_t nCount = pUserLists->size();
     OUString  aEntry;
@@ -279,13 +279,13 @@ sal_uInt16 ScTpUserLists::UpdateUserListBox()
     return nCount;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTpUserLists::UpdateEntries( size_t nList )
 {
     if ( !pUserLists ) return;
 
-    //----------------------------------------------------------
+
 
     if ( nList < pUserLists->size() )
     {
@@ -308,7 +308,7 @@ void ScTpUserLists::UpdateEntries( size_t nList )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTpUserLists::MakeListStr( OUString& rListStr )
 {
@@ -346,7 +346,7 @@ void ScTpUserLists::MakeListStr( OUString& rListStr )
 
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTpUserLists::AddNewList( const OUString& rEntriesStr )
 {
@@ -360,14 +360,14 @@ void ScTpUserLists::AddNewList( const OUString& rEntriesStr )
     pUserLists->push_back(new ScUserListData(theEntriesStr));
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
                                       const ScRefAddress& rEndPos )
 {
     if ( bCopyDone ) return;
 
-    //----------------------------------------------------------
+
 
     SCTAB   nTab            = rStartPos.Tab();
     SCCOL   nStartCol       = rStartPos.Col();
@@ -446,20 +446,20 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
         }
     }
 
-    //----------------------------------------------------------
+
 
     bCopyDone = true;
 
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTpUserLists::ModifyList( sal_uInt16          nSelList,
                                 const OUString&   rEntriesStr )
 {
     if ( !pUserLists ) return;
 
-    //----------------------------------------------------------
+
 
     OUString theEntriesStr( rEntriesStr );
 
@@ -468,7 +468,7 @@ void ScTpUserLists::ModifyList( sal_uInt16          nSelList,
     (*pUserLists)[nSelList]->SetString( theEntriesStr );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTpUserLists::RemoveList( size_t nList )
 {
@@ -480,9 +480,9 @@ void ScTpUserLists::RemoveList( size_t nList )
     }
 }
 
-//-----------------------------------------------------------------------
+
 // Handler:
-//---------
+
 
 IMPL_LINK( ScTpUserLists, LbSelectHdl, ListBox*, pLb )
 {
@@ -507,7 +507,7 @@ IMPL_LINK( ScTpUserLists, LbSelectHdl, ListBox*, pLb )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
 {
@@ -528,7 +528,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
             mpBtnAdd->Disable();
             mpBtnModify->Disable();
             mpBtnRemove->Disable();
-            //-----------------------------
+
             if ( mpBtnCopy->IsEnabled() )
             {
                 mpBtnCopy->Disable();
@@ -557,7 +557,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
             }
             mpBtnAdd->Disable();
             mpBtnModify->Disable();
-            //-----------------------------
+
             if ( pViewData && !bCopyDone )
             {
                 mpBtnCopy->Enable();
@@ -692,7 +692,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
         if ( bCopyDone )
             return 0;
 
-        //-----------------------------------------------------------
+
 
         ScRefAddress theStartPos;
         ScRefAddress theEndPos;
@@ -744,14 +744,14 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( ScTpUserLists, EdEntriesModHdl, VclMultiLineEdit*, pEd )
 {
     if ( pEd != mpEdEntries )
         return 0;
 
-    //-----------------------------------------------------------
+
 
     if ( mpBtnCopy->IsEnabled() )
     {

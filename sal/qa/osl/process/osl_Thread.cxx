@@ -24,9 +24,9 @@
 #include <time.h>
 #endif
 
-//------------------------------------------------------------------------
+
 // include files
-//------------------------------------------------------------------------
+
 #include <sal/types.h>
 
 #include <rtl/string.hxx>
@@ -50,7 +50,7 @@ using namespace osl;
 
 using ::rtl::OString;
 
-// -----------------------------------------------------------------------------
+
 // Small stopwatch
 class StopWatch {
     TimeValue t1,t2;                                // Start and stoptime
@@ -155,7 +155,7 @@ double StopWatch::getTenthSec() const
     return nValue ;
 }
 
-// -----------------------------------------------------------------------------
+
 template <class T>
 class ThreadSafeValue
 {
@@ -179,7 +179,7 @@ public:
     void release() {m_aMutex.release();}
 };
 
-// -----------------------------------------------------------------------------
+
 namespace ThreadHelper
 {
     void thread_sleep_tenth_sec(sal_Int32 _nTenthSec)
@@ -266,7 +266,7 @@ public:
 
 };
 
-// -----------------------------------------------------------------------------
+
 /** Thread which has a flag add 1 every second until 20
  */
 class OCountThread : public Thread
@@ -1867,7 +1867,7 @@ namespace osl_Thread
         CPPUNIT_TEST_SUITE_END();
     }; // class schedule
 
-// -----------------------------------------------------------------------------
+
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::create, "osl_Thread");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::createSuspended, "osl_Thread");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::suspend, "osl_Thread");
@@ -1885,7 +1885,7 @@ namespace osl_Thread
 } // namespace osl_Thread
 
 
-// -----------------------------------------------------------------------------
+
 // destroy function when the binding thread terminate
 void SAL_CALL destroyCallback(void * data)
 {
@@ -2185,7 +2185,7 @@ namespace osl_ThreadData
         CPPUNIT_TEST_SUITE_END();
     }; // class getData
 
-// -----------------------------------------------------------------------------
+
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_ThreadData::ctors);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_ThreadData::setData);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_ThreadData::getData);

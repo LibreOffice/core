@@ -110,7 +110,7 @@ ImplDockFloatWin2::ImplDockFloatWin2( Window* pParent, WinBits nWinBits,
     maEndDockTimer.SetTimeout( 50 );
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplDockFloatWin2::~ImplDockFloatWin2()
 {
@@ -118,7 +118,7 @@ ImplDockFloatWin2::~ImplDockFloatWin2()
         Application::RemoveUserEvent( mnLastUserEvent );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ImplDockFloatWin2, DockTimerHdl)
 {
@@ -240,7 +240,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl)
     mbInMove = false;
     return 0;
 }
-// -----------------------------------------------------------------------
+
 
 void ImplDockFloatWin2::Move()
 {
@@ -264,7 +264,7 @@ void ImplDockFloatWin2::Move()
         mnLastUserEvent = Application::PostUserEvent( LINK( this, ImplDockFloatWin2, DockingHdl ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockFloatWin2::Resize()
 {
@@ -284,7 +284,7 @@ void ImplDockFloatWin2::setPosSizePixel( long nX, long nY,
     FloatingWindow::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 }
 
-// -----------------------------------------------------------------------
+
 
 
 void ImplDockFloatWin2::TitleButtonClick( sal_uInt16 nButton )
@@ -293,7 +293,7 @@ void ImplDockFloatWin2::TitleButtonClick( sal_uInt16 nButton )
     mpDockWin->TitleButtonClick( nButton );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockFloatWin2::Pin()
 {
@@ -301,7 +301,7 @@ void ImplDockFloatWin2::Pin()
     mpDockWin->Pin();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockFloatWin2::Roll()
 {
@@ -309,7 +309,7 @@ void ImplDockFloatWin2::Roll()
     mpDockWin->Roll();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockFloatWin2::PopupModeEnd()
 {
@@ -317,7 +317,7 @@ void ImplDockFloatWin2::PopupModeEnd()
     mpDockWin->PopupModeEnd();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockFloatWin2::Resizing( Size& rSize )
 {
@@ -325,7 +325,7 @@ void ImplDockFloatWin2::Resizing( Size& rSize )
     mpDockWin->Resizing( rSize );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplDockFloatWin2::Close()
 {
@@ -437,7 +437,7 @@ bool DockingManager::IsInPopupMode( const Window *pWindow )
         return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingManager::EndPopupMode( const Window *pWin )
 {
@@ -446,7 +446,7 @@ void DockingManager::EndPopupMode( const Window *pWin )
         pWrapper->GetFloatingWindow()->EndPopupMode();
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingManager::AddWindow( const Window *pWindow )
 {
@@ -866,7 +866,7 @@ ImplDockingWindowWrapper::~ImplDockingWindowWrapper()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplDockingWindowWrapper::ImplStartDocking( const Point& rPos )
 {
@@ -943,7 +943,7 @@ void ImplDockingWindowWrapper::ImplInitData()
     maMaxOutSize        = Size( SHRT_MAX, SHRT_MAX );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
 {
@@ -1035,7 +1035,7 @@ void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockingWindowWrapper::StartDocking( const Point& rPoint, Rectangle& rRect )
 {
@@ -1045,7 +1045,7 @@ void ImplDockingWindowWrapper::StartDocking( const Point& rPoint, Rectangle& rRe
     mbDocking = true;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplDockingWindowWrapper::Docking( const Point& rPoint, Rectangle& rRect )
 {
@@ -1056,7 +1056,7 @@ bool ImplDockingWindowWrapper::Docking( const Point& rPoint, Rectangle& rRect )
     return data.mbFloating;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockingWindowWrapper::EndDocking( const Rectangle& rRect, bool bFloatMode )
 {
@@ -1097,7 +1097,7 @@ void ImplDockingWindowWrapper::EndDocking( const Rectangle& rRect, bool bFloatMo
     mbStartDockingEnabled = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplDockingWindowWrapper::PrepareToggleFloatingMode()
 {
@@ -1106,7 +1106,7 @@ bool ImplDockingWindowWrapper::PrepareToggleFloatingMode()
     return bFloating;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplDockingWindowWrapper::Close()
 {
@@ -1114,7 +1114,7 @@ bool ImplDockingWindowWrapper::Close()
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockingWindowWrapper::ToggleFloatingMode()
 {
@@ -1131,7 +1131,7 @@ void ImplDockingWindowWrapper::ToggleFloatingMode()
     mbStartDockingEnabled = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockingWindowWrapper::TitleButtonClick( sal_uInt16 nType )
 {
@@ -1149,28 +1149,28 @@ void ImplDockingWindowWrapper::TitleButtonClick( sal_uInt16 nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockingWindowWrapper::Pin()
 {
     // TODO: send event
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockingWindowWrapper::Roll()
 {
     // TODO: send event
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockingWindowWrapper::PopupModeEnd()
 {
     // TODO: send event
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockingWindowWrapper::Resizing( Size& rSize )
 {
@@ -1180,7 +1180,7 @@ void ImplDockingWindowWrapper::Resizing( Size& rSize )
         pDockingWindow->Resizing( rSize );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockingWindowWrapper::ShowTitleButton( sal_uInt16 nButton, bool bVisible )
 {
@@ -1195,7 +1195,7 @@ void ImplDockingWindowWrapper::ShowTitleButton( sal_uInt16 nButton, bool bVisibl
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, sal_uLong nFlags )
 {
@@ -1299,7 +1299,7 @@ bool ImplDockingWindowWrapper::IsInPopupMode() const
         return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
 {
@@ -1414,21 +1414,21 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockingWindowWrapper::SetFloatStyle( WinBits nStyle )
 {
     mnFloatBits = nStyle;
 }
 
-// -----------------------------------------------------------------------
+
 
 WinBits ImplDockingWindowWrapper::GetFloatStyle() const
 {
     return mnFloatBits;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDockingWindowWrapper::setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
@@ -1440,7 +1440,7 @@ void ImplDockingWindowWrapper::setPosSizePixel( long nX, long nY,
         GetWindow()->setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 }
 
-// -----------------------------------------------------------------------
+
 
 Point ImplDockingWindowWrapper::GetPosPixel() const
 {
@@ -1450,7 +1450,7 @@ Point ImplDockingWindowWrapper::GetPosPixel() const
         return mpDockingWindow->GetPosPixel();
 }
 
-// -----------------------------------------------------------------------
+
 
 Size ImplDockingWindowWrapper::GetSizePixel() const
 {
@@ -1460,9 +1460,9 @@ Size ImplDockingWindowWrapper::GetSizePixel() const
         return mpDockingWindow->GetSizePixel();
 }
 
-// -----------------------------------------------------------------------
+
 // old inlines from DockingWindow
-// -----------------------------------------------------------------------
+
 
 void ImplDockingWindowWrapper::SetMinOutputSizePixel( const Size& rSize )
 {

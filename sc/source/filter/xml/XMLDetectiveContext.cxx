@@ -20,7 +20,7 @@
 
 
 
-//___________________________________________________________________
+
 #include "XMLDetectiveContext.hxx"
 
 #include <sax/tools/converter.hxx>
@@ -37,7 +37,7 @@ using namespace ::com::sun::star;
 using namespace xmloff::token;
 
 
-//___________________________________________________________________
+
 
 ScMyImpDetectiveObj::ScMyImpDetectiveObj() :
     aSourceRange(),
@@ -46,7 +46,7 @@ ScMyImpDetectiveObj::ScMyImpDetectiveObj() :
 {
 }
 
-//___________________________________________________________________
+
 
 bool ScMyImpDetectiveOp::operator<(const ScMyImpDetectiveOp& rDetOp) const
 {
@@ -69,7 +69,7 @@ bool ScMyImpDetectiveOpArray::GetFirstOp( ScMyImpDetectiveOp& rDetOp )
 }
 
 
-//___________________________________________________________________
+
 
 ScXMLDetectiveContext::ScXMLDetectiveContext(
         ScXMLImport& rImport,
@@ -113,7 +113,7 @@ void ScXMLDetectiveContext::EndElement()
 }
 
 
-//___________________________________________________________________
+
 
 ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
         ScXMLImport& rImport,
@@ -194,7 +194,7 @@ void ScXMLDetectiveHighlightedContext::EndElement()
 }
 
 
-//___________________________________________________________________
+
 
 ScXMLDetectiveOperationContext::ScXMLDetectiveOperationContext(
         ScXMLImport& rImport,

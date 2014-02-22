@@ -36,13 +36,13 @@ SmartTag::SmartTag( ::sd::View& rView )
     mrView.getSmartTags().add( xThis );
 }
 
-// --------------------------------------------------------------------
+
 
 SmartTag::~SmartTag()
 {
 }
 
-// --------------------------------------------------------------------
+
 
 bool SmartTag::MouseButtonDown( const MouseEvent&, SmartHdl&  )
 {
@@ -67,34 +67,34 @@ bool SmartTag::Command( const CommandEvent& /*rCEvt*/ )
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 void SmartTag::addCustomHandles( SdrHdlList& /*rHandlerList*/ )
 {
 }
 
-// --------------------------------------------------------------------
+
 
 void SmartTag::select()
 {
     mbSelected = true;
 }
 
-// --------------------------------------------------------------------
+
 
 void SmartTag::deselect()
 {
     mbSelected = false;
 }
 
-// --------------------------------------------------------------------
+
 
 bool SmartTag::isSelected() const
 {
     return mbSelected;
 }
 
-// --------------------------------------------------------------------
+
 
 void SmartTag::disposing()
 {
@@ -102,42 +102,42 @@ void SmartTag::disposing()
     mrView.getSmartTags().remove( xThis );
 }
 
-// --------------------------------------------------------------------
+
 
 bool SmartTag::getContext( SdrViewContext& /*rContext*/ )
 {
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_uLong SmartTag::GetMarkablePointCount() const
 {
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_uLong SmartTag::GetMarkedPointCount() const
 {
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool SmartTag::MarkPoint(SdrHdl& /*rHdl*/, sal_Bool /*bUnmark*/ )
 {
     return sal_False;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool SmartTag::MarkPoints(const Rectangle* /*pRect*/, sal_Bool /*bUnmark*/ )
 {
     return sal_False;
 }
 
-// --------------------------------------------------------------------
+
 
 void SmartTag::CheckPossibilities()
 {
@@ -150,13 +150,13 @@ SmartTagSet::SmartTagSet( View& rView )
 {
 }
 
-// --------------------------------------------------------------------
+
 
 SmartTagSet::~SmartTagSet()
 {
 }
 
-// --------------------------------------------------------------------
+
 
 void SmartTagSet::add( const SmartTagReference& xTag )
 {
@@ -170,7 +170,7 @@ void SmartTagSet::add( const SmartTagReference& xTag )
         mxSelectedTag.clear();
 }
 
-// --------------------------------------------------------------------
+
 
 void SmartTagSet::remove( const SmartTagReference& xTag )
 {
@@ -186,7 +186,7 @@ void SmartTagSet::remove( const SmartTagReference& xTag )
         mxSelectedTag.clear();
 }
 
-// --------------------------------------------------------------------
+
 
 void SmartTagSet::Dispose()
 {
@@ -199,7 +199,7 @@ void SmartTagSet::Dispose()
     mxSelectedTag.clear();
 }
 
-// --------------------------------------------------------------------
+
 
 void SmartTagSet::select( const SmartTagReference& xTag )
 {
@@ -218,7 +218,7 @@ void SmartTagSet::select( const SmartTagReference& xTag )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SmartTagSet::deselect()
 {
@@ -231,7 +231,7 @@ void SmartTagSet::deselect()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 bool SmartTagSet::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -257,7 +257,7 @@ bool SmartTagSet::MouseButtonDown( const MouseEvent& rMEvt )
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 bool SmartTagSet::KeyInput( const KeyEvent& rKEvt )
 {
@@ -279,7 +279,7 @@ bool SmartTagSet::KeyInput( const KeyEvent& rKEvt )
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 bool SmartTagSet::RequestHelp( const HelpEvent& rHEvt )
 {
@@ -300,7 +300,7 @@ bool SmartTagSet::RequestHelp( const HelpEvent& rHEvt )
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 /** returns true if the SmartTag consumes this event. */
 bool SmartTagSet::Command( const CommandEvent& rCEvt )
@@ -331,7 +331,7 @@ bool SmartTagSet::Command( const CommandEvent& rCEvt )
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 void SmartTagSet::addCustomHandles( SdrHdlList& rHandlerList )
 {
@@ -342,7 +342,7 @@ void SmartTagSet::addCustomHandles( SdrHdlList& rHandlerList )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 /** returns true if the currently selected smart tag has
     a special context, returned in rContext. */
@@ -354,16 +354,16 @@ bool SmartTagSet::getContext( SdrViewContext& rContext ) const
         return false;
 }
 
-// --------------------------------------------------------------------
+
 // support point editing
-// --------------------------------------------------------------------
+
 
 sal_Bool SmartTagSet::HasMarkablePoints() const
 {
     return GetMarkablePointCount() != 0 ? sal_True : sal_False;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_uLong SmartTagSet::GetMarkablePointCount() const
 {
@@ -372,14 +372,14 @@ sal_uLong SmartTagSet::GetMarkablePointCount() const
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool SmartTagSet::HasMarkedPoints() const
 {
     return GetMarkedPointCount() != 0 ? sal_True : sal_False;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_uLong SmartTagSet::GetMarkedPointCount() const
 {
@@ -389,7 +389,7 @@ sal_uLong SmartTagSet::GetMarkedPointCount() const
         return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool SmartTagSet::IsPointMarkable(const SdrHdl& rHdl) const
 {
@@ -398,7 +398,7 @@ sal_Bool SmartTagSet::IsPointMarkable(const SdrHdl& rHdl) const
     return pSmartHdl && pSmartHdl->isMarkable();
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool SmartTagSet::MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark )
 {
@@ -408,7 +408,7 @@ sal_Bool SmartTagSet::MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark )
     return sal_False;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool SmartTagSet::MarkPoints(const Rectangle* pRect, sal_Bool bUnmark)
 {
@@ -417,7 +417,7 @@ sal_Bool SmartTagSet::MarkPoints(const Rectangle* pRect, sal_Bool bUnmark)
     return sal_False;
 }
 
-// --------------------------------------------------------------------
+
 
 void SmartTagSet::CheckPossibilities()
 {
@@ -434,7 +434,7 @@ SmartHdl::SmartHdl( const SmartTagReference& xTag, SdrObject* pObject, const Poi
     SetObj( pObject );
 }
 
-// --------------------------------------------------------------------
+
 
 SmartHdl::SmartHdl( const SmartTagReference& xTag, const Point& rPnt, SdrHdlKind eNewKind /*=HDL_MOVE*/ )
 : SdrHdl( rPnt, eNewKind )
@@ -442,7 +442,7 @@ SmartHdl::SmartHdl( const SmartTagReference& xTag, const Point& rPnt, SdrHdlKind
 {
 }
 
-// --------------------------------------------------------------------
+
 
 bool SmartHdl::isMarkable() const
 {

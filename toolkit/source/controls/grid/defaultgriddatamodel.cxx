@@ -121,7 +121,7 @@ private:
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     DefaultGridDataModel::DefaultGridDataModel( DefaultGridDataModel const & i_copySource )
         :cppu::BaseMutex()
         ,DefaultGridDataModel_Base( m_aMutex )
@@ -131,12 +131,12 @@ private:
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     DefaultGridDataModel::~DefaultGridDataModel()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void DefaultGridDataModel::broadcast( GridDataEvent const & i_event,
         void ( SAL_CALL XGridDataListener::*i_listenerMethod )( GridDataEvent const & ), ::comphelper::ComponentGuard & i_instanceLock )
     {
@@ -148,21 +148,21 @@ private:
         pListeners->notifyEach( i_listenerMethod, i_event );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     ::sal_Int32 SAL_CALL DefaultGridDataModel::getRowCount() throw (::com::sun::star::uno::RuntimeException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return impl_getRowCount_nolck();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     ::sal_Int32 SAL_CALL DefaultGridDataModel::getColumnCount() throw (::com::sun::star::uno::RuntimeException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return m_nColumnCount;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     DefaultGridDataModel::CellData const & DefaultGridDataModel::impl_getCellData_throw( sal_Int32 const i_column, sal_Int32 const i_row ) const
     {
         if  (   ( i_row < 0 ) || ( size_t( i_row ) > m_aData.size() )
@@ -178,7 +178,7 @@ private:
         return s_aEmpty;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     DefaultGridDataModel::RowData& DefaultGridDataModel::impl_getRowDataAccess_throw( sal_Int32 const i_rowIndex, size_t const i_requiredColumnCount )
     {
         OSL_ENSURE( i_requiredColumnCount <= size_t( m_nColumnCount ), "DefaultGridDataModel::impl_getRowDataAccess_throw: invalid column count!" );
@@ -191,7 +191,7 @@ private:
         return rRowData;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     DefaultGridDataModel::CellData& DefaultGridDataModel::impl_getCellDataAccess_throw( sal_Int32 const i_columnIndex, sal_Int32 const i_rowIndex )
     {
         if  ( ( i_columnIndex < 0 ) || ( i_columnIndex >= m_nColumnCount ) )
@@ -201,21 +201,21 @@ private:
         return rRowData[ i_columnIndex ];
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Any SAL_CALL DefaultGridDataModel::getCellData( ::sal_Int32 i_column, ::sal_Int32 i_row ) throw (RuntimeException, IndexOutOfBoundsException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return impl_getCellData_throw( i_column, i_row ).first;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Any SAL_CALL DefaultGridDataModel::getCellToolTip( ::sal_Int32 i_column, ::sal_Int32 i_row ) throw (RuntimeException, IndexOutOfBoundsException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return impl_getCellData_throw( i_column, i_row ).second;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Any SAL_CALL DefaultGridDataModel::getRowHeading( ::sal_Int32 i_row ) throw (RuntimeException, IndexOutOfBoundsException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
@@ -226,7 +226,7 @@ private:
         return m_aRowHeaders[ i_row ];
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Sequence< Any > SAL_CALL DefaultGridDataModel::getRowData( ::sal_Int32 i_rowIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
@@ -239,7 +239,7 @@ private:
         return resultData;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void DefaultGridDataModel::impl_insertRow( sal_Int32 const i_position, Any const & i_heading, Sequence< Any > const & i_rowData, sal_Int32 const i_assumedColCount )
     {
         OSL_PRECOND( ( i_assumedColCount <= 0 ) || ( i_assumedColCount >= i_rowData.getLength() ),
@@ -258,19 +258,19 @@ private:
         m_aData.insert( m_aData.begin() + i_position, newRow );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL DefaultGridDataModel::addRow( const Any& i_heading, const Sequence< Any >& i_data ) throw (RuntimeException)
     {
         insertRow( getRowCount(), i_heading, i_data );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL DefaultGridDataModel::addRows( const Sequence< Any >& i_headings, const Sequence< Sequence< Any > >& i_data ) throw (IllegalArgumentException, RuntimeException)
     {
         insertRows( getRowCount(), i_headings, i_data );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL DefaultGridDataModel::insertRow( ::sal_Int32 i_index, const Any& i_heading, const Sequence< Any >& i_data ) throw (RuntimeException, IndexOutOfBoundsException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
@@ -293,7 +293,7 @@ private:
         );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL DefaultGridDataModel::insertRows( ::sal_Int32 i_index, const Sequence< Any>& i_headings, const Sequence< Sequence< Any > >& i_data ) throw (IllegalArgumentException, IndexOutOfBoundsException, RuntimeException)
     {
         if ( i_headings.getLength() != i_data.getLength() )
@@ -332,7 +332,7 @@ private:
         );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL DefaultGridDataModel::removeRow( ::sal_Int32 i_rowIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
@@ -350,7 +350,7 @@ private:
         );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL DefaultGridDataModel::removeAllRows(  ) throw (RuntimeException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
@@ -365,7 +365,7 @@ private:
         );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL DefaultGridDataModel::updateCellData( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex, const Any& i_value ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
@@ -379,7 +379,7 @@ private:
         );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL DefaultGridDataModel::updateRowData( const Sequence< ::sal_Int32 >& i_columnIndexes, ::sal_Int32 i_rowIndex, const Sequence< Any >& i_values ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
@@ -419,7 +419,7 @@ private:
         );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL DefaultGridDataModel::updateRowHeading( ::sal_Int32 i_rowIndex, const Any& i_heading ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
@@ -436,14 +436,14 @@ private:
         );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL DefaultGridDataModel::updateCellToolTip( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex, const Any& i_value ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         impl_getCellDataAccess_throw( i_columnIndex, i_rowIndex ).second = i_value;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL DefaultGridDataModel::updateRowToolTip( ::sal_Int32 i_rowIndex, const Any& i_value ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
@@ -453,19 +453,19 @@ private:
             cell->second = i_value;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL DefaultGridDataModel::addGridDataListener( const Reference< grid::XGridDataListener >& i_listener ) throw (RuntimeException)
     {
         rBHelper.addListener( cppu::UnoType<XGridDataListener>::get(), i_listener );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL DefaultGridDataModel::removeGridDataListener( const Reference< grid::XGridDataListener >& i_listener ) throw (RuntimeException)
     {
         rBHelper.removeListener( cppu::UnoType<XGridDataListener>::get(), i_listener );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL DefaultGridDataModel::disposing()
     {
         ::com::sun::star::lang::EventObject aEvent;
@@ -482,7 +482,7 @@ private:
         m_nColumnCount = 0;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     OUString SAL_CALL DefaultGridDataModel::getImplementationName(  ) throw (RuntimeException)
     {
         return OUString("stardiv.Toolkit.DefaultGridDataModel");
@@ -500,7 +500,7 @@ private:
         return aSeq;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< css::util::XCloneable > SAL_CALL DefaultGridDataModel::createClone(  ) throw (RuntimeException)
     {
         return new DefaultGridDataModel( *this );

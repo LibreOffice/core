@@ -137,7 +137,7 @@ SvxGradientTabPage::SvxGradientTabPage
     setPreviewsToSamePlace(pParent, this);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxGradientTabPage::Construct()
 {
@@ -147,7 +147,7 @@ void SvxGradientTabPage::Construct()
     m_pLbGradients->Fill( pGradientList );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
 {
@@ -224,7 +224,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 int SvxGradientTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
@@ -237,7 +237,7 @@ int SvxGradientTabPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-// -----------------------------------------------------------------------
+
 
 long SvxGradientTabPage::CheckChanges_Impl()
 {
@@ -304,7 +304,7 @@ long SvxGradientTabPage::CheckChanges_Impl()
     return 0L;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxGradientTabPage::FillItemSet( SfxItemSet& rSet )
 {
@@ -343,7 +343,7 @@ sal_Bool SvxGradientTabPage::FillItemSet( SfxItemSet& rSet )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxGradientTabPage::Reset( const SfxItemSet& )
 {
@@ -365,7 +365,7 @@ void SvxGradientTabPage::Reset( const SfxItemSet& )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SvxGradientTabPage::Create( Window* pWindow,
                 const SfxItemSet& rOutAttrs )
@@ -373,7 +373,7 @@ SfxTabPage* SvxGradientTabPage::Create( Window* pWindow,
     return new SvxGradientTabPage( pWindow, rOutAttrs );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( SvxGradientTabPage, ModifiedHdl_Impl, void *, pControl )
 {
@@ -402,7 +402,7 @@ IMPL_LINK( SvxGradientTabPage, ModifiedHdl_Impl, void *, pControl )
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
 {
@@ -505,7 +505,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
 {
@@ -575,7 +575,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl)
 {
@@ -608,7 +608,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl)
     return 0L;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
 {
@@ -703,7 +703,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
     return 0L;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickSaveHdl_Impl)
 {
@@ -764,7 +764,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickSaveHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
 {
@@ -839,7 +839,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxGradientTabPage::SetControlState_Impl( XGradientStyle eXGS )
 {

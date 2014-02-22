@@ -2392,14 +2392,14 @@ void X11SalFrame::SetTitle( const OUString& rTitle )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void X11SalFrame::Flush()
 {
     XFlush( GetDisplay()->GetDisplay() );
 }
 
-// -----------------------------------------------------------------------
+
 
 void X11SalFrame::Sync()
 {
@@ -2445,7 +2445,7 @@ void X11SalFrame::SetInputContext( SalInputContext* pContext )
       return;
 }
 
-// -----------------------------------------------------------------------
+
 
 void X11SalFrame::EndExtTextInput( sal_uInt16 nFlags )
 {
@@ -2453,7 +2453,7 @@ void X11SalFrame::EndExtTextInput( sal_uInt16 nFlags )
           mpInputContext->EndExtTextInput( nFlags );
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString X11SalFrame::GetKeyName( sal_uInt16 nKeyCode )
 {

@@ -102,7 +102,7 @@
 #include <limits>
 
 #define GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
-//------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_FormComponentPropertyHandler()
 {
     ::pcr::FormComponentPropertyHandler::registerImplementation();
@@ -137,7 +137,7 @@ namespace pcr
     //====================================================================
     DBG_NAME( FormComponentPropertyHandler )
 #define PROPERTY_ID_ROWSET 1
-    //--------------------------------------------------------------------
+
     FormComponentPropertyHandler::FormComponentPropertyHandler( const Reference< XComponentContext >& _rxContext )
         :FormComponentPropertyHandler_Base( _rxContext )
         ,::comphelper::OPropertyContainer(FormComponentPropertyHandler_Base::rBHelper)
@@ -152,20 +152,20 @@ namespace pcr
         registerProperty(PROPERTY_ROWSET,PROPERTY_ID_ROWSET,0,&m_xRowSet,::getCppuType(&m_xRowSet));
     }
 
-    //--------------------------------------------------------------------
+
     FormComponentPropertyHandler::~FormComponentPropertyHandler()
     {
         DBG_DTOR( FormComponentPropertyHandler, NULL );
     }
-    //--------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XINTERFACE2(FormComponentPropertyHandler,FormComponentPropertyHandler_Base,::comphelper::OPropertyContainer)
-    //--------------------------------------------------------------------
+
     OUString SAL_CALL FormComponentPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
         return OUString(  "com.sun.star.comp.extensions.FormComponentPropertyHandler"  );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL FormComponentPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSupported( 1 );
@@ -242,7 +242,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     Any FormComponentPropertyHandler::impl_getPropertyValue_throw( const OUString& _rPropertyName ) const
     {
         const PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
@@ -303,7 +303,7 @@ namespace pcr
         return aPropertyValue;
     }
 
-    //--------------------------------------------------------------------
+
     Any SAL_CALL FormComponentPropertyHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         if( _rPropertyName == PROPERTY_ROWSET )
@@ -313,7 +313,7 @@ namespace pcr
         return impl_getPropertyValue_throw( _rPropertyName );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FormComponentPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
         if( _rPropertyName == PROPERTY_ROWSET )
@@ -490,7 +490,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     Any SAL_CALL FormComponentPropertyHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -625,7 +625,7 @@ namespace pcr
         return aPropertyValue;
     }
 
-    //--------------------------------------------------------------------
+
     Any SAL_CALL FormComponentPropertyHandler::convertToControlValue( const OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -806,7 +806,7 @@ namespace pcr
         return aControlValue;
     }
 
-    //--------------------------------------------------------------------
+
     PropertyState SAL_CALL FormComponentPropertyHandler::getPropertyState( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -815,7 +815,7 @@ namespace pcr
         return PropertyState_DIRECT_VALUE;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FormComponentPropertyHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -824,7 +824,7 @@ namespace pcr
             m_xComponent->addPropertyChangeListener( OUString(), _rxListener );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FormComponentPropertyHandler::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -833,7 +833,7 @@ namespace pcr
         FormComponentPropertyHandler_Base::removePropertyChangeListener( _rxListener );
     }
 
-    //--------------------------------------------------------------------
+
     void FormComponentPropertyHandler::onNewComponent()
     {
         FormComponentPropertyHandler_Base::onNewComponent();
@@ -848,7 +848,7 @@ namespace pcr
         impl_initComponentMetaData_throw();
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< Property > SAL_CALL FormComponentPropertyHandler::doDescribeSupportedProperties() const
     {
         if ( !m_xComponentPropertyInfo.is() )
@@ -925,13 +925,13 @@ namespace pcr
         return Sequence< Property >( &(*aProperties.begin()), aProperties.size() );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL FormComponentPropertyHandler::getSupersededProperties( ) throw (RuntimeException)
     {
         return Sequence< OUString >( );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL FormComponentPropertyHandler::getActuatingProperties( ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -961,7 +961,7 @@ namespace pcr
         return Sequence< OUString >( &(*aInterestingProperties.begin()), aInterestingProperties.size() );
     }
 
-    //--------------------------------------------------------------------
+
     LineDescriptor SAL_CALL FormComponentPropertyHandler::describePropertyLine( const OUString& _rPropertyName,
         const Reference< XPropertyControlFactory >& _rxControlFactory )
         throw (UnknownPropertyException, NullPointerException, RuntimeException)
@@ -1413,7 +1413,7 @@ namespace pcr
         return aDescriptor;
     }
 
-    //--------------------------------------------------------------------
+
     InteractiveSelectionResult SAL_CALL FormComponentPropertyHandler::onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool /*_bPrimary*/, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )
@@ -1504,7 +1504,7 @@ namespace pcr
         return eResult;
     }
 
-    //--------------------------------------------------------------------
+
     namespace
     {
         void lcl_rebuildAndResetCommand( const Reference< XObjectInspectorUI >& _rxInspectorUI, const Reference< XPropertyHandler >& _rxHandler )
@@ -1516,7 +1516,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FormComponentPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )
@@ -1800,7 +1800,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     void FormComponentPropertyHandler::impl_updateDependentProperty_nothrow( PropertyId _nPropId, const Reference< XObjectInspectorUI >& _rxInspectorUI ) const
     {
         try
@@ -2006,7 +2006,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     void SAL_CALL FormComponentPropertyHandler::disposing()
     {
         FormComponentPropertyHandler_Base::disposing();
@@ -2014,7 +2014,7 @@ namespace pcr
             m_xCommandDesigner->dispose();
     }
 
-    //------------------------------------------------------------------------
+
     sal_Bool SAL_CALL FormComponentPropertyHandler::suspend( sal_Bool _bSuspend ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -2024,7 +2024,7 @@ namespace pcr
         return sal_True;
     }
 
-    //------------------------------------------------------------------------
+
     void FormComponentPropertyHandler::impl_initComponentMetaData_throw()
     {
         try
@@ -2078,7 +2078,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     void FormComponentPropertyHandler::impl_classifyControlModel_throw( )
     {
         if ( impl_componentHasProperty_throw( PROPERTY_CLASSID ) )
@@ -2162,7 +2162,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     void FormComponentPropertyHandler::impl_normalizePropertyValue_nothrow( Any& _rValue, PropertyId _nPropId ) const
     {
         switch ( _nPropId )
@@ -2196,7 +2196,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     bool FormComponentPropertyHandler::impl_shouldExcludeProperty_nothrow( const Property& _rProperty ) const
     {
         OSL_ENSURE( _rProperty.Handle == m_pInfoService->getPropertyId( _rProperty.Name ),
@@ -2289,7 +2289,7 @@ namespace pcr
         return false;
     }
 
-    //------------------------------------------------------------------------
+
     Reference< XRowSet > FormComponentPropertyHandler::impl_getRowSet_throw( ) const
     {
         Reference< XRowSet > xRowSet = m_xRowSet;
@@ -2317,7 +2317,7 @@ namespace pcr
         return xRowSet;
     }
 
-    //------------------------------------------------------------------------
+
     Reference< XRowSet > FormComponentPropertyHandler::impl_getRowSet_nothrow( ) const
     {
         Reference< XRowSet > xReturn;
@@ -2333,7 +2333,7 @@ namespace pcr
         return xReturn;
     }
 
-    //------------------------------------------------------------------------
+
     void FormComponentPropertyHandler::impl_initFieldList_nothrow( ::std::vector< OUString >& _rFieldNames ) const
     {
         clearContainer( _rFieldNames );
@@ -2372,19 +2372,19 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     void FormComponentPropertyHandler::impl_clearRowsetConnection_nothrow()
     {
         m_xRowSetConnection.clear();
     }
 
-    //------------------------------------------------------------------------
+
     void FormComponentPropertyHandler::impl_displaySQLError_nothrow( const ::dbtools::SQLExceptionInfo& _rErrorDescriptor ) const
     {
         ::dbtools::showError( _rErrorDescriptor, VCLUnoHelper::GetInterface( impl_getDefaultDialogParent_nothrow() ), m_xContext );
     }
 
-    //------------------------------------------------------------------------
+
     bool FormComponentPropertyHandler::impl_ensureRowsetConnection_nothrow() const
     {
         if ( !m_xRowSetConnection.is() )
@@ -2441,7 +2441,7 @@ namespace pcr
         return m_xRowSetConnection.is();
     }
 
-    //------------------------------------------------------------------------
+
     void FormComponentPropertyHandler::impl_describeCursorSource_nothrow( LineDescriptor& _out_rProperty, const Reference< XPropertyControlFactory >& _rxControlFactory ) const
     {
         try
@@ -2488,7 +2488,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     void FormComponentPropertyHandler::impl_fillTableNames_throw( ::std::vector< OUString >& _out_rNames ) const
     {
         OSL_PRECOND( m_xRowSetConnection.is(), "FormComponentPropertyHandler::impl_fillTableNames_throw: need a connection!" );
@@ -2510,7 +2510,7 @@ namespace pcr
             _out_rNames.push_back( *pTableNames );
     }
 
-    //------------------------------------------------------------------------
+
     void FormComponentPropertyHandler::impl_fillQueryNames_throw( ::std::vector< OUString >& _out_rNames ) const
     {
         OSL_PRECOND( m_xRowSetConnection.is(), "FormComponentPropertyHandler::impl_fillQueryNames_throw: need a connection!" );
@@ -2524,7 +2524,7 @@ namespace pcr
             impl_fillQueryNames_throw(xQueryNames,_out_rNames);
         }
     }
-    //------------------------------------------------------------------------
+
     void FormComponentPropertyHandler::impl_fillQueryNames_throw( const Reference< XNameAccess >& _xQueryNames,::std::vector< OUString >& _out_rNames,const OUString& _sName ) const
     {
         DBG_ASSERT( _xQueryNames.is(), "FormComponentPropertyHandler::impl_fillQueryNames_throw: no way to obtain the queries of the connection!" );
@@ -2553,7 +2553,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     void FormComponentPropertyHandler::impl_describeListSourceUI_throw( LineDescriptor& _out_rDescriptor, const Reference< XPropertyControlFactory >& _rxControlFactory ) const
     {
         OSL_PRECOND( m_xComponent.is(), "FormComponentPropertyHandler::impl_describeListSourceUI_throw: no component!" );
@@ -2599,7 +2599,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     bool FormComponentPropertyHandler::impl_dialogListSelection_nothrow( const OUString& _rProperty, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
         OSL_PRECOND( m_pInfoService.get(), "FormComponentPropertyHandler::impl_dialogListSelection_nothrow: no property meta data!" );
@@ -2610,7 +2610,7 @@ namespace pcr
         return ( RET_OK == aDialog.Execute() );
     }
 
-    //------------------------------------------------------------------------
+
     bool FormComponentPropertyHandler::impl_dialogFilterOrSort_nothrow( bool _bFilter, OUString& _out_rSelectedClause, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
         OSL_PRECOND( Reference< XRowSet >( m_xComponent, UNO_QUERY ).is(),
@@ -2671,7 +2671,7 @@ namespace pcr
         return bSuccess;
     }
 
-    //------------------------------------------------------------------------
+
     bool FormComponentPropertyHandler::impl_dialogLinkedFormFields_nothrow( ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
         Reference< XForm > xDetailForm( m_xComponent, UNO_QUERY );
@@ -2687,7 +2687,7 @@ namespace pcr
         return ( RET_OK == aDialog.Execute() );
     }
 
-    //------------------------------------------------------------------------
+
     bool FormComponentPropertyHandler::impl_dialogFormatting_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
         bool bChanged = false;
@@ -2762,7 +2762,7 @@ namespace pcr
         return bChanged;
     }
 
-    //------------------------------------------------------------------------
+
     bool FormComponentPropertyHandler::impl_browseForImage_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
         OUString aStrTrans = m_pInfoService->getPropertyTranslation( PROPERTY_ID_IMAGE_URL );
@@ -2805,7 +2805,7 @@ namespace pcr
         return bSuccess;
     }
 
-    //------------------------------------------------------------------------
+
     bool FormComponentPropertyHandler::impl_browseForTargetURL_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
         ::sfx2::FileDialogHelper aFileDlg(
@@ -2826,7 +2826,7 @@ namespace pcr
         return bSuccess;
     }
 
-    //------------------------------------------------------------------------
+
     bool FormComponentPropertyHandler::impl_executeFontDialog_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
         bool bSuccess = false;
@@ -2859,7 +2859,7 @@ namespace pcr
         return bSuccess;
     }
 
-    //------------------------------------------------------------------------
+
     bool FormComponentPropertyHandler::impl_browseForDatabaseDocument_throw( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
         ::sfx2::FileDialogHelper aFileDlg(
@@ -2889,7 +2889,7 @@ namespace pcr
         return bSuccess;
     }
 
-    //------------------------------------------------------------------------
+
     bool FormComponentPropertyHandler::impl_dialogColorChooser_throw( sal_Int32 _nColorPropertyId, Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
         sal_Int32 nColor = 0;
@@ -2908,7 +2908,7 @@ namespace pcr
         return true;
     }
 
-    //------------------------------------------------------------------------
+
     bool FormComponentPropertyHandler::impl_dialogChooseLabelControl_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
         OSelectLabelDialog dlgSelectLabel( impl_getDefaultDialogParent_nothrow(), m_xComponent );
@@ -2919,7 +2919,7 @@ namespace pcr
         return bSuccess;
     }
 
-    //------------------------------------------------------------------------
+
     Reference< XControlContainer > FormComponentPropertyHandler::impl_getContextControlContainer_nothrow() const
     {
         Reference< XControlContainer > xControlContext;
@@ -2928,7 +2928,7 @@ namespace pcr
         return xControlContext;
     }
 
-    //------------------------------------------------------------------------
+
     bool FormComponentPropertyHandler::impl_dialogChangeTabOrder_nothrow( ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
         OSL_PRECOND( impl_getContextControlContainer_nothrow().is(), "FormComponentPropertyHandler::impl_dialogChangeTabOrder_nothrow: invalid control context!" );
@@ -2944,12 +2944,12 @@ namespace pcr
         return ( RET_OK == aDialog.Execute() );
     }
 
-    //------------------------------------------------------------------------
+
     namespace
     {
-        //--------------------------------------------------------------------
+
         //- ISQLCommandPropertyUI
-        //--------------------------------------------------------------------
+
         class ISQLCommandPropertyUI : public ISQLCommandAdapter
         {
         public:
@@ -2960,9 +2960,9 @@ namespace pcr
             virtual OUString*    getPropertiesToDisable() = 0;
         };
 
-        //--------------------------------------------------------------------
+
         //- SQLCommandPropertyUI
-        //--------------------------------------------------------------------
+
         class SQLCommandPropertyUI : public ISQLCommandPropertyUI
         {
         protected:
@@ -2996,9 +2996,9 @@ namespace pcr
             oslInterlockedCount         m_refCount;
         };
 
-        //--------------------------------------------------------------------
+
         //- FormSQLCommandUI - declaration
-        //--------------------------------------------------------------------
+
         class FormSQLCommandUI : public SQLCommandPropertyUI
         {
         public:
@@ -3014,9 +3014,9 @@ namespace pcr
             virtual OUString*    getPropertiesToDisable();
         };
 
-        //--------------------------------------------------------------------
+
         //- FormSQLCommandUI - implementation
-        //--------------------------------------------------------------------
+
         //....................................................................
         FormSQLCommandUI::FormSQLCommandUI( const Reference< XPropertySet >& _rxForm )
             :SQLCommandPropertyUI( _rxForm )
@@ -3063,9 +3063,9 @@ namespace pcr
             };
             return s_aCommandProps;
         }
-        //--------------------------------------------------------------------
+
         //- ValueListCommandUI - declaration
-        //--------------------------------------------------------------------
+
         class ValueListCommandUI : public SQLCommandPropertyUI
         {
         public:
@@ -3083,9 +3083,9 @@ namespace pcr
             mutable bool    m_bPropertyValueIsList;
         };
 
-        //--------------------------------------------------------------------
+
         //- ValueListCommandUI - implementation
-        //--------------------------------------------------------------------
+
         //....................................................................
         ValueListCommandUI::ValueListCommandUI( const Reference< XPropertySet >& _rxListOrCombo )
             :SQLCommandPropertyUI( _rxListOrCombo )
@@ -3157,7 +3157,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     bool FormComponentPropertyHandler::impl_doDesignSQLCommand_nothrow( const Reference< XObjectInspectorUI >& _rxInspectorUI, PropertyId _nDesignForProperty )
     {
         try
@@ -3217,7 +3217,7 @@ namespace pcr
         return m_xCommandDesigner.is();
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK( FormComponentPropertyHandler, OnDesignerClosed, void*, /*NOTINTERESTEDIN*/ )
     {
         OSL_ENSURE( m_xBrowserUI.is() && m_xCommandDesigner.is(), "FormComponentPropertyHandler::OnDesignerClosed: too many NULLs!" );
@@ -3245,7 +3245,7 @@ namespace pcr
         return 0L;
     }
 
-    //------------------------------------------------------------------------
+
     bool FormComponentPropertyHandler::impl_hasValidDataSourceSignature_nothrow( const Reference< XPropertySet >& _xFormProperties, bool _bAllowEmptyDataSourceName ) SAL_THROW(())
     {
         bool bHas = false;
@@ -3275,7 +3275,7 @@ namespace pcr
         }
         return bHas;
     }
-    //------------------------------------------------------------------------
+
     OUString FormComponentPropertyHandler::impl_getDocumentURL_nothrow() const
     {
         OUString sURL;
@@ -3291,7 +3291,7 @@ namespace pcr
         }
         return sURL;
     }
-    // -------------------------------------------------------------------------
+
     ::cppu::IPropertyArrayHelper* FormComponentPropertyHandler::createArrayHelper( ) const
     {
         uno::Sequence< beans::Property > aProps;
@@ -3299,12 +3299,12 @@ namespace pcr
         return new ::cppu::OPropertyArrayHelper(aProps);
 
     }
-    // -------------------------------------------------------------------------
+
     ::cppu::IPropertyArrayHelper & FormComponentPropertyHandler::getInfoHelper()
     {
         return *const_cast<FormComponentPropertyHandler*>(this)->getArrayHelper();
     }
-    // -----------------------------------------------------------------------------
+
     uno::Reference< beans::XPropertySetInfo > SAL_CALL FormComponentPropertyHandler::getPropertySetInfo(  ) throw(uno::RuntimeException)
     {
         return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());

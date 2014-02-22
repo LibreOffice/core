@@ -101,7 +101,7 @@ void ButtonFrame::Draw( OutputDevice& rDev )
     rDev.SetFillColor( aOldFillColor );
 }
 
-//-------------------------------------------------------------------
+
 
 BrowserColumn::BrowserColumn( sal_uInt16 nItemId, const class Image &rImage,
                               const OUString& rTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom )
@@ -121,7 +121,7 @@ BrowserColumn::~BrowserColumn()
 {
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserColumn::SetWidth(sal_uLong nNewWidthPixel, const Fraction& rCurrentZoom)
 {
@@ -132,7 +132,7 @@ void BrowserColumn::SetWidth(sal_uLong nNewWidthPixel, const Fraction& rCurrentZ
     _nOriginalWidth = n>0 ? (long)(n+0.5) : -(long)(-n+0.5);
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserColumn::Draw( BrowseBox& rBox, OutputDevice& rDev, const Point& rPos, sal_Bool bCurs  )
 {
@@ -172,7 +172,7 @@ void BrowserColumn::Draw( BrowseBox& rBox, OutputDevice& rDev, const Point& rPos
     }
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserColumn::ZoomChanged(const Fraction& rNewZoom)
 {
@@ -183,7 +183,7 @@ void BrowserColumn::ZoomChanged(const Fraction& rNewZoom)
     _nWidth = n>0 ? (long)(n+0.5) : -(long)(-n+0.5);
 }
 
-//-------------------------------------------------------------------
+
 
 BrowserDataWin::BrowserDataWin( BrowseBox* pParent )
     :Control( pParent, WinBits(WB_CLIPCHILDREN) )
@@ -217,7 +217,7 @@ BrowserDataWin::BrowserDataWin( BrowseBox* pParent )
     aMouseTimer.SetTimeout( 100 );
 }
 
-//-------------------------------------------------------------------
+
 BrowserDataWin::~BrowserDataWin()
 {
     if( pDtorNotify )
@@ -228,7 +228,7 @@ BrowserDataWin::~BrowserDataWin()
     aInvalidRegion.clear();
 }
 
-//-------------------------------------------------------------------
+
 void BrowserDataWin::LeaveUpdateLock()
 {
     if ( !--nUpdateLock )
@@ -242,7 +242,7 @@ void BrowserDataWin::LeaveUpdateLock()
     }
 }
 
-//-------------------------------------------------------------------
+
 void InitSettings_Impl( Window *pWin,
                      sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
 {
@@ -274,7 +274,7 @@ void InitSettings_Impl( Window *pWin,
     }
 }
 
-//-------------------------------------------------------------------
+
 void BrowserDataWin::Update()
 {
     if ( !nUpdateLock )
@@ -283,7 +283,7 @@ void BrowserDataWin::Update()
         bUpdateOnUnlock = true;
 }
 
-//-------------------------------------------------------------------
+
 void BrowserDataWin::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -302,7 +302,7 @@ void BrowserDataWin::DataChanged( const DataChangedEvent& rDCEvt )
         Control::DataChanged( rDCEvt );
 }
 
-//-------------------------------------------------------------------
+
 void BrowserDataWin::Paint( const Rectangle& rRect )
 {
     if ( !nUpdateLock && GetUpdateMode() )
@@ -321,7 +321,7 @@ void BrowserDataWin::Paint( const Rectangle& rRect )
         aInvalidRegion.push_back( new Rectangle( rRect ) );
 }
 
-//-------------------------------------------------------------------
+
 
 BrowseEvent BrowserDataWin::CreateBrowseEvent( const Point& rPosPixel )
 {
@@ -365,7 +365,7 @@ BrowseEvent BrowserDataWin::CreateBrowseEvent( const Point& rPosPixel )
     return BrowseEvent( this, nRow, nCol, nColId, aFieldRect );
 }
 
-//-------------------------------------------------------------------
+
 sal_Int8 BrowserDataWin::AcceptDrop( const AcceptDropEvent& _rEvt )
 {
     bCallingDropCallback = true;
@@ -374,7 +374,7 @@ sal_Int8 BrowserDataWin::AcceptDrop( const AcceptDropEvent& _rEvt )
     return nReturn;
 }
 
-//-------------------------------------------------------------------
+
 sal_Int8 BrowserDataWin::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 {
     bCallingDropCallback = true;
@@ -383,7 +383,7 @@ sal_Int8 BrowserDataWin::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     return nReturn;
 }
 
-//-------------------------------------------------------------------
+
 void BrowserDataWin::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 {
     if ( !GetParent()->bRowDividerDrag )
@@ -394,7 +394,7 @@ void BrowserDataWin::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
     }
 }
 
-//-------------------------------------------------------------------
+
 void BrowserDataWin::Command( const CommandEvent& rEvt )
 {
     // scroll mouse event?
@@ -442,7 +442,7 @@ void BrowserDataWin::Command( const CommandEvent& rEvt )
     Control::Command( rEvt );
 }
 
-//-------------------------------------------------------------------
+
 
 sal_Bool BrowserDataWin::ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent )
 {
@@ -458,7 +458,7 @@ sal_Bool BrowserDataWin::ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent
     return ( nDividerDistance <= 4 );
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserDataWin::MouseButtonDown( const MouseEvent& rEvt )
 {
@@ -474,7 +474,7 @@ void BrowserDataWin::MouseButtonDown( const MouseEvent& rEvt )
     GetParent()->MouseButtonDown( BrowserMouseEvent( this, rEvt ) );
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserDataWin::MouseMove( const MouseEvent& rEvt )
 {
@@ -509,7 +509,7 @@ void BrowserDataWin::MouseMove( const MouseEvent& rEvt )
             aMouseTimer.Stop();
 }
 
-//-------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(BrowserDataWin, RepeatedMouseMove)
 {
@@ -518,7 +518,7 @@ IMPL_LINK_NOARG_INLINE_START(BrowserDataWin, RepeatedMouseMove)
 }
 IMPL_LINK_NOARG_INLINE_END(BrowserDataWin, RepeatedMouseMove)
 
-//-------------------------------------------------------------------
+
 
 void BrowserDataWin::MouseButtonUp( const MouseEvent& rEvt )
 {
@@ -536,7 +536,7 @@ void BrowserDataWin::MouseButtonUp( const MouseEvent& rEvt )
     GetParent()->MouseButtonUp( BrowserMouseEvent( this, rEvt ) );
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserDataWin::StartRowDividerDrag( const Point& _rStartPos )
 {
@@ -561,7 +561,7 @@ void BrowserDataWin::StartRowDividerDrag( const Point& _rStartPos )
     StartTracking();
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserDataWin::Tracking( const TrackingEvent& rTEvt )
 {
@@ -606,7 +606,7 @@ void BrowserDataWin::Tracking( const TrackingEvent& rTEvt )
     }
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserDataWin::KeyInput( const KeyEvent& rEvt )
 {
@@ -615,7 +615,7 @@ void BrowserDataWin::KeyInput( const KeyEvent& rEvt )
         Control::KeyInput( rEvt );
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserDataWin::RequestHelp( const HelpEvent& rHEvt )
 {
@@ -645,7 +645,7 @@ BrowserMouseEvent::BrowserMouseEvent( BrowserDataWin *pWindow,
 {
 }
 
-//-------------------------------------------------------------------
+
 
 BrowserMouseEvent::BrowserMouseEvent( Window *pWindow, const MouseEvent& rEvt,
                           long nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
@@ -673,7 +673,7 @@ BrowserExecuteDropEvent::BrowserExecuteDropEvent( BrowserDataWin *pWindow, const
 
 //===================================================================
 
-//-------------------------------------------------------------------
+
 
 void BrowserDataWin::SetUpdateMode( sal_Bool bMode )
 {
@@ -686,7 +686,7 @@ void BrowserDataWin::SetUpdateMode( sal_Bool bMode )
         DoOutstandingInvalidations();
 }
 
-//-------------------------------------------------------------------
+
 void BrowserDataWin::DoOutstandingInvalidations()
 {
     for ( size_t i = 0, n = aInvalidRegion.size(); i < n; ++i ) {
@@ -696,7 +696,7 @@ void BrowserDataWin::DoOutstandingInvalidations()
     aInvalidRegion.clear();
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserDataWin::Invalidate( sal_uInt16 nFlags )
 {
@@ -711,7 +711,7 @@ void BrowserDataWin::Invalidate( sal_uInt16 nFlags )
         Window::Invalidate( nFlags );
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserDataWin::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
 {
@@ -746,7 +746,7 @@ void BrowserScrollBar::Tracking( const TrackingEvent& rTEvt )
     ScrollBar::Tracking( rTEvt );
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowserScrollBar::EndScroll()
 {

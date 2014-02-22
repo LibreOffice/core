@@ -161,7 +161,7 @@ ExtensionRemoveGuard::~ExtensionRemoveGuard()
 
 namespace dp_manager {
 
-//------------------------------------------------------------------------------
+
 
 //ToDo: bundled extension
 ExtensionManager::ExtensionManager( Reference< uno::XComponentContext > const& xContext) :
@@ -176,7 +176,7 @@ ExtensionManager::ExtensionManager( Reference< uno::XComponentContext > const& x
     m_repositoryNames.push_back("bundled");
 }
 
-//------------------------------------------------------------------------------
+
 
 ExtensionManager::~ExtensionManager()
 {
@@ -1452,7 +1452,7 @@ sal_Bool ExtensionManager::isReadOnlyRepository(OUString const & repository)
 {
     return getPackageManager(repository)->isReadOnly();
 }
-//------------------------------------------------------------------------------
+
 
 namespace sdecl = comphelper::service_decl;
 sdecl::class_<ExtensionManager> servicePIP;
@@ -1463,7 +1463,7 @@ extern sdecl::ServiceDecl const serviceDecl(
     "com.sun.star.comp.deployment.ExtensionManager");
 
 // XModifyBroadcaster
-//______________________________________________________________________________
+
 void ExtensionManager::addModifyListener(
     Reference<util::XModifyListener> const & xListener )
     throw (uno::RuntimeException)
@@ -1472,7 +1472,7 @@ void ExtensionManager::addModifyListener(
      rBHelper.addListener( ::getCppuType( &xListener ), xListener );
 }
 
-//______________________________________________________________________________
+
 void ExtensionManager::removeModifyListener(
     Reference<util::XModifyListener> const & xListener )
     throw (uno::RuntimeException)

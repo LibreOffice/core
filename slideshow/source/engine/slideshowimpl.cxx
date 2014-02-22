@@ -327,7 +327,7 @@ private:
         throw (uno::RuntimeException);
 
     // CursorManager
-    // -----------------------------------------------------------
+
 
     virtual bool requestCursor( sal_Int16 nCursorShape );
     virtual void resetCursor();

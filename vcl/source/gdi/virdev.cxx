@@ -122,7 +122,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     pSVData->maGDIData.mpFirstVirDev = this;
 }
 
-// -----------------------------------------------------------------------
+
 
 VirtualDevice::VirtualDevice( sal_uInt16 nBitCount )
 :   mpVirDev( NULL ),
@@ -135,7 +135,7 @@ VirtualDevice::VirtualDevice( sal_uInt16 nBitCount )
     ImplInitVirDev( Application::GetDefaultDevice(), 1, 1, nBitCount );
 }
 
-// -----------------------------------------------------------------------
+
 
 VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount )
     : mpVirDev( NULL ),
@@ -148,7 +148,7 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount
     ImplInitVirDev( &rCompDev, 1, 1, nBitCount );
 }
 
-// -----------------------------------------------------------------------
+
 
 VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount, sal_uInt16 nAlphaBitCount )
     : mpVirDev( NULL ),
@@ -165,7 +165,7 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount
     mnAlphaDepth = sal::static_int_cast<sal_Int8>(nAlphaBitCount);
 }
 
-// -----------------------------------------------------------------------
+
 
 VirtualDevice::VirtualDevice( const SystemGraphicsData *pData, sal_uInt16 nBitCount )
 :   mpVirDev( NULL ),
@@ -176,7 +176,7 @@ VirtualDevice::VirtualDevice( const SystemGraphicsData *pData, sal_uInt16 nBitCo
     ImplInitVirDev( Application::GetDefaultDevice(), 1, 1, nBitCount, pData );
 }
 
-// -----------------------------------------------------------------------
+
 
 VirtualDevice::~VirtualDevice()
 {
@@ -201,7 +201,7 @@ VirtualDevice::~VirtualDevice()
         pSVData->maGDIData.mpLastVirDev = mpPrev;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase, const basebmp::RawMemorySharedArray &pBuffer )
 {
@@ -303,7 +303,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 // #i32109#: Fill opaque areas correctly (without relying on
 // fill/linecolor state)
@@ -319,7 +319,7 @@ void VirtualDevice::ImplFillOpaqueRectangle( const Rectangle& rRect )
     Pop();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase, const basebmp::RawMemorySharedArray &pBuffer )
 {
@@ -373,7 +373,7 @@ bool VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer( const Size& rNewSize
     return ImplSetOutputSizePixel( rNewSize, true, pBuffer);
 }
 
-// -----------------------------------------------------------------------
+
 
 void VirtualDevice::SetReferenceDevice( RefDevMode i_eRefDevMode )
 {
@@ -455,13 +455,13 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
     mpFontCache = new ImplFontCache();
 }
 
-// -----------------------------------------------------------------------
+
 
 void VirtualDevice::Compat_ZeroExtleadBug()
 {
     meRefDevMode = (sal_uInt8)meRefDevMode | REFDEV_FORCE_ZERO_EXTLEAD;
 }
 
-// -----------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

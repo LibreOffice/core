@@ -141,7 +141,7 @@ const SfxSlot* SfxSlotPool::GetSlot( sal_uInt16 nId )
     return _pParentPool ? _pParentPool->GetSlot( nId ) : 0;
 }
 
-//--------------------------------------------------------------------
+
 
 // skips to the next group
 
@@ -186,7 +186,7 @@ OUString SfxSlotPool::SeekGroup( sal_uInt16 nNo )
 }
 
 
-//--------------------------------------------------------------------
+
 
 sal_uInt16 SfxSlotPool::GetGroupCount()
 {
@@ -194,7 +194,7 @@ sal_uInt16 SfxSlotPool::GetGroupCount()
 }
 
 
-//--------------------------------------------------------------------
+
 
 // internal search loop
 
@@ -240,7 +240,7 @@ const SfxSlot* SfxSlotPool::SeekSlot( sal_uInt16 nStartInterface )
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 // skips to the next func in the current group
 
 const SfxSlot* SfxSlotPool::NextSlot()
@@ -285,9 +285,9 @@ const SfxSlot* SfxSlotPool::NextSlot()
 }
 
 
-//--------------------------------------------------------------------
+
 // Query SlotName with help text
-//--------------------------------------------------------------------
+
 
 SfxInterface* SfxSlotPool::FirstInterface()
 {
@@ -298,7 +298,7 @@ SfxInterface* SfxSlotPool::FirstInterface()
 }
 
 
-//--------------------------------------------------------------------
+
 
 const SfxSlot* SfxSlotPool::GetUnoSlot( const OUString& rName )
 {

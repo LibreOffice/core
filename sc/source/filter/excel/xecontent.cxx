@@ -77,7 +77,7 @@ struct XclExpHashEntrySWO
                             { return *rLeft.mpString < *rRight.mpString; }
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Implementation of the SST export.
     @descr  Stores all passed strings in a hash table and prevents repeated
@@ -105,7 +105,7 @@ private:
     sal_uInt32          mnSize;         /// Size of the SST (count of unique strings).
 };
 
-// ----------------------------------------------------------------------------
+
 
 const sal_uInt32 EXC_SST_HASHTABLE_SIZE = 2048;
 
@@ -229,7 +229,7 @@ void XclExpSstImpl::SaveXml( XclExpXmlStream& rStrm )
     rStrm.PopStream();
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpSst::XclExpSst() :
     mxImpl( new XclExpSstImpl )
@@ -602,7 +602,7 @@ private:
     bool                mbPattUsed;         /// true = Pattern attribute used.
 };
 
-// ----------------------------------------------------------------------------
+
 
 XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry, sal_Int32 nPriority ) :
     XclExpRoot( rRoot ),
@@ -960,7 +960,7 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_cfRule );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpCF::XclExpCF( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry, sal_Int32 nPriority = 0 ) :
     XclExpRecord( EXC_ID_CF ),
@@ -1131,7 +1131,7 @@ void XclExpColScaleCol::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_color );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat& rCondFormat, XclExtLstRef xExtLst, sal_Int32& rIndex ) :
     XclExpRecord( EXC_ID_CONDFMT ),
@@ -1204,7 +1204,7 @@ void XclExpCondfmt::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_conditionalFormatting );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpColorScale::XclExpColorScale( const XclExpRoot& rRoot, const ScColorScaleFormat& rFormat, sal_Int32 nPriority ):
     XclExpRecord(),
@@ -1389,7 +1389,7 @@ void XclExpIconSet::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_cfRule );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot, XclExtLstRef xExtLst ) :
     XclExpRoot( rRoot )
@@ -1474,7 +1474,7 @@ const char* lcl_GetOperatorType( sal_uInt32 nFlags )
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
     XclExpRecord( EXC_ID_DV ),
@@ -1693,7 +1693,7 @@ void XclExpDV::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_dataValidation );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpDval::XclExpDval( const XclExpRoot& rRoot ) :
     XclExpRecord( EXC_ID_DVAL, 18 ),
@@ -1904,7 +1904,7 @@ void XclExpWebQuery::Save( XclExpStream& rStrm )
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
 {

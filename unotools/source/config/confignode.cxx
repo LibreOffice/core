@@ -52,7 +52,7 @@ namespace utl
     //========================================================================
     //= OConfigurationNode
     //========================================================================
-    //------------------------------------------------------------------------
+
     OConfigurationNode::OConfigurationNode(const Reference< XInterface >& _rxNode )
         :m_bEscapeNames(false)
     {
@@ -83,7 +83,7 @@ namespace utl
             setEscape(isSetNode());
     }
 
-    //------------------------------------------------------------------------
+
     OConfigurationNode::OConfigurationNode(const OConfigurationNode& _rSource)
         :OEventListenerAdapter()
         ,m_xHierarchyAccess(_rSource.m_xHierarchyAccess)
@@ -98,7 +98,7 @@ namespace utl
             startComponentListening(xConfigNodeComp);
     }
 
-    //------------------------------------------------------------------------
+
     const OConfigurationNode& OConfigurationNode::operator=(const OConfigurationNode& _rSource)
     {
         stopAllComponentListening();
@@ -117,7 +117,7 @@ namespace utl
         return *this;
     }
 
-    //------------------------------------------------------------------------
+
     void OConfigurationNode::_disposing( const EventObject& _rSource )
     {
         Reference< XComponent > xDisposingSource(_rSource.Source, UNO_QUERY);
@@ -126,7 +126,7 @@ namespace utl
             clear();
     }
 
-    //------------------------------------------------------------------------
+
     OUString OConfigurationNode::getLocalName() const
     {
         OUString sLocalName;
@@ -142,7 +142,7 @@ namespace utl
         return sLocalName;
     }
 
-    //------------------------------------------------------------------------
+
     OUString OConfigurationNode::getNodePath() const
     {
         OUString sNodePath;
@@ -158,7 +158,7 @@ namespace utl
         return sNodePath;
     }
 
-    //------------------------------------------------------------------------
+
     OUString OConfigurationNode::normalizeName(const OUString& _rName, NAMEORIGIN _eOrigin) const
     {
         OUString sName(_rName);
@@ -183,7 +183,7 @@ namespace utl
         return sName;
     }
 
-    //------------------------------------------------------------------------
+
     Sequence< OUString > OConfigurationNode::getNodeNames() const throw()
     {
         OSL_ENSURE(m_xDirectAccess.is(), "OConfigurationNode::getNodeNames: object is invalid!");
@@ -207,7 +207,7 @@ namespace utl
         return aReturn;
     }
 
-    //------------------------------------------------------------------------
+
     bool OConfigurationNode::removeNode(const OUString& _rName) const throw()
     {
         OSL_ENSURE(m_xContainerAccess.is(), "OConfigurationNode::removeNode: object is invalid!");
@@ -240,7 +240,7 @@ namespace utl
         }
         return false;
     }
-    //------------------------------------------------------------------------
+
     OConfigurationNode OConfigurationNode::insertNode(const OUString& _rName,const Reference< XInterface >& _xNode) const throw()
     {
         if(_xNode.is())
@@ -265,7 +265,7 @@ namespace utl
 
         return OConfigurationNode();
     }
-    //------------------------------------------------------------------------
+
     OConfigurationNode OConfigurationNode::createNode(const OUString& _rName) const throw()
     {
         Reference< XSingleServiceFactory > xChildFactory(m_xContainerAccess, UNO_QUERY);
@@ -288,7 +288,7 @@ namespace utl
         return OConfigurationNode();
     }
 
-    //------------------------------------------------------------------------
+
     OConfigurationNode OConfigurationNode::openNode(const OUString& _rPath) const throw()
     {
         OSL_ENSURE(m_xDirectAccess.is(), "OConfigurationNode::openNode: object is invalid!");
@@ -328,13 +328,13 @@ namespace utl
         return OConfigurationNode();
     }
 
-    //------------------------------------------------------------------------
+
     void OConfigurationNode::setEscape(bool _bEnable)
     {
         m_bEscapeNames = _bEnable && Reference< XStringEscape >::query(m_xDirectAccess).is();
     }
 
-    //------------------------------------------------------------------------
+
     bool OConfigurationNode::isSetNode() const
     {
         bool bIsSet = false;
@@ -364,7 +364,7 @@ namespace utl
         return false;
     }
 
-    //------------------------------------------------------------------------
+
     bool OConfigurationNode::hasByName(const OUString& _rName) const throw()
     {
         OSL_ENSURE(m_xDirectAccess.is(), "OConfigurationNode::hasByName: object is invalid!");
@@ -380,7 +380,7 @@ namespace utl
         return false;
     }
 
-    //------------------------------------------------------------------------
+
     bool OConfigurationNode::setNodeValue(const OUString& _rPath, const Any& _rValue) const throw()
     {
         bool bResult = false;
@@ -441,7 +441,7 @@ namespace utl
         return bResult;
     }
 
-    //------------------------------------------------------------------------
+
     Any OConfigurationNode::getNodeValue(const OUString& _rPath) const throw()
     {
         OSL_ENSURE(m_xDirectAccess.is(), "OConfigurationNode::hasByName: object is invalid!");
@@ -466,7 +466,7 @@ namespace utl
         return aReturn;
     }
 
-    //------------------------------------------------------------------------
+
     void OConfigurationNode::clear() throw()
     {
         m_xHierarchyAccess.clear();
@@ -480,7 +480,7 @@ namespace utl
     //========================================================================
     namespace
     {
-        //--------------------------------------------------------------------
+
         Reference< XMultiServiceFactory > lcl_getConfigProvider( const Reference<XComponentContext> & i_rContext )
         {
             try
@@ -495,7 +495,7 @@ namespace utl
             return NULL;
         }
 
-        //--------------------------------------------------------------------
+
         Reference< XInterface > lcl_createConfigurationRoot( const Reference< XMultiServiceFactory >& i_rxConfigProvider,
             const OUString& i_rNodePath, const bool i_bUpdatable, const sal_Int32 i_nDepth, const bool i_bLazyWrite )
         {
@@ -525,14 +525,14 @@ namespace utl
         }
     }
 
-    //------------------------------------------------------------------------
+
     OConfigurationTreeRoot::OConfigurationTreeRoot( const Reference< XInterface >& _rxRootNode )
         :OConfigurationNode( _rxRootNode )
         ,m_xCommitter( _rxRootNode, UNO_QUERY )
     {
     }
 
-    //------------------------------------------------------------------------
+
     OConfigurationTreeRoot::OConfigurationTreeRoot( const Reference<XComponentContext> & i_rContext, const OUString& i_rNodePath, const bool i_bUpdatable )
         :OConfigurationNode( lcl_createConfigurationRoot( lcl_getConfigProvider( i_rContext ),
             i_rNodePath, i_bUpdatable, -1, false ).get() )
@@ -545,14 +545,14 @@ namespace utl
         }
     }
 
-    //------------------------------------------------------------------------
+
     void OConfigurationTreeRoot::clear() throw()
     {
         OConfigurationNode::clear();
         m_xCommitter.clear();
     }
 
-    //------------------------------------------------------------------------
+
     bool OConfigurationTreeRoot::commit() const throw()
     {
         OSL_ENSURE(isValid(), "OConfigurationTreeRoot::commit: object is invalid!");
@@ -574,7 +574,7 @@ namespace utl
         return false;
     }
 
-    //------------------------------------------------------------------------
+
     OConfigurationTreeRoot OConfigurationTreeRoot::createWithProvider(const Reference< XMultiServiceFactory >& _rxConfProvider, const OUString& _rPath, sal_Int32 _nDepth, CREATION_MODE _eMode, bool _bLazyWrite)
     {
         Reference< XInterface > xRoot( lcl_createConfigurationRoot(
@@ -584,13 +584,13 @@ namespace utl
         return OConfigurationTreeRoot();
     }
 
-    //------------------------------------------------------------------------
+
     OConfigurationTreeRoot OConfigurationTreeRoot::createWithComponentContext( const Reference< XComponentContext >& _rxContext, const OUString& _rPath, sal_Int32 _nDepth, CREATION_MODE _eMode, bool _bLazyWrite )
     {
         return createWithProvider( lcl_getConfigProvider( _rxContext ), _rPath, _nDepth, _eMode, _bLazyWrite );
     }
 
-    //------------------------------------------------------------------------
+
     OConfigurationTreeRoot OConfigurationTreeRoot::tryCreateWithComponentContext( const Reference< XComponentContext >& rxContext,
         const OUString& _rPath, sal_Int32 _nDepth , CREATION_MODE _eMode , bool _bLazyWrite )
     {

@@ -123,16 +123,16 @@ class SvxRubyData_Impl : public cppu::WeakImplHelper1
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (RuntimeException);
 
 };
-//-----------------------------------------------------------------------------
+
 SvxRubyData_Impl::SvxRubyData_Impl() :
     bHasSelectionChanged(false)
 {
 }
-//-----------------------------------------------------------------------------
+
 SvxRubyData_Impl::~SvxRubyData_Impl()
 {
 }
-//-----------------------------------------------------------------------------
+
 void    SvxRubyData_Impl::SetController(Reference<XController> xCtrl)
 {
     if(xCtrl.get() != xController.get())
@@ -154,12 +154,12 @@ void    SvxRubyData_Impl::SetController(Reference<XController> xCtrl)
         }
     }
 }
-//-----------------------------------------------------------------------------
+
 void SvxRubyData_Impl::selectionChanged( const EventObject& ) throw (RuntimeException)
 {
     bHasSelectionChanged = true;
 }
-//-----------------------------------------------------------------------------
+
 void SvxRubyData_Impl::disposing( const EventObject&) throw (RuntimeException)
 {
     try
@@ -173,7 +173,7 @@ void SvxRubyData_Impl::disposing( const EventObject&) throw (RuntimeException)
     }
     xController = 0;
 }
-//-----------------------------------------------------------------------------
+
 void  SvxRubyData_Impl::AssertOneEntry()
 {
     //create one entry
@@ -400,7 +400,7 @@ void SvxRubyDialog::SetRubyText(sal_Int32 nPos, Edit& rLeft, Edit& rRight)
     rLeft.SaveValue();
     rRight.SaveValue();
 }
-//-----------------------------------------------------------------------------
+
 void SvxRubyDialog::GetRubyText()
 {
     long nTempLastPos = GetLastPos();
@@ -425,7 +425,7 @@ void SvxRubyDialog::GetRubyText()
         }
     }
 }
-//-----------------------------------------------------------------------------
+
 void SvxRubyDialog::Update()
 {
     const Sequence<PropertyValues>& aRubyValues = pImpl->GetRubyValues();
@@ -715,7 +715,7 @@ void SvxRubyDialog::AssertOneEntry()
     pImpl->AssertOneEntry();
 }
 
-// ----------------------------------------------------------------------------
+
 
 void SvxRubyDialog::UpdateColors( void )
 {
@@ -737,7 +737,7 @@ void SvxRubyDialog::UpdateColors( void )
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 void SvxRubyDialog::DataChanged( const DataChangedEvent& rDCEvt )
 {

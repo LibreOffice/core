@@ -26,7 +26,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 
-// -----------------------------------------------------------------------
+
 
 FieldUnit GetModuleFieldUnit( const SfxItemSet& rSet )
 {

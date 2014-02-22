@@ -45,7 +45,7 @@
 #include <systools/win32/uwinapi.h>
 #include <../tools/seterror.hxx>
 
-//----------------------------------------------------------
+
 #ifdef DEBUG
 inline void OutputDebugStringFormat( LPCSTR pFormat, ... )
 {

@@ -47,7 +47,7 @@
 
 using namespace ::com::sun::star;
 
-// ---------------------------------------------------------------
+
 
 CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XModel > & rModel ) :
         CGMOutAct       ( rCGM ),
@@ -76,7 +76,7 @@ CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XMod
     }
 };
 
-// ---------------------------------------------------------------
+
 
 sal_Bool CGMImpressOutAct::ImplInitPage()
 {
@@ -92,7 +92,7 @@ sal_Bool CGMImpressOutAct::ImplInitPage()
     return bStatRet;
 }
 
-// ---------------------------------------------------------------
+
 
 sal_Bool CGMImpressOutAct::ImplCreateShape( const OUString& rType )
 {
@@ -107,7 +107,7 @@ sal_Bool CGMImpressOutAct::ImplCreateShape( const OUString& rType )
     return sal_False;
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::ImplSetOrientation( FloatPoint& rRefPoint, double& rOrientation )
 {
@@ -120,7 +120,7 @@ void CGMImpressOutAct::ImplSetOrientation( FloatPoint& rRefPoint, double& rOrien
     maXPropSet->setPropertyValue( "RotateAngle", aAny );
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::ImplSetLineBundle()
 {
@@ -178,7 +178,7 @@ void CGMImpressOutAct::ImplSetLineBundle()
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::ImplSetFillBundle()
 {
@@ -345,7 +345,7 @@ void CGMImpressOutAct::ImplSetFillBundle()
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::ImplSetTextBundle( const uno::Reference< beans::XPropertySet > & rProperty )
 {
@@ -389,7 +389,7 @@ void CGMImpressOutAct::ImplSetTextBundle( const uno::Reference< beans::XProperty
     rProperty->setPropertyValue( "FontDescriptor", aAny );
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::InsertPage()
 {
@@ -403,7 +403,7 @@ void CGMImpressOutAct::InsertPage()
     mnCurrentPage++;
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::BeginGroup()
 {
@@ -415,7 +415,7 @@ void CGMImpressOutAct::BeginGroup()
     mnGroupActCount = mpCGM->mnActCount;
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::EndGroup()
 {
@@ -448,7 +448,7 @@ void CGMImpressOutAct::EndGroup()
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::EndGrouping()
 {
@@ -458,7 +458,7 @@ void CGMImpressOutAct::EndGrouping()
     }
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::DrawRectangle( FloatRect& rFloatRect )
 {
@@ -474,7 +474,7 @@ void CGMImpressOutAct::DrawRectangle( FloatRect& rFloatRect )
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::DrawEllipse( FloatPoint& rCenter, FloatPoint& rSize, double& rOrientation )
 {
@@ -501,7 +501,7 @@ void CGMImpressOutAct::DrawEllipse( FloatPoint& rCenter, FloatPoint& rSize, doub
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::DrawEllipticalArc( FloatPoint& rCenter, FloatPoint& rSize, double& rOrientation,
             sal_uInt32 nType, double& fStartAngle, double& fEndAngle )
@@ -574,7 +574,7 @@ void CGMImpressOutAct::DrawEllipticalArc( FloatPoint& rCenter, FloatPoint& rSize
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::DrawBitmap( CGMBitmapDescriptor* pBmpDesc )
 {
@@ -615,7 +615,7 @@ void CGMImpressOutAct::DrawBitmap( CGMBitmapDescriptor* pBmpDesc )
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::DrawPolygon( Polygon& rPoly )
 {
@@ -648,7 +648,7 @@ void CGMImpressOutAct::DrawPolygon( Polygon& rPoly )
 };
 
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::DrawPolyLine( Polygon& rPoly )
 {
@@ -680,7 +680,7 @@ void CGMImpressOutAct::DrawPolyLine( Polygon& rPoly )
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::DrawPolybezier( Polygon& rPolygon )
 {
@@ -715,7 +715,7 @@ void CGMImpressOutAct::DrawPolybezier( Polygon& rPolygon )
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::DrawPolyPolygon( PolyPolygon& rPolyPolygon )
 {
@@ -760,7 +760,7 @@ void CGMImpressOutAct::DrawPolyPolygon( PolyPolygon& rPolyPolygon )
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, char* pString, sal_uInt32 /*nSize*/, FinalFlag eFlag )
 {
@@ -909,7 +909,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 /*nSize*/, FinalFlag /*eFlag*/ )
 {
@@ -947,14 +947,14 @@ void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 /*nSize*/, FinalFla
     }
 }
 
-// ---------------------------------------------------------------
+
 // nCount != 0 -> Append Text
 sal_uInt32 CGMImpressOutAct::DrawText( TextEntry* /*pTextEntry*/, NodeFrameSet& /*rNodeFrameSet*/, sal_uInt32 /*nObjCount*/ )
 {
 return 0;
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::DrawChart()
 {

@@ -57,7 +57,7 @@ namespace dbp
     //=====================================================================
     //= OTableSelectionPage
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OTableSelectionPage::OTableSelectionPage(OControlWizard* _pParent)
         :OControlWizardPage(_pParent, ModuleRes(RID_PAGE_TABLESELECTION))
         ,m_aData            (this, ModuleRes(FL_DATA))
@@ -80,14 +80,14 @@ namespace dbp
         m_aDatasource.SetDropDownLineCount(10);
     }
 
-    //---------------------------------------------------------------------
+
     void OTableSelectionPage::ActivatePage()
     {
         OControlWizardPage::ActivatePage();
         m_aDatasource.GrabFocus();
     }
 
-    //---------------------------------------------------------------------
+
     bool OTableSelectionPage::canAdvance() const
     {
         if (!OControlWizardPage::canAdvance())
@@ -102,7 +102,7 @@ namespace dbp
         return true;
     }
 
-    //---------------------------------------------------------------------
+
     void OTableSelectionPage::initializePage()
     {
         OControlWizardPage::initializePage();
@@ -152,7 +152,7 @@ namespace dbp
         }
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OTableSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OControlWizardPage::commitPage(_eReason))
@@ -189,7 +189,7 @@ namespace dbp
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK( OTableSelectionPage, OnSearchClicked, PushButton*, /*_pButton*/ )
     {
         ::sfx2::FileDialogHelper aFileDlg(
@@ -214,7 +214,7 @@ namespace dbp
         }
         return 0L;
     }
-    //---------------------------------------------------------------------
+
     IMPL_LINK( OTableSelectionPage, OnListboxDoubleClicked, ListBox*, _pBox )
     {
         if (_pBox->GetSelectEntryCount())
@@ -222,7 +222,7 @@ namespace dbp
         return 0L;
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK( OTableSelectionPage, OnListboxSelection, ListBox*, _pBox )
     {
         if (&m_aDatasource == _pBox)
@@ -238,7 +238,7 @@ namespace dbp
         return 0L;
     }
 
-    //---------------------------------------------------------------------
+
     namespace
     {
         void    lcl_fillEntries( ListBox& _rListBox, const Sequence< OUString >& _rNames, const Image& _rImage, sal_Int32 _nCommandType )
@@ -254,7 +254,7 @@ namespace dbp
         }
     }
 
-    //---------------------------------------------------------------------
+
     void OTableSelectionPage::implFillTables(const Reference< XConnection >& _rxConn)
     {
         m_aTable.Clear();
@@ -369,7 +369,7 @@ namespace dbp
         lcl_fillEntries( m_aTable, aQueryNames, aQueryImage, CommandType::QUERY );
     }
 
-    //---------------------------------------------------------------------
+
     void OTableSelectionPage::implCollectDatasource()
     {
         try
@@ -387,7 +387,7 @@ namespace dbp
     //=====================================================================
     //= OMaybeListSelectionPage
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OMaybeListSelectionPage::OMaybeListSelectionPage( OControlWizard* _pParent, const ResId& _rId )
         :OControlWizardPage(_pParent, _rId)
         ,m_pYes(NULL)
@@ -396,7 +396,7 @@ namespace dbp
     {
     }
 
-    //---------------------------------------------------------------------
+
     void OMaybeListSelectionPage::announceControls(RadioButton& _rYesButton, RadioButton& _rNoButton, ListBox& _rSelection)
     {
         m_pYes = &_rYesButton;
@@ -408,14 +408,14 @@ namespace dbp
         implEnableWindows();
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK( OMaybeListSelectionPage, OnRadioSelected, RadioButton*, /*NOTINTERESTEDIN*/ )
     {
         implEnableWindows();
         return 0L;
     }
 
-    //---------------------------------------------------------------------
+
     void OMaybeListSelectionPage::implInitialize(const OUString& _rSelection)
     {
         DBG_ASSERT(m_pYes, "OMaybeListSelectionPage::implInitialize: no controls announced!");
@@ -427,19 +427,19 @@ namespace dbp
         m_pList->SelectEntry(bIsSelection ? _rSelection : OUString());
     }
 
-    //---------------------------------------------------------------------
+
     void OMaybeListSelectionPage::implCommit(OUString& _rSelection)
     {
         _rSelection = m_pYes->IsChecked() ? m_pList->GetSelectEntry() : OUString();
     }
 
-    //---------------------------------------------------------------------
+
     void OMaybeListSelectionPage::implEnableWindows()
     {
         m_pList->Enable(m_pYes->IsChecked());
     }
 
-    //---------------------------------------------------------------------
+
     void OMaybeListSelectionPage::ActivatePage()
     {
         OControlWizardPage::ActivatePage();
@@ -454,7 +454,7 @@ namespace dbp
     //=====================================================================
     //= ODBFieldPage
     //=====================================================================
-    //---------------------------------------------------------------------
+
     ODBFieldPage::ODBFieldPage( OControlWizard* _pParent )
         :OMaybeListSelectionPage(_pParent, ModuleRes(RID_PAGE_OPTION_DBFIELD))
         ,m_aFrame           (this, ModuleRes(FL_DATABASEFIELD_EXPL))
@@ -469,7 +469,7 @@ namespace dbp
         m_aStoreWhere.SetDropDownLineCount(10);
     }
 
-    //---------------------------------------------------------------------
+
     void ODBFieldPage::initializePage()
     {
         OMaybeListSelectionPage::initializePage();
@@ -480,7 +480,7 @@ namespace dbp
         implInitialize(getDBFieldSetting());
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool ODBFieldPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OMaybeListSelectionPage::commitPage(_eReason))

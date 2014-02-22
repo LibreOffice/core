@@ -55,7 +55,7 @@ class TaskCreatorService : private osl::Mutex,
 {
 private:
 
-    //---------------------------------------
+
     /** @short  the global uno service manager.
         @descr  Must be used to create own needed services.
      */
@@ -115,19 +115,19 @@ private:
     OUString impl_filterNames( const OUString& sName );
 };
 
-//-----------------------------------------------
+
 TaskCreatorService::TaskCreatorService(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : TaskCreatorService_BASE(*static_cast<osl::Mutex *>(this))
     , m_xContext         (xContext                     )
 {
 }
 
-//-----------------------------------------------
+
 TaskCreatorService::~TaskCreatorService()
 {
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createInstance()
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
@@ -135,7 +135,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
     return createInstanceWithArguments(css::uno::Sequence< css::uno::Any >());
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createInstanceWithArguments(const css::uno::Sequence< css::uno::Any >& lArguments)
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
@@ -218,7 +218,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
     return css::uno::Reference< css::uno::XInterface >(xFrame, css::uno::UNO_QUERY_THROW);
 }
 
-//-----------------------------------------------
+
 void TaskCreatorService::implts_applyDocStyleToWindow(const css::uno::Reference< css::awt::XWindow >& xWindow) const
 {
     // SYNCHRONIZED ->
@@ -229,7 +229,7 @@ void TaskCreatorService::implts_applyDocStyleToWindow(const css::uno::Reference<
     // <- SYNCHRONIZED
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContainerWindow( const css::uno::Reference< css::awt::XWindow >& xParentWindow ,
                                                                                            const css::awt::Rectangle&                      aPosSize      ,
                                                                                                  sal_Bool                                  bTopWindow    )
@@ -286,7 +286,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
     return xWindow;
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::frame::XFrame2 > TaskCreatorService::implts_createFrame( const css::uno::Reference< css::frame::XFrame >& xParentFrame    ,
                                                                                   const css::uno::Reference< css::awt::XWindow >&  xContainerWindow,
                                                                                   const OUString&                           sName           )
@@ -315,7 +315,7 @@ css::uno::Reference< css::frame::XFrame2 > TaskCreatorService::implts_createFram
     return xNewFrame;
 }
 
-//-----------------------------------------------
+
 void TaskCreatorService::implts_establishWindowStateListener( const css::uno::Reference< css::frame::XFrame2 >& xFrame )
 {
     // Special feature: It's allowed for frames using a top level window only!
@@ -330,7 +330,7 @@ void TaskCreatorService::implts_establishWindowStateListener( const css::uno::Re
     xInit->initialize(lInitData);
 }
 
-//-----------------------------------------------
+
 void TaskCreatorService::implts_establishDocModifyListener( const css::uno::Reference< css::frame::XFrame2 >& xFrame )
 {
     // Special feature: It's allowed for frames using a top level window only!
@@ -344,7 +344,7 @@ void TaskCreatorService::implts_establishDocModifyListener( const css::uno::Refe
     xInit->initialize(lInitData);
 }
 
-//-----------------------------------------------
+
 void TaskCreatorService::implts_establishTitleBarUpdate( const css::uno::Reference< css::frame::XFrame2 >& xFrame )
 {
     TitleBarUpdate* pHelper = new TitleBarUpdate (m_xContext);

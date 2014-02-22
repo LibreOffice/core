@@ -105,7 +105,7 @@ void OTableEditorCtrl::Init()
 {
     OTableRowView::Init();
 
-    // Should it be opened ReadOnly ?
+    // Should it be opened ReadOnly?
     sal_Bool bRead(GetView()->getController().isReadOnly());
 
     SetReadOnly( bRead );
@@ -474,7 +474,7 @@ void OTableEditorCtrl::DisplayData(long nRow, sal_Bool bGrabFocus)
 
 void OTableEditorCtrl::CursorMoved()
 {
-    // New line ?
+    // New line?
     m_nDataPos = GetCurRow();
     if( m_nDataPos != nOldDataPos && m_nDataPos != -1)
     {
@@ -549,7 +549,7 @@ sal_Bool OTableEditorCtrl::SaveData(long nRow, sal_uInt16 nColId)
         // Store DescrCell
         case HELP_TEXT:
         {
-            // Wenn aktuelle Feldbeschreibung NULL, Default setzen
+            // if the current field description is NULL, set Default
             if( !pActFieldDescr )
             {
                 pHelpTextCell->SetText(OUString());

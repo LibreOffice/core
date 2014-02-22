@@ -105,7 +105,7 @@ namespace skeleton
                 if(aIter->second)
                     rtl_uString_release(aIter->second);
         }
-        // ------------------------------------------------------------------------------
+
         ::rtl::OUString OPropertyMap::getNameByIndex(sal_Int32 _nIndex) const
         {
             ::rtl::OUString sRet;
@@ -116,7 +116,7 @@ namespace skeleton
                 sRet = aIter->second;
             return sRet;
         }
-        // ------------------------------------------------------------------------------
+
         ::rtl::OUString OPropertyMap::fillValue(sal_Int32 _nIndex)
         {
             rtl_uString* pStr = NULL;

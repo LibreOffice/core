@@ -707,19 +707,19 @@ void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequ
 }
 
 //
-//-------------------------------------------------------------------------
+
 com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >  SAL_CALL ToolboxController::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException)
 {
     Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
-//-------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper& ToolboxController::getInfoHelper()
 {
         return *const_cast<ToolboxController*>(this)->getArrayHelper();
 }
 
-//------------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* ToolboxController::createArrayHelper( ) const
 {
         com::sun::star::uno::Sequence< Property > aProps;
@@ -769,7 +769,7 @@ throw( com::sun::star::uno::Exception)
     }
 }
 
-//--------------------------------------------------------------------
+
 
 IMPL_STATIC_LINK_NOINSTANCE( ToolboxController, ExecuteHdl_Impl, DispatchInfo*, pDispatchInfo )
 {

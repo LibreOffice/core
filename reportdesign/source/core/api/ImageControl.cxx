@@ -112,7 +112,7 @@ uno::Sequence< OUString > lcl_getImageOptionals()
     return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }
 
-// -----------------------------------------------------------------------------
+
 OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _xContext)
 :ImageControlBase(m_aMutex)
 ,ImageControlPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getImageOptionals())
@@ -122,7 +122,7 @@ OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _x
 {
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_IMAGECONTROL,m_aProps.aComponent.m_xContext->getServiceManager());
 }
-// -----------------------------------------------------------------------------
+
 OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _xContext
                            ,const uno::Reference< lang::XMultiServiceFactory>& _xFactory
                            ,uno::Reference< drawing::XShape >& _xShape)
@@ -140,14 +140,14 @@ OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _x
     }
     osl_atomic_decrement( &m_refCount );
 }
-// -----------------------------------------------------------------------------
+
 OImageControl::~OImageControl()
 {
 }
-// -----------------------------------------------------------------------------
+
 //IMPLEMENT_FORWARD_XINTERFACE2(OImageControl,ImageControlBase,ImageControlPropertySet)
 IMPLEMENT_FORWARD_REFCOUNT( OImageControl, ImageControlBase )
-// --------------------------------------------------------------------------------
+
 uno::Any SAL_CALL OImageControl::queryInterface( const uno::Type& _rType ) throw (uno::RuntimeException)
 {
     uno::Any aReturn = ImageControlBase::queryInterface(_rType);
@@ -160,24 +160,24 @@ uno::Any SAL_CALL OImageControl::queryInterface( const uno::Type& _rType ) throw
     return aReturn.hasValue() ? aReturn : (m_aProps.aComponent.m_xProxy.is() ? m_aProps.aComponent.m_xProxy->queryAggregation(_rType) : aReturn);
 }
 
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OImageControl::dispose() throw(uno::RuntimeException)
 {
     ImageControlPropertySet::dispose();
     cppu::WeakComponentImplHelperBase::dispose();
 }
-// -----------------------------------------------------------------------------
+
 OUString OImageControl::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
     return OUString("com.sun.star.comp.report.OImageControl");
 }
 
-//--------------------------------------------------------------------------
+
 OUString SAL_CALL OImageControl::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
-//--------------------------------------------------------------------------
+
 uno::Sequence< OUString > OImageControl::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aServices(1);
@@ -185,23 +185,23 @@ uno::Sequence< OUString > OImageControl::getSupportedServiceNames_Static(  ) thr
 
     return aServices;
 }
-//------------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > OImageControl::create(uno::Reference< uno::XComponentContext > const & xContext)
 {
     return *(new OImageControl(xContext));
 }
 
-//--------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL OImageControl::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OImageControl::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);
 }
-// -----------------------------------------------------------------------------
+
 // XReportComponent
 REPORTCOMPONENT_IMPL(OImageControl,m_aProps.aComponent)
 REPORTCOMPONENT_IMPL2(OImageControl,m_aProps.aComponent)
@@ -235,7 +235,7 @@ void SAL_CALL OImageControl::setHyperLinkName(const OUString & the_value) throw 
     set(PROPERTY_HYPERLINKNAME,the_value,m_aProps.aFormatProperties.sHyperLinkName);
 }
 
-// -----------------------------------------------------------------------------
+
 ::sal_Int32 SAL_CALL OImageControl::getControlBackground() throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -263,78 +263,78 @@ void SAL_CALL OImageControl::setControlBackgroundTransparent( ::sal_Bool _contro
         set(PROPERTY_CONTROLBACKGROUND,static_cast<sal_Int32>(COL_TRANSPARENT),m_aProps.aFormatProperties.nBackgroundColor);
 }
 
-// -----------------------------------------------------------------------------
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL OImageControl::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     return ImageControlPropertySet::getPropertySetInfo();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OImageControl::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ImageControlPropertySet::setPropertyValue( aPropertyName, aValue );
 }
-// -----------------------------------------------------------------------------
+
 uno::Any SAL_CALL OImageControl::getPropertyValue( const OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     return ImageControlPropertySet::getPropertyValue( PropertyName);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OImageControl::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ImageControlPropertySet::addPropertyChangeListener( aPropertyName, xListener );
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OImageControl::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ImageControlPropertySet::removePropertyChangeListener( aPropertyName, aListener );
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OImageControl::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ImageControlPropertySet::addVetoableChangeListener( PropertyName, aListener );
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OImageControl::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ImageControlPropertySet::removeVetoableChangeListener( PropertyName, aListener );
 }
-// -----------------------------------------------------------------------------
+
 // XReportControlModel
 OUString SAL_CALL OImageControl::getDataField() throw ( beans::UnknownPropertyException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.aDataField;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OImageControl::setDataField( const OUString& _datafield ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {
     set(PROPERTY_DATAFIELD,_datafield,m_aProps.aDataField);
 }
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+
+
 ::sal_Bool SAL_CALL OImageControl::getPrintWhenGroupChange() throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.bPrintWhenGroupChange;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OImageControl::setPrintWhenGroupChange( ::sal_Bool _printwhengroupchange ) throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     set(PROPERTY_PRINTWHENGROUPCHANGE,_printwhengroupchange,m_aProps.bPrintWhenGroupChange);
 }
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL OImageControl::getConditionalPrintExpression() throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.aConditionalPrintExpression;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OImageControl::setConditionalPrintExpression( const OUString& _conditionalprintexpression ) throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     set(PROPERTY_CONDITIONALPRINTEXPRESSION,_conditionalprintexpression,m_aProps.aConditionalPrintExpression);
 }
 
-// -----------------------------------------------------------------------------
+
 
 // XCloneable
 uno::Reference< util::XCloneable > SAL_CALL OImageControl::createClone(  ) throw (uno::RuntimeException)
@@ -343,32 +343,32 @@ uno::Reference< util::XCloneable > SAL_CALL OImageControl::createClone(  ) throw
     uno::Reference< report::XImageControl> xSet(cloneObject(xSource,m_aProps.aComponent.m_xFactory,SERVICE_IMAGECONTROL),uno::UNO_QUERY_THROW);
     return xSet.get();
 }
-// -----------------------------------------------------------------------------
+
 
 // XImageControl
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL OImageControl::getImageURL() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aImageURL;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OImageControl::setImageURL( const OUString& _imageurl ) throw (uno::RuntimeException)
 {
     set(PROPERTY_IMAGEURL,_imageurl,m_aImageURL);
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< awt::XImageProducer > SAL_CALL OImageControl::getImageProducer(  ) throw (uno::RuntimeException)
 {
     return uno::Reference< awt::XImageProducer >();
 }
-// -----------------------------------------------------------------------------
+
 // XChild
 uno::Reference< uno::XInterface > SAL_CALL OImageControl::getParent(  ) throw (uno::RuntimeException)
 {
     return OShapeHelper::getParent(this);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OImageControl::setParent( const uno::Reference< uno::XInterface >& Parent ) throw (lang::NoSupportException, uno::RuntimeException)
 {
     OShapeHelper::setParent(Parent,this);
@@ -377,79 +377,79 @@ uno::Reference< report::XFormatCondition > SAL_CALL OImageControl::createFormatC
 {
     return new OFormatCondition(m_aProps.aComponent.m_xContext);
 }
-// -----------------------------------------------------------------------------
+
 // XContainer
 void SAL_CALL OImageControl::addContainerListener( const uno::Reference< container::XContainerListener >& xListener ) throw (uno::RuntimeException)
 {
     m_aProps.addContainerListener(xListener);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OImageControl::removeContainerListener( const uno::Reference< container::XContainerListener >& xListener ) throw (uno::RuntimeException)
 {
     m_aProps.removeContainerListener(xListener);
 }
-// -----------------------------------------------------------------------------
+
 // XElementAccess
 uno::Type SAL_CALL OImageControl::getElementType(  ) throw (uno::RuntimeException)
 {
     return ::getCppuType(static_cast< uno::Reference<report::XFormatCondition>*>(NULL));
 }
-// -----------------------------------------------------------------------------
+
 ::sal_Bool SAL_CALL OImageControl::hasElements(  ) throw (uno::RuntimeException)
 {
     return m_aProps.hasElements();
 }
-// -----------------------------------------------------------------------------
+
 // XIndexContainer
 void SAL_CALL OImageControl::insertByIndex( ::sal_Int32 Index, const uno::Any& Element ) throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
     m_aProps.insertByIndex(Index,Element);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OImageControl::removeByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
     m_aProps.removeByIndex(Index);
 }
-// -----------------------------------------------------------------------------
+
 // XIndexReplace
 void SAL_CALL OImageControl::replaceByIndex( ::sal_Int32 Index, const uno::Any& Element ) throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
     m_aProps.replaceByIndex(Index,Element);
 }
-// -----------------------------------------------------------------------------
+
 // XIndexAccess
 ::sal_Int32 SAL_CALL OImageControl::getCount(  ) throw (uno::RuntimeException)
 {
     return m_aProps.getCount();
 }
-// -----------------------------------------------------------------------------
+
 uno::Any SAL_CALL OImageControl::getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
     return m_aProps.getByIndex( Index );
 }
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+
+
 // XShape
 awt::Point SAL_CALL OImageControl::getPosition(  ) throw (uno::RuntimeException)
 {
     return OShapeHelper::getPosition(this);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OImageControl::setPosition( const awt::Point& aPosition ) throw (uno::RuntimeException)
 {
     OShapeHelper::setPosition(aPosition,this);
 }
-// -----------------------------------------------------------------------------
+
 awt::Size SAL_CALL OImageControl::getSize(  ) throw (uno::RuntimeException)
 {
     return OShapeHelper::getSize(this);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OImageControl::setSize( const awt::Size& aSize ) throw (beans::PropertyVetoException, uno::RuntimeException)
 {
     OShapeHelper::setSize(aSize,this);
 }
-// -----------------------------------------------------------------------------
+
 
 // XShapeDescriptor
 OUString SAL_CALL OImageControl::getShapeType(  ) throw (uno::RuntimeException)
@@ -459,26 +459,26 @@ OUString SAL_CALL OImageControl::getShapeType(  ) throw (uno::RuntimeException)
         return m_aProps.aComponent.m_xShape->getShapeType();
     return OUString("com.sun.star.drawing.ControlShape");
 }
-// -----------------------------------------------------------------------------
+
 ::sal_Int16 SAL_CALL OImageControl::getScaleMode() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_nScaleMode;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OImageControl::setScaleMode( ::sal_Int16 _scalemode ) throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     if ( _scalemode < awt::ImageScaleMode::NONE ||_scalemode > awt::ImageScaleMode::ANISOTROPIC )
         throw lang::IllegalArgumentException();
     set(PROPERTY_SCALEMODE,_scalemode,m_nScaleMode);
 }
-// -----------------------------------------------------------------------------
+
 ::sal_Bool SAL_CALL OImageControl::getPreserveIRI() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_bPreserveIRI;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OImageControl::setPreserveIRI( ::sal_Bool _preserveiri ) throw (uno::RuntimeException)
 {
     set(PROPERTY_PRESERVEIRI,_preserveiri,m_bPreserveIRI);

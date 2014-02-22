@@ -36,7 +36,7 @@ void IntroWindow::ImplInitIntroWindowData()
     pSVData->mpIntroWindow = this;
 }
 
-// -----------------------------------------------------------------------
+
 
 IntroWindow::IntroWindow( ) :
     WorkWindow( WINDOW_INTROWINDOW )
@@ -45,7 +45,7 @@ IntroWindow::IntroWindow( ) :
     WorkWindow::ImplInit( 0, WB_INTROWIN, NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 IntroWindow::~IntroWindow()
 {

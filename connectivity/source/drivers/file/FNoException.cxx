@@ -28,7 +28,7 @@
 
 using namespace connectivity;
 using namespace connectivity::file;
-// -----------------------------------------------------------------------------
+
 void OFileCatalog::refreshViews()
 {}
 void OFileCatalog::refreshGroups()
@@ -36,7 +36,7 @@ void OFileCatalog::refreshGroups()
 void OFileCatalog::refreshUsers()
 {
 }
-// -----------------------------------------------------------------------------
+
 OPredicateInterpreter::~OPredicateInterpreter()
 {
     while(!m_aStack.empty())
@@ -46,7 +46,7 @@ OPredicateInterpreter::~OPredicateInterpreter()
     }
     //  m_aStack.clear();
 }
-// -----------------------------------------------------------------------------
+
 void OPredicateCompiler::Clean()
 {
     for(OCodeList::reverse_iterator aIter = m_aCodeList.rbegin(); aIter != m_aCodeList.rend();++aIter)
@@ -55,7 +55,7 @@ void OPredicateCompiler::Clean()
     }
     m_aCodeList.clear();
 }
-// -----------------------------------------------------------------------------
+
 void OSQLAnalyzer::bindParameterRow(OValueRefRow& _pRow)
 {
     OCodeList& rCodeList    = m_aCompiler->m_aCodeList;
@@ -66,7 +66,7 @@ void OSQLAnalyzer::bindParameterRow(OValueRefRow& _pRow)
             pParam->bindValue(_pRow);
     }
 }
-// -----------------------------------------------------------------------------
+
 void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,::std::vector< OSQLParseNode*>& _rParaNodes)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::scanParameter" );
@@ -87,7 +87,7 @@ void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,::std::vector< 
     for (sal_uInt32 i = 0; i < pParseNode->count(); i++)
         scanParameter(pParseNode->getChild(i),_rParaNodes);
 }
-// -----------------------------------------------------------------------------
+
 OKeyValue* OResultSet::GetOrderbyKeyValue(OValueRefRow& _rRow)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::GetOrderbyKeyValue" );
@@ -104,6 +104,6 @@ OKeyValue* OResultSet::GetOrderbyKeyValue(OValueRefRow& _rRow)
 
     return pKeyValue;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

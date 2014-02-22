@@ -481,7 +481,7 @@ void SfxConfigGroupListBox::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
     pStylesInfo = pStyles;
 }
 
-//-----------------------------------------------
+
 void SfxConfigGroupListBox::InitModule()
 {
     try
@@ -517,17 +517,17 @@ void SfxConfigGroupListBox::InitModule()
         {}
 }
 
-//-----------------------------------------------
+
 void SfxConfigGroupListBox::InitBasic()
 {
 }
 
-//-----------------------------------------------
+
 void SfxConfigGroupListBox::InitStyles()
 {
 }
 
-//-----------------------------------------------
+
 namespace
 {
     //...........................................
@@ -580,7 +580,7 @@ namespace
     }
 }
 
-//-----------------------------------------------
+
 void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponentContext >& xContext,
     const css::uno::Reference< css::frame::XFrame >& xFrame,
     const OUString& sModuleLongName,
@@ -845,7 +845,7 @@ SfxConfigGroupListBox::getDocumentModel( Reference< XComponentContext >& xCtx, O
     return xModel;
 }
 
-//-----------------------------------------------
+
 OUString SfxConfigGroupListBox::MapCommand2UIName(const OUString& sCommand)
 {
     OUString sUIName;
@@ -873,7 +873,7 @@ OUString SfxConfigGroupListBox::MapCommand2UIName(const OUString& sCommand)
     return sUIName;
 }
 
-//-----------------------------------------------
+
 void SfxConfigGroupListBox::GroupSelected()
 /*  Description
     A function group or a basic module has been selected.

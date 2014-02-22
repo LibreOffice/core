@@ -70,17 +70,17 @@ sdbcx::ObjectType OTables::createObject(const OUString& _rName)
 
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 void OTables::impl_refresh(  ) throw(RuntimeException)
 {
     static_cast<OCatalog&>(m_rParent).refreshTables();
 }
-// -------------------------------------------------------------------------
+
 void OTables::disposing(void)
 {
 m_xMetaData.clear();
     OCollection::disposing();
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

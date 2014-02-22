@@ -166,7 +166,7 @@ private:
     Reference< embed::XStorage > mxStorage;
 };
 
-//--------------------------------------------------------------------
+
 ::comphelper::DocPasswordVerifierResult SfxDocPasswordVerifier::verifyPassword( const OUString& rPassword, uno::Sequence< beans::NamedValue >& o_rEncryptionData )
 {
     o_rEncryptionData = ::comphelper::OStorageHelper::CreatePackageEncryptionData( rPassword );
@@ -174,7 +174,7 @@ private:
 }
 
 
-//--------------------------------------------------------------------
+
 ::comphelper::DocPasswordVerifierResult SfxDocPasswordVerifier::verifyEncryptionData( const uno::Sequence< beans::NamedValue >& rEncryptionData )
 {
     ::comphelper::DocPasswordVerifierResult eResult = ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
@@ -207,7 +207,7 @@ private:
 
 //====================================================================
 
-//--------------------------------------------------------------------
+
 
 sal_uInt32 CheckPasswd_Impl
 (
@@ -312,7 +312,7 @@ sal_uInt32 CheckPasswd_Impl
     return nRet;
 }
 
-//--------------------------------------------------------------------
+
 
 
 sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &rFileName, sal_Bool bCopy, SfxItemSet* pSet )
@@ -438,7 +438,7 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStri
     return xDoc->GetErrorCode();
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
 {
@@ -471,7 +471,7 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
         rReq.SetReturnValue( SfxFrameItem( 0, pItem->GetFrame() ) );
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
 {
@@ -577,7 +577,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
     }
 }
 
-//---------------------------------------------------------------------------
+
 
 namespace {
 

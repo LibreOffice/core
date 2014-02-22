@@ -147,7 +147,7 @@ static void lcl_setFillStyle(ListBox* pLbSelect, XFillStyle eStyle)
             return;
         }
 }
-//-------------------------------------------------------------------------
+
 
 sal_uInt16 GetItemId_Impl( ValueSet& rValueSet, const Color& rCol )
 {
@@ -225,14 +225,14 @@ void BackgroundPreviewImpl::setBmp(bool bBmp)
     Invalidate();
 }
 
-//-----------------------------------------------------------------------
+
 
 BackgroundPreviewImpl::~BackgroundPreviewImpl()
 {
     delete pBitmap;
 }
 
-//-----------------------------------------------------------------------
+
 void BackgroundPreviewImpl::NotifyChange( const Color& rColor )
 {
     if ( !bIsBmp )
@@ -246,7 +246,7 @@ void BackgroundPreviewImpl::NotifyChange( const Color& rColor )
     }
 }
 
-//-----------------------------------------------------------------------
+
 
 void BackgroundPreviewImpl::NotifyChange( const Bitmap* pNewBitmap )
 {
@@ -313,7 +313,7 @@ void BackgroundPreviewImpl::Resize()
     recalcDrawPos();
 }
 
-//-----------------------------------------------------------------------
+
 
 void BackgroundPreviewImpl::Paint( const Rectangle& )
 {
@@ -431,7 +431,7 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(Window* pParent, const SfxItemSet& rC
     m_pBackgroundColorSet->SetText(SVX_RESSTR(RID_SVXSTR_TRANSPARENT));
 }
 
-//------------------------------------------------------------------------
+
 
 SvxBackgroundTabPage::~SvxBackgroundTabPage()
 {
@@ -455,7 +455,7 @@ SvxBackgroundTabPage::~SvxBackgroundTabPage()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16* SvxBackgroundTabPage::GetRanges()
 
@@ -468,7 +468,7 @@ sal_uInt16* SvxBackgroundTabPage::GetRanges()
     return pRanges;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxTabPage* SvxBackgroundTabPage::Create( Window* pParent,
                                           const SfxItemSet& rAttrSet )
@@ -482,7 +482,7 @@ SfxTabPage* SvxBackgroundTabPage::Create( Window* pParent,
     return ( new SvxBackgroundTabPage( pParent, rAttrSet ) );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
 {
@@ -715,7 +715,7 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
 
 
 
-//------------------------------------------------------------------------
+
 
 void SvxBackgroundTabPage::FillUserData()
 
@@ -731,7 +731,7 @@ void SvxBackgroundTabPage::FillUserData()
     SetUserData( m_pBtnPreview->IsChecked() ? OUString('1') : OUString('0') );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
 {
@@ -1088,7 +1088,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSe
     return bModified;
 }
 
-//-----------------------------------------------------------------------
+
 
 int SvxBackgroundTabPage::DeactivatePage( SfxItemSet* _pSet )
 
@@ -1107,14 +1107,14 @@ int SvxBackgroundTabPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-//-----------------------------------------------------------------------
+
 
 void SvxBackgroundTabPage::PointChanged( Window* , RECT_POINT  )
 {
     // has to be implemented so that position control can work
 }
 
-//-----------------------------------------------------------------------
+
 
 void SvxBackgroundTabPage::ShowSelector()
 {
@@ -1147,7 +1147,7 @@ void SvxBackgroundTabPage::ShowSelector()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 
 void SvxBackgroundTabPage::RaiseLoadError_Impl()
@@ -1163,7 +1163,7 @@ void SvxBackgroundTabPage::RaiseLoadError_Impl()
                               aBgdGraphicPath ) );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SvxBackgroundTabPage::LoadLinkedGraphic_Impl()
 {
@@ -1174,7 +1174,7 @@ sal_Bool SvxBackgroundTabPage::LoadLinkedGraphic_Impl()
     return bResult;
 }
 
-//------------------------------------------------------------------------
+
 
 
 void SvxBackgroundTabPage::FillColorValueSets_Impl()
@@ -1201,11 +1201,11 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
     m_pBackgroundColorSet->SetColCount(m_pBackgroundColorSet->getColumnCount());
 }
 
-//------------------------------------------------------------------------
 
 
 
-//------------------------------------------------------------------------
+
+
 
 void SvxBackgroundTabPage::ShowColorUI_Impl()
 
@@ -1235,7 +1235,7 @@ void SvxBackgroundTabPage::HideColorUI_Impl()
         m_pBackGroundColorFrame->Hide();
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxBackgroundTabPage::ShowBitmapUI_Impl()
 
@@ -1307,7 +1307,7 @@ void SvxBackgroundTabPage::HideGradientUI_Impl()
     m_pBackGroundGradientFrame->Hide();
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxBackgroundTabPage::SetGraphicPosition_Impl( SvxGraphicPosition ePos )
 {
@@ -1353,7 +1353,7 @@ void SvxBackgroundTabPage::SetGraphicPosition_Impl( SvxGraphicPosition ePos )
     m_pWndPosition->Invalidate();
 }
 
-//------------------------------------------------------------------------
+
 
 SvxGraphicPosition SvxBackgroundTabPage::GetGraphicPosition_Impl()
 {
@@ -1379,9 +1379,9 @@ SvxGraphicPosition SvxBackgroundTabPage::GetGraphicPosition_Impl()
     return GPOS_MM;
 }
 
-//-----------------------------------------------------------------------
+
 // Handler
-//-----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBackgroundTabPage, BackgroundColorHdl_Impl)
 /*
@@ -1398,7 +1398,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BackgroundColorHdl_Impl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBackgroundTabPage, SelectHdl_Impl)
 {
@@ -1419,7 +1419,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, SelectHdl_Impl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, CheckBox*, pBox )
 {
@@ -1468,7 +1468,7 @@ IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, CheckBox*, pBox )
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( SvxBackgroundTabPage, RadioClickHdl_Impl, RadioButton*, pBtn )
 {
@@ -1503,7 +1503,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, ModifyGradientHdl_Impl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl)
 
@@ -1545,7 +1545,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl)
     return 0;
 }
 
-//-----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
 
@@ -1606,7 +1606,7 @@ IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
     return 0;
 }
 
-//-----------------------------------------------------------------------
+
 
 void SvxBackgroundTabPage::ShowTblControl()
 {
@@ -1617,7 +1617,7 @@ void SvxBackgroundTabPage::ShowTblControl()
     m_pAsGrid->Show();
 }
 
-//-----------------------------------------------------------------------
+
 
 void SvxBackgroundTabPage::ShowParaControl(sal_Bool bCharOnly)
 {
@@ -1631,7 +1631,7 @@ void SvxBackgroundTabPage::ShowParaControl(sal_Bool bCharOnly)
     }
     m_pParaLBox->SetData(m_pParaLBox); // here it can be recognized that this mode is turned on
 }
-//-----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
 {
@@ -1723,7 +1723,7 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
     return 0;
 }
 
-//-----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
 {
@@ -1787,7 +1787,7 @@ IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
     return 0;
 }
 
-//-----------------------------------------------------------------------
+
 
 void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
                                               const OUString& rUserData )

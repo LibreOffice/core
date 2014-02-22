@@ -33,7 +33,7 @@ namespace bib
     //=====================================================================
     //= OComponentListener
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OComponentListener::~OComponentListener()
     {
         {
@@ -43,13 +43,13 @@ namespace bib
         }
     }
 
-    //---------------------------------------------------------------------
+
     void OComponentListener::_disposing( const EventObject& /*_rSource*/ ) throw( RuntimeException)
     {
         // nothing to do here, overrride if you're interested in
     }
 
-    //---------------------------------------------------------------------
+
     void OComponentListener::setAdapter( OComponentAdapterBase* pAdapter )
     {
         {
@@ -72,7 +72,7 @@ namespace bib
     //=====================================================================
     //= OComponentAdapterBase
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OComponentAdapterBase::OComponentAdapterBase( const Reference< XComponent >& _rxComp, sal_Bool _bAutoRelease )
         :m_xComponent( _rxComp )
         ,m_pListener( NULL )
@@ -83,7 +83,7 @@ namespace bib
         OSL_ENSURE( m_xComponent.is(), "OComponentAdapterBase::OComponentAdapterBase: invalid component!" );
     }
 
-    //---------------------------------------------------------------------
+
     void OComponentAdapterBase::Init( OComponentListener* _pListener )
     {
         OSL_ENSURE( !m_pListener, "OComponentAdapterBase::Init: already initialized!" );
@@ -97,12 +97,12 @@ namespace bib
         m_bListening = sal_True;
     }
 
-    //---------------------------------------------------------------------
+
     OComponentAdapterBase::~OComponentAdapterBase()
     {
     }
 
-    //---------------------------------------------------------------------
+
     void OComponentAdapterBase::dispose()
     {
         if ( m_bListening )
@@ -123,7 +123,7 @@ namespace bib
 
     // XEventListener
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OComponentAdapterBase::disposing( const EventObject& _rSource ) throw( RuntimeException )
     {
         if ( m_pListener )
@@ -147,13 +147,13 @@ namespace bib
     //=====================================================================
     //= OLoadListenerAdapter
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OLoadListenerAdapter::OLoadListenerAdapter( const Reference< XLoadable >& _rxLoadable, sal_Bool _bAutoRelease )
         :OComponentAdapterBase( Reference< XComponent >( _rxLoadable, UNO_QUERY ), _bAutoRelease )
     {
     }
 
-    //---------------------------------------------------------------------
+
     void OLoadListenerAdapter::startComponentListening()
     {
         Reference< XLoadable > xLoadable( getComponent(), UNO_QUERY );
@@ -162,25 +162,25 @@ namespace bib
             xLoadable->addLoadListener( this );
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OLoadListenerAdapter::acquire(  ) throw ()
     {
         OLoadListenerAdapter_Base::acquire();
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OLoadListenerAdapter::release(  ) throw ()
     {
         OLoadListenerAdapter_Base::release();
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OLoadListenerAdapter::disposing( const  EventObject& _rSource ) throw( RuntimeException)
     {
         OComponentAdapterBase::disposing( _rSource );
     }
 
-    //---------------------------------------------------------------------
+
     void OLoadListenerAdapter::disposing()
     {
         Reference< XLoadable > xLoadable( getComponent(), UNO_QUERY );
@@ -188,35 +188,35 @@ namespace bib
             xLoadable->removeLoadListener( this );
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OLoadListenerAdapter::loaded( const EventObject& _rEvent ) throw (RuntimeException)
     {
         if ( !locked() && getLoadListener( ) )
             getLoadListener( )->_loaded( _rEvent );
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OLoadListenerAdapter::unloading( const EventObject& _rEvent ) throw (RuntimeException)
     {
         if ( !locked() && getLoadListener( ) )
             getLoadListener( )->_unloading( _rEvent );
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OLoadListenerAdapter::unloaded( const EventObject& _rEvent ) throw (RuntimeException)
     {
         if ( !locked() && getLoadListener( ) )
             getLoadListener( )->_unloaded( _rEvent );
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OLoadListenerAdapter::reloading( const EventObject& _rEvent ) throw (RuntimeException)
     {
         if ( !locked() && getLoadListener( ) )
             getLoadListener( )->_reloading( _rEvent );
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OLoadListenerAdapter::reloaded( const EventObject& _rEvent ) throw (RuntimeException)
     {
         if ( !locked() && getLoadListener( ) )

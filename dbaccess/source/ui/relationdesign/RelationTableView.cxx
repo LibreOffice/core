@@ -114,14 +114,14 @@ void ORelationTableView::ReSync()
         }
 
         (*GetTabWinMap())[pData->GetComposedName()] = pTabWin;  // am Anfang einfuegen, da ich die DataList ja rueckwaerts durchlaufe
-        // wenn in den Daten keine Position oder Groesse steht -> Default
+        // if there's no position or size contained in the data -> Default
         if (!pData->HasPosition() && !pData->HasSize())
             SetDefaultTabWinPosSize(pTabWin);
 
         pTabWin->Show();
     }
 
-    // Verbindungen einfuegen
+    // insert connection
     TTableConnectionData* pTabConnDataList = m_pView->getController().getTableConnectionData();
     TTableConnectionData::reverse_iterator aConIter = pTabConnDataList->rbegin();
 
@@ -137,7 +137,8 @@ void ORelationTableView::ReSync()
             bInvalid = bInvalid || ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
 
             if (bInvalid)
-            {   // nein -> Pech gehabt, die Connection faellt weg
+            {
+                // no -> bad luck, die Connection faellt weg
                 pTabConnDataList->erase( ::std::remove(pTabConnDataList->begin(),pTabConnDataList->end(),*aConIter),pTabConnDataList->end() );
                 continue;
             }
@@ -176,15 +177,14 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
         }
     }
     // insert table connection into view
-
     TTableConnectionData::value_type pTabConnData(new ORelationTableConnectionData(pSourceWin->GetData(),
                                                                                    pDestWin->GetData()));
 
-    // die Namen der betroffenen Felder
+    // the names of the affected fields
     OUString sSourceFieldName = jxdSource.pListBox->GetEntryText(jxdSource.pEntry);
     OUString sDestFieldName = jxdDest.pListBox->GetEntryText(jxdDest.pEntry);
 
-    // die Anzahl der PKey-Felder in der Quelle
+    // the number of PKey-Fields in the source
     const Reference< XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(pSourceWin->GetData()->getTable());
     bool bAskUser = xPrimaryKeyColumns.is() && Reference< XIndexAccess>(xPrimaryKeyColumns,UNO_QUERY)->getCount() > 1;
 
@@ -196,10 +196,10 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
     {
         try
         {
-            // Daten der Datenbank uebergeben
+            // hand over data to the database
             if( pTabConnData->Update() )
             {
-                // UI-Object in ConnListe eintragen
+                // enter UI-object into ConnList
                 addConnection( new ORelationTableConnection( this, pTabConnData ) );
             }
         }
@@ -288,7 +288,7 @@ void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUStrin
         return;
     }
 
-    // Neue Datenstruktur in DocShell eintragen
+    // enter the new data structure into DocShell
     TTableWindowData::value_type pNewTabWinData(createTableWindowData( _rComposedName, rWinName,rWinName ));
     pNewTabWinData->ShowAll(sal_False);
 

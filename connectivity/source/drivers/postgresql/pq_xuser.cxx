@@ -198,7 +198,7 @@ void User::revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int
                                              *this, OUString(), 1, Any() );
 }
 
-//______________________________________________________________________________________
+
 UserDescriptor::UserDescriptor(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
     const Reference< com::sun::star::sdbc::XConnection > & connection,

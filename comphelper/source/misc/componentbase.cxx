@@ -36,21 +36,21 @@ namespace comphelper
     //====================================================================
     //= ComponentBase
     //====================================================================
-    //--------------------------------------------------------------------
+
     void ComponentBase::impl_checkDisposed_throw() const
     {
         if ( m_rBHelper.bDisposed )
             throw DisposedException( OUString(), getComponent() );
     }
 
-    //--------------------------------------------------------------------
+
     void ComponentBase::impl_checkInitialized_throw() const
     {
         if ( !m_bInitialized )
             throw NotInitializedException( OUString(), getComponent() );
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XInterface > ComponentBase::getComponent() const
     {
         return NULL;

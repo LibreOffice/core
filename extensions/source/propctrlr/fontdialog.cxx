@@ -94,7 +94,7 @@ namespace pcr
                             sal_Bool _bForceInvalidation = sal_False);
     };
 
-    //------------------------------------------------------------------------
+
     OFontPropertyExtractor::OFontPropertyExtractor(const Reference< XPropertySet >& _rxProps)
         :m_xPropValueAccess(_rxProps)
         ,m_xPropStateAccess(_rxProps, UNO_QUERY)
@@ -102,7 +102,7 @@ namespace pcr
         OSL_ENSURE(m_xPropValueAccess.is(), "OFontPropertyExtractor::OFontPropertyExtractor: invalid property set!");
     }
 
-    //------------------------------------------------------------------------
+
     sal_Bool OFontPropertyExtractor::getCheckFontProperty(const OUString& _rPropName, Any& _rValue)
     {
         _rValue = m_xPropValueAccess->getPropertyValue(_rPropName);
@@ -112,7 +112,7 @@ namespace pcr
         return sal_False;
     }
 
-    //------------------------------------------------------------------------
+
     OUString OFontPropertyExtractor::getStringFontProperty(const OUString& _rPropName, const OUString& _rDefault)
     {
         Any aValue;
@@ -122,7 +122,7 @@ namespace pcr
         return ::comphelper::getString(aValue);
     }
 
-    //------------------------------------------------------------------------
+
     sal_Int16 OFontPropertyExtractor::getInt16FontProperty(const OUString& _rPropName, const sal_Int16 _nDefault)
     {
         Any aValue;
@@ -134,7 +134,7 @@ namespace pcr
         return (sal_Int16)nValue;
     }
 
-    //------------------------------------------------------------------------
+
     sal_Int32 OFontPropertyExtractor::getInt32FontProperty(const OUString& _rPropName, const sal_Int32 _nDefault)
     {
         Any aValue;
@@ -146,7 +146,7 @@ namespace pcr
         return nValue;
     }
 
-    //------------------------------------------------------------------------
+
     float OFontPropertyExtractor::getFloatFontProperty(const OUString& _rPropName, const float _nDefault)
     {
         Any aValue;
@@ -156,7 +156,7 @@ namespace pcr
         return ::comphelper::getFloat(aValue);
     }
 
-    //------------------------------------------------------------------------
+
     void OFontPropertyExtractor::invalidateItem(const OUString& _rPropName, sal_uInt16 _nItemId, SfxItemSet& _rSet, sal_Bool _bForceInvalidation)
     {
         if  (   _bForceInvalidation
@@ -170,7 +170,7 @@ namespace pcr
     //========================================================================
     //= ControlCharacterDialog
     //========================================================================
-    //------------------------------------------------------------------------
+
     ControlCharacterDialog::ControlCharacterDialog(Window* _pParent, const SfxItemSet& _rCoreSet)
         : SfxTabDialog(_pParent, "ControlFontDialog",
             "modules/spropctrlr/ui/controlfontdialog.ui", &_rCoreSet)
@@ -182,12 +182,12 @@ namespace pcr
         AddTabPage("fonteffects", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), 0 );
     }
 
-    //------------------------------------------------------------------------
+
     ControlCharacterDialog::~ControlCharacterDialog()
     {
     }
 
-    //------------------------------------------------------------------------
+
     void ControlCharacterDialog::translatePropertiesToItems(const Reference< XPropertySet >& _rxModel, SfxItemSet* _pSet)
     {
         OSL_ENSURE(_pSet && _rxModel.is(), "ControlCharacterDialog::translatePropertiesToItems: invalid arguments!");
@@ -288,7 +288,7 @@ namespace pcr
 
     }
 
-    //------------------------------------------------------------------------
+
     namespace
     {
         void lcl_pushBackPropertyValue( Sequence< NamedValue >& _out_properties, const OUString& _name, const Any& _value )
@@ -298,7 +298,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     void ControlCharacterDialog::translateItemsToProperties( const SfxItemSet& _rSet, Sequence< NamedValue >& _out_properties )
     {
         _out_properties.realloc( 0 );
@@ -457,7 +457,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     void ControlCharacterDialog::translateItemsToProperties( const SfxItemSet& _rSet, const Reference< XPropertySet >& _rxModel)
     {
         OSL_ENSURE( _rxModel.is(), "ControlCharacterDialog::translateItemsToProperties: invalid arguments!" );
@@ -479,7 +479,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     SfxItemSet* ControlCharacterDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults)
     {
         // just to be sure ....
@@ -552,7 +552,7 @@ namespace pcr
         return _rpSet;
     }
 
-    //-------------------------------------------------------------------------
+
     void ControlCharacterDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults)
     {
         // from the pool, get and remember the font list (needs to be deleted)
@@ -579,7 +579,7 @@ namespace pcr
         delete pFontList;
     }
 
-    //------------------------------------------------------------------------
+
     void ControlCharacterDialog::PageCreated( sal_uInt16 _nId, SfxTabPage& _rPage )
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));

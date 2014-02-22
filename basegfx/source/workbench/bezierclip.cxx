@@ -45,7 +45,7 @@
 
 
 
-// -----------------------------------------------------------------------------
+
 
 /* Implementation of the so-called 'Fat-Line Bezier Clipping Algorithm' by Sederberg et al.
  *
@@ -54,7 +54,7 @@
  * (9), 1990, pp. 538--549
  */
 
-// -----------------------------------------------------------------------------
+
 
 /* Misc helper
  * ===========
@@ -74,20 +74,20 @@ int fallFac( int n, int k )
     return res;
 }
 
-// -----------------------------------------------------------------------------
+
 
 int fac( int n )
 {
     return fallFac(n, n);
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* Bezier fat line clipping part
  * =============================
  */
 
-// -----------------------------------------------------------------------------
+
 
 void Impl_calcFatLine( FatLine& line, const Bezier& c )
 {
@@ -340,7 +340,7 @@ bool Impl_calcSafeParams_clip( double&          t1,
 #endif
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Impl_deCasteljauAt( Bezier&        part1,
                          Bezier&        part2,
@@ -389,7 +389,7 @@ void Impl_deCasteljauAt( Bezier&        part1,
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void printCurvesWithSafeRange( const Bezier& c1, const Bezier& c2, double t1_c1, double t2_c1,
                                const Bezier& c2_part, const FatLine& bounds_c2 )
@@ -473,7 +473,7 @@ void printCurvesWithSafeRange( const Bezier& c1, const Bezier& c2, double t1_c1,
     offset += 1;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void printResultWithFinalCurves( const Bezier& c1, const Bezier& c1_part,
                                  const Bezier& c2, const Bezier& c2_part,
@@ -548,7 +548,7 @@ void printResultWithFinalCurves( const Bezier& c1, const Bezier& c1_part,
     offset += 1;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** determine parameter ranges [0,t1) and (t2,1] on c1, where c1 is guaranteed to lie outside c2.
       Returns false, if the two curves don't even intersect.
@@ -628,13 +628,13 @@ bool Impl_calcClipRange( double&        t1,
     return false;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* Tangent intersection part
  * =========================
  */
 
-// -----------------------------------------------------------------------------
+
 
 void Impl_calcFocus( Bezier& res, const Bezier& c )
 {
@@ -761,7 +761,7 @@ void Impl_calcFocus( Bezier& res, const Bezier& c )
     res.p3.y = c.p3.y + 3*fRes[1]*(c.p3.x - c.p2.x);
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool Impl_calcSafeParams_focus( double&         t1,
                                 double&         t2,
@@ -900,7 +900,7 @@ bool Impl_calcSafeParams_focus( double&         t1,
 #endif
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** Calc all values t_i on c1, for which safeRanges functor does not
     give a safe range on c1 and c2.
@@ -1144,7 +1144,7 @@ template <class Functor> void Impl_applySafeRanges_rec( ::std::back_insert_itera
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 struct ClipBezierFunctor
 {
@@ -1159,7 +1159,7 @@ struct ClipBezierFunctor
     }
 };
 
-// -----------------------------------------------------------------------------
+
 
 struct BezierTangencyFunctor
 {
@@ -1187,7 +1187,7 @@ struct BezierTangencyFunctor
     }
 };
 
-// -----------------------------------------------------------------------------
+
 
 /** Perform a bezier clip (curve against curve)
 

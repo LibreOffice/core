@@ -30,20 +30,20 @@ namespace svt
     //====================================================================
     //= OStringTransferable
     //====================================================================
-    //--------------------------------------------------------------------
+
     OStringTransferable::OStringTransferable(const OUString& _rContent)
         :TransferableHelper()
         ,m_sContent( _rContent )
     {
     }
 
-    //--------------------------------------------------------------------
+
     void OStringTransferable::AddSupportedFormats()
     {
         AddFormat(SOT_FORMAT_STRING);
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool OStringTransferable::GetData( const DataFlavor& _rFlavor )
     {
         sal_uInt32 nFormat = SotExchange::GetFormat( _rFlavor );
@@ -56,7 +56,7 @@ namespace svt
     //====================================================================
     //= OStringTransfer
     //====================================================================
-    //--------------------------------------------------------------------
+
     void OStringTransfer::CopyString( const OUString& _rContent, Window* _pWindow )
     {
         OStringTransferable* pTransferable = new OStringTransferable( _rContent );
@@ -64,7 +64,7 @@ namespace svt
         pTransferable->CopyToClipboard( _pWindow );
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool OStringTransfer::PasteString( OUString& _rContent, Window* _pWindow )
     {
         TransferableDataHelper aClipboardData = TransferableDataHelper::CreateFromSystemClipboard( _pWindow );
@@ -88,7 +88,7 @@ namespace svt
         return sal_False;
     }
 
-    //--------------------------------------------------------------------
+
     void OStringTransfer::StartStringDrag( const OUString& _rContent, Window* _pWindow, sal_Int8 _nDragSourceActions )
     {
         OStringTransferable* pTransferable = new OStringTransferable( _rContent );

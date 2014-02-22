@@ -39,7 +39,7 @@ namespace rptxml
     using namespace ::com::sun::star::xml::sax;
 
 
-// -----------------------------------------------------------------------------
+
 OXMLImage::OXMLImage( ORptFilter& rImport,
                 sal_uInt16 nPrfx, const OUString& rLName,
                 const Reference< XAttributeList > & _xAttrList
@@ -104,16 +104,16 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
         OSL_FAIL("Exception catched while filling the image props");
     }
 }
-// -----------------------------------------------------------------------------
+
 
 OXMLImage::~OXMLImage()
 {
 
 }
-// -----------------------------------------------------------------------------
 
-//----------------------------------------------------------------------------
+
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

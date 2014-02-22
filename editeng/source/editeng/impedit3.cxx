@@ -594,9 +594,9 @@ sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     bool bProcessingEmptyLine = ( pParaPortion->GetNode()->Len() == 0 );
     bool bEmptyNodeWithPolygon = ( pParaPortion->GetNode()->Len() == 0 ) && GetTextRanger();
 
-    // ---------------------------------------------------------------
+
     // Fast special treatment for empty paragraphs ...
-    // ---------------------------------------------------------------
+
     if ( ( pParaPortion->GetNode()->Len() == 0 ) && !GetTextRanger() )
     {
         // fast special treatment ...
@@ -608,9 +608,9 @@ sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         return FinishCreateLines( pParaPortion );
     }
 
-    // ---------------------------------------------------------------
+
     // Initialization ......
-    // ---------------------------------------------------------------
+
 
     // Always format for 100%:
     bool bMapChanged = ImpCheckRefMapMode();
@@ -621,9 +621,9 @@ sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         pParaPortion->GetLines().Append(pL);
     }
 
-    // ---------------------------------------------------------------
+
     // Get Paragraph attributes  ......
-    // ---------------------------------------------------------------
+
     ContentNode* const pNode = pParaPortion->GetNode();
 
     sal_Bool bRightToLeftPara = IsRightToLeft( nPara );
@@ -697,10 +697,10 @@ sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     }
 
 
-    // ---------------------------------------------------------------
+
     // Search for line with InvalidPos, start one line before
     // Flag the line => do not remove it !
-    // ---------------------------------------------------------------
+
 
     sal_Int32 nLine = pParaPortion->GetLines().Count()-1;
     for ( sal_Int32 nL = 0; nL <= nLine; nL++ )
@@ -731,9 +731,9 @@ sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             pParaPortion->SetBulletX( 0 ); // if Bullet is set incorrectly
     }
 
-    // ---------------------------------------------------------------
+
     // Reformat all lines from here ...
-    // ---------------------------------------------------------------
+
     sal_Int32 nDelFromLine = -1;
     bool bLineBreak = false;
 
@@ -1275,9 +1275,9 @@ sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                                                 nRemainingWidth, bCanHyphenate && bHyphenatePara );
         }
 
-        // ------------------------------------------------------------------
+
         // Line finished => adjust
-        // ------------------------------------------------------------------
+
 
         // CalcTextSize should be replaced by a continuous registering!
         Size aTextSize = pLine->CalcTextSize( *pParaPortion );
@@ -1440,9 +1440,9 @@ sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             break;
         }
 
-        // -----------------------------------------------------------------
+
         // Check whether the line must be re-issued ...
-        // -----------------------------------------------------------------
+
         pLine->SetInvalid();
 
         // If a portion was wrapped there may be far too many positions in
@@ -2879,9 +2879,9 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
 
     long nVertLineSpacing = CalcVertLineSpacing(aStartPos);
 
-    // --------------------------------------------------
+
     // Over all the paragraphs ...
-    // --------------------------------------------------
+
     for ( sal_Int32 n = 0; n < GetParaPortions().Count(); n++ )
     {
         const ParaPortion* pPortion = GetParaPortions()[n];
@@ -2901,9 +2901,9 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                 ( IsVertical() && ( ( aStartPos.X() - nParaHeight ) < aClipRect.Right() ) ) ) )
 
         {
-            // --------------------------------------------------
+
             // Over the lines of the paragraph ...
-            // --------------------------------------------------
+
             sal_Int32 nLines = pPortion->GetLines().Count();
             sal_Int32 nLastLine = nLines-1;
 
@@ -2964,9 +2964,9 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                         bPaintBullet = rBulletState.GetValue() ? true : false;
                     }
 
-                    // --------------------------------------------------
+
                     // Over the Portions of the line ...
-                    // --------------------------------------------------
+
                     bool bParsingFields = false;
                     ::std::vector< sal_Int32 >::iterator itSubLines;
 

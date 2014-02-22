@@ -108,7 +108,7 @@ OUString getExtensionFolder(OUString const &  parentFolder,
     return title;
 }
 }
-//______________________________________________________________________________
+
 void PackageManagerImpl::initActivationLayer(
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
@@ -280,7 +280,7 @@ void PackageManagerImpl::initActivationLayer(
     }
 }
 
-//______________________________________________________________________________
+
 void PackageManagerImpl::initRegistryBackends()
 {
     if (!m_registryCache.isEmpty())
@@ -326,7 +326,7 @@ static bool isMacroURLReadOnly( const OUString &rMacro )
     return bError;
 }
 
-//______________________________________________________________________________
+
 Reference<deployment::XPackageManager> PackageManagerImpl::create(
     Reference<XComponentContext> const & xComponentContext,
     OUString const & context )
@@ -430,12 +430,12 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
     }
 }
 
-//______________________________________________________________________________
+
 PackageManagerImpl::~PackageManagerImpl()
 {
 }
 
-//______________________________________________________________________________
+
 void PackageManagerImpl::fireModified()
 {
     ::cppu::OInterfaceContainerHelper * pContainer = rBHelper.getContainer(
@@ -447,7 +447,7 @@ void PackageManagerImpl::fireModified()
     }
 }
 
-//______________________________________________________________________________
+
 void PackageManagerImpl::disposing()
 {
     try {
@@ -475,7 +475,7 @@ void PackageManagerImpl::disposing()
 }
 
 // XComponent
-//______________________________________________________________________________
+
 void PackageManagerImpl::dispose() throw (RuntimeException)
 {
     //Do not call check here. We must not throw an exception here if the object
@@ -483,7 +483,7 @@ void PackageManagerImpl::dispose() throw (RuntimeException)
     WeakComponentImplHelperBase::dispose();
 }
 
-//______________________________________________________________________________
+
 void PackageManagerImpl::addEventListener(
     Reference<lang::XEventListener> const & xListener ) throw (RuntimeException)
 {
@@ -492,7 +492,7 @@ void PackageManagerImpl::addEventListener(
     WeakComponentImplHelperBase::addEventListener( xListener );
 }
 
-//______________________________________________________________________________
+
 void PackageManagerImpl::removeEventListener(
     Reference<lang::XEventListener> const & xListener ) throw (RuntimeException)
 {
@@ -502,14 +502,14 @@ void PackageManagerImpl::removeEventListener(
 }
 
 // XPackageManager
-//______________________________________________________________________________
+
 OUString PackageManagerImpl::getContext() throw (RuntimeException)
 {
     check();
     return m_context;
 }
 
-//______________________________________________________________________________
+
 Sequence< Reference<deployment::XPackageTypeInfo> >
 PackageManagerImpl::getSupportedPackageTypes() throw (RuntimeException)
 {
@@ -517,7 +517,7 @@ PackageManagerImpl::getSupportedPackageTypes() throw (RuntimeException)
     return m_xRegistry->getSupportedPackageTypes();
 }
 
-//______________________________________________________________________________
+
 Reference<task::XAbortChannel> PackageManagerImpl::createAbortChannel()
     throw (RuntimeException)
 {
@@ -526,7 +526,7 @@ Reference<task::XAbortChannel> PackageManagerImpl::createAbortChannel()
 }
 
 // XModifyBroadcaster
-//______________________________________________________________________________
+
 void PackageManagerImpl::addModifyListener(
     Reference<util::XModifyListener> const & xListener )
     throw (RuntimeException)
@@ -535,7 +535,7 @@ void PackageManagerImpl::addModifyListener(
     rBHelper.addListener( ::getCppuType( &xListener ), xListener );
 }
 
-//______________________________________________________________________________
+
 void PackageManagerImpl::removeModifyListener(
     Reference<util::XModifyListener> const & xListener )
     throw (RuntimeException)
@@ -544,7 +544,7 @@ void PackageManagerImpl::removeModifyListener(
     rBHelper.removeListener( ::getCppuType( &xListener ), xListener );
 }
 
-//______________________________________________________________________________
+
 OUString PackageManagerImpl::detectMediaType(
     ::ucbhelper::Content const & ucbContent_, bool throw_exc )
 {
@@ -583,7 +583,7 @@ OUString PackageManagerImpl::detectMediaType(
     return mediaType;
 }
 
-//______________________________________________________________________________
+
 OUString PackageManagerImpl::insertToActivationLayer(
     Sequence<beans::NamedValue> const & properties,
     OUString const & mediaType, ::ucbhelper::Content const & sourceContent_,
@@ -652,7 +652,7 @@ OUString PackageManagerImpl::insertToActivationLayer(
     return destFolder;
 }
 
-//______________________________________________________________________________
+
 void PackageManagerImpl::insertToActivationLayerDB(
     OUString const & id, ActivePackages::Data const & dbData )
 {
@@ -661,7 +661,7 @@ void PackageManagerImpl::insertToActivationLayerDB(
     m_activePackagesDB->put( id, dbData );
 }
 
-//______________________________________________________________________________
+
 /* The function returns true if there is an extension with the same id already
     installed which needs to be uninstalled, before the new extension can be installed.
 */
@@ -679,7 +679,7 @@ bool PackageManagerImpl::isInstalled(
 }
 
 // XPackageManager
-//______________________________________________________________________________
+
 Reference<deployment::XPackage> PackageManagerImpl::importExtension(
     Reference<deployment::XPackage> const & extension,
     Reference<task::XAbortChannel> const & xAbortChannel,
@@ -850,7 +850,7 @@ void PackageManagerImpl::deletePackageFromCache(
         false /* no throw: ignore errors */ );
 
 }
-//______________________________________________________________________________
+
 void PackageManagerImpl::removePackage(
     OUString const & id, OUString const & fileName,
     Reference<task::XAbortChannel> const & /*xAbortChannel*/,
@@ -938,7 +938,7 @@ void PackageManagerImpl::removePackage(
     }
 }
 
-//______________________________________________________________________________
+
 OUString PackageManagerImpl::getDeployPath( ActivePackages::Data const & data )
 {
     OUStringBuffer buf;
@@ -956,7 +956,7 @@ OUString PackageManagerImpl::getDeployPath( ActivePackages::Data const & data )
     return makeURL( m_activePackages, buf.makeStringAndClear() );
 }
 
-//______________________________________________________________________________
+
 Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage_(
     OUString const & id, OUString const & fileName,
     Reference<XCommandEnvironment> const & xCmdEnv )
@@ -971,7 +971,7 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage_(
         static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
 }
 
-//______________________________________________________________________________
+
 Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage_(
     OUString const & id, ActivePackages::Data const & data,
     Reference<XCommandEnvironment> const & xCmdEnv, bool ignoreAlienPlatforms )
@@ -1009,7 +1009,7 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage_(
     return xExtension;
 }
 
-//______________________________________________________________________________
+
 Sequence< Reference<deployment::XPackage> >
 PackageManagerImpl::getDeployedPackages_(
     Reference<XCommandEnvironment> const & xCmdEnv )
@@ -1045,7 +1045,7 @@ PackageManagerImpl::getDeployedPackages_(
     return comphelper::containerToSequence(packages);
 }
 
-//______________________________________________________________________________
+
 Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage(
     OUString const & id, OUString const & fileName,
     Reference<XCommandEnvironment> const & xCmdEnv_ )
@@ -1088,7 +1088,7 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage(
     }
 }
 
-//______________________________________________________________________________
+
 Sequence< Reference<deployment::XPackage> >
 PackageManagerImpl::getDeployedPackages(
     Reference<task::XAbortChannel> const &,
@@ -1133,7 +1133,7 @@ PackageManagerImpl::getDeployedPackages(
     }
 }
 
-//______________________________________________________________________________
+
 
 
 //ToDo: the function must not call registerPackage, do this in
@@ -1562,12 +1562,12 @@ sal_Int32 PackageManagerImpl::checkPrerequisites(
 }
 
 
-//______________________________________________________________________________
+
 PackageManagerImpl::CmdEnvWrapperImpl::~CmdEnvWrapperImpl()
 {
 }
 
-//______________________________________________________________________________
+
 PackageManagerImpl::CmdEnvWrapperImpl::CmdEnvWrapperImpl(
     Reference<XCommandEnvironment> const & xUserCmdEnv,
     Reference<XProgressHandler> const & xLogFile )
@@ -1580,7 +1580,7 @@ PackageManagerImpl::CmdEnvWrapperImpl::CmdEnvWrapperImpl(
 }
 
 // XCommandEnvironment
-//______________________________________________________________________________
+
 Reference<task::XInteractionHandler>
 PackageManagerImpl::CmdEnvWrapperImpl::getInteractionHandler()
     throw (RuntimeException)
@@ -1588,7 +1588,7 @@ PackageManagerImpl::CmdEnvWrapperImpl::getInteractionHandler()
     return m_xUserInteractionHandler;
 }
 
-//______________________________________________________________________________
+
 Reference<XProgressHandler>
 PackageManagerImpl::CmdEnvWrapperImpl::getProgressHandler()
     throw (RuntimeException)
@@ -1597,7 +1597,7 @@ PackageManagerImpl::CmdEnvWrapperImpl::getProgressHandler()
 }
 
 // XProgressHandler
-//______________________________________________________________________________
+
 void PackageManagerImpl::CmdEnvWrapperImpl::push( Any const & Status )
     throw (RuntimeException)
 {
@@ -1607,7 +1607,7 @@ void PackageManagerImpl::CmdEnvWrapperImpl::push( Any const & Status )
         m_xUserProgress->push( Status );
 }
 
-//______________________________________________________________________________
+
 void PackageManagerImpl::CmdEnvWrapperImpl::update( Any const & Status )
     throw (RuntimeException)
 {
@@ -1617,7 +1617,7 @@ void PackageManagerImpl::CmdEnvWrapperImpl::update( Any const & Status )
         m_xUserProgress->update( Status );
 }
 
-//______________________________________________________________________________
+
 void PackageManagerImpl::CmdEnvWrapperImpl::pop() throw (RuntimeException)
 {
     if (m_xLogFile.is())

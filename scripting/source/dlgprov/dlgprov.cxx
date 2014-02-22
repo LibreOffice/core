@@ -179,7 +179,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
         return *pImplName;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     static Sequence< OUString > getSupportedServiceNames_DialogProviderImpl()
     {
@@ -230,13 +230,13 @@ static OUString aResourceResolverPropName("ResourceResolver");
     {
     }
 
-    // -----------------------------------------------------------------------------
+
 
     DialogProviderImpl::~DialogProviderImpl()
     {
     }
 
-    // -----------------------------------------------------------------------------
+
 
     Reference< resource::XStringResourceManager > getStringResourceFromDialogLibrary
         ( Reference< container::XNameContainer > xDialogLib )
@@ -472,7 +472,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
         return xCtrlModel;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     Reference< XUnoControlDialog > DialogProviderImpl::createDialogControl
         ( const Reference< XControlModel >& rxDialogModel, const Reference< XWindowPeer >& xParent )
@@ -517,7 +517,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
         return xDialogControl;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     void DialogProviderImpl::attachControlEvents(
         const Reference< XControl >& rxControl,
@@ -584,9 +584,9 @@ static OUString aResourceResolverPropName("ResourceResolver");
     }
 
 
-    // -----------------------------------------------------------------------------
+
     // XServiceInfo
-    // -----------------------------------------------------------------------------
+
 
     OUString DialogProviderImpl::getImplementationName(  ) throw (RuntimeException)
     {
@@ -603,9 +603,9 @@ static OUString aResourceResolverPropName("ResourceResolver");
         return getSupportedServiceNames_DialogProviderImpl();
     }
 
-    // -----------------------------------------------------------------------------
+
     // XInitialization
-    // -----------------------------------------------------------------------------
+
 
     void DialogProviderImpl::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
     {
@@ -645,9 +645,9 @@ static OUString aResourceResolverPropName("ResourceResolver");
         }
     }
 
-    // -----------------------------------------------------------------------------
+
     // XDialogProvider
-    // -----------------------------------------------------------------------------
+
 
     static OUString aDecorationPropName("Decoration");
     static OUString aTitlePropName("Title");
@@ -800,7 +800,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
         return static_cast< lang::XTypeProvider * >( new DialogProviderImpl( xContext ) );
     }
 
-    // -----------------------------------------------------------------------------
+
 
     static struct ::cppu::ImplementationEntry s_component_entries [] =
     {
@@ -809,7 +809,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
         { 0, 0, 0, 0, 0, 0 }
     };
 
-    // -----------------------------------------------------------------------------
+
 
 //.........................................................................
 }   // namespace dlgprov

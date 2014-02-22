@@ -155,7 +155,7 @@ public:
     using PackageRegistryBackend::disposing;
 };
 
-//______________________________________________________________________________
+
 void BackendImpl::disposing()
 {
     try {
@@ -174,7 +174,7 @@ void BackendImpl::disposing()
     }
 }
 
-//______________________________________________________________________________
+
 BackendImpl::BackendImpl(
     Sequence<Any> const & args,
     Reference<XComponentContext> const & xComponentContext )
@@ -284,7 +284,7 @@ bool BackendImpl::activateEntry(OUString const & url)
 
 
 // XPackageRegistry
-//______________________________________________________________________________
+
 Sequence< Reference<deployment::XPackageTypeInfo> >
 BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 {
@@ -299,7 +299,7 @@ void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaT
 }
 
 // PackageRegistryBackend
-//______________________________________________________________________________
+
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString const & url, OUString const & mediaType_,
     sal_Bool bRemoved, OUString const & identifier,
@@ -360,7 +360,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
 }
 
 
-//______________________________________________________________________________
+
 void BackendImpl::configmgrini_verify_init(
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
@@ -417,7 +417,7 @@ void BackendImpl::configmgrini_verify_init(
     }
 }
 
-//______________________________________________________________________________
+
 void BackendImpl::configmgrini_flush(
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
@@ -473,7 +473,7 @@ void BackendImpl::configmgrini_flush(
     m_configmgrini_modified = false;
 }
 
-//______________________________________________________________________________
+
 bool BackendImpl::addToConfigmgrIni( bool isSchema, bool isURL, OUString const & url_,
                               Reference<XCommandEnvironment> const & xCmdEnv )
 {
@@ -492,7 +492,7 @@ bool BackendImpl::addToConfigmgrIni( bool isSchema, bool isURL, OUString const &
         return false;
 }
 
-//______________________________________________________________________________
+
 bool BackendImpl::removeFromConfigmgrIni(
     bool isSchema, OUString const & url_,
     Reference<XCommandEnvironment> const & xCmdEnv )
@@ -524,7 +524,7 @@ bool BackendImpl::removeFromConfigmgrIni(
 
 
 // Package
-//______________________________________________________________________________
+
 
 BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
 {
@@ -566,7 +566,7 @@ BackendImpl::PackageImpl::isRegistered_(
         true, beans::Ambiguous<sal_Bool>( bReg, false ) );
 }
 
-//------------------------------------------------------------------------------
+
 OUString encodeForXml( OUString const & text )
 {
     // encode conforming xml:
@@ -599,7 +599,7 @@ OUString encodeForXml( OUString const & text )
     return buf.makeStringAndClear();
 }
 
-//______________________________________________________________________________
+
 OUString replaceOrigin(
     OUString const & url, OUString const & destFolder, Reference< XCommandEnvironment > const & xCmdEnv, Reference< XComponentContext > const & xContext, bool & out_replaced)
 {
@@ -686,7 +686,7 @@ OUString replaceOrigin(
     return newUrl;
 }
 
-//______________________________________________________________________________
+
 void BackendImpl::PackageImpl::processPackage_(
     ::osl::ResettableMutexGuard &,
     bool doRegisterPackage,

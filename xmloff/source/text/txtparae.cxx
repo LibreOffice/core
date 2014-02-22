@@ -258,7 +258,7 @@ static int txtparae_bContainsIllegalCharacters = sal_False;
 // The following map shows which property values are required:
 //
 // property                     auto style pass     export
-// -------------------------------------------------------
+
 // ParaStyleName                if style exists     always
 // ParaConditionalStyleName     if style exists     always
 // NumberingRules               if style exists     always

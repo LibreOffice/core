@@ -97,7 +97,7 @@ namespace connectivity
     //====================================================================
     //= SQLError_Impl - implementation
     //====================================================================
-    //--------------------------------------------------------------------
+
     SQLError_Impl::SQLError_Impl( const Reference<XComponentContext> & _rxContext )
         :m_aContext( _rxContext )
         ,m_pResources( )
@@ -105,19 +105,19 @@ namespace connectivity
     {
     }
 
-    //--------------------------------------------------------------------
+
     SQLError_Impl::~SQLError_Impl()
     {
     }
 
-    //--------------------------------------------------------------------
+
     const OUString& SQLError_Impl::getMessagePrefix()
     {
         static const OUString s_sMessagePrefix( "[OOoBase]" );
         return s_sMessagePrefix;
     }
 
-    //--------------------------------------------------------------------
+
     namespace
     {
         //................................................................
@@ -145,7 +145,7 @@ namespace connectivity
         }
     }
 
-    //--------------------------------------------------------------------
+
     OUString SQLError_Impl::getErrorMessage( const ErrorCondition _eCondition, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 )
     {
         OUString sErrorMessage( impl_getErrorMessage( _eCondition ) );
@@ -157,19 +157,19 @@ namespace connectivity
         return sErrorMessage;
     }
 
-    //--------------------------------------------------------------------
+
     OUString SQLError_Impl::getSQLState( const ErrorCondition _eCondition )
     {
         return impl_getSQLState( _eCondition );
     }
 
-    //--------------------------------------------------------------------
+
     ErrorCode SQLError_Impl::getErrorCode( const ErrorCondition _eCondition )
     {
         return 0 - ::sal::static_int_cast< ErrorCode, ErrorCondition >( _eCondition );
     }
 
-    //--------------------------------------------------------------------
+
     void SQLError_Impl::raiseException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 )
     {
         raiseTypedException(
@@ -182,7 +182,7 @@ namespace connectivity
         );
     }
 
-    //--------------------------------------------------------------------
+
     void SQLError_Impl::raiseException( const ErrorCondition _eCondition, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 )
     {
         raiseTypedException(
@@ -195,7 +195,7 @@ namespace connectivity
         );
     }
 
-    //--------------------------------------------------------------------
+
     void SQLError_Impl::raiseTypedException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext,
         const Type& _rExceptionType, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 )
     {
@@ -213,14 +213,14 @@ namespace connectivity
         ::cppu::throwException( aException );
     }
 
-    //--------------------------------------------------------------------
+
     SQLException SQLError_Impl::getSQLException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext,
         const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 )
     {
         return impl_buildSQLException( _eCondition, _rxContext, _rParamValue1, _rParamValue2, _rParamValue3 );
     }
 
-    //--------------------------------------------------------------------
+
     SQLException SQLError_Impl::impl_buildSQLException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext,
         const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 )
     {
@@ -233,7 +233,7 @@ namespace connectivity
         );
     }
 
-    //--------------------------------------------------------------------
+
     OUString SQLError_Impl::impl_getErrorMessage( const ErrorCondition& _eCondition )
     {
         OUStringBuffer aMessage;
@@ -248,7 +248,7 @@ namespace connectivity
         return aMessage.makeStringAndClear();
     }
 
-    //--------------------------------------------------------------------
+
     OUString SQLError_Impl::impl_getSQLState( const ErrorCondition& _eCondition )
     {
         OUString sState;
@@ -266,7 +266,7 @@ namespace connectivity
         return sState;
     }
 
-    //--------------------------------------------------------------------
+
     bool SQLError_Impl::impl_initResources()
     {
         if ( m_pResources.get() )
@@ -284,55 +284,55 @@ namespace connectivity
     //====================================================================
     //= SQLError
     //====================================================================
-    //--------------------------------------------------------------------
+
     SQLError::SQLError( const Reference<XComponentContext> & _rxContext )
         :m_pImpl( new SQLError_Impl( _rxContext ) )
     {
     }
 
-    //--------------------------------------------------------------------
+
     SQLError::~SQLError()
     {
     }
 
-    //--------------------------------------------------------------------
+
     const OUString& SQLError::getMessagePrefix()
     {
         return SQLError_Impl::getMessagePrefix();
     }
 
-    //--------------------------------------------------------------------
+
     OUString SQLError::getErrorMessage( const ErrorCondition _eCondition, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 ) const
     {
         return m_pImpl->getErrorMessage( _eCondition, _rParamValue1, _rParamValue2, _rParamValue3 );
     }
 
-    //--------------------------------------------------------------------
+
     ErrorCode SQLError::getErrorCode( const ErrorCondition _eCondition )
     {
         return SQLError_Impl::getErrorCode( _eCondition );
     }
 
-    //--------------------------------------------------------------------
+
     void SQLError::raiseException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 ) const
     {
         m_pImpl->raiseException( _eCondition, _rxContext, _rParamValue1, _rParamValue2, _rParamValue3 );
     }
 
-    //--------------------------------------------------------------------
+
     void SQLError::raiseException( const ErrorCondition _eCondition, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 ) const
     {
         m_pImpl->raiseException( _eCondition, _rParamValue1, _rParamValue2, _rParamValue3 );
     }
 
-    //--------------------------------------------------------------------
+
     void SQLError::raiseTypedException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext,
         const Type& _rExceptionType, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 ) const
     {
         m_pImpl->raiseTypedException( _eCondition, _rxContext, _rExceptionType, _rParamValue1, _rParamValue2, _rParamValue3 );
     }
 
-    //--------------------------------------------------------------------
+
     SQLException SQLError::getSQLException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext,
         const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 ) const
     {

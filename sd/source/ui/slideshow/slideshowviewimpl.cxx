@@ -314,7 +314,7 @@ void SAL_CALL SlideShowView::clear() throw (::com::sun::star::uno::RuntimeExcept
     SolarMutexGuard aSolarGuard;
 
     // fill the bounds rectangle in black
-    // ----------------------------------
+
 
     const Size aWindowSize( mrOutputWindow.GetSizePixel() );
 

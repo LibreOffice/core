@@ -48,12 +48,12 @@ using namespace vcl;
 extern "C" char * XSetIMValues(XIM im, ...);
 #endif
 
-// ------------------------------------------------------------------------------------
+
 //
 // kinput2 IME needs special key handling since key release events are filtered in
 // preeditmode and XmbResetIC does not work
 //
-// ------------------------------------------------------------------------------------
+
 
 bool
 IMServerKinput2 ()
@@ -143,11 +143,11 @@ XKeyEventOp::match (const XKeyEvent &rEvent) const
             && same_screen == rEvent.same_screen;
 }
 
-// -------------------------------------------------------------------------
+
 //
 // locale handling
 //
-// -------------------------------------------------------------------------
+
 
 //  Locale handling of the operating system layer
 
@@ -262,11 +262,11 @@ SalI18N_InputMethod::PosixLocale()
     return False;
 }
 
-// ------------------------------------------------------------------------
+
 //
 // Constructor / Destructor / Initialisation
 //
-// ------------------------------------------------------------------------
+
 
 SalI18N_InputMethod::SalI18N_InputMethod( ) : mbUseable( bUseInputMethodDefault ),
                                               maMethod( (XIM)NULL ),
@@ -446,7 +446,7 @@ SalI18N_InputMethod::HandleDestroyIM()
     maMethod        = NULL;
 }
 
-// ------------------------------------------------------------------------
+
 //
 // add a connection watch into the SalXLib yieldTable to allow iiimp
 // connection processing: soffice waits in select() not in XNextEvent(), so
@@ -455,7 +455,7 @@ SalI18N_InputMethod::HandleDestroyIM()
 // have the focus because the atok12 lookup choice aux window has it we stay
 // deaf and dump otherwise.
 //
-// ------------------------------------------------------------------------
+
 
 int
 InputMethod_HasPendingEvent(int nFileDescriptor, void *pData)

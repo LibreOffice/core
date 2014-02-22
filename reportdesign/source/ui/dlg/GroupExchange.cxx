@@ -40,7 +40,7 @@ namespace rptui
         : m_aGroupRow(_aGroupRow)
     {
     }
-    // -----------------------------------------------------------------------------
+
     void OGroupExchange::AddSupportedFormats()
     {
         if ( m_aGroupRow.getLength() )
@@ -48,7 +48,7 @@ namespace rptui
             AddFormat(OGroupExchange::getReportGroupId());
         }
     }
-    // -----------------------------------------------------------------------------
+
     sal_Bool OGroupExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
     {
         sal_uLong nFormat = SotExchange::GetFormat(rFlavor);
@@ -58,12 +58,12 @@ namespace rptui
         }
         return sal_False;
     }
-    // -----------------------------------------------------------------------------
+
     void OGroupExchange::ObjectReleased()
     {
         m_aGroupRow.realloc(0);
     }
-    // -----------------------------------------------------------------------------
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

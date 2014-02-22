@@ -19,7 +19,7 @@
 
 #include <svx/numinf.hxx>
 
-// -----------------------------------------------------------------------
+
 
 TYPEINIT1(SvxNumberInfoItem, SfxPoolItem);
 
@@ -42,7 +42,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( const sal_uInt16 nId ) :
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                                       const sal_uInt16 nId ) :
@@ -52,7 +52,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                                       const OUString& rVal, const sal_uInt16 nId ) :
@@ -62,7 +62,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                                       const double& rVal, const sal_uInt16 nId ) :
@@ -72,7 +72,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                                       const double& rVal, const OUString& rValueStr,
@@ -85,7 +85,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 
 #undef INIT
 
-// -----------------------------------------------------------------------
+
 
 SvxNumberInfoItem::SvxNumberInfoItem( const SvxNumberInfoItem& rItem ) :
 
@@ -108,14 +108,14 @@ SvxNumberInfoItem::SvxNumberInfoItem( const SvxNumberInfoItem& rItem ) :
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxNumberInfoItem::~SvxNumberInfoItem()
 {
     delete [] pDelFormatArr;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxNumberInfoItem::GetPresentation
 (
@@ -129,7 +129,7 @@ SfxItemPresentation SvxNumberInfoItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxNumberInfoItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -163,7 +163,7 @@ bool SvxNumberInfoItem::operator==( const SfxPoolItem& rItem ) const
     return bEqual;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxNumberInfoItem::Clone( SfxItemPool * ) const
 {
@@ -171,21 +171,21 @@ SfxPoolItem* SvxNumberInfoItem::Clone( SfxItemPool * ) const
 }
 
 // Laden/Speichern wird nicht gebraucht!
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxNumberInfoItem::Create( SvStream& /*rStream*/, sal_uInt16 ) const
 {
     return new SvxNumberInfoItem( *this );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SvxNumberInfoItem::Store( SvStream &rStream, sal_uInt16 /*nItemVersion*/ ) const
 {
     return rStream;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberInfoItem::SetDelFormatArray( const sal_uInt32* pData,
                                            const sal_uInt32 nCount )

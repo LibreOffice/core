@@ -45,7 +45,7 @@ struct StrCannotDetermineLibName : public StaticResourceString<
     StrCannotDetermineLibName, RID_STR_CANNOT_DETERMINE_LIBNAME> {};
 }
 
-//______________________________________________________________________________
+
 OUString LibraryContainer::get_libname(
     OUString const & url,
     Reference<XCommandEnvironment> const & xCmdEnv,

@@ -99,7 +99,7 @@ FuncPage::FuncPage(Window* pParent,const IFunctionManager* _pFunctionManager):
     aLbFunction.SetSelectHdl( LINK( this, FuncPage, SelHdl ) );
     aLbFunction.SetDoubleClickHdl( LINK( this, FuncPage, DblClkHdl ) );
 }
-// -----------------------------------------------------------------------------
+
 void FuncPage::impl_addFunctions(const IFunctionCategory* _pCategory)
 {
     const sal_uInt32 nCount = _pCategory->getCount();
@@ -122,7 +122,7 @@ void FuncPage::UpdateFunctionList()
 
     aLbFunction.Clear();
     aLbFunction.SetUpdateMode( false );
-    //------------------------------------------------------
+
 
     if ( nSelPos > 0 )
     {
@@ -155,7 +155,7 @@ void FuncPage::UpdateFunctionList()
         }
     }
 
-    //------------------------------------------------------
+
     aLbFunction.SetUpdateMode( true );
     aLbFunction.SelectEntryPos(0);
 

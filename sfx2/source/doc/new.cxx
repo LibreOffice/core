@@ -187,7 +187,7 @@ public:
 };
 
 
-//-------------------------------------------------------------------------
+
 
 void SfxNewFileDialog_Impl::ClearInfo()
 {
@@ -198,7 +198,7 @@ void SfxNewFileDialog_Impl::ClearInfo()
     aDescEd.SetText(aNo);
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update)
 {
@@ -273,7 +273,7 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update)
     return sal_True;
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox *, pBox )
 {
@@ -300,7 +300,7 @@ IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox *, pBox )
     return 0;
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(SfxNewFileDialog_Impl, Expand)
 {
@@ -309,7 +309,7 @@ IMPL_LINK_NOARG_INLINE_START(SfxNewFileDialog_Impl, Expand)
 }
 IMPL_LINK_NOARG_INLINE_END(SfxNewFileDialog_Impl, Expand)
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK( SfxNewFileDialog_Impl, PreviewClick, CheckBox *, pBox )
 {
@@ -331,7 +331,7 @@ IMPL_LINK( SfxNewFileDialog_Impl, PreviewClick, CheckBox *, pBox )
     return 0;
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SfxNewFileDialog_Impl, TemplateSelect)
 {
@@ -347,7 +347,7 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, TemplateSelect)
     return 0;
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK_INLINE_START( SfxNewFileDialog_Impl, DoubleClick, ListBox *, pListBox )
 {
@@ -359,7 +359,7 @@ IMPL_LINK_INLINE_START( SfxNewFileDialog_Impl, DoubleClick, ListBox *, pListBox 
 }
 IMPL_LINK_INLINE_END( SfxNewFileDialog_Impl, DoubleClick, ListBox *, pListBox )
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(SfxNewFileDialog_Impl, LoadFile)
 {
@@ -367,7 +367,7 @@ IMPL_LINK_NOARG_INLINE_START(SfxNewFileDialog_Impl, LoadFile)
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SfxNewFileDialog_Impl, LoadFile)
-//-------------------------------------------------------------------------
+
 
 sal_uInt16  SfxNewFileDialog_Impl::GetSelectedTemplatePos() const
 {
@@ -383,7 +383,7 @@ sal_uInt16  SfxNewFileDialog_Impl::GetSelectedTemplatePos() const
     return nEntry;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxNewFileDialog_Impl::IsTemplate() const
 {
@@ -391,7 +391,7 @@ sal_Bool SfxNewFileDialog_Impl::IsTemplate() const
 
 }
 
-//-------------------------------------------------------------------------
+
 
 OUString SfxNewFileDialog_Impl::GetTemplateFileName() const
 {
@@ -401,7 +401,7 @@ OUString SfxNewFileDialog_Impl::GetTemplateFileName() const
                               GetSelectedTemplatePos()-1);
 }
 
-//-------------------------------------------------------------------------
+
 
 void AdjustPosSize_Impl(Window *pWin, short nMoveOffset, short nSizeOffset)
 {
@@ -411,7 +411,7 @@ void AdjustPosSize_Impl(Window *pWin, short nMoveOffset, short nSizeOffset)
     aSize.Width() += nSizeOffset;
     pWin->SetPosSizePixel(aPos, aSize);
 }
-//-------------------------------------------------------------------------
+
 sal_uInt16  SfxNewFileDialog_Impl::GetTemplateFlags()const
 {
     sal_uInt16 nRet = aTextStyleCB.IsChecked() ? SFX_LOAD_TEXT_STYLES : 0;
@@ -425,7 +425,7 @@ sal_uInt16  SfxNewFileDialog_Impl::GetTemplateFlags()const
         nRet |= SFX_MERGE_STYLES;
     return nRet;
 }
-//-------------------------------------------------------------------------
+
 void    SfxNewFileDialog_Impl::SetTemplateFlags(sal_uInt16 nSet)
 {
     aTextStyleCB.Check(  0 != (nSet&SFX_LOAD_TEXT_STYLES ));
@@ -435,7 +435,7 @@ void    SfxNewFileDialog_Impl::SetTemplateFlags(sal_uInt16 nSet)
     aMergeStyleCB.Check( 0 != (nSet&SFX_MERGE_STYLES     ));
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     SfxNewFileDialog* pAntiImplP, sal_uInt16 nFl)
@@ -554,7 +554,7 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     RegionSelect(&aRegionLb);
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxNewFileDialog_Impl::~SfxNewFileDialog_Impl()
 {
@@ -565,34 +565,34 @@ SfxNewFileDialog_Impl::~SfxNewFileDialog_Impl()
 
     delete pMoreBt;
 }
-//-------------------------------------------------------------------------
+
 SfxNewFileDialog::SfxNewFileDialog(Window *pParent, sal_uInt16 nFlags)
     : SfxModalDialog( pParent, SfxResId( DLG_NEW_FILE ) )
 {
     pImpl = new SfxNewFileDialog_Impl( this, nFlags );
 }
-//-------------------------------------------------------------------------
+
 SfxNewFileDialog::~SfxNewFileDialog()
 {
     delete pImpl;
 }
-//-------------------------------------------------------------------------
+
 sal_Bool SfxNewFileDialog::IsTemplate() const
 {
     return pImpl->IsTemplate();
 }
-//-------------------------------------------------------------------------
+
 OUString SfxNewFileDialog::GetTemplateFileName() const
 {
     return pImpl->GetTemplateFileName();
 }
-//-------------------------------------------------------------------------
+
 sal_uInt16 SfxNewFileDialog::GetTemplateFlags()const
 {
     return pImpl->GetTemplateFlags();
 
 }
-//-------------------------------------------------------------------------
+
 void    SfxNewFileDialog::SetTemplateFlags(sal_uInt16 nSet)
 {
     pImpl->SetTemplateFlags(nSet);

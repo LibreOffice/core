@@ -45,7 +45,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 
-// -----------------------------------------------------------------------
+
 
 /*  [Description]
 
@@ -88,7 +88,7 @@ OUString SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
     return sMetric;
 }
 
-// -----------------------------------------------------------------------
+
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxPosSizeStatusBarControl, SvxSizeItem);
 
@@ -107,7 +107,7 @@ private:
     virtual void    Select();
 };
 
-// -----------------------------------------------------------------------
+
 
 FunctionPopup_Impl::FunctionPopup_Impl( sal_uInt16 nCheck ) :
     PopupMenu( ResId( RID_SVXMNU_PSZ_FUNC, DIALOG_MGR() ) ),
@@ -117,7 +117,7 @@ FunctionPopup_Impl::FunctionPopup_Impl( sal_uInt16 nCheck ) :
         CheckItem( nCheck );
 }
 
-// -----------------------------------------------------------------------
+
 
 void FunctionPopup_Impl::Select()
 {
@@ -195,7 +195,7 @@ SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( sal_uInt16 _nSlotId,
     addStatusListener( OUString( STR_FUNC ));    // SID_PSZ_FUNCTION
 }
 
-// -----------------------------------------------------------------------
+
 
 /*  [Description]
 
@@ -209,7 +209,7 @@ SvxPosSizeStatusBarControl::~SvxPosSizeStatusBarControl()
     delete pImp;
 }
 
-// -----------------------------------------------------------------------
+
 
 /*  [Description]
 
@@ -309,7 +309,7 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     GetStatusBar().SetItemText( GetId(), aText );
 }
 
-// -----------------------------------------------------------------------
+
 
 /*  [Description]
 
@@ -349,7 +349,7 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
         SfxStatusBarControl::Command( rCEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 /*  [Description]
 

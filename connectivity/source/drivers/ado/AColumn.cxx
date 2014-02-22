@@ -53,7 +53,7 @@ void WpADOColumn::Create()
         pColumn->Release( );
     }
 }
-// -------------------------------------------------------------------------
+
 OAdoColumn::OAdoColumn(sal_Bool _bCase,OConnection* _pConnection,_ADOColumn* _pColumn)
     : connectivity::sdbcx::OColumn(_bCase)
     ,m_pConnection(_pConnection)
@@ -64,7 +64,7 @@ OAdoColumn::OAdoColumn(sal_Bool _bCase,OConnection* _pConnection,_ADOColumn* _pC
     //  m_aColumn.put_ParentCatalog(_pConnection->getAdoCatalog()->getCatalog());
     fillPropertyValues();
 }
-// -------------------------------------------------------------------------
+
 OAdoColumn::OAdoColumn(sal_Bool _bCase,OConnection* _pConnection)
     : connectivity::sdbcx::OColumn(_bCase)
     ,m_pConnection(_pConnection)
@@ -76,7 +76,7 @@ OAdoColumn::OAdoColumn(sal_Bool _bCase,OConnection* _pConnection)
     m_Type = DataType::OTHER;
 }
 
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OAdoColumn::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId * pId = 0;
@@ -93,14 +93,14 @@ Sequence< sal_Int8 > OAdoColumn::getUnoTunnelImplementationId()
 }
 
 // com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
 sal_Int64 OAdoColumn::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OColumn_ADO::getSomething(rId);
 }
-// -------------------------------------------------------------------------
+
 void OAdoColumn::construct()
 {
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
@@ -108,7 +108,7 @@ void OAdoColumn::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISASCENDING),     PROPERTY_ID_ISASCENDING,    nAttrib,&m_IsAscending, ::getBooleanCppuType());
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RELATEDCOLUMN),   PROPERTY_ID_RELATEDCOLUMN,  nAttrib,&m_ReferencedColumn,    ::getCppuType(static_cast< OUString*>(0)));
 }
-// -----------------------------------------------------------------------------
+
 void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)throw (Exception)
 {
     if(m_aColumn.IsValid())
@@ -189,7 +189,7 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
     }
     OColumn_ADO::setFastPropertyValue_NoBroadcast(nHandle,rValue);
 }
-// -----------------------------------------------------------------------------
+
 void OAdoColumn::fillPropertyValues()
 {
     if(m_aColumn.IsValid())
@@ -271,23 +271,23 @@ void OAdoColumn::fillPropertyValues()
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 WpADOColumn OAdoColumn::getColumnImpl() const
 {
     return m_aColumn;
 }
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+
+
 void SAL_CALL OAdoColumn::acquire() throw()
 {
     OColumn_ADO::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OAdoColumn::release() throw()
 {
     OColumn_ADO::release();
 }
-// -----------------------------------------------------------------------------
+
 
 
 

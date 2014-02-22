@@ -59,7 +59,7 @@ namespace xforms
     //====================================================================
     //= OXSDDataType
     //====================================================================
-    //--------------------------------------------------------------------
+
     OXSDDataType::OXSDDataType( const OUString& _rName, sal_Int16 _nTypeClass )
         :OXSDDataType_PBase( m_aBHelper )
         ,m_bIsBasic( sal_True )
@@ -70,12 +70,12 @@ namespace xforms
     {
     }
 
-    //--------------------------------------------------------------------
+
     OXSDDataType::~OXSDDataType()
     {
     }
 
-    //--------------------------------------------------------------------
+
     void OXSDDataType::registerProperties()
     {
         registerProperty( PROPERTY_NAME,            PROPERTY_ID_NAME,           BOUND, &m_sName,    ::getCppuType( &m_sName ) );
@@ -86,7 +86,7 @@ namespace xforms
         registerProperty( PROPERTY_XSD_TYPE_CLASS,  PROPERTY_ID_XSD_TYPE_CLASS, READONLY, &m_nTypeClass,    ::getCppuType( &m_nTypeClass ) );
     }
 
-    //--------------------------------------------------------------------
+
     void OXSDDataType::initializeClone( const OXSDDataType& _rCloneSource )
     {
         m_bIsBasic   = sal_False;
@@ -95,7 +95,7 @@ namespace xforms
         m_nWST       = _rCloneSource.m_nWST;
     }
 
-    //--------------------------------------------------------------------
+
     OXSDDataType* OXSDDataType::clone( const OUString& _rNewName ) const
     {
         OXSDDataType* pClone = createClone( _rNewName );
@@ -103,73 +103,73 @@ namespace xforms
         return pClone;
     }
 
-    //--------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XINTERFACE2( OXSDDataType, OXSDDataType_Base, ::comphelper::OPropertyContainer )
 
-    //--------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OXSDDataType, OXSDDataType_Base, ::comphelper::OPropertyContainer )
 
 #define SET_PROPERTY( propertyid, value, member ) \
     setFastPropertyValue( PROPERTY_ID_##propertyid, makeAny( value ) ); \
     OSL_POSTCOND( member == value, "OXSDDataType::setFoo: inconsistency!" );
 
-    //--------------------------------------------------------------------
+
     OUString SAL_CALL OXSDDataType::getName(  ) throw (RuntimeException)
     {
         return m_sName;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OXSDDataType::setName( const OUString& aName ) throw (RuntimeException, VetoException)
     {
         // TODO: check the name for conflicts in the repository
         SET_PROPERTY( NAME, aName, m_sName );
     }
 
-    //--------------------------------------------------------------------
+
     OUString SAL_CALL OXSDDataType::getPattern() throw (RuntimeException)
     {
         return m_sPattern;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OXSDDataType::setPattern( const OUString& _pattern ) throw (RuntimeException)
     {
         SET_PROPERTY( XSD_PATTERN, _pattern, m_sPattern );
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int16 SAL_CALL OXSDDataType::getWhiteSpaceTreatment() throw (RuntimeException)
     {
         return m_nWST;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OXSDDataType::setWhiteSpaceTreatment( sal_Int16 _whitespacetreatment ) throw (RuntimeException, IllegalArgumentException)
     {
         SET_PROPERTY( XSD_WHITESPACE, _whitespacetreatment, m_nWST );
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool SAL_CALL OXSDDataType::getIsBasic() throw (RuntimeException)
     {
         return m_bIsBasic;
     }
 
 
-    //--------------------------------------------------------------------
+
     sal_Int16 SAL_CALL OXSDDataType::getTypeClass() throw (RuntimeException)
     {
         return m_nTypeClass;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool OXSDDataType::validate( const OUString& sValue ) throw( RuntimeException )
     {
         return ( _validate( sValue ) == 0 );
     }
 
-    //--------------------------------------------------------------------
+
   OUString OXSDDataType::explainInvalid( const OUString& sValue ) throw( RuntimeException )
     {
         // get reason
@@ -182,7 +182,7 @@ namespace xforms
                                    _explainInvalid( nReason ) );
     }
 
-    //--------------------------------------------------------------------
+
     OUString OXSDDataType::_explainInvalid( sal_uInt16 nReason )
     {
         if ( RID_STR_XFORMS_PATTERN_DOESNT_MATCH == nReason )
@@ -193,7 +193,7 @@ namespace xforms
         return OUString();
     }
 
-    //--------------------------------------------------------------------
+
     namespace
     {
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -224,7 +224,7 @@ namespace xforms
         }
     }
 
-    //--------------------------------------------------------------------
+
     sal_uInt16 OXSDDataType::_validate( const OUString& _rValue )
     {
         // care for the regular expression
@@ -245,7 +245,7 @@ namespace xforms
         return 0;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool OXSDDataType::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue ) throw(IllegalArgumentException)
     {
         // let the base class do the conversion
@@ -265,7 +265,7 @@ namespace xforms
         return sal_True;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OXSDDataType::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw (Exception)
     {
         OXSDDataType_PBase::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
@@ -273,7 +273,7 @@ namespace xforms
             m_bPatternMatcherDirty = true;
     }
 
-    //--------------------------------------------------------------------
+
     bool OXSDDataType::checkPropertySanity( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rNewValue, OUString& _rErrorMessage )
     {
         if ( _nHandle == PROPERTY_ID_XSD_PATTERN )
@@ -293,37 +293,37 @@ namespace xforms
         return true;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OXSDDataType::setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
     {
         OXSDDataType_PBase::setPropertyValue( aPropertyName, aValue );
     }
 
-    //--------------------------------------------------------------------
+
     Any SAL_CALL OXSDDataType::getPropertyValue( const OUString& PropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
         return OXSDDataType_PBase::getPropertyValue( PropertyName );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OXSDDataType::addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
         OXSDDataType_PBase::addPropertyChangeListener( aPropertyName, xListener );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OXSDDataType::removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
         OXSDDataType_PBase::removePropertyChangeListener( aPropertyName, aListener );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OXSDDataType::addVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
         OXSDDataType_PBase::addVetoableChangeListener( PropertyName, aListener );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OXSDDataType::removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
         OXSDDataType_PBase::removeVetoableChangeListener( PropertyName, aListener );
@@ -341,14 +341,14 @@ namespace xforms
     {
     }
 
-    //--------------------------------------------------------------------
+
     void OValueLimitedType_Base::initializeClone( const OXSDDataType& _rCloneSource )
     {
         OXSDDataType::initializeClone( _rCloneSource );
         initializeTypedClone( static_cast< const OValueLimitedType_Base& >( _rCloneSource ) );
     }
 
-    //--------------------------------------------------------------------
+
     void OValueLimitedType_Base::initializeTypedClone( const OValueLimitedType_Base& _rCloneSource )
     {
         m_aMaxInclusive   = _rCloneSource.m_aMaxInclusive;
@@ -361,7 +361,7 @@ namespace xforms
         m_fCachedMinExclusive   = _rCloneSource.m_fCachedMinExclusive;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OValueLimitedType_Base::setFastPropertyValue_NoBroadcast(
         sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue ) throw (::com::sun::star::uno::Exception)
     {
@@ -414,7 +414,7 @@ namespace xforms
         }
     }
 
-    //--------------------------------------------------------------------
+
     bool OValueLimitedType_Base::_getValue( const OUString& rValue, double& fValue )
     {
         // convert to double
@@ -434,7 +434,7 @@ namespace xforms
         return bReturn;
     }
 
-    //--------------------------------------------------------------------
+
     sal_uInt16 OValueLimitedType_Base::_validate( const OUString& rValue )
     {
         sal_uInt16 nReason = OXSDDataType::_validate( rValue );
@@ -459,7 +459,7 @@ namespace xforms
         return nReason;
     }
 
-    //--------------------------------------------------------------------
+
     OUString OValueLimitedType_Base::_explainInvalid( sal_uInt16 nReason )
     {
         OUStringBuffer sInfo;
@@ -500,13 +500,13 @@ namespace xforms
     //====================================================================
     //= OStringType
     //====================================================================
-     //--------------------------------------------------------------------
+
     OStringType::OStringType( const OUString& _rName, sal_Int16 _nTypeClass )
         :OStringType_Base( _rName, _nTypeClass )
     {
     }
 
-    //--------------------------------------------------------------------
+
     void OStringType::registerProperties()
     {
         OStringType_Base::registerProperties();
@@ -516,10 +516,10 @@ namespace xforms
         REGISTER_VOID_PROP( XSD_MAX_LENGTH, m_aMaxLength, sal_Int32 );
     }
 
-    //--------------------------------------------------------------------
+
     IMPLEMENT_DEFAULT_TYPED_CLONING( OStringType, OStringType_Base )
 
-    //--------------------------------------------------------------------
+
     void OStringType::initializeTypedClone( const OStringType& _rCloneSource )
     {
         m_aLength       = _rCloneSource.m_aLength;
@@ -527,7 +527,7 @@ namespace xforms
         m_aMaxLength    = _rCloneSource.m_aMaxLength;
     }
 
-    //--------------------------------------------------------------------
+
     bool OStringType::checkPropertySanity( sal_Int32 _nHandle, const Any& _rNewValue, OUString& _rErrorMessage )
     {
         // let the base class do the conversion
@@ -553,7 +553,7 @@ namespace xforms
         return _rErrorMessage.isEmpty();
     }
 
-    //--------------------------------------------------------------------
+
     sal_uInt16 OStringType::_validate( const OUString& rValue )
     {
         // check regexp, whitespace etc. in parent class
@@ -580,7 +580,7 @@ namespace xforms
         return nReason;
     }
 
-    //--------------------------------------------------------------------
+
     OUString OStringType::_explainInvalid( sal_uInt16 nReason )
     {
         sal_Int32 nValue = 0;
@@ -616,21 +616,21 @@ namespace xforms
     //====================================================================
     //= OBooleanType
     //====================================================================
-    //--------------------------------------------------------------------
+
     OBooleanType::OBooleanType( const OUString& _rName )
         :OBooleanType_Base( _rName, DataTypeClass::BOOLEAN )
     {
     }
 
-    //--------------------------------------------------------------------
+
     IMPLEMENT_DEFAULT_CLONING( OBooleanType, OBooleanType_Base )
 
-    //--------------------------------------------------------------------
+
     void OBooleanType::initializeTypedClone( const OBooleanType& /*_rCloneSource*/ )
     {
     }
 
-    //--------------------------------------------------------------------
+
     sal_uInt16 OBooleanType::_validate( const OUString& sValue )
     {
         sal_uInt16 nInvalidityReason = OBooleanType_Base::_validate( sValue );
@@ -641,7 +641,7 @@ namespace xforms
         return bValid ? 0 : RID_STR_XFORMS_INVALID_VALUE;
     }
 
-    //--------------------------------------------------------------------
+
     OUString OBooleanType::_explainInvalid( sal_uInt16 nReason )
     {
         return ( nReason == 0 ) ? OUString() : getName();
@@ -650,23 +650,23 @@ namespace xforms
     //====================================================================
     //= ODecimalType
     //====================================================================
-    //--------------------------------------------------------------------
+
     ODecimalType::ODecimalType( const OUString& _rName, sal_Int16 _nTypeClass )
         :ODecimalType_Base( _rName, _nTypeClass )
     {
     }
 
-    //--------------------------------------------------------------------
+
     IMPLEMENT_DEFAULT_TYPED_CLONING( ODecimalType, ODecimalType_Base )
 
-    //--------------------------------------------------------------------
+
     void ODecimalType::initializeTypedClone( const ODecimalType& _rCloneSource )
     {
         m_aTotalDigits    = _rCloneSource.m_aTotalDigits;
         m_aFractionDigits = _rCloneSource.m_aFractionDigits;
     }
 
-    //--------------------------------------------------------------------
+
     void ODecimalType::registerProperties()
     {
         ODecimalType_Base::registerProperties();
@@ -675,7 +675,7 @@ namespace xforms
         REGISTER_VOID_PROP( XSD_FRACTION_DIGITS, m_aFractionDigits, sal_Int32 );
     }
 
-    //--------------------------------------------------------------------
+
 
     // validate decimals and return code for which facets failed
     // to be used by: ODecimalType::validate and ODecimalType::explainInvalid
@@ -712,7 +712,7 @@ namespace xforms
         return nReason;
     }
 
-    //--------------------------------------------------------------------
+
     OUString ODecimalType::_explainInvalid( sal_uInt16 nReason )
     {
         sal_Int32 nValue = 0;
@@ -736,7 +736,7 @@ namespace xforms
         return sInfo.makeStringAndClear();
     }
 
-    //--------------------------------------------------------------------
+
     OUString ODecimalType::typedValueAsHumanReadableString( const Any& _rValue ) const
     {
         double fValue( 0 );
@@ -744,7 +744,7 @@ namespace xforms
         return OUString::number( fValue );
     }
 
-    //--------------------------------------------------------------------
+
     void ODecimalType::normalizeValue( const Any& _rValue, double& _rDoubleValue ) const
     {
         OSL_VERIFY( _rValue >>= _rDoubleValue );
@@ -769,16 +769,16 @@ namespace xforms
     //====================================================================
     //= ODateType
     //====================================================================
-    //--------------------------------------------------------------------
+
     DEFAULT_IMPLEMNENT_SUBTYPE( ODateType, DATE )
 
-    //--------------------------------------------------------------------
+
     sal_uInt16 ODateType::_validate( const OUString& _rValue )
     {
         return ODateType_Base::_validate( _rValue );
     }
 
-    //--------------------------------------------------------------------
+
     bool ODateType::_getValue( const OUString& value, double& fValue )
     {
         Any aTypeValue = Convert::get().toAny( value, getCppuType() );
@@ -792,14 +792,14 @@ namespace xforms
         return true;
     }
 
-    //--------------------------------------------------------------------
+
     OUString ODateType::typedValueAsHumanReadableString( const Any& _rValue ) const
     {
         OSL_PRECOND( _rValue.getValueType().equals( getCppuType() ), "ODateType::typedValueAsHumanReadableString: unexpected type" );
         return Convert::get().toXSD( _rValue );
     }
 
-    //--------------------------------------------------------------------
+
     void ODateType::normalizeValue( const Any& _rValue, double& _rDoubleValue ) const
     {
         Date aValue;
@@ -811,16 +811,16 @@ namespace xforms
     //====================================================================
     //= OTimeType
     //====================================================================
-    //--------------------------------------------------------------------
+
     DEFAULT_IMPLEMNENT_SUBTYPE( OTimeType, TIME )
 
-    //--------------------------------------------------------------------
+
     sal_uInt16 OTimeType::_validate( const OUString& _rValue )
     {
         return OTimeType_Base::_validate( _rValue );
     }
 
-    //--------------------------------------------------------------------
+
     bool OTimeType::_getValue( const OUString& value, double& fValue )
     {
         Any aTypedValue = Convert::get().toAny( value, getCppuType() );
@@ -841,14 +841,14 @@ namespace xforms
         return true;
     }
 
-    //--------------------------------------------------------------------
+
     OUString OTimeType::typedValueAsHumanReadableString( const Any& _rValue ) const
     {
         OSL_PRECOND( _rValue.getValueType().equals( getCppuType() ), "OTimeType::typedValueAsHumanReadableString: unexpected type" );
         return Convert::get().toXSD( _rValue );
     }
 
-    //--------------------------------------------------------------------
+
     void OTimeType::normalizeValue( const Any& _rValue, double& _rDoubleValue ) const
     {
         Time aValue;
@@ -860,16 +860,16 @@ namespace xforms
     //====================================================================
     //= ODateTimeType
     //====================================================================
-    //--------------------------------------------------------------------
+
     DEFAULT_IMPLEMNENT_SUBTYPE( ODateTimeType, DATETIME )
 
-    //--------------------------------------------------------------------
+
     sal_uInt16 ODateTimeType::_validate( const OUString& _rValue )
     {
         return ODateTimeType_Base::_validate( _rValue );
     }
 
-    //--------------------------------------------------------------------
+
     namespace
     {
         double lcl_normalizeDateTime( const DateTime& _rValue )
@@ -888,7 +888,7 @@ namespace xforms
         }
     }
 
-    //--------------------------------------------------------------------
+
     bool ODateTimeType::_getValue( const OUString& value, double& fValue )
     {
         Any aTypedValue = Convert::get().toAny( value, getCppuType() );
@@ -901,7 +901,7 @@ namespace xforms
         return true;
     }
 
-    //--------------------------------------------------------------------
+
     OUString ODateTimeType::typedValueAsHumanReadableString( const Any& _rValue ) const
     {
         OSL_PRECOND( _rValue.getValueType().equals( getCppuType() ), "OTimeType::typedValueAsHumanReadableString: unexpected type" );
@@ -913,7 +913,7 @@ namespace xforms
         return sString.replace( 'T', ' ' );
     }
 
-    //--------------------------------------------------------------------
+
     void ODateTimeType::normalizeValue( const Any& _rValue, double& _rDoubleValue ) const
     {
         DateTime aValue;
@@ -924,21 +924,21 @@ namespace xforms
     //====================================================================
     //= OShortIntegerType
     //====================================================================
-    //--------------------------------------------------------------------
+
     OShortIntegerType::OShortIntegerType( const OUString& _rName, sal_Int16 _nTypeClass )
         :OShortIntegerType_Base( _rName, _nTypeClass )
     {
     }
 
-    //--------------------------------------------------------------------
+
     IMPLEMENT_DEFAULT_TYPED_CLONING( OShortIntegerType, OShortIntegerType_Base )
 
-    //--------------------------------------------------------------------
+
     void OShortIntegerType::initializeTypedClone( const OShortIntegerType& /*_rCloneSource*/ )
     {
     }
 
-    //--------------------------------------------------------------------
+
     bool OShortIntegerType::_getValue( const OUString& value, double& fValue )
     {
         fValue = (double)(sal_Int16)value.toInt32();
@@ -954,7 +954,7 @@ namespace xforms
         return true;
     }
 
-    //--------------------------------------------------------------------
+
     OUString OShortIntegerType::typedValueAsHumanReadableString( const Any& _rValue ) const
     {
         sal_Int16 nValue( 0 );
@@ -962,7 +962,7 @@ namespace xforms
         return OUString::number( nValue );
     }
 
-    //--------------------------------------------------------------------
+
     void OShortIntegerType::normalizeValue( const Any& _rValue, double& _rDoubleValue ) const
     {
         sal_Int16 nValue( 0 );

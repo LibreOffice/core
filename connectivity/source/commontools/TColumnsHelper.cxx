@@ -68,13 +68,13 @@ OColumnsHelper::OColumnsHelper( ::cppu::OWeakObject& _rParent
     ,m_pTable(NULL)
 {
 }
-// -----------------------------------------------------------------------------
+
 OColumnsHelper::~OColumnsHelper()
 {
     delete m_pImpl;
     m_pImpl = NULL;
 }
-// -----------------------------------------------------------------------------
+
 
 sdbcx::ObjectType OColumnsHelper::createObject(const OUString& _rName)
 {
@@ -153,7 +153,7 @@ sdbcx::ObjectType OColumnsHelper::createObject(const OUString& _rName)
     return xRet;
 }
 
-// -------------------------------------------------------------------------
+
 void OColumnsHelper::impl_refresh() throw(RuntimeException)
 {
     if ( m_pTable )
@@ -162,12 +162,12 @@ void OColumnsHelper::impl_refresh() throw(RuntimeException)
         m_pTable->refreshColumns();
     }
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OColumnsHelper::createDescriptor()
 {
     return new OColumn(sal_True);
 }
-// -----------------------------------------------------------------------------
+
 // XAppend
 sdbcx::ObjectType OColumnsHelper::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
@@ -190,7 +190,7 @@ sdbcx::ObjectType OColumnsHelper::appendObject( const OUString& _rForName, const
     }
     return createObject( _rForName );
 }
-// -------------------------------------------------------------------------
+
 // XDrop
 void OColumnsHelper::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
 {
@@ -212,7 +212,7 @@ void OColumnsHelper::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 
 
 

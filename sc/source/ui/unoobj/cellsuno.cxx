@@ -131,7 +131,7 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 class ScNamedEntry
 {
@@ -146,7 +146,7 @@ public:
     const ScRange&  GetRange() const    { return aRange; }
 };
 
-//------------------------------------------------------------------------
+
 
 //  The names in the maps must be sorted according to strcmp!
 //! Instead of Which-ID 0 use special IDs and do not compare via names!
@@ -856,12 +856,12 @@ static const SvxItemPropertySet* lcl_GetEditPropertySet()
     return &aEditPropertySet;
 }
 
-//------------------------------------------------------------------------
+
 
 using sc::HMMToTwips;
 using sc::TwipsToHMM;
 
-//------------------------------------------------------------------------
+
 
 #define SCCHARPROPERTIES_SERVICE    "com.sun.star.style.CharacterProperties"
 #define SCPARAPROPERTIES_SERVICE    "com.sun.star.style.ParagraphProperties"
@@ -883,7 +883,7 @@ SC_SIMPLE_SERVICE_INFO( ScCellsObj, "ScCellsObj", "com.sun.star.sheet.Cells" )
 SC_SIMPLE_SERVICE_INFO( ScTableColumnObj, "ScTableColumnObj", "com.sun.star.table.TableColumn" )
 SC_SIMPLE_SERVICE_INFO( ScTableRowObj, "ScTableRowObj", "com.sun.star.table.TableRow" )
 
-//------------------------------------------------------------------------
+
 
 //! ScLinkListener in anderes File verschieben !!!
 
@@ -896,7 +896,7 @@ void ScLinkListener::Notify( SvtBroadcaster&, const SfxHint& rHint )
     aLink.Call( (SfxHint*)&rHint );
 }
 
-//------------------------------------------------------------------------
+
 
 static void lcl_CopyProperties( beans::XPropertySet& rDest, beans::XPropertySet& rSource )
 {
@@ -1051,7 +1051,7 @@ void ScHelperFunctions::AssignTableBorder2ToAny( uno::Any& rAny,
     rAny <<= aBorder;
 }
 
-//------------------------------------------------------------------------
+
 
 //! lcl_ApplyBorder nach docfunc verschieben!
 
@@ -1403,7 +1403,7 @@ static OUString lcl_GetInputString( ScDocument* pDoc, const ScAddress& rPos, sal
     return aVal;
 }
 
-//------------------------------------------------------------------------
+
 
 ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRange& rR) :
     pPropSet(lcl_GetCellsPropertySet()),
@@ -1807,7 +1807,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScCellRangesBase::getImplementationId()
     return theScCellRangesBaseImplementationId::get().getSeq();
 }
 
-// ---
+
 
 void ScCellRangesBase::PaintRanges_Impl( sal_uInt16 nPart )
 {
@@ -4146,7 +4146,7 @@ ScCellRangesBase* ScCellRangesBase::getImplementation( const uno::Reference<uno:
     return pRet;
 }
 
-//------------------------------------------------------------------------
+
 
 typedef boost::ptr_vector<ScNamedEntry> ScNamedEntryArr_Impl;
 
@@ -4782,7 +4782,7 @@ uno::Reference<table::XCellRange> ScCellRangeObj::CreateRangeFromDoc( ScDocument
     return NULL;
 }
 
-//------------------------------------------------------------------------
+
 
 ScCellRangeObj::ScCellRangeObj(ScDocShell* pDocSh, const ScRange& rR) :
     ScCellRangesBase( pDocSh, rR ),
@@ -6062,7 +6062,7 @@ uno::Sequence<OUString> SAL_CALL ScCellRangeObj::getSupportedServiceNames()
     return aRet;
 }
 
-//------------------------------------------------------------------------
+
 
 const SvxItemPropertySet* ScCellObj::GetEditPropertySet()
 {
@@ -6874,7 +6874,7 @@ sal_Int16 SAL_CALL ScCellObj::resetActionLocks() throw(uno::RuntimeException)
     return nRet;
 }
 
-//------------------------------------------------------------------------
+
 
 ScTableSheetObj::ScTableSheetObj( ScDocShell* pDocSh, SCTAB nTab ) :
     ScCellRangeObj( pDocSh, ScRange(0,0,nTab, MAXCOL,MAXROW,nTab) ),
@@ -8728,7 +8728,7 @@ ScTableSheetObj* ScTableSheetObj::getImplementation( const uno::Reference<uno::X
     return pRet;
 }
 
-//------------------------------------------------------------------------
+
 
 ScTableColumnObj::ScTableColumnObj( ScDocShell* pDocSh, SCCOL nCol, SCTAB nTab ) :
     ScCellRangeObj( pDocSh, ScRange(nCol,0,nTab, nCol,MAXROW,nTab) ),
@@ -8937,7 +8937,7 @@ const SfxItemPropertyMap& ScTableColumnObj::GetItemPropertyMap()
     return pColPropSet->getPropertyMap();
 }
 
-//------------------------------------------------------------------------
+
 
 ScTableRowObj::ScTableRowObj(ScDocShell* pDocSh, SCROW nRow, SCTAB nTab) :
     ScCellRangeObj( pDocSh, ScRange(0,nRow,nTab, MAXCOL,nRow,nTab) ),
@@ -9093,7 +9093,7 @@ const SfxItemPropertyMap& ScTableRowObj::GetItemPropertyMap()
     return pRowPropSet->getPropertyMap();
 }
 
-//------------------------------------------------------------------------
+
 
 ScCellsObj::ScCellsObj(ScDocShell* pDocSh, const ScRangeList& rR) :
     pDocShell( pDocSh ),
@@ -9154,7 +9154,7 @@ sal_Bool SAL_CALL ScCellsObj::hasElements() throw(uno::RuntimeException)
     return bHas;
 }
 
-//------------------------------------------------------------------------
+
 
 ScCellsEnumeration::ScCellsEnumeration(ScDocShell* pDocSh, const ScRangeList& rR) :
     pDocShell( pDocSh ),
@@ -9286,7 +9286,7 @@ uno::Any SAL_CALL ScCellsEnumeration::nextElement() throw(container::NoSuchEleme
     throw container::NoSuchElementException();      // no more elements
 }
 
-//------------------------------------------------------------------------
+
 
 ScCellFormatsObj::ScCellFormatsObj(ScDocShell* pDocSh, const ScRange& rRange) :
     pDocShell( pDocSh ),
@@ -9408,7 +9408,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScCellFormatsObj::createEnumera
     return NULL;
 }
 
-//------------------------------------------------------------------------
+
 
 ScCellFormatsEnumeration::ScCellFormatsEnumeration(ScDocShell* pDocSh, const ScRange& rRange) :
     pDocShell( pDocSh ),
@@ -9516,7 +9516,7 @@ uno::Any SAL_CALL ScCellFormatsEnumeration::nextElement() throw(container::NoSuc
     return uno::makeAny(uno::Reference<table::XCellRange> (NextObject_Impl()));
 }
 
-//------------------------------------------------------------------------
+
 
 ScUniqueCellFormatsObj::ScUniqueCellFormatsObj(ScDocShell* pDocSh, const ScRange& rRange) :
     pDocShell( pDocSh ),
@@ -9786,7 +9786,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScUniqueCellFormatsObj::createE
     return NULL;
 }
 
-//------------------------------------------------------------------------
+
 
 ScUniqueCellFormatsEnumeration::ScUniqueCellFormatsEnumeration(ScDocShell* pDocSh, const ScMyRangeLists& rRangeLists) :
     aRangeLists(rRangeLists),

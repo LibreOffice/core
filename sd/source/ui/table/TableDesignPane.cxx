@@ -76,7 +76,7 @@ static const sal_Int32 nBitmapWidth = (nCellWidth * nPreviewColumns) - (nPreview
 static const sal_Int32 nBitmapHeight = (nCellHeight * nPreviewRows) - (nPreviewRows - 1);
 
 
-// --------------------------------------------------------------------
+
 
 static const OUString* getPropertyNames()
 {
@@ -91,7 +91,7 @@ static const OUString* getPropertyNames()
     };
     return &gPropNames[0];
 }
-// --------------------------------------------------------------------
+
 
 TableDesignWidget::TableDesignWidget( VclBuilderContainer* pParent, ViewShellBase& rBase, bool bModal )
     : mrBase(rBase)
@@ -143,14 +143,14 @@ TableDesignWidget::TableDesignWidget( VclBuilderContainer* pParent, ViewShellBas
     updateControls();
 }
 
-// --------------------------------------------------------------------
+
 
 TableDesignWidget::~TableDesignWidget()
 {
     removeListener();
 }
 
-// --------------------------------------------------------------------
+
 
 static SfxBindings* getBindings( ViewShellBase& rBase )
 {
@@ -160,7 +160,7 @@ static SfxBindings* getBindings( ViewShellBase& rBase )
         return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 static SfxDispatcher* getDispatcher( ViewShellBase& rBase )
 {
@@ -170,7 +170,7 @@ static SfxDispatcher* getDispatcher( ViewShellBase& rBase )
         return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(TableDesignWidget, implValueSetHdl)
 {
@@ -180,7 +180,7 @@ IMPL_LINK_NOARG(TableDesignWidget, implValueSetHdl)
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 void TableDesignWidget::ApplyStyle()
 {
@@ -231,7 +231,7 @@ void TableDesignWidget::ApplyStyle()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(TableDesignWidget, implCheckBoxHdl)
 {
@@ -244,7 +244,7 @@ IMPL_LINK_NOARG(TableDesignWidget, implCheckBoxHdl)
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 void TableDesignWidget::ApplyOptions()
 {
@@ -282,7 +282,7 @@ void TableDesignWidget::ApplyOptions()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void TableDesignWidget::onSelectionChanged()
 {
@@ -326,7 +326,7 @@ void TableDesignWidget::onSelectionChanged()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void TableValueSet::Resize()
 {
@@ -396,7 +396,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT ::Window* SAL_CALL makeTableValueSet(::Window *p
     return new TableValueSet(pParent, nWinStyle);
 }
 
-// --------------------------------------------------------------------
+
 
 void TableDesignWidget::updateControls()
 {
@@ -451,7 +451,7 @@ void TableDesignWidget::updateControls()
     m_pValueSet->SelectItem( nSelection );
 }
 
-// --------------------------------------------------------------------
+
 
 void TableDesignWidget::addListener()
 {
@@ -465,7 +465,7 @@ void TableDesignWidget::addListener()
         | tools::EventMultiplexerEvent::EID_DISPOSING);
 }
 
-// --------------------------------------------------------------------
+
 
 void TableDesignWidget::removeListener()
 {
@@ -473,7 +473,7 @@ void TableDesignWidget::removeListener()
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK(TableDesignWidget,EventMultiplexerListener,
     tools::EventMultiplexerEvent*,pEvent)
@@ -498,7 +498,7 @@ IMPL_LINK(TableDesignWidget,EventMultiplexerListener,
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 struct CellInfo
 {
@@ -535,7 +535,7 @@ CellInfo::CellInfo( const Reference< XStyle >& xStyle )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 typedef std::vector< boost::shared_ptr< CellInfo > > CellInfoVector;
 typedef boost::shared_ptr< CellInfo > CellInfoMatrix[nPreviewColumns][nPreviewRows];
@@ -558,7 +558,7 @@ struct TableStyleSettings
         , mbUseColumnBanding(false) {}
 };
 
-// --------------------------------------------------------------------
+
 
 static void FillCellInfoVector( const Reference< XIndexAccess >& xTableStyle, CellInfoVector& rVector )
 {
@@ -655,7 +655,7 @@ static void FillCellInfoMatrix( const CellInfoVector& rStyle, const TableStyleSe
     }
 }
 
-// --------------------------------------------------------------------
+
 
 const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, const TableStyleSettings& rSettings, bool bIsPageDark )
 {

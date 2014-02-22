@@ -59,11 +59,11 @@ ODatabaseMetaData::ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon
         osl_atomic_decrement( &m_refCount );
     }
 }
-// -------------------------------------------------------------------------
+
 ODatabaseMetaData::~ODatabaseMetaData()
 {
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > ODatabaseMetaData::impl_getTypeInfo_throw(  )
 {
     Reference< XResultSet > xRef;
@@ -80,7 +80,7 @@ Reference< XResultSet > ODatabaseMetaData::impl_getTypeInfo_throw(  )
 
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  ) throw(SQLException, RuntimeException)
 {
     Reference< XResultSet > xRef;
@@ -104,7 +104,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  ) throw(SQLExc
 
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 OUString ODatabaseMetaData::impl_getCatalogSeparator_throw(  )
 {
     OUString aVal;
@@ -113,7 +113,7 @@ OUString ODatabaseMetaData::impl_getCatalogSeparator_throw(  )
 
     return aVal;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas(  ) throw(SQLException, RuntimeException)
 {
     Reference< XResultSet > xRef;
@@ -129,7 +129,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas(  ) throw(SQLExce
     }
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
     const Any& catalog, const OUString& schema, const OUString& table,
     const OUString& columnNamePattern ) throw(SQLException, RuntimeException)
@@ -147,7 +147,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
     }
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
     const Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern,
     const OUString& columnNamePattern ) throw(SQLException, RuntimeException)
@@ -165,7 +165,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
     }
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     const Any& catalog, const OUString& schemaPattern,
     const OUString& tableNamePattern, const Sequence< OUString >& types ) throw(SQLException, RuntimeException)
@@ -183,7 +183,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     }
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
     const Any& catalog, const OUString& schemaPattern,
     const OUString& procedureNamePattern, const OUString& columnNamePattern ) throw(SQLException, RuntimeException)
@@ -201,7 +201,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
     }
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
     const Any& catalog, const OUString& schemaPattern,
     const OUString& procedureNamePattern ) throw(SQLException, RuntimeException)
@@ -219,7 +219,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
     }
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
     const Any& catalog, const OUString& schema, const OUString& table ) throw(SQLException, RuntimeException)
 {
@@ -246,91 +246,91 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
 
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_BINARY_LITERAL_LEN,nValue,*this);
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxRowSize(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_ROW_SIZE,nValue,*this);
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCatalogNameLength(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_CATALOG_NAME_LEN,nValue,*this);
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCharLiteralLength(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_CHAR_LITERAL_LEN,nValue,*this);
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnNameLength(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_COLUMN_NAME_LEN,nValue,*this);
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInIndex(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_COLUMNS_IN_INDEX,nValue,*this);
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCursorNameLength(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_CURSOR_NAME_LEN,nValue,*this);
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxConnections(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_DRIVER_CONNECTIONS/*SQL_ACTIVE_CONNECTIONS*/,nValue,*this);
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_COLUMNS_IN_TABLE,nValue,*this);
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatementLength(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_STATEMENT_LEN,nValue,*this);
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTableNameLength(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_TABLE_NAME_LEN,nValue,*this);
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 ODatabaseMetaData::impl_getMaxTablesInSelect_throw(  )
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_TABLES_IN_SELECT,nValue,*this);
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
     const Any& catalog, const OUString& schema, const OUString& table ) throw(SQLException, RuntimeException)
 {
@@ -347,7 +347,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
     }
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     const Any& catalog, const OUString& schema, const OUString& table ) throw(SQLException, RuntimeException)
 {
@@ -364,7 +364,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     }
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
     const Any& catalog, const OUString& schema, const OUString& table ) throw(SQLException, RuntimeException)
 {
@@ -381,7 +381,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
     }
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
     const Any& catalog, const OUString& schema, const OUString& table,
     sal_Bool unique, sal_Bool approximate ) throw(SQLException, RuntimeException)
@@ -399,7 +399,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
     }
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
     const Any& catalog, const OUString& schema, const OUString& table, sal_Int32 scope,
     sal_Bool nullable ) throw(SQLException, RuntimeException)
@@ -417,7 +417,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
     }
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     const Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern ) throw(SQLException, RuntimeException)
 {
@@ -430,7 +430,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     pResult->openTablePrivileges(m_bUseCatalog ? catalog : Any(),schemaPattern,tableNamePattern);
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
     const Any& primaryCatalog, const OUString& primarySchema,
     const OUString& primaryTable, const Any& foreignCatalog,
@@ -450,63 +450,63 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
     }
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::doesMaxRowSizeIncludeBlobs(  ) throw(SQLException, RuntimeException)
 {
     OUString aVal;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_ROW_SIZE_INCLUDES_LONG,aVal,*this,m_pConnection->getTextEncoding());
     return aVal.toChar() == 'Y';
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_QUOTED_IDENTIFIER_CASE,nValue,*this);
     return nValue == SQL_IC_LOWER;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseIdentifiers(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_IDENTIFIER_CASE,nValue,*this);
     return nValue == SQL_IC_LOWER;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_QUOTED_IDENTIFIER_CASE,nValue,*this);
     return nValue == SQL_IC_MIXED;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::storesMixedCaseIdentifiers(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_IDENTIFIER_CASE,nValue,*this);
     return nValue == SQL_IC_MIXED;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_QUOTED_IDENTIFIER_CASE,nValue,*this);
     return nValue == SQL_IC_UPPER;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseIdentifiers(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_IDENTIFIER_CASE,nValue,*this);
     return nValue == SQL_IC_UPPER;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ODatabaseMetaData::impl_supportsAlterTableWithAddColumn_throw(  )
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ALTER_TABLE,nValue,*this);
     return (nValue & SQL_AT_ADD_COLUMN) == SQL_AT_ADD_COLUMN;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ODatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
 {
     SQLUINTEGER nValue;
@@ -515,21 +515,21 @@ sal_Bool ODatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
             ((nValue & SQL_AT_DROP_COLUMN_CASCADE)  == SQL_AT_DROP_COLUMN_CASCADE)  ||
             ((nValue & SQL_AT_DROP_COLUMN_RESTRICT) == SQL_AT_DROP_COLUMN_RESTRICT);
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxIndexLength(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_INDEX_SIZE,nValue,*this);
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_NON_NULLABLE_COLUMNS,nValue,*this);
     return nValue == SQL_NNC_NON_NULL;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ODatabaseMetaData::getCatalogTerm(  ) throw(SQLException, RuntimeException)
 {
     OUString aVal;
@@ -537,28 +537,28 @@ OUString SAL_CALL ODatabaseMetaData::getCatalogTerm(  ) throw(SQLException, Runt
         OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CATALOG_TERM,aVal,*this,m_pConnection->getTextEncoding());
     return aVal;
 }
-// -------------------------------------------------------------------------
+
 OUString ODatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 {
     OUString aVal;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_IDENTIFIER_QUOTE_CHAR,aVal,*this,m_pConnection->getTextEncoding());
     return aVal;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters(  ) throw(SQLException, RuntimeException)
 {
     OUString aVal;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SPECIAL_CHARACTERS,aVal,*this,m_pConnection->getTextEncoding());
     return aVal;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
     return nValue != SQL_CN_NONE;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool        ODatabaseMetaData::impl_isCatalogAtStart_throw(  )
 {
     SQLUSMALLINT nValue=0;
@@ -566,126 +566,126 @@ sal_Bool        ODatabaseMetaData::impl_isCatalogAtStart_throw(  )
         OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CATALOG_LOCATION,nValue,*this);
     return nValue == SQL_CL_START;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_TXN_CAPABLE,nValue,*this);
     return nValue == SQL_TC_DDL_IGNORE;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::dataDefinitionCausesTransactionCommit(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_TXN_CAPABLE,nValue,*this);
     return nValue == SQL_TC_DDL_COMMIT;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDataManipulationTransactionsOnly(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_TXN_CAPABLE,nValue,*this);
     return nValue == SQL_TC_DML;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_TXN_CAPABLE,nValue,*this);
     return nValue == SQL_TC_ALL;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsPositionedDelete(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DYNAMIC_CURSOR_ATTRIBUTES1,nValue,*this);
     return (nValue & SQL_CA1_POS_DELETE) == SQL_CA1_POS_DELETE;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsPositionedUpdate(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DYNAMIC_CURSOR_ATTRIBUTES1,nValue,*this);
     return (nValue & SQL_CA1_POS_UPDATE) == SQL_CA1_POS_UPDATE;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenStatementsAcrossRollback(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CURSOR_ROLLBACK_BEHAVIOR,nValue,*this);
     return nValue == SQL_CB_PRESERVE || nValue == SQL_CB_CLOSE;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenStatementsAcrossCommit(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CURSOR_COMMIT_BEHAVIOR,nValue,*this);
     return nValue == SQL_CB_PRESERVE || nValue == SQL_CB_CLOSE;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenCursorsAcrossCommit(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CURSOR_COMMIT_BEHAVIOR,nValue,*this);
     return nValue == SQL_CB_PRESERVE;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenCursorsAcrossRollback(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CURSOR_ROLLBACK_BEHAVIOR,nValue,*this);
     return nValue == SQL_CB_PRESERVE;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 level ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_TXN_ISOLATION_OPTION,nValue,*this);
     return (nValue & static_cast<SQLUINTEGER>(level)) == static_cast<SQLUINTEGER>(level);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ODatabaseMetaData::impl_supportsSchemasInDataManipulation_throw(  )
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SCHEMA_USAGE,nValue,*this);
     return (nValue & SQL_SU_DML_STATEMENTS) == SQL_SU_DML_STATEMENTS;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92FullSQL(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SQL_CONFORMANCE,nValue,*this);
     return nValue == SQL_SC_SQL92_FULL;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92EntryLevelSQL(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SQL_CONFORMANCE,nValue,*this);
     return nValue == SQL_SC_SQL92_ENTRY;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsIntegrityEnhancementFacility(  ) throw(SQLException, RuntimeException)
 {
     OUString aStr;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_INTEGRITY,aStr,*this,m_pConnection->getTextEncoding());
     return aStr.toChar() == 'Y';
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInIndexDefinitions(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SCHEMA_USAGE,nValue,*this);
     return (nValue & SQL_SU_INDEX_DEFINITION) == SQL_SU_INDEX_DEFINITION;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ODatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw(  )
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SCHEMA_USAGE,nValue,*this);
     return (nValue & SQL_SU_TABLE_DEFINITION) == SQL_SU_TABLE_DEFINITION;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ODatabaseMetaData::impl_supportsCatalogsInTableDefinitions_throw(  )
 {
     SQLUINTEGER nValue=0;
@@ -693,7 +693,7 @@ sal_Bool ODatabaseMetaData::impl_supportsCatalogsInTableDefinitions_throw(  )
         OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
     return (nValue & SQL_CU_TABLE_DEFINITION) == SQL_CU_TABLE_DEFINITION;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue=0;
@@ -701,7 +701,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) thro
         OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
     return (nValue & SQL_CU_INDEX_DEFINITION) == SQL_CU_INDEX_DEFINITION;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ODatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  )
 {
     SQLUINTEGER nValue=0;
@@ -709,14 +709,14 @@ sal_Bool ODatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  )
         OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
     return (nValue & SQL_CU_DML_STATEMENTS) == SQL_CU_DML_STATEMENTS;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOuterJoins(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_OJ_CAPABILITIES,nValue,*this);
     return ((nValue & (SQL_OJ_FULL|SQL_OJ_LEFT|SQL_OJ_RIGHT|SQL_OJ_NESTED|SQL_OJ_NOT_ORDERED|SQL_OJ_ALL_COMPARISON_OPS|SQL_OJ_INNER)) != 0);
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLException, RuntimeException)
 {
     Reference< XResultSet > xRef;
@@ -732,110 +732,110 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
     }
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 ODatabaseMetaData::impl_getMaxStatements_throw(  )
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_CONCURRENT_ACTIVITIES,nValue,*this);
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxProcedureNameLength(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_PROCEDURE_NAME_LEN,nValue,*this);
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxSchemaNameLength(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_SCHEMA_NAME_LEN,nValue,*this);
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactions(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_TXN_CAPABLE,nValue,*this);
     return nValue != SQL_TC_NONE;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::allProceduresAreCallable(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ACCESSIBLE_PROCEDURES,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.toChar() == 'Y';
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsStoredProcedures(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_PROCEDURES,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.toChar() == 'Y';
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSelectForUpdate(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DYNAMIC_CURSOR_ATTRIBUTES1,nValue,*this);
     return (nValue & SQL_CA1_POSITIONED_UPDATE) == SQL_CA1_POSITIONED_UPDATE;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::allTablesAreSelectable(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ACCESSIBLE_TABLES,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.toChar() == 'Y';
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::isReadOnly(  ) throw(SQLException, RuntimeException)
 {
     return m_pConnection->isReadOnly();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::usesLocalFiles(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_FILE_USAGE,nValue,*this);
     return nValue == SQL_FILE_CATALOG;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::usesLocalFilePerTable(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_FILE_USAGE,nValue,*this);
     return nValue == SQL_FILE_TABLE;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsTypeConversion(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_FUNCTIONS,nValue,*this);
     return (nValue & SQL_FN_CVT_CONVERT) == SQL_FN_CVT_CONVERT;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::nullPlusNonNullIsNull(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONCAT_NULL_BEHAVIOR,nValue,*this);
     return nValue == SQL_CB_NULL;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsColumnAliasing(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_COLUMN_ALIAS,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.toChar() == 'Y';
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsTableCorrelationNames(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
     return nValue != SQL_CN_NONE;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_Int32 toType ) throw(SQLException, RuntimeException)
 {
     if(fromType == toType)
@@ -991,133 +991,133 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_In
 
     return bConvert;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsExpressionsInOrderBy(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_EXPRESSIONS_IN_ORDERBY,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.toChar() == 'Y';
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsGroupBy(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_GROUP_BY,nValue,*this);
     return nValue != SQL_GB_NOT_SUPPORTED;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsGroupByBeyondSelect(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_GROUP_BY,nValue,*this);
     return nValue != SQL_GB_GROUP_BY_CONTAINS_SELECT;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsGroupByUnrelated(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_GROUP_BY,nValue,*this);
     return nValue == SQL_GB_NO_RELATION;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMultipleTransactions(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MULTIPLE_ACTIVE_TXN,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.toChar() == 'Y';
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMultipleResultSets(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MULT_RESULT_SETS,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.toChar() == 'Y';
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsLikeEscapeClause(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_LIKE_ESCAPE_CLAUSE,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.toChar() == 'Y';
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOrderByUnrelated(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ORDER_BY_COLUMNS_IN_SELECT,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.toChar() == 'N';
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsUnion(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_UNION,nValue,*this);
     return (nValue & SQL_U_UNION) == SQL_U_UNION;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsUnionAll(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_UNION,nValue,*this);
     return (nValue & SQL_U_UNION_ALL) == SQL_U_UNION_ALL;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseIdentifiers(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_IDENTIFIER_CASE,nValue,*this);
     return nValue == SQL_IC_MIXED;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ODatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_QUOTED_IDENTIFIER_CASE,nValue,*this);
     return nValue == SQL_IC_MIXED;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedAtEnd(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_NULL_COLLATION,nValue,*this);
     return nValue == SQL_NC_END;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedAtStart(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_NULL_COLLATION,nValue,*this);
     return nValue == SQL_NC_START;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedHigh(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_NULL_COLLATION,nValue,*this);
     return nValue == SQL_NC_HIGH;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedLow(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_NULL_COLLATION,nValue,*this);
     return nValue == SQL_NC_LOW;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInProcedureCalls(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SCHEMA_USAGE,nValue,*this);
     return (nValue & SQL_SU_PROCEDURE_INVOCATION) == SQL_SU_PROCEDURE_INVOCATION;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SCHEMA_USAGE,nValue,*this);
     return (nValue & SQL_SU_PRIVILEGE_DEFINITION) == SQL_SU_PRIVILEGE_DEFINITION;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInProcedureCalls(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue=0;
@@ -1125,7 +1125,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInProcedureCalls(  ) throw(
         OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
     return (nValue & SQL_CU_PROCEDURE_INVOCATION) == SQL_CU_PROCEDURE_INVOCATION;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue=0;
@@ -1133,56 +1133,56 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  ) 
         OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
     return (nValue & SQL_CU_PRIVILEGE_DEFINITION) == SQL_CU_PRIVILEGE_DEFINITION;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCorrelatedSubqueries(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SUBQUERIES,nValue,*this);
     return (nValue & SQL_SQ_CORRELATED_SUBQUERIES) == SQL_SQ_CORRELATED_SUBQUERIES;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInComparisons(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SUBQUERIES,nValue,*this);
     return (nValue & SQL_SQ_COMPARISON) == SQL_SQ_COMPARISON;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInExists(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SUBQUERIES,nValue,*this);
     return (nValue & SQL_SQ_EXISTS) == SQL_SQ_EXISTS;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInIns(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SUBQUERIES,nValue,*this);
     return (nValue & SQL_SQ_IN) == SQL_SQ_IN;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInQuantifieds(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SUBQUERIES,nValue,*this);
     return (nValue & SQL_SQ_QUANTIFIED) == SQL_SQ_QUANTIFIED;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SQL_CONFORMANCE,nValue,*this);
     return nValue == SQL_SC_SQL92_INTERMEDIATE;
 }
-// -----------------------------------------------------------------------------
+
 OUString ODatabaseMetaData::getURLImpl()
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DATA_SOURCE_NAME,aValue,*this,m_pConnection->getTextEncoding());
     return aValue;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ODatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue = m_pConnection->getURL();
@@ -1192,91 +1192,91 @@ OUString SAL_CALL ODatabaseMetaData::getURL(  ) throw(SQLException, RuntimeExcep
     }
     return aValue;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ODatabaseMetaData::getUserName(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_USER_NAME,aValue,*this,m_pConnection->getTextEncoding());
     return aValue;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ODatabaseMetaData::getDriverName(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DRIVER_NAME,aValue,*this,m_pConnection->getTextEncoding());
     return aValue;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ODatabaseMetaData::getDriverVersion() throw(SQLException, RuntimeException)
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DRIVER_ODBC_VER,aValue,*this,m_pConnection->getTextEncoding());
     return aValue;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ODatabaseMetaData::getDatabaseProductVersion(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DRIVER_VER,aValue,*this,m_pConnection->getTextEncoding());
     return aValue;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ODatabaseMetaData::getDatabaseProductName(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DBMS_NAME,aValue,*this,m_pConnection->getTextEncoding());
     return aValue;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ODatabaseMetaData::getProcedureTerm(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_PROCEDURE_TERM,aValue,*this,m_pConnection->getTextEncoding());
     return aValue;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ODatabaseMetaData::getSchemaTerm(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SCHEMA_TERM,aValue,*this,m_pConnection->getTextEncoding());
     return aValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMajorVersion(  ) throw(RuntimeException)
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DRIVER_VER,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.copy(0,aValue.indexOf('.')).toInt32();
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODatabaseMetaData::getDefaultTransactionIsolation(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SUBQUERIES,nValue,*this);
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeException)
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DRIVER_VER,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.copy(0,aValue.lastIndexOf('.')).toInt32();
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ODatabaseMetaData::getSQLKeywords(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_KEYWORDS,aValue,*this,m_pConnection->getTextEncoding());
     return aValue;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ODatabaseMetaData::getSearchStringEscape(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SEARCH_PATTERN_ESCAPE,aValue,*this,m_pConnection->getTextEncoding());
     return aValue;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ODatabaseMetaData::getStringFunctions(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
@@ -1337,7 +1337,7 @@ OUString SAL_CALL ODatabaseMetaData::getStringFunctions(  ) throw(SQLException, 
 
     return aValue.makeStringAndClear();
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ODatabaseMetaData::getTimeDateFunctions(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
@@ -1392,7 +1392,7 @@ OUString SAL_CALL ODatabaseMetaData::getTimeDateFunctions(  ) throw(SQLException
 
     return aValue.makeStringAndClear();
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ODatabaseMetaData::getSystemFunctions(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
@@ -1411,7 +1411,7 @@ OUString SAL_CALL ODatabaseMetaData::getSystemFunctions(  ) throw(SQLException, 
 
     return aValue.makeStringAndClear();
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ODatabaseMetaData::getNumericFunctions(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
@@ -1472,7 +1472,7 @@ OUString SAL_CALL ODatabaseMetaData::getNumericFunctions(  ) throw(SQLException,
 
     return aValue.makeStringAndClear();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsExtendedSQLGrammar(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
@@ -1487,7 +1487,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsExtendedSQLGrammar(  ) throw(SQLExc
         return nValue == SQL_OAC_LEVEL2;
     }
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCoreSQLGrammar(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
@@ -1502,7 +1502,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCoreSQLGrammar(  ) throw(SQLExcepti
         return nValue == SQL_OSC_CORE || nValue == SQL_OAC_LEVEL1 || nValue == SQL_OAC_LEVEL2;
     }
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMinimumSQLGrammar(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
@@ -1517,54 +1517,54 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsMinimumSQLGrammar(  ) throw(SQLExce
         return nValue == SQL_OAC_LEVEL1 || nValue == SQL_OAC_LEVEL2;
     }
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsFullOuterJoins(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_OJ_CAPABILITIES,nValue,*this);
     return (nValue & SQL_OJ_FULL) == SQL_OJ_FULL;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsLimitedOuterJoins(  ) throw(SQLException, RuntimeException)
 {
     return supportsFullOuterJoins(  );
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInGroupBy(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_COLUMNS_IN_GROUP_BY,nValue,*this);
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInOrderBy(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_COLUMNS_IN_ORDER_BY,nValue,*this);
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInSelect(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_COLUMNS_IN_SELECT,nValue,*this);
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxUserNameLength(  ) throw(SQLException, RuntimeException)
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_USER_NAME_LEN,nValue,*this);
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetType( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CURSOR_SENSITIVITY,nValue,*this);
     return (nValue & static_cast<SQLUINTEGER>(setType)) == static_cast<SQLUINTEGER>(setType);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency( sal_Int32 setType, sal_Int32 concurrency ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
@@ -1596,7 +1596,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency( sal_Int32 set
     }
     return bRet;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::ownUpdatesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
@@ -1618,7 +1618,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::ownUpdatesAreVisible( sal_Int32 setType ) t
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,nAskFor,nValue,*this);
     return (nValue & SQL_CA2_SENSITIVITY_UPDATES) == SQL_CA2_SENSITIVITY_UPDATES;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::ownDeletesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
@@ -1640,7 +1640,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::ownDeletesAreVisible( sal_Int32 setType ) t
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,nAskFor,nValue,*this);
     return (nValue & SQL_CA2_SENSITIVITY_DELETIONS) != SQL_CA2_SENSITIVITY_DELETIONS;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::ownInsertsAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
@@ -1662,46 +1662,46 @@ sal_Bool SAL_CALL ODatabaseMetaData::ownInsertsAreVisible( sal_Int32 setType ) t
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,nAskFor,nValue,*this);
     return (nValue & SQL_CA2_SENSITIVITY_ADDITIONS) == SQL_CA2_SENSITIVITY_ADDITIONS;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::othersUpdatesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
     return ownUpdatesAreVisible(setType);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::othersDeletesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
     return ownDeletesAreVisible(setType);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::othersInsertsAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
     return ownInsertsAreVisible(setType);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::updatesAreDetected( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::deletesAreDetected( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::insertsAreDetected( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*typeNamePattern*/, const Sequence< sal_Int32 >& /*types*/ ) throw(SQLException, RuntimeException)
 {
     return NULL;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

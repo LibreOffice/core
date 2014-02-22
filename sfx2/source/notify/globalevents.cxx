@@ -227,7 +227,7 @@ uno::Any SAL_CALL ModelCollectionEnumeration::nextElement()
     return uno::makeAny(xModel);
 }
 
-//-----------------------------------------------------------------------------
+
 SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const uno::Reference < uno::XComponentContext >& rxContext)
     : ModelCollectionMutexBase(       )
     , m_xJobExecutorListener( task::theJobExecutor::get( rxContext ), uno::UNO_QUERY_THROW )
@@ -242,12 +242,12 @@ SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const uno::Reference < uno::XCompone
     m_refCount--;
 }
 
-//-----------------------------------------------------------------------------
+
 SfxGlobalEvents_Impl::~SfxGlobalEvents_Impl()
 {
 }
 
-//-----------------------------------------------------------------------------
+
 uno::Reference< container::XNameReplace > SAL_CALL SfxGlobalEvents_Impl::getEvents()
     throw(uno::RuntimeException)
 {
@@ -257,7 +257,7 @@ uno::Reference< container::XNameReplace > SAL_CALL SfxGlobalEvents_Impl::getEven
     // <- SAFE
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL SfxGlobalEvents_Impl::addEventListener(const uno::Reference< document::XEventListener >& xListener)
     throw(uno::RuntimeException)
 {
@@ -265,7 +265,7 @@ void SAL_CALL SfxGlobalEvents_Impl::addEventListener(const uno::Reference< docum
     m_aLegacyListeners.addInterface(xListener);
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL SfxGlobalEvents_Impl::removeEventListener(const uno::Reference< document::XEventListener >& xListener)
     throw(uno::RuntimeException)
 {
@@ -273,21 +273,21 @@ void SAL_CALL SfxGlobalEvents_Impl::removeEventListener(const uno::Reference< do
     m_aLegacyListeners.removeInterface(xListener);
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL SfxGlobalEvents_Impl::addDocumentEventListener( const uno::Reference< document::XDocumentEventListener >& _Listener )
     throw(uno::RuntimeException)
 {
     m_aDocumentListeners.addInterface( _Listener );
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL SfxGlobalEvents_Impl::removeDocumentEventListener( const uno::Reference< document::XDocumentEventListener >& _Listener )
     throw(uno::RuntimeException)
 {
     m_aDocumentListeners.removeInterface( _Listener );
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL SfxGlobalEvents_Impl::notifyDocumentEvent( const OUString& /*_EventName*/,
         const uno::Reference< frame::XController2 >& /*_ViewController*/, const uno::Any& /*_Supplement*/ )
         throw (lang::IllegalArgumentException, lang::NoSupportException, uno::RuntimeException)
@@ -296,7 +296,7 @@ void SAL_CALL SfxGlobalEvents_Impl::notifyDocumentEvent( const OUString& /*_Even
     throw lang::NoSupportException(OUString(), *this);
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL SfxGlobalEvents_Impl::notifyEvent(const document::EventObject& aEvent)
     throw(uno::RuntimeException)
 {
@@ -306,7 +306,7 @@ void SAL_CALL SfxGlobalEvents_Impl::notifyEvent(const document::EventObject& aEv
     implts_notifyListener(aDocEvent);
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL SfxGlobalEvents_Impl::documentEventOccured( const document::DocumentEvent& _Event )
     throw (uno::RuntimeException)
 {
@@ -315,7 +315,7 @@ void SAL_CALL SfxGlobalEvents_Impl::documentEventOccured( const document::Docume
     implts_notifyListener(_Event);
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL SfxGlobalEvents_Impl::disposing(const lang::EventObject& aEvent)
     throw(uno::RuntimeException)
 {
@@ -330,7 +330,7 @@ void SAL_CALL SfxGlobalEvents_Impl::disposing(const lang::EventObject& aEvent)
     // <- SAFE
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SfxGlobalEvents_Impl::has(const uno::Any& aElement)
     throw (uno::RuntimeException)
 {
@@ -350,7 +350,7 @@ sal_Bool SAL_CALL SfxGlobalEvents_Impl::has(const uno::Any& aElement)
     return bHas;
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL SfxGlobalEvents_Impl::insert( const uno::Any& aElement )
     throw (lang::IllegalArgumentException  ,
            container::ElementExistException,
@@ -387,7 +387,7 @@ void SAL_CALL SfxGlobalEvents_Impl::insert( const uno::Any& aElement )
     }
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL SfxGlobalEvents_Impl::remove( const uno::Any& aElement )
     throw (lang::IllegalArgumentException   ,
            container::NoSuchElementException,
@@ -424,7 +424,7 @@ void SAL_CALL SfxGlobalEvents_Impl::remove( const uno::Any& aElement )
     }
 }
 
-//-----------------------------------------------------------------------------
+
 uno::Reference< container::XEnumeration > SAL_CALL SfxGlobalEvents_Impl::createEnumeration()
     throw (uno::RuntimeException)
 {
@@ -441,14 +441,14 @@ uno::Reference< container::XEnumeration > SAL_CALL SfxGlobalEvents_Impl::createE
     return xEnum;
 }
 
-//-----------------------------------------------------------------------------
+
 uno::Type SAL_CALL SfxGlobalEvents_Impl::getElementType()
     throw (uno::RuntimeException)
 {
     return ::getCppuType(static_cast< uno::Reference< frame::XModel >* >(NULL));
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SfxGlobalEvents_Impl::hasElements()
     throw (uno::RuntimeException)
 {
@@ -458,7 +458,7 @@ sal_Bool SAL_CALL SfxGlobalEvents_Impl::hasElements()
     // <- SAFE
 }
 
-//-----------------------------------------------------------------------------
+
 void SfxGlobalEvents_Impl::implts_notifyJobExecution(const document::EventObject& aEvent)
 {
     try
@@ -471,7 +471,7 @@ void SfxGlobalEvents_Impl::implts_notifyJobExecution(const document::EventObject
         {}
 }
 
-//-----------------------------------------------------------------------------
+
 void SfxGlobalEvents_Impl::implts_checkAndExecuteEventBindings(const document::DocumentEvent& aEvent)
 {
     try
@@ -497,7 +497,7 @@ void SfxGlobalEvents_Impl::implts_checkAndExecuteEventBindings(const document::D
     }
 }
 
-//-----------------------------------------------------------------------------
+
 void SfxGlobalEvents_Impl::implts_notifyListener(const document::DocumentEvent& aEvent)
 {
     // containers are threadsafe
@@ -507,7 +507,7 @@ void SfxGlobalEvents_Impl::implts_notifyListener(const document::DocumentEvent& 
     m_aDocumentListeners.notifyEach( &document::XDocumentEventListener::documentEventOccured, aEvent );
 }
 
-//-----------------------------------------------------------------------------
+
 // not threadsafe ... must be locked from outside!
 TModelList::iterator SfxGlobalEvents_Impl::impl_searchDoc(const uno::Reference< frame::XModel >& xModel)
 {

@@ -26,14 +26,14 @@ using namespace ::connectivity::kab;
 KabOrder::~KabOrder()
 {
 }
-// -----------------------------------------------------------------------------
+
 KabSimpleOrder::KabSimpleOrder(OUString &sColumnName, sal_Bool bAscending)
     : KabOrder(),
       m_nFieldNumber(findKabField(sColumnName)),
       m_bAscending(bAscending)
 {
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 KabSimpleOrder::compare(const ::KABC::Addressee &aAddressee1, const ::KABC::Addressee &aAddressee2) const
 {
     sal_Int32 result;
@@ -47,24 +47,24 @@ sal_Int32 KabSimpleOrder::compare(const ::KABC::Addressee &aAddressee1, const ::
 
     return result;
 }
-// -----------------------------------------------------------------------------
+
 KabComplexOrder::KabComplexOrder()
     : KabOrder(),
       m_aOrders()
 {
 }
-// -----------------------------------------------------------------------------
+
 KabComplexOrder::~KabComplexOrder()
 {
     for (sal_uInt32 i = 0; i < m_aOrders.size(); i++)
         delete m_aOrders[i];
 }
-// -----------------------------------------------------------------------------
+
 void KabComplexOrder::addOrder(KabOrder *pOrder)
 {
     m_aOrders.push_back(pOrder);
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 KabComplexOrder::compare(const ::KABC::Addressee &aAddressee1, const ::KABC::Addressee &aAddressee2) const
 {
     for (sal_uInt32 i = 0; i < m_aOrders.size(); i++)

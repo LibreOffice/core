@@ -45,7 +45,7 @@ namespace cppu
 */
 ::osl::Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_THROW(());
 
-//--------------------------------------------------------------------------------------------------
+
 static inline void checkInterface( Type const & rType )
     SAL_THROW( (RuntimeException) )
 {
@@ -56,17 +56,17 @@ static inline void checkInterface( Type const & rType )
         throw RuntimeException( msg, Reference< XInterface >() );
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 static inline bool isXInterface( rtl_uString * pStr ) SAL_THROW(())
 {
     return (*((OUString const *)&pStr) == "com.sun.star.uno.XInterface");
 }
-//--------------------------------------------------------------------------------------------------
+
 static inline void * makeInterface( sal_IntPtr nOffset, void * that ) SAL_THROW(())
 {
     return (((char *)that) + nOffset);
 }
-//--------------------------------------------------------------------------------------------------
+
 static inline bool __td_equals(
     typelib_TypeDescriptionReference const * pTDR1,
     typelib_TypeDescriptionReference const * pTDR2 )
@@ -75,7 +75,7 @@ static inline bool __td_equals(
     return ((pTDR1 == pTDR2) ||
             ((OUString const *)&pTDR1->pTypeName)->equals( *(OUString const *)&pTDR2->pTypeName ));
 }
-//--------------------------------------------------------------------------------------------------
+
 static inline type_entry * __getTypeEntries( class_data * cd )
     SAL_THROW( (RuntimeException) )
 {
@@ -106,7 +106,7 @@ static inline type_entry * __getTypeEntries( class_data * cd )
     }
     return pEntries;
 }
-//--------------------------------------------------------------------------------------------------
+
 static inline void __fillTypes( Type * types, class_data * cd )
     SAL_THROW( (RuntimeException) )
 {
@@ -116,7 +116,7 @@ static inline void __fillTypes( Type * types, class_data * cd )
         types[ n ] = pEntries[ n ].m_type.typeRef;
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 namespace {
 
 bool recursivelyFindType(

@@ -41,12 +41,12 @@ OXMLReportElementBase::OXMLReportElementBase( ORptFilter& rImport
 ,m_xComponent(_xComponent)
 {
 }
-// -----------------------------------------------------------------------------
+
 
 OXMLReportElementBase::~OXMLReportElementBase()
 {
 }
-// -----------------------------------------------------------------------------
+
 SvXMLImportContext* OXMLReportElementBase::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -57,7 +57,7 @@ SvXMLImportContext* OXMLReportElementBase::CreateChildContext(
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 SvXMLImportContext* OXMLReportElementBase::_CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -88,7 +88,7 @@ SvXMLImportContext* OXMLReportElementBase::_CreateChildContext(
 
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 void OXMLReportElementBase::EndElement()
 {
     try
@@ -101,8 +101,8 @@ void OXMLReportElementBase::EndElement()
         OSL_FAIL("Exception caught while inserting a new control!");
     }
 }
-//----------------------------------------------------------------------------
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

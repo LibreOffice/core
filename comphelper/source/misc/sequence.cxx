@@ -19,20 +19,15 @@
 
 #include <comphelper/sequence.hxx>
 
-//.........................................................................
 namespace comphelper
 {
-//.........................................................................
-
-//------------------------------------------------------------------------------
 staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< OUString >& _rList, const OUString& _rValue, bool _bOnlyFirst)
 {
     sal_Int32 nLength = _rList.getLength();
 
     if( _bOnlyFirst )
     {
-        //////////////////////////////////////////////////////////////////////
-        // An welcher Position finde ich den Wert?
+        // at which position do I find the value?
         sal_Int32 nPos = -1;
         const OUString* pTArray = _rList.getConstArray();
         for (sal_Int32 i = 0; i < nLength; ++i, ++pTArray)
@@ -44,8 +39,7 @@ staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< OUString >& _rLi
             }
         }
 
-        //////////////////////////////////////////////////////////////////////
-        // Sequence fuellen
+        // fill sequence
         if( nPos>-1 )
         {
             staruno::Sequence<sal_Int16> aRetSeq( 1 );
@@ -62,8 +56,7 @@ staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< OUString >& _rLi
         staruno::Sequence<sal_Int16> aRetSeq( nLength );
         sal_Int16* pReturn = aRetSeq.getArray();
 
-        //////////////////////////////////////////////////////////////////////
-        // Wie oft kommt der Wert vor?
+        // how often does the value occur?
         const OUString* pTArray = _rList.getConstArray();
         for (sal_Int32 i = 0; i < nLength; ++i, ++pTArray)
         {
@@ -80,6 +73,5 @@ staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< OUString >& _rLi
     }
 }
 }   // namespace comphelper
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -37,14 +37,14 @@ namespace connectivity { namespace hsqldb
         return streams;
     }
 
-    //---------------------------------------------------------------------
+
     LogFile::LogFile( JNIEnv* env, jstring streamName, const sal_Char* _pAsciiSuffix )
     {
         m_sFileName = StorageContainer::jstring2ustring(env,streamName) +
             "." + OUString::createFromAscii( _pAsciiSuffix );
     }
 
-    //---------------------------------------------------------------------
+
     FILE*& LogFile::getLogFile()
     {
         FILE*& pLogFile = getStreams()[m_sFileName];
@@ -56,7 +56,7 @@ namespace connectivity { namespace hsqldb
         return pLogFile;
     }
 
-    //---------------------------------------------------------------------
+
     void LogFile::writeString( const sal_Char* _pString, bool _bEndLine )
     {
         FILE* pLogFile = getLogFile();
@@ -66,7 +66,7 @@ namespace connectivity { namespace hsqldb
         fflush( pLogFile );
     }
 
-    //---------------------------------------------------------------------
+
     void LogFile::close()
     {
         fclose( getLogFile() );

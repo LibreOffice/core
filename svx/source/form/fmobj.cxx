@@ -58,7 +58,7 @@ using namespace ::svxform;
 
 TYPEINIT1(FmFormObj, SdrUnoObj);
 DBG_NAME(FmFormObj);
-//------------------------------------------------------------------
+
 FmFormObj::FmFormObj(const OUString& rModelName)
           :SdrUnoObj                ( rModelName    )
           ,m_nPos                   ( -1            )
@@ -71,7 +71,7 @@ FmFormObj::FmFormObj(const OUString& rModelName)
     impl_checkRefDevice_nothrow( true );
 }
 
-//------------------------------------------------------------------
+
 FmFormObj::FmFormObj()
           :SdrUnoObj                ( ""  )
           ,m_nPos                   ( -1        )
@@ -80,7 +80,7 @@ FmFormObj::FmFormObj()
     DBG_CTOR(FmFormObj, NULL);
 }
 
-//------------------------------------------------------------------
+
 FmFormObj::~FmFormObj()
 {
     DBG_DTOR(FmFormObj, NULL);
@@ -92,7 +92,7 @@ FmFormObj::~FmFormObj()
     m_aEventsHistory.realloc(0);
 }
 
-//------------------------------------------------------------------
+
 void FmFormObj::SetObjEnv(const Reference< XIndexContainer > & xForm, const sal_Int32 nIdx,
                           const Sequence< ScriptEventDescriptor >& rEvts)
 {
@@ -101,7 +101,7 @@ void FmFormObj::SetObjEnv(const Reference< XIndexContainer > & xForm, const sal_
     m_nPos    = nIdx;
 }
 
-//------------------------------------------------------------------
+
 void FmFormObj::ClearObjEnv()
 {
     m_xParent.clear();
@@ -109,7 +109,7 @@ void FmFormObj::ClearObjEnv()
     m_nPos = -1;
 }
 
-//------------------------------------------------------------------
+
 void FmFormObj::impl_checkRefDevice_nothrow( bool _force )
 {
     const FmFormModel* pFormModel = PTR_CAST( FmFormModel, GetModel() );
@@ -148,7 +148,7 @@ void FmFormObj::impl_checkRefDevice_nothrow( bool _force )
     }
 }
 
-//------------------------------------------------------------------
+
 void FmFormObj::impl_isolateControlModel_nothrow()
 {
     try
@@ -170,7 +170,7 @@ void FmFormObj::impl_isolateControlModel_nothrow()
     }
 }
 
-//------------------------------------------------------------------
+
 void FmFormObj::SetPage(SdrPage* _pNewPage)
 {
     if ( GetPage() == _pNewPage )
@@ -328,19 +328,19 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
         pNewFormPage->GetImpl().formObjectInserted( *this );
 }
 
-//------------------------------------------------------------------
+
 sal_uInt32 FmFormObj::GetObjInventor()   const
 {
     return FmFormInventor;
 }
 
-//------------------------------------------------------------------
+
 sal_uInt16 FmFormObj::GetObjIdentifier() const
 {
     return OBJ_UNO;
 }
 
-//------------------------------------------------------------------
+
 void FmFormObj::clonedFrom(const FmFormObj* _pSource)
 {
     DBG_ASSERT(_pSource != NULL, "FmFormObj::clonedFrom : invalid source !");
@@ -363,7 +363,7 @@ void FmFormObj::clonedFrom(const FmFormObj* _pSource)
         // if we we're clone there was a call to operator=, so aEvts are excatly the events we need here ...
 }
 
-//------------------------------------------------------------------
+
 FmFormObj* FmFormObj::Clone() const
 {
     FmFormObj* pFormObject = CloneHelper< FmFormObj >();
@@ -374,14 +374,14 @@ FmFormObj* FmFormObj::Clone() const
     return pFormObject;
 }
 
-//------------------------------------------------------------------
+
 void FmFormObj::NbcReformatText()
 {
     impl_checkRefDevice_nothrow( false );
     SdrUnoObj::NbcReformatText();
 }
 
-//------------------------------------------------------------------
+
 FmFormObj& FmFormObj::operator= (const FmFormObj& rObj)
 {
     if( this == &rObj )
@@ -407,7 +407,7 @@ FmFormObj& FmFormObj::operator= (const FmFormObj& rObj)
     return *this;
 }
 
-//------------------------------------------------------------------
+
 namespace
 {
     OUString lcl_getFormComponentAccessPath(const Reference< XInterface >& _xElement, Reference< XInterface >& _rTopLevelElement)
@@ -445,7 +445,7 @@ namespace
     }
 }
 
-//------------------------------------------------------------------
+
 Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface > & _rSourceContainer, const Reference<css::form::XForms>& _rTopLevelDestContainer)
 {
     Reference< XInterface >  xTopLevelSouce;
@@ -589,14 +589,14 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
     return xDestContainer;
 }
 
-//------------------------------------------------------------------
+
 void FmFormObj::SetModel( SdrModel* _pNewModel )
 {
     SdrUnoObj::SetModel( _pNewModel );
     impl_checkRefDevice_nothrow();
 }
 
-//------------------------------------------------------------------
+
 FmFormObj* FmFormObj::GetFormObject( SdrObject* _pSdrObject )
 {
     FmFormObj* pFormObject = dynamic_cast< FmFormObj* >( _pSdrObject );
@@ -609,7 +609,7 @@ FmFormObj* FmFormObj::GetFormObject( SdrObject* _pSdrObject )
     return pFormObject;
 }
 
-//------------------------------------------------------------------
+
 const FmFormObj* FmFormObj::GetFormObject( const SdrObject* _pSdrObject )
 {
     const FmFormObj* pFormObject = dynamic_cast< const FmFormObj* >( _pSdrObject );
@@ -622,7 +622,7 @@ const FmFormObj* FmFormObj::GetFormObject( const SdrObject* _pSdrObject )
     return pFormObject;
 }
 
-//------------------------------------------------------------------
+
 void FmFormObj::SetUnoControlModel( const Reference< com::sun::star::awt::XControlModel >& _rxModel )
 {
     SdrUnoObj::SetUnoControlModel( _rxModel );
@@ -634,7 +634,7 @@ void FmFormObj::SetUnoControlModel( const Reference< com::sun::star::awt::XContr
     impl_checkRefDevice_nothrow( true );
 }
 
-//------------------------------------------------------------------
+
 bool FmFormObj::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
 {
     bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
@@ -677,14 +677,14 @@ bool FmFormObj::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
     return bResult;
 }
 
-//------------------------------------------------------------------------------
+
 void FmFormObj::BrkCreate( SdrDragStat& rStat )
 {
     SdrUnoObj::BrkCreate( rStat );
     impl_isolateControlModel_nothrow();
 }
 
-// -----------------------------------------------------------------------------
+
 // #i70852# overload Layer interface to force to FormColtrol layer
 
 SdrLayerID FmFormObj::GetLayer() const

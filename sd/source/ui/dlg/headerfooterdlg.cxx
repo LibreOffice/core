@@ -251,7 +251,7 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent
     mpNotesHandoutsTabPage->init( maNotesHandoutSettings, false );
 }
 
-// -----------------------------------------------------------------------
+
 
 HeaderFooterDialog::~HeaderFooterDialog()
 {
@@ -259,7 +259,7 @@ HeaderFooterDialog::~HeaderFooterDialog()
     delete mpNotesHandoutsTabPage;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 {
@@ -272,14 +272,14 @@ IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(HeaderFooterDialog, DeactivatePageHdl)
 {
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyToAllHdl)
 {
@@ -287,7 +287,7 @@ IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyToAllHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyHdl)
 {
@@ -295,7 +295,7 @@ IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(HeaderFooterDialog, ClickCancelHdl)
 {
@@ -303,7 +303,7 @@ IMPL_LINK_NOARG(HeaderFooterDialog, ClickCancelHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 short HeaderFooterDialog::Execute()
 {
@@ -313,7 +313,7 @@ short HeaderFooterDialog::Execute()
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderFooterDialog::ApplyToAll()
 {
@@ -322,7 +322,7 @@ void HeaderFooterDialog::ApplyToAll()
     EndDialog(1);
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderFooterDialog::Apply()
 {
@@ -331,14 +331,14 @@ void HeaderFooterDialog::Apply()
     EndDialog(1);
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderFooterDialog::Cancel()
 {
     EndDialog();
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
 {
@@ -418,7 +418,7 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
     mpViewShell->GetViewFrame()->GetObjectShell()->GetUndoManager()->AddUndoAction(pUndoGroup);
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderFooterDialog::change( SdUndoGroup* pUndoGroup, SdPage* pPage, const HeaderFooterSettings& rNewSettings )
 {
@@ -489,13 +489,13 @@ HeaderFooterTabPage::HeaderFooterTabPage( HeaderFooterDialog* pDialog, ::Window*
 
     FillFormatList(SVXDATEFORMAT_A);
 }
-// -----------------------------------------------------------------------
+
 
 HeaderFooterTabPage::~HeaderFooterTabPage()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(HeaderFooterTabPage, LanguageChangeHdl)
 {
@@ -505,7 +505,7 @@ IMPL_LINK_NOARG(HeaderFooterTabPage, LanguageChangeHdl)
     return 0L;
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderFooterTabPage::FillFormatList( int eFormat )
 {
@@ -532,7 +532,7 @@ void HeaderFooterTabPage::FillFormatList( int eFormat )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderFooterTabPage::init( const HeaderFooterSettings& rSettings, bool bNotOnTitle )
 {
@@ -568,7 +568,7 @@ void HeaderFooterTabPage::init( const HeaderFooterSettings& rSettings, bool bNot
     update();
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderFooterTabPage::getData( HeaderFooterSettings& rSettings, bool& rNotOnTitle )
 {
@@ -591,7 +591,7 @@ void HeaderFooterTabPage::getData( HeaderFooterSettings& rSettings, bool& rNotOn
     rNotOnTitle = mpCBNotOnTitle->IsChecked();
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderFooterTabPage::update()
 {
@@ -612,7 +612,7 @@ void HeaderFooterTabPage::update()
     mpCTPreview->update( aSettings );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(HeaderFooterTabPage, UpdateOnClickHdl)
 {
@@ -621,7 +621,7 @@ IMPL_LINK_NOARG(HeaderFooterTabPage, UpdateOnClickHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, bool bSet )
 {
@@ -654,7 +654,7 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, bool bSet, SdPage* pPage )
 {
@@ -739,7 +739,7 @@ PresLayoutPreview::PresLayoutPreview( ::Window* pParent )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::Window* SAL_CALL makePresLayoutPreview( ::Window *pParent, VclBuilder::stringmap & )
 {
@@ -755,7 +755,7 @@ Size PresLayoutPreview::GetOptimalSize() const
     return LogicToPixel(Size(80, 80), MAP_APPFONT);
 }
 
-// -----------------------------------------------------------------------
+
 
 void PresLayoutPreview::init( SdPage *pMaster )
 {
@@ -769,7 +769,7 @@ void PresLayoutPreview::update( HeaderFooterSettings& rSettings )
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void PresLayoutPreview::Paint( OutputDevice& aOut, SdrTextObj* pObj, bool bVisible, bool bDotted /* = false*/ )
 {
@@ -816,7 +816,7 @@ void PresLayoutPreview::Paint( OutputDevice& aOut, SdrTextObj* pObj, bool bVisib
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void PresLayoutPreview::Paint( const Rectangle& )
 {

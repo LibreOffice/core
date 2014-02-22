@@ -32,20 +32,20 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
 
-// -----------------------------------------------------------------------------
+
 
 OptimizationStats::OptimizationStats()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizationStats::SetStatusValue( const PPPOptimizerTokenEnum eStat, const uno::Any& rStatValue )
 {
     maStats[ eStat ] = rStatValue;
 }
 
-// -----------------------------------------------------------------------------
+
 
 const uno::Any* OptimizationStats::GetStatusValue( const PPPOptimizerTokenEnum eStat ) const
 {
@@ -53,7 +53,7 @@ const uno::Any* OptimizationStats::GetStatusValue( const PPPOptimizerTokenEnum e
     return aIter != maStats.end() ? &((*aIter).second) : NULL;
 }
 
-// -----------------------------------------------------------------------------
+
 
 com::sun::star::beans::PropertyValues OptimizationStats::GetStatusSequence()
 {
@@ -68,7 +68,7 @@ com::sun::star::beans::PropertyValues OptimizationStats::GetStatusSequence()
     return aStatsSequence;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizationStats::InitializeStatusValues( const uno::Sequence< PropertyValue >& rOptimizationStats )
 {
@@ -76,7 +76,7 @@ void OptimizationStats::InitializeStatusValues( const uno::Sequence< PropertyVal
         rOptimizationStats[ i ].Value >>= maStats[ TKGet( rOptimizationStats[ i ].Name ) ];
 }
 
-// -----------------------------------------------------------------------------
+
 
 void OptimizationStats::InitializeStatusValuesFromDocument( Reference< XModel > rxModel )
 {

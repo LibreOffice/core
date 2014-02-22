@@ -37,14 +37,14 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL OIndex::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     if(isNew())
         return OUString("com.sun.star.sdbcx.VIndexDescriptor");
     return OUString("com.sun.star.sdbcx.VIndex");
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL OIndex::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Sequence< OUString > aSupported(1);
@@ -60,7 +60,7 @@ sal_Bool SAL_CALL OIndex::supportsService( const OUString& _rServiceName ) throw
 {
     return cppu::supportsService(this, _rServiceName);
 }
-// -------------------------------------------------------------------------
+
 OIndex::OIndex(sal_Bool _bCase) :   ODescriptor_BASE(m_aMutex)
                 ,   ODescriptor(ODescriptor_BASE::rBHelper,_bCase,sal_True)
                 ,m_IsUnique(sal_False)
@@ -69,7 +69,7 @@ OIndex::OIndex(sal_Bool _bCase) :   ODescriptor_BASE(m_aMutex)
                 ,m_pColumns(NULL)
 {
 }
-// -------------------------------------------------------------------------
+
 OIndex::OIndex( const OUString& _Name,
                 const OUString& _Catalog,
                 sal_Bool _isUnique,
@@ -85,22 +85,22 @@ OIndex::OIndex( const OUString& _Name,
 {
     m_Name = _Name;
 }
-// -------------------------------------------------------------------------
+
 OIndex::~OIndex( )
 {
     delete m_pColumns;
 }
-// -----------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* OIndex::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {
     return doCreateArrayHelper();
 }
-// -----------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper& SAL_CALL OIndex::getInfoHelper()
 {
     return *OIndex_PROP::getArrayHelper(isNew() ? 1 : 0);
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OIndex::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = ODescriptor::queryInterface( rType);
@@ -113,14 +113,14 @@ Any SAL_CALL OIndex::queryInterface( const Type & rType ) throw(RuntimeException
     }
     return aRet;
 }
-// -------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OIndex::getTypes(  ) throw(RuntimeException)
 {
     if(isNew())
         return ::comphelper::concatSequences(ODescriptor::getTypes(),ODescriptor_BASE::getTypes());
     return ::comphelper::concatSequences(ODescriptor::getTypes(),ODescriptor_BASE::getTypes(),OIndex_BASE::getTypes());
 }
-// -------------------------------------------------------------------------
+
 void OIndex::construct()
 {
     ODescriptor::construct();
@@ -132,7 +132,7 @@ void OIndex::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISPRIMARYKEYINDEX),PROPERTY_ID_ISPRIMARYKEYINDEX, nAttrib,&m_IsPrimaryKeyIndex,   ::getBooleanCppuType());
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCLUSTERED),     PROPERTY_ID_ISCLUSTERED,        nAttrib,&m_IsClustered,     ::getBooleanCppuType());
 }
-// -------------------------------------------------------------------------
+
 void OIndex::disposing(void)
 {
     OPropertySetHelper::disposing();
@@ -142,7 +142,7 @@ void OIndex::disposing(void)
     if(m_pColumns)
         m_pColumns->disposing();
 }
-// -------------------------------------------------------------------------
+
 Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OIndex::getColumns(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -165,7 +165,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OIndex::getColumn
 
     return const_cast<OIndex*>(this)->m_pColumns;
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > SAL_CALL OIndex::createDataDescriptor(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -174,35 +174,35 @@ Reference< XPropertySet > SAL_CALL OIndex::createDataDescriptor(  ) throw(Runtim
 
     return this;
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OIndex::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL OIndex::getName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return m_Name;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OIndex::setName( const OUString& /*aName*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
 }
-// -----------------------------------------------------------------------------
+
 // XInterface
 void SAL_CALL OIndex::acquire() throw()
 {
     ODescriptor_BASE::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OIndex::release() throw()
 {
     ODescriptor_BASE::release();
 }
-// -----------------------------------------------------------------------------
+
 void OIndex::refreshColumns()
 {
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

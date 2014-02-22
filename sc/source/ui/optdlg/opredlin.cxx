@@ -22,7 +22,7 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #include <svx/dlgutil.hxx>
 #include <svx/drawitem.hxx>
@@ -44,7 +44,7 @@
 
 #include "opredlin.hxx"
 
-//------------------------------------------------------------------
+
 
 ScRedlineOptionsTabPage::ScRedlineOptionsTabPage( Window* pParent,
                                                     const SfxItemSet& rSet )

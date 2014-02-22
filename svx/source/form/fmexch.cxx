@@ -39,14 +39,14 @@ namespace svxform
     //====================================================================
     //= OLocalExchange
     //====================================================================
-    //--------------------------------------------------------------------
+
     OLocalExchange::OLocalExchange( )
         :m_bDragging( sal_False )
         ,m_bClipboardOwner( sal_False )
     {
     }
 
-    //--------------------------------------------------------------------
+
     void OLocalExchange::copyToClipboard( Window* _pWindow, const GrantAccess& )
     {
         if ( m_bClipboardOwner )
@@ -59,7 +59,7 @@ namespace svxform
         CopyToClipboard( _pWindow );
     }
 
-    //--------------------------------------------------------------------
+
     void OLocalExchange::clear()
     {
         if ( isClipboardOwner() )
@@ -78,7 +78,7 @@ namespace svxform
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OLocalExchange::lostOwnership( const Reference< clipboard::XClipboard >& _rxClipboard, const Reference< XTransferable >& _rxTrans ) throw(RuntimeException)
     {
         TransferableHelper::implCallOwnLostOwnership( _rxClipboard, _rxTrans );
@@ -88,21 +88,21 @@ namespace svxform
             m_aClipboardListener.Call( this );
     }
 
-    //--------------------------------------------------------------------
+
     void OLocalExchange::startDrag( Window* _pWindow, sal_Int8 _nDragSourceActions, const GrantAccess& )
     {
         m_bDragging = sal_True;
         StartDrag( _pWindow, _nDragSourceActions );
     }
 
-    //--------------------------------------------------------------------
+
     void OLocalExchange::DragFinished( sal_Int8 nDropAction )
     {
         TransferableHelper::DragFinished( nDropAction );
         m_bDragging = sal_False;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool OLocalExchange::hasFormat( const DataFlavorExVector& _rFormats, sal_uInt32 _nFormatId )
     {
         DataFlavorExVector::const_iterator aSearch;
@@ -114,7 +114,7 @@ namespace svxform
         return aSearch != _rFormats.end();
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool OLocalExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& /*_rFlavor*/ )
     {
         return sal_False;   // do not have any formats by default
@@ -123,13 +123,13 @@ namespace svxform
     //====================================================================
     //= OControlTransferData
     //====================================================================
-    //--------------------------------------------------------------------
+
     OControlTransferData::OControlTransferData( )
         :m_pFocusEntry( NULL )
     {
     }
 
-    //--------------------------------------------------------------------
+
     OControlTransferData::OControlTransferData( const Reference< XTransferable >& _rxTransferable )
         :m_pFocusEntry( NULL )
     {
@@ -161,14 +161,14 @@ namespace svxform
         updateFormats( );
     }
 
-    //--------------------------------------------------------------------
+
     static sal_Bool lcl_fillDataFlavorEx( SotFormatStringId nId, DataFlavorEx& _rFlavor )
     {
         _rFlavor.mnSotId = nId;
         return SotExchange::GetFormatDataFlavor( _rFlavor.mnSotId, _rFlavor );
     }
 
-    //--------------------------------------------------------------------
+
     void OControlTransferData::updateFormats( )
     {
         m_aCurrentFormats.clear();
@@ -195,32 +195,32 @@ namespace svxform
         }
     }
 
-    //--------------------------------------------------------------------
+
     size_t OControlTransferData::onEntryRemoved( SvTreeListEntry* _pEntry )
     {
         m_aSelectedEntries.erase( _pEntry );
         return m_aSelectedEntries.size();
     }
 
-    //--------------------------------------------------------------------
+
     void OControlTransferData::addSelectedEntry( SvTreeListEntry* _pEntry )
     {
         m_aSelectedEntries.insert( _pEntry );
     }
 
-    //--------------------------------------------------------------------
+
     void OControlTransferData::setFocusEntry( SvTreeListEntry* _pFocusEntry )
     {
         m_pFocusEntry = _pFocusEntry;
     }
 
-    //------------------------------------------------------------------------
+
     void OControlTransferData::addHiddenControlsFormat(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > seqInterfaces)
     {
         m_aHiddenControlModels = seqInterfaces;
     }
 
-    //------------------------------------------------------------------------
+
     void OControlTransferData::buildPathFormat(SvTreeListBox* pTreeBox, SvTreeListEntry* pRoot)
     {
         m_aControlPaths.realloc(0);
@@ -261,7 +261,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------
+
     void OControlTransferData::buildListFromPath(SvTreeListBox* pTreeBox, SvTreeListEntry* pRoot)
     {
         ListBoxEntrySet aEmpty;
@@ -284,12 +284,12 @@ namespace svxform
     //====================================================================
     //= OControlExchange
     //====================================================================
-    //--------------------------------------------------------------------
+
     OControlExchange::OControlExchange( )
     {
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool OControlExchange::GetData( const DataFlavor& _rFlavor )
     {
         const sal_uInt32 nFormatId = SotExchange::GetFormat( _rFlavor );
@@ -315,7 +315,7 @@ namespace svxform
         return sal_True;
     }
 
-    //--------------------------------------------------------------------
+
     void OControlExchange::AddSupportedFormats()
     {
         if (m_pFocusEntry && !m_aSelectedEntries.empty())
@@ -328,7 +328,7 @@ namespace svxform
             AddFormat(getHiddenControlModelsFormatId());
     }
 
-    //--------------------------------------------------------------------
+
     sal_uInt32 OControlExchange::getControlPathFormatId()
     {
         static sal_uInt32 s_nFormat = (sal_uInt32)-1;
@@ -340,7 +340,7 @@ namespace svxform
         return s_nFormat;
     }
 
-    //--------------------------------------------------------------------
+
     sal_uInt32 OControlExchange::getHiddenControlModelsFormatId()
     {
         static sal_uInt32 s_nFormat = (sal_uInt32)-1;
@@ -352,7 +352,7 @@ namespace svxform
         return s_nFormat;
     }
 
-    //--------------------------------------------------------------------
+
     sal_uInt32 OControlExchange::getFieldExchangeFormatId()
     {
         static sal_uInt32 s_nFormat = (sal_uInt32)-1;
@@ -375,34 +375,34 @@ namespace svxform
     //====================================================================
     //= OLocalExchangeHelper
     //====================================================================
-    //--------------------------------------------------------------------
+
     OLocalExchangeHelper::OLocalExchangeHelper(Window* _pDragSource)
         :m_pDragSource(_pDragSource)
         ,m_pTransferable(NULL)
     {
     }
 
-    //--------------------------------------------------------------------
+
     OLocalExchangeHelper::~OLocalExchangeHelper()
     {
         implReset();
     }
 
-    //--------------------------------------------------------------------
+
     void OLocalExchangeHelper::startDrag( sal_Int8 nDragSourceActions )
     {
         DBG_ASSERT(m_pTransferable, "OLocalExchangeHelper::startDrag: not prepared!");
         m_pTransferable->startDrag( m_pDragSource, nDragSourceActions, OLocalExchange::GrantAccess() );
     }
 
-    //--------------------------------------------------------------------
+
     void OLocalExchangeHelper::copyToClipboard( ) const
     {
         DBG_ASSERT( m_pTransferable, "OLocalExchangeHelper::copyToClipboard: not prepared!" );
         m_pTransferable->copyToClipboard( m_pDragSource, OLocalExchange::GrantAccess() );
     }
 
-    //--------------------------------------------------------------------
+
     void OLocalExchangeHelper::implReset()
     {
         if (m_pTransferable)
@@ -413,7 +413,7 @@ namespace svxform
         }
     }
 
-    //--------------------------------------------------------------------
+
     void OLocalExchangeHelper::prepareDrag( )
     {
         DBG_ASSERT(!m_pTransferable || !m_pTransferable->isDragging(), "OLocalExchangeHelper::prepareDrag: recursive DnD?");

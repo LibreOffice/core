@@ -59,60 +59,60 @@ namespace comphelper
     //====================================================================
     //= NamedValueCollection
     //====================================================================
-    //--------------------------------------------------------------------
+
     NamedValueCollection::NamedValueCollection()
         :m_pImpl( new NamedValueCollection_Impl )
     {
     }
 
-    //--------------------------------------------------------------------
+
     NamedValueCollection::NamedValueCollection( const NamedValueCollection& _rCopySource )
         :m_pImpl( new NamedValueCollection_Impl )
     {
         *this = _rCopySource;
     }
 
-    //--------------------------------------------------------------------
+
     NamedValueCollection& NamedValueCollection::operator=( const NamedValueCollection& i_rCopySource )
     {
         m_pImpl->aValues = i_rCopySource.m_pImpl->aValues;
         return *this;
     }
 
-    //--------------------------------------------------------------------
+
     NamedValueCollection::NamedValueCollection( const Any& _rElements )
         :m_pImpl( new NamedValueCollection_Impl )
     {
         impl_assign( _rElements );
     }
 
-    //--------------------------------------------------------------------
+
     NamedValueCollection::NamedValueCollection( const Sequence< Any >& _rArguments )
         :m_pImpl( new NamedValueCollection_Impl )
     {
         impl_assign( _rArguments );
     }
 
-    //--------------------------------------------------------------------
+
     NamedValueCollection::NamedValueCollection( const Sequence< PropertyValue >& _rArguments )
         :m_pImpl( new NamedValueCollection_Impl )
     {
         impl_assign( _rArguments );
     }
 
-    //--------------------------------------------------------------------
+
     NamedValueCollection::NamedValueCollection( const Sequence< NamedValue >& _rArguments )
         :m_pImpl( new NamedValueCollection_Impl )
     {
         impl_assign( _rArguments );
     }
 
-    //--------------------------------------------------------------------
+
     NamedValueCollection::~NamedValueCollection()
     {
     }
 
-    //--------------------------------------------------------------------
+
     bool NamedValueCollection::canExtractFrom( ::com::sun::star::uno::Any const & i_value )
     {
         Type const & aValueType = i_value.getValueType();
@@ -125,7 +125,7 @@ namespace comphelper
         return false;
     }
 
-   //--------------------------------------------------------------------
+
     NamedValueCollection& NamedValueCollection::merge( const NamedValueCollection& _rAdditionalValues, bool _bOverwriteExisting )
     {
         for (   NamedValueRepository::const_iterator namedValue = _rAdditionalValues.m_pImpl->aValues.begin();
@@ -140,19 +140,19 @@ namespace comphelper
         return *this;
     }
 
-    //--------------------------------------------------------------------
+
     size_t NamedValueCollection::size() const
     {
         return m_pImpl->aValues.size();
     }
 
-    //--------------------------------------------------------------------
+
     bool NamedValueCollection::empty() const
     {
         return m_pImpl->aValues.empty();
     }
 
-    //--------------------------------------------------------------------
+
     ::std::vector< OUString > NamedValueCollection::getNames() const
     {
         ::std::vector< OUString > aNames;
@@ -163,7 +163,7 @@ namespace comphelper
         return aNames;
     }
 
-    //--------------------------------------------------------------------
+
     void NamedValueCollection::impl_assign( const Any& i_rWrappedElements )
     {
         Sequence< NamedValue > aNamedValues;
@@ -183,7 +183,7 @@ namespace comphelper
             SAL_WARN_IF( i_rWrappedElements.hasValue(), "comphelper", "NamedValueCollection::impl_assign(Any): unsupported type!" );
     }
 
-    //--------------------------------------------------------------------
+
     void NamedValueCollection::impl_assign( const Sequence< Any >& _rArguments )
     {
         {
@@ -213,7 +213,7 @@ namespace comphelper
         }
     }
 
-    //--------------------------------------------------------------------
+
     void NamedValueCollection::impl_assign( const Sequence< PropertyValue >& _rArguments )
     {
         {
@@ -227,7 +227,7 @@ namespace comphelper
             m_pImpl->aValues[ pArgument->Name ] = pArgument->Value;
     }
 
-    //--------------------------------------------------------------------
+
     void NamedValueCollection::impl_assign( const Sequence< NamedValue >& _rArguments )
     {
         {
@@ -241,7 +241,7 @@ namespace comphelper
             m_pImpl->aValues[ pArgument->Name ] = pArgument->Value;
     }
 
-    //--------------------------------------------------------------------
+
     bool NamedValueCollection::get_ensureType( const OUString& _rValueName, void* _pValueLocation, const Type& _rExpectedValueType ) const
     {
         NamedValueRepository::const_iterator pos = m_pImpl->aValues.find( _rValueName );
@@ -277,7 +277,7 @@ namespace comphelper
         class theEmptyDefault : public rtl::Static<Any, theEmptyDefault> {};
     }
 
-    //--------------------------------------------------------------------
+
     const Any& NamedValueCollection::impl_get( const OUString& _rValueName ) const
     {
         NamedValueRepository::const_iterator pos = m_pImpl->aValues.find( _rValueName );
@@ -287,14 +287,14 @@ namespace comphelper
         return theEmptyDefault::get();
     }
 
-    //--------------------------------------------------------------------
+
     bool NamedValueCollection::impl_has( const OUString& _rValueName ) const
     {
         NamedValueRepository::const_iterator pos = m_pImpl->aValues.find( _rValueName );
         return ( pos != m_pImpl->aValues.end() );
     }
 
-    //--------------------------------------------------------------------
+
     bool NamedValueCollection::impl_put( const OUString& _rValueName, const Any& _rValue )
     {
         bool bHas = impl_has( _rValueName );
@@ -302,7 +302,7 @@ namespace comphelper
         return bHas;
     }
 
-    //--------------------------------------------------------------------
+
     bool NamedValueCollection::impl_remove( const OUString& _rValueName )
     {
         NamedValueRepository::iterator pos = m_pImpl->aValues.find( _rValueName );
@@ -312,7 +312,7 @@ namespace comphelper
         return true;
     }
 
-    //--------------------------------------------------------------------
+
     namespace
     {
         struct Value2PropertyValue : public ::std::unary_function< NamedValueRepository::value_type, PropertyValue >
@@ -333,7 +333,7 @@ namespace comphelper
         };
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int32 NamedValueCollection::operator >>= ( Sequence< PropertyValue >& _out_rValues ) const
     {
         _out_rValues.realloc( m_pImpl->aValues.size() );
@@ -341,7 +341,7 @@ namespace comphelper
         return _out_rValues.getLength();
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int32 NamedValueCollection::operator >>= ( Sequence< NamedValue >& _out_rValues ) const
     {
         _out_rValues.realloc( m_pImpl->aValues.size() );

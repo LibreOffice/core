@@ -86,11 +86,11 @@ namespace
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 DriversConfigImpl::DriversConfigImpl()
 {
 }
-// -----------------------------------------------------------------------------
+
 void DriversConfigImpl::Load(const uno::Reference< uno::XComponentContext >& _rxORB) const
 {
     if ( m_aDrivers.empty() )
@@ -120,24 +120,24 @@ void DriversConfigImpl::Load(const uno::Reference< uno::XComponentContext >& _rx
         } // if ( m_aInstalled.isValid() )
     }
 }
-// -----------------------------------------------------------------------------
+
 DriversConfig::DriversConfig(const uno::Reference< uno::XComponentContext >& _rxORB)
 :m_xORB(_rxORB)
 {
 }
 
-// -----------------------------------------------------------------------------
+
 DriversConfig::~DriversConfig()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 DriversConfig::DriversConfig( const DriversConfig& _rhs )
 {
     *this = _rhs;
 }
 
-// -----------------------------------------------------------------------------
+
 DriversConfig& DriversConfig::operator=( const DriversConfig& _rhs )
 {
     if ( this != &_rhs )
@@ -147,7 +147,7 @@ DriversConfig& DriversConfig::operator=( const DriversConfig& _rhs )
     return *this;
 }
 
-// -----------------------------------------------------------------------------
+
 OUString DriversConfig::getDriverFactoryName(const OUString& _sURL) const
 {
     const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);
@@ -167,7 +167,7 @@ OUString DriversConfig::getDriverFactoryName(const OUString& _sURL) const
 
     return sRet;
 }
-// -----------------------------------------------------------------------------
+
 OUString DriversConfig::getDriverTypeDisplayName(const OUString& _sURL) const
 {
     const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);
@@ -187,22 +187,22 @@ OUString DriversConfig::getDriverTypeDisplayName(const OUString& _sURL) const
 
     return sRet;
 }
-// -----------------------------------------------------------------------------
+
 const ::comphelper::NamedValueCollection& DriversConfig::getProperties(const OUString& _sURL) const
 {
     return impl_get(_sURL,1);
 }
-// -----------------------------------------------------------------------------
+
 const ::comphelper::NamedValueCollection& DriversConfig::getFeatures(const OUString& _sURL) const
 {
     return impl_get(_sURL,0);
 }
-// -----------------------------------------------------------------------------
+
 const ::comphelper::NamedValueCollection& DriversConfig::getMetaData(const OUString& _sURL) const
 {
     return impl_get(_sURL,2);
 }
-// -----------------------------------------------------------------------------
+
 const ::comphelper::NamedValueCollection& DriversConfig::impl_get(const OUString& _sURL,sal_Int32 _nProps) const
 {
     const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);
@@ -237,7 +237,7 @@ const ::comphelper::NamedValueCollection& DriversConfig::impl_get(const OUString
     }
     return *pRet;
 }
-// -----------------------------------------------------------------------------
+
 uno::Sequence< OUString > DriversConfig::getURLs() const
 {
     const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);

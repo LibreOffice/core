@@ -40,14 +40,14 @@ jclass java_lang_Throwable::st_getMyClass()
         theClass = findMyClass("java/lang/Throwable");
     return theClass;
 }
-// -----------------------------------------------------------------------------
+
 
 OUString java_lang_Throwable::getMessage() const
 {
     static jmethodID mID(NULL);
     return callStringMethod("getMessage",mID);
 }
-// -----------------------------------------------------------------------------
+
 
 OUString java_lang_Throwable::getLocalizedMessage() const
 {

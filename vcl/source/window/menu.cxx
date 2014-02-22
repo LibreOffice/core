@@ -478,9 +478,9 @@ size_t MenuItemList::GetItemCount( KeyCode aKeyCode ) const
 }
 
 
-// ----------------------
+
 // - MenuFloatingWindow -
-// ----------------------
+
 
 class MenuFloatingWindow : public FloatingWindow
 {
@@ -2358,7 +2358,7 @@ bool Menu::ImplGetNativeSubmenuArrowSize( Window* pWin, Size& rArrowSize, long& 
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Menu::ImplAddDel( ImplMenuDelData& rDel )
 {
@@ -2371,7 +2371,7 @@ void Menu::ImplAddDel( ImplMenuDelData& rDel )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Menu::ImplRemoveDel( ImplMenuDelData& rDel )
 {
@@ -2392,7 +2392,7 @@ void Menu::ImplRemoveDel( ImplMenuDelData& rDel )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 Size Menu::ImplCalcSize( const Window* pWin )
 {
@@ -3273,9 +3273,9 @@ void Menu::HighlightItem( sal_uInt16 nItemPos )
 }
 
 
-// -----------
+
 // - MenuBar -
-// -----------
+
 
 MenuBar::MenuBar() : Menu( true )
 {
@@ -3377,7 +3377,7 @@ bool MenuBar::ImplHandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
     return bDone;
 }
 
-// -----------------------------------------------------------------------
+
 
 void MenuBar::SelectEntry( sal_uInt16 nId )
 {
@@ -3400,7 +3400,7 @@ void MenuBar::SelectEntry( sal_uInt16 nId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 // handler for native menu selection and command events
 
@@ -3501,7 +3501,7 @@ bool MenuBar::HandleMenuButtonEvent( Menu *, sal_uInt16 i_nButtonId ) const
     return static_cast<MenuBarWindow*>(pWindow)->HandleMenuButtonEvent( i_nButtonId );
 }
 
-// -----------------------------------------------------------------------
+
 
 // sal_Bool PopupMenu::bAnyPopupInExecute = sal_False;
 

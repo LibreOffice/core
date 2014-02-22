@@ -165,7 +165,7 @@ PPTWriterBase::PPTWriterBase( const Reference< XModel > & rXModel,
 {
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 PPTWriterBase::~PPTWriterBase()
 {
@@ -177,7 +177,7 @@ PPTWriterBase::~PPTWriterBase()
         mXStatusIndicator->end();
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 void PPTWriterBase::exportPPT( const std::vector< com::sun::star::beans::PropertyValue >& rMediaData )
 {
@@ -258,7 +258,7 @@ void PPTWriterBase::exportPPT( const std::vector< com::sun::star::beans::Propert
     exportPPTPost();
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_Bool PPTWriterBase::InitSOIface()
 {
@@ -287,7 +287,7 @@ sal_Bool PPTWriterBase::InitSOIface()
     return sal_False;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_Bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
 {
@@ -372,7 +372,7 @@ sal_Bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
     return sal_False;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_Bool PPTWriterBase::CreateSlide( sal_uInt32 nPageNum )
 {
@@ -419,7 +419,7 @@ sal_Bool PPTWriterBase::CreateSlide( sal_uInt32 nPageNum )
     return sal_True;
 };
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_Bool PPTWriterBase::CreateNotes( sal_uInt32 nPageNum )
 {
@@ -432,7 +432,7 @@ sal_Bool PPTWriterBase::CreateNotes( sal_uInt32 nPageNum )
     return sal_True;
 };
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_Bool PPTWriterBase::CreateSlideMaster( sal_uInt32 nPageNum )
 {
@@ -451,7 +451,7 @@ sal_Bool PPTWriterBase::CreateSlideMaster( sal_uInt32 nPageNum )
     return sal_True;
 };
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_Int32 PPTWriterBase::GetLayoutOffset( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const
 {
@@ -484,7 +484,7 @@ PHLayout& PPTWriterBase::GetLayout(  const ::com::sun::star::uno::Reference< ::c
     return pPHLayout[ GetLayoutOffsetFixed( rXPropSet ) ];
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 PHLayout& PPTWriterBase::GetLayout( sal_Int32 nOffset ) const
 {
@@ -496,7 +496,7 @@ PHLayout& PPTWriterBase::GetLayout( sal_Int32 nOffset ) const
     return pPHLayout[ 0 ];
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_uInt32 PPTWriterBase::GetMasterIndex( PageType ePageType )
 {
@@ -540,7 +540,7 @@ sal_Bool PPTWriterBase::SetCurrentStyleSheet( sal_uInt32 nPageNum )
     return bRet;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_Bool PPTWriterBase::GetStyleSheets()
 {

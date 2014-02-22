@@ -31,7 +31,7 @@
 namespace task = ::com::sun::star::task;
 namespace uno  = ::com::sun::star::uno;
 
-// -----------------------------------------------------------------------
+
 
 SAL_IMPLEMENT_MAIN()
 {

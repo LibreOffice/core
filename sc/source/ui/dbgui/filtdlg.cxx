@@ -161,7 +161,7 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 }
 
 
-//----------------------------------------------------------------------------
+
 
 ScFilterDlg::~ScFilterDlg()
 {
@@ -174,7 +174,7 @@ ScFilterDlg::~ScFilterDlg()
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScFilterDlg::Init( const SfxItemSet& rArgSet )
 {
@@ -389,7 +389,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScFilterDlg::Close()
 {
@@ -400,7 +400,7 @@ bool ScFilterDlg::Close()
 }
 
 
-//----------------------------------------------------------------------------
+
 // Mouse-selected cell area becomes the new selection and is shown in the
 // reference text box
 
@@ -416,7 +416,7 @@ void ScFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScFilterDlg::SetActive()
 {
@@ -432,7 +432,7 @@ void ScFilterDlg::SetActive()
     RefInputDone();
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScFilterDlg::FillFieldLists()
 {
@@ -611,7 +611,7 @@ void ScFilterDlg::UpdateHdrInValueList( size_t nList )
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScFilterDlg::ClearValueList( size_t nList )
 {
@@ -626,7 +626,7 @@ void ScFilterDlg::ClearValueList( size_t nList )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 size_t ScFilterDlg::GetFieldSelPos( SCCOL nField )
 {
@@ -636,7 +636,7 @@ size_t ScFilterDlg::GetFieldSelPos( SCCOL nField )
         return 0;
 }
 
-//----------------------------------------------------------------------------
+
 
 ScQueryItem* ScFilterDlg::GetOutputItem()
 {
@@ -682,7 +682,7 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScFilterDlg::IsRefInputMode() const
 {
@@ -690,7 +690,7 @@ bool ScFilterDlg::IsRefInputMode() const
 }
 
 
-//----------------------------------------------------------------------------
+
 // Handler:
 // ========
 
@@ -731,7 +731,7 @@ IMPL_LINK( ScFilterDlg, EndDlgHdl, Button*, pBtn )
     return 0;
 }
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScFilterDlg, MoreExpandedHdl)
 {
@@ -747,7 +747,7 @@ IMPL_LINK_NOARG(ScFilterDlg, MoreExpandedHdl)
     return 0;
 }
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScFilterDlg, TimeOutHdl, Timer*, _pTimer )
 {
@@ -763,7 +763,7 @@ IMPL_LINK( ScFilterDlg, TimeOutHdl, Timer*, _pTimer )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
 {
@@ -1020,7 +1020,7 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScFilterDlg, CheckBoxHdl, CheckBox*, pBox )
 {
@@ -1061,7 +1061,7 @@ IMPL_LINK( ScFilterDlg, CheckBoxHdl, CheckBox*, pBox )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
 {
@@ -1147,7 +1147,7 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
     return 0;
 }
 
-//----------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(ScFilterDlg, ScrollHdl)
 {
     SliderMoved();

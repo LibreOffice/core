@@ -91,7 +91,7 @@ namespace slideshow
                 }
 
                 // Animation interface
-                // -------------------
+
                 virtual void prefetch( const AnimatableShapeSharedPtr&,
                                        const ShapeAttributeLayerSharedPtr& )
                 {}
@@ -137,7 +137,7 @@ namespace slideshow
                 }
 
                 // PairAnimation interface
-                // -----------------------
+
 
                 virtual bool operator()( const ::basegfx::B2DTuple& rValue )
                 {
@@ -245,7 +245,7 @@ namespace slideshow
                 }
 
                 // Animation interface
-                // -------------------
+
                 virtual void prefetch( const AnimatableShapeSharedPtr&,
                                        const ShapeAttributeLayerSharedPtr& )
                 {}
@@ -300,7 +300,7 @@ namespace slideshow
                 }
 
                 // NumberAnimation interface
-                // -----------------------
+
 
                 virtual bool operator()( double nValue )
                 {
@@ -443,7 +443,7 @@ namespace slideshow
                 }
 
                 // Animation interface
-                // -------------------
+
                 virtual void prefetch( const AnimatableShapeSharedPtr&,
                                        const ShapeAttributeLayerSharedPtr& )
                 {}
@@ -518,7 +518,7 @@ namespace slideshow
                 }
 
                 // Derived Animation interface
-                // ---------------------------
+
 
                 /** For by-reference interfaces (B2DTuple, OUString)
                  */

@@ -39,34 +39,34 @@ using namespace ::com::sun::star::sdb;
 //====================================================================
 namespace
 {
-    // -----------------------------------------------------------------------------
+
     // this namespace contains access to all static members of the class SwDbtoolsClient
     // to make the initialize of the dll a little bit faster
-    // -----------------------------------------------------------------------------
+
     ::osl::Mutex& getDbtoolsClientMutex()
     {
         static  ::osl::Mutex aMutex;
         return aMutex;
     }
-    // -----------------------------------------------------------------------------
+
     sal_Int32& getDbToolsClientClients()
     {
         static  sal_Int32 nClients = 0;
         return nClients;
     }
-    // -----------------------------------------------------------------------------
+
     oslModule& getDbToolsClientModule()
     {
         static oslModule hDbtoolsModule = NULL;
         return hDbtoolsModule;
     }
-    // -----------------------------------------------------------------------------
+
     createDataAccessToolsFactoryFunction& getDbToolsClientFactoryFunction()
     {
         static createDataAccessToolsFactoryFunction pFactoryCreationFunc = NULL;
         return pFactoryCreationFunc;
     }
-    // -----------------------------------------------------------------------------
+
 }
 
 SwDbtoolsClient::SwDbtoolsClient()

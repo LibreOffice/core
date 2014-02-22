@@ -70,7 +70,7 @@
 
 using ::std::auto_ptr;
 
-//------------------------------------------------------------------
+
 
 /** Try to parse the given range using Calc-style syntax first, then
     Excel-style if that fails. */
@@ -766,7 +766,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             }
             break;
 
-        //----------------------------------------------------------------
+
 
         case FID_TAB_SELECTALL:
             SelectAllTables();

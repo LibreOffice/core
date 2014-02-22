@@ -24,13 +24,13 @@ namespace rptui
     // =============================================================================
     // = ConditionalExpression
     // =============================================================================
-    // -----------------------------------------------------------------------------
+
     ConditionalExpression::ConditionalExpression( const sal_Char* _pAsciiPattern )
         :m_sPattern( OUString::createFromAscii( _pAsciiPattern ) )
     {
     }
 
-    // -----------------------------------------------------------------------------
+
     OUString ConditionalExpression::assembleExpression( const OUString& _rFieldDataSource, const OUString& _rLHS, const OUString& _rRHS ) const
     {
         OUString sExpression( m_sPattern );
@@ -59,7 +59,7 @@ namespace rptui
         return sExpression;
     }
 
-    // -----------------------------------------------------------------------------
+
     bool ConditionalExpression::matchExpression( const OUString& _rExpression, const OUString& _rFieldDataSource, OUString& _out_rLHS, OUString& _out_rRHS ) const
     {
         (void)_rExpression;
@@ -165,7 +165,7 @@ namespace rptui
     // =============================================================================
     // = ConditionalExpressionFactory
     // =============================================================================
-    // -----------------------------------------------------------------------------
+
     size_t ConditionalExpressionFactory::getKnownConditionalExpressions( ConditionalExpressions& _out_rCondExp )
     {
         ConditionalExpressions aEmpty;

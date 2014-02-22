@@ -53,7 +53,7 @@
 
 using namespace ::com::sun::star;
 
-// -----------------------------------------------------------------
+
 
 bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange, bool /* bApi */ )
 {
@@ -239,7 +239,7 @@ bool ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
     return bDone;
 }
 
-// -----------------------------------------------------------------
+
 
 bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bool bIsUnnamed, SCTAB aTab )
 {
@@ -423,7 +423,7 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bo
     return bDone;
 }
 
-// -----------------------------------------------------------------
+
 
 bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
                             bool bRecord, bool bPaint, bool bApi )
@@ -666,7 +666,7 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     return true;
 }
 
-// -----------------------------------------------------------------
+
 
 bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                         const ScRange* pAdvSource, bool bRecord, bool bApi )
@@ -1007,7 +1007,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
     return true;
 }
 
-// -----------------------------------------------------------------
+
 
 bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
                                 const ScSortParam* pForceNewSort, bool bRecord, bool bApi )

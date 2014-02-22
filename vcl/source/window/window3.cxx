@@ -22,7 +22,7 @@
 #include "vcl/waitobj.hxx"
 #include "vcl/button.hxx"
 
-// -----------------------------------------------------------------------
+
 
 WaitObject::~WaitObject()
 {
@@ -30,14 +30,14 @@ WaitObject::~WaitObject()
         mpWindow->LeaveWait();
 }
 
-// -----------------------------------------------------------------------
+
 
 Size Window::GetOptimalSize() const
 {
     return Size();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Window::ImplAdjustNWFSizes()
 {

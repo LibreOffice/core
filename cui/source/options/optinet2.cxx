@@ -96,7 +96,7 @@ using namespace ::sfx2;
 
 #include <sal/config.h>
 
-// -----------------------------------------------------------------------
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxNoSpaceEdit(Window *pParent, VclBuilder::stringmap &)
 {
@@ -122,7 +122,7 @@ void SvxNoSpaceEdit::KeyInput( const KeyEvent& rKEvent )
         Edit::KeyInput(rKEvent);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNoSpaceEdit::Modify()
 {
@@ -505,7 +505,7 @@ void SvxProxyTabPage::EnableControls_Impl(sal_Bool bEnable)
     m_pNoProxyDescFT->Enable(bEnable);
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxProxyTabPage, ProxyHdl_Impl, ListBox *, pBox )
 {
@@ -521,7 +521,7 @@ IMPL_LINK( SvxProxyTabPage, ProxyHdl_Impl, ListBox *, pBox )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Edit *, pEdit )
 {
@@ -1290,6 +1290,6 @@ IMPL_LINK(  SvxEMailTabPage, FileDialogHdl_Impl, PushButton*, pButton )
     return 0;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

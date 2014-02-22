@@ -29,7 +29,7 @@
 
 using namespace com::sun::star::uno;
 
-//------------------------------------------------------------------------------
+
 // converts the openoffice text/html clipboard format to the HTML Format
 // well known under MS Windows
 // the MS HTML Format has a header before the real html data
@@ -52,7 +52,7 @@ using namespace com::sun::star::uno;
 // The fragment should be preceded and followed by the HTML comments
 // <!--StartFragment--> and <!--EndFragment--> (no space between !-- and the
 // text
-//------------------------------------------------------------------------------
+
 
 namespace // private
 {

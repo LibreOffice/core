@@ -50,21 +50,21 @@ SvxSmartTagItem::SvxSmartTagItem( const sal_uInt16 nId,
 {
 }
 
-// -----------------------------------------------------------------------
 
-// -----------------------------------------------------------------------
+
+
 
 bool SvxSmartTagItem::QueryValue( uno::Any& /* rVal */, sal_uInt8 /* nMemberId */ ) const
 {
     return false;
 }
-// -----------------------------------------------------------------------
+
 bool SvxSmartTagItem::PutValue( const uno::Any& /*rVal*/, sal_uInt8 /* nMemberId */)
 {
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxSmartTagItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -81,21 +81,21 @@ bool SvxSmartTagItem::operator==( const SfxPoolItem& rAttr ) const
                maRangeText == rItem.maRangeText;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxSmartTagItem::Clone( SfxItemPool * ) const
 {
     return new SvxSmartTagItem( *this );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SvxSmartTagItem::Store( SvStream& rStream, sal_uInt16 /*nItemVersion*/ ) const
 {
     return rStream;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxSmartTagItem::Create(SvStream& , sal_uInt16) const
 {

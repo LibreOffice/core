@@ -1837,7 +1837,7 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
     return 0;
 }
 
-// --------------------------------------------------------------
+
 
 // numbering format conversion:
 // ListBox  - format            - enum-value

@@ -84,7 +84,7 @@ public:
         { return makeAny( name ); }
 };
 
-//______________________________________________________________________________
+
 Any TargetObject::queryInterface( Type const & type )
     throw (RuntimeException)
 {

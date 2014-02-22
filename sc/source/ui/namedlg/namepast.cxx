@@ -22,7 +22,7 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #include "namepast.hxx"
 #include "scresid.hxx"
@@ -76,7 +76,7 @@ ScNamePasteDlg::~ScNamePasteDlg()
     delete mpTable;
 }
 
-//------------------------------------------------------------------
+
 
 IMPL_LINK( ScNamePasteDlg, ButtonHdl, Button *, pButton )
 {
@@ -101,7 +101,7 @@ IMPL_LINK( ScNamePasteDlg, ButtonHdl, Button *, pButton )
     return 0;
 }
 
-//------------------------------------------------------------------
+
 
 std::vector<OUString> ScNamePasteDlg::GetSelectedNames() const
 {

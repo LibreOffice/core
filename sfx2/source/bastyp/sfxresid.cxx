@@ -22,7 +22,7 @@
 #include <sfx2/app.hxx>
 #include "tools/resmgr.hxx"
 
-// -----------------------------------------------------------------------
+
 
 static ResMgr* pMgr=NULL;
 

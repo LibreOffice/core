@@ -20,7 +20,7 @@
 #include <vcl/msgbox.hxx>
 #include "cuicharmap.hxx"
 
-// ------------------------------------------------------------------------
+
 // hook to call special character dialog for edits
 // caution: needs C-Linkage since dynamically loaded via symbol name
 extern "C"

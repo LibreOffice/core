@@ -78,7 +78,7 @@ void TryToHideDisabledEntries_Impl( Menu* pMenu )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 SfxMenuManager::~SfxMenuManager()
 {
@@ -87,7 +87,7 @@ SfxMenuManager::~SfxMenuManager()
     pBindings->LEAVEREGISTRATIONS();
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxMenuManager::Construct( SfxVirtualMenu& rMenu )
 {
@@ -99,7 +99,7 @@ void SfxMenuManager::Construct( SfxVirtualMenu& rMenu )
     TryToHideDisabledEntries_Impl( pSvMenu );
 }
 
-//-------------------------------------------------------------------------
+
 void InsertVerbs_Impl( SfxBindings* pBindings, const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& aVerbs, Menu* pMenu )
 {
     SfxViewShell *pView = pBindings->GetDispatcher()->GetFrame()->GetViewShell();
@@ -203,7 +203,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
     return pThesSubMenu;
 }
 
-// ------------------------------------------------------------------------
+
 
 // executes the function for the selected item
 IMPL_LINK( SfxMenuManager, Select, Menu *, pSelMenu )
@@ -237,7 +237,7 @@ SfxPopupMenuManager::~SfxPopupMenuManager()
 {
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxPopupMenuManager::RemoveDisabledEntries()
 {
@@ -245,7 +245,7 @@ void SfxPopupMenuManager::RemoveDisabledEntries()
         TryToHideDisabledEntries_Impl( pSVMenu );
 }
 
-//--------------------------------------------------------------------
+
 
 sal_uInt16 SfxPopupMenuManager::Execute( const Point& rPos, Window* pWindow )
 {
@@ -254,7 +254,7 @@ sal_uInt16 SfxPopupMenuManager::Execute( const Point& rPos, Window* pWindow )
     return nVal;
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxMenuManager::SfxMenuManager( Menu* pMenuArg, SfxBindings &rBindings )
 :   pMenu(0),

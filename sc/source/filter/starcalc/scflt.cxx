@@ -400,9 +400,9 @@ template < typename T > sal_uLong insert_new( ScCollection* pCollection, SvStrea
     return nError;
 }
 
-//--------------------------------------------
+
 // Font
-//--------------------------------------------
+
 
 Sc10FontData::Sc10FontData(SvStream& rStream)
 {
@@ -440,9 +440,9 @@ Sc10FontCollection::Sc10FontCollection(SvStream& rStream) :
   }
 }
 
-//--------------------------------------------
+
 // Benannte-Bereiche
-//--------------------------------------------
+
 
 Sc10NameData::Sc10NameData(SvStream& rStream)
 {
@@ -484,9 +484,9 @@ Sc10NameCollection::Sc10NameCollection(SvStream& rStream) :
   }
 }
 
-//--------------------------------------------
+
 // Vorlagen
-//--------------------------------------------
+
 
 Sc10PatternData::Sc10PatternData(SvStream& rStream)
 {
@@ -528,9 +528,9 @@ Sc10PatternCollection::Sc10PatternCollection(SvStream& rStream) :
   }
 }
 
-//--------------------------------------------
+
 // Datenbank
-//--------------------------------------------
+
 
 Sc10DataBaseData::Sc10DataBaseData(SvStream& rStream)
 {
@@ -896,9 +896,9 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
         pSet->Put(SfxBoolItem( ATTR_PAGE_HORCENTER, pPage->HorCenter ));
         pSet->Put(SfxBoolItem( ATTR_PAGE_VERCENTER, pPage->VerCenter ));
 
-        //----------------
+
         // Area-Parameter:
-        //----------------
+
         {
             ScRange* pRepeatRow = NULL;
             ScRange* pRepeatCol = NULL;
@@ -925,9 +925,9 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
             delete pRepeatCol;
         }
 
-        //-----------------
+
         // Table-Parameter:
-        //-----------------
+
         pSet->Put( SfxBoolItem( ATTR_PAGE_NOTES,   pPage->PrintNote ) );
         pSet->Put( SfxBoolItem( ATTR_PAGE_GRID,    pPage->PrintGrid ) );
         pSet->Put( SfxBoolItem( ATTR_PAGE_HEADERS, pPage->PrintColRow ) );
@@ -952,9 +952,9 @@ ScDataObject* Sc10PageData::Clone() const
 }
 
 
-//--------------------------------------------
+
 // Import
-//--------------------------------------------
+
 
 
 Sc10Import::Sc10Import(SvStream& rStr, ScDocument* pDocument ) :
@@ -1447,7 +1447,7 @@ void Sc10Import::LoadTables()
             nLen = sizeof(TabName) - 1;
         TabName[nLen] = 0;
 
-        //----------------------------------------------------------
+
         rStream.ReadUInt16( Display );
 
         if ( Tab == (sal_Int16)nShowTab )
@@ -1478,7 +1478,7 @@ void Sc10Import::LoadTables()
             aSc30ViewOpt.SetObjMode( VOBJ_TYPE_DRAW,  eObjMode );
         }
 
-        //--------------------------------------------------------------------
+
         rStream.ReadUChar( Visible );
 
         nError = rStream.GetError();
@@ -2420,7 +2420,7 @@ void Sc10Import::LoadObjects()
   }
 }
 
-//-----------------------------------------------------------------------------------------------
+
 
 FltError ScFormatFilterPluginImpl::ScImportStarCalc10( SvStream& rStream, ScDocument* pDocument )
 {

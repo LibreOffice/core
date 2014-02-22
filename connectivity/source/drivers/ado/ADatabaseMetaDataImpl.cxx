@@ -41,7 +41,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::uno;
 
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaData::fillLiterals()
 {
     ADORecordset *pRecordset = NULL;
@@ -78,7 +78,7 @@ void ODatabaseMetaData::fillLiterals()
         aRecordset.Close();
     }
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 ODatabaseMetaData::getMaxSize(sal_uInt32 _nId)
 {
     if(!m_aLiteralInfo.size())
@@ -90,7 +90,7 @@ sal_Int32 ODatabaseMetaData::getMaxSize(sal_uInt32 _nId)
         nSize = (static_cast<sal_Int32>((*aIter).second.cchMaxLen) == (-1)) ? 0 : (*aIter).second.cchMaxLen;
     return nSize;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ODatabaseMetaData::isCapable(sal_uInt32 _nId)
 {
     if(!m_aLiteralInfo.size())
@@ -102,7 +102,7 @@ sal_Bool ODatabaseMetaData::isCapable(sal_uInt32 _nId)
     return bSupported;
 }
 
-// -------------------------------------------------------------------------
+
 OUString ODatabaseMetaData::getLiteral(sal_uInt32 _nId)
 {
     if(!m_aLiteralInfo.size())
@@ -113,8 +113,8 @@ OUString ODatabaseMetaData::getLiteral(sal_uInt32 _nId)
         sStr = (*aIter).second.pwszLiteralValue;
     return sStr;
 }
-// -----------------------------------------------------------------------------
-// -------------------------------------------------------------------------
+
+
 void ODatabaseMetaDataResultSetMetaData::setColumnPrivilegesMap()
 {
     m_mColumns[8] = OColumn(OUString(),OUString("IS_GRANTABLE"),
@@ -122,7 +122,7 @@ void ODatabaseMetaDataResultSetMetaData::setColumnPrivilegesMap()
         3,3,0,
         DataType::VARCHAR);
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSetMetaData::setColumnsMap()
 {
     m_mColumns[6] = OColumn(OUString(),OUString("TYPE_NAME"),
@@ -154,7 +154,7 @@ void ODatabaseMetaDataResultSetMetaData::setColumnsMap()
         1,1,0,
         DataType::INTEGER);
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSetMetaData::setTablesMap()
 {
     m_mColumns[5] = OColumn(OUString(),OUString("REMARKS"),
@@ -162,7 +162,7 @@ void ODatabaseMetaDataResultSetMetaData::setTablesMap()
         0,0,0,
         DataType::VARCHAR);
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSetMetaData::setProcedureColumnsMap()
 {
     m_mColumns[12] = OColumn(OUString(),OUString("NULLABLE"),
@@ -170,7 +170,7 @@ void ODatabaseMetaDataResultSetMetaData::setProcedureColumnsMap()
         1,1,0,
         DataType::INTEGER);
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSetMetaData::setPrimaryKeysMap()
 {
     m_mColumns[5] = OColumn(OUString(),OUString("KEY_SEQ"),
@@ -182,7 +182,7 @@ void ODatabaseMetaDataResultSetMetaData::setPrimaryKeysMap()
         0,0,0,
         DataType::VARCHAR);
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSetMetaData::setIndexInfoMap()
 {
     m_mColumns[4] = OColumn(OUString(),OUString("NON_UNIQUE"),
@@ -198,7 +198,7 @@ void ODatabaseMetaDataResultSetMetaData::setIndexInfoMap()
         0,0,0,
         DataType::VARCHAR);
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSetMetaData::setTablePrivilegesMap()
 {
     m_mColumns[6] = OColumn(OUString(),OUString("PRIVILEGE"),
@@ -210,7 +210,7 @@ void ODatabaseMetaDataResultSetMetaData::setTablePrivilegesMap()
         0,0,0,
         DataType::VARCHAR);
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSetMetaData::setCrossReferenceMap()
 {
     m_mColumns[9] = OColumn(OUString(),OUString("KEY_SEQ"),
@@ -218,7 +218,7 @@ void ODatabaseMetaDataResultSetMetaData::setCrossReferenceMap()
         1,1,0,
         DataType::INTEGER);
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSetMetaData::setTypeInfoMap()
 {
     m_mColumns[3] = OColumn(OUString(),OUString("PRECISION"),
@@ -246,7 +246,7 @@ void ODatabaseMetaDataResultSetMetaData::setTypeInfoMap()
         1,1,0,
         DataType::INTEGER);
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSetMetaData::setProceduresMap()
 {
     m_mColumns[7] = OColumn(OUString(),OUString("REMARKS"),
@@ -254,49 +254,49 @@ void ODatabaseMetaDataResultSetMetaData::setProceduresMap()
         0,0,0,
         DataType::VARCHAR);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isSearchable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isSearchable();
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isAutoIncrement( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isAutoIncrement();
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnServiceName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.getColumnServiceName();
     return OUString();
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getTableName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.getTableName();
     return OUString();
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getCatalogName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.getCatalogName();
     return OUString();
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnTypeName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.getColumnTypeName();
     return OUString();
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
@@ -304,7 +304,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isCaseSensitive( sal_Int32
         return (*m_mColumnsIter).second.isCaseSensitive();
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 
 OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getSchemaName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
@@ -312,8 +312,8 @@ OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getSchemaName( sal_Int32 c
         return (*m_mColumnsIter).second.getSchemaName();
     return OUString();
 }
-// -----------------------------------------------------------------------------
-// -------------------------------------------------------------------------
+
+
 ObjectTypeEnum OAdoGroup::MapObjectType(sal_Int32 _ObjType)
 {
     ObjectTypeEnum eNumType= adPermObjTable;
@@ -330,7 +330,7 @@ ObjectTypeEnum OAdoGroup::MapObjectType(sal_Int32 _ObjType)
     }
     return eNumType;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 OAdoGroup::MapRight(RightsEnum _eNum)
 {
     sal_Int32 nRight = 0;
@@ -355,7 +355,7 @@ sal_Int32 OAdoGroup::MapRight(RightsEnum _eNum)
 
     return nRight;
 }
-// -------------------------------------------------------------------------
+
 RightsEnum OAdoGroup::Map2Right(sal_Int32 _eNum)
 {
     sal_Int32 nRight = adRightNone;
@@ -388,7 +388,7 @@ RightsEnum OAdoGroup::Map2Right(sal_Int32 _eNum)
 
     return (RightsEnum)nRight;
 }
-// -------------------------------------------------------------------------
+
 void WpADOIndex::Create()
 {
     _ADOIndex* pIndex = NULL;
@@ -405,7 +405,7 @@ void WpADOIndex::Create()
         pIndex->Release();
     }
 }
-// -------------------------------------------------------------------------
+
 void OAdoIndex::fillPropertyValues()
 {
     if(m_aIndex.IsValid())
@@ -416,7 +416,7 @@ void OAdoIndex::fillPropertyValues()
         m_IsClustered       = m_aIndex.get_Clustered();
     }
 }
-// -----------------------------------------------------------------------------
+
 void WpADOKey::Create()
 {
     _ADOKey* pKey = NULL;
@@ -433,7 +433,7 @@ void WpADOKey::Create()
         pKey->Release();
     }
 }
-// -------------------------------------------------------------------------
+
 void OAdoKey::fillPropertyValues()
 {
     if(m_aKey.IsValid())
@@ -445,7 +445,7 @@ void OAdoKey::fillPropertyValues()
         m_aProps->m_DeleteRule      = MapRule(m_aKey.get_DeleteRule());
     }
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 OAdoKey::MapRule(const RuleEnum& _eNum)
 {
         sal_Int32 eNum = KeyRule::NO_ACTION;
@@ -466,7 +466,7 @@ sal_Int32 OAdoKey::MapRule(const RuleEnum& _eNum)
     }
     return eNum;
 }
-// -------------------------------------------------------------------------
+
 RuleEnum OAdoKey::Map2Rule(const sal_Int32& _eNum)
 {
     RuleEnum eNum = adRINone;
@@ -487,7 +487,7 @@ RuleEnum OAdoKey::Map2Rule(const sal_Int32& _eNum)
     }
     return eNum;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 OAdoKey::MapKeyRule(const KeyTypeEnum& _eNum)
 {
     sal_Int32 nKeyType = KeyType::PRIMARY;
@@ -505,7 +505,7 @@ sal_Int32 OAdoKey::MapKeyRule(const KeyTypeEnum& _eNum)
     }
     return nKeyType;
 }
-// -------------------------------------------------------------------------
+
 KeyTypeEnum OAdoKey::Map2KeyRule(const sal_Int32& _eNum)
 {
     KeyTypeEnum eNum( adKeyPrimary );
@@ -525,7 +525,7 @@ KeyTypeEnum OAdoKey::Map2KeyRule(const sal_Int32& _eNum)
     }
     return eNum;
 }
-// -----------------------------------------------------------------------------
+
 void WpADOTable::Create()
 {
     _ADOTable* pTable = NULL;
@@ -542,7 +542,7 @@ void WpADOTable::Create()
         pTable->Release();
     }
 }
-// -------------------------------------------------------------------------
+
 OUString WpADOCatalog::GetObjectOwner(const OUString& _rName, ObjectTypeEnum _eNum)
 {
     OLEVariant _rVar;
@@ -552,7 +552,7 @@ OUString WpADOCatalog::GetObjectOwner(const OUString& _rName, ObjectTypeEnum _eN
     pInterface->GetObjectOwner(sStr1,_eNum,_rVar,&aBSTR);
     return aBSTR;
 }
-// -----------------------------------------------------------------------------
+
 void OAdoTable::fillPropertyValues()
 {
     if(m_aTable.IsValid())
@@ -571,7 +571,7 @@ void OAdoTable::fillPropertyValues()
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void WpADOUser::Create()
 {
     _ADOUser* pUser = NULL;
@@ -588,7 +588,7 @@ void WpADOUser::Create()
         pUser->Release();
     }
 }
-// -------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

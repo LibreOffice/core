@@ -82,7 +82,7 @@ namespace frm
         Reference< XImageManager >    m_xModuleImageManager;
     };
 
-    //--------------------------------------------------------------------
+
     void DocumentCommandImageProvider::impl_init_nothrow( const Reference<XComponentContext>& _rContext, const Reference< XModel >& _rxDocument )
     {
         OSL_ENSURE( _rxDocument.is(), "DocumentCommandImageProvider::impl_init_nothrow: no document => no images!" );
@@ -119,7 +119,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     CommandImages DocumentCommandImageProvider::getCommandImages( const CommandURLs& _rCommandURLs, const bool _bLarge ) const
     {
         const size_t nCommandCount = _rCommandURLs.getLength();
@@ -158,7 +158,7 @@ namespace frm
         return aImages;
     }
 
-    //--------------------------------------------------------------------
+
     PCommandImageProvider createDocumentCommandImageProvider(
         const Reference<XComponentContext>& _rContext, const Reference< XModel >& _rxDocument )
     {

@@ -318,7 +318,7 @@ typedef string_container_t::iterator       string_container_iter_t;
 class exclude : public std::unary_function<std::string, bool>
 {
 public:
-    //------------------------------------------------
+
     exclude(const string_container_t& exclude_list)
     {
         string_container_const_iter_t iter     = exclude_list.begin();
@@ -327,7 +327,7 @@ public:
             exclude_list_.push_back(env_var_name(*iter));
     }
 
-    //------------------------------------------------
+
     bool operator() (const std::string& env_var) const
     {
         return (exclude_list_.end() !=
@@ -338,7 +338,7 @@ public:
     }
 
 private:
-    //-------------------------------------------------
+
     // extract the name from an environment variable
     // that is given in the form "NAME=VALUE"
     std::string env_var_name(const std::string& env_var) const
@@ -419,7 +419,7 @@ class Test_osl_executeProcess : public CppUnit::TestFixture
 
 public:
 
-    //------------------------------------------------
+
     // ctor
     Test_osl_executeProcess() :
         env_param_(OUString("-env")),
@@ -432,7 +432,7 @@ public:
         suExecutableFileURL += EXECUTABLE_NAME;
     }
 
-    //------------------------------------------------
+
     virtual void setUp()
     {
         temp_file_path_ = create_temp_file(temp_file_url_);
@@ -444,7 +444,7 @@ public:
         osl::File::remove(temp_file_url_);
     }
 
-    //------------------------------------------------
+
     OUString create_temp_file(OUString &temp_file_url)
     {
         FileBase::RC rc = FileBase::createTempFile(0, 0, &temp_file_url);
@@ -457,7 +457,7 @@ public:
         return temp_file_path;
     }
 
-   //------------------------------------------------
+
     void read_child_environment(string_container_t* env_container)
     {
         OString temp_file_name = OUStringToOString(OUString(
@@ -477,7 +477,7 @@ public:
         tidy_container(*env_container);
     }
 
-    //------------------------------------------------
+
     // environment of the child process that was
     // started. The child process writes his
     // environment into a file
@@ -493,7 +493,7 @@ public:
                 (std::equal(child_env.begin(), child_env.end(), parent_env.begin())));
     }
 
-    //------------------------------------------------
+
     // compare the equal environment parts and the
     // different part of the child environment
     bool compare_merged_environments(const string_container_t& different_env_vars)
@@ -563,7 +563,7 @@ public:
                 different_env_size_equals && different_env_content_equals);
     }
 
-    //------------------------------------------------
+
     // test that parent and child process have the
     // same environment when osl_executeProcess will
     // be called with out setting new environment
@@ -605,7 +605,7 @@ public:
         );
     }
 
-    //------------------------------------------------
+
     #define ENV1 "PAT=a:\\"
     #define ENV2 "PATHb=b:\\"
     #define ENV3 "Patha=c:\\"

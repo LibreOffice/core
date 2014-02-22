@@ -182,14 +182,14 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
         LINK( this, SvxGridTabPage, ChangeDivisionHdl_Impl ) );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxTabPage* SvxGridTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return ( new SvxGridTabPage( pParent, rAttrSet ) );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SvxGridTabPage::FillItemSet( SfxItemSet& rCoreSet )
 {
@@ -216,7 +216,7 @@ sal_Bool SvxGridTabPage::FillItemSet( SfxItemSet& rCoreSet )
     return bAttrModified;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxGridTabPage::Reset( const SfxItemSet& rSet )
 {
@@ -295,7 +295,7 @@ int SvxGridTabPage::DeactivatePage( SfxItemSet* _pSet )
         FillItemSet( *_pSet );
     return( LEAVE_PAGE );
 }
-//------------------------------------------------------------------------
+
 IMPL_LINK( SvxGridTabPage, ChangeDrawHdl_Impl, MetricField *, pField )
 {
     bAttrModified = sal_True;
@@ -308,7 +308,7 @@ IMPL_LINK( SvxGridTabPage, ChangeDrawHdl_Impl, MetricField *, pField )
     }
     return 0;
 }
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxGridTabPage, ClickRotateHdl_Impl)
 {
@@ -320,7 +320,7 @@ IMPL_LINK_NOARG(SvxGridTabPage, ClickRotateHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( SvxGridTabPage, ChangeDivisionHdl_Impl, NumericField *, pField )
 {
@@ -334,7 +334,7 @@ IMPL_LINK( SvxGridTabPage, ChangeDivisionHdl_Impl, NumericField *, pField )
     }
     return 0;
 }
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxGridTabPage, ChangeGridsnapHdl_Impl)
 {

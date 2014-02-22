@@ -56,7 +56,7 @@ SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAcc
 
     StorageContainer::registerStream(env,name,key,mode);
 }
-// -----------------------------------------------------------------------------
+
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess
  * Method:    close
@@ -95,7 +95,7 @@ SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAcc
 
     StorageContainer::revokeStream(env,name,key);
 }
-// -----------------------------------------------------------------------------
+
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess
  * Method:    getFilePointer
@@ -118,7 +118,7 @@ SAL_JNI_EXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAc
 #endif
     return nReturn;
 }
-// -----------------------------------------------------------------------------
+
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess
@@ -143,7 +143,7 @@ SAL_JNI_EXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAc
     return nReturn;
 }
 
-// -----------------------------------------------------------------------------
+
 
 jint read_from_storage_stream( JNIEnv * env, jobject /*obj_this*/, jstring name, jstring key, DataLogFile* logger )
 {
@@ -185,7 +185,7 @@ jint read_from_storage_stream( JNIEnv * env, jobject /*obj_this*/, jstring name,
     return -1;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess
@@ -206,7 +206,7 @@ SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAcc
 #endif
 }
 
-// -----------------------------------------------------------------------------
+
 
 jint read_from_storage_stream_into_buffer( JNIEnv * env, jobject /*obj_this*/,jstring name, jstring key, jbyteArray buffer, jint off, jint len, DataLogFile* logger )
 {
@@ -258,7 +258,7 @@ jint read_from_storage_stream_into_buffer( JNIEnv * env, jobject /*obj_this*/,js
                     "Stream is not valid");
     return -1;
 }
-// -----------------------------------------------------------------------------
+
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess
@@ -279,7 +279,7 @@ SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAcc
 #endif
 }
 
-// -----------------------------------------------------------------------------
+
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess
@@ -347,7 +347,7 @@ SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAcc
                     "No InputStream");
     return -1;
 }
-// -----------------------------------------------------------------------------
+
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess
@@ -414,7 +414,7 @@ SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAcc
     #endif
     }
 }
-// -----------------------------------------------------------------------------
+
 
 void write_to_storage_stream_from_buffer( JNIEnv* env, jobject /*obj_this*/, jstring name, jstring key, jbyteArray buffer, jint off, jint len, DataLogFile* logger )
 {
@@ -459,7 +459,7 @@ void write_to_storage_stream_from_buffer( JNIEnv* env, jobject /*obj_this*/, jst
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess
@@ -479,7 +479,7 @@ SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAcc
     write_to_storage_stream_from_buffer( env, obj_this, name, key, buffer, off, len );
 #endif
 }
-// -----------------------------------------------------------------------------
+
 
 void write_to_storage_stream( JNIEnv* env, jobject /*obj_this*/, jstring name, jstring key, jint v, DataLogFile* logger )
 {
@@ -518,7 +518,7 @@ void write_to_storage_stream( JNIEnv* env, jobject /*obj_this*/, jstring name, j
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess

@@ -49,12 +49,12 @@ using namespace com::sun::star;
 
 #define PROP_HANDLE_RELATED_CELLRANGES  1
 
-//------------------------------------------------------------------------
+
 
 SC_SIMPLE_SERVICE_INFO( ScChartObj, "ScChartObj", "com.sun.star.table.TableChart" )
 SC_SIMPLE_SERVICE_INFO( ScChartsObj, "ScChartsObj", "com.sun.star.table.TableCharts" )
 
-//------------------------------------------------------------------------
+
 
 static SdrOle2Obj* lcl_FindChartObj( ScDocShell* pDocShell, SCTAB nTab, const OUString& rName )
 {
@@ -90,7 +90,7 @@ static SdrOle2Obj* lcl_FindChartObj( ScDocShell* pDocShell, SCTAB nTab, const OU
     return NULL;
 }
 
-//------------------------------------------------------------------------
+
 
 ScChartsObj::ScChartsObj(ScDocShell* pDocSh, SCTAB nT) :
     pDocShell( pDocSh ),
@@ -443,7 +443,7 @@ sal_Bool SAL_CALL ScChartsObj::hasByName( const OUString& aName )
     return ( lcl_FindChartObj( pDocShell, nTab, aName ) != NULL );
 }
 
-//------------------------------------------------------------------------
+
 
 ScChartObj::ScChartObj(ScDocShell* pDocSh, SCTAB nT, const OUString& rN)
     :ScChartObj_Base( m_aMutex )
@@ -795,7 +795,7 @@ uno::Reference< beans::XPropertySetInfo > ScChartObj::getPropertySetInfo() throw
     return createPropertySetInfo( getInfoHelper() ) ;
 }
 
-//------------------------------------------------------------------------
+
 
 
 

@@ -77,7 +77,7 @@ void SAL_CALL java_io_Reader::closeInput(  ) throw(::com::sun::star::io::NotConn
     static jmethodID mID(NULL);
     callVoidMethod("close",mID);
 }
-// -----------------------------------------------------
+
 sal_Int32 SAL_CALL java_io_Reader::readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OSL_ENSURE(aData.getLength() < nBytesToRead," Sequence is smaller than BytesToRead");

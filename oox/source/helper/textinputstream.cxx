@@ -64,7 +64,7 @@ private:
     BinaryInputStream*  mpInStrm;
 };
 
-// ----------------------------------------------------------------------------
+
 
 UnoBinaryInputStream::UnoBinaryInputStream( BinaryInputStream& rInStrm ) :
     mpInStrm( &rInStrm )

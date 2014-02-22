@@ -35,7 +35,7 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
             rtl_ModuleCount*
         );
 
-//---------------------------------------------------------------------------------------
+
 struct ProviderRequest
 {
     Reference< XSingleServiceFactory > xRet;

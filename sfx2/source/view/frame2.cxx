@@ -60,7 +60,7 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::frame::XComponentLoader;
 
-//------------------------------------------------------------------------
+
 
 class SfxFrameWindow_Impl : public Window
 {

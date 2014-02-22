@@ -63,7 +63,7 @@ struct Impl_DownLoadData
     }
 };
 
-// --------------------------------------------------------------------------
+
 
 
 SvFileObject::SvFileObject() :

@@ -51,14 +51,14 @@ FormatPaintBrushToolBoxControl::FormatPaintBrushToolBoxControl( sal_uInt16 nSlot
     m_aDoubleClickTimer.SetTimeout(nDblClkTime);
 }
 
-// -----------------------------------------------------------------------
+
 
 FormatPaintBrushToolBoxControl::~FormatPaintBrushToolBoxControl()
 {
     m_aDoubleClickTimer.Stop();
 }
 
-// -----------------------------------------------------------------------
+
 void FormatPaintBrushToolBoxControl::impl_executePaintBrush()
 {
     Sequence< PropertyValue > aArgs( 1 );
@@ -68,7 +68,7 @@ void FormatPaintBrushToolBoxControl::impl_executePaintBrush()
         , aArgs );
 }
 
-// -----------------------------------------------------------------------
+
 void FormatPaintBrushToolBoxControl::DoubleClick()
 {
     m_aDoubleClickTimer.Stop();
@@ -77,14 +77,14 @@ void FormatPaintBrushToolBoxControl::DoubleClick()
     this->impl_executePaintBrush();
 }
 
-// -----------------------------------------------------------------------
+
 void FormatPaintBrushToolBoxControl::Click()
 {
     m_bPersistentCopy = false;
     m_aDoubleClickTimer.Start();
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(FormatPaintBrushToolBoxControl, WaitDoubleClickHdl)
 {
     //there was no second click during waiting
@@ -92,12 +92,12 @@ IMPL_LINK_NOARG(FormatPaintBrushToolBoxControl, WaitDoubleClickHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 void FormatPaintBrushToolBoxControl::Select( sal_Bool )
 {
 }
 
-// -----------------------------------------------------------------------
+
 void FormatPaintBrushToolBoxControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                 const SfxPoolItem* pState )
 {

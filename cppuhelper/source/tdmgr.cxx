@@ -628,7 +628,7 @@ public:
     virtual void SAL_CALL disposing( lang::EventObject const & rEvt )
         throw (RuntimeException);
 };
-//__________________________________________________________________________________________________
+
 void EventListenerImpl::disposing( lang::EventObject const & rEvt )
     throw (RuntimeException)
 {

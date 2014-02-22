@@ -76,7 +76,7 @@ using namespace ::com::sun::star::container;
 //========================================================================
 TYPEINIT1( FmNavInsertedHint, SfxHint );
 DBG_NAME(FmNavInsertedHint);
-//------------------------------------------------------------------------
+
 FmNavInsertedHint::FmNavInsertedHint( FmEntryData* pInsertedEntryData, sal_uInt32 nRelPos )
     :pEntryData( pInsertedEntryData )
     ,nPos( nRelPos )
@@ -85,7 +85,7 @@ FmNavInsertedHint::FmNavInsertedHint( FmEntryData* pInsertedEntryData, sal_uInt3
     DBG_CTOR(FmNavInsertedHint,NULL);
 }
 
-//------------------------------------------------------------------------
+
 FmNavInsertedHint::~FmNavInsertedHint()
 {
     DBG_DTOR(FmNavInsertedHint,NULL);
@@ -97,14 +97,14 @@ FmNavInsertedHint::~FmNavInsertedHint()
 //========================================================================
 TYPEINIT1( FmNavModelReplacedHint, SfxHint );
 DBG_NAME(FmNavModelReplacedHint);
-//------------------------------------------------------------------------
+
 FmNavModelReplacedHint::FmNavModelReplacedHint( FmEntryData* pAffectedEntryData )
     :pEntryData( pAffectedEntryData )
 {
     DBG_CTOR(FmNavModelReplacedHint,NULL);
 }
 
-//------------------------------------------------------------------------
+
 FmNavModelReplacedHint::~FmNavModelReplacedHint()
 {
     DBG_DTOR(FmNavModelReplacedHint,NULL);
@@ -115,14 +115,14 @@ FmNavModelReplacedHint::~FmNavModelReplacedHint()
 //========================================================================
 TYPEINIT1( FmNavRemovedHint, SfxHint );
 DBG_NAME(FmNavRemovedHint);
-//------------------------------------------------------------------------
+
 FmNavRemovedHint::FmNavRemovedHint( FmEntryData* pRemovedEntryData )
     :pEntryData( pRemovedEntryData )
 {
     DBG_CTOR(FmNavRemovedHint,NULL);
 }
 
-//------------------------------------------------------------------------
+
 FmNavRemovedHint::~FmNavRemovedHint()
 {
     DBG_DTOR(FmNavRemovedHint,NULL);
@@ -134,7 +134,7 @@ FmNavRemovedHint::~FmNavRemovedHint()
 //========================================================================
 TYPEINIT1( FmNavNameChangedHint, SfxHint );
 DBG_NAME(FmNavNameChangedHint);
-//------------------------------------------------------------------------
+
 FmNavNameChangedHint::FmNavNameChangedHint( FmEntryData* pData, const OUString& rNewName )
     :pEntryData( pData )
     ,aNewName( rNewName )
@@ -142,7 +142,7 @@ FmNavNameChangedHint::FmNavNameChangedHint( FmEntryData* pData, const OUString& 
     DBG_CTOR(FmNavNameChangedHint,NULL);
 }
 
-//------------------------------------------------------------------------
+
 FmNavNameChangedHint::~FmNavNameChangedHint()
 {
     DBG_DTOR(FmNavNameChangedHint,NULL);
@@ -153,13 +153,13 @@ FmNavNameChangedHint::~FmNavNameChangedHint()
 //========================================================================
 TYPEINIT1( FmNavClearedHint, SfxHint );
 DBG_NAME(FmNavClearedHint);
-//------------------------------------------------------------------------
+
 FmNavClearedHint::FmNavClearedHint()
 {
     DBG_CTOR(FmNavClearedHint,NULL);
 }
 
-//------------------------------------------------------------------------
+
 FmNavClearedHint::~FmNavClearedHint()
 {
     DBG_DTOR(FmNavClearedHint,NULL);
@@ -179,19 +179,19 @@ TYPEINIT1(FmNavViewMarksChanged, SfxHint);
 // class FmEntryDataList
 //========================================================================
 DBG_NAME(FmEntryDataList);
-//------------------------------------------------------------------------
+
 FmEntryDataList::FmEntryDataList()
 {
     DBG_CTOR(FmEntryDataList,NULL);
 }
 
-//------------------------------------------------------------------------
+
 FmEntryDataList::~FmEntryDataList()
 {
     DBG_DTOR(FmEntryDataList,NULL);
 }
 
-//------------------------------------------------------------------------
+
 FmEntryData* FmEntryDataList::remove( FmEntryData* pItem )
 {
     for ( FmEntryDataBaseList::iterator it = maEntryDataList.begin();
@@ -208,7 +208,7 @@ FmEntryData* FmEntryDataList::remove( FmEntryData* pItem )
     return pItem;
 }
 
-//------------------------------------------------------------------------
+
 void FmEntryDataList::insert( FmEntryData* pItem, size_t Index )
 {
     if ( Index < maEntryDataList.size() )
@@ -221,7 +221,7 @@ void FmEntryDataList::insert( FmEntryData* pItem, size_t Index )
         maEntryDataList.push_back( pItem );
 }
 
-//------------------------------------------------------------------------
+
 void FmEntryDataList::clear()
 {
     for ( size_t i = 0, n = maEntryDataList.size(); i < n; ++i )
@@ -234,7 +234,7 @@ void FmEntryDataList::clear()
 //========================================================================
 TYPEINIT0( FmEntryData );
 DBG_NAME(FmEntryData);
-//------------------------------------------------------------------------
+
 FmEntryData::FmEntryData( FmEntryData* pParentData, const Reference< XInterface >& _rxIFace )
     :pParent( pParentData )
 {
@@ -244,7 +244,7 @@ FmEntryData::FmEntryData( FmEntryData* pParentData, const Reference< XInterface 
     newObject( _rxIFace );
 }
 
-//------------------------------------------------------------------------
+
 FmEntryData::~FmEntryData()
 {
     Clear();
@@ -252,7 +252,7 @@ FmEntryData::~FmEntryData()
     DBG_DTOR(FmEntryData,NULL);
 }
 
-//------------------------------------------------------------------------
+
 void FmEntryData::newObject( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxIFace )
 {
     // do not just copy, normalize it
@@ -261,7 +261,7 @@ void FmEntryData::newObject( const ::com::sun::star::uno::Reference< ::com::sun:
     m_xChild = m_xChild.query( m_xNormalizedIFace );
 }
 
-//------------------------------------------------------------------------
+
 FmEntryData::FmEntryData( const FmEntryData& rEntryData )
 {
     pChildList = new FmEntryDataList();
@@ -283,13 +283,13 @@ FmEntryData::FmEntryData( const FmEntryData& rEntryData )
     m_xChild = rEntryData.m_xChild;
 }
 
-//------------------------------------------------------------------------
+
 void FmEntryData::Clear()
 {
     GetChildList()->clear();
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmEntryData::IsEqualWithoutChildren( FmEntryData* pEntryData )
 {
     if(this == pEntryData)
@@ -322,7 +322,7 @@ sal_Bool FmEntryData::IsEqualWithoutChildren( FmEntryData* pEntryData )
 //========================================================================
 TYPEINIT1( FmFormData, FmEntryData );
 DBG_NAME(FmFormData);
-//------------------------------------------------------------------------
+
 FmFormData::FmFormData(
     const Reference< XForm >& _rxForm,
     const ImageList& _rNormalImages,
@@ -352,13 +352,13 @@ FmFormData::FmFormData(
         SetText( OUString() );
 }
 
-//------------------------------------------------------------------------
+
 FmFormData::~FmFormData()
 {
     DBG_DTOR(FmEntryData,NULL);
 }
 
-//------------------------------------------------------------------------
+
 FmFormData::FmFormData( const FmFormData& rFormData )
     :FmEntryData( rFormData )
 {
@@ -366,13 +366,13 @@ FmFormData::FmFormData( const FmFormData& rFormData )
     m_xForm = rFormData.GetFormIface();
 }
 
-//------------------------------------------------------------------------
+
 FmEntryData* FmFormData::Clone()
 {
     return new FmFormData( *this );
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmFormData::IsEqualWithoutChildren( FmEntryData* pEntryData )
 {
     if(this == pEntryData)
@@ -392,7 +392,7 @@ sal_Bool FmFormData::IsEqualWithoutChildren( FmEntryData* pEntryData )
 //========================================================================
 TYPEINIT1( FmControlData, FmEntryData );
 DBG_NAME(FmControlData);
-//------------------------------------------------------------------------
+
 FmControlData::FmControlData(
     const Reference< XFormComponent >& _rxComponent,
     const ImageList& _rNormalImages,
@@ -415,13 +415,13 @@ FmControlData::FmControlData(
     }
 }
 
-//------------------------------------------------------------------------
+
 FmControlData::~FmControlData()
 {
     DBG_DTOR(FmControlData,NULL);
 }
 
-//------------------------------------------------------------------------
+
 FmControlData::FmControlData( const FmControlData& rControlData )
     :FmEntryData( rControlData )
 {
@@ -429,13 +429,13 @@ FmControlData::FmControlData( const FmControlData& rControlData )
     m_xFormComponent = rControlData.GetFormComponent();
 }
 
-//------------------------------------------------------------------------
+
 FmEntryData* FmControlData::Clone()
 {
     return new FmControlData( *this );
 }
 
-//------------------------------------------------------------------------
+
 Image FmControlData::GetImage(const ImageList& ilNavigatorImages) const
 {
     //////////////////////////////////////////////////////////////////////
@@ -543,7 +543,7 @@ Image FmControlData::GetImage(const ImageList& ilNavigatorImages) const
     return aImage;
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmControlData::IsEqualWithoutChildren( FmEntryData* pEntryData )
 {
     if(this == pEntryData)
@@ -559,7 +559,7 @@ sal_Bool FmControlData::IsEqualWithoutChildren( FmEntryData* pEntryData )
     return FmEntryData::IsEqualWithoutChildren( pControlData );
 }
 
-//------------------------------------------------------------------------
+
 void FmControlData::ModelReplaced(
     const Reference< XFormComponent >& _rxNew,
     const ImageList& _rNormalImages
@@ -581,7 +581,7 @@ namespace svxform
     // class NavigatorFrame
     //========================================================================
     DBG_NAME(NavigatorFrame)
-    //------------------------------------------------------------------------
+
     NavigatorFrame::NavigatorFrame( SfxBindings* _pBindings, SfxChildWindow* _pMgr,
                                   Window* _pParent )
       :SfxDockingWindow( _pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) )
@@ -596,20 +596,20 @@ namespace svxform
         SfxDockingWindow::SetFloatingSize( Size(200,200) );
     }
 
-    //------------------------------------------------------------------------
+
     NavigatorFrame::~NavigatorFrame()
     {
         delete m_pNavigatorTree;
         DBG_DTOR(NavigatorFrame,NULL);
     }
 
-    //-----------------------------------------------------------------------
+
     void NavigatorFrame::UpdateContent( FmFormShell* pFormShell )
     {
         m_pNavigatorTree->UpdateContent( pFormShell );
     }
 
-    //-----------------------------------------------------------------------
+
     void NavigatorFrame::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
     {
         if( !pState  || SID_FM_FMEXPLORER_CONTROL != nSID )
@@ -624,7 +624,7 @@ namespace svxform
             UpdateContent( NULL );
     }
 
-    //-----------------------------------------------------------------------
+
     void NavigatorFrame::GetFocus()
     {
         if ( m_pNavigatorTree )
@@ -633,21 +633,21 @@ namespace svxform
             SfxDockingWindow::GetFocus();
     }
 
-    //-----------------------------------------------------------------------
+
     bool NavigatorFrame::Close()
     {
         UpdateContent( NULL );
         return SfxDockingWindow::Close();
     }
 
-    //-----------------------------------------------------------------------
+
     void NavigatorFrame::FillInfo( SfxChildWinInfo& rInfo ) const
     {
         SfxDockingWindow::FillInfo( rInfo );
         rInfo.bVisible = sal_False;
     }
 
-    //-----------------------------------------------------------------------
+
     Size NavigatorFrame::CalcDockingSize( SfxChildAlignment eAlign )
     {
         if ( ( eAlign == SFX_ALIGN_TOP ) || ( eAlign == SFX_ALIGN_BOTTOM ) )
@@ -656,7 +656,7 @@ namespace svxform
         return SfxDockingWindow::CalcDockingSize( eAlign );
     }
 
-    //-----------------------------------------------------------------------
+
     SfxChildAlignment NavigatorFrame::CheckAlignment( SfxChildAlignment _eActAlign, SfxChildAlignment _eAlign )
     {
         if ( ( _eAlign == SFX_ALIGN_LEFT ) || ( _eAlign == SFX_ALIGN_RIGHT ) || ( _eAlign == SFX_ALIGN_NOALIGNMENT ) )
@@ -664,7 +664,7 @@ namespace svxform
         return _eActAlign;
     }
 
-    //------------------------------------------------------------------------
+
     void NavigatorFrame::Resize()
     {
         SfxDockingWindow::Resize();
@@ -685,10 +685,10 @@ namespace svxform
     // class NavigatorFrameManager
     //========================================================================
 
-    //-----------------------------------------------------------------------
+
     SFX_IMPL_DOCKINGWINDOW( NavigatorFrameManager, SID_FM_SHOW_FMEXPLORER )
 
-    //-----------------------------------------------------------------------
+
     NavigatorFrameManager::NavigatorFrameManager( Window* _pParent, sal_uInt16 _nId,
                                         SfxBindings* _pBindings, SfxChildWinInfo* _pInfo )
                      :SfxChildWindow( _pParent, _nId )

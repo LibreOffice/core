@@ -62,7 +62,7 @@ namespace frm
     //====================================================================
     namespace
     {
-        //----------------------------------------------------------------
+
         static ::comphelper::IPropertyInfoService& lcl_getPropertyInfos()
         {
             static ConcreteInfoService s_aPropInfos;
@@ -73,7 +73,7 @@ namespace frm
     //====================================================================
     //= PropertyBagHelper
     //====================================================================
-    //--------------------------------------------------------------------
+
     PropertyBagHelper::PropertyBagHelper( IPropertyBagHelperContext& _rContext )
         :m_rContext( _rContext )
         ,m_pPropertyArrayHelper( NULL )
@@ -81,32 +81,32 @@ namespace frm
     {
     }
 
-    //--------------------------------------------------------------------
+
     PropertyBagHelper::~PropertyBagHelper()
     {
         delete m_pPropertyArrayHelper, m_pPropertyArrayHelper = NULL;
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyBagHelper::dispose()
     {
         m_bDisposed = true;
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyBagHelper::impl_nts_checkDisposed_throw() const
     {
         if ( m_bDisposed )
             throw DisposedException();
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyBagHelper::impl_nts_invalidatePropertySetInfo()
     {
         delete m_pPropertyArrayHelper, m_pPropertyArrayHelper = NULL;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int32 PropertyBagHelper::impl_findFreeHandle( const OUString& _rPropertyName )
     {
         ::comphelper::OPropertyArrayAggregationHelper& rPropInfo( impl_ts_getArrayHelper() );
@@ -145,7 +145,7 @@ namespace frm
         return nHandle;
     }
 
-    //--------------------------------------------------------------------
+
     ::comphelper::OPropertyArrayAggregationHelper& PropertyBagHelper::impl_ts_getArrayHelper() const
     {
         OPropertyArrayAggregationHelper* p = m_pPropertyArrayHelper;
@@ -179,34 +179,34 @@ namespace frm
         return *p;
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyBagHelper::addProperty( const OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue )
     {
         ::osl::MutexGuard aGuard( m_rContext.getMutex() );
         impl_nts_checkDisposed_throw();
 
-        //----------------------------------------------
+
         // check name sanity
         ::comphelper::OPropertyArrayAggregationHelper& aPropInfo( impl_ts_getArrayHelper() );
         if ( aPropInfo.hasPropertyByName( _rName ) )
             throw PropertyExistException( _rName, m_rContext.getPropertiesInterface() );
 
-        //----------------------------------------------
+
         // normalize the REMOVABLE attribute - the FormComponent service
         // requires that all dynamic properties are REMOVABLE
         _nAttributes |= PropertyAttribute::REMOVABLE;
 
-        //----------------------------------------------
+
         // find a free handle
         sal_Int32 nHandle = impl_findFreeHandle( _rName );
 
-        //----------------------------------------------
+
         // register the property, and invalidate our property meta data
         m_aDynamicProperties.addProperty( _rName, nHandle, _nAttributes, _rInitialValue );
         impl_nts_invalidatePropertySetInfo();
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyBagHelper::removeProperty( const OUString& _rName )
     {
         ::osl::MutexGuard aGuard( m_rContext.getMutex() );
@@ -223,28 +223,28 @@ namespace frm
         impl_nts_invalidatePropertySetInfo();
     }
 
-    //--------------------------------------------------------------------
+
     namespace
     {
-        //----------------------------------------------------------------
+
         struct SelectNameOfProperty : public ::std::unary_function< Property, OUString >
         {
             const OUString& operator()( const Property& _rProp ) const { return _rProp.Name; }
         };
 
-        //----------------------------------------------------------------
+
         struct SelectNameOfPropertyValue : public ::std::unary_function< PropertyValue, OUString >
         {
             const OUString& operator()( const PropertyValue& _rProp ) const { return _rProp.Name; }
         };
 
-        //----------------------------------------------------------------
+
         struct SelectValueOfPropertyValue : public ::std::unary_function< PropertyValue, Any >
         {
             const Any& operator()( const PropertyValue& _rProp ) const { return _rProp.Value; }
         };
 
-        //----------------------------------------------------------------
+
         struct PropertyValueLessByName : public ::std::binary_function< PropertyValue, PropertyValue, bool >
         {
             bool operator()( const PropertyValue& _lhs, const PropertyValue _rhs ) const
@@ -254,7 +254,7 @@ namespace frm
         };
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< PropertyValue > PropertyBagHelper::getPropertyValues()
     {
         ::osl::MutexGuard aGuard( m_rContext.getMutex() );
@@ -296,7 +296,7 @@ namespace frm
         return aPropertyValues;
     }
 
-    //--------------------------------------------------------------------
+
     void PropertyBagHelper::setPropertyValues( const Sequence< PropertyValue >& _rProps )
     {
         ::osl::ClearableMutexGuard aGuard( m_rContext.getMutex() );

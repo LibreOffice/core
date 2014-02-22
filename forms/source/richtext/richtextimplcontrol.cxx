@@ -44,7 +44,7 @@ namespace frm
     //====================================================================
     //= RichTextControlImpl
     //====================================================================
-    //--------------------------------------------------------------------
+
     RichTextControlImpl::RichTextControlImpl( Control* _pAntiImpl, RichTextEngine* _pEngine, ITextAttributeListener* _pTextAttrListener, ITextSelectionListener* _pSelectionListener )
         :m_pAntiImpl            ( _pAntiImpl          )
         ,m_pViewport            ( NULL                )
@@ -89,7 +89,7 @@ namespace frm
         m_pAntiImpl->SetBackground( Wallpaper( m_pAntiImpl->GetSettings().GetStyleSettings().GetFieldColor() ) );
     }
 
-    //--------------------------------------------------------------------
+
     RichTextControlImpl::~RichTextControlImpl( )
     {
         m_pEngine->RemoveView( m_pView );
@@ -101,7 +101,7 @@ namespace frm
         delete m_pScrollCorner;
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControlImpl::implUpdateAttribute( AttributeHandlerPool::const_iterator _pHandler )
     {
         if  (  ( _pHandler->first == SID_ATTR_CHAR_WEIGHT )
@@ -127,7 +127,7 @@ namespace frm
             implCheckUpdateCache( _pHandler->first, _pHandler->second->getState( m_pView->GetAttribs() ) );
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControlImpl::updateAttribute( AttributeId _nAttribute )
     {
         AttributeHandlerPool::const_iterator pHandler = m_aAttributeHandlers.find( _nAttribute );
@@ -135,7 +135,7 @@ namespace frm
             implUpdateAttribute( pHandler );
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControlImpl::updateAllAttributes( )
     {
         for (   AttributeHandlerPool::const_iterator pHandler = m_aAttributeHandlers.begin();
@@ -158,7 +158,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     AttributeState RichTextControlImpl::getAttributeState( AttributeId _nAttributeId ) const
     {
         StateCache::const_iterator aCachedStatePos = m_aLastKnownStates.find( _nAttributeId );
@@ -170,7 +170,7 @@ namespace frm
         return aCachedStatePos->second;
     }
 
-    //--------------------------------------------------------------------
+
     bool RichTextControlImpl::executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rAttribs, AttributeId _nAttribute, const SfxPoolItem* _pArgument, ScriptType _nForScriptType )
     {
         // let's see whether we have a handler for this attribute
@@ -183,7 +183,7 @@ namespace frm
         return false;
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControlImpl::enableAttributeNotification( AttributeId _nAttributeId, ITextAttributeListener* _pListener )
     {
         AttributeHandlerPool::const_iterator aHandlerPos = m_aAttributeHandlers.find( _nAttributeId  );
@@ -206,7 +206,7 @@ namespace frm
         updateAttribute( _nAttributeId );
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControlImpl::disableAttributeNotification( AttributeId _nAttributeId )
     {
         // forget the handler for this attribute
@@ -220,7 +220,7 @@ namespace frm
             m_aAttributeListeners.erase( aListenerPos );
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControlImpl::normalizeScriptDependentAttribute( SvxScriptSetItem& _rScriptSetItem )
     {
         _rScriptSetItem.GetItemSet().Put( m_pView->GetAttribs(), false );
@@ -238,7 +238,7 @@ namespace frm
             _rScriptSetItem.GetItemSet().InvalidateItem( nNormalizedWhichId );
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControlImpl::implCheckUpdateCache( AttributeId _nAttribute, const AttributeState& _rState )
     {
         StateCache::iterator aCachePos = m_aLastKnownStates.find( _nAttribute );
@@ -266,7 +266,7 @@ namespace frm
             m_pTextAttrListener->onAttributeStateChanged( _nAttribute, _rState );
     }
 
-    //--------------------------------------------------------------------
+
     ScriptType RichTextControlImpl::getSelectedScriptType() const
     {
         ScriptType nScript = m_pView->GetSelectedScriptType();
@@ -275,7 +275,7 @@ namespace frm
         return nScript;
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControlImpl::EditEngineStatusChanged( const EditStatus& _rStatus )
     {
         sal_uLong nStatusWord( _rStatus.GetStatusWord() );
@@ -314,28 +314,28 @@ namespace frm
             m_pVScroll->SetThumbPos( m_pView->GetVisArea().Top() );
     }
 
-    //--------------------------------------------------------------------
+
     IMPL_LINK( RichTextControlImpl, OnInvalidateAllAttributes, void*, /*_pNotInterestedIn*/ )
     {
         updateAllAttributes();
         return 0L;
     }
 
-    //--------------------------------------------------------------------
+
     IMPL_LINK( RichTextControlImpl, OnHScroll, ScrollBar*, _pScrollbar )
     {
         m_pView->Scroll( -_pScrollbar->GetDelta(), 0, RGCHK_PAPERSZ1 );
         return 0L;
     }
 
-    //--------------------------------------------------------------------
+
     IMPL_LINK( RichTextControlImpl, OnVScroll, ScrollBar*, _pScrollbar )
     {
         m_pView->Scroll( 0, -_pScrollbar->GetDelta(), RGCHK_PAPERSZ1 );
         return 0L;
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControlImpl::ensureScrollbars()
     {
         bool bNeedVScroll = 0 != ( m_pAntiImpl->GetStyle() & WB_VSCROLL );
@@ -385,7 +385,7 @@ namespace frm
         layoutWindow();
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControlImpl::ensureLineBreakSetting()
     {
         if ( !windowHasAutomaticLineBreak() )
@@ -394,7 +394,7 @@ namespace frm
         layoutWindow();
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControlImpl::layoutWindow()
     {
         if ( !m_bHasEverBeenShown )
@@ -480,7 +480,7 @@ namespace frm
         updateScrollbars();
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControlImpl::updateScrollbars()
     {
         if ( m_pVScroll )
@@ -499,7 +499,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControlImpl::notifyInitShow()
     {
         if ( !m_bHasEverBeenShown )
@@ -509,14 +509,14 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControlImpl::notifyStyleChanged()
     {
         ensureScrollbars();
         ensureLineBreakSetting();
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControlImpl::notifyZoomChanged()
     {
         const Fraction& rZoom = m_pAntiImpl->GetZoom();
@@ -532,25 +532,25 @@ namespace frm
         layoutWindow();
     }
 
-    //--------------------------------------------------------------------
+
     bool RichTextControlImpl::windowHasAutomaticLineBreak()
     {
         return ( m_pAntiImpl->GetStyle() & WB_WORDBREAK ) != 0;
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControlImpl::SetReadOnly( bool _bReadOnly )
     {
         m_pView->SetReadOnly( _bReadOnly );
     }
 
-    //--------------------------------------------------------------------
+
     bool RichTextControlImpl::IsReadOnly() const
     {
         return m_pView->IsReadOnly( );
     }
 
-    //--------------------------------------------------------------------
+
     namespace
     {
         static void lcl_inflate( Rectangle& _rRect, long _nInflateX, long _nInflateY )
@@ -561,7 +561,7 @@ namespace frm
             _rRect.Bottom() += _nInflateY;
         }
     }
-    //--------------------------------------------------------------------
+
     long RichTextControlImpl::HandleCommand( const CommandEvent& _rEvent )
     {
         if (  ( _rEvent.GetCommand() == COMMAND_WHEEL )
@@ -575,7 +575,7 @@ namespace frm
         return 0;
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControlImpl::Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, sal_uLong /*_nFlags*/ )
     {
         // need to normalize the map mode of the device - every paint operation on any device needs
@@ -635,13 +635,13 @@ namespace frm
         _pDev->Pop();
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControlImpl::SetBackgroundColor( )
     {
         SetBackgroundColor( Application::GetSettings().GetStyleSettings().GetFieldColor() );
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControlImpl::SetBackgroundColor( const Color& _rColor )
     {
         Wallpaper aWallpaper( _rColor );
@@ -649,13 +649,13 @@ namespace frm
         m_pViewport->SetBackground( aWallpaper );
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextControlImpl::SetHideInactiveSelection( bool _bHide )
     {
         m_pViewport->SetHideInactiveSelection( _bHide );
     }
 
-    //--------------------------------------------------------------------
+
     bool RichTextControlImpl::GetHideInactiveSelection() const
     {
         return m_pViewport->GetHideInactiveSelection( );

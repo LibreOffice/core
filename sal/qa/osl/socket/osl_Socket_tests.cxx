@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//------------------------------------------------------------------------
+
 // include files
-//------------------------------------------------------------------------
+
 #include <sal/types.h>
 #include <osl_Socket_Const.h>
 
@@ -27,13 +27,13 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <osl/socket.hxx>
-//------------------------------------------------------------------------
-// helper functions
-//------------------------------------------------------------------------
 
-//------------------------------------------------------------------------
+// helper functions
+
+
+
 // tests cases begins here
-//------------------------------------------------------------------------
+
 
 namespace osl_Socket
 {
@@ -59,7 +59,7 @@ namespace osl_Socket
 }
 
 
-// -----------------------------------------------------------------------------
+
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

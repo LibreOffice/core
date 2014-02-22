@@ -62,13 +62,13 @@ PGMWriter::PGMWriter(SvStream &rStream)
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 PGMWriter::~PGMWriter()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool PGMWriter::WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
 {
@@ -111,7 +111,7 @@ sal_Bool PGMWriter::WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilter
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool PGMWriter::ImplWriteHeader()
 {
@@ -137,7 +137,7 @@ sal_Bool PGMWriter::ImplWriteHeader()
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
+
 
 void PGMWriter::ImplWriteBody()
 {
@@ -199,7 +199,7 @@ void PGMWriter::ImplWriteBody()
     }
 }
 
-// ------------------------------------------------------------------------
+
 // write a decimal number in ascii format into the stream
 void PGMWriter::ImplWriteNumber(sal_Int32 nNumber)
 {
@@ -207,11 +207,11 @@ void PGMWriter::ImplWriteNumber(sal_Int32 nNumber)
     m_rOStm.WriteCharPtr( aNum.getStr() );
 }
 
-// ------------------------------------------------------------------------
 
-// ---------------------
+
+
 // - exported function -
-// ---------------------
+
 
 // this needs to be kept in sync with
 // ImpFilterLibCacheEntry::GetImportFunction() from
@@ -228,7 +228,7 @@ GraphicExport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterCon
     return aPGMWriter.WritePGM( rGraphic, pFilterConfigItem );
 }
 
-// ------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

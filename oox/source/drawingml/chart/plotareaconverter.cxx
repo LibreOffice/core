@@ -92,7 +92,7 @@ private:
     bool                mbPieChart;
 };
 
-// ----------------------------------------------------------------------------
+
 
 AxesSetConverter::AxesSetConverter( const ConverterRoot& rParent, AxesSetModel& rModel ) :
     ConverterBase< AxesSetModel >( rParent, rModel ),

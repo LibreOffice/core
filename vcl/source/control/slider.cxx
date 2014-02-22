@@ -78,7 +78,7 @@ void Slider::ImplInit( Window* pParent, WinBits nStyle )
     SetSizePixel( CalcWindowSizePixel() );
 }
 
-// -----------------------------------------------------------------------
+
 
 Slider::Slider( Window* pParent, WinBits nStyle ) :
     Control( WINDOW_SLIDER )
@@ -86,7 +86,7 @@ Slider::Slider( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::ImplInitSettings()
 {
@@ -111,7 +111,7 @@ void Slider::ImplInitSettings()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::ImplUpdateRects( bool bUpdate )
 {
@@ -220,7 +220,7 @@ void Slider::ImplUpdateRects( bool bUpdate )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 long Slider::ImplCalcThumbPos( long nPixPos )
 {
@@ -231,7 +231,7 @@ long Slider::ImplCalcThumbPos( long nPixPos )
     return nCalcThumbPos;
 }
 
-// -----------------------------------------------------------------------
+
 
 long Slider::ImplCalcThumbPosPix( long nPos )
 {
@@ -248,7 +248,7 @@ long Slider::ImplCalcThumbPosPix( long nPos )
     return nCalcThumbPos+mnThumbPixOffset;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::ImplCalc( bool bUpdate )
 {
@@ -319,7 +319,7 @@ void Slider::ImplCalc( bool bUpdate )
     ImplUpdateRects( bUpdate );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::ImplDraw( sal_uInt16 nDrawFlags )
 {
@@ -459,7 +459,7 @@ void Slider::ImplDraw( sal_uInt16 nDrawFlags )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Slider::ImplIsPageUp( const Point& rPos )
 {
@@ -478,7 +478,7 @@ bool Slider::ImplIsPageUp( const Point& rPos )
     return aRect.IsInside( rPos );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Slider::ImplIsPageDown( const Point& rPos )
 {
@@ -497,7 +497,7 @@ bool Slider::ImplIsPageDown( const Point& rPos )
     return aRect.IsInside( rPos );
 }
 
-// -----------------------------------------------------------------------
+
 
 long Slider::ImplSlide( long nNewPos, bool bCallEndSlide )
 {
@@ -515,7 +515,7 @@ long Slider::ImplSlide( long nNewPos, bool bCallEndSlide )
     return nDelta;
 }
 
-// -----------------------------------------------------------------------
+
 
 long Slider::ImplDoAction( bool bCallEndSlide )
 {
@@ -549,7 +549,7 @@ long Slider::ImplDoAction( bool bCallEndSlide )
     return nDelta;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
 {
@@ -611,7 +611,7 @@ void Slider::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
         ImplDraw( mnDragDraw );
 }
 
-// -----------------------------------------------------------------------
+
 
 long Slider::ImplDoSlide( long nNewPos )
 {
@@ -624,7 +624,7 @@ long Slider::ImplDoSlide( long nNewPos )
     return nDelta;
 }
 
-// -----------------------------------------------------------------------
+
 
 long Slider::ImplDoSlideAction( ScrollType eScrollType )
 {
@@ -639,7 +639,7 @@ long Slider::ImplDoSlideAction( ScrollType eScrollType )
     return nDelta;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -700,7 +700,7 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::MouseButtonUp( const MouseEvent& )
 {
@@ -720,7 +720,7 @@ void Slider::MouseButtonUp( const MouseEvent& )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::Tracking( const TrackingEvent& rTEvt )
 {
@@ -807,7 +807,7 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::KeyInput( const KeyEvent& rKEvt )
 {
@@ -849,14 +849,14 @@ void Slider::KeyInput( const KeyEvent& rKEvt )
         Control::KeyInput( rKEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::Paint( const Rectangle& )
 {
     ImplDraw( SLIDER_DRAW_ALL );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::Resize()
 {
@@ -867,14 +867,14 @@ void Slider::Resize()
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::RequestHelp( const HelpEvent& rHEvt )
 {
     Control::RequestHelp( rHEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::StateChanged( StateChangedType nType )
 {
@@ -920,7 +920,7 @@ void Slider::StateChanged( StateChangedType nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -934,21 +934,21 @@ void Slider::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::Slide()
 {
     maSlideHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::EndSlide()
 {
     maEndSlideHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::SetRange( const Range& rRange )
 {
@@ -975,7 +975,7 @@ void Slider::SetRange( const Range& rRange )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::SetThumbPos( long nNewThumbPos )
 {
@@ -991,7 +991,7 @@ void Slider::SetThumbPos( long nNewThumbPos )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 Size Slider::CalcWindowSizePixel()
 {

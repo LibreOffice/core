@@ -25,14 +25,14 @@ using namespace connectivity;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL OIndexColumn::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     if(isNew())
         return OUString("com.sun.star.sdbcx.VIndexColumnDescription");
     return OUString("com.sun.star.sdbcx.VIndex");
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL OIndexColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Sequence< OUString > aSupported(1);
@@ -48,13 +48,13 @@ sal_Bool SAL_CALL OIndexColumn::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
-// -----------------------------------------------------------------------------
+
 OIndexColumn::OIndexColumn(sal_Bool _bCase) : OColumn(_bCase),  m_IsAscending(sal_True)
 {
     construct();
 }
 
-// -------------------------------------------------------------------------
+
 OIndexColumn::OIndexColumn( sal_Bool _IsAscending,
                             const OUString&  _Name,
                             const OUString&  _TypeName,
@@ -89,23 +89,23 @@ OIndexColumn::OIndexColumn( sal_Bool _IsAscending,
 {
     construct();
 }
-// -----------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* OIndexColumn::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {
     return doCreateArrayHelper();
 }
-// -----------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper& SAL_CALL OIndexColumn::getInfoHelper()
 {
     return *OIndexColumn_PROP::getArrayHelper(isNew() ? 1 : 0);
 }
-// -------------------------------------------------------------------------
+
 void OIndexColumn::construct()
 {
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISASCENDING), PROPERTY_ID_ISASCENDING,    nAttrib,&m_IsAscending, ::getBooleanCppuType());
 }
-// -----------------------------------------------------------------------------
+
 
 
 

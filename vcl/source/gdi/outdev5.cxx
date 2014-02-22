@@ -92,7 +92,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
         mpAlphaVDev->DrawRect( rRect, nHorzRound, nVertRound );
 }
 
-// -----------------------------------------------------------------------
+
 
 void OutputDevice::DrawEllipse( const Rectangle& rRect )
 {
@@ -140,7 +140,7 @@ void OutputDevice::DrawEllipse( const Rectangle& rRect )
         mpAlphaVDev->DrawEllipse( rRect );
 }
 
-// -----------------------------------------------------------------------
+
 
 void OutputDevice::DrawArc( const Rectangle& rRect,
                             const Point& rStartPt, const Point& rEndPt )
@@ -185,7 +185,7 @@ void OutputDevice::DrawArc( const Rectangle& rRect,
         mpAlphaVDev->DrawArc( rRect, rStartPt, rEndPt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void OutputDevice::DrawPie( const Rectangle& rRect,
                             const Point& rStartPt, const Point& rEndPt )
@@ -237,7 +237,7 @@ void OutputDevice::DrawPie( const Rectangle& rRect,
         mpAlphaVDev->DrawPie( rRect, rStartPt, rEndPt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void OutputDevice::DrawChord( const Rectangle& rRect,
                               const Point& rStartPt, const Point& rEndPt )

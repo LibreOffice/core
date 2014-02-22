@@ -56,7 +56,7 @@ ConfigAccess::ConfigAccess( /*IN*/ const css::uno::Reference< css::uno::XCompone
 {
 }
 
-//________________________________
+
 /**
     @short  last chance to close an open configuration access point
     @descr  In case our user forgot to close this configuration point
@@ -68,7 +68,7 @@ ConfigAccess::~ConfigAccess()
     close();
 }
 
-//________________________________
+
 /**
     @short  return the internal mode of this instance
     @descr  May be the outside user need any information about successfully opened
@@ -84,7 +84,7 @@ ConfigAccess::EOpenMode ConfigAccess::getMode() const
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short  open the configuration access in the specified mode
     @descr  We set the opened configuration access as our member. So any following method,
@@ -153,7 +153,7 @@ void ConfigAccess::open( /*IN*/ EOpenMode eMode )
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short  close the internal opened configuration access and flush all changes
     @descr  It checks, if the given access is valid and react in the right way.
@@ -180,7 +180,7 @@ void ConfigAccess::close()
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short  provides an access to the internal wrapped configuration access
     @descr  It's not allowed to safe this c++ (!) reference outside. You have

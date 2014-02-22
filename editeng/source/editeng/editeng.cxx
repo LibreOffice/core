@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
@@ -94,9 +93,6 @@ static bool bDebugPaint = false;
 
 static SfxItemPool* pGlobalPool=0;
 
-// ----------------------------------------------------------------------
-// EditEngine
-// ----------------------------------------------------------------------
 EditEngine::EditEngine( SfxItemPool* pItemPool )
 {
     pImpEditEngine = new ImpEditEngine( this, pItemPool );
@@ -248,7 +244,7 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const P
 #endif
 
     // Align to the pixel boundary, so that it becomes exactly the same
-    // as Paint ().
+    // as Paint ()
     Rectangle aOutRect( pOutDev->LogicToPixel( rOutRect ) );
     aOutRect = pOutDev->PixelToLogic( aOutRect );
 

@@ -61,7 +61,7 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 //  alles ohne Which-ID, Map nur fuer PropertySetInfo
 
@@ -128,7 +128,7 @@ static const SfxItemPropertyMapEntry* lcl_GetDBRangePropertyMap()
 }
 
 
-//------------------------------------------------------------------------
+
 
 
 SC_SIMPLE_SERVICE_INFO( ScConsolidationDescriptor, "ScConsolidationDescriptor", "com.sun.star.sheet.ConsolidationDescriptor" )
@@ -162,7 +162,7 @@ sheet::GeneralFunction  ScDataUnoConversion::SubTotalToGeneral( ScSubTotalFunc e
     return eGeneral;
 }
 
-//------------------------------------------------------------------------
+
 
 //  ScImportDescriptor: alles static
 
@@ -270,7 +270,7 @@ void ScImportDescriptor::FillImportParam( ScImportParam& rParam, const uno::Sequ
     }
 }
 
-//------------------------------------------------------------------------
+
 
 //  ScSortDescriptor: alles static
 
@@ -467,7 +467,7 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
     }
 }
 
-//------------------------------------------------------------------------
+
 
 ScSubTotalFieldObj::ScSubTotalFieldObj( ScSubTotalDescriptorBase* pDesc, sal_uInt16 nP ) :
     xRef( pDesc ),          // Objekt festhalten
@@ -558,7 +558,7 @@ void SAL_CALL ScSubTotalFieldObj::setSubTotalColumns(
     rParent.PutData(aParam);
 }
 
-//------------------------------------------------------------------------
+
 
 ScSubTotalDescriptorBase::ScSubTotalDescriptorBase() :
     aPropSet( lcl_GetSubTotalPropertyMap() )
@@ -813,7 +813,7 @@ ScSubTotalDescriptorBase* ScSubTotalDescriptorBase::getImplementation(
     return pRet;
 }
 
-//------------------------------------------------------------------------
+
 
 ScSubTotalDescriptor::ScSubTotalDescriptor()
 {
@@ -838,7 +838,7 @@ void ScSubTotalDescriptor::SetParam( const ScSubTotalParam& rNew )
     aStoredParam = rNew;            // von aussen gesetzt
 }
 
-//------------------------------------------------------------------------
+
 
 ScRangeSubTotalDescriptor::ScRangeSubTotalDescriptor(ScDatabaseRangeObj* pPar) :
     pParent(pPar)
@@ -865,7 +865,7 @@ void ScRangeSubTotalDescriptor::PutData( const ScSubTotalParam& rParam )
         pParent->SetSubTotalParam( rParam );
 }
 
-//------------------------------------------------------------------------
+
 
 ScConsolidationDescriptor::ScConsolidationDescriptor()
 {
@@ -1557,7 +1557,7 @@ uno::Any SAL_CALL ScFilterDescriptorBase::getPropertyValue( const OUString& aPro
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScFilterDescriptorBase )
 
-//------------------------------------------------------------------------
+
 
 ScFilterDescriptor::ScFilterDescriptor(ScDocShell* pDocShell)
     :
@@ -1584,7 +1584,7 @@ void ScFilterDescriptor::SetParam( const ScQueryParam& rNew )
     aStoredParam = rNew;            // von aussen gesetzt
 }
 
-//------------------------------------------------------------------------
+
 
 ScRangeFilterDescriptor::ScRangeFilterDescriptor(ScDocShell* pDocShell, ScDatabaseRangeObj* pPar) :
     ScFilterDescriptorBase(pDocShell),
@@ -1612,7 +1612,7 @@ void ScRangeFilterDescriptor::PutData( const ScQueryParam& rParam )
         pParent->SetQueryParam( rParam );
 }
 
-//------------------------------------------------------------------------
+
 
 ScDataPilotFilterDescriptor::ScDataPilotFilterDescriptor(ScDocShell* pDocShell, ScDataPilotDescriptorBase* pPar) :
     ScFilterDescriptorBase(pDocShell),
@@ -1655,7 +1655,7 @@ void ScDataPilotFilterDescriptor::PutData( const ScQueryParam& rParam )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 ScDatabaseRangeObj::ScDatabaseRangeObj(ScDocShell* pDocSh, const OUString& rNm) :
     pDocShell( pDocSh ),
@@ -2226,7 +2226,7 @@ uno::Sequence<OUString> SAL_CALL ScDatabaseRangeObj::getSupportedServiceNames()
     return aRet;
 }
 
-//------------------------------------------------------------------------
+
 
 ScDatabaseRangesObj::ScDatabaseRangesObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
@@ -2424,7 +2424,7 @@ sal_Bool SAL_CALL ScDatabaseRangesObj::hasByName( const OUString& aName )
     return false;
 }
 
-//------------------------------------------------------------------------
+
 
 ScUnnamedDatabaseRangesObj::ScUnnamedDatabaseRangesObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
@@ -2510,7 +2510,7 @@ sal_Bool ScUnnamedDatabaseRangesObj::hasByTable( sal_Int32 nTab )
         return false;
 }
 
-//------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

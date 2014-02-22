@@ -137,21 +137,21 @@ struct SvtCompatibilityEntry
 class SvtCompatibility
 {
     public:
-        //---------------------------------------------------------------------------------------------------------
+
         // append one entry
         void AppendEntry( const SvtCompatibilityEntry& rEntry )
         {
             lEntries.push_back( rEntry );
         }
 
-        //---------------------------------------------------------------------------------------------------------
+
         // the only way to free memory!
         void Clear()
         {
             lEntries.clear();
         }
 
-        //---------------------------------------------------------------------------------------------------------
+
         // convert internal list to external format
         Sequence< Sequence< PropertyValue > > GetList() const
         {
@@ -214,24 +214,24 @@ class SvtCompatibility
 
 class SvtCompatibilityOptions_Impl : public ConfigItem
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     public:
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
+
 
          SvtCompatibilityOptions_Impl();
         ~SvtCompatibilityOptions_Impl();
 
         void SetDefault( OUString sName, bool bValue );
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  overloaded methods of baseclass
-        //---------------------------------------------------------------------------------------------------------
+
 
         /*-****************************************************************************************************//**
             @short      called for notify of configmanager
@@ -264,9 +264,9 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
 
         virtual void Commit();
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  public interface
-        //---------------------------------------------------------------------------------------------------------
+
 
         /*-****************************************************************************************************//**
             @short      base implementation of public interface for "SvtCompatibilityOptions"!
@@ -309,9 +309,9 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
         inline bool IsConsiderWrappingStyle() const { return m_aDefOptions.bConsiderWrappingStyle; }
         inline bool IsExpandWordSpace() const { return m_aDefOptions.bExpandWordSpace; }
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 
@@ -347,9 +347,9 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
         void impl_ExpandPropertyNames( const Sequence< OUString >& lSource,
                                              Sequence< OUString >& lDestination );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private member
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 

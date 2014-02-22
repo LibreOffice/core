@@ -91,7 +91,7 @@ ODateTimeDialog::ODateTimeDialog( Window* _pParent
         aCheckBoxes[i]->SetClickHdl(LINK(this,ODateTimeDialog,CBClickHdl));
 
 }
-// -----------------------------------------------------------------------------
+
     void ODateTimeDialog::InsertEntry(sal_Int16 _nNumberFormatId)
     {
         const bool bTime = util::NumberFormat::TIME == _nNumberFormatId;
@@ -110,11 +110,11 @@ ODateTimeDialog::ODateTimeDialog( Window* _pParent
             pListBox->SetEntryData(nPos, reinterpret_cast<void*>(*pIter));
         }
     }
-//------------------------------------------------------------------------
+
 ODateTimeDialog::~ODateTimeDialog()
 {
 }
-// -----------------------------------------------------------------------------
+
 short ODateTimeDialog::Execute()
 {
     short nRet = ModalDialog::Execute();
@@ -166,7 +166,7 @@ short ODateTimeDialog::Execute()
     }
     return nRet;
 }
-// -----------------------------------------------------------------------------
+
 OUString ODateTimeDialog::getFormatStringByKey(::sal_Int32 _nNumberFormatKey,const uno::Reference< util::XNumberFormats>& _xFormats,bool _bTime)
 {
     uno::Reference< beans::XPropertySet> xFormSet = _xFormats->getByKey(_nNumberFormatKey);
@@ -191,7 +191,7 @@ OUString ODateTimeDialog::getFormatStringByKey(::sal_Int32 _nNumberFormatKey,con
     OSL_ENSURE(xPreviewer.is(),"XNumberFormatPreviewer is null!");
     return xPreviewer->convertNumberToPreviewString(sFormat,nValue,m_nLocale,sal_True);
 }
-// -----------------------------------------------------------------------------
+
 IMPL_LINK( ODateTimeDialog, CBClickHdl, CheckBox*, _pBox )
 {
    (void)_pBox;
@@ -211,7 +211,7 @@ IMPL_LINK( ODateTimeDialog, CBClickHdl, CheckBox*, _pBox )
     }
     return 1L;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 ODateTimeDialog::getFormatKey(sal_Bool _bDate) const
 {
     sal_Int32 nFormatKey;

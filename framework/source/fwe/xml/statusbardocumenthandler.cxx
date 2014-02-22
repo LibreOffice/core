@@ -485,9 +485,9 @@ OUString OReadStatusBarDocumentHandler::getErrorLineString()
 }
 
 
-//_________________________________________________________________________________________________________________
+
 //  OWriteStatusBarDocumentHandler
-//_________________________________________________________________________________________________________________
+
 
 OWriteStatusBarDocumentHandler::OWriteStatusBarDocumentHandler(
     const Reference< XIndexAccess >& aStatusBarItems,
@@ -570,9 +570,9 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument() throw
     m_xWriteDocumentHandler->endDocument();
 }
 
-//_________________________________________________________________________________________________________________
+
 //  protected member functions
-//_________________________________________________________________________________________________________________
+
 
 void OWriteStatusBarDocumentHandler::WriteStatusBarItem(
     const OUString& rCommandURL,

@@ -1686,7 +1686,7 @@ SdrObject* SdPage::ReplaceObject(SdrObject* pNewObj, sal_uLong nObjNum)
     return FmFormPage::ReplaceObject(pNewObj, nObjNum);
 }
 
-// -------------------------------------------------------------------------
+
 
 // called after a shape is removed or replaced from this slide
 

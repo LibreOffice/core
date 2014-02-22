@@ -40,7 +40,7 @@ using namespace cppu;
 namespace cppu
 {
 
-//------------------------------------------------------------------------------
+
 static inline uno_Sequence * reallocSeq(
     uno_Sequence * pReallocate, sal_Size nElementSize, sal_Int32 nElements )
 {
@@ -67,7 +67,7 @@ static inline uno_Sequence * reallocSeq(
     return pNew;
 }
 
-//------------------------------------------------------------------------------
+
 static inline bool idefaultConstructElements(
     uno_Sequence ** ppSeq,
     typelib_TypeDescriptionReference * pElementType,
@@ -309,7 +309,7 @@ static inline bool idefaultConstructElements(
     }
 }
 
-//------------------------------------------------------------------------------
+
 static inline bool icopyConstructFromElements(
     uno_Sequence ** ppSeq, void * pSourceElements,
     typelib_TypeDescriptionReference * pElementType,
@@ -587,7 +587,7 @@ static inline bool icopyConstructFromElements(
     }
 }
 
-//------------------------------------------------------------------------------
+
 static inline bool ireallocSequence(
     uno_Sequence ** ppSequence,
     typelib_TypeDescriptionReference * pElementType,

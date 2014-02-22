@@ -52,7 +52,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     // ===================================================================
     // = UnoControlRoadmapModel
     // ===================================================================
-    // -------------------------------------------------------------------
+
     UnoControlRoadmapModel::UnoControlRoadmapModel( const Reference< XComponentContext >& i_factory )
         :UnoControlRoadmapModel_Base( i_factory )
         ,maContainerListeners( *this )
@@ -74,14 +74,14 @@ static void lcl_throwIndexOutOfBoundsException( )
         ImplRegisterProperty( BASEPROPERTY_TEXT );
     }
 
-    // -------------------------------------------------------------------
+
     OUString UnoControlRoadmapModel::getServiceName() throw(RuntimeException)
     {
         return OUString::createFromAscii( szServiceName_UnoControlRoadmapModel );
     }
 
 
-    // -------------------------------------------------------------------
+
     Any UnoControlRoadmapModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     {
         Any aReturn;
@@ -131,7 +131,7 @@ static void lcl_throwIndexOutOfBoundsException( )
  IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoControlRoadmapModel, UnoControlRoadmapModel_Base, UnoControlRoadmapModel_IBase )
 
 
-    // -------------------------------------------------------------------
+
     ::com::sun::star::uno::Any  SAL_CALL UnoControlRoadmapModel::queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
     {
         Any aRet = UnoControlRoadmapModel_Base::queryAggregation( rType );
@@ -141,7 +141,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     }
 
 
-    // -------------------------------------------------------------------
+
     ::cppu::IPropertyArrayHelper& UnoControlRoadmapModel::getInfoHelper()
     {
         static UnoPropertyArrayHelper* pHelper = NULL;
@@ -155,7 +155,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 
 
     // beans::XMultiPropertySet
-    // -------------------------------------------------------------------
+
     Reference< XPropertySetInfo > UnoControlRoadmapModel::getPropertySetInfo(  ) throw(RuntimeException)
     {
         static Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -356,7 +356,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     // ===================================================================
     // = UnoRoadmapControl
     // ===================================================================
-    // -------------------------------------------------------------------
+
     UnoRoadmapControl::UnoRoadmapControl()
         :UnoControlRoadmap_Base()
         ,maItemListeners( *this )
@@ -385,7 +385,7 @@ sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& 
     }
 
 
-    // -------------------------------------------------------------------
+
     OUString UnoRoadmapControl::GetComponentServiceName()
     {
         return OUString("Roadmap");

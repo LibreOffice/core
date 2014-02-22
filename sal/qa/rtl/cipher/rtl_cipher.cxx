@@ -27,7 +27,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/cipher.h>
 
-// -----------------------------------------------------------------------------
+
 namespace rtl_cipher
 {
 
@@ -103,7 +103,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class create
 
-// -----------------------------------------------------------------------------
+
 class createBF : public CppUnit::TestFixture
 {
 public:
@@ -151,7 +151,7 @@ public:
     CPPUNIT_TEST(createBF_004);
     CPPUNIT_TEST_SUITE_END();
 }; // class createBF
-// -----------------------------------------------------------------------------
+
 class decode : public CppUnit::TestFixture
 {
 public:
@@ -288,7 +288,7 @@ public:
     CPPUNIT_TEST(decode_002);
     CPPUNIT_TEST_SUITE_END();
 }; // class decode
-// -----------------------------------------------------------------------------
+
 class decodeBF : public CppUnit::TestFixture
 {
 public:
@@ -312,7 +312,7 @@ public:
     CPPUNIT_TEST(decodeBF_001);
     CPPUNIT_TEST_SUITE_END();
 }; // class decodeBF
-// -----------------------------------------------------------------------------
+
 class destroy : public CppUnit::TestFixture
 {
 public:
@@ -339,7 +339,7 @@ public:
     CPPUNIT_TEST(destroy_001);
     CPPUNIT_TEST_SUITE_END();
 }; // class destroy
-// -----------------------------------------------------------------------------
+
 class destroyBF : public CppUnit::TestFixture
 {
 public:
@@ -368,7 +368,7 @@ public:
     CPPUNIT_TEST(destroyBF_001);
     CPPUNIT_TEST_SUITE_END();
 }; // class destroyBF
-// -----------------------------------------------------------------------------
+
 class encode : public CppUnit::TestFixture
 {
 public:
@@ -441,7 +441,7 @@ public:
     CPPUNIT_TEST(encode_001);
     CPPUNIT_TEST_SUITE_END();
 }; // class encode
-// -----------------------------------------------------------------------------
+
 class encodeBF : public CppUnit::TestFixture
 {
 public:
@@ -465,7 +465,7 @@ public:
     CPPUNIT_TEST(encodeBF_001);
     CPPUNIT_TEST_SUITE_END();
 }; // class encodeBF
-// -----------------------------------------------------------------------------
+
 class init : public CppUnit::TestFixture
 {
 public:
@@ -578,7 +578,7 @@ public:
     CPPUNIT_TEST(init_004);
     CPPUNIT_TEST_SUITE_END();
 }; // class init
-// -----------------------------------------------------------------------------
+
 class initBF : public CppUnit::TestFixture
 {
 public:
@@ -605,7 +605,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class initBF
 
-// -----------------------------------------------------------------------------
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_cipher::create);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_cipher::createBF);
@@ -621,7 +621,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_cipher::initBF);
 } // namespace rtl_cipher
 
 
-// -----------------------------------------------------------------------------
+
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

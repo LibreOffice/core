@@ -49,14 +49,14 @@ namespace abp
     using namespace ::com::sun::star::ui;
     using namespace ::com::sun::star::ui::dialogs;
 
-    //---------------------------------------------------------------------
+
     static const OUString& lcl_getDriverSettingsNodeName()
     {
         static const OUString s_sDriverSettingsNodeName( "/org.openoffice.Office.DataAccess/DriverSettings/com.sun.star.comp.sdbc.MozabDriver" );
         return s_sDriverSettingsNodeName;
     }
 
-    //---------------------------------------------------------------------
+
     static const OUString& lcl_getAddressBookNodeName()
     {
         static const OUString s_sAddressBookNodeName( "/org.openoffice.Office.DataAccess/AddressBook" );
@@ -68,7 +68,7 @@ namespace abp
     {
     //.....................................................................
 
-        //-----------------------------------------------------------------
+
         sal_Bool invokeDialog( const Reference< XComponentContext >& _rxORB, class Window* _pParent,
             const Reference< XPropertySet >& _rxDataSource, AddressSettings& _rSettings ) SAL_THROW ( ( ) )
         {
@@ -124,7 +124,7 @@ namespace abp
             return sal_False;
         }
 
-        //-----------------------------------------------------------------
+
         void defaultMapping(  const Reference< XComponentContext >& _rxContext, MapString2String& _rFieldAssignment ) SAL_THROW ( ( ) )
         {
             _rFieldAssignment.clear();
@@ -217,7 +217,7 @@ namespace abp
             }
         }
 
-        //-----------------------------------------------------------------
+
         void writeTemplateAddressFieldMapping( const Reference< XComponentContext >& _rxContext, const MapString2String& _rFieldAssignment ) SAL_THROW ( ( ) )
         {
             // want to have a non-const map for easier handling
@@ -296,7 +296,7 @@ namespace abp
     {
     //.....................................................................
 
-        //-----------------------------------------------------------------
+
         void writeTemplateAddressSource( const Reference< XComponentContext >& _rxContext,
             const OUString& _rDataSourceName, const OUString& _rTableName ) SAL_THROW ( ( ) )
         {
@@ -315,7 +315,7 @@ namespace abp
             aAddressBookSettings.commit();
         }
 
-        //-----------------------------------------------------------------
+
         void markPilotSuccess( const Reference< XComponentContext >& _rxContext ) SAL_THROW ( ( ) )
         {
             // access the configuration information which the driver uses for determining it's column names

@@ -30,7 +30,7 @@
 #include <vcl/window.hxx>
 #include <tools/diagnose_ex.h>
 
-//------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_DefaultHelpProvider()
 {
     ::pcr::OAutoRegistration< ::pcr::DefaultHelpProvider > aAutoRegistration;
@@ -60,24 +60,24 @@ namespace pcr
     //====================================================================
     //= DefaultHelpProvider
     //====================================================================
-    //--------------------------------------------------------------------
+
     DefaultHelpProvider::DefaultHelpProvider()
         :m_bConstructed( false )
     {
     }
 
-    //--------------------------------------------------------------------
+
     DefaultHelpProvider::~DefaultHelpProvider()
     {
     }
 
-    //------------------------------------------------------------------------
+
     OUString DefaultHelpProvider::getImplementationName_static(  ) throw(RuntimeException)
     {
         return OUString("org.openoffice.comp.extensions.DefaultHelpProvider");
     }
 
-    //------------------------------------------------------------------------
+
     Sequence< OUString > DefaultHelpProvider::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported(1);
@@ -85,13 +85,13 @@ namespace pcr
         return aSupported;
     }
 
-    //------------------------------------------------------------------------
+
     Reference< XInterface > SAL_CALL DefaultHelpProvider::Create( const Reference< XComponentContext >& )
     {
         return *new DefaultHelpProvider;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL DefaultHelpProvider::focusGained( const Reference< XPropertyControl >& _Control ) throw (RuntimeException)
     {
         if ( !m_xInspectorUI.is() )
@@ -107,13 +107,13 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL DefaultHelpProvider::valueChanged( const Reference< XPropertyControl >& /*_Control*/ ) throw (RuntimeException)
     {
         // not interested in
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL DefaultHelpProvider::initialize( const Sequence< Any >& _arguments ) throw (Exception, RuntimeException)
     {
         if ( m_bConstructed )
@@ -130,7 +130,7 @@ namespace pcr
         throw IllegalArgumentException( OUString(), *this, 0 );
     }
 
-    //--------------------------------------------------------------------
+
     void DefaultHelpProvider::create( const Reference< XObjectInspectorUI >& _rxUI )
     {
         if ( !_rxUI.is() )
@@ -149,7 +149,7 @@ namespace pcr
         m_bConstructed = true;
     }
 
-    //--------------------------------------------------------------------
+
     Window* DefaultHelpProvider::impl_getVclControlWindow_nothrow( const Reference< XPropertyControl >& _rxControl )
     {
         Window* pControlWindow = NULL;
@@ -170,7 +170,7 @@ namespace pcr
         return pControlWindow;
     }
 
-    //--------------------------------------------------------------------
+
     OUString DefaultHelpProvider::impl_getHelpText_nothrow( const Reference< XPropertyControl >& _rxControl )
     {
         OUString sHelpText;

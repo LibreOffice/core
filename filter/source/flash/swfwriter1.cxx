@@ -52,7 +52,7 @@ extern sal_uInt16 getMaxBitsSigned( sal_Int32 nValue );
 static MapMode aTWIPSMode( MAP_TWIP );
 static MapMode a100thmmMode( MAP_100TH_MM );
 
-// -----------------------------------------------------------------------------
+
 
 Point Writer::map( const Point& rPoint ) const
 {
@@ -68,7 +68,7 @@ Point Writer::map( const Point& rPoint ) const
     return retPoint;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Size Writer::map( const Size& rSize ) const
 {
@@ -84,7 +84,7 @@ Size Writer::map( const Size& rSize ) const
     return retSize;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::map( PolyPolygon& rPolyPolygon ) const
 {
@@ -105,7 +105,7 @@ void Writer::map( PolyPolygon& rPolyPolygon ) const
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 Writer::mapRelative( sal_Int32 n100thMM ) const
 {
@@ -116,7 +116,7 @@ sal_Int32 Writer::mapRelative( sal_Int32 n100thMM ) const
     return nTwips;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /**
 */
@@ -173,7 +173,7 @@ void Writer::Impl_addPolygon( BitStream& rBits, const Polygon& rPoly, sal_Bool b
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** exports a style change record with a move to (x,y) and depending on bFilled a line style 1 or fill style 1
 */
@@ -196,7 +196,7 @@ void Writer::Impl_addShapeRecordChange( BitStream& rBits, sal_Int16 dx, sal_Int1
     rBits.writeUB( 1, 1 );          // set FillStyle1 or LineStyle to 1
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** exports a straight edge record
 */
@@ -230,7 +230,7 @@ void Writer::Impl_addStraightEdgeRecord( BitStream& rBits, sal_Int16 dx, sal_Int
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** exports a curved edge record
 */
@@ -253,7 +253,7 @@ void Writer::Impl_addCurvedEdgeRecord( BitStream& rBits, sal_Int16 control_dx, s
     rBits.writeSB( anchor_dy, nBits );      // DeltaY
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** exports a end shape record
 */
@@ -262,7 +262,7 @@ void Writer::Impl_addEndShapeRecord( BitStream& rBits )
     rBits.writeUB( 0, 6 );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::Impl_writePolygon( const Polygon& rPoly, sal_Bool bFilled )
 {
@@ -270,7 +270,7 @@ void Writer::Impl_writePolygon( const Polygon& rPoly, sal_Bool bFilled )
     Impl_writePolyPolygon( aPolyPoly, bFilled );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::Impl_writePolygon( const Polygon& rPoly, sal_Bool bFilled, const Color& rFillColor, const Color& rLineColor )
 {
@@ -278,7 +278,7 @@ void Writer::Impl_writePolygon( const Polygon& rPoly, sal_Bool bFilled, const Co
     Impl_writePolyPolygon( aPolyPoly, bFilled, rFillColor, rLineColor );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bFilled, sal_uInt8 nTransparence /* = 0 */ )
 {
@@ -291,7 +291,7 @@ void Writer::Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bFill
     Impl_writePolyPolygon(rPolyPoly, bFilled, aFillColor, aLineColor );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bFilled, const Color& rFillColor, const Color& rLineColor )
 {
@@ -326,7 +326,7 @@ void Writer::Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bFill
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** a gradient is a transition from one color to another, rendered inside a given polypolygon */
 void Writer::Impl_writeGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient )
@@ -361,14 +361,14 @@ void Writer::Impl_writeGradientEx( const PolyPolygon& rPolyPoly, const Gradient&
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::setClipping( const PolyPolygon* pClipPolyPolygon )
 {
     mpClipPolyPolygon = pClipPolyPolygon;
 }
 
-// -----------------------------------------------------------------------------
+
 
 // AS: Just comparing fonts straight up is too literal.  There are some
 //  differences in font that actually require different glyphs to be defined,
@@ -384,7 +384,7 @@ bool compare_fonts_for_me(const Font& rFont1, const Font& rFont2)
             rFont1.GetRelief() == rFont2.GetRelief();
 }
 
-// -----------------------------------------------------------------------------
+
 
 FlashFont& Writer::Impl_getFont( const Font& rFont )
 {
@@ -405,7 +405,7 @@ FlashFont& Writer::Impl_getFont( const Font& rFont )
     return *pFont;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, long nWidth )
 {
@@ -724,7 +724,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const sal
     }
 }
 
-// -----------------------------------------------------------------------------
+
 // AS: Because JPEGs require the alpha channel provided separately (JPEG does not
 //  natively support alpha channel, but SWF lets you provide it separately), we
 //  extract the alpha channel into a separate array here.
@@ -792,7 +792,7 @@ void getBitmapData( const BitmapEx& aBmpEx, sal_uInt8*& tgadata, sal_uInt8*& tga
     }
 }
 
-// -----------------------------------------------------------------------------
+
 sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQualityLevel )
 {
     sal_uLong bmpChecksum = bmpSource.GetChecksum();
@@ -885,7 +885,7 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
     return nBitmapId;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& /* rSrcPt */, const Size& /* rSrcSz */, const Rectangle& rClipRect, bool bNeedToMapClipRect )
 {
@@ -982,7 +982,7 @@ void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Si
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 
 void Writer::Impl_writeBmp( sal_uInt16 nBitmapId, sal_uInt32 width, sal_uInt32 height, sal_uInt8 *pCompressed, sal_uInt32 compressed_size )
 {
@@ -998,7 +998,7 @@ void Writer::Impl_writeBmp( sal_uInt16 nBitmapId, sal_uInt32 width, sal_uInt32 h
     endTag();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal_uInt32 nJpgDataLength, sal_uInt8 *pAlphaCompressed, sal_uInt32 alpha_compressed_size )
 {
@@ -1135,7 +1135,7 @@ void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::Impl_writeLine( const Point& rPt1, const Point& rPt2, const Color* pLineColor )
 {
@@ -1150,7 +1150,7 @@ void Writer::Impl_writeLine( const Point& rPt1, const Point& rPt2, const Color* 
     mpVDev->SetLineColor( aOldColor );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::Impl_writeRect( const Rectangle& rRect, long nRadX, long nRadY )
 {
@@ -1166,7 +1166,7 @@ void Writer::Impl_writeRect( const Rectangle& rRect, long nRadX, long nRadY )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::Impl_writeEllipse( const Point& rCenter, long nRadX, long nRadY )
 {
@@ -1217,7 +1217,7 @@ bool Writer::Impl_writeStroke( SvtGraphicStroke& rStroke )
     return true;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** writes the filling defined by SvtGraphicFill and returns true or it returns
     false if it can't handle this filling.
@@ -1294,7 +1294,7 @@ bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
     return true;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* CL: The idea was to export page fields as text fields that get theire
    string from a variable set with actionscript by each page. This didn't
@@ -1343,7 +1343,7 @@ bool Writer::Impl_writePageField( Rectangle& rTextBounds )
 }
 #endif
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon)
 {
@@ -1383,7 +1383,7 @@ void Writer::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegf
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 {
@@ -1862,7 +1862,7 @@ void Writer::Impl_addStraightLine( BitStream& rBits, Point& rLastPoint,
 
 }
 
-// -----------------------------------------------------------------------------
+
 
 void Writer::Impl_addQuadBezier( BitStream& rBits, Point& rLastPoint,
                                  const double P2x, const double P2y,
@@ -1878,7 +1878,7 @@ void Writer::Impl_addQuadBezier( BitStream& rBits, Point& rLastPoint,
     rLastPoint = aAnchorPoint;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* Approximate given cubic bezier curve by quadratic bezier segments */
 void Writer::Impl_quadBezierApprox( BitStream& rBits,

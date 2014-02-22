@@ -69,7 +69,7 @@ FltError ImportLotus::Read()
 
         switch( eAkt )
         {
-            // -----------------------------------------------------------
+
             case S_START:                                           // S_START
             if( nOp )
             {
@@ -99,10 +99,10 @@ FltError ImportLotus::Read()
                 }
             }
             break;
-            // -----------------------------------------------------------
+
             case S_WK1:                                             // S_WK1
             break;
-            // -----------------------------------------------------------
+
             case S_WK3:                                             // S_WK3
             case S_WK4:                                             // S_WK4
             switch( nOp )
@@ -180,10 +180,10 @@ FltError ImportLotus::Read()
             }
 
             break;
-            // -----------------------------------------------------------
+
             case S_FM3:                                             // S_FM3
             break;
-            // -----------------------------------------------------------
+
             case S_END:                                             // S_END
             break;
         }

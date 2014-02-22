@@ -32,7 +32,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-// ----------------------------------------------------------------------------
+
 
 #include <sfx2/app.hxx>
 #include "sfxpicklist.hxx"
@@ -52,13 +52,13 @@
 
 #include <algorithm>
 
-// ----------------------------------------------------------------------------
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 
-// ----------------------------------------------------------------------------
+
 
 class StringLength : public ::cppu::WeakImplHelper1< XStringWidth >
 {

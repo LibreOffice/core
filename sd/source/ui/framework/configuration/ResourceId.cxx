@@ -482,7 +482,7 @@ void SAL_CALL ResourceId::initialize (const Sequence<Any>& aArguments)
 
 
 
-//-----------------------------------------------------------------------------
+
 
 /** When eMode is DIRECTLY then the anchor of the called object and the
     anchor represented by the given sequence of anchor URLs have to be

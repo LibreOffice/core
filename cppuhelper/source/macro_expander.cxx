@@ -144,27 +144,27 @@ public:
         throw (RuntimeException);
 };
 
-//__________________________________________________________________________________________________
+
 void Bootstrap_MacroExpander::disposing()
 {}
-//__________________________________________________________________________________________________
+
 Bootstrap_MacroExpander::~Bootstrap_MacroExpander() SAL_THROW(())
 {}
 
 // XServiceInfo impl
-//__________________________________________________________________________________________________
+
 OUString Bootstrap_MacroExpander::getImplementationName()
     throw (RuntimeException)
 {
     return s_impl_name();
 }
-//__________________________________________________________________________________________________
+
 sal_Bool Bootstrap_MacroExpander::supportsService( OUString const & serviceName )
     throw (RuntimeException)
 {
     return cppu::supportsService(this, serviceName);
 }
-//__________________________________________________________________________________________________
+
 Sequence< OUString > Bootstrap_MacroExpander::getSupportedServiceNames()
     throw (RuntimeException)
 {
@@ -172,7 +172,7 @@ Sequence< OUString > Bootstrap_MacroExpander::getSupportedServiceNames()
 }
 
 // XMacroExpander impl
-//__________________________________________________________________________________________________
+
 OUString Bootstrap_MacroExpander::expandMacros( OUString const & exp )
     throw (lang::IllegalArgumentException)
 {

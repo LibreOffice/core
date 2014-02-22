@@ -247,7 +247,7 @@ public:
     }
 };
 
-// ----------------------------------------------------------------------------
+
 
 class ScFlatBoolSegmentsImpl : public ScFlatSegmentsImpl<bool>
 {
@@ -304,7 +304,7 @@ SCROW ScFlatBoolRowSegments::ForwardIterator::getLastPos() const
     return mnLastPos;
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScFlatBoolRowSegments::RangeIterator::RangeIterator(ScFlatBoolRowSegments& rSegs) :
     mrSegs(rSegs)
@@ -335,7 +335,7 @@ bool ScFlatBoolRowSegments::RangeIterator::getNext(RangeData& rRange)
     return true;
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScFlatBoolRowSegments::ScFlatBoolRowSegments() :
     mpImpl(new ScFlatBoolSegmentsImpl(static_cast<SCCOLROW>(MAXROW)))
@@ -486,7 +486,7 @@ SCROW ScFlatUInt16RowSegments::ForwardIterator::getLastPos() const
     return mnLastPos;
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScFlatUInt16RowSegments::ScFlatUInt16RowSegments(sal_uInt16 nDefault) :
     mpImpl(new ScFlatUInt16SegmentsImpl(static_cast<SCCOLROW>(MAXROW), nDefault))

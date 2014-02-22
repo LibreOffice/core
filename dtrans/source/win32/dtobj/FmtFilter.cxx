@@ -56,9 +56,9 @@ struct METAFILEHEADER
 };
 #pragma pack()
 
-//------------------------------------------------------------------------
+
 // convert a windows metafile picture to a openoffice metafile picture
-//------------------------------------------------------------------------
+
 
 Sequence< sal_Int8 > SAL_CALL WinMFPictToOOMFPict( Sequence< sal_Int8 >& aMetaFilePict )
 {
@@ -128,9 +128,9 @@ Sequence< sal_Int8 > SAL_CALL WinMFPictToOOMFPict( Sequence< sal_Int8 >& aMetaFi
     return mfpictStream;
 }
 
-//-------------------------------------------------------------
+
 // convert a windows enhanced metafile to a openoffice metafile
-//-------------------------------------------------------------
+
 
 Sequence< sal_Int8 > SAL_CALL WinENHMFPictToOOMFPict( HENHMETAFILE hEnhMetaFile )
 {
@@ -149,9 +149,9 @@ Sequence< sal_Int8 > SAL_CALL WinENHMFPictToOOMFPict( HENHMETAFILE hEnhMetaFile 
     return aRet;
 }
 
-//------------------------------------------------------------------------
+
 // convert a openoffice metafile picture to a windows metafile picture
-//------------------------------------------------------------------------
+
 
 HMETAFILEPICT SAL_CALL OOMFPictToWinMFPict( Sequence< sal_Int8 >& aOOMetaFilePict )
 {
@@ -173,9 +173,9 @@ HMETAFILEPICT SAL_CALL OOMFPictToWinMFPict( Sequence< sal_Int8 >& aOOMetaFilePic
     return hPict;
 }
 
-//-----------------------------------------------------------------------------
+
 // convert a openoffice metafile picture to a windows enhanced metafile picture
-//-----------------------------------------------------------------------------
+
 
 HENHMETAFILE SAL_CALL OOMFPictToWinENHMFPict( Sequence< sal_Int8 >& aOOMetaFilePict )
 {
@@ -184,9 +184,9 @@ HENHMETAFILE SAL_CALL OOMFPictToWinENHMFPict( Sequence< sal_Int8 >& aOOMetaFileP
     return hEnhMtf;
 }
 
-//------------------------------------------------------------------------
+
 // convert a windows device independent bitmap into a openoffice bitmap
-//------------------------------------------------------------------------
+
 
 Sequence< sal_Int8 > SAL_CALL WinDIBToOOBMP( const Sequence< sal_Int8 >& aWinDIB )
 {
@@ -219,9 +219,9 @@ Sequence< sal_Int8 > SAL_CALL WinDIBToOOBMP( const Sequence< sal_Int8 >& aWinDIB
     return ooBmpStream;
 }
 
-//------------------------------------------------------------------------
+
 // convert a openoffice bitmap into a windows device independent bitmap
-//------------------------------------------------------------------------
+
 
 Sequence< sal_Int8 > SAL_CALL OOBmpToWinDIB( Sequence< sal_Int8 >& aOOBmp )
 {
@@ -234,7 +234,7 @@ Sequence< sal_Int8 > SAL_CALL OOBmpToWinDIB( Sequence< sal_Int8 >& aOOBmp )
     return winDIBStream;
 }
 
-//------------------------------------------------------------------------------
+
 // converts the openoffice text/html clipboard format to the HTML Format
 // well known under MS Windows
 // the MS HTML Format has a header before the real html data
@@ -257,7 +257,7 @@ Sequence< sal_Int8 > SAL_CALL OOBmpToWinDIB( Sequence< sal_Int8 >& aOOBmp )
 // The fragment should be preceded and followed by the HTML comments
 // <!--StartFragment--> and <!--EndFragment--> (no space between !-- and the
 // text
-//------------------------------------------------------------------------------
+
 /*
 Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( Sequence< sal_Int8 >& aTextHtml )
 {
@@ -525,9 +525,9 @@ ByteSequence_t CF_HDROPToFileList(HGLOBAL hGlobal)
     return FileListToByteSequence(files);
 }
 
-//------------------------------------------------------------------------
+
 // convert a windows bitmap handle into a openoffice bitmap
-//------------------------------------------------------------------------
+
 
 Sequence< sal_Int8 > SAL_CALL WinBITMAPToOOBMP( HBITMAP aHBMP )
 {

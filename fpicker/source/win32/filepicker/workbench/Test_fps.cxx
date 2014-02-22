@@ -70,17 +70,17 @@ void TestFilterManager( Reference< XFilePicker > xFilePicker );
 
 #define RDB_SYSPATH "D:\\Projects\\gsl\\sysui\\wntmsci7\\bin\\applicat.rdb"
 
-//_________________________________________________________________________________________________________________________
+
 //  global variables
-//_________________________________________________________________________________________________________________________
+
 
 Reference< XMultiServiceFactory >   g_xFactory;
 
 const OUString BMP_EXTENSION( "bmp" );
 
-//-------------------------------------------------------------------------------------------------------------------------
+
 // a test client
-//-------------------------------------------------------------------------------------------------------------------------
+
 
 class FilePickerListener : public WeakImplHelper1< XFilePickerListener >
 {
@@ -230,18 +230,18 @@ void SAL_CALL FilePickerListener::dialogSizeChanged( )
 {
 }
 
-//--------------------------------------------------------
+
 //  main
-//--------------------------------------------------------
+
 
 
 int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
 {
     printf("Starting test of FPS-Service\n");
 
-    //-------------------------------------------------
+
     // get the global service-manager
-    //-------------------------------------------------
+
 
     // Get global factory for uno services.
     OUString rdbName = OUString( RDB_SYSPATH );
@@ -254,9 +254,9 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
         return(-1);
     }
 
-    //-------------------------------------------------
+
     // try to get an Interface to a XFilePicker Service
-    //-------------------------------------------------
+
 
     Sequence< Any > arguments(1);
         arguments[0] = makeAny( FILEOPEN_READONLY_VERSION );
@@ -331,9 +331,9 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
         if ( xFPNotifier.is( ) )
             xFPNotifier->removeFilePickerListener( xFPListener );
 
-    //--------------------------------------------------
+
     // shutdown
-    //--------------------------------------------------
+
 
     // Cast factory to XComponent
     Reference< XComponent > xComponent( g_xFactory, UNO_QUERY );

@@ -117,56 +117,56 @@ namespace sfx2
     //====================================================================
     //= UserInputInterception
     //====================================================================
-    //--------------------------------------------------------------------
+
     UserInputInterception::UserInputInterception( ::cppu::OWeakObject& _rControllerImpl, ::osl::Mutex& _rMutex )
         :m_pData( new UserInputInterception_Data( _rControllerImpl, _rMutex ) )
     {
     }
 
-    //--------------------------------------------------------------------
+
     UserInputInterception::~UserInputInterception()
     {
     }
 
-    //--------------------------------------------------------------------
+
     void UserInputInterception::addKeyHandler( const Reference< XKeyHandler >& _rxHandler ) throw (RuntimeException)
     {
         if ( _rxHandler.is() )
             m_pData->m_aKeyHandlers.addInterface( _rxHandler );
     }
 
-    //--------------------------------------------------------------------
+
     void UserInputInterception::removeKeyHandler( const Reference< XKeyHandler >& _rxHandler ) throw (RuntimeException)
     {
         m_pData->m_aKeyHandlers.removeInterface( _rxHandler );
     }
 
-    //--------------------------------------------------------------------
+
     void UserInputInterception::addMouseClickHandler( const Reference< XMouseClickHandler >& _rxHandler ) throw (RuntimeException)
     {
         if ( _rxHandler.is() )
             m_pData->m_aMouseClickHandlers.addInterface( _rxHandler );
     }
 
-    //--------------------------------------------------------------------
+
     void UserInputInterception::removeMouseClickHandler( const Reference< XMouseClickHandler >& _rxHandler ) throw (RuntimeException)
     {
         m_pData->m_aMouseClickHandlers.removeInterface( _rxHandler );
     }
 
-    //--------------------------------------------------------------------
+
     bool UserInputInterception::hasKeyHandlers() const
     {
         return m_pData->m_aKeyHandlers.getLength() > 0;
     }
 
-    //--------------------------------------------------------------------
+
     bool UserInputInterception::hasMouseClickListeners() const
     {
         return m_pData->m_aMouseClickHandlers.getLength() > 0;
     }
 
-    //--------------------------------------------------------------------
+
     bool UserInputInterception::handleNotifyEvent( const NotifyEvent& _rEvent )
     {
         Reference < XInterface > xHoldAlive( m_pData->m_rControllerImpl );

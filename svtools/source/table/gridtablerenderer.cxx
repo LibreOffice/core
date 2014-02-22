@@ -74,7 +74,7 @@ namespace svt { namespace table
         BitmapEx    m_sortDescending;
     };
 
-    //------------------------------------------------------------------------------------------------------------------
+
     BitmapEx const & CachedSortIndicator::getBitmapFor( OutputDevice const & i_device, long const i_headerHeight,
         StyleSettings const & i_style, bool const i_sortAscending )
     {
@@ -179,30 +179,30 @@ namespace svt { namespace table
     //==================================================================================================================
     //= GridTableRenderer
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     GridTableRenderer::GridTableRenderer( ITableModel& _rModel )
         :m_pImpl( new GridTableRenderer_Impl( _rModel ) )
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     GridTableRenderer::~GridTableRenderer()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool GridTableRenderer::useGridLines() const
     {
         return m_pImpl->bUseGridLines;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void GridTableRenderer::useGridLines( bool const i_use )
     {
         m_pImpl->bUseGridLines = i_use;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     namespace
     {
         Color lcl_getEffectiveColor(
@@ -217,7 +217,7 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void GridTableRenderer::PaintHeaderArea(
         OutputDevice& _rDevice, const Rectangle& _rArea, bool _bIsColHeaderArea, bool _bIsRowHeaderArea,
         const StyleSettings& _rStyle )
@@ -245,7 +245,7 @@ namespace svt { namespace table
         (void)_bIsRowHeaderArea;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void GridTableRenderer::PaintColumnHeader( ColPos _nCol, bool _bActive, bool _bSelected,
         OutputDevice& _rDevice, const Rectangle& _rArea, const StyleSettings& _rStyle )
     {
@@ -313,7 +313,7 @@ namespace svt { namespace table
         // selection for column header not yet implemented
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void GridTableRenderer::PrepareRow( RowPos _nRow, bool i_hasControlFocus, bool _bSelected,
         OutputDevice& _rDevice, const Rectangle& _rRowArea, const StyleSettings& _rStyle )
     {
@@ -380,7 +380,7 @@ namespace svt { namespace table
         _rDevice.Pop();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void GridTableRenderer::PaintRowHeader( bool i_hasControlFocus, bool _bSelected, OutputDevice& _rDevice, const Rectangle& _rArea,
         const StyleSettings& _rStyle )
     {
@@ -411,7 +411,7 @@ namespace svt { namespace table
         _rDevice.Pop();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     struct GridTableRenderer::CellRenderContext
     {
         OutputDevice&           rDevice;
@@ -433,7 +433,7 @@ namespace svt { namespace table
         }
     };
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void GridTableRenderer::PaintCell( ColPos const i_column, bool _bSelected, bool i_hasControlFocus,
         OutputDevice& _rDevice, const Rectangle& _rArea, const StyleSettings& _rStyle )
     {
@@ -464,7 +464,7 @@ namespace svt { namespace table
         _rDevice.Pop();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void GridTableRenderer::impl_paintCellImage( CellRenderContext const & i_context, Image const & i_image )
     {
         Point imagePos( Point( i_context.aContentArea.Left(), i_context.aContentArea.Top() ) );
@@ -509,7 +509,7 @@ namespace svt { namespace table
         i_context.rDevice.DrawImage( imagePos, imageSize, i_image, nStyle );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void GridTableRenderer::impl_paintCellContent( CellRenderContext const & i_context )
     {
         Any aCellContent;
@@ -534,7 +534,7 @@ namespace svt { namespace table
         impl_paintCellText( i_context, sText );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void GridTableRenderer::impl_paintCellText( CellRenderContext const & i_context, OUString const & i_text )
     {
         if ( i_context.bSelected )
@@ -557,20 +557,20 @@ namespace svt { namespace table
         i_context.rDevice.DrawText( textRect, i_text, nDrawTextFlags );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void GridTableRenderer::ShowCellCursor( Window& _rView, const Rectangle& _rCursorRect)
     {
         _rView.ShowFocus( _rCursorRect );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void GridTableRenderer::HideCellCursor( Window& _rView, const Rectangle& _rCursorRect)
     {
         (void)_rCursorRect;
         _rView.HideFocus();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool GridTableRenderer::FitsIntoCell( Any const & i_cellContent, ColPos const i_colPos, RowPos const i_rowPos,
         bool const i_active, bool const i_selected, OutputDevice& i_targetDevice, Rectangle const & i_targetArea ) const
     {
@@ -613,7 +613,7 @@ namespace svt { namespace table
         return true;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool GridTableRenderer::GetFormattedCellString( Any const & i_cellValue, ColPos const i_colPos, RowPos const i_rowPos, OUString & o_cellString ) const
     {
         o_cellString = m_pImpl->aStringConverter.convertToString( i_cellValue );

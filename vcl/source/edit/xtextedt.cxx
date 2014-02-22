@@ -223,9 +223,9 @@ bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSea
 }
 
 
-// -------------------------------------------------------------------------
+
 // class ExtTextView
-// -------------------------------------------------------------------------
+
 ExtTextView::ExtTextView( ExtTextEngine* pEng, Window* pWindow )
     : TextView( pEng, pWindow )
 {

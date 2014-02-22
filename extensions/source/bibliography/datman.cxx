@@ -288,7 +288,7 @@ static sal_uInt16 lcl_FindLogicalName(BibConfig* pConfig ,
     }
     return USHRT_MAX;
 }
-//-----------------------------------------------------------------------------
+
 MappingDialog_Impl::MappingDialog_Impl(Window* pParent, BibDataManager* pMan) :
     ModalDialog(pParent, BibResId(RID_DLG_MAPPING) ),
     pDatMan(pMan),
@@ -661,7 +661,7 @@ void SAL_CALL BibInterceptorHelper::setMasterDispatchProvider( const ::com::sun:
     xMasterDispatchProvider = xNewMasterDispatchProvider;
 }
 
-//-----------------------------------------------------------------------------
+
 #define STR_UID "uid"
 OUString gGridName("theGrid");
 OUString gViewName("theView");
@@ -704,7 +704,7 @@ BibDataManager::~BibDataManager()
         m_pInterceptorHelper = NULL;
     }
 }
-//------------------------------------------------------------------------
+
 void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
 {
     if ( !_rxGrid.is() )
@@ -906,7 +906,7 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
 
     return xResult;
 }
-//------------------------------------------------------------------------
+
 Sequence< OUString > BibDataManager::getDataSources()
 {
     Sequence< OUString > aTableNameSeq;
@@ -927,12 +927,12 @@ Sequence< OUString > BibDataManager::getDataSources()
 
     return aTableNameSeq;
 }
-//------------------------------------------------------------------------
+
 OUString BibDataManager::getActiveDataTable()
 {
     return aActiveDataTable;
 }
-//------------------------------------------------------------------------
+
 void BibDataManager::setFilter(const OUString& rQuery)
 {
     if(!m_xParser.is())
@@ -953,7 +953,7 @@ void BibDataManager::setFilter(const OUString& rQuery)
 
 
 }
-//------------------------------------------------------------------------
+
 OUString BibDataManager::getFilter()
 {
 
@@ -972,7 +972,7 @@ OUString BibDataManager::getFilter()
     return aQueryString;
 
 }
-//------------------------------------------------------------------------
+
 Sequence< OUString > BibDataManager::getQueryFields()
 {
     Sequence< OUString > aFieldSeq;
@@ -981,7 +981,7 @@ Sequence< OUString > BibDataManager::getQueryFields()
         aFieldSeq = xFields->getElementNames();
     return aFieldSeq;
 }
-//------------------------------------------------------------------------
+
 OUString BibDataManager::getQueryField()
 {
     BibConfig* pConfig = BibModul::GetConfig();
@@ -997,7 +997,7 @@ OUString BibDataManager::getQueryField()
     }
     return aFieldString;
 }
-//------------------------------------------------------------------------
+
 void BibDataManager::startQueryWith(const OUString& rQuery)
 {
     BibConfig* pConfig = BibModul::GetConfig();
@@ -1163,7 +1163,7 @@ void BibDataManager::setActiveDataTable(const OUString& rTable)
     }
 }
 
-//------------------------------------------------------------------------
+
 void SAL_CALL BibDataManager::load(  ) throw (RuntimeException)
 {
     if ( isLoaded() )
@@ -1182,7 +1182,7 @@ void SAL_CALL BibDataManager::load(  ) throw (RuntimeException)
     }
 }
 
-//------------------------------------------------------------------------
+
 void SAL_CALL BibDataManager::unload(  ) throw (RuntimeException)
 {
     if ( !isLoaded() )
@@ -1208,7 +1208,7 @@ void SAL_CALL BibDataManager::unload(  ) throw (RuntimeException)
     }
 }
 
-//------------------------------------------------------------------------
+
 void SAL_CALL BibDataManager::reload(  ) throw (RuntimeException)
 {
     if ( !isLoaded() )
@@ -1233,7 +1233,7 @@ void SAL_CALL BibDataManager::reload(  ) throw (RuntimeException)
     }
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool SAL_CALL BibDataManager::isLoaded(  ) throw (RuntimeException)
 {
     Reference< XLoadable >xFormAsLoadable( m_xForm, UNO_QUERY );
@@ -1245,19 +1245,19 @@ sal_Bool SAL_CALL BibDataManager::isLoaded(  ) throw (RuntimeException)
     return bLoaded;
 }
 
-//------------------------------------------------------------------------
+
 void SAL_CALL BibDataManager::addLoadListener( const Reference< XLoadListener >& aListener ) throw (RuntimeException)
 {
     m_aLoadListeners.addInterface( aListener );
 }
 
-//------------------------------------------------------------------------
+
 void SAL_CALL BibDataManager::removeLoadListener( const Reference< XLoadListener >& aListener ) throw (RuntimeException)
 {
     m_aLoadListeners.removeInterface( aListener );
 }
 
-//------------------------------------------------------------------------
+
 Reference< awt::XControlModel > BibDataManager::createGridModel(const OUString& rName)
 {
     Reference< awt::XControlModel > xModel;
@@ -1295,7 +1295,7 @@ Reference< awt::XControlModel > BibDataManager::createGridModel(const OUString& 
 
     return xModel;
 }
-//------------------------------------------------------------------------
+
 OUString BibDataManager::getControlName(sal_Int32 nFormatKey )
 {
     OUString aResStr;
@@ -1334,7 +1334,7 @@ OUString BibDataManager::getControlName(sal_Int32 nFormatKey )
     }
     return aResStr;
 }
-//------------------------------------------------------------------------
+
 Reference< awt::XControlModel > BibDataManager::loadControlModel(
                     const OUString& rName, sal_Bool bForceListBox)
 {
@@ -1413,19 +1413,19 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
     }
     return xModel;
 }
-//------------------------------------------------------------------------
+
 void SAL_CALL BibDataManager::disposing()
 {
     BibDataManager_Base::WeakComponentImplHelperBase::disposing();
 }
 
-//------------------------------------------------------------------------
+
 void BibDataManager::disposing( const EventObject& /*Source*/ ) throw( ::com::sun::star::uno::RuntimeException )
 {
     // not interested in
 }
 
-//------------------------------------------------------------------------
+
 void BibDataManager::propertyChange(const beans::PropertyChangeEvent& evt) throw( RuntimeException )
 {
     try
@@ -1452,7 +1452,7 @@ void BibDataManager::propertyChange(const beans::PropertyChangeEvent& evt) throw
     }
 }
 
-//------------------------------------------------------------------------
+
 void BibDataManager::SetMeAsUidListener()
 {
     try
@@ -1495,7 +1495,7 @@ void BibDataManager::SetMeAsUidListener()
     }
 }
 
-//------------------------------------------------------------------------
+
 void BibDataManager::RemoveMeAsUidListener()
 {
     try

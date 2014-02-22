@@ -313,7 +313,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 {
@@ -409,7 +409,7 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
     return (bOK);
 }
 
-// -----------------------------------------------------------------------------
+
 
 void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 {
@@ -548,7 +548,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
     delete pDlg;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 {
@@ -684,7 +684,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     delete pOutliner;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
 {
@@ -730,7 +730,7 @@ sal_Bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
         return sal_False;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void FuInsertFile::GetSupportedFilterVector( ::std::vector< OUString >& rFilterVector )
 {

@@ -47,7 +47,7 @@ namespace offapp
         const ::std::vector< OUString >& getDriverImplNames() const { return m_aImplNames; }
     };
 
-    //--------------------------------------------------------------------
+
     ODriverEnumerationImpl::ODriverEnumerationImpl()
     {
         try
@@ -76,25 +76,25 @@ namespace offapp
     //====================================================================
     //= ODriverEnumeration
     //====================================================================
-    //--------------------------------------------------------------------
+
     ODriverEnumeration::ODriverEnumeration() throw()
         :m_pImpl(new ODriverEnumerationImpl)
     {
     }
 
-    //--------------------------------------------------------------------
+
     ODriverEnumeration::~ODriverEnumeration() throw()
     {
         delete m_pImpl;
     }
 
-    //--------------------------------------------------------------------
+
     ODriverEnumeration::const_iterator ODriverEnumeration::begin() const throw()
     {
         return m_pImpl->getDriverImplNames().begin();
     }
 
-    //--------------------------------------------------------------------
+
     ODriverEnumeration::const_iterator ODriverEnumeration::end() const throw()
     {
         return m_pImpl->getDriverImplNames().end();

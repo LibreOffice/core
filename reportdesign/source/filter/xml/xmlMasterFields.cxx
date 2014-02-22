@@ -71,13 +71,13 @@ OXMLMasterFields::OXMLMasterFields( ORptFilter& rImport,
     if ( !sMasterField.isEmpty() )
         m_pReport->addMasterDetailPair(::std::pair< OUString,OUString >(sMasterField,sDetailField));
 }
-// -----------------------------------------------------------------------------
+
 
 OXMLMasterFields::~OXMLMasterFields()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 SvXMLImportContext* OXMLMasterFields::CreateChildContext(
         sal_uInt16 _nPrefix,
         const OUString& _rLocalName,
@@ -104,8 +104,8 @@ SvXMLImportContext* OXMLMasterFields::CreateChildContext(
     return pContext;
 }
 
-//----------------------------------------------------------------------------
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

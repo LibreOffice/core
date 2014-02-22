@@ -50,9 +50,9 @@ enum {
 
 }
 
-// ------------
+
 // - ValueSet -
-// ------------
+
 
 void ValueSet::ImplInit()
 {
@@ -92,7 +92,7 @@ void ValueSet::ImplInit()
     ImplInitSettings( true, true, true );
 }
 
-// -----------------------------------------------------------------------
+
 
 ValueSet::ValueSet( Window* pParent, WinBits nWinStyle, bool bDisableTransientChildren ) :
     Control( pParent, nWinStyle ),
@@ -114,7 +114,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeValueSet(Window *pParent, V
     return new ValueSet(pParent, nWinBits);
 }
 
-// -----------------------------------------------------------------------
+
 
 ValueSet::ValueSet( Window* pParent, const ResId& rResId, bool bDisableTransientChildren ) :
     Control( pParent, rResId ),
@@ -125,7 +125,7 @@ ValueSet::ValueSet( Window* pParent, const ResId& rResId, bool bDisableTransient
     mbIsTransientChildrenDisabled = bDisableTransientChildren;
 }
 
-// -----------------------------------------------------------------------
+
 
 ValueSet::~ValueSet()
 {
@@ -140,7 +140,7 @@ ValueSet::~ValueSet()
     ImplDeleteItems();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::ImplDeleteItems()
 {
@@ -163,7 +163,7 @@ void ValueSet::ImplDeleteItems()
     mItemList.clear();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 {
@@ -204,7 +204,7 @@ void ValueSet::ImplInitSettings( bool bFont, bool bForeground, bool bBackground 
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::ImplInitScrollBar()
 {
@@ -224,7 +224,7 @@ void ValueSet::ImplInitScrollBar()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::ImplFormatItem( ValueSetItem* pItem, Rectangle aRect )
 {
@@ -352,14 +352,14 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem, Rectangle aRect )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > ValueSet::CreateAccessible()
 {
     return new ValueSetAcc( this, mbIsTransientChildrenDisabled );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::Format()
 {
@@ -688,7 +688,7 @@ void ValueSet::Format()
     delete pDelScrBar;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::ImplDrawItemText(const OUString& rText)
 {
@@ -716,7 +716,7 @@ void ValueSet::ImplDrawItemText(const OUString& rText)
     DrawText( Point( (aWinSize.Width()-nTxtWidth) / 2, nTxtOffset+(NAME_OFFSET/2) ), rText );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::ImplDrawSelect()
 {
@@ -739,7 +739,7 @@ void ValueSet::ImplDrawSelect()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::ImplDrawSelect( sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel )
 {
@@ -900,7 +900,7 @@ void ValueSet::ImplDrawSelect( sal_uInt16 nItemId, const bool bFocus, const bool
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::ImplHideSelect( sal_uInt16 nItemId )
 {
@@ -930,7 +930,7 @@ void ValueSet::ImplHideSelect( sal_uInt16 nItemId )
     DrawOutDev( aPos, aSize, aPos, aSize, maVirDev );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::ImplHighlightItem( sal_uInt16 nItemId, bool bIsSelection )
 {
@@ -951,7 +951,7 @@ void ValueSet::ImplHighlightItem( sal_uInt16 nItemId, bool bIsSelection )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::ImplDraw()
 {
@@ -1008,7 +1008,7 @@ void ValueSet::ImplDraw()
     ImplDrawSelect();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ValueSet::ImplScroll( const Point& rPos )
 {
@@ -1043,7 +1043,7 @@ bool ValueSet::ImplScroll( const Point& rPos )
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 size_t ValueSet::ImplGetItem( const Point& rPos, bool bMove ) const
 {
@@ -1089,7 +1089,7 @@ size_t ValueSet::ImplGetItem( const Point& rPos, bool bMove ) const
     return VALUESET_ITEM_NOTFOUND;
 }
 
-// -----------------------------------------------------------------------
+
 
 ValueSetItem* ValueSet::ImplGetItem( size_t nPos )
 {
@@ -1099,14 +1099,14 @@ ValueSetItem* ValueSet::ImplGetItem( size_t nPos )
         return ( nPos < mItemList.size() ) ? mItemList[nPos] : NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 ValueSetItem* ValueSet::ImplGetFirstItem()
 {
     return mItemList.size() ? mItemList[0] : NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ValueSet::ImplGetVisibleItemCount() const
 {
@@ -1122,7 +1122,7 @@ sal_uInt16 ValueSet::ImplGetVisibleItemCount() const
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::ImplFireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue )
 {
@@ -1132,7 +1132,7 @@ void ValueSet::ImplFireAccessibleEvent( short nEventId, const ::com::sun::star::
         pAcc->FireAccessibleEvent( nEventId, rOldValue, rNewValue );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ValueSet::ImplHasAccessibleListeners()
 {
@@ -1140,7 +1140,7 @@ bool ValueSet::ImplHasAccessibleListeners()
     return( pAcc && pAcc->HasAccessibleListeners() );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( ValueSet,ImplScrollHdl, ScrollBar*, pScrollBar )
 {
@@ -1154,7 +1154,7 @@ IMPL_LINK( ValueSet,ImplScrollHdl, ScrollBar*, pScrollBar )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ValueSet, ImplTimerHdl)
 {
@@ -1162,7 +1162,7 @@ IMPL_LINK_NOARG(ValueSet, ImplTimerHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::ImplTracking( const Point& rPos, bool bRepeat )
 {
@@ -1196,7 +1196,7 @@ void ValueSet::ImplTracking( const Point& rPos, bool bRepeat )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::ImplEndTracking( const Point& rPos, bool bCancel )
 {
@@ -1225,7 +1225,7 @@ void ValueSet::ImplEndTracking( const Point& rPos, bool bCancel )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -1265,7 +1265,7 @@ void ValueSet::MouseButtonDown( const MouseEvent& rMEvt )
     Control::MouseButtonDown( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -1276,7 +1276,7 @@ void ValueSet::MouseButtonUp( const MouseEvent& rMEvt )
         Control::MouseButtonUp( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::MouseMove( const MouseEvent& rMEvt )
 {
@@ -1286,7 +1286,7 @@ void ValueSet::MouseMove( const MouseEvent& rMEvt )
     Control::MouseMove( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::Tracking( const TrackingEvent& rTEvt )
 {
@@ -1298,7 +1298,7 @@ void ValueSet::Tracking( const TrackingEvent& rTEvt )
         ImplTracking( aMousePos, rTEvt.IsTrackingRepeat() );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::KeyInput( const KeyEvent& rKEvt )
 {
@@ -1457,7 +1457,7 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::Command( const CommandEvent& rCEvt )
 {
@@ -1472,7 +1472,7 @@ void ValueSet::Command( const CommandEvent& rCEvt )
     Control::Command( rCEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::Paint( const Rectangle& )
 {
@@ -1489,7 +1489,7 @@ void ValueSet::Paint( const Rectangle& )
     ImplDraw();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::GetFocus()
 {
@@ -1503,7 +1503,7 @@ void ValueSet::GetFocus()
         pAcc->GetFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::LoseFocus()
 {
@@ -1520,7 +1520,7 @@ void ValueSet::LoseFocus()
         pAcc->LoseFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::Resize()
 {
@@ -1530,7 +1530,7 @@ void ValueSet::Resize()
     Control::Resize();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::RequestHelp( const HelpEvent& rHEvt )
 {
@@ -1555,7 +1555,7 @@ void ValueSet::RequestHelp( const HelpEvent& rHEvt )
     Control::RequestHelp( rHEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::StateChanged( StateChangedType nType )
 {
@@ -1603,7 +1603,7 @@ void ValueSet::StateChanged( StateChangedType nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -1621,27 +1621,27 @@ void ValueSet::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::Select()
 {
     maSelectHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::DoubleClick()
 {
     maDoubleClickHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::UserDraw( const UserDrawEvent& )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage, size_t nPos )
 {
@@ -1652,7 +1652,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage, size_t nPos 
     ImplInsertItem( pItem, nPos );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor, size_t nPos )
 {
@@ -1663,7 +1663,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor, size_t nPos 
     ImplInsertItem( pItem, nPos );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
                            const OUString& rText, size_t nPos )
@@ -1676,7 +1676,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
     ImplInsertItem( pItem, nPos );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor,
                            const OUString& rText, size_t nPos )
@@ -1689,7 +1689,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor,
     ImplInsertItem( pItem, nPos );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, size_t nPos )
 {
@@ -1699,7 +1699,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, size_t nPos )
     ImplInsertItem( pItem, nPos );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::ImplInsertItem( ValueSetItem *const pItem, const size_t nPos )
 {
@@ -1722,7 +1722,7 @@ void ValueSet::ImplInsertItem( ValueSetItem *const pItem, const size_t nPos )
         Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle ValueSet::ImplGetItemRect( size_t nPos ) const
 {
@@ -1744,7 +1744,7 @@ Rectangle ValueSet::ImplGetItemRect( size_t nPos ) const
     return Rectangle( Point(x, y), Size(mnItemWidth, mnItemHeight) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::RemoveItem( sal_uInt16 nItemId )
 {
@@ -1776,7 +1776,7 @@ void ValueSet::RemoveItem( sal_uInt16 nItemId )
         Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::Clear()
 {
@@ -1794,14 +1794,14 @@ void ValueSet::Clear()
         Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 size_t ValueSet::GetItemCount() const
 {
     return mItemList.size();
 }
 
-// -----------------------------------------------------------------------
+
 
 size_t ValueSet::GetItemPos( sal_uInt16 nItemId ) const
 {
@@ -1813,14 +1813,14 @@ size_t ValueSet::GetItemPos( sal_uInt16 nItemId ) const
     return VALUESET_ITEM_NOTFOUND;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ValueSet::GetItemId( size_t nPos ) const
 {
     return ( nPos < mItemList.size() ) ? mItemList[nPos]->mnId : 0 ;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ValueSet::GetItemId( const Point& rPos ) const
 {
@@ -1831,7 +1831,7 @@ sal_uInt16 ValueSet::GetItemId( const Point& rPos ) const
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle ValueSet::GetItemRect( sal_uInt16 nItemId ) const
 {
@@ -1843,14 +1843,14 @@ Rectangle ValueSet::GetItemRect( sal_uInt16 nItemId ) const
     return Rectangle();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::EnableFullItemMode( bool bFullMode )
 {
     mbFullMode = bFullMode;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::SetColCount( sal_uInt16 nNewCols )
 {
@@ -1864,7 +1864,7 @@ void ValueSet::SetColCount( sal_uInt16 nNewCols )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::SetLineCount( sal_uInt16 nNewLines )
 {
@@ -1878,7 +1878,7 @@ void ValueSet::SetLineCount( sal_uInt16 nNewLines )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::SetItemWidth( long nNewItemWidth )
 {
@@ -1905,7 +1905,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const OUString& rText, size_t nPo
     ImplInsertItem( pItem, nPos );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::SetItemHeight( long nNewItemHeight )
 {
@@ -1919,7 +1919,7 @@ void ValueSet::SetItemHeight( long nNewItemHeight )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::SelectItem( sal_uInt16 nItemId )
 {
@@ -2040,7 +2040,7 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::SetNoSelection()
 {
@@ -2052,7 +2052,7 @@ void ValueSet::SetNoSelection()
         ImplDraw();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
 {
@@ -2075,7 +2075,7 @@ void ValueSet::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
         mbFormat = true;
 }
 
-// -----------------------------------------------------------------------
+
 
 Image ValueSet::GetItemImage( sal_uInt16 nItemId ) const
 {
@@ -2087,7 +2087,7 @@ Image ValueSet::GetItemImage( sal_uInt16 nItemId ) const
         return Image();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::SetItemColor( sal_uInt16 nItemId, const Color& rColor )
 {
@@ -2110,7 +2110,7 @@ void ValueSet::SetItemColor( sal_uInt16 nItemId, const Color& rColor )
         mbFormat = true;
 }
 
-// -----------------------------------------------------------------------
+
 
 Color ValueSet::GetItemColor( sal_uInt16 nItemId ) const
 {
@@ -2122,7 +2122,7 @@ Color ValueSet::GetItemColor( sal_uInt16 nItemId ) const
         return Color();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::SetItemData( sal_uInt16 nItemId, void* pData )
 {
@@ -2147,7 +2147,7 @@ void ValueSet::SetItemData( sal_uInt16 nItemId, void* pData )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void* ValueSet::GetItemData( sal_uInt16 nItemId ) const
 {
@@ -2159,7 +2159,7 @@ void* ValueSet::GetItemData( sal_uInt16 nItemId ) const
         return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::SetItemText(sal_uInt16 nItemId, const OUString& rText)
 {
@@ -2202,7 +2202,7 @@ void ValueSet::SetItemText(sal_uInt16 nItemId, const OUString& rText)
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString ValueSet::GetItemText( sal_uInt16 nItemId ) const
 {
@@ -2214,7 +2214,7 @@ OUString ValueSet::GetItemText( sal_uInt16 nItemId ) const
     return OUString();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::SetColor( const Color& rColor )
 {
@@ -2224,7 +2224,7 @@ void ValueSet::SetColor( const Color& rColor )
         ImplDraw();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::SetExtraSpacing( sal_uInt16 nNewSpacing )
 {
@@ -2239,7 +2239,7 @@ void ValueSet::SetExtraSpacing( sal_uInt16 nNewSpacing )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::StartSelection()
 {
@@ -2248,7 +2248,7 @@ void ValueSet::StartSelection()
     mnHighItemId    = mnSelItemId;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::EndSelection()
 {
@@ -2263,7 +2263,7 @@ void ValueSet::EndSelection()
     mbSelection = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ValueSet::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
 {
@@ -2303,7 +2303,7 @@ bool ValueSet::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCols,
                                     sal_uInt16 nDesireLines ) const
@@ -2381,7 +2381,7 @@ Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCol
     return aSize;
 }
 
-// -----------------------------------------------------------------------
+
 
 Size ValueSet::CalcItemSizePixel( const Size& rItemSize, bool bOut ) const
 {
@@ -2412,7 +2412,7 @@ Size ValueSet::CalcItemSizePixel( const Size& rItemSize, bool bOut ) const
     return aSize;
 }
 
-// -----------------------------------------------------------------------
+
 
 long ValueSet::GetScrollWidth() const
 {
@@ -2425,7 +2425,7 @@ long ValueSet::GetScrollWidth() const
         return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::SetHighlightHdl( const Link& rLink )
 {
@@ -2456,7 +2456,7 @@ Size ValueSet::GetOptimalSize() const
     return CalcWindowSizePixel(aLargestItemSize);
 }
 
-// -----------------------------------------------------------------------
+
 
 void ValueSet::SetEdgeBlending(bool bNew)
 {

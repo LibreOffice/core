@@ -328,7 +328,7 @@ void VCLXGraphicControl::setProperty( const OUString& PropertyName, const ::com:
     return aProp;
 }
 
-//--------------------------------------------------------------------
+
 //  class VCLXButton
 //  ----------------------------------------------------
 

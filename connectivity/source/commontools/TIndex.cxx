@@ -31,7 +31,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-// -------------------------------------------------------------------------
+
 OIndexHelper::OIndexHelper( OTableHelper* _pTable) : connectivity::sdbcx::OIndex(sal_True)
                  , m_pTable(_pTable)
 {
@@ -39,7 +39,7 @@ OIndexHelper::OIndexHelper( OTableHelper* _pTable) : connectivity::sdbcx::OIndex
     ::std::vector< OUString> aVector;
     m_pColumns  = new OIndexColumns(this,m_aMutex,aVector);
 }
-// -------------------------------------------------------------------------
+
 OIndexHelper::OIndexHelper( OTableHelper* _pTable,
                 const OUString& _Name,
                 const OUString& _Catalog,
@@ -56,7 +56,7 @@ OIndexHelper::OIndexHelper( OTableHelper* _pTable,
     construct();
     refreshColumns();
 }
-// -------------------------------------------------------------------------
+
 
 void OIndexHelper::refreshColumns()
 {
@@ -95,6 +95,6 @@ void OIndexHelper::refreshColumns()
     else
         m_pColumns  = new OIndexColumns(this,m_aMutex,aVector);
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

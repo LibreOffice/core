@@ -478,7 +478,7 @@ void ScColRowNameRangesDlg::SetActive()
 void ScColRowNameRangesDlg::UpdateNames()
 {
     pLbRange->SetUpdateMode( false );
-    //-----------------------------------------------------------
+
     pLbRange->Clear();
     aRangeMap.clear();
     pEdAssign->SetText( EMPTY_OUSTRING );
@@ -590,7 +590,7 @@ void ScColRowNameRangesDlg::UpdateNames()
         }
         delete [] ppSortArray;
     }
-    //-----------------------------------------------------------
+
     pLbRange->SetUpdateMode( true );
     pLbRange->Invalidate();
 }
@@ -666,7 +666,7 @@ bool ScColRowNameRangesDlg::IsRefInputMode() const
     return (pEdActive != NULL);
 }
 
-//------------------------------------------------------------------------
+
 // Handler:
 // ========
 

@@ -41,14 +41,14 @@ using namespace dbtools;
 using namespace connectivity::ado;
 using namespace cppu;
 using namespace ::comphelper;
-//------------------------------------------------------------------------------
+
 using namespace ::com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
-// -------------------------------------------------------------------------
+
 ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(ADORecordset* _pRecordSet)
     :ODatabaseMetaDataResultSet_BASE(m_aMutex)
     ,OPropertySetHelper(ODatabaseMetaDataResultSet_BASE::rBHelper)
@@ -75,13 +75,13 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(ADORecordset* _pRecordSet
     //  allocBuffer();
 }
 
-// -------------------------------------------------------------------------
+
 ODatabaseMetaDataResultSet::~ODatabaseMetaDataResultSet()
 {
     if(m_pRecordSet)
         m_pRecordSet->Release();
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSet::disposing(void)
 {
     OPropertySetHelper::disposing();
@@ -92,13 +92,13 @@ void ODatabaseMetaDataResultSet::disposing(void)
     m_aStatement    = NULL;
 m_xMetaData.clear();
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL ODatabaseMetaDataResultSet::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = OPropertySetHelper::queryInterface(rType);
     return aRet.hasValue() ? aRet : ODatabaseMetaDataResultSet_BASE::queryInterface(rType);
 }
-// -------------------------------------------------------------------------
+
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL ODatabaseMetaDataResultSet::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
@@ -107,13 +107,13 @@ Any SAL_CALL ODatabaseMetaDataResultSet::queryInterface( const Type & rType ) th
 
     return ::comphelper::concatSequences(aTypes.getTypes(),ODatabaseMetaDataResultSet_BASE::getTypes());
 }
-// -----------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSet::checkRecordSet() throw(SQLException)
 {
     if(!m_pRecordSet)
         throwFunctionSequenceException(*this);
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const OUString& columnName ) throw(SQLException, RuntimeException)
 {
@@ -136,7 +136,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const OUString& colum
     return 0; // Never reached
 }
 #define BLOCK_SIZE 256
-// -------------------------------------------------------------------------
+
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -179,14 +179,14 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResult
         return NULL;
     return new SequenceInputStream(m_aValue);
 }
-// -------------------------------------------------------------------------
+
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XRow::getCharacterStream", *this );
     return NULL;
 }
 
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -199,7 +199,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex 
     }
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
@@ -218,31 +218,31 @@ sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex ) t
 
     return m_aValue;
 }
-// -------------------------------------------------------------------------
+
 
 Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 
 ::com::sun::star::util::Date SAL_CALL ODatabaseMetaDataResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 
 double SAL_CALL ODatabaseMetaDataResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 
 float SAL_CALL ODatabaseMetaDataResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
@@ -262,21 +262,21 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex ) t
 
     return m_aValue;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getRow(  ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XResultSet::getRow", *this );
     return 0;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int64 SAL_CALL ODatabaseMetaDataResultSet::getLong( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XRow::getLong", *this );
     return sal_Int64(0);
 }
-// -------------------------------------------------------------------------
+
 
 Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData(  ) throw(SQLException, RuntimeException)
 {
@@ -291,34 +291,34 @@ Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData
 
     return m_xMetaData;
 }
-// -------------------------------------------------------------------------
+
 Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XRow::getRow", *this );
     return NULL;
 }
 
-// -------------------------------------------------------------------------
+
 
 Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XRow::getRow", *this );
     return NULL;
 }
-// -------------------------------------------------------------------------
+
 Reference< XBlob > SAL_CALL ODatabaseMetaDataResultSet::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XRow::getRow", *this );
     return NULL;
 }
-// -------------------------------------------------------------------------
+
 
 Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XRow::getRow", *this );
     return NULL;
 }
-// -------------------------------------------------------------------------
+
 
 Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
@@ -331,7 +331,7 @@ Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 columnIndex, const
     columnIndex = mapColumn(columnIndex);
     return Any();
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
@@ -350,7 +350,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 
     return m_aValue;
 }
-// -------------------------------------------------------------------------
+
 
 OUString SAL_CALL ODatabaseMetaDataResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
@@ -368,21 +368,21 @@ OUString SAL_CALL ODatabaseMetaDataResultSet::getString( sal_Int32 columnIndex )
     return m_aValue;
 }
 
-// -------------------------------------------------------------------------
+
 
 
 ::com::sun::star::util::Time SAL_CALL ODatabaseMetaDataResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 
 
 ::com::sun::star::util::DateTime SAL_CALL ODatabaseMetaDataResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isAfterLast(  ) throw(SQLException, RuntimeException)
 {
@@ -396,7 +396,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isAfterLast(  ) throw(SQLException
     m_pRecordSet->get_EOF(&bIsAtEOF);
     return bIsAtEOF == VARIANT_TRUE;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isFirst(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -407,7 +407,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isFirst(  ) throw(SQLException, Ru
 
     return m_nRowPos == 1;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isLast(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -418,7 +418,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isLast(  ) throw(SQLException, Run
 
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL ODatabaseMetaDataResultSet::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -430,7 +430,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::beforeFirst(  ) throw(SQLException, Ru
     if(first())
         previous();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL ODatabaseMetaDataResultSet::afterLast(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -443,7 +443,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::afterLast(  ) throw(SQLException, Runt
         next();
     m_bEOF = sal_True;
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL ODatabaseMetaDataResultSet::close(  ) throw(SQLException, RuntimeException)
 {
@@ -454,7 +454,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::close(  ) throw(SQLException, RuntimeE
     }
     dispose();
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::first(  ) throw(SQLException, RuntimeException)
 {
@@ -470,7 +470,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::first(  ) throw(SQLException, Runt
         m_nRowPos = 1;
     return bRet;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::last(  ) throw(SQLException, RuntimeException)
 {
@@ -480,7 +480,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::last(  ) throw(SQLException, Runti
 
     return m_pRecordSet && SUCCEEDED(m_pRecordSet->MoveLast()) ? sal_True : sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -498,7 +498,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 row ) throw(SQ
     }
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -515,7 +515,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::relative( sal_Int32 row ) throw(SQ
         m_nRowPos += row;
     return bRet;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::previous(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -530,12 +530,12 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::previous(  ) throw(SQLException, R
         --m_nRowPos;
     return bRet;
 }
-// -------------------------------------------------------------------------
+
 Reference< XInterface > SAL_CALL ODatabaseMetaDataResultSet::getStatement(  ) throw(SQLException, RuntimeException)
 {
     return m_aStatement.get();
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowDeleted(  ) throw(SQLException, RuntimeException)
 {
@@ -549,7 +549,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowDeleted(  ) throw(SQLException,
     m_pRecordSet->get_Status((sal_Int32*)&eRec);
     return (eRec & adRecDeleted) == adRecDeleted;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowInserted(  ) throw(SQLException, RuntimeException)
 {   ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -561,7 +561,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowInserted(  ) throw(SQLException
     m_pRecordSet->get_Status((sal_Int32*)&eRec);
     return (eRec & adRecNew) == adRecNew;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowUpdated(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -574,7 +574,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowUpdated(  ) throw(SQLException,
     m_pRecordSet->get_Status((sal_Int32*)&eRec);
     return (eRec & adRecModified) == adRecModified;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
 {
@@ -589,7 +589,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isBeforeFirst(  ) throw(SQLExcepti
     m_pRecordSet->get_BOF(&bIsAtBOF);
     return bIsAtBOF == VARIANT_TRUE;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::next(  ) throw(SQLException, RuntimeException)
 {
@@ -608,7 +608,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::next(  ) throw(SQLException, Runti
     else
         return SUCCEEDED(m_pRecordSet->MoveNext());
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::wasNull(  ) throw(SQLException, RuntimeException)
 {
@@ -620,7 +620,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::wasNull(  ) throw(SQLException, Ru
 
     return m_aValue.isNull();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL ODatabaseMetaDataResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -631,7 +631,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::refreshRow(  ) throw(SQLException, Run
 
     m_pRecordSet->Resync(adAffectCurrent,adResyncAllValues);
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL ODatabaseMetaDataResultSet::cancel(  ) throw(RuntimeException)
 {
@@ -643,34 +643,34 @@ void SAL_CALL ODatabaseMetaDataResultSet::cancel(  ) throw(RuntimeException)
 
     m_pRecordSet->Cancel();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL ODatabaseMetaDataResultSet::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL ODatabaseMetaDataResultSet::getWarnings(  ) throw(SQLException, RuntimeException)
 {
     return Any();
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 ODatabaseMetaDataResultSet::getResultSetConcurrency() const
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     return ResultSetConcurrency::READ_ONLY;
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 ODatabaseMetaDataResultSet::getResultSetType() const
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     return ResultSetType::FORWARD_ONLY;
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 ODatabaseMetaDataResultSet::getFetchDirection() const
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     return FetchDirection::FORWARD;
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 ODatabaseMetaDataResultSet::getFetchSize() const
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -679,27 +679,27 @@ sal_Int32 ODatabaseMetaDataResultSet::getFetchSize() const
         m_pRecordSet->get_CacheSize(&nValue);
     return nValue;
 }
-//------------------------------------------------------------------------------
+
 OUString ODatabaseMetaDataResultSet::getCursorName() const
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     return OUString();
 }
 
-//------------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSet::setFetchDirection(sal_Int32 /*_par0*/)
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "ResultSet::FetchDirection", *this );
 }
-//------------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSet::setFetchSize(sal_Int32 _par0)
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     if(m_pRecordSet)
         m_pRecordSet->put_CacheSize(_par0);
 }
-// -------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* ODatabaseMetaDataResultSet::createArrayHelper( ) const
 {
 
@@ -714,12 +714,12 @@ void ODatabaseMetaDataResultSet::setFetchSize(sal_Int32 _par0)
 
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
-// -------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper & ODatabaseMetaDataResultSet::getInfoHelper()
 {
     return *const_cast<ODatabaseMetaDataResultSet*>(this)->getArrayHelper();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ODatabaseMetaDataResultSet::convertFastPropertyValue(
                             Any & rConvertedValue,
                             Any & rOldValue,
@@ -742,7 +742,7 @@ sal_Bool ODatabaseMetaDataResultSet::convertFastPropertyValue(
     }
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSet::setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
                                 const Any& /*rValue*/
@@ -761,7 +761,7 @@ void ODatabaseMetaDataResultSet::setFastPropertyValue_NoBroadcast(
             OSL_FAIL("setFastPropertyValue_NoBroadcast: Illegal handle value!");
     }
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSet::getFastPropertyValue(
                                 Any& rValue,
                                 sal_Int32 nHandle
@@ -786,7 +786,7 @@ void ODatabaseMetaDataResultSet::getFastPropertyValue(
             break;
     }
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSet::setProceduresMap()
 {
 
@@ -808,21 +808,21 @@ void ODatabaseMetaDataResultSet::setProceduresMap()
     pMetaData->setProceduresMap();
     m_xMetaData = pMetaData;
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSet::setCatalogsMap()
 {
     m_aColMapping.push_back(1);
 
     m_xMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSet::setSchemasMap()
 {
     m_aColMapping.push_back(2);
 
     m_xMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSet::setColumnPrivilegesMap()
 {
 
@@ -838,7 +838,7 @@ void ODatabaseMetaDataResultSet::setColumnPrivilegesMap()
     pMetaData->setColumnPrivilegesMap();
     m_xMetaData = pMetaData;
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSet::setColumnsMap()
 {
 
@@ -915,7 +915,7 @@ void ODatabaseMetaDataResultSet::setColumnsMap()
     pMetaData->setColumnsMap();
     m_xMetaData = pMetaData;
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSet::setTablesMap()
 {
 
@@ -927,7 +927,7 @@ void ODatabaseMetaDataResultSet::setTablesMap()
     pMetaData->setTablesMap();
     m_xMetaData = pMetaData;
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSet::setProcedureColumnsMap()
 {
 
@@ -994,7 +994,7 @@ void ODatabaseMetaDataResultSet::setProcedureColumnsMap()
     pMetaData->setProcedureColumnsMap();
     m_xMetaData = pMetaData;
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSet::setPrimaryKeysMap()
 {
 
@@ -1008,7 +1008,7 @@ void ODatabaseMetaDataResultSet::setPrimaryKeysMap()
     pMetaData->setProcedureColumnsMap();
     m_xMetaData = pMetaData;
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSet::setIndexInfoMap()
 {
 
@@ -1050,7 +1050,7 @@ void ODatabaseMetaDataResultSet::setIndexInfoMap()
     pMetaData->setIndexInfoMap();
     m_xMetaData = pMetaData;
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSet::setTablePrivilegesMap()
 {
 
@@ -1072,7 +1072,7 @@ void ODatabaseMetaDataResultSet::setTablePrivilegesMap()
     pMetaData->setTablePrivilegesMap();
     m_xMetaData = pMetaData;
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSet::setCrossReferenceMap()
 {
 
@@ -1103,7 +1103,7 @@ void ODatabaseMetaDataResultSet::setCrossReferenceMap()
     pMetaData->setCrossReferenceMap();
     m_xMetaData = pMetaData;
 }
-// -------------------------------------------------------------------------
+
 void ODatabaseMetaDataResultSet::setTypeInfoMap(sal_Bool _bJetEngine)
 {
     sal_Int32 i=1;
@@ -1181,22 +1181,22 @@ void ODatabaseMetaDataResultSet::setTypeInfoMap(sal_Bool _bJetEngine)
     pMetaData->setTypeInfoMap();
     m_xMetaData = pMetaData;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL ODatabaseMetaDataResultSet::acquire() throw()
 {
     ODatabaseMetaDataResultSet_BASE::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL ODatabaseMetaDataResultSet::release() throw()
 {
     ODatabaseMetaDataResultSet_BASE::release();
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL ODatabaseMetaDataResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
-// -----------------------------------------------------------------------------
+
 OLEVariant ODatabaseMetaDataResultSet::getValue(sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1208,7 +1208,7 @@ OLEVariant ODatabaseMetaDataResultSet::getValue(sal_Int32 columnIndex ) throw(SQ
     aField.get_Value(m_aValue);
     return m_aValue;
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

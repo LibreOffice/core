@@ -33,7 +33,7 @@ using namespace connectivity::file;
 
 typedef connectivity::file::OConnection  OConnection_BASE;
 
-//------------------------------------------------------------------------------
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -41,23 +41,23 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 
 DBG_NAME(ODbaseConnection)
-// --------------------------------------------------------------------------------
+
 ODbaseConnection::ODbaseConnection(ODriver* _pDriver) : OConnection(_pDriver)
 {
     DBG_CTOR(ODbaseConnection,NULL);
     m_aFilenameExtension = "dbf";
 }
-//-----------------------------------------------------------------------------
+
 ODbaseConnection::~ODbaseConnection()
 {
     DBG_DTOR(ODbaseConnection,NULL);
 }
 
 // XServiceInfo
-// --------------------------------------------------------------------------------
+
 IMPLEMENT_SERVICE_INFO(ODbaseConnection, "com.sun.star.sdbc.drivers.dbase.Connection", "com.sun.star.sdbc.Connection")
 
-// --------------------------------------------------------------------------------
+
 Reference< XDatabaseMetaData > SAL_CALL ODbaseConnection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -73,7 +73,7 @@ Reference< XDatabaseMetaData > SAL_CALL ODbaseConnection::getMetaData(  ) throw(
 
     return xMetaData;
 }
-//------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< XTablesSupplier > ODbaseConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -86,7 +86,7 @@ Reference< XDatabaseMetaData > SAL_CALL ODbaseConnection::getMetaData(  ) throw(
     }
     return xTab;
 }
-// --------------------------------------------------------------------------------
+
 Reference< XStatement > SAL_CALL ODbaseConnection::createStatement(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -97,7 +97,7 @@ Reference< XStatement > SAL_CALL ODbaseConnection::createStatement(  ) throw(SQL
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
     return xReturn;
 }
-// --------------------------------------------------------------------------------
+
 Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareStatement( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -110,12 +110,12 @@ Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareStatement( con
     m_aStatements.push_back(WeakReferenceHelper(*pStmt));
     return pStmt;
 }
-// --------------------------------------------------------------------------------
+
 Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareCall( const OUString& /*sql*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
     return NULL;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

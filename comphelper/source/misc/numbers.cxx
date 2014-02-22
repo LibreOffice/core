@@ -32,7 +32,7 @@ namespace comphelper
 namespace starbeans = ::com::sun::star::beans;
 namespace starlang  = ::com::sun::star::lang;
 
-//------------------------------------------------------------------------------
+
 sal_Int16 getNumberFormatType(const staruno::Reference<starutil::XNumberFormats>& xFormats, sal_Int32 nKey)
 {
     sal_Int16 nReturn(starutil::NumberFormat::UNDEFINED);
@@ -52,7 +52,7 @@ sal_Int16 getNumberFormatType(const staruno::Reference<starutil::XNumberFormats>
     return nReturn;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int16 getNumberFormatType(const staruno::Reference<starutil::XNumberFormatter>& xFormatter, sal_Int32 nKey)
 {
     OSL_ENSURE(xFormatter.is(), "getNumberFormatType : the formatter isn't valid !");
@@ -62,7 +62,7 @@ sal_Int16 getNumberFormatType(const staruno::Reference<starutil::XNumberFormatte
     return getNumberFormatType(xFormats, nKey);
 }
 
-//------------------------------------------------------------------------------
+
 staruno::Any getNumberFormatDecimals(const staruno::Reference<starutil::XNumberFormats>& xFormats, sal_Int32 nKey)
 {
     if (xFormats.is())
@@ -85,7 +85,7 @@ staruno::Any getNumberFormatDecimals(const staruno::Reference<starutil::XNumberF
 }
 
 
-//------------------------------------------------------------------------------
+
 sal_Int32 getStandardFormat(
         const staruno::Reference<starutil::XNumberFormatter>& xFormatter,
         sal_Int16 nType,
@@ -99,12 +99,12 @@ sal_Int32 getStandardFormat(
     return xTypes.is() ? xTypes->getStandardFormat(nType, _rLocale) : 0;
 }
 
-//------------------------------------------------------------------------------
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 
-//------------------------------------------------------------------------------
+
 Any getNumberFormatProperty( const Reference< XNumberFormatter >& _rxFormatter, sal_Int32 _nKey, const OUString& _rPropertyName )
 {
     Any aReturn;

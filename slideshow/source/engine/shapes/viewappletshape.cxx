@@ -100,7 +100,7 @@ namespace slideshow
             }
         }
 
-        // ---------------------------------------------------------------------
+
 
         ViewAppletShape::~ViewAppletShape()
         {
@@ -117,14 +117,14 @@ namespace slideshow
             }
         }
 
-        // ---------------------------------------------------------------------
+
 
         ViewLayerSharedPtr ViewAppletShape::getViewLayer() const
         {
             return mpViewLayer;
         }
 
-        // ---------------------------------------------------------------------
+
 
         bool ViewAppletShape::startApplet( const ::basegfx::B2DRectangle& rBounds )
         {
@@ -213,7 +213,7 @@ namespace slideshow
             return true;
         }
 
-        // ---------------------------------------------------------------------
+
 
         void ViewAppletShape::endApplet()
         {
@@ -228,7 +228,7 @@ namespace slideshow
             }
         }
 
-        // ---------------------------------------------------------------------
+
 
         bool ViewAppletShape::render( const ::basegfx::B2DRectangle& rBounds ) const
         {

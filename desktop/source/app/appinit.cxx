@@ -64,7 +64,7 @@ using namespace ::com::sun::star::ucb;
 namespace desktop
 {
 
-// -----------------------------------------------------------------------------
+
 
 static void configureUcb()
 {

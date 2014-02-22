@@ -656,9 +656,9 @@ OUString OReadToolBoxDocumentHandler::getErrorLineString()
 }
 
 
-//_________________________________________________________________________________________________________________
+
 //  OWriteToolBoxDocumentHandler
-//_________________________________________________________________________________________________________________
+
 
 OWriteToolBoxDocumentHandler::OWriteToolBoxDocumentHandler(
     const Reference< XIndexAccess >& rItemAccess,
@@ -761,9 +761,9 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
     m_xWriteDocumentHandler->endDocument();
 }
 
-//_________________________________________________________________________________________________________________
+
 //  protected member functions
-//_________________________________________________________________________________________________________________
+
 
 void OWriteToolBoxDocumentHandler::WriteToolBoxItem(
     const OUString& rCommandURL,

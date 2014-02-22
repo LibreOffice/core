@@ -131,7 +131,7 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
     css::uno::TypeClass aTypeClass = aT1.getTypeClass();
     switch(aTypeClass)
     {
-        //---------------------------------------
+
         case css::uno::TypeClass_BOOLEAN :
         case css::uno::TypeClass_BYTE :
         case css::uno::TypeClass_SHORT :
@@ -148,7 +148,7 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
             return bIs;
         }
 
-        //---------------------------------------
+
         case css::uno::TypeClass_STRING :
         {
             OUString v1;
@@ -166,7 +166,7 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
         }
         break;
 
-        //---------------------------------------
+
         case css::uno::TypeClass_ANY :
         {
             css::uno::Any v1;
@@ -184,7 +184,7 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
         }
         break;
 
-        //---------------------------------------
+
         case css::uno::TypeClass_STRUCT :
         {
             css::beans::PropertyValue p1;
@@ -221,7 +221,7 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
         }
         break;
 
-        //---------------------------------------
+
         case css::uno::TypeClass_SEQUENCE :
         {
             css::uno::Sequence< OUString > uno_s1;

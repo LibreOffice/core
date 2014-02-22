@@ -22,7 +22,7 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #include "inscldlg.hxx"
 #include "scresid.hxx"
@@ -66,7 +66,7 @@ ScInsertCellDlg::ScInsertCellDlg( Window* pParent,sal_Bool bDisallowCellMove) :
     }
 }
 
-//------------------------------------------------------------------------
+
 
 InsCellCmd ScInsertCellDlg::GetInsCellCmd() const
 {

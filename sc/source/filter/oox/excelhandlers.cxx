@@ -56,7 +56,7 @@ BiffContextHandler::~BiffContextHandler()
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 BiffWorksheetContextBase::BiffWorksheetContextBase( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper )
@@ -95,7 +95,7 @@ BiffWorkbookFragmentBase::BiffWorkbookFragmentBase( const WorkbookHelper& rHelpe
         getCodecHelper().cloneDecoder( getInputStream() );
 }
 
-// ----------------------------------------------------------------------------
+
 
 } // namespace xls
 } // namespace oox

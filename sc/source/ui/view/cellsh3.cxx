@@ -54,7 +54,7 @@ using sc::HMMToTwips;
 using sc::TwipsToHMM;
 using sc::TwipsToEvenHMM;
 
-//------------------------------------------------------------------
+
 
 void ScCellShell::Execute( SfxRequest& rReq )
 {
@@ -322,9 +322,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
             {
                 if ( pReqArgs != NULL )
                 {
-                    //----------------------------------
+
                     // set cell attribute without dialog:
-                    //----------------------------------
+
                     SfxItemSet*     pEmptySet =
                                         new SfxItemSet( *pReqArgs->GetPool(),
                                                         ATTR_PATTERN_START,
@@ -523,7 +523,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             }
             break;
 
-        //----------------------------------------------------------------
+
 
         case FID_ROW_HEIGHT:
             {
@@ -714,7 +714,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             rReq.Done();
             break;
 
-        //----------------------------------------------------------------
+
 
 
         case SID_CELL_FORMAT_RESET:

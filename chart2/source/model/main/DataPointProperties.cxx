@@ -48,7 +48,7 @@ void DataPointProperties::AddPropertiesToVector(
     // DataPointProperties
 
     // Common
-    // ------
+
     rOutProperties.push_back(
         Property( "Color",
                   PROP_DATAPOINT_COLOR,

@@ -55,9 +55,9 @@ namespace fpicker{
 namespace win32{
 namespace vista{
 
-//-----------------------------------------------------------------------------
+
 // types, const etcpp.
-//-----------------------------------------------------------------------------
+
 
 
 static const ::sal_Int16 INVALID_CONTROL_ID     = -1;
@@ -75,7 +75,7 @@ static const GUID CLIENTID_FILEOPEN_LINK_TEMPLATE   = {0x32237796, 0x1509, 0x49D
 static const GUID CLIENTID_FILEOPEN_PLAY            = {0x32CFB147, 0xF5AE, 0x4F90, 0xA1, 0xF1, 0x81, 0x20, 0x72, 0xBB, 0x2F, 0xC5};
 static const GUID CLIENTID_FILEOPEN_LINK            = {0x39AC4BAE, 0x7D2D, 0x46BC, 0xBE, 0x2E, 0xF8, 0x8C, 0xB5, 0x65, 0x5E, 0x6A};
 
-//-----------------------------------------------------------------------------
+
 OUString lcl_getURLFromShellItem (IShellItem* pItem)
 {
     LPOLESTR pStr = NULL;
@@ -103,7 +103,7 @@ OUString lcl_getURLFromShellItem (IShellItem* pItem)
     return sURL;
 }
 
-//-----------------------------------------------------------------------------------------
+
 ::std::vector< COMDLG_FILTERSPEC > lcl_buildFilterList(CFilterContainer& rContainer)
 {
     const sal_Int32                          c      = rContainer.numFilter();
@@ -125,7 +125,7 @@ OUString lcl_getURLFromShellItem (IShellItem* pItem)
     return lList;
 }
 
-//-----------------------------------------------------------------------------------------
+
 VistaFilePickerImpl::VistaFilePickerImpl()
     : m_iDialogOpen  ()
     , m_iDialogSave  ()
@@ -141,12 +141,12 @@ VistaFilePickerImpl::VistaFilePickerImpl()
     m_hParentWindow = choose_parent_window();
 }
 
-//-------------------------------------------------------------------------------
+
 VistaFilePickerImpl::~VistaFilePickerImpl()
 {
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::before()
 {
     // SYNCHRONIZED->
@@ -167,7 +167,7 @@ void VistaFilePickerImpl::before()
     }
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::doRequest(const RequestRef& rRequest)
 {
     try
@@ -265,13 +265,13 @@ void VistaFilePickerImpl::doRequest(const RequestRef& rRequest)
     {}
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::after()
 {
     CoUninitialize();
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::impl_sta_addFilePickerListener(const RequestRef& rRequest)
 {
     // SYNCHRONIZED outside !
@@ -290,7 +290,7 @@ void VistaFilePickerImpl::impl_sta_addFilePickerListener(const RequestRef& rRequ
         pHandlerImpl->addFilePickerListener(xListener);
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::impl_sta_removeFilePickerListener(const RequestRef& rRequest)
 {
     // SYNCHRONIZED outside !
@@ -309,7 +309,7 @@ void VistaFilePickerImpl::impl_sta_removeFilePickerListener(const RequestRef& rR
         pHandlerImpl->removeFilePickerListener(xListener);
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::impl_sta_appendFilter(const RequestRef& rRequest)
 {
     const OUString sTitle  = rRequest->getArgumentOrDefault(PROP_FILTER_TITLE, OUString());
@@ -321,7 +321,7 @@ void VistaFilePickerImpl::impl_sta_appendFilter(const RequestRef& rRequest)
     m_lFilters.addFilter(sTitle, sFilter);
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::impl_sta_appendFilterGroup(const RequestRef& rRequest)
 {
     const css::uno::Sequence< css::beans::StringPair > aFilterGroup  =
@@ -343,7 +343,7 @@ void VistaFilePickerImpl::impl_sta_appendFilterGroup(const RequestRef& rRequest)
     }
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::impl_sta_setCurrentFilter(const RequestRef& rRequest)
 {
     const OUString sTitle  = rRequest->getArgumentOrDefault(PROP_FILTER_TITLE, OUString());
@@ -354,7 +354,7 @@ void VistaFilePickerImpl::impl_sta_setCurrentFilter(const RequestRef& rRequest)
     m_lFilters.setCurrentFilter(sTitle);
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::impl_sta_getCurrentFilter(const RequestRef& rRequest)
 {
     TFileDialog iDialog = impl_getBaseDialogInterface();
@@ -386,7 +386,7 @@ void VistaFilePickerImpl::impl_sta_getCurrentFilter(const RequestRef& rRequest)
     // <- SYNCHRONIZED
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::impl_sta_CreateOpenDialog(const RequestRef& rRequest)
 {
     // SYNCHRONIZED->
@@ -428,7 +428,7 @@ void VistaFilePickerImpl::impl_sta_CreateOpenDialog(const RequestRef& rRequest)
         pHandlerImpl->startListening(iDialog);
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::impl_sta_CreateSaveDialog(const RequestRef& rRequest)
 {
     // SYNCHRONIZED->
@@ -469,13 +469,13 @@ void VistaFilePickerImpl::impl_sta_CreateSaveDialog(const RequestRef& rRequest)
         pHandlerImpl->startListening(iDialog);
 }
 
-//-------------------------------------------------------------------------------
+
 static const ::sal_Int32 GROUP_VERSION         =   1;
 static const ::sal_Int32 GROUP_TEMPLATE        =   2;
 static const ::sal_Int32 GROUP_IMAGETEMPLATE   =   3;
 static const ::sal_Int32 GROUP_CHECKBOXES      =   4;
 
-//-------------------------------------------------------------------------------
+
 static void setLabelToControl(CResourceProvider& rResourceProvider, TFileDialogCustomize iCustom, sal_uInt16 nControlId)
 {
     OUString aLabel = rResourceProvider.getResString(nControlId);
@@ -483,7 +483,7 @@ static void setLabelToControl(CResourceProvider& rResourceProvider, TFileDialogC
     iCustom->SetControlLabel(nControlId, reinterpret_cast<LPCWSTR>(aLabel.getStr()) );
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_Int32 nTemplate)
 {
     GUID aGUID = {};
@@ -610,7 +610,7 @@ void VistaFilePickerImpl::impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_I
 
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::impl_sta_SetMultiSelectionMode(const RequestRef& rRequest)
 {
     const ::sal_Bool bMultiSelection = rRequest->getArgumentOrDefault(PROP_MULTISELECTION_MODE, (::sal_Bool)sal_True);
@@ -632,7 +632,7 @@ void VistaFilePickerImpl::impl_sta_SetMultiSelectionMode(const RequestRef& rRequ
     iDialog->SetOptions ( nFlags );
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::impl_sta_SetTitle(const RequestRef& rRequest)
 {
     OUString sTitle = rRequest->getArgumentOrDefault(PROP_TITLE, OUString());
@@ -646,7 +646,7 @@ void VistaFilePickerImpl::impl_sta_SetTitle(const RequestRef& rRequest)
     iDialog->SetTitle(reinterpret_cast<LPCTSTR>(sTitle.getStr()));
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::impl_sta_SetFileName(const RequestRef& rRequest)
 {
     OUString sFileName = rRequest->getArgumentOrDefault(PROP_FILENAME, OUString());
@@ -660,7 +660,7 @@ void VistaFilePickerImpl::impl_sta_SetFileName(const RequestRef& rRequest)
     iDialog->SetFileName(reinterpret_cast<LPCTSTR>(sFileName.getStr()));
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::impl_sta_SetDirectory(const RequestRef& rRequest)
 {
     OUString sDirectory = rRequest->getArgumentOrDefault(PROP_DIRECTORY, OUString());
@@ -712,7 +712,7 @@ void VistaFilePickerImpl::impl_sta_GetDirectory(const RequestRef& rRequest)
         rRequest->setArgument( PROP_DIRECTORY, sFolder );
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::impl_sta_SetDefaultName(const RequestRef& rRequest)
 {
     OUString sFilename = rRequest->getArgumentOrDefault(PROP_FILENAME, OUString());
@@ -737,7 +737,7 @@ void VistaFilePickerImpl::impl_sta_SetDefaultName(const RequestRef& rRequest)
     m_sFilename = sFilename;
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::impl_sta_setFiltersOnDialog()
 {
     // SYNCHRONIZED->
@@ -774,7 +774,7 @@ void VistaFilePickerImpl::impl_sta_setFiltersOnDialog()
 
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::impl_sta_getSelectedFiles(const RequestRef& rRequest)
 {
     // SYNCHRONIZED->
@@ -848,7 +848,7 @@ void VistaFilePickerImpl::impl_sta_getSelectedFiles(const RequestRef& rRequest)
     rRequest->setArgument(PROP_SELECTED_FILES, lFiles.getAsConstList());
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
 {
     impl_sta_setFiltersOnDialog();
@@ -960,7 +960,7 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
     rRequest->setArgument(PROP_DIALOG_SHOW_RESULT, sal_True);
 }
 
-//-------------------------------------------------------------------------------
+
 TFileDialog VistaFilePickerImpl::impl_getBaseDialogInterface()
 {
     TFileDialog iDialog;
@@ -984,7 +984,7 @@ TFileDialog VistaFilePickerImpl::impl_getBaseDialogInterface()
     return iDialog;
 }
 
-//-------------------------------------------------------------------------------
+
 TFileDialogCustomize VistaFilePickerImpl::impl_getCustomizeInterface()
 {
     TFileDialogCustomize iCustom;
@@ -1009,7 +1009,7 @@ TFileDialogCustomize VistaFilePickerImpl::impl_getCustomizeInterface()
     return iCustom;
 }
 
-//-------------------------------------------------------------------------------
+
 void lcl_removeControlItemsWorkaround(const TFileDialogCustomize& iCustom   ,
                                             ::sal_Int16           nControlId)
 {
@@ -1022,7 +1022,7 @@ void lcl_removeControlItemsWorkaround(const TFileDialogCustomize& iCustom   ,
         hResult = iCustom->RemoveControlItem(nControlId, i++);
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::impl_sta_SetControlValue(const RequestRef& rRequest)
 {
     ::sal_Int16   nId     = rRequest->getArgumentOrDefault(PROP_CONTROL_ID    , INVALID_CONTROL_ID    );
@@ -1097,7 +1097,7 @@ void VistaFilePickerImpl::impl_sta_SetControlValue(const RequestRef& rRequest)
         }
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::impl_sta_GetControlValue(const RequestRef& rRequest)
 {
     ::sal_Int16 nId     = rRequest->getArgumentOrDefault(PROP_CONTROL_ID    , INVALID_CONTROL_ID    );
@@ -1133,7 +1133,7 @@ void VistaFilePickerImpl::impl_sta_GetControlValue(const RequestRef& rRequest)
         rRequest->setArgument(PROP_CONTROL_VALUE, aValue);
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::impl_sta_SetControlLabel(const RequestRef& rRequest)
 {
     ::sal_Int16     nId    = rRequest->getArgumentOrDefault(PROP_CONTROL_ID   , INVALID_CONTROL_ID  );
@@ -1148,12 +1148,12 @@ void VistaFilePickerImpl::impl_sta_SetControlLabel(const RequestRef& rRequest)
     iCustom->SetControlLabel ( nId, reinterpret_cast<LPCTSTR>(sLabel.getStr()));
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::impl_sta_GetControlLabel(const RequestRef& /*rRequest*/)
 {
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::impl_sta_EnableControl(const RequestRef& rRequest)
 {
     ::sal_Int16 nId      = rRequest->getArgumentOrDefault(PROP_CONTROL_ID    , INVALID_CONTROL_ID  );
@@ -1174,7 +1174,7 @@ void VistaFilePickerImpl::impl_sta_EnableControl(const RequestRef& rRequest)
 
     iCustom->SetControlState(nId, eState);
 }
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::impl_SetDefaultExtension( const OUString& currentFilter )
 {
    TFileDialog iDialog = impl_getBaseDialogInterface();
@@ -1217,7 +1217,7 @@ static void impl_refreshFileDialog( TFileDialog iDialog )
     }
 }
 
-//-------------------------------------------------------------------------------
+
 void VistaFilePickerImpl::onAutoExtensionChanged (bool bChecked)
 {
     // SYNCHRONIZED->

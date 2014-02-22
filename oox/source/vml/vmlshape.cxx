@@ -83,7 +83,7 @@ namespace {
 const sal_Int32 VML_SHAPETYPE_PICTUREFRAME  = 75;
 const sal_Int32 VML_SHAPETYPE_HOSTCONTROL   = 201;
 
-// ----------------------------------------------------------------------------
+
 
 awt::Point lclGetAbsPoint( const awt::Point& rRelPoint, const awt::Rectangle& rShapeRect, const awt::Rectangle& rCoordSys )
 {
@@ -130,7 +130,7 @@ void ShapeTypeModel::assignUsed( const ShapeTypeModel& rSource )
     moGraphicTitle.assignIfUsed( rSource.moGraphicTitle );
 }
 
-// ----------------------------------------------------------------------------
+
 
 ShapeType::ShapeType( Drawing& rDrawing ) :
     mrDrawing( rDrawing )
@@ -237,7 +237,7 @@ ClientData::ClientData() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ShapeModel::ShapeModel()
 {
@@ -259,7 +259,7 @@ ClientData& ShapeModel::createClientData()
     return *mxClientData;
 }
 
-// ----------------------------------------------------------------------------
+
 
 ShapeBase::ShapeBase( Drawing& rDrawing ) :
     ShapeType( rDrawing )

@@ -61,9 +61,9 @@ Any Stream::queryInterface( const Type &type )
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( type );
 }
 
-// -------------------------------------------------------------------
+
 //                            XStream
-// -------------------------------------------------------------------
+
 
 com::sun::star::uno::Reference< com::sun::star::io::XInputStream > SAL_CALL
 Stream::getInputStream(  )
@@ -87,9 +87,9 @@ Stream::getOutputStream(  )
     return Reference< XOutputStream >( this );
 }
 
-// -------------------------------------------------------------------
+
 //                            XInputStream
-// -------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL Stream::readBytes(
     Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
@@ -184,9 +184,9 @@ void SAL_CALL Stream::closeInput( void )
         closeStream();
 }
 
-// -------------------------------------------------------------------
+
 //                            XSeekable
-// -------------------------------------------------------------------
+
 
 void SAL_CALL Stream::seek( sal_Int64 location )
         throw( ::com::sun::star::lang::IllegalArgumentException,
@@ -236,9 +236,9 @@ sal_Int64 SAL_CALL Stream::getLength()
     }
 }
 
-// -------------------------------------------------------------------
+
 //                            XTruncate
-// -------------------------------------------------------------------
+
 
 void SAL_CALL Stream::truncate( void )
     throw( com::sun::star::io::IOException,
@@ -250,9 +250,9 @@ void SAL_CALL Stream::truncate( void )
     throwOnError( gnome_vfs_truncate_handle( m_handle, 0 ) );
 }
 
-// -------------------------------------------------------------------
+
 //                            XOutputStream
-// -------------------------------------------------------------------
+
 
 void SAL_CALL Stream::writeBytes( const com::sun::star::uno::Sequence< sal_Int8 >& aData )
     throw( com::sun::star::io::NotConnectedException,
@@ -298,9 +298,9 @@ void SAL_CALL Stream::closeOutput( void )
         closeStream();
 }
 
-// -------------------------------------------------------------------
+
 //                            Misc.
-// -------------------------------------------------------------------
+
 
 void Stream::closeStream( void )
     throw( ::com::sun::star::io::NotConnectedException,

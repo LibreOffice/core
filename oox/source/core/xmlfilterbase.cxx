@@ -186,7 +186,7 @@ XmlFilterBase::~XmlFilterBase()
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 void XmlFilterBase::importDocumentProperties()
 {

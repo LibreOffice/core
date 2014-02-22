@@ -42,14 +42,14 @@ namespace utl
     //========================================================================
     //= DisposableComponent
     //========================================================================
-    //------------------------------------------------------------------------
+
     DisposableComponent::DisposableComponent( const Reference< XInterface >& _rxComponent )
         :m_xComponent( _rxComponent, UNO_QUERY )
     {
         DBG_ASSERT( m_xComponent.is() || !_rxComponent.is(), "DisposableComponent::DisposableComponent: should be an XComponent!" );
     }
 
-    //------------------------------------------------------------------------
+
     DisposableComponent::~DisposableComponent()
     {
         if ( m_xComponent.is() )
@@ -113,7 +113,7 @@ namespace utl
         CloseableComponentImpl& operator=( const CloseableComponentImpl& ); // never implemented
     };
 
-    //------------------------------------------------------------------------
+
     CloseableComponentImpl::CloseableComponentImpl( const Reference< XInterface >& _rxComponent )
         :m_xCloseable( _rxComponent, UNO_QUERY )
     {
@@ -121,14 +121,14 @@ namespace utl
         DBG_ASSERT( m_xCloseable.is() || !_rxComponent.is(), "CloseableComponentImpl::CloseableComponentImpl: component is not an XCloseable!" );
         impl_nf_switchListening( true );
     }
-    //------------------------------------------------------------------------
+
     CloseableComponentImpl::~CloseableComponentImpl()
     {
         nf_closeComponent();
         DBG_DTOR( CloseableComponentImpl, NULL );
     }
 
-    //------------------------------------------------------------------------
+
     void CloseableComponentImpl::nf_closeComponent()
     {
         if ( !m_xCloseable.is() )
@@ -153,7 +153,7 @@ namespace utl
         m_xCloseable.clear();
     }
 
-    //------------------------------------------------------------------------
+
     void CloseableComponentImpl::impl_nf_switchListening( bool _bListen )
     {
         if ( !m_xCloseable.is() )
@@ -172,7 +172,7 @@ namespace utl
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL CloseableComponentImpl::queryClosing( const EventObject&
     #ifdef DBG_UTIL
     Source
@@ -185,7 +185,7 @@ namespace utl
         throw CloseVetoException();
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL CloseableComponentImpl::notifyClosing( const EventObject&
     #ifdef DBG_UTIL
     Source
@@ -200,7 +200,7 @@ namespace utl
         OSL_FAIL( "CloseableComponentImpl::notifyClosing: unreachable!" );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL CloseableComponentImpl::disposing( const EventObject&
     #ifdef DBG_UTIL
     Source
@@ -216,14 +216,14 @@ namespace utl
     //= CloseableComponentImpl
     //========================================================================
     DBG_NAME( CloseableComponent )
-    //------------------------------------------------------------------------
+
     CloseableComponent::CloseableComponent( const Reference< XInterface >& _rxComponent )
         :m_pImpl( new CloseableComponentImpl( _rxComponent ) )
     {
         DBG_CTOR( CloseableComponent, NULL );
     }
 
-    //------------------------------------------------------------------------
+
     CloseableComponent::~CloseableComponent()
     {
         // close the component, deliver ownership to anybody who wants to veto the close

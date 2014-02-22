@@ -22,7 +22,7 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #include "groupdlg.hxx"
 #include "scresid.hxx"
@@ -50,14 +50,14 @@ ScGroupDlg::ScGroupDlg(Window* pParent, bool bUngroup, bool bRows)
     m_pBtnRows->GrabFocus();
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScGroupDlg::GetColsChecked() const
 {
     return m_pBtnCols->IsChecked();
 }
 
-//------------------------------------------------------------------------
+
 
 ScGroupDlg::~ScGroupDlg()
 {

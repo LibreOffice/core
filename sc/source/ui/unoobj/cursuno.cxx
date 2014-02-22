@@ -34,12 +34,12 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 #define SCSHEETCELLCURSOR_SERVICE   "com.sun.star.sheet.SheetCellCursor"
 #define SCCELLCURSOR_SERVICE        "com.sun.star.table.CellCursor"
 
-//------------------------------------------------------------------------
+
 
 ScCellCursorObj::ScCellCursorObj(ScDocShell* pDocSh, const ScRange& rR) :
     ScCellRangeObj( pDocSh, rR )

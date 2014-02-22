@@ -150,7 +150,7 @@ SdNavigatorWin::SdNavigatorWin(
         rUpdateRequest();
 }
 
-// -----------------------------------------------------------------------
+
 
 SdNavigatorWin::~SdNavigatorWin()
 {
@@ -158,7 +158,7 @@ SdNavigatorWin::~SdNavigatorWin()
     delete mpPageNameCtrlItem;
 }
 
-// -----------------------------------------------------------------------
+
 
 //when object is marked , fresh the corresponding entry tree .
 void SdNavigatorWin::FreshTree( const SdDrawDocument* pDoc )
@@ -304,7 +304,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, SelectToolboxHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 
 IMPL_LINK_NOARG(SdNavigatorWin, ClickToolboxHdl)
@@ -312,7 +312,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickToolboxHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
 {
@@ -390,7 +390,7 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl)
 {
@@ -428,7 +428,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl)
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl)
 {
@@ -559,7 +559,7 @@ IMPL_LINK( SdNavigatorWin, ShapeFilterCallback, Menu *, pMenu )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdNavigatorWin::Resize()
 {
@@ -598,7 +598,7 @@ void SdNavigatorWin::Resize()
     Window::Resize();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SdNavigatorWin::InsertFile(const OUString& rFileName)
 {
@@ -675,7 +675,7 @@ bool SdNavigatorWin::InsertFile(const OUString& rFileName)
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
 {
@@ -744,7 +744,7 @@ void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
     maLbDocs.SelectEntryPos( nPos );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SdNavigatorWin::GetDragTypeSdResId( NavigatorDragType eDT, sal_Bool bImage )
 {
@@ -763,7 +763,7 @@ sal_uInt16 SdNavigatorWin::GetDragTypeSdResId( NavigatorDragType eDT, sal_Bool b
     return( 0 );
 }
 
-//------------------------------------------------------------------------
+
 
 NavDocInfo* SdNavigatorWin::GetDocInfo()
 {
@@ -889,7 +889,7 @@ SdNavigatorControllerItem::SdNavigatorControllerItem(
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
                         SfxItemState eState, const SfxPoolItem* pItem )
@@ -974,7 +974,7 @@ SdPageNameControllerItem::SdPageNameControllerItem(
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdPageNameControllerItem::StateChanged( sal_uInt16 nSId,
                         SfxItemState eState, const SfxPoolItem* pItem )

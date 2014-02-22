@@ -389,7 +389,7 @@ UString     OMarkableOutputStreamTest_getImplementationName() THROWS(())
 
 
 
-//-----------------------------------------------------
+
 // Input stream
 
 class OMarkableInputStreamTest :

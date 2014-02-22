@@ -35,7 +35,7 @@ namespace svxform
     //====================================================================
     //= FormToolboxes
     //====================================================================
-    //--------------------------------------------------------------------
+
     FormToolboxes::FormToolboxes( const Reference< XFrame >& _rxFrame )
     {
         // the layout manager
@@ -44,7 +44,7 @@ namespace svxform
             xFrameProps->getPropertyValue("LayoutManager") >>= m_xLayouter;
     }
 
-    //--------------------------------------------------------------------
+
     void FormToolboxes::toggleToolbox( sal_uInt16 _nSlotId ) const
     {
         try
@@ -72,14 +72,14 @@ namespace svxform
         }
     }
 
-    //--------------------------------------------------------------------
+
     bool FormToolboxes::isToolboxVisible( sal_uInt16 _nSlotId ) const
     {
         return m_xLayouter.is() && m_xLayouter->isElementVisible(
             getToolboxResourceName( _nSlotId ) );
     }
 
-    //--------------------------------------------------------------------
+
     OUString FormToolboxes::getToolboxResourceName( sal_uInt16 _nSlotId ) const
     {
         OSL_ENSURE( ( _nSlotId == SID_FM_MORE_CONTROLS ) || ( _nSlotId == SID_FM_FORM_DESIGN_TOOLS ) || ( _nSlotId == SID_FM_CONFIG ),

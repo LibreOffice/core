@@ -56,7 +56,7 @@ static OUString core_getImplementationName()
 {
     return OUString(IMPLNAME);
 }
-//__________________________________________________________________________________________________
+
 IdlReflectionServiceImpl::IdlReflectionServiceImpl(
     const Reference< XComponentContext > & xContext )
     : OComponentHelper( _aComponentMutex )
@@ -67,11 +67,11 @@ IdlReflectionServiceImpl::IdlReflectionServiceImpl(
         "/singletons/com.sun.star.reflection.theTypeDescriptionManager") ) >>= _xTDMgr;
     OSL_ENSURE( _xTDMgr.is(), "### cannot get singleton \"TypeDescriptionManager\" from context!" );
 }
-//__________________________________________________________________________________________________
+
 IdlReflectionServiceImpl::~IdlReflectionServiceImpl() {}
 
 // XInterface
-//__________________________________________________________________________________________________
+
 Any IdlReflectionServiceImpl::queryInterface( const Type & rType )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -83,19 +83,19 @@ Any IdlReflectionServiceImpl::queryInterface( const Type & rType )
 
     return (aRet.hasValue() ? aRet : OComponentHelper::queryInterface( rType ));
 }
-//__________________________________________________________________________________________________
+
 void IdlReflectionServiceImpl::acquire() throw()
 {
     OComponentHelper::acquire();
 }
-//__________________________________________________________________________________________________
+
 void IdlReflectionServiceImpl::release() throw()
 {
     OComponentHelper::release();
 }
 
 // XTypeProvider
-//__________________________________________________________________________________________________
+
 Sequence< Type > IdlReflectionServiceImpl::getTypes()
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -115,7 +115,7 @@ Sequence< Type > IdlReflectionServiceImpl::getTypes()
     }
     return s_pTypes->getTypes();
 }
-//__________________________________________________________________________________________________
+
 Sequence< sal_Int8 > IdlReflectionServiceImpl::getImplementationId()
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -133,7 +133,7 @@ Sequence< sal_Int8 > IdlReflectionServiceImpl::getImplementationId()
 }
 
 // XComponent
-//__________________________________________________________________________________________________
+
 void IdlReflectionServiceImpl::dispose()
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -153,19 +153,19 @@ void IdlReflectionServiceImpl::dispose()
 }
 
 // XServiceInfo
-//__________________________________________________________________________________________________
+
 OUString IdlReflectionServiceImpl::getImplementationName()
     throw(::com::sun::star::uno::RuntimeException)
 {
     return core_getImplementationName();
 }
-//__________________________________________________________________________________________________
+
 sal_Bool IdlReflectionServiceImpl::supportsService( const OUString & rServiceName )
     throw(::com::sun::star::uno::RuntimeException)
 {
     return cppu::supportsService(this, rServiceName);
 }
-//__________________________________________________________________________________________________
+
 Sequence< OUString > IdlReflectionServiceImpl::getSupportedServiceNames()
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -173,14 +173,14 @@ Sequence< OUString > IdlReflectionServiceImpl::getSupportedServiceNames()
 }
 
 // XIdlReflection
-//__________________________________________________________________________________________________
+
 Reference< XIdlClass > IdlReflectionServiceImpl::getType( const Any & rObj )
     throw(::com::sun::star::uno::RuntimeException)
 {
     return (rObj.hasValue() ? forType( rObj.getValueTypeRef() ) : Reference< XIdlClass >());
 }
 
-//__________________________________________________________________________________________________
+
 inline Reference< XIdlClass > IdlReflectionServiceImpl::constructClass(
     typelib_TypeDescription * pTypeDescr )
 {
@@ -230,7 +230,7 @@ inline Reference< XIdlClass > IdlReflectionServiceImpl::constructClass(
         return Reference< XIdlClass >();
     }
 }
-//__________________________________________________________________________________________________
+
 Reference< XIdlClass > IdlReflectionServiceImpl::forName( const OUString & rTypeName )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -259,7 +259,7 @@ Reference< XIdlClass > IdlReflectionServiceImpl::forName( const OUString & rType
 }
 
 // XHierarchicalNameAccess
-//__________________________________________________________________________________________________
+
 Any IdlReflectionServiceImpl::getByHierarchicalName( const OUString & rName )
     throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException)
 {
@@ -313,7 +313,7 @@ Any IdlReflectionServiceImpl::getByHierarchicalName( const OUString & rName )
     }
     return aRet;
 }
-//__________________________________________________________________________________________________
+
 sal_Bool IdlReflectionServiceImpl::hasByHierarchicalName( const OUString & rName )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -327,7 +327,7 @@ sal_Bool IdlReflectionServiceImpl::hasByHierarchicalName( const OUString & rName
     return sal_False;
 }
 
-//__________________________________________________________________________________________________
+
 Reference< XIdlClass > IdlReflectionServiceImpl::forType( typelib_TypeDescription * pTypeDescr )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -348,7 +348,7 @@ Reference< XIdlClass > IdlReflectionServiceImpl::forType( typelib_TypeDescriptio
 
     return xRet;
 }
-//__________________________________________________________________________________________________
+
 Reference< XIdlClass > IdlReflectionServiceImpl::forType( typelib_TypeDescriptionReference * pRef )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -365,7 +365,7 @@ Reference< XIdlClass > IdlReflectionServiceImpl::forType( typelib_TypeDescriptio
         (XWeak *)(OWeakObject *)this );
 }
 
-//__________________________________________________________________________________________________
+
 const Mapping & IdlReflectionServiceImpl::getCpp2Uno()
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -388,7 +388,7 @@ const Mapping & IdlReflectionServiceImpl::getCpp2Uno()
     }
     return _aCpp2Uno;
 }
-//__________________________________________________________________________________________________
+
 const Mapping & IdlReflectionServiceImpl::getUno2Cpp()
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -411,7 +411,7 @@ const Mapping & IdlReflectionServiceImpl::getUno2Cpp()
     }
     return _aUno2Cpp;
 }
-//__________________________________________________________________________________________________
+
 uno_Interface * IdlReflectionServiceImpl::mapToUno(
     const Any & rObj, typelib_InterfaceTypeDescription * pTo )
     throw(::com::sun::star::uno::RuntimeException)

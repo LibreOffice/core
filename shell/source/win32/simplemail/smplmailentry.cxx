@@ -22,9 +22,9 @@
 #include <osl/diagnose.h>
 #include "smplmailsuppl.hxx"
 
-//-----------------------------------------------------------------------
+
 // namespace directives
-//-----------------------------------------------------------------------
+
 
 using namespace ::rtl                       ;
 using namespace ::com::sun::star::uno       ;
@@ -37,7 +37,7 @@ using com::sun::star::system::XSimpleMailClientSupplier;
 #define COMP_SERVICE_NAME  "com.sun.star.system.SimpleSystemMail"
 #define COMP_IMPL_NAME     "com.sun.star.system.SimpleSystemMail"
 
-//-----------------------------------------------------------------------
+
 
 namespace
 {
@@ -49,10 +49,10 @@ namespace
 
 extern "C"
 {
-//----------------------------------------------------------------------
+
 // component_getFactory
 // returns a factory to create XFilePicker-Services
-//----------------------------------------------------------------------
+
 
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL smplmail_component_getFactory( const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* /*pRegistryKey*/ )
 {

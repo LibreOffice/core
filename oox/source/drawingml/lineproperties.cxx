@@ -168,7 +168,7 @@ sal_Int32 lclGetArrowSize( sal_Int32 nToken )
     return OOX_ARROWSIZE_MEDIUM;
 }
 
-// ----------------------------------------------------------------------------
+
 
 void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
         const LineArrowProperties& rArrowProps, sal_Int32 nLineWidth, bool bLineEnd )

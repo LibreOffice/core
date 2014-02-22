@@ -119,11 +119,11 @@ private:
     void * _m_data;
     char _m_d_name[1];
 };
-//__________________________________________________________________________________________________
+
 __type_info::~__type_info() throw ()
 {
 }
-//__________________________________________________________________________________________________
+
 type_info * RTTInfos::getRTTI( OUString const & rUNOname ) throw ()
 {
     // a must be
@@ -152,11 +152,11 @@ type_info * RTTInfos::getRTTI( OUString const & rUNOname ) throw ()
         return (type_info *)iFind->second;
     }
 }
-//__________________________________________________________________________________________________
+
 RTTInfos::RTTInfos() throw ()
 {
 }
-//__________________________________________________________________________________________________
+
 RTTInfos::~RTTInfos() throw ()
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -212,7 +212,7 @@ inline void ObjectFunction::operator delete ( void * pMem )
     rtl_freeMemory( pMem );
 }
 
-//__________________________________________________________________________________________________
+
 ObjectFunction::ObjectFunction( typelib_TypeDescription * pTypeDescr, void * fpFunc ) throw ()
     : _pTypeDescr( pTypeDescr )
 {
@@ -230,7 +230,7 @@ ObjectFunction::ObjectFunction( typelib_TypeDescription * pTypeDescr, void * fpF
     *pCode++ = 0xe9;
     *(sal_Int32 *)pCode = ((unsigned char *)fpFunc) - pCode - sizeof(sal_Int32);
 }
-//__________________________________________________________________________________________________
+
 ObjectFunction::~ObjectFunction() throw ()
 {
     ::typelib_typedescription_release( _pTypeDescr );
@@ -312,7 +312,7 @@ struct RaiseInfo
     RaiseInfo( typelib_TypeDescription * pTypeDescr ) throw ();
     ~RaiseInfo() throw ();
 };
-//__________________________________________________________________________________________________
+
 RaiseInfo::RaiseInfo( typelib_TypeDescription * pTypeDescr ) throw ()
     : _n0( 0 )
     , _pDtor( new ObjectFunction( pTypeDescr, destruct ) )
@@ -346,7 +346,7 @@ RaiseInfo::RaiseInfo( typelib_TypeDescription * pTypeDescr ) throw ()
         ppTypes[nPos++] = new ExceptionType( (typelib_TypeDescription *)pCompTypeDescr );
     }
 }
-//__________________________________________________________________________________________________
+
 RaiseInfo::~RaiseInfo() throw ()
 {
     ExceptionType ** ppTypes = (ExceptionType **)((sal_Int32 *)_types + 1);
@@ -371,11 +371,11 @@ public:
     ExceptionInfos() throw ();
     ~ExceptionInfos() throw ();
 };
-//__________________________________________________________________________________________________
+
 ExceptionInfos::ExceptionInfos() throw ()
 {
 }
-//__________________________________________________________________________________________________
+
 ExceptionInfos::~ExceptionInfos() throw ()
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -389,7 +389,7 @@ ExceptionInfos::~ExceptionInfos() throw ()
         delete (RaiseInfo *)iPos->second;
     }
 }
-//__________________________________________________________________________________________________
+
 void * ExceptionInfos::getRaiseInfo( typelib_TypeDescription * pTypeDescr ) throw ()
 {
     static ExceptionInfos * s_pInfos = 0;

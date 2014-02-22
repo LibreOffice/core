@@ -78,7 +78,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 
-//-------------------------------------------------------------------------
+
 
 class SfxEventAsyncer_Impl : public SfxListener
 {
@@ -93,7 +93,7 @@ public:
     DECL_LINK( TimerHdl, Timer*);
 };
 
-// -----------------------------------------------------------------------
+
 
 void SfxEventAsyncer_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
@@ -105,7 +105,7 @@ void SfxEventAsyncer_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxEventAsyncer_Impl::SfxEventAsyncer_Impl( const SfxEventHint& rHint )
  : aHint( rHint )
@@ -118,14 +118,14 @@ SfxEventAsyncer_Impl::SfxEventAsyncer_Impl( const SfxEventHint& rHint )
     pTimer->Start();
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxEventAsyncer_Impl::~SfxEventAsyncer_Impl()
 {
     delete pTimer;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pAsyncTimer)
 {
@@ -148,7 +148,7 @@ IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pAsyncTimer)
 }
 
 
-//--------------------------------------------------------------------
+
 
 sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
 {
@@ -771,7 +771,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     batch->commit();
 }
 
-//--------------------------------------------------------------------
+
 void SfxApplication::SetOptions(const SfxItemSet &rSet)
 {
     SvtPathOptions aPathOptions;
@@ -873,7 +873,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
     Broadcast( SfxItemSetHint( rSet ) );
 }
 
-//--------------------------------------------------------------------
+
 void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, bool bSynchron )
 {
     SfxObjectShell *pDoc = rEventHint.GetObjShell();

@@ -27,29 +27,23 @@ namespace basctl
 
 TYPEINIT1( DlgEdPage, SdrPage );
 
-//----------------------------------------------------------------------------
-
 DlgEdPage::DlgEdPage(DlgEdModel& rModel, bool bMasterPage)
     : SdrPage(rModel, bMasterPage)
     , pDlgEdForm(0)
 {
 }
 
-//----------------------------------------------------------------------------
-
 DlgEdPage::~DlgEdPage()
 {
     Clear();
 }
 
-//----------------------------------------------------------------------------
 
 SdrPage* DlgEdPage::Clone() const
 {
     return new DlgEdPage( *this );
 }
 
-//----------------------------------------------------------------------------
 
 SdrObject* DlgEdPage::SetObjectOrdNum(sal_uLong nOldObjNum, sal_uLong nNewObjNum)
 {
@@ -61,8 +55,6 @@ SdrObject* DlgEdPage::SetObjectOrdNum(sal_uLong nOldObjNum, sal_uLong nNewObjNum
 
     return pObj;
 }
-
-//----------------------------------------------------------------------------
 
 } // namespace basctl
 

@@ -52,7 +52,7 @@ private:
     void                        setDateAcceptancePatternsConfig();
 };
 
-// -----------------------------------------------------------------------
+
 
 SvtSysLocale_Impl::SvtSysLocale_Impl() : pCharClass(NULL)
 {
@@ -194,7 +194,7 @@ const LanguageTag& SvtSysLocale::GetUILanguageTag() const
     return pImpl->aSysLocaleOptions.GetRealUILanguageTag();
 }
 
-//------------------------------------------------------------------------
+
 
 // static
 rtl_TextEncoding SvtSysLocale::GetBestMimeEncoding()

@@ -27,24 +27,24 @@ using namespace connectivity::file;
 //==================================================================
 // OIndexIterator
 //==================================================================
-//------------------------------------------------------------------
+
 OIndexIterator::~OIndexIterator()
 {
     m_pIndex->release();
 }
 
-//------------------------------------------------------------------
+
 sal_uIntPtr OIndexIterator::First()
 {
     return Find(sal_True);
 }
 
-//------------------------------------------------------------------
+
 sal_uIntPtr OIndexIterator::Next()
 {
     return Find(sal_False);
 }
-//------------------------------------------------------------------
+
 sal_uIntPtr OIndexIterator::Find(sal_Bool bFirst)
 {
     sal_uIntPtr nRes = NODE_NOTFOUND;
@@ -82,7 +82,7 @@ sal_uIntPtr OIndexIterator::Find(sal_Bool bFirst)
     return nRes;
 }
 
-//------------------------------------------------------------------
+
 ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
 {
     // searches a given key
@@ -128,7 +128,7 @@ ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
     return pFoundKey;
 }
 
-//------------------------------------------------------------------
+
 sal_uIntPtr OIndexIterator::GetCompare(sal_Bool bFirst)
 {
     ONDXKey* pKey = NULL;
@@ -198,7 +198,7 @@ sal_uIntPtr OIndexIterator::GetCompare(sal_Bool bFirst)
     return pKey ? pKey->GetRecord() : NODE_NOTFOUND;
 }
 
-//------------------------------------------------------------------
+
 sal_uIntPtr OIndexIterator::GetLike(sal_Bool bFirst)
 {
     if (bFirst)
@@ -218,7 +218,7 @@ sal_uIntPtr OIndexIterator::GetLike(sal_Bool bFirst)
     return pKey ? pKey->GetRecord() : NODE_NOTFOUND;
 }
 
-//------------------------------------------------------------------
+
 sal_uIntPtr OIndexIterator::GetNull(sal_Bool bFirst)
 {
     if (bFirst)
@@ -240,7 +240,7 @@ sal_uIntPtr OIndexIterator::GetNull(sal_Bool bFirst)
     return pKey ? pKey->GetRecord() : NODE_NOTFOUND;
 }
 
-//------------------------------------------------------------------
+
 sal_uIntPtr OIndexIterator::GetNotNull(sal_Bool bFirst)
 {
     ONDXKey* pKey;
@@ -259,7 +259,7 @@ sal_uIntPtr OIndexIterator::GetNotNull(sal_Bool bFirst)
     return pKey ? pKey->GetRecord() : NODE_NOTFOUND;
 }
 
-//------------------------------------------------------------------
+
 ONDXKey* OIndexIterator::GetNextKey()
 {
     if (m_aCurLeaf.Is() && ((++m_nCurNode) >= m_aCurLeaf->Count()))

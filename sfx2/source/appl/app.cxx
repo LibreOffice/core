@@ -277,7 +277,7 @@ const OUString& SfxApplication::GetLastSaveDirectory() const
     return GetLastDir_Impl();
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxApplication::SetLastDir_Impl
 (
@@ -297,21 +297,21 @@ void SfxApplication::SetLastDir_Impl
     pAppData_Impl->aLastDir = rNewDir;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxApplication::ResetLastDir()
 {
     pAppData_Impl->aLastDir = "";
 }
 
-//--------------------------------------------------------------------
+
 
 SfxDispatcher* SfxApplication::GetDispatcher_Impl()
 {
     return pAppData_Impl->pViewFrame? pAppData_Impl->pViewFrame->GetDispatcher(): pAppData_Impl->pAppDispat;
 }
 
-//--------------------------------------------------------------------
+
 void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
 {
     if ( pFrame != pAppData_Impl->pViewFrame )
@@ -377,21 +377,21 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
         pFrame->GetViewShell()->SetCurrentDocument();
 }
 
-//---------------------------------------------------------------------
+
 
 ResMgr* SfxApplication::CreateResManager( const char *pPrefix )
 {
     return ResMgr::CreateResMgr(pPrefix);
 }
 
-//--------------------------------------------------------------------
+
 
 ResMgr* SfxApplication::GetSfxResManager()
 {
     return SfxResId::GetResMgr();
 }
 
-//------------------------------------------------------------------------
+
 
 void SfxApplication::SetProgress_Impl
 (
@@ -413,21 +413,21 @@ void SfxApplication::SetProgress_Impl
     pAppData_Impl->pProgress = pProgress;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SfxApplication::GetFreeIndex()
 {
     return pAppData_Impl->aIndexBitSet.GetFreeIndex()+1;
 }
 
-//------------------------------------------------------------------------
+
 
 void SfxApplication::ReleaseIndex(sal_uInt16 i)
 {
     pAppData_Impl->aIndexBitSet.ReleaseIndex(i-1);
 }
 
-//--------------------------------------------------------------------
+
 
 Window* SfxApplication::GetTopWindow() const
 {

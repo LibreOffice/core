@@ -324,7 +324,7 @@ void lcl_SetFrame( ScDocument* pDoc, SCTAB nTab,
     pDoc->ApplyFrameAreaTab( ScRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab ), &aBox, &aBoxInfo );
 }
 
-// -----------------------------------------------------------------------
+
 
 void lcl_FillNumberFormats( sal_uInt32*& rFormats, long& rCount,
                             const uno::Reference<sheet::XDataPilotMemberResults>& xLevRes,

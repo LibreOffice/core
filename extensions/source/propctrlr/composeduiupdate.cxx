@@ -187,7 +187,7 @@ namespace pcr
         };
     };
 
-    //----------------------------------------------------------------
+
     CachedInspectorUI::CachedInspectorUI( ComposedPropertyUIUpdate& _rMaster, FNotifySingleUIChange _pUIChangeNotification )
         :m_refCount( 0 )
         ,m_bDisposed( false )
@@ -196,12 +196,12 @@ namespace pcr
     {
     }
 
-    //----------------------------------------------------------------
+
     CachedInspectorUI::~CachedInspectorUI()
     {
     }
 
-    //----------------------------------------------------------------
+
     void CachedInspectorUI::dispose()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -218,13 +218,13 @@ namespace pcr
         clearContainer( aDisabledElements );
     }
 
-    //----------------------------------------------------------------
+
     void SAL_CALL CachedInspectorUI::acquire() throw()
     {
         osl_atomic_increment( &m_refCount );
     }
 
-    //----------------------------------------------------------------
+
     void SAL_CALL CachedInspectorUI::release() throw()
     {
         if ( 0 == osl_atomic_decrement( &m_refCount ) )
@@ -232,14 +232,14 @@ namespace pcr
     }
 
 
-    //----------------------------------------------------------------
+
     void CachedInspectorUI::checkDisposed() const
     {
         if ( isDisposed() )
             throw DisposedException();
     }
 
-    //----------------------------------------------------------------
+
     namespace
     {
         void lcl_markStringKeyPositiveOrNegative( const OUString& _rKeyName, StringBag& _rPositives, StringBag& _rNegatives, sal_Bool _bMarkPositive )
@@ -255,7 +255,7 @@ namespace pcr
         }
     }
 
-    //----------------------------------------------------------------
+
     void CachedInspectorUI::enablePropertyUI( const OUString& _rPropertyName, sal_Bool _bEnable ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -266,7 +266,7 @@ namespace pcr
         impl_notifySingleUIChange();
     }
 
-    //----------------------------------------------------------------
+
     void CachedInspectorUI::impl_markElementEnabledOrDisabled( const OUString& _rPropertyName, sal_Int16 _nElementIdOrZero, sal_Bool _bEnable )
     {
         if ( _nElementIdOrZero == 0 )
@@ -280,13 +280,13 @@ namespace pcr
         );
     }
 
-    //----------------------------------------------------------------
+
     void CachedInspectorUI::impl_notifySingleUIChange() const
     {
         (m_rMaster.*m_pUIChangeNotification)();
     }
 
-    //----------------------------------------------------------------
+
     void CachedInspectorUI::enablePropertyUIElements( const OUString& _rPropertyName, sal_Int16 _nElements, sal_Bool _bEnable ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -300,7 +300,7 @@ namespace pcr
         impl_notifySingleUIChange();
     }
 
-    //----------------------------------------------------------------
+
     void CachedInspectorUI::rebuildPropertyUI( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -312,7 +312,7 @@ namespace pcr
         impl_notifySingleUIChange();
     }
 
-    //----------------------------------------------------------------
+
     void CachedInspectorUI::showPropertyUI( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -326,7 +326,7 @@ namespace pcr
         impl_notifySingleUIChange();
     }
 
-    //----------------------------------------------------------------
+
     void CachedInspectorUI::hidePropertyUI( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -337,7 +337,7 @@ namespace pcr
         impl_notifySingleUIChange();
     }
 
-    //----------------------------------------------------------------
+
     void CachedInspectorUI::showCategory( const OUString& _rCategory, sal_Bool _bShow ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -346,7 +346,7 @@ namespace pcr
         impl_notifySingleUIChange();
     }
 
-    //----------------------------------------------------------------
+
     Reference< XPropertyControl > SAL_CALL CachedInspectorUI::getPropertyControl( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -356,7 +356,7 @@ namespace pcr
         return m_rMaster.getDelegatorUI()->getPropertyControl( _rPropertyName );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL CachedInspectorUI::registerControlObserver( const Reference< XPropertyControlObserver >& _Observer ) throw (RuntimeException)
     {
         OSL_FAIL( "CachedInspectorUI::registerControlObserver: not expected to be called!" );
@@ -365,7 +365,7 @@ namespace pcr
         m_rMaster.getDelegatorUI()->registerControlObserver( _Observer );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL CachedInspectorUI::revokeControlObserver( const Reference< XPropertyControlObserver >& _Observer ) throw (RuntimeException)
     {
         OSL_FAIL( "CachedInspectorUI::revokeControlObserver: not expected to be called!" );
@@ -374,7 +374,7 @@ namespace pcr
         m_rMaster.getDelegatorUI()->revokeControlObserver( _Observer );
     }
 
-    //----------------------------------------------------------------
+
     void SAL_CALL CachedInspectorUI::setHelpSectionText( const OUString& _HelpText ) throw (NoSupportException, RuntimeException)
     {
         m_rMaster.getDelegatorUI()->setHelpSectionText( _HelpText );
@@ -395,7 +395,7 @@ namespace pcr
     //====================================================================
     //= ComposedPropertyUIUpdate
     //====================================================================
-    //----------------------------------------------------------------
+
     ComposedPropertyUIUpdate::ComposedPropertyUIUpdate( const Reference< XObjectInspectorUI >& _rxDelegatorUI,
         IPropertyExistenceCheck* _pPropertyCheck )
         :m_pCollectedUIs( new MapHandlerToUI )
@@ -407,12 +407,12 @@ namespace pcr
             throw NullPointerException();
     }
 
-    //----------------------------------------------------------------
+
     ComposedPropertyUIUpdate::~ComposedPropertyUIUpdate( )
     {
     }
 
-    //----------------------------------------------------------------
+
     Reference< XObjectInspectorUI > ComposedPropertyUIUpdate::getUIForPropertyHandler( const Reference< XPropertyHandler >& _rxHandler )
     {
         impl_checkDisposed();
@@ -423,7 +423,7 @@ namespace pcr
         return rUI.get();
     }
 
-    //----------------------------------------------------------------
+
     namespace
     {
         //============================================================
@@ -681,7 +681,7 @@ namespace pcr
         }
     }
 
-    //----------------------------------------------------------------
+
     void ComposedPropertyUIUpdate::impl_fireEnablePropertyUI_throw()
     {
         lcl_fireUIStateFlag(
@@ -692,7 +692,7 @@ namespace pcr
         );
     }
 
-    //----------------------------------------------------------------
+
     void ComposedPropertyUIUpdate::impl_fireRebuildPropertyUI_throw()
     {
         // collect all properties for which a rebuild request has been made
@@ -706,7 +706,7 @@ namespace pcr
         StringBagClearer::clearAll( m_pCollectedUIs->aHandlers, &CachedInspectorUI::getRebuiltProperties );
     }
 
-    //----------------------------------------------------------------
+
     void ComposedPropertyUIUpdate::impl_fireShowHidePropertyUI_throw()
     {
         // all properties which have been shown by at least one handler
@@ -726,7 +726,7 @@ namespace pcr
         PropertyUIOperator::forEach( aAllShown, m_xDelegatorUI, &XObjectInspectorUI::showPropertyUI );
     }
 
-    //----------------------------------------------------------------
+
     void ComposedPropertyUIUpdate::impl_fireShowCategory_throw()
     {
         lcl_fireUIStateFlag(
@@ -737,7 +737,7 @@ namespace pcr
         );
     }
 
-    //----------------------------------------------------------------
+
     void ComposedPropertyUIUpdate::impl_fireEnablePropertyUIElements_throw()
     {
         lcl_fireUIStateFlag(
@@ -762,7 +762,7 @@ namespace pcr
         );
     }
 
-    //--------------------------------------------------------------------
+
     void ComposedPropertyUIUpdate::impl_fireAll_throw()
     {
         OSL_PRECOND( !impl_isDisposed(), "ComposedPropertyUIUpdate::impl_fireAll_throw: already disposed, this will crash!" );
@@ -774,14 +774,14 @@ namespace pcr
         impl_fireEnablePropertyUIElements_throw();
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ComposedPropertyUIUpdate::suspendAutoFire()
     {
         impl_checkDisposed();
         osl_atomic_increment( &m_nSuspendCounter );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL ComposedPropertyUIUpdate::resumeAutoFire()
     {
         impl_checkDisposed();
@@ -789,28 +789,28 @@ namespace pcr
             impl_fireAll_throw();
     }
 
-    //----------------------------------------------------------------
+
     void ComposedPropertyUIUpdate::impl_checkDisposed() const
     {
         if ( impl_isDisposed() )
             throw DisposedException();
     }
 
-    //----------------------------------------------------------------
+
     void ComposedPropertyUIUpdate::callback_inspectorUIChanged_throw()
     {
         if ( 0 == m_nSuspendCounter )
             impl_fireAll_throw();
     }
 
-    //----------------------------------------------------------------
+
     Reference< XObjectInspectorUI > ComposedPropertyUIUpdate::getDelegatorUI() const
     {
         impl_checkDisposed();
         return m_xDelegatorUI;
     }
 
-    //----------------------------------------------------------------
+
     void SAL_CALL ComposedPropertyUIUpdate::dispose()
     {
         if ( impl_isDisposed() )
@@ -829,7 +829,7 @@ namespace pcr
         m_xDelegatorUI.set( NULL );
     }
 
-    //----------------------------------------------------------------
+
     bool ComposedPropertyUIUpdate::shouldContinuePropertyHandling( const OUString& _rName ) const
     {
         if ( !m_pPropertyCheck )

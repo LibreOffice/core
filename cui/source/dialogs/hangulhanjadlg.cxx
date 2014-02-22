@@ -53,7 +53,7 @@ namespace svx
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
 
-    //-------------------------------------------------------------------------
+
     namespace
     {
         class FontSwitch
@@ -103,7 +103,7 @@ namespace svx
             ::vcl::ControlLayoutData* _pLayoutData = NULL );
     };
 
-    //-------------------------------------------------------------------------
+
     PseudoRubyText::PseudoRubyText( const OUString& _rPrimary, const OUString& _rSecondary, const RubyPosition _ePosition )
         :m_sPrimaryText( _rPrimary )
         ,m_sSecondaryText( _rSecondary )
@@ -111,7 +111,7 @@ namespace svx
     {
     }
 
-    //-------------------------------------------------------------------------
+
     void PseudoRubyText::Paint( OutputDevice& _rDevice, const Rectangle& _rRect, sal_uInt16 _nTextStyle,
         Rectangle* _pPrimaryLocation, Rectangle* _pSecondaryLocation, ::vcl::ControlLayoutData* _pLayoutData )
     {
@@ -220,7 +220,7 @@ namespace svx
         virtual void    Paint( const Rectangle& _rRect );
     };
 
-    //-------------------------------------------------------------------------
+
     RubyRadioButton::RubyRadioButton( Window* _pParent, const ResId& _rId,
         const OUString& _rSecondary, const PseudoRubyText::RubyPosition _ePosition )
         :RadioButton( _pParent, _rId )
@@ -228,7 +228,7 @@ namespace svx
     {
     }
 
-    //-------------------------------------------------------------------------
+
     void RubyRadioButton::Paint( const Rectangle& )
     {
         HideFocus();
@@ -300,7 +300,7 @@ namespace svx
     //=========================================================================
     //= SuggestionSet
     //=========================================================================
-    //-------------------------------------------------------------------------
+
 
     SuggestionSet::SuggestionSet( Window* pParent )
                     : ValueSet( pParent, pParent->GetStyle() | WB_BORDER )
@@ -334,7 +334,7 @@ namespace svx
     //=========================================================================
     //= SuggestionDisplay
     //=========================================================================
-    //-------------------------------------------------------------------------
+
 
     SuggestionDisplay::SuggestionDisplay( Window* pParent, const ResId& rResId )
         : Control( pParent, rResId )
@@ -498,7 +498,7 @@ namespace svx
     //=========================================================================
     //= HangulHanjaConversionDialog
     //=========================================================================
-    //-------------------------------------------------------------------------
+
     HangulHanjaConversionDialog::HangulHanjaConversionDialog( Window* _pParent, HHC::ConversionDirection _ePrimaryDirection )
         :ModalDialog( _pParent, CUI_RES( RID_SVX_MDLG_HANGULHANJA ) )
         ,m_pPlayground( new SvxCommonLinguisticControl( this ) )
@@ -607,12 +607,12 @@ namespace svx
         m_aSuggestions.SetHelpIds();
     }
 
-    //-------------------------------------------------------------------------
+
     HangulHanjaConversionDialog::~HangulHanjaConversionDialog( )
     {
     }
 
-    //-------------------------------------------------------------------------
+
     void HangulHanjaConversionDialog::FillSuggestions( const ::com::sun::star::uno::Sequence< OUString >& _rSuggestions )
     {
         m_aSuggestions.Clear();
@@ -634,43 +634,43 @@ namespace svx
         OnSuggestionModified( &m_pPlayground->GetWordInputControl() );
     }
 
-    //-------------------------------------------------------------------------
+
     void HangulHanjaConversionDialog::SetOptionsChangedHdl( const Link& _rHdl )
     {
         m_aOptionsChangedLink = _rHdl;
     }
 
-    //-------------------------------------------------------------------------
+
     void HangulHanjaConversionDialog::SetIgnoreHdl( const Link& _rHdl )
     {
         m_pPlayground->SetButtonHandler( SvxCommonLinguisticControl::eIgnore, _rHdl );
     }
 
-    //-------------------------------------------------------------------------
+
     void HangulHanjaConversionDialog::SetIgnoreAllHdl( const Link& _rHdl )
     {
         m_pPlayground->SetButtonHandler( SvxCommonLinguisticControl::eIgnoreAll, _rHdl );
     }
 
-    //-------------------------------------------------------------------------
+
     void HangulHanjaConversionDialog::SetChangeHdl( const Link& _rHdl )
     {
         m_pPlayground->SetButtonHandler( SvxCommonLinguisticControl::eChange, _rHdl );
     }
 
-    //-------------------------------------------------------------------------
+
     void HangulHanjaConversionDialog::SetChangeAllHdl( const Link& _rHdl )
     {
         m_pPlayground->SetButtonHandler( SvxCommonLinguisticControl::eChangeAll, _rHdl );
     }
 
-    //-------------------------------------------------------------------------
+
     void HangulHanjaConversionDialog::SetFindHdl( const Link& _rHdl )
     {
         m_aFind.SetClickHdl( _rHdl );
     }
 
-    //-------------------------------------------------------------------------
+
     void HangulHanjaConversionDialog::SetConversionFormatChangedHdl( const Link& _rHdl )
     {
         m_aSimpleConversion.SetClickHdl( _rHdl );
@@ -682,13 +682,13 @@ namespace svx
         m_pHangulBelow->SetClickHdl( _rHdl );
     }
 
-    //-------------------------------------------------------------------------
+
     void HangulHanjaConversionDialog::SetClickByCharacterHdl( const Link& _rHdl )
     {
         m_aClickByCharacterLink = _rHdl;
     }
 
-    //-------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(HangulHanjaConversionDialog, OnSuggestionSelected)
     {
         m_pPlayground->GetWordInputControl().SetText( m_aSuggestions.GetSelectEntry() );
@@ -696,7 +696,7 @@ namespace svx
         return 0L;
     }
 
-    //-------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(HangulHanjaConversionDialog, OnSuggestionModified)
     {
         m_aFind.Enable( m_pPlayground->GetWordInputControl().GetSavedValue() != m_pPlayground->GetWordInputControl().GetText() );
@@ -708,7 +708,7 @@ namespace svx
         return 0L;
     }
 
-    //-------------------------------------------------------------------------
+
     IMPL_LINK( HangulHanjaConversionDialog, ClickByCharacterHdl, CheckBox *, pBox )
     {
         m_aClickByCharacterLink.Call(pBox);
@@ -719,7 +719,7 @@ namespace svx
         return 0L;
     }
 
-    //-------------------------------------------------------------------------
+
     IMPL_LINK( HangulHanjaConversionDialog, OnConversionDirectionClicked, CheckBox *, pBox )
     {
         CheckBox *pOtherBox = 0;
@@ -738,7 +738,7 @@ namespace svx
         return 0L;
     }
 
-    //-------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(HangulHanjaConversionDialog, OnClose)
     {
         Close();
@@ -753,19 +753,19 @@ namespace svx
         return 0L;
     }
 
-    //-------------------------------------------------------------------------
+
     OUString HangulHanjaConversionDialog::GetCurrentString( ) const
     {
         return m_pPlayground->GetCurrentText( );
     }
 
-    //-------------------------------------------------------------------------
+
     void HangulHanjaConversionDialog::FocusSuggestion( )
     {
         m_pPlayground->GetWordInputControl().GrabFocus();
     }
 
-    //-------------------------------------------------------------------------
+
     namespace
     {
         void lcl_modifyWindowStyle( Window* _pWin, WinBits _nSet, WinBits _nReset )
@@ -776,7 +776,7 @@ namespace svx
         }
     }
 
-    //-------------------------------------------------------------------------
+
     void HangulHanjaConversionDialog::SetCurrentString( const OUString& _rNewString,
         const Sequence< OUString >& _rSuggestions, bool _bOriginatesFromDocument )
     {
@@ -821,20 +821,20 @@ namespace svx
         }
     }
 
-    //-------------------------------------------------------------------------
+
     OUString HangulHanjaConversionDialog::GetCurrentSuggestion( ) const
     {
         return m_pPlayground->GetWordInputControl().GetText();
     }
 
-    //-------------------------------------------------------------------------
+
     void HangulHanjaConversionDialog::SetByCharacter( bool _bByCharacter )
     {
         m_aReplaceByChar.Check( _bByCharacter );
         m_aSuggestions.DisplayListBox( !_bByCharacter );
     }
 
-    //-------------------------------------------------------------------------
+
     void HangulHanjaConversionDialog::SetConversionDirectionState(
             bool _bTryBothDirections,
             HHC::ConversionDirection _ePrimaryConversionDirection )
@@ -854,13 +854,13 @@ namespace svx
         }
     }
 
-    //-------------------------------------------------------------------------
+
     bool HangulHanjaConversionDialog::GetUseBothDirections( ) const
     {
         return !m_aHangulOnly.IsChecked() && !m_aHanjaOnly.IsChecked();
     }
 
-    //-------------------------------------------------------------------------
+
     HHC::ConversionDirection HangulHanjaConversionDialog::GetDirection(
             HHC::ConversionDirection eDefaultDirection ) const
     {
@@ -872,7 +872,7 @@ namespace svx
         return eDirection;
     }
 
-    //-------------------------------------------------------------------------
+
     void HangulHanjaConversionDialog::SetConversionFormat( HHC::ConversionFormat _eType )
     {
         switch ( _eType )
@@ -889,7 +889,7 @@ namespace svx
         }
     }
 
-    //-------------------------------------------------------------------------
+
     HHC::ConversionFormat HangulHanjaConversionDialog::GetConversionFormat( ) const
     {
         if ( m_aSimpleConversion.IsChecked() )
@@ -911,7 +911,7 @@ namespace svx
         return HHC::eSimpleConversion;
     }
 
-    //-------------------------------------------------------------------------
+
     void HangulHanjaConversionDialog::EnableRubySupport( bool bVal )
     {
         m_pHanjaAbove->Enable( bVal );
@@ -924,7 +924,7 @@ namespace svx
     //=========================================================================
     //= HangulHanjaOptionsDialog
     //=========================================================================
-    //-------------------------------------------------------------------------
+
 
     void HangulHanjaOptionsDialog::Init( void )
     {
@@ -1174,7 +1174,7 @@ namespace svx
     //=========================================================================
     //= HangulHanjaNewDictDialog
     //=========================================================================
-    //-------------------------------------------------------------------------
+
 
     IMPL_LINK_NOARG(HangulHanjaNewDictDialog, OKHdl)
     {
@@ -1219,7 +1219,7 @@ namespace svx
     //=========================================================================
     //= HangulHanjaEditDictDialog
     //=========================================================================
-    //-------------------------------------------------------------------------
+
 
     class SuggestionList
     {

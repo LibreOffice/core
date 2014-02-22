@@ -21,9 +21,9 @@
 #include <tools/vcompat.hxx>
 #include <svtools/grfmgr.hxx>
 
-// ---------------
+
 // - GraphicAttr -
-// ---------------
+
 
 GraphicAttr::GraphicAttr() :
     mfGamma         ( 1.0 ),
@@ -44,13 +44,13 @@ GraphicAttr::GraphicAttr() :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 GraphicAttr::~GraphicAttr()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool GraphicAttr::operator==( const GraphicAttr& rAttr ) const
 {
@@ -71,7 +71,7 @@ sal_Bool GraphicAttr::operator==( const GraphicAttr& rAttr ) const
             ( meDrawMode == rAttr.meDrawMode ) );
 }
 
-// ------------------------------------------------------------------------
+
 
 SvStream& ReadGraphicAttr( SvStream& rIStm, GraphicAttr& rAttr )
 {
@@ -98,7 +98,7 @@ SvStream& ReadGraphicAttr( SvStream& rIStm, GraphicAttr& rAttr )
     return rIStm;
 }
 
-// ------------------------------------------------------------------------
+
 
 SvStream& WriteGraphicAttr( SvStream& rOStm, const GraphicAttr& rAttr )
 {

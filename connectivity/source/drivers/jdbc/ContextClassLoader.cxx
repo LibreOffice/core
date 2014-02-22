@@ -33,7 +33,7 @@ namespace connectivity { namespace jdbc
     //====================================================================
     //= ContextClassLoaderScope
     //====================================================================
-    //--------------------------------------------------------------------
+
     ContextClassLoaderScope::ContextClassLoaderScope( JNIEnv& environment, const GlobalRef< jobject >& newClassLoader,
         const ::comphelper::ResourceBasedEventLogger& _rLoggerForErrors, const Reference< XInterface >& _rxErrorContext )
         :m_environment( environment )
@@ -95,7 +95,7 @@ namespace connectivity { namespace jdbc
         }
     }
 
-    //--------------------------------------------------------------------
+
     void ContextClassLoaderScope::pop( bool clearExceptions )
     {
         if ( isActive() )

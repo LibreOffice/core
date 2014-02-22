@@ -20,8 +20,8 @@ namespace util {
 
 rtl_TextEncoding getBestTextEncodingFromLocale(const ::com::sun::star::lang::Locale &rLocale)
 {
-    //Obviously not comprehensive, feel free to expand these, they're for ultimate fallbacks
-    //in last-ditch broken-file-format cases to guess the right 8bit encodings
+    // Obviously not comprehensive, feel free to expand these, they're for ultimate fallbacks
+    // in last-ditch broken-file-format cases to guess the right 8bit encodings
     const OUString &rLanguage = rLocale.Language;
     if (rLanguage == "cs" || rLanguage == "hu" || rLanguage == "pl")
         return RTL_TEXTENCODING_MS_1250;
@@ -358,7 +358,7 @@ sal_Int32 PaperSizeConv::getMSPaperSizeIndex( const com::sun::star::awt::Size& r
     {
         sal_Int32 nCurDeltaHeight = std::abs( pItem->mnHeight - rSize.Height );
         sal_Int32 nCurDeltaWidth = std::abs( pItem->mnWidth - rSize.Width );
-        if ( pItem == spPaperSizeTable ) // initialise delta with first item
+        if ( pItem == spPaperSizeTable ) // initialize delta with first item
         {
             nDeltaWidth = nCurDeltaWidth;
             nDeltaHeight = nCurDeltaHeight;
@@ -412,10 +412,9 @@ WW8ReadFieldParams::WW8ReadFieldParams( const OUString& _rData )
     , nNext( 0 )
     , nSavPtr( 0 )
 {
+
     /*
-        erstmal nach einer oeffnenden Klammer oder einer Leerstelle oder einem
-        Anfuehrungszeichen oder einem Backslash suchen, damit der Feldbefehl
-        (also INCLUDEPICTURE bzw EINFUeGENGRAFIK bzw ...) ueberlesen wird
+        First look for an opening bracket or a space or a quatation mark or a backslash, so that the field (i.e. INCLUDEPICTURE or EINFUEGENGRAFIK or...) gets oread over
     */
     const sal_Int32 nLen = aData.getLength();
 
@@ -461,7 +460,7 @@ bool WW8ReadFieldParams::GoToTokenParam()
     return false;
 }
 
-// ret: -2: NOT a '\' parameter but normal Text
+// ret: -2: NOT a '\' parameter but normal text
 sal_Int32 WW8ReadFieldParams::SkipToNextToken()
 {
     if ( nNext<0 || nNext>=aData.getLength() )
@@ -476,7 +475,7 @@ sal_Int32 WW8ReadFieldParams::SkipToNextToken()
     if (nFnd+1<aData.getLength() && aData[nFnd+1]!='\\' && aData[nFnd]=='\\')
     {
         const sal_Int32 nRet = aData[++nFnd];
-        nNext = ++nFnd;             // und dahinter setzen
+        nNext = ++nFnd;             // and set after
         return nRet;
     }
 
@@ -487,22 +486,22 @@ sal_Int32 WW8ReadFieldParams::SkipToNextToken()
     return -2;
 }
 
-// FindNextPara sucht naechsten Backslash-Parameter oder naechste Zeichenkette
-// bis zum Blank oder naechsten "\" oder zum schliessenden Anfuehrungszeichen
-// oder zum String-Ende von pStr.
+// FindNextPara searches the next backslash parameter or the next string
+// until the next blank or "\" or closing quatation mark
+// or the end of the string of pStr.
 //
-// Ausgabe ppNext (falls ppNext != 0) Suchbeginn fuer naechsten Parameter bzw. 0
+// Output ppNext (if ppNext != 0) Suchbeginn fuer naechsten Parameter bzw. 0
 //
-// Returnwert: 0 falls String-Ende erreicht,
+// Return value: 0 if end of string reached,
 //             ansonsten Anfang des Paramters bzw. der Zeichenkette
 //
 sal_Int32 WW8ReadFieldParams::FindNextStringPiece(const sal_Int32 nStart)
 {
     const sal_Int32 nLen = aData.getLength();
-    sal_Int32  n = nStart<0  ? nFnd : nStart;  // Anfang
-    sal_Int32 n2;          // Ende
+    sal_Int32  n = nStart<0  ? nFnd : nStart;  // start
+    sal_Int32 n2;          // end
 
-    nNext = -1;        // Default fuer nicht gefunden
+    nNext = -1;        // if not found -> Default
 
     while ( n<nLen && aData[n]==' ' )
         ++n;
@@ -519,36 +518,36 @@ sal_Int32 WW8ReadFieldParams::FindNextStringPiece(const sal_Int32 nStart)
             return -1;
     }
 
-    // Anfuehrungszeichen vor Para?
+    // quotation marks before paragraph?
     if ( aData[n]=='"' || aData[n]==0x201c || aData[n]==132 || aData[n]==0x14 )
     {
-        n++;                        // Anfuehrungszeichen ueberlesen
-        n2 = n;                     // ab hier nach Ende suchen
+        n++;                        // read over quatation marks
+        n2 = n;                     // search for the end from here on
         while(     (nLen > n2)
                 && (aData[n2] != '"')
                 && (aData[n2] != 0x201d)
                 && (aData[n2] != 147)
                 && (aData[n2] != 0x15) )
-            n2++;                   // Ende d. Paras suchen
+            n2++;                   // search for the end of the paragraph
     }
-    else                        // keine Anfuehrungszeichen
+    else                        // no quotation mark
     {
-        n2 = n;                     // ab hier nach Ende suchen
-        while ( n2<nLen && aData[n2]!=' ' ) // Ende d. Paras suchen
+        n2 = n;                     // search for the end from here on
+        while ( n2<nLen && aData[n2]!=' ' ) // search for the end of the paragraph
         {
             if ( aData[n2]=='\\' )
             {
                 if ( n2+1<nLen && aData[n2+1]=='\\' )
-                    n2 += 2;        // Doppel-Backslash -> OK
+                    n2 += 2;        // double backslash -> OK
                 else
                 {
                     if( n2 > n )
                         n2--;
-                    break;          // einfach-Backslash -> Ende
+                    break;          // single backslash -> end
                 }
             }
             else
-                n2++;               // kein Backslash -> OK
+                n2++;               // no backslash -> OK
         }
     }
     if( nLen > n2 )
@@ -622,8 +621,8 @@ EquationResult Read_SubF_Combined(WW8ReadFieldParams& rReadParam)
                                 OUString sPart = rReadParam.GetResult();
                                 sal_Int32 nBegin = sPart.indexOf('(');
 
-                                //Word disallows brackets in this field, which
-                                //aids figuring out the case of an end of )) vs )
+                                // Word disallows brackets in this field, which
+                                // aids figuring out the case of an end of )) vs )
                                 sal_Int32 nEnd = sPart.indexOf(')');
 
                                 if (nBegin != -1 && nEnd != -1)

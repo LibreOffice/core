@@ -45,7 +45,7 @@ namespace connectivity
     //================================================================
     //= ODataAccessToolsFactory
     //================================================================
-    //----------------------------------------------------------------
+
     ODataAccessToolsFactory::ODataAccessToolsFactory()
     {
         ODataAccessStaticTools* pStaticTools = new ODataAccessStaticTools;
@@ -53,37 +53,37 @@ namespace connectivity
         m_xToolsHelper = pStaticTools;
     }
 
-    //----------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL ODataAccessToolsFactory::acquire()
     {
         return ORefBase::acquire();
     }
 
-    //----------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL ODataAccessToolsFactory::release()
     {
         return ORefBase::release();
     }
 
-    //----------------------------------------------------------------
+
     ::rtl::Reference< simple::IDataAccessTypeConversion > ODataAccessToolsFactory::getTypeConversionHelper()
     {
         return m_xTypeConversionHelper;
     }
 
-    //----------------------------------------------------------------
+
     ::rtl::Reference< simple::IDataAccessCharSet > ODataAccessToolsFactory::createCharsetHelper( ) const
     {
         return new ODataAccessCharSet;
     }
 
-    //----------------------------------------------------------------
+
     ::rtl::Reference< simple::IDataAccessTools > ODataAccessToolsFactory::getDataAccessTools()
     {
         return m_xToolsHelper;
     }
 
-    //----------------------------------------------------------------
+
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ::dbtools::FormattedColumnValue > ODataAccessToolsFactory::createFormattedColumnValue(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
@@ -94,7 +94,7 @@ namespace connectivity
     }
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
-    //----------------------------------------------------------------
+
     ::rtl::Reference< simple::ISQLParser > ODataAccessToolsFactory::createSQLParser(const Reference< XComponentContext >& rxContext, const IParseContext* _pContext) const
     {
         return new OSimpleSQLParser(rxContext, _pContext);

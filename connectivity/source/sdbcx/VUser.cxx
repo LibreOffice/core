@@ -28,7 +28,7 @@
 #include <connectivity/dbexception.hxx>
 #include <comphelper/sequence.hxx>
 
-// -------------------------------------------------------------------------
+
 using namespace connectivity;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::sdbc;
@@ -38,25 +38,25 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 IMPLEMENT_SERVICE_INFO(OUser,"com.sun.star.sdbcx.VUser","com.sun.star.sdbcx.User");
-// -------------------------------------------------------------------------
+
 OUser::OUser(sal_Bool _bCase)  : OUser_BASE(m_aMutex)
                 , ODescriptor(OUser_BASE::rBHelper,_bCase,sal_True)
                 , m_pGroups(NULL)
 {
 }
-// -------------------------------------------------------------------------
+
 OUser::OUser(const OUString& _Name,sal_Bool _bCase) :    OUser_BASE(m_aMutex)
                         ,ODescriptor(OUser_BASE::rBHelper,_bCase)
                         ,m_pGroups(NULL)
 {
     m_Name = _Name;
 }
-// -------------------------------------------------------------------------
+
 OUser::~OUser( )
 {
     delete m_pGroups;
 }
-// -------------------------------------------------------------------------
+
 void OUser::disposing(void)
 {
     OPropertySetHelper::disposing();
@@ -64,18 +64,18 @@ void OUser::disposing(void)
     if(m_pGroups)
         m_pGroups->disposing();
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OUser::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = ODescriptor::queryInterface( rType);
     return aRet.hasValue() ? aRet : OUser_BASE::queryInterface( rType);
 }
-// -------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OUser::getTypes(  ) throw(RuntimeException)
 {
     return ::comphelper::concatSequences(ODescriptor::getTypes(),OUser_BASE::getTypes());
 }
-// -------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* OUser::createArrayHelper( ) const
 {
         Sequence< Property > aProps;
@@ -83,12 +83,12 @@ Sequence< Type > SAL_CALL OUser::getTypes(  ) throw(RuntimeException)
     return new ::cppu::OPropertyArrayHelper(aProps);
 
 }
-// -------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper & OUser::getInfoHelper()
 {
     return *const_cast<OUser*>(this)->getArrayHelper();
 }
-// -------------------------------------------------------------------------
+
 // XUser
 void SAL_CALL OUser::changePassword( const OUString& /*objPassword*/, const OUString& /*newPassword*/ ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
@@ -96,7 +96,7 @@ void SAL_CALL OUser::changePassword( const OUString& /*objPassword*/, const OUSt
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
     ::dbtools::throwFeatureNotImplementedException( "XUser::changePassword", *this );
 }
-// -------------------------------------------------------------------------
+
 // XGroupsSupplier
 Reference< XNameAccess > SAL_CALL OUser::getGroups(  ) throw(RuntimeException)
 {
@@ -120,7 +120,7 @@ Reference< XNameAccess > SAL_CALL OUser::getGroups(  ) throw(RuntimeException)
 
     return const_cast<OUser*>(this)->m_pGroups;
 }
-// -------------------------------------------------------------------------
+
 
 SAL_WNOUNREACHABLE_CODE_PUSH
 
@@ -131,7 +131,7 @@ sal_Int32 SAL_CALL OUser::getPrivileges( const OUString& /*objName*/, sal_Int32 
     ::dbtools::throwFeatureNotImplementedException( "XAuthorizable::changePassword", *this );
     return 0;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OUser::getGrantablePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -142,48 +142,48 @@ sal_Int32 SAL_CALL OUser::getGrantablePrivileges( const OUString& /*objName*/, s
 
 SAL_WNOUNREACHABLE_CODE_POP
 
-// -------------------------------------------------------------------------
+
 void SAL_CALL OUser::grantPrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
     ::dbtools::throwFeatureNotImplementedException( "XAuthorizable::grantPrivileges", *this );
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OUser::revokePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
     ::dbtools::throwFeatureNotImplementedException( "XAuthorizable::revokePrivileges", *this );
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OUser::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL OUser::getName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return m_Name;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OUser::setName( const OUString& /*aName*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
     OSL_FAIL( "OUser::setName: not implemented!" );
         // not allowed to throw an SQLException here ...
 }
-// -----------------------------------------------------------------------------
+
 // XInterface
 void SAL_CALL OUser::acquire() throw()
 {
     OUser_BASE::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OUser::release() throw()
 {
     OUser_BASE::release();
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -80,7 +80,7 @@ void OStatementCommonBase::freeStatementHandle()
     }
 }
 
-//-----------------------------------------------------------------------------
+
 Any SAL_CALL OStatementCommonBase::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = OStatementCommonBase_Base::queryInterface(rType);
@@ -88,7 +88,7 @@ Any SAL_CALL OStatementCommonBase::queryInterface( const Type & rType ) throw(Ru
         aRet = OPropertySetHelper::queryInterface(rType);
     return aRet;
 }
-// -------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OStatementCommonBase::getTypes(  ) throw(RuntimeException)
 {
     ::cppu::OTypeCollection aTypes(
@@ -98,7 +98,7 @@ Sequence< Type > SAL_CALL OStatementCommonBase::getTypes(  ) throw(RuntimeExcept
 
     return concatSequences(aTypes.getTypes(),OStatementCommonBase_Base::getTypes());
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OStatementCommonBase::cancel(  ) throw(RuntimeException)
 {
@@ -271,7 +271,7 @@ void SAL_CALL OStatementCommonBase::clearWarnings() throw(SQLException, RuntimeE
 {
     return *const_cast<OStatementCommonBase*>(this)->getArrayHelper();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool OStatementCommonBase::convertFastPropertyValue(
                             Any & rConvertedValue,
                             Any & rOldValue,
@@ -287,7 +287,7 @@ sal_Bool OStatementCommonBase::convertFastPropertyValue(
     // here we have to try to convert
     return bConverted;
 }
-// -------------------------------------------------------------------------
+
 void OStatementCommonBase::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
 {
     (void) rValue;
@@ -308,7 +308,7 @@ void OStatementCommonBase::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,co
             ;
     }
 }
-// -------------------------------------------------------------------------
+
 void OStatementCommonBase::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
 {
     (void) rValue;

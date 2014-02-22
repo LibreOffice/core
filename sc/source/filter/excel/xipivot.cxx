@@ -1356,7 +1356,7 @@ void XclImpPivotTable::ReadSxViewEx9( XclImpStream& rStrm )
     rStrm >> maPTViewEx9Info;
 }
 
-// ----------------------------------------------------------------------------
+
 
 void XclImpPivotTable::Convert()
 {
@@ -1628,7 +1628,7 @@ void XclImpPivotTableManager::ReadSxViewEx9( XclImpStream& rStrm )
         maPTables.back()->ReadSxViewEx9( rStrm );
 }
 
-// ----------------------------------------------------------------------------
+
 
 void XclImpPivotTableManager::ReadPivotCaches( XclImpStream& rStrm )
 {

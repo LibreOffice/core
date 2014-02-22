@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dlged.hxx"
 #include "dlgeddef.hxx"
 #include "dlgedlist.hxx"
@@ -61,8 +60,6 @@ DlgEditor& DlgEdObj::GetDialogEditor ()
         return pDlgEdForm->GetDlgEditor();
 }
 
-//----------------------------------------------------------------------------
-
 DlgEdObj::DlgEdObj()
           :SdrUnoObj(OUString(), false)
           ,bIsListening(false)
@@ -70,8 +67,6 @@ DlgEdObj::DlgEdObj()
 {
     DBG_CTOR(DlgEdObj, NULL);
 }
-
-//----------------------------------------------------------------------------
 
 DlgEdObj::DlgEdObj(const OUString& rModelName,
                    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac)
@@ -82,8 +77,6 @@ DlgEdObj::DlgEdObj(const OUString& rModelName,
     DBG_CTOR(DlgEdObj, NULL);
 }
 
-//----------------------------------------------------------------------------
-
 DlgEdObj::~DlgEdObj()
 {
     DBG_DTOR(DlgEdObj, NULL);
@@ -92,19 +85,15 @@ DlgEdObj::~DlgEdObj()
         EndListening();
 }
 
-//----------------------------------------------------------------------------
-
 void DlgEdObj::SetPage(SdrPage* _pNewPage)
 {
     // now set the page
     SdrUnoObj::SetPage(_pNewPage);
 }
 
-//----------------------------------------------------------------------------
-
 namespace
 {
-    /** returns the DlgEdForm which the given DlgEdObj belongs to
+    /* returns the DlgEdForm which the given DlgEdObj belongs to
         (which might in fact be the object itself)
 
         Failure to obtain the form will be reported with an assertion in the non-product
@@ -120,8 +109,6 @@ namespace
     }
 }
 
-//----------------------------------------------------------------------------
-
 uno::Reference< awt::XControl > DlgEdObj::GetControl() const
 {
     uno::Reference< awt::XControl > xControl;
@@ -132,8 +119,6 @@ uno::Reference< awt::XControl > DlgEdObj::GetControl() const
     }
     return xControl;
 }
-
-//----------------------------------------------------------------------------
 
 bool DlgEdObj::TransformSdrToControlCoordinates(
     sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn,
@@ -190,8 +175,6 @@ bool DlgEdObj::TransformSdrToControlCoordinates(
     return true;
 }
 
-//----------------------------------------------------------------------------
-
 bool DlgEdObj::TransformSdrToFormCoordinates(
     sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn,
     sal_Int32& nXOut, sal_Int32& nYOut, sal_Int32& nWidthOut, sal_Int32& nHeightOut )
@@ -238,8 +221,6 @@ bool DlgEdObj::TransformSdrToFormCoordinates(
 
     return true;
 }
-
-//----------------------------------------------------------------------------
 
 bool DlgEdObj::TransformControlToSdrCoordinates(
     sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn,
@@ -301,8 +282,6 @@ bool DlgEdObj::TransformControlToSdrCoordinates(
     return true;
 }
 
-//----------------------------------------------------------------------------
-
 bool DlgEdObj::TransformFormToSdrCoordinates(
     sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn,
     sal_Int32& nXOut, sal_Int32& nYOut, sal_Int32& nWidthOut, sal_Int32& nHeightOut )
@@ -352,8 +331,6 @@ bool DlgEdObj::TransformFormToSdrCoordinates(
     return true;
 }
 
-//----------------------------------------------------------------------------
-
 void DlgEdObj::SetRectFromProps()
 {
     // get control position and size from properties
@@ -377,8 +354,6 @@ void DlgEdObj::SetRectFromProps()
         }
     }
 }
-
-//----------------------------------------------------------------------------
 
 void DlgEdObj::SetPropsFromRect()
 {
@@ -409,8 +384,6 @@ void DlgEdObj::SetPropsFromRect()
         }
     }
 }
-
-//----------------------------------------------------------------------------
 
 void DlgEdObj::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
 {
@@ -482,8 +455,6 @@ void DlgEdObj::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
     SetRectFromProps();
 }
 
-//----------------------------------------------------------------------------
-
 void SAL_CALL DlgEdObj::NameChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException)
 {
     // get old name
@@ -530,8 +501,6 @@ void SAL_CALL DlgEdObj::NameChange( const  ::com::sun::star::beans::PropertyChan
     }
 }
 
-//----------------------------------------------------------------------------
-
 sal_Int32 DlgEdObj::GetStep() const
 {
     // get step property
@@ -543,8 +512,6 @@ sal_Int32 DlgEdObj::GetStep() const
     }
     return nStep;
 }
-
-//----------------------------------------------------------------------------
 
 void DlgEdObj::UpdateStep()
 {
@@ -571,8 +538,6 @@ void DlgEdObj::UpdateStep()
         SetLayer( nControlLayerId );
     }
 }
-
-//----------------------------------------------------------------------------
 
 void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt ) throw (RuntimeException)
 {
@@ -669,8 +634,6 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt ) throw (Ru
     }
 }
 
-//----------------------------------------------------------------------------
-
 bool DlgEdObj::supportsService( OUString const & serviceName ) const
 {
     bool bSupports = false;
@@ -682,8 +645,6 @@ bool DlgEdObj::supportsService( OUString const & serviceName ) const
 
     return bSupports;
 }
-
-//----------------------------------------------------------------------------
 
 OUString DlgEdObj::GetDefaultName() const
 {
@@ -790,8 +751,6 @@ OUString DlgEdObj::GetDefaultName() const
     return aDefaultName;
 }
 
-//----------------------------------------------------------------------------
-
 OUString DlgEdObj::GetUniqueName() const
 {
     OUString aUniqueName;
@@ -811,14 +770,10 @@ OUString DlgEdObj::GetUniqueName() const
     return aUniqueName;
 }
 
-//----------------------------------------------------------------------------
-
 sal_uInt32 DlgEdObj::GetObjInventor()   const
 {
     return DlgInventor;
 }
-
-//----------------------------------------------------------------------------
 
 sal_uInt16 DlgEdObj::GetObjIdentifier() const
 {
@@ -912,8 +867,6 @@ sal_uInt16 DlgEdObj::GetObjIdentifier() const
     }
 }
 
-//----------------------------------------------------------------------------
-
 void DlgEdObj::clonedFrom(const DlgEdObj* _pSource)
 {
     // set parent form
@@ -955,8 +908,6 @@ void DlgEdObj::clonedFrom(const DlgEdObj* _pSource)
     StartListening();
 }
 
-//----------------------------------------------------------------------------
-
 DlgEdObj* DlgEdObj::Clone() const
 {
     DlgEdObj* pDlgEdObj = CloneHelper< DlgEdObj >();
@@ -967,8 +918,6 @@ DlgEdObj* DlgEdObj::Clone() const
     return pDlgEdObj;
 }
 
-//----------------------------------------------------------------------------
-
 SdrObject* DlgEdObj::getFullDragClone() const
 {
     // no need to really add the clone for dragging, it's a temporary
@@ -978,8 +927,6 @@ SdrObject* DlgEdObj::getFullDragClone() const
 
     return pObj;
 }
-
-//----------------------------------------------------------------------------
 
 void DlgEdObj::NbcMove( const Size& rSize )
 {
@@ -998,8 +945,6 @@ void DlgEdObj::NbcMove( const Size& rSize )
     GetDlgEdForm()->GetDlgEditor().SetDialogModelChanged(true);
 }
 
-//----------------------------------------------------------------------------
-
 void DlgEdObj::NbcResize(const Point& rRef, const Fraction& xFract, const Fraction& yFract)
 {
     SdrUnoObj::NbcResize( rRef, xFract, yFract );
@@ -1017,8 +962,6 @@ void DlgEdObj::NbcResize(const Point& rRef, const Fraction& xFract, const Fracti
     GetDlgEdForm()->GetDlgEditor().SetDialogModelChanged(true);
 }
 
-//----------------------------------------------------------------------------
-
 bool DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
@@ -1028,8 +971,6 @@ bool DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 
     return bResult;
 }
-
-//----------------------------------------------------------------------------
 
 void DlgEdObj::SetDefaults()
 {
@@ -1114,8 +1055,6 @@ void DlgEdObj::SetDefaults()
     }
 }
 
-//----------------------------------------------------------------------------
-
 void DlgEdObj::StartListening()
 {
     DBG_ASSERT(!isListening(), "DlgEdObj::StartListening: already listening!");
@@ -1152,8 +1091,6 @@ void DlgEdObj::StartListening()
     }
 }
 
-//----------------------------------------------------------------------------
-
 void DlgEdObj::EndListening(bool bRemoveListener)
 {
     DBG_ASSERT(isListening(), "DlgEdObj::EndListening: not listening currently!");
@@ -1188,8 +1125,6 @@ void DlgEdObj::EndListening(bool bRemoveListener)
         }
     }
 }
-
-//----------------------------------------------------------------------------
 
 void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException)
 {
@@ -1237,8 +1172,6 @@ void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::Propert
     }
 }
 
-//----------------------------------------------------------------------------
-
 void SAL_CALL DlgEdObj::_elementInserted(const ::com::sun::star::container::ContainerEvent& ) throw(::com::sun::star::uno::RuntimeException)
 {
     if (isListening())
@@ -1247,8 +1180,6 @@ void SAL_CALL DlgEdObj::_elementInserted(const ::com::sun::star::container::Cont
         GetDialogEditor().SetDialogModelChanged(true);
     }
 }
-
-//----------------------------------------------------------------------------
 
 void SAL_CALL DlgEdObj::_elementReplaced(const ::com::sun::star::container::ContainerEvent& ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -1259,8 +1190,6 @@ void SAL_CALL DlgEdObj::_elementReplaced(const ::com::sun::star::container::Cont
     }
 }
 
-//----------------------------------------------------------------------------
-
 void SAL_CALL DlgEdObj::_elementRemoved(const ::com::sun::star::container::ContainerEvent& ) throw(::com::sun::star::uno::RuntimeException)
 {
     if (isListening())
@@ -1269,8 +1198,6 @@ void SAL_CALL DlgEdObj::_elementRemoved(const ::com::sun::star::container::Conta
         GetDialogEditor().SetDialogModelChanged(true);
     }
 }
-
-//----------------------------------------------------------------------------
 
 void DlgEdObj::SetLayer(SdrLayerID nLayer)
 {
@@ -1285,12 +1212,8 @@ void DlgEdObj::SetLayer(SdrLayerID nLayer)
     }
 }
 
-//----------------------------------------------------------------------------
-
 TYPEINIT1(DlgEdForm, DlgEdObj);
 DBG_NAME(DlgEdForm);
-
-//----------------------------------------------------------------------------
 
 DlgEdForm::DlgEdForm (DlgEditor& rDlgEditor_) :
     rDlgEditor(rDlgEditor_)
@@ -1298,14 +1221,10 @@ DlgEdForm::DlgEdForm (DlgEditor& rDlgEditor_) :
     DBG_CTOR(DlgEdForm, NULL);
 }
 
-//----------------------------------------------------------------------------
-
 DlgEdForm::~DlgEdForm()
 {
     DBG_DTOR(DlgEdForm, NULL);
 }
-
-//----------------------------------------------------------------------------
 
 void DlgEdForm::SetRectFromProps()
 {
@@ -1330,8 +1249,6 @@ void DlgEdForm::SetRectFromProps()
         }
     }
 }
-
-//----------------------------------------------------------------------------
 
 void DlgEdForm::SetPropsFromRect()
 {
@@ -1363,21 +1280,15 @@ void DlgEdForm::SetPropsFromRect()
     }
 }
 
-//----------------------------------------------------------------------------
-
 void DlgEdForm::AddChild( DlgEdObj* pDlgEdObj )
 {
     pChildren.push_back( pDlgEdObj );
 }
 
-//----------------------------------------------------------------------------
-
 void DlgEdForm::RemoveChild( DlgEdObj* pDlgEdObj )
 {
     pChildren.erase( ::std::find( pChildren.begin() , pChildren.end() , pDlgEdObj ) );
 }
-
-//----------------------------------------------------------------------------
 
 void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
 {
@@ -1495,8 +1406,6 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
         (*aIter)->SetRectFromProps();
 }
 
-//----------------------------------------------------------------------------
-
 void DlgEdForm::UpdateStep()
 {
     sal_uLong nObjCount;
@@ -1512,8 +1421,6 @@ void DlgEdForm::UpdateStep()
         }
     }
 }
-
-//----------------------------------------------------------------------------
 
 void DlgEdForm::UpdateTabIndices()
 {
@@ -1577,8 +1484,6 @@ void DlgEdForm::UpdateTabIndices()
     }
 }
 
-//----------------------------------------------------------------------------
-
 void DlgEdForm::UpdateTabOrder()
 {
     // #110559#
@@ -1598,8 +1503,6 @@ void DlgEdForm::UpdateTabOrder()
             pTabCtrls[i]->activateTabOrder();
     }
 }
-
-//----------------------------------------------------------------------------
 
 void DlgEdForm::UpdateGroups()
 {
@@ -1667,15 +1570,11 @@ void DlgEdForm::UpdateGroups()
     }
 }
 
-//----------------------------------------------------------------------------
-
 void DlgEdForm::UpdateTabOrderAndGroups()
 {
     UpdateTabOrder();
     UpdateGroups();
 }
-
-//----------------------------------------------------------------------------
 
 void DlgEdForm::NbcMove( const Size& rSize )
 {
@@ -1699,8 +1598,6 @@ void DlgEdForm::NbcMove( const Size& rSize )
     GetDlgEditor().SetDialogModelChanged(true);
 }
 
-//----------------------------------------------------------------------------
-
 void DlgEdForm::NbcResize(const Point& rRef, const Fraction& xFract, const Fraction& yFract)
 {
     SdrUnoObj::NbcResize( rRef, xFract, yFract );
@@ -1723,8 +1620,6 @@ void DlgEdForm::NbcResize(const Point& rRef, const Fraction& xFract, const Fract
     GetDlgEditor().SetDialogModelChanged(true);
 }
 
-//----------------------------------------------------------------------------
-
 bool DlgEdForm::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
@@ -1743,8 +1638,6 @@ bool DlgEdForm::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 
     return bResult;
 }
-
-//----------------------------------------------------------------------------
 
 awt::DeviceInfo DlgEdForm::getDeviceInfo() const
 {
@@ -1809,8 +1702,6 @@ bool DlgEdObj::MakeDataAware( const Reference< frame::XModel >& xModel )
     }
     return bRes;
 }
-//----------------------------------------------------------------------------
-
 } // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -114,9 +114,9 @@ public:
     void Write( SvStream& rStrm );
 };
 
-//------------------------------------------------------------
+
 //  Styles
-//------------------------------------------------------------
+
 
 #define WW8_RESERVED_SLOTS 15
 
@@ -725,9 +725,9 @@ const SwNumRule* MSWordStyles::GetSwNumRule(sal_uInt16 nId) const
     return it->second;
 }
 
-//---------------------------------------------------------------------------
+
 //          Fonts
-//---------------------------------------------------------------------------
+
 wwFont::wwFont(const OUString &rFamilyName, FontPitch ePitch, FontFamily eFamily,
     rtl_TextEncoding eChrSet, bool bWrtWW8) : mbAlt(false), mbWrtWW8(bWrtWW8), mePitch(ePitch), meFamily(eFamily), meChrSet(eChrSet)
 {
@@ -1035,12 +1035,12 @@ void WW8_WrPlc0::Write( SvStream& rStrm )
     }
 }
 
-//------------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
+
+
 // class MSWordSections : translate PageDescs into Sections
 //      also deals with header and footer
-//------------------------------------------------------------------------------
+
 
 MSWordSections::MSWordSections( MSWordExportBase& rExport )
     : mbDocumentIsProtected( false )
@@ -2040,11 +2040,11 @@ void MSWordExportBase::WriteHeaderFooterText( const SwFmt& rFmt, bool bHeader )
     }
 }
 
-//------------------------------------------------------------------------------
+
 // class WW8_WrPlcFtnEdn : Collect the Footnotes and Endnotes and output their text
 // and Plcs at the end of the document.
 // WW8_WrPlcFtnEdn is the class for Footnotes and Endnotes
-//------------------------------------------------------------------------------
+
 WW8_WrPlcSubDoc::WW8_WrPlcSubDoc()
     : pTxtPos( 0 )
 {

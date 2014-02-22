@@ -21,7 +21,7 @@
 #include "internal/fileextensions.hxx"
 #include <sal/macros.h>
 
-//------------------------------------
+
 
 const std::string WRITER_FILE_EXTENSIONS   = "sxwstwsxgodtottodm";
 const std::string CALC_FILE_EXTENSIONS     = "sxcstcodsots";
@@ -59,7 +59,7 @@ FileExtensionEntry OOFileExtensionTable[] = {
 
 size_t OOFileExtensionTableSize = sizeof(OOFileExtensionTable)/sizeof(OOFileExtensionTable[0]);
 
-//---------------------------------
+
 /** Return the extension of a file
     name without the '.'
 */
@@ -73,7 +73,7 @@ std::string get_file_name_extension(const std::string& file_name)
     return std::string();
 }
 
-//---------------------------------
+
 /** Return the type of a file
 */
 

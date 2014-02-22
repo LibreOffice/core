@@ -144,18 +144,18 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
             // All searchflags are supported by this implementation!
             // If some flags should not be supported - don't call me with this flags!!!
 
-            //_____________________________________________________________________________________________________________
+
             // Search with AUTO-flag is not supported yet!
             // We think about right implementation.
             SAL_WARN_IF( (nSearchFlags & FrameSearchFlag::AUTO), "fwk", "OFrames::queryFrames(): Search with AUTO-flag is not supported yet!" );
 
-            //_____________________________________________________________________________________________________________
+
             // Search for ALL and GLOBAL is superflous!
             // We support all necessary flags, from which these two flags are derived.
             //      ALL     = PARENT + SELF  + CHILDREN + SIBLINGS
             //      GLOBAL  = ALL    + TASKS
 
-            //_____________________________________________________________________________________________________________
+
             // Add parent to list ... if any exist!
             if( nSearchFlags & FrameSearchFlag::PARENT )
             {
@@ -168,7 +168,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
                 }
             }
 
-            //_____________________________________________________________________________________________________________
+
             // Add owner to list if SELF is searched.
             if( nSearchFlags & FrameSearchFlag::SELF )
             {
@@ -177,7 +177,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
                 impl_appendSequence( seqFrames, seqSelf );
             }
 
-            //_____________________________________________________________________________________________________________
+
             // Add SIBLINGS to list.
             if( nSearchFlags & FrameSearchFlag::SIBLINGS )
             {
@@ -197,7 +197,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
                 m_bRecursiveSearchProtection = sal_False;
             }
 
-            //_____________________________________________________________________________________________________________
+
             // If searched for children, step over all elements in container and collect the information.
             if ( nSearchFlags & FrameSearchFlag::CHILDREN )
             {
@@ -370,9 +370,9 @@ void OFrames::impl_appendSequence(          Sequence< css::uno::Reference< XFram
     seqDestination = seqResult;
 }
 
-//_________________________________________________________________________________________________________________
+
 //  debug methods
-//_________________________________________________________________________________________________________________
+
 
 /*-----------------------------------------------------------------------------------------------------------------
     The follow methods checks the parameter for other functions. If a parameter or his value is non valid,

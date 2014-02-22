@@ -42,7 +42,7 @@ OPooledConnection::OPooledConnection(const Reference< XConnection >& _xConnectio
 {
 
 }
-// -----------------------------------------------------------------------------
+
 // OComponentHelper
 void SAL_CALL OPooledConnection::disposing(void)
 {
@@ -52,13 +52,13 @@ void SAL_CALL OPooledConnection::disposing(void)
 m_xComponent.clear();
     ::comphelper::disposeComponent(m_xRealConnection);
 }
-// -----------------------------------------------------------------------------
+
 // XEventListener
 void SAL_CALL OPooledConnection::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
 {
 m_xComponent.clear();
 }
-// -----------------------------------------------------------------------------
+
 //XPooledConnection
 Reference< XConnection > OPooledConnection::getConnection()  throw(SQLException, RuntimeException)
 {
@@ -72,6 +72,6 @@ Reference< XConnection > OPooledConnection::getConnection()  throw(SQLException,
     }
     return Reference< XConnection >(m_xComponent,UNO_QUERY);
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

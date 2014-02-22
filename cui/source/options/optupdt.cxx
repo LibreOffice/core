@@ -82,13 +82,13 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(Window* pParent, const SfxItemSet
     UpdateLastCheckedText();
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxOnlineUpdateTabPage::~SvxOnlineUpdateTabPage()
 {
 }
 
-// -----------------------------------------------------------------------
+
 void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
 {
     OUString aDateStr;
@@ -146,7 +146,7 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
     m_pLastChecked->SetText( aText );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage*
 SvxOnlineUpdateTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
@@ -154,7 +154,7 @@ SvxOnlineUpdateTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
     return new SvxOnlineUpdateTabPage( pParent, rAttrSet );
 }
 
-// -----------------------------------------------------------------------
+
 
 
 sal_Bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
@@ -218,7 +218,7 @@ sal_Bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
     return bModified;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxOnlineUpdateTabPage::Reset( const SfxItemSet& )
 {
@@ -260,13 +260,13 @@ void SvxOnlineUpdateTabPage::Reset( const SfxItemSet& )
     m_pAutoDownloadCheckBox->SaveValue();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxOnlineUpdateTabPage::FillUserData()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxOnlineUpdateTabPage, AutoCheckHdl_Impl, CheckBox *, pBox )
 {
@@ -279,7 +279,7 @@ IMPL_LINK( SvxOnlineUpdateTabPage, AutoCheckHdl_Impl, CheckBox *, pBox )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, FileDialogHdl_Impl)
 {
@@ -303,7 +303,7 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, FileDialogHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl)
 {

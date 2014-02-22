@@ -40,19 +40,19 @@ using ::rtl::OUStringBuffer;
 extern "C"
 {
 
-//------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
     const typelib_TypeDescription * pTypeDescription,
     sal_Int32 nOffset,
     sal_Int32 & rMaxIntegralTypeSize )
     SAL_THROW_EXTERN_C();
-//------------------------------------------------------------------------
+
 void SAL_CALL typelib_typedescription_newEmpty(
     typelib_TypeDescription ** ppRet,
     typelib_TypeClass eTypeClass,
     rtl_uString * pTypeName )
     SAL_THROW_EXTERN_C();
-//-----------------------------------------------------------------------------
+
 void SAL_CALL typelib_typedescriptionreference_getByName(
     typelib_TypeDescriptionReference ** ppRet,
     rtl_uString * pName )
@@ -107,7 +107,7 @@ static inline sal_Int32 newAlignedSize(
     return (OldSize + NeededAlignment -1) / NeededAlignment * NeededAlignment + ElementSize;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 
 namespace
 {

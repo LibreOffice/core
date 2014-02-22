@@ -363,7 +363,7 @@ namespace
     }
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 bool UUIInteractionHelper::handleCustomRequest( const Reference< XInteractionRequest >& i_rRequest, const OUString& i_rServiceName ) const
 {
     try
@@ -388,7 +388,7 @@ bool UUIInteractionHelper::handleCustomRequest( const Reference< XInteractionReq
     return false;
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 bool UUIInteractionHelper::handleTypedHandlerImplementations( Reference< XInteractionRequest > const & rRequest )
 {
     // the request

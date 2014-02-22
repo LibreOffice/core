@@ -30,7 +30,7 @@ namespace rptui
 
     namespace
     {
-        //----------------------------------------------------------------
+
         const OUString&  lcl_getExpressionPrefix( sal_Int32* _pTakeLengthOrNull = NULL )
         {
             static OUString s_sPrefix( "rpt:" );
@@ -39,7 +39,7 @@ namespace rptui
             return s_sPrefix;
         }
 
-        //----------------------------------------------------------------
+
         const OUString&  lcl_getFieldPrefix( sal_Int32* _pTakeLengthOrNull = NULL )
         {
             static OUString s_sPrefix( "field:" );
@@ -52,14 +52,14 @@ namespace rptui
     //====================================================================
     //= ReportFormula
     //====================================================================
-    //--------------------------------------------------------------------
+
     ReportFormula::ReportFormula( const OUString& _rFormula )
         :m_eType( Invalid )
     {
         impl_construct( _rFormula );
     }
 
-    //--------------------------------------------------------------------
+
     ReportFormula::ReportFormula( const BindType _eType, const OUString& _rFieldOrExpression )
         :m_eType( _eType )
     {
@@ -91,11 +91,11 @@ namespace rptui
 
         m_sUndecoratedContent = _rFieldOrExpression;
     }
-    //--------------------------------------------------------------------
+
     ReportFormula::~ReportFormula()
     {
     }
-    //--------------------------------------------------------------------
+
     void ReportFormula::impl_construct( const OUString& _rFormula )
     {
         m_sCompleteFormula = _rFormula;
@@ -126,7 +126,7 @@ namespace rptui
         m_eType = Invalid;
     }
 
-    //--------------------------------------------------------------------
+
     OUString ReportFormula::getBracketedFieldOrExpression() const
     {
         bool bIsField = ( getType() == Field );
@@ -139,7 +139,7 @@ namespace rptui
 
         return aFieldContent.makeStringAndClear();
     }
-    //--------------------------------------------------------------------
+
     const OUString& ReportFormula::getUndecoratedContent() const
     {
         return m_sUndecoratedContent;
@@ -155,7 +155,7 @@ namespace rptui
         m_sUndecoratedContent   = _rHd.m_sUndecoratedContent;
         return *this;
     }
-    //--------------------------------------------------------------------
+
     OUString ReportFormula::getEqualUndecoratedContent() const
     {
         OUStringBuffer aBuffer;

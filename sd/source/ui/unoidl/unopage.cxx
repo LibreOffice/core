@@ -1466,7 +1466,7 @@ Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape( SdrObject *pObj )
 
 }
 
-//----------------------------------------------------------------------
+
 
 // XServiceInfo
 Sequence< OUString > SAL_CALL SdGenericDrawPage::getSupportedServiceNames()
@@ -1479,7 +1479,7 @@ Sequence< OUString > SAL_CALL SdGenericDrawPage::getSupportedServiceNames()
     return aSeq;
 }
 
-//----------------------------------------------------------------------
+
 
 // XLinkTargetSupplier
 Reference< container::XNameAccess > SAL_CALL SdGenericDrawPage::getLinks(  )
@@ -1488,21 +1488,21 @@ Reference< container::XNameAccess > SAL_CALL SdGenericDrawPage::getLinks(  )
     return new SdPageLinkTargets( (SdGenericDrawPage*)this );
 }
 
-//----------------------------------------------------------------------
+
 
 void SdGenericDrawPage::setBackground( const Any& ) throw(lang::IllegalArgumentException)
 {
     OSL_FAIL( "Don't call me, I'm useless!" );
 }
 
-//----------------------------------------------------------------------
+
 
 void SdGenericDrawPage::getBackground( Any& ) throw()
 {
     OSL_FAIL( "Don't call me, I'm useless!" );
 }
 
-//----------------------------------------------------------------------
+
 
 OUString SdGenericDrawPage::getBookmarkURL() const
 {
@@ -1522,7 +1522,7 @@ OUString SdGenericDrawPage::getBookmarkURL() const
     return aRet.makeStringAndClear();
 }
 
-//----------------------------------------------------------------------
+
 void SdGenericDrawPage::setBookmarkURL( OUString& rURL )
 {
     if( SvxFmDrawPage::mpPage )
@@ -1544,7 +1544,7 @@ void SdGenericDrawPage::setBookmarkURL( OUString& rURL )
     }
 }
 
-//----------------------------------------------------------------------
+
 Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::combine( const Reference< drawing::XShapes >& xShapes )
     throw( uno::RuntimeException )
 {
@@ -1581,7 +1581,7 @@ Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::combine( const Referenc
     return xShape;
 }
 
-//----------------------------------------------------------------------
+
 void SAL_CALL SdGenericDrawPage::split( const Reference< drawing::XShape >& xGroup )
     throw( uno::RuntimeException )
 {
@@ -1600,7 +1600,7 @@ void SAL_CALL SdGenericDrawPage::split( const Reference< drawing::XShape >& xGro
     GetModel()->SetModified();
 }
 
-//----------------------------------------------------------------------
+
 Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::bind( const Reference< drawing::XShapes >& xShapes )
     throw( uno::RuntimeException )
 {
@@ -1634,7 +1634,7 @@ Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::bind( const Reference< 
     return xShape;
 }
 
-//----------------------------------------------------------------------
+
 void SAL_CALL SdGenericDrawPage::unbind( const Reference< drawing::XShape >& xShape )
     throw( uno::RuntimeException )
 {

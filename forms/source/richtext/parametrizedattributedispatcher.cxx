@@ -41,20 +41,20 @@ namespace frm
     //====================================================================
     //= OParametrizedAttributeDispatcher
     //====================================================================
-    //--------------------------------------------------------------------
+
     OParametrizedAttributeDispatcher::OParametrizedAttributeDispatcher( EditView& _rView, AttributeId _nAttributeId, const URL& _rURL, IMultiAttributeDispatcher* _pMasterDispatcher )
         :OAttributeDispatcher( _rView, _nAttributeId, _rURL, _pMasterDispatcher )
     {
     }
 
-    //--------------------------------------------------------------------
+
     OParametrizedAttributeDispatcher::~OParametrizedAttributeDispatcher()
     {
         acquire();
         dispose();
     }
 
-    //--------------------------------------------------------------------
+
     namespace
     {
         static SfxSlotId lcl_normalizeLatinScriptSlotId( SfxSlotId _nSlotId )
@@ -71,7 +71,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     void OParametrizedAttributeDispatcher::fillFeatureEventFromAttributeState( FeatureStateEvent& _rEvent, const AttributeState& _rState ) const
     {
         OSL_ENSURE( getEditView(), "OParametrizedAttributeDispatcher::notifyState: already disposed!" );
@@ -91,7 +91,7 @@ namespace frm
             OAttributeDispatcher::fillFeatureEventFromAttributeState( _rEvent, _rState );
     }
 
-    //--------------------------------------------------------------------
+
     const SfxPoolItem* OParametrizedAttributeDispatcher::convertDispatchArgsToItem( const Sequence< PropertyValue >& _rArguments )
     {
         // get the real slot id. This may differ from our attribute id: for instance, both
@@ -113,7 +113,7 @@ namespace frm
         return pArgument;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OParametrizedAttributeDispatcher::dispatch( const URL& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
