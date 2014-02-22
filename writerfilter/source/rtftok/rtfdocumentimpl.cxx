@@ -2861,7 +2861,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_RIN: nSprm = 0x845d; break;
         case RTF_ITAP: nSprm = NS_sprm::LN_PTableDepth; break;
         case RTF_SBASEDON:
-           nSprm = (nKeyword == RTF_SBASEDON) ? NS_ooxml::LN_CT_Style_basedOn : NS_ooxml::LN_CT_Style_next;
+           nSprm = NS_ooxml::LN_CT_Style_basedOn;
            pIntValue.reset(new RTFValue(getStyleName(nParam)));
            break;
         default: break;
