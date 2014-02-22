@@ -41,7 +41,7 @@
     um Calls zu sparen.
 */
 
-static void lclWriteMiniHeader(SvStream *p, sal_uInt32 nPreTag, sal_uInt32 nStartPos, sal_uInt32 nEndPos)
+static void lclWriteMiniHeader(SvStream *p, sal_uInt32 nPreTag, size_t nStartPos, size_t nEndPos)
 {
    (*p).WriteUInt32(  sal_uInt32(nPreTag) |
              sal_uInt32(nEndPos-nStartPos-SFX_REC_HEADERSIZE_MINI) << 8  );
@@ -59,7 +59,7 @@ static void lclWriteHeader(SvStream *p, sal_uInt32 nRecType, sal_uInt32 nContent
                       sal_uInt32( nCurStartPos - n1StStartPos ) << 8 )
 
 
-sal_uInt32 SfxMiniRecordWriter::Close
+size_t SfxMiniRecordWriter::Close
 (
     bool         bSeekToEndOfRec    /*  true (default)
                                         Der Stream wird an das Ende des Records
@@ -96,7 +96,7 @@ sal_uInt32 SfxMiniRecordWriter::Close
     if ( !_bHeaderOk )
     {
         // Header an den Anfang des Records schreiben
-        sal_uInt32 nEndPos = _pStream->Tell();
+        size_t nEndPos = _pStream->Tell();
         _pStream->Seek( _nStartPos );
         lclWriteMiniHeader(_pStream, _nPreTag, _nStartPos, nEndPos );
 
@@ -193,7 +193,7 @@ SfxMiniRecordReader::SfxMiniRecordReader
     }
 
     // StartPos merken, um im Fehlerfall zur"uck-seeken zu k"onnen
-    sal_uInt32 nStartPos = pStream->Tell();
+    size_t nStartPos = pStream->Tell();
 
     // passenden Record suchen
     while(true)
@@ -300,7 +300,7 @@ bool SfxSingleRecordReader::FindHeader_Impl
 
 {
     // StartPos merken, um im Fehlerfall zur"uck-seeken zu k"onnen
-    sal_uInt32 nStartPos = _pStream->Tell();
+    size_t nStartPos = _pStream->Tell();
 
     // richtigen Record suchen
     while ( !_pStream->IsEof() )
@@ -370,7 +370,7 @@ SfxMultiFixRecordWriter::SfxMultiFixRecordWriter
 }
 
 
-sal_uInt32 SfxMultiFixRecordWriter::Close( bool bSeekToEndOfRec )
+size_t SfxMultiFixRecordWriter::Close( bool bSeekToEndOfRec )
 
 //  siehe <SfxMiniRecordWriter>
 
@@ -379,7 +379,7 @@ sal_uInt32 SfxMultiFixRecordWriter::Close( bool bSeekToEndOfRec )
     if ( !_bHeaderOk )
     {
         // Position hinter Record merken, um sie restaurieren zu k"onnen
-        sal_uInt32 nEndPos = SfxSingleRecordWriter::Close( false );
+        size_t nEndPos = SfxSingleRecordWriter::Close( false );
 
         // gegen"uber SfxSingleRecord erweiterten Header schreiben
         _pStream->WriteUInt16( _nContentCount );
@@ -490,7 +490,7 @@ void SfxMultiVarRecordWriter::NewContent()
 }
 
 
-sal_uInt32 SfxMultiVarRecordWriter::Close( bool bSeekToEndOfRec )
+size_t SfxMultiVarRecordWriter::Close( bool bSeekToEndOfRec )
 
 // siehe <SfxMiniRecordWriter>
 
@@ -503,13 +503,13 @@ sal_uInt32 SfxMultiVarRecordWriter::Close( bool bSeekToEndOfRec )
             FlushContent_Impl();
 
         // Content-Offset-Tabelle schreiben
-        sal_uInt32 nContentOfsPos = _pStream->Tell();
+        size_t nContentOfsPos = _pStream->Tell();
         //! darf man das so einr"ucken?
         for ( sal_uInt16 n = 0; n < _nContentCount; ++n )
             _pStream->WriteUInt32( _aContentOfs[n] );
 
         // SfxMultiFixRecordWriter::Close() "uberspringen!
-        sal_uInt32 nEndPos = SfxSingleRecordWriter::Close( false );
+        size_t nEndPos = SfxSingleRecordWriter::Close( false );
 
         // eigenen Header schreiben
         _pStream->WriteUInt16( _nContentCount );
@@ -575,7 +575,7 @@ bool SfxMultiRecordReader::ReadHeader_Impl()
     if ( _nRecordType != SFX_REC_TYPE_FIXSIZE )
     {
         // Tabelle aus dem Stream einlesen
-        sal_uInt32 nContentPos = _pStream->Tell();
+        size_t nContentPos = _pStream->Tell();
         if ( _nRecordType == SFX_REC_TYPE_VARSIZE_RELOC ||
              _nRecordType == SFX_REC_TYPE_MIXTAGS_RELOC )
             _pStream->SeekRel( + _nContentSize );
@@ -647,10 +647,10 @@ bool SfxMultiRecordReader::GetContent()
     if ( _nContentNo < _nContentCount )
     {
         // den Stream an den Anfang des Contents positionieren
-        sal_uInt32 nOffset = _nRecordType == SFX_REC_TYPE_FIXSIZE
+        size_t nOffset = _nRecordType == SFX_REC_TYPE_FIXSIZE
                     ? _nContentNo * _nContentSize
                     : SFX_REC_CONTENT_OFS(_pContentOfs[_nContentNo]);
-        sal_uInt32 nNewPos = _nStartPos + nOffset;
+        size_t nNewPos = _nStartPos + nOffset;
         DBG_ASSERT( nNewPos >= _pStream->Tell(), "SfxMultiRecordReader::GetContent() - New position before current, to much data red!" );
 
         // #99366#: correct stream pos in every case;

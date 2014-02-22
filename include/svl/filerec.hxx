@@ -190,20 +190,20 @@ class SVL_DLLPUBLIC SfxMiniRecordWriter
 {
 protected:
     SvStream*       _pStream;   // <SvStream> with the record
-    sal_uInt32      _nStartPos; // starting position of the total record in the stream
+    size_t          _nStartPos; // starting position of the total record in the stream
     bool            _bHeaderOk; /* TRUE, if header already written */
     sal_uInt8       _nPreTag;   // 'pre-Tag' to write to header
 
 public:
     inline          SfxMiniRecordWriter( SvStream *pStream, sal_uInt8 nTag );
     inline          SfxMiniRecordWriter( SvStream *pStream, sal_uInt8 nTag,
-                                         sal_uInt32 nSize );
+                                         size_t nSize );
     inline          ~SfxMiniRecordWriter();
 
     inline SvStream& operator*() const;
 
     inline void     Reset();
-    sal_uInt32      Close( bool bSeekToEndOfRec = true );
+    size_t          Close( bool bSeekToEndOfRec = true );
 
 private:
     /// not implementend, not allowed
@@ -236,7 +236,7 @@ class SVL_DLLPUBLIC SfxMiniRecordReader
 {
 protected:
     SvStream*           _pStream;   //  <SvStream> to read from
-    sal_uInt32          _nEofRec;   //  Position direkt hinter dem Record
+    size_t              _nEofRec;   //  Position direkt hinter dem Record
     bool                _bSkipped;  //  TRUE: der Record wurde explizit geskippt
     sal_uInt8           _nPreTag;   //  aus dem Header gelesenes Pre-Tag
 
@@ -251,7 +251,7 @@ protected:
     inline bool         SetHeader_Impl( sal_uInt32 nHeader );
 
                         // als ung"ultig markieren und zur"uck-seeken
-    void                SetInvalid_Impl( sal_uInt32 nRecordStartPos )
+    void                SetInvalid_Impl( size_t nRecordStartPos )
                         {
                             _nPreTag = SFX_REC_PRETAG_EOR;
                             _pStream->Seek( nRecordStartPos );
@@ -309,7 +309,7 @@ protected:
 public:
     inline void     Reset();
 
-    sal_uInt32          Close( bool bSeekToEndOfRec = true );
+    size_t          Close( bool bSeekToEndOfRec = true );
 };
 
 /*  [Beschreibung]
@@ -393,11 +393,11 @@ public:
 class SVL_DLLPUBLIC SfxMultiFixRecordWriter: public SfxSingleRecordWriter
 {
 protected:
-    sal_uInt32          _nContentStartPos;  /*  Startposition des jeweiligen
+    size_t          _nContentStartPos;  /*  Startposition des jeweiligen
                                             Contents - nur bei DBG_UTIL
                                             und f"ur Subklassen */
-    sal_uInt32          _nContentSize;      //  Gr"o\se jedes Contents
-    sal_uInt16          _nContentCount;     //  jeweilige Anzahl der Contents
+    sal_uInt32      _nContentSize;      //  Gr"o\se jedes Contents
+    sal_uInt16      _nContentCount;     //  jeweilige Anzahl der Contents
 
                     SfxMultiFixRecordWriter( sal_uInt8 nRecordType,
                                              SvStream *pStream,
@@ -411,7 +411,7 @@ public:
 
     inline void     Reset();
 
-    sal_uInt32          Close( bool bSeekToEndOfRec = true );
+    size_t          Close( bool bSeekToEndOfRec = true );
 };
 
 /** write record with multiple content items
@@ -470,7 +470,7 @@ public:
 
     void                NewContent();
 
-    virtual sal_uInt32  Close( bool bSeekToEndOfRec = true );
+    virtual size_t      Close( bool bSeekToEndOfRec = true );
 };
 
 /** write record with multiple content items with identical size
@@ -544,7 +544,7 @@ public:
  */
 class SVL_DLLPUBLIC SfxMultiRecordReader: public SfxSingleRecordReader
 {
-    sal_uInt32          _nStartPos;     //  start position of this record
+    size_t              _nStartPos;     //  start position of this record
     sal_uInt32*         _pContentOfs;   //  offsets of the start positions
     sal_uInt32          _nContentSize;  //  size of each record or table position
     sal_uInt16          _nContentCount; //  number of content items
@@ -593,7 +593,7 @@ inline SfxMiniRecordWriter::SfxMiniRecordWriter( SvStream* pStream, sal_uInt8 nT
  * @param nTag    a record tag between 0x01 and 0xFE
  * @param nSize   data size in Byte
  */
-inline SfxMiniRecordWriter::SfxMiniRecordWriter( SvStream* pStream, sal_uInt8 nTag, sal_uInt32 nSize )
+inline SfxMiniRecordWriter::SfxMiniRecordWriter( SvStream* pStream, sal_uInt8 nTag, size_t nSize )
 :   _pStream( pStream ),
     _bHeaderOk(true)
 {
@@ -676,15 +676,15 @@ inline SvStream& SfxMiniRecordReader::operator*() const
 }
 
 /// @see SfxMiniRecordWriter::Close()
-inline sal_uInt32 SfxSingleRecordWriter::Close( bool bSeekToEndOfRec )
+inline size_t SfxSingleRecordWriter::Close( bool bSeekToEndOfRec )
 {
-    sal_uInt32 nRet = 0;
+    size_t nRet = 0;
 
     // was the header already written?
     if ( !_bHeaderOk )
     {
         // write base class header
-        sal_uInt32 nEndPos = SfxMiniRecordWriter::Close( bSeekToEndOfRec );
+        size_t nEndPos = SfxMiniRecordWriter::Close( bSeekToEndOfRec );
 
         // seek the end of the own header if needed or stay behind the record
         if ( !bSeekToEndOfRec )
@@ -740,7 +740,7 @@ inline SfxMultiFixRecordWriter::~SfxMultiFixRecordWriter()
 inline void SfxMultiFixRecordWriter::NewContent()
 {
     #ifdef DBG_UTIL
-    sal_uLong nOldStartPos;
+    size_t nOldStartPos;
     // store starting position of the current content - CAUTION: sub classes!
     nOldStartPos = _nContentStartPos;
     #endif

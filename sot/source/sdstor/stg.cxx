@@ -195,7 +195,7 @@ bool StorageStream::Equals( const BaseStorageStream& rStream ) const
     return pOther && ( pOther->pEntry == pEntry );
 }
 
-sal_uLong StorageStream::Read( void* pData, sal_uLong nSize )
+size_t StorageStream::Read( void* pData, size_t nSize )
 {
     if( Validate() )
     {
@@ -209,7 +209,7 @@ sal_uLong StorageStream::Read( void* pData, sal_uLong nSize )
     return nSize;
 }
 
-sal_uLong StorageStream::Write( const void* pData, sal_uLong nSize )
+size_t StorageStream::Write( const void* pData, size_t nSize )
 {
     if( Validate( true ) )
     {
@@ -223,7 +223,7 @@ sal_uLong StorageStream::Write( const void* pData, sal_uLong nSize )
     return nSize;
 }
 
-sal_uLong StorageStream::Seek( sal_uLong n )
+size_t StorageStream::Seek( size_t n )
 {
     if( Validate() )
         return nPos = pEntry->Seek( n );
@@ -237,7 +237,7 @@ void StorageStream::Flush()
     Commit();
 }
 
-bool StorageStream::SetSize( sal_uLong nNewSize )
+bool StorageStream::SetSize( size_t nNewSize )
 {
     if( Validate( true ) )
     {
@@ -249,7 +249,7 @@ bool StorageStream::SetSize( sal_uLong nNewSize )
         return false;
 }
 
-sal_uLong StorageStream::GetSize() const
+size_t StorageStream::GetSize() const
 {
     if( Validate() )
         return pEntry->GetSize();
@@ -346,7 +346,7 @@ bool Storage::IsStorageFile( SvStream* pStream )
     if ( pStream )
     {
         StgHeader aHdr;
-        sal_uLong nPos = pStream->Tell();
+        size_t nPos = pStream->Tell();
         bRet = ( aHdr.Load( *pStream ) && aHdr.Check() );
 
         // It's not a stream error if it is too small for a OLE storage header
@@ -405,7 +405,7 @@ Storage::Storage( SvStream& r, bool bDirect )
     if( r.GetError() == SVSTREAM_OK )
     {
         pIo->SetStrm( &r, false );
-        sal_uLong nSize = r.Seek( STREAM_SEEK_TO_END );
+        size_t nSize = r.Seek( STREAM_SEEK_TO_END );
         r.Seek( 0L );
         // Initializing is OK if the stream is empty
         Init( nSize == 0 );
@@ -450,7 +450,7 @@ Storage::Storage( UCBStorageStream& rStrm, bool bDirect )
 
     pIo->SetStrm( &rStrm );
 
-    sal_uLong nSize = pStream->Seek( STREAM_SEEK_TO_END );
+    size_t nSize = pStream->Seek( STREAM_SEEK_TO_END );
     pStream->Seek( 0L );
     // Initializing is OK if the stream is empty
     Init( nSize == 0 );
@@ -475,7 +475,7 @@ void Storage::Init( bool bCreate )
     OSL_ENSURE( pIo, "The pointer may not be empty at this point!" );
     if( pIo->Good() && pIo->GetStrm() )
     {
-        sal_uLong nSize = pIo->GetStrm()->Seek( STREAM_SEEK_TO_END );
+        size_t nSize = pIo->GetStrm()->Seek( STREAM_SEEK_TO_END );
         pIo->GetStrm()->Seek( 0L );
         if( nSize )
         {

@@ -44,7 +44,7 @@ StgInternalStream::~StgInternalStream()
     delete pStrm;
 }
 
-sal_uLong StgInternalStream::GetData( void* pData, sal_uLong nSize )
+size_t StgInternalStream::GetData( void* pData, size_t nSize )
 {
     if( pStrm )
     {
@@ -56,7 +56,7 @@ sal_uLong StgInternalStream::GetData( void* pData, sal_uLong nSize )
         return 0;
 }
 
-sal_uLong StgInternalStream::PutData( const void* pData, sal_uLong nSize )
+size_t StgInternalStream::PutData( const void* pData, size_t nSize )
 {
     if( pStrm )
     {
@@ -68,7 +68,7 @@ sal_uLong StgInternalStream::PutData( const void* pData, sal_uLong nSize )
         return 0;
 }
 
-sal_uLong StgInternalStream::SeekPos( sal_uLong nPos )
+size_t StgInternalStream::SeekPos( size_t nPos )
 {
     return pStrm ? pStrm->Seek( nPos ) : 0;
 }
@@ -115,7 +115,7 @@ bool StgCompObjStream::Load()
         if ( nLen1 > 0 )
         {
             // higher bits are ignored
-            sal_uLong nStrLen = ::std::min( nLen1, (sal_Int32)0xFFFE );
+            size_t nStrLen = ::std::min( nLen1, (sal_Int32)0xFFFE );
 
             sal_Char* p = new sal_Char[ nStrLen+1 ];
             p[nStrLen] = 0;

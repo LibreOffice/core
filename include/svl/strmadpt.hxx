@@ -43,23 +43,23 @@ public:
                 rTheOutputStream):
         m_xOutputStream(rTheOutputStream), m_nPosition(0) {}
 
-    virtual ErrCode ReadAt(sal_uLong, void *, sal_uLong, sal_uLong *) const;
+    virtual ErrCode ReadAt(sal_uLong, void *, sal_uLong, size_t *) const;
 
-    virtual ErrCode WriteAt(sal_uLong nPos, const void * pBuffer, sal_uLong nCount,
-                            sal_uLong * pWritten);
+    virtual ErrCode WriteAt(sal_uLong nPos, const void * pBuffer, size_t nCount,
+                            size_t * pWritten);
 
     virtual ErrCode Flush() const;
 
-    virtual ErrCode SetSize(sal_uLong);
+    virtual ErrCode SetSize(size_t);
 
     virtual ErrCode Stat(SvLockBytesStat * pStat, SvLockBytesStatFlag) const;
 
-    virtual ErrCode FillAppend(const void * pBuffer, sal_uLong nCount,
-                               sal_uLong * pWritten);
+    virtual ErrCode FillAppend(const void * pBuffer, size_t nCount,
+                               size_t * pWritten);
 
-    virtual sal_uLong Tell() const;
+    virtual size_t Tell() const;
 
-    virtual sal_uLong Seek(sal_uLong);
+    virtual size_t Seek(size_t);
 
     virtual void Terminate();
 };
@@ -70,7 +70,7 @@ class SVL_DLLPUBLIC SvLockBytesInputStream: public cppu::OWeakObject,
                               public com::sun::star::io::XSeekable
 {
     SvLockBytesRef m_xLockBytes;
-    sal_Int64 m_nPosition;
+    size_t m_nPosition;
 
 public:
     SvLockBytesInputStream(SvLockBytes * pTheLockBytes):

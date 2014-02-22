@@ -221,7 +221,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
 #ifdef DBG_UTIL_MI
                             if ( !pItem->ISA(SfxSetItem) )
                             {
-                                sal_uLong nMark = rStream.Tell();
+                                size_t nMark = rStream.Tell();
                                 rStream.Seek( nItemStartPos + sizeof(sal_uInt16) );
                                 SfxPoolItem *pClone = pItem->Create(rStream, nItemVersion );
                                 sal_uInt16 nWh = pItem->Which();
@@ -369,7 +369,7 @@ void SfxItemPool_Impl::readTheItems (
     SfxPoolItemArray_Impl *pNewArr = new SfxPoolItemArray_Impl();
     SfxPoolItem *pItem = 0;
 
-    sal_uLong n, nLastSurrogate = sal_uLong(-1);
+    size_t n, nLastSurrogate = size_t(-1);
     while (aItemsRec.GetContent())
     {
         // n"achstes Surrogat holen
@@ -639,7 +639,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
             if ( !bSecondaryLoaded && pImp->mpSecondary && pImp->bInSetItem )
             {
                 // an das Ende des eigenen Pools seeken
-                sal_uLong nLastPos = rStream.Tell();
+                size_t nLastPos = rStream.Tell();
                 aPoolRec.Skip();
 
                 // Sekund"arpool einlesen
@@ -757,20 +757,20 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
     rStream.ReadUInt32( nAttribSize );
 
     // Size-Table einlesen
-    sal_uLong nStartPos = rStream.Tell();
+    size_t nStartPos = rStream.Tell();
     rStream.SeekRel( nAttribSize );
     CHECK_FILEFORMAT( rStream, SFX_ITEMPOOL_TAG_SIZES );
     sal_uInt32 nSizeTableLen(0);
     rStream.ReadUInt32( nSizeTableLen );
     sal_Char *pBuf = new sal_Char[nSizeTableLen];
     rStream.Read( pBuf, nSizeTableLen );
-    sal_uLong nEndOfSizes = rStream.Tell();
+    size_t nEndOfSizes = rStream.Tell();
     SvMemoryStream aSizeTable( pBuf, nSizeTableLen, STREAM_READ );
 
     // ab Version 1.3 steht in der Size-Table eine Versions-Map
     if ( pImp->nMajorVer > 1 || pImp->nMinorVer >= 3 )
     {
-        // Version-Map finden (letztes sal_uLong der Size-Table gibt Pos an)
+        // Version-Map finden (letztes size_t der Size-Table gibt Pos an)
         rStream.Seek( nEndOfSizes - sizeof(sal_uInt32) );
         sal_uInt32 nVersionMapPos(0);
         rStream.ReadUInt32( nVersionMapPos );
@@ -808,7 +808,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
     rStream.Seek( nStartPos );
     CHECK_FILEFORMAT( rStream, SFX_ITEMPOOL_TAG_ITEMS );
     bool bSecondaryLoaded = false;
-    long nSecondaryEnd = 0;
+    size_t nSecondaryEnd = 0;
     sal_uInt16 nWhich(0), nSlot(0);
     while ( rStream.ReadUInt16( nWhich ), nWhich )
     {
@@ -834,7 +834,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
         SfxPoolItem *pDefItem = *(pImp->ppStaticDefaults + nIndex);
 
         // Position vor ersten Item merken
-        sal_uLong nLastPos = rStream.Tell();
+        size_t nLastPos = rStream.Tell();
 
         // SfxSetItems k"onnten Items aus Sekund"arpools beinhalten
         if ( !bSecondaryLoaded && pImp->mpSecondary && pDefItem->ISA(SfxSetItem) )
@@ -856,7 +856,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
         // Items an sich lesen
         for ( sal_uInt16 j = 0; j < nCount; ++j )
         {
-            sal_uLong nPos = nLastPos;
+            size_t nPos = nLastPos;
             rStream.ReadUInt16( nRef );
 
             SfxPoolItem *pItem = 0;
@@ -940,7 +940,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
     if ( pImp->nMajorVer > 1 || pImp->nMinorVer > 0 )
         CHECK_FILEFORMAT( rStream, SFX_ITEMPOOL_TAG_DEFAULTS );
 
-    sal_uLong nLastPos = rStream.Tell();
+    size_t nLastPos = rStream.Tell();
     while ( rStream.ReadUInt16( nWhich ), nWhich )
     {
         // ggf. Which-Id aus alter Version verschieben?
@@ -949,7 +949,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
 
         rStream.ReadUInt16( nSlot );
 
-        sal_uLong nPos = nLastPos;
+        size_t nPos = nLastPos;
         sal_uInt32 nSize(0);
         sal_uInt16 nVersion(0);
         rStream.ReadUInt16( nVersion );
@@ -1457,7 +1457,7 @@ bool SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
     optional (falls 'bDirect == sal_True' oder '!rItem.IsPoolable()':
 
     sal_uInt16  rItem.GetVersion()
-    sal_uLong   Size
+    size_t   Size
     Size    rItem.Store()
 
 
@@ -1489,9 +1489,9 @@ bool SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
     {
         rStream.WriteUInt16( nItemVersion );
         rStream.WriteUInt32( (sal_uInt32) 0L );           // Platz fuer Laenge in Bytes
-        sal_uLong nIStart = rStream.Tell();
+        size_t nIStart = rStream.Tell();
         rItem.Store(rStream, nItemVersion);
-        sal_uLong nIEnd = rStream.Tell();
+        size_t nIEnd = rStream.Tell();
         rStream.Seek( nIStart-4 );
         rStream.WriteInt32( (sal_Int32) ( nIEnd-nIStart ) );
         rStream.Seek( nIEnd );
@@ -1565,7 +1565,7 @@ const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, bool bDirect,
         sal_uInt16 nVersion(0);
         sal_uInt32 nLen(0);
         rStream.ReadUInt16( nVersion ).ReadUInt32( nLen );
-        sal_uLong nIStart = rStream.Tell();
+        size_t nIStart = rStream.Tell();
 
         // Which-Id in dieser Version bekannt?
         if ( nWhich )
@@ -1583,7 +1583,7 @@ const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, bool bDirect,
                 }
                 else
                     pItem = 0;
-            sal_uLong nIEnd = rStream.Tell();
+            size_t nIEnd = rStream.Tell();
             DBG_ASSERT( nIEnd <= (nIStart+nLen), "read past end of item" );
             if ( (nIStart+nLen) != nIEnd )
                 rStream.Seek( nIStart+nLen );
