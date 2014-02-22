@@ -628,8 +628,6 @@ void SwFntObj::SetDevFont( const SwViewShell *pSh, OutputDevice& rOut )
 }
 
 #define WRONG_SHOW_MIN 5
-#define WRONG_SHOW_SMALL 11
-#define WRONG_SHOW_MEDIUM 15
 
 /*************************************************************************
  *
@@ -775,31 +773,7 @@ static void lcl_DrawLineForWrongListData(
                 {
                     rInf.GetOut().SetLineColor( wrongArea->mColor );
 
-                    // get wavy line type to use
-                    sal_uInt16 nWave =
-                        WRONG_SHOW_MEDIUM < nHght ? WAVE_NORMAL :
-                        ( WRONG_SHOW_SMALL < nHght ? WAVE_SMALL : WAVE_FLAT );
-
-                    rInf.GetOut().DrawWaveLine( aStart, aEnd, nWave );
-                }
-                else if (WRONGAREA_WAVE_NORMAL == wrongArea->mLineType)
-                {
-                    rInf.GetOut().SetLineColor( wrongArea->mColor );
-
-                    rInf.GetOut().DrawWaveLine( aStart, aEnd, WAVE_NORMAL);
-                }
-
-                else if (WRONGAREA_WAVE_SMALL == wrongArea->mLineType)
-                {
-                    rInf.GetOut().SetLineColor( wrongArea->mColor );
-
-                    rInf.GetOut().DrawWaveLine( aStart, aEnd, WAVE_SMALL);
-                }
-                else if (WRONGAREA_WAVE_FLAT == wrongArea->mLineType)
-                {
-                    rInf.GetOut().SetLineColor( wrongArea->mColor );
-
-                    rInf.GetOut().DrawWaveLine( aStart, aEnd, WAVE_FLAT);
+                    rInf.GetOut().DrawWaveLine( aStart, aEnd );
                 }
             }
         }
@@ -1702,10 +1676,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         if ( rInf.GetOut().GetConnectMetaFile() )
                             rInf.GetOut().Push();
 
-                        sal_uInt16 nWave =
-                            WRONG_SHOW_MEDIUM < nHght ? WAVE_NORMAL :
-                            ( WRONG_SHOW_SMALL < nHght ? WAVE_SMALL :
-                            WAVE_FLAT );
                         Color aCol( rInf.GetOut().GetLineColor() );
                         bool bColSave = aCol != *pWaveCol;
                         if ( bColSave )
@@ -1753,7 +1723,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             rInf.GetFrm()->SwitchHorizontalToVertical( aCurrPos );
                             rInf.GetFrm()->SwitchHorizontalToVertical( aEnd );
                         }
-                        rInf.GetOut().DrawWaveLine( aCurrPos, aEnd, nWave );
+                        rInf.GetOut().DrawWaveLine( aCurrPos, aEnd );
 
                         if ( bColSave )
                             rInf.GetOut().SetLineColor( aCol );
