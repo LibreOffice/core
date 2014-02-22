@@ -34,7 +34,7 @@
 			<div class="MAC" id="SystemRequirements_OSX">
 				<ul>
 					<li>
-						<p id="macxiOSX" xml:lang="en-US">MacOSX 10.6 or higher</p>
+						<p id="macxiOSX" xml:lang="en-US">MacOSX 10.5 (Leopard) or higher, Intel or PowerPC processor</p>
 					</li>
 				</ul>
 			</div>
