@@ -644,7 +644,7 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
         sal_uInt16 nPos = GetPagePos( nId );
         Rectangle aRect = ImplGetTabRect( nPos );
 
-        if ( !pOldItem || (pOldItem->mnLine != pItem->mnLine) )
+        if ( !pOldItem || !pItem || (pOldItem->mnLine != pItem->mnLine) )
         {
             aRect.Left() = 0;
             aRect.Top() = 0;
