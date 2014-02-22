@@ -910,7 +910,8 @@ void SfxFrame::Resize()
                 if ( nHandle )
                 {
                     SfxObjectShell* pDoc = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
-                    pWork = SfxViewFrame::GetFirst( pDoc )->GetFrame().GetWorkWindow_Impl();
+                    SfxViewFrame *pFrame = SfxViewFrame::GetFirst( pDoc );
+                    pWork = pFrame ? pFrame->GetFrame().GetWorkWindow_Impl() : NULL;
                 }
             }
 
