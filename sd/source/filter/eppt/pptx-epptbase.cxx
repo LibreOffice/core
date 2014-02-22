@@ -21,7 +21,6 @@
 #include "eppt.hxx"
 #include "epptdef.hxx"
 
-#include <comphelper/extract.hxx>
 #include <tools/globname.hxx>
 #include <tools/datetime.hxx>
 #include <tools/poly.hxx>
@@ -618,16 +617,18 @@ sal_Bool PPTWriterBase::GetStyleSheets()
                         if ( aXNameAccess->hasByName( aFamily ) )
                         {
                             Any aAny( aXNameAccess->getByName( aFamily ) );
-                            if( aAny.getValue() && ::cppu::extractInterface( xNameAccess, aAny ) )
+                            xNameAccess.set(aAny, css::uno::UNO_QUERY);
+                            if( xNameAccess.is() )
                             {
                                 Reference< XNameAccess > aXFamily;
                                 if ( aAny >>= aXFamily )
                                 {
                                     if ( aXFamily->hasByName( aStyle ) )
                                     {
-                                        Reference< XStyle > xStyle;
                                         aAny = aXFamily->getByName( aStyle );
-                                        if( aAny.getValue() && ::cppu::extractInterface( xStyle, aAny ) )
+                                        Reference< XStyle > xStyle(
+                                            aAny, css::uno::UNO_QUERY);
+                                        if( xStyle.is() )
                                         {
                                             Reference< XStyle > aXStyle;
                                             aAny >>= aXStyle;

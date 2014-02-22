@@ -30,7 +30,6 @@
 #include <com/sun/star/util/XStringEscape.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <comphelper/extract.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <rtl/string.hxx>
 #if OSL_DEBUG_LEVEL > 0
@@ -300,12 +299,17 @@ namespace utl
             Reference< XInterface > xNode;
             if (m_xDirectAccess.is() && m_xDirectAccess->hasByName(sNormalized))
             {
-                if (!::cppu::extractInterface(xNode, m_xDirectAccess->getByName(sNormalized)))
+                xNode.set(
+                    m_xDirectAccess->getByName(sNormalized), css::uno::UNO_QUERY);
+                if (!xNode.is())
                     OSL_FAIL("OConfigurationNode::openNode: could not open the node!");
             }
             else if (m_xHierarchyAccess.is())
             {
-                if (!::cppu::extractInterface(xNode, m_xHierarchyAccess->getByHierarchicalName(_rPath)))
+                xNode.set(
+                    m_xHierarchyAccess->getByHierarchicalName(_rPath),
+                    css::uno::UNO_QUERY);
+                if (!xNode.is())
                     OSL_FAIL("OConfigurationNode::openNode: could not open the node!");
             }
             if (xNode.is())

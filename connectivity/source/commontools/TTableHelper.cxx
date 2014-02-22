@@ -27,7 +27,6 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <comphelper/implementationreference.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 #include "connectivity/dbtools.hxx"
 #include "connectivity/sdbcx/VCollection.hxx"
@@ -554,8 +553,9 @@ void SAL_CALL OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference
 #endif
         );
 
-    Reference< XPropertySet > xOld;
-    if(::cppu::extractInterface(xOld,m_pColumns->getByIndex(index)) && xOld.is())
+    Reference< XPropertySet > xOld(
+        m_pColumns->getByIndex(index), css::uno::UNO_QUERY);
+    if(xOld.is())
         alterColumnByName(getString(xOld->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),descriptor);
 }
 

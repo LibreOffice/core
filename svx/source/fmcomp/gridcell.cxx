@@ -45,7 +45,6 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/Date.hpp>
 
-#include <comphelper/extract.hxx>
 #include <comphelper/numbers.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -1324,7 +1323,7 @@ void DbFormattedField::Init( Window& rParent, const Reference< XRowSet >& xCurso
     Any aSupplier( xUnoModel->getPropertyValue(FM_PROP_FORMATSSUPPLIER));
     if (aSupplier.hasValue())
     {
-        ::cppu::extractInterface(m_xSupplier, aSupplier);
+        m_xSupplier.set(aSupplier, css::uno::UNO_QUERY);
         if (m_xSupplier.is())
         {
             // wenn wir den Supplier vom Model nehmen, dann auch den Key
@@ -3138,7 +3137,7 @@ void DbFilterField::Update()
 
                 Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(xListCursor, UNO_QUERY);
                 Reference< ::com::sun::star::container::XIndexAccess >  xFields(xSupplyCols->getColumns(), UNO_QUERY);
-                ::cppu::extractInterface(xDataField, xFields->getByIndex(0));
+                xDataField.set(xFields->getByIndex(0), css::uno::UNO_QUERY);
                 if (!xDataField.is())
                     return;
             }

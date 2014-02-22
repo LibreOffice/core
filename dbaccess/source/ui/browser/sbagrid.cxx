@@ -63,7 +63,6 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -789,7 +788,7 @@ void SbaGridControl::SetColWidth(sal_uInt16 nColId)
     Reference< XIndexAccess >  xCols(GetPeer()->getColumns(), UNO_QUERY);
     Reference< XPropertySet >  xAffectedCol;
     if (xCols.is() && (nModelPos != (sal_uInt16)-1))
-        ::cppu::extractInterface(xAffectedCol,xCols->getByIndex(nModelPos));
+        xAffectedCol.set(xCols->getByIndex(nModelPos), css::uno::UNO_QUERY);
 
     if (xAffectedCol.is())
     {
@@ -868,7 +867,7 @@ void SbaGridControl::SetColAttrs(sal_uInt16 nColId)
     Reference< XIndexAccess >  xCols(GetPeer()->getColumns(), UNO_QUERY);
     Reference< XPropertySet >  xAffectedCol;
     if (xCols.is() && (nModelPos != (sal_uInt16)-1))
-        ::cppu::extractInterface(xAffectedCol,xCols->getByIndex(nModelPos));
+        xAffectedCol.set(xCols->getByIndex(nModelPos), css::uno::UNO_QUERY);
 
     // get the field the column is bound to
     Reference< XPropertySet >  xField = getField(nModelPos);
@@ -1326,8 +1325,9 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
             Reference< XIndexAccess >  xColumnControls((::com::sun::star::form::XGridPeer*)GetPeer(), UNO_QUERY);
             if (xColumnControls.is())
             {
-                Reference< ::com::sun::star::awt::XTextComponent >  xColControl;
-                ::cppu::extractInterface(xColControl,xColumnControls->getByIndex(GetViewColumnPos(nCol)));
+                Reference< ::com::sun::star::awt::XTextComponent >  xColControl(
+                    xColumnControls->getByIndex(GetViewColumnPos(nCol)),
+                    css::uno::UNO_QUERY);
                 if (xColControl.is())
                 {
                     m_bActivatingForDrop = sal_True;

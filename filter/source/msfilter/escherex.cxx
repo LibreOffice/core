@@ -85,7 +85,6 @@
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/string.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/virdev.hxx>
@@ -1476,8 +1475,9 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
         }
         else if ( rSource == "Bitmap" )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >xBitmap;
-            if ( ::cppu::extractInterface( xBitmap, aAny ) )
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >xBitmap(
+                aAny, css::uno::UNO_QUERY);
+            if (xBitmap.is())
             {
                 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap > xBmp;
                 if ( aAny >>= xBmp )

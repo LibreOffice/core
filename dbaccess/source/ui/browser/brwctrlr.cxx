@@ -1385,8 +1385,8 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
         const PropertyValue* pFinalValues = aFinalValues.getConstArray();
         for (sal_Int32 i=0; i<aFinalValues.getLength(); ++i, ++pFinalValues)
         {
-            Reference< XPropertySet > xParam;
-            ::cppu::extractInterface(xParam, aRequest.Parameters->getByIndex(i));
+            Reference< XPropertySet > xParam(
+                aRequest.Parameters->getByIndex(i), css::uno::UNO_QUERY);
             OSL_ENSURE(xParam.is(), "SbaXDataBrowserController::approveParameter: one of the parameters is no property set!");
             if (xParam.is())
             {

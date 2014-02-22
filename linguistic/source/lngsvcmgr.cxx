@@ -34,7 +34,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <comphelper/extract.hxx>
 #include <boost/checked_delete.hpp>
 
 #include "lngsvcmgr.hxx"
@@ -1075,7 +1074,12 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
                 uno::Reference< lang::XSingleServiceFactory > xFactory;
 
                 uno::Reference< linguistic2::XSpellChecker > xSvc;
-                if ( cppu::extractInterface( xCompFactory, aCurrent ) || ::cppu::extractInterface( xFactory, aCurrent ) )
+                xCompFactory.set(aCurrent, css::uno::UNO_QUERY);
+                if (!xCompFactory.is())
+                {
+                    xFactory.set(aCurrent, css::uno::UNO_QUERY);
+                }
+                if ( xCompFactory.is() || xFactory.is() )
                 {
                     try
                     {
@@ -1132,7 +1136,12 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
                 uno::Reference< lang::XSingleServiceFactory > xFactory;
 
                 uno::Reference< linguistic2::XProofreader > xSvc;
-                if ( cppu::extractInterface( xCompFactory, aCurrent ) || ::cppu::extractInterface( xFactory, aCurrent ) )
+                xCompFactory.set(aCurrent, css::uno::UNO_QUERY);
+                if (!xCompFactory.is())
+                {
+                    xFactory.set(aCurrent, css::uno::UNO_QUERY);
+                }
+                if ( xCompFactory.is() || xFactory.is() )
                 {
                     try
                     {
@@ -1189,7 +1198,12 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
                 uno::Reference< lang::XSingleServiceFactory > xFactory;
 
                 uno::Reference< linguistic2::XHyphenator > xSvc;
-                if ( cppu::extractInterface( xCompFactory, aCurrent ) || ::cppu::extractInterface( xFactory, aCurrent ) )
+                xCompFactory.set(aCurrent, css::uno::UNO_QUERY);
+                if (!xCompFactory.is())
+                {
+                    xFactory.set(aCurrent, css::uno::UNO_QUERY);
+                }
+                if ( xCompFactory.is() || xFactory.is() )
                 {
                     try
                     {
@@ -1245,7 +1259,12 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
                 uno::Reference< lang::XSingleServiceFactory > xFactory;
 
                 uno::Reference< linguistic2::XThesaurus > xSvc;
-                if ( cppu::extractInterface( xCompFactory, aCurrent ) || ::cppu::extractInterface( xFactory, aCurrent ) )
+                xCompFactory.set(aCurrent, css::uno::UNO_QUERY);
+                if (!xCompFactory.is())
+                {
+                    xFactory.set(aCurrent, css::uno::UNO_QUERY);
+                }
+                if ( xCompFactory.is() || xFactory.is() )
                 {
                     try
                     {

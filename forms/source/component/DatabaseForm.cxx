@@ -58,7 +58,6 @@
 #include <comphelper/basicio.hxx>
 #include <comphelper/container.hxx>
 #include <comphelper/enumhelper.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
@@ -2471,8 +2470,8 @@ void SAL_CALL ODatabaseForm::setControlModels(const Sequence<Reference<XControlM
                 // Find component in the list
                 for (sal_Int32 j = 0; j < nCount; ++j)
                 {
-                    Reference<XFormComponent> xElement;
-                    ::cppu::extractInterface(xElement, getByIndex(j));
+                    Reference<XFormComponent> xElement(
+                        getByIndex(j), css::uno::UNO_QUERY);
                     if (xComp == xElement)
                     {
                         Reference<XPropertySet>  xSet(xComp, UNO_QUERY);

@@ -20,7 +20,6 @@
 #define INCLUDED_COMPHELPER_EXTRACT_HXX
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -98,24 +97,6 @@ template< typename E >
 inline ::com::sun::star::uno::Any SAL_CALL enum2any( E eEnum )
 {
     return ::com::sun::star::uno::Any( &eEnum, ::cppu::UnoType< E >::get() );
-}
-
-/**
- * Extracts interface from an any.  If given any does not hold the demanded interface,
- * it will be queried for it.
- * If no interface is available, the out ref will be cleared.
- *<BR>
- * @param rxOut         [out] demanded interface
- * @param rAny          interface
- * @return sal_True if any reference (including the null ref) was retrieved from any else sal_False.
- */
-template< class T >
-inline bool SAL_CALL extractInterface(
-    ::com::sun::star::uno::Reference< T > & rxOut,
-    const ::com::sun::star::uno::Any & rAny )
-{
-    rxOut.clear();
-    return (rAny >>= rxOut);
 }
 
 /**

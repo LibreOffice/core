@@ -50,7 +50,6 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <unotools/streamhelper.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/guarding.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -959,7 +958,9 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
             // If the Control is not bound, do not display a dialog (because the to-be-sent URL would be invalid anyway)
             Reference<XPropertySet> xBoundField;
             if (hasProperty(PROPERTY_BOUNDFIELD, xSet))
-                ::cppu::extractInterface(xBoundField, xSet->getPropertyValue(PROPERTY_BOUNDFIELD));
+                xBoundField.set(
+                    xSet->getPropertyValue(PROPERTY_BOUNDFIELD),
+                    css::uno::UNO_QUERY);
             if (!xBoundField.is())
             {
                 // but only if our IMAGE_URL property is handled as if it is transient, which is equivalent to

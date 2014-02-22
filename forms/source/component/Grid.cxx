@@ -28,7 +28,6 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <comphelper/basicio.hxx>
 #include <comphelper/container.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -266,9 +265,13 @@ sal_Bool SAL_CALL OGridControlModel::select(const Any& rElement) throw(IllegalAr
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     Reference<XPropertySet> xSel;
-    if (rElement.hasValue() && !::cppu::extractInterface(xSel, rElement))
+    if (rElement.hasValue())
     {
-        throw IllegalArgumentException();
+        xSel.set(rElement, css::uno::UNO_QUERY);
+        if (!xSel.is())
+        {
+            throw IllegalArgumentException();
+        }
     }
     InterfaceRef xMe = static_cast<XWeak*>(this);
     if (xSel.is())

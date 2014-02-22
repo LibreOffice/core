@@ -45,7 +45,6 @@
 
 #include <comphelper/container.hxx>
 #include <comphelper/enumhelper.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
@@ -1471,7 +1470,7 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt) throw( RuntimeE
 
         for ( i = 0; i < m_xColumns->getCount(); i++)
         {
-            ::cppu::extractInterface(xCurrent, m_xColumns->getByIndex(i));
+            xCurrent.set(m_xColumns->getByIndex(i), css::uno::UNO_QUERY);
             if (evt.Source == xCurrent)
                 break;
         }
@@ -1718,7 +1717,7 @@ void FmXGridPeer::setColumns(const Reference< XIndexContainer >& Columns) throw(
         Reference< XPropertySet > xCol;
         for (sal_Int32 i = 0; i < m_xColumns->getCount(); i++)
         {
-            ::cppu::extractInterface(xCol, m_xColumns->getByIndex(i));
+            xCol.set(m_xColumns->getByIndex(i), css::uno::UNO_QUERY);
             removeColumnListeners(xCol);
         }
         Reference< XContainer >  xContainer(m_xColumns, UNO_QUERY);
@@ -1742,7 +1741,7 @@ void FmXGridPeer::setColumns(const Reference< XIndexContainer >& Columns) throw(
         Reference< XPropertySet >  xCol;
         for (sal_Int32 i = 0; i < Columns->getCount(); i++)
         {
-            ::cppu::extractInterface(xCol, Columns->getByIndex(i));
+            xCol.set(Columns->getByIndex(i), css::uno::UNO_QUERY);
             addColumnListeners(xCol);
         }
 
@@ -1799,8 +1798,7 @@ void FmXGridPeer::elementInserted(const ContainerEvent& evt) throw( RuntimeExcep
     if (!pGrid || !m_xColumns.is() || pGrid->IsInColumnMove() || m_xColumns->getCount() == ((sal_Int32)pGrid->GetModelColCount()))
         return;
 
-    Reference< XPropertySet >  xSet;
-    ::cppu::extractInterface(xSet, evt.Element);
+    Reference< XPropertySet >  xSet(evt.Element, css::uno::UNO_QUERY);
     addColumnListeners(xSet);
 
     Reference< XPropertySet >  xNewColumn(xSet);
@@ -1834,10 +1832,9 @@ void FmXGridPeer::elementReplaced(const ContainerEvent& evt) throw( RuntimeExcep
     if (!pGrid || !m_xColumns.is() || pGrid->IsInColumnMove())
         return;
 
-    Reference< XPropertySet >  xNewColumn;
-    Reference< XPropertySet >  xOldColumn;
-    ::cppu::extractInterface(xNewColumn, evt.Element);
-    ::cppu::extractInterface(xOldColumn, evt.ReplacedElement);
+    Reference< XPropertySet > xNewColumn(evt.Element, css::uno::UNO_QUERY);
+    Reference< XPropertySet > xOldColumn(
+        evt.ReplacedElement, css::uno::UNO_QUERY);
 
     sal_Bool bWasEditing = pGrid->IsEditing();
     if (bWasEditing)
@@ -1892,8 +1889,7 @@ void FmXGridPeer::elementRemoved(const ContainerEvent& evt) throw( RuntimeExcept
 
     pGrid->RemoveColumn(pGrid->GetColumnIdFromModelPos((sal_uInt16)::comphelper::getINT32(evt.Accessor)));
 
-    Reference< XPropertySet >  xOldColumn;
-    ::cppu::extractInterface(xOldColumn, evt.Element);
+    Reference< XPropertySet > xOldColumn(evt.Element, css::uno::UNO_QUERY);
     removeColumnListeners(xOldColumn);
 }
 

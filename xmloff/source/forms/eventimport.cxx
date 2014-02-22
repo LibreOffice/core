@@ -20,7 +20,6 @@
 #include "eventimport.hxx"
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <comphelper/extract.hxx>
 #include "strings.hxx"
 
 namespace xmloff
@@ -126,7 +125,7 @@ namespace xmloff
         MapPropertySet2ScriptSequence::const_iterator aRegisteredEventsPos;
         for (sal_Int32 i=0; i<nCount; ++i)
         {
-            ::cppu::extractInterface(xCurrent, _rxContainer->getByIndex(i));
+            xCurrent.set(_rxContainer->getByIndex(i), css::uno::UNO_QUERY);
             if (xCurrent.is())
             {
                 aRegisteredEventsPos = m_aEvents.find(xCurrent);

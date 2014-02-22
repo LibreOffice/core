@@ -27,7 +27,6 @@
 #include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
 #include "FDatabaseMetaDataResultSet.hxx"
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 
 using namespace ::comphelper;
@@ -176,8 +175,8 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumns(
     {
         if(match(tableNamePattern,*pTabBegin,'\0'))
         {
-            Reference< XColumnsSupplier> xTable;
-            ::cppu::extractInterface(xTable,xNames->getByName(*pTabBegin));
+            Reference< XColumnsSupplier> xTable(
+                xNames->getByName(*pTabBegin), css::uno::UNO_QUERY);
             aRow[3] = new ORowSetValueDecorator(*pTabBegin);
 
             Reference< XNameAccess> xColumns = xTable->getColumns();
@@ -195,7 +194,8 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumns(
                 {
                     aRow[4] = new ORowSetValueDecorator(*pBegin);
 
-                    ::cppu::extractInterface(xColumn,xColumns->getByName(*pBegin));
+                    xColumn.set(
+                        xColumns->getByName(*pBegin), css::uno::UNO_QUERY);
                     OSL_ENSURE(xColumn.is(),"Columns contains a column who isn't a fastpropertyset!");
                     aRow[5] = new ORowSetValueDecorator(getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))));
                     aRow[6] = new ORowSetValueDecorator(getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME))));

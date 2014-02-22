@@ -24,7 +24,6 @@
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 
 #include <toolkit/awt/vclxwindow.hxx>
-#include <comphelper/extract.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
@@ -127,8 +126,7 @@ sal_Bool OGenericUnoDialog::convertFastPropertyValue( Any& rConvertedValue, Any&
     {
         case UNODIALOG_PROPERTY_ID_PARENT:
         {
-            Reference<starawt::XWindow> xNew;
-            ::cppu::extractInterface(xNew, rValue);
+            Reference<starawt::XWindow> xNew(rValue, css::uno::UNO_QUERY);
             if (xNew != m_xParent)
             {
                 rConvertedValue <<= xNew;

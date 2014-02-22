@@ -3026,8 +3026,9 @@ void SbaTableQueryBrowser::unloadAndCleanup( sal_Bool _bDisposeConnection )
         xRowSetProps->getPropertyValue(PROPERTY_ACTIVE_CONNECTION) >>= xConn;
 #if OSL_DEBUG_LEVEL > 1
         {
-            Reference< XComponent > xComp;
-            ::cppu::extractInterface(xComp, xRowSetProps->getPropertyValue(PROPERTY_ACTIVE_CONNECTION));
+            Reference< XComponent > xComp(
+                xRowSetProps->getPropertyValue(PROPERTY_ACTIVE_CONNECTION),
+                css::uno::UNO_QUERY);
         }
 #endif
 

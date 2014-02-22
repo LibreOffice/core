@@ -30,7 +30,6 @@
 #include <tools/urlobj.hxx>
 #include "file/FDriver.hxx"
 #include "file/FTable.hxx"
-#include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <ucbhelper/content.hxx>
@@ -419,8 +418,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
                 aRow[7] = new ORowSetValueDecorator(OUString("NO"));
                 aRows.push_back(aRow);
 
-                Reference< XPropertySet> xTable;
-                ::cppu::extractInterface(xTable,xNames->getByName(*pBegin));
+                Reference< XPropertySet> xTable(
+                    xNames->getByName(*pBegin), css::uno::UNO_QUERY);
                 if(xTable.is())
                 {
                     Reference<XUnoTunnel> xTunnel(xTable,UNO_QUERY);

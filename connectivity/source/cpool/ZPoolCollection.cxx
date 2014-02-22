@@ -27,7 +27,6 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
-#include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -359,13 +358,19 @@ Reference<XInterface> OPoolCollection::openNode(const OUString& _rPath,const Ref
     {
         if (xDirectAccess.is() && xDirectAccess->hasByName(_rPath))
         {
-            if (!::cppu::extractInterface(xNode, xDirectAccess->getByName(_rPath)))
-                SAL_WARN("connectivity.cpool", "OConfigurationNode::openNode: could not open the node!");
+            xNode.set(xDirectAccess->getByName(_rPath), css::uno::UNO_QUERY);
+            SAL_WARN_IF(
+                !xNode.is(), "connectivity.cpool",
+                "OConfigurationNode::openNode: could not open the node!");
         }
         else if (xHierarchyAccess.is())
         {
-            if (!::cppu::extractInterface(xNode, xHierarchyAccess->getByHierarchicalName(_rPath)))
-                SAL_WARN("connectivity.cpool", "OConfigurationNode::openNode: could not open the node!");
+            xNode.set(
+                xHierarchyAccess->getByHierarchicalName(_rPath),
+                css::uno::UNO_QUERY);
+            SAL_WARN_IF(
+                !xNode.is(), "connectivity.cpool",
+                "OConfigurationNode::openNode: could not open the node!");
         }
 
     }

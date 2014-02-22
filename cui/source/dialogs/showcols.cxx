@@ -89,7 +89,7 @@ void FmShowColsDialog::SetColumns(const ::com::sun::star::uno::Reference< ::com:
     for (sal_uInt16 i=0; i<xCols->getCount(); ++i)
     {
         sCurName = "";
-        ::cppu::extractInterface(xCurCol, xCols->getByIndex(i));
+        xCurCol.set(xCols->getByIndex(i), css::uno::UNO_QUERY);
         sal_Bool bIsHidden = sal_False;
         try
         {

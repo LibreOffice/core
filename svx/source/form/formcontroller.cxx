@@ -65,7 +65,6 @@
 #include <com/sun/star/sdb/XColumn.hpp>
 
 #include <comphelper/enumhelper.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
@@ -3967,8 +3966,8 @@ sal_Bool SAL_CALL FormController::approveParameter(const DatabaseParameterEvent&
             const PropertyValue* pFinalValues = aFinalValues.getConstArray();
             for (sal_Int32 i=0; i<aFinalValues.getLength(); ++i, ++pFinalValues)
             {
-                Reference< XPropertySet > xParam;
-                ::cppu::extractInterface(xParam, aRequest.Parameters->getByIndex(i));
+                Reference< XPropertySet > xParam(
+                    aRequest.Parameters->getByIndex(i), css::uno::UNO_QUERY);
                 if (xParam.is())
                 {
 #ifdef DBG_UTIL

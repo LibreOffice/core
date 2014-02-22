@@ -29,7 +29,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include "dbase/DIndex.hxx"
 #include "connectivity/FValue.hxx"
-#include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <ucbhelper/content.hxx>
@@ -181,8 +180,8 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
     {
         if(match(tableNamePattern,*pTabBegin,'\0'))
         {
-            Reference< XColumnsSupplier> xTable;
-            ::cppu::extractInterface(xTable,xNames->getByName(*pTabBegin));
+            Reference< XColumnsSupplier> xTable(
+                xNames->getByName(*pTabBegin), css::uno::UNO_QUERY);
             OSL_ENSURE(xTable.is(),"Table not found! Normallya exception had to be thrown here!");
             aRow[3] = new ORowSetValueDecorator(*pTabBegin);
 
@@ -201,7 +200,8 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
                 {
                     aRow[4] = new ORowSetValueDecorator(*pBegin);
 
-                    ::cppu::extractInterface(xColumn,xColumns->getByName(*pBegin));
+                    xColumn.set(
+                        xColumns->getByName(*pBegin), css::uno::UNO_QUERY);
                     OSL_ENSURE(xColumn.is(),"Columns contains a column who isn't a fastpropertyset!");
                     aRow[5] = new ORowSetValueDecorator(getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))));
                     aRow[6] = new ORowSetValueDecorator(getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME))));
@@ -266,8 +266,8 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
     aRow[5]     = new ORowSetValueDecorator(OUString());
     aRow[10]    = new ORowSetValueDecorator(OUString("A"));
 
-    Reference< XIndexesSupplier> xTable;
-    ::cppu::extractInterface(xTable,xNames->getByName(table));
+    Reference< XIndexesSupplier> xTable(
+        xNames->getByName(table), css::uno::UNO_QUERY);
     aRow[3] = new ORowSetValueDecorator(table);
     aRow[7] = new ORowSetValueDecorator((sal_Int32)3);
 
@@ -282,7 +282,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
     Reference< XPropertySet> xIndex;
     for(;pBegin != pEnd;++pBegin)
     {
-        ::cppu::extractInterface(xIndex,xIndexes->getByName(*pBegin));
+        xIndex.set(xIndexes->getByName(*pBegin), css::uno::UNO_QUERY);
         OSL_ENSURE(xIndex.is(),"Indexes contains a column who isn't a fastpropertyset!");
 
         if(unique && !getBOOL(xIndex->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))))

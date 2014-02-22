@@ -57,7 +57,6 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/seqstream.hxx>
@@ -359,7 +358,7 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
             m_bOwnConnection = sal_True;
             break;
         case PROPERTY_ID_TYPEMAP:
-            ::cppu::extractInterface(m_xTypeMap,m_aTypeMap);
+            m_xTypeMap.set(m_aTypeMap, css::uno::UNO_QUERY);
             break;
         case PROPERTY_ID_PROPCHANGE_NOTIFY:
             m_bPropChangeNotifyEnabled = ::cppu::any2bool(rValue);

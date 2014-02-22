@@ -25,7 +25,6 @@
 #include <svtools/helpid.hrc>
 #include <svtools/svtresid.hxx>
 #include <tools/debug.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -942,7 +941,9 @@ void AssignmentPersistentData::Commit()
                 // get the table and the columns
                 Reference< XColumnsSupplier > xSuppTableCols;
                 if (m_xCurrentDatasourceTables->hasByName(sSelectedTable))
-                    ::cppu::extractInterface(xSuppTableCols, m_xCurrentDatasourceTables->getByName(sSelectedTable));
+                    xSuppTableCols.set(
+                        m_xCurrentDatasourceTables->getByName(sSelectedTable),
+                        css::uno::UNO_QUERY);
                 Reference< XNameAccess > xColumns;
                 if (xSuppTableCols.is())
                     xColumns = xSuppTableCols->getColumns();

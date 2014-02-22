@@ -24,7 +24,6 @@
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include "connectivity/dbtools.hxx"
-#include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/property.hxx>
 #include "TConnection.hxx"
@@ -182,7 +181,7 @@ sdbcx::ObjectType OKeysHelper::appendObject( const OUString& _rForName, const Re
         {
             if ( i > 0 )
                 aSql.appendAscii(",");
-            ::cppu::extractInterface(xColProp,xColumns->getByIndex(i));
+            xColProp.set(xColumns->getByIndex(i), css::uno::UNO_QUERY);
             aSql.append( ::dbtools::quoteName( aQuote,getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME)))) );
 
         }

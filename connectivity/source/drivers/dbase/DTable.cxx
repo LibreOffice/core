@@ -36,7 +36,6 @@
 #include <rtl/math.hxx>
 #include <stdio.h>
 #include <ucbhelper/content.hxx>
-#include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -1598,7 +1597,7 @@ sal_Bool ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
         Reference<XPropertySet> xIndex = isUniqueByColumnName(i);
         if (xIndex.is())
         {
-            ::cppu::extractInterface(xCol,m_pColumns->getByIndex(i));
+            xCol.set(m_pColumns->getByIndex(i), css::uno::UNO_QUERY);
             OSL_ENSURE(xCol.is(),"ODbaseTable::DeleteRow column is null!");
             if(xCol.is())
             {
@@ -1646,7 +1645,7 @@ Reference<XPropertySet> ODbaseTable::isUniqueByColumnName(sal_Int32 _nColumnPos)
         Reference<XPropertySet> xIndex;
         for(sal_Int32 i=0;i<m_pIndexes->getCount();++i)
         {
-            ::cppu::extractInterface(xIndex,m_pIndexes->getByIndex(i));
+            xIndex.set(m_pIndexes->getByIndex(i), css::uno::UNO_QUERY);
             if(xIndex.is() && getBOOL(xIndex->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))))
             {
                 Reference<XNameAccess> xCols(Reference<XColumnsSupplier>(xIndex,UNO_QUERY)->getColumns());
@@ -1696,8 +1695,8 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, 
 
             for(nPos = 0;nPos<_xCols->getCount();++nPos)
             {
-                Reference<XPropertySet> xFindCol;
-                ::cppu::extractInterface(xFindCol,_xCols->getByIndex(nPos));
+                Reference<XPropertySet> xFindCol(
+                    _xCols->getByIndex(nPos), css::uno::UNO_QUERY);
                 OSL_ENSURE(xFindCol.is(),"ODbaseTable::UpdateBuffer column is null!");
                 if(aCase(getString(xFindCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),aColName))
                     break;
@@ -1796,8 +1795,8 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, 
             xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
             for(nPos = 0;nPos<_xCols->getCount();++nPos)
             {
-                Reference<XPropertySet> xFindCol;
-                ::cppu::extractInterface(xFindCol,_xCols->getByIndex(nPos));
+                Reference<XPropertySet> xFindCol(
+                    _xCols->getByIndex(nPos), css::uno::UNO_QUERY);
                 if(aCase(getString(xFindCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),aColName))
                     break;
             }

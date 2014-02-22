@@ -55,7 +55,6 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
-#include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/streamsection.hxx>
 #include <comphelper/types.hxx>
@@ -1379,22 +1378,25 @@ void OTableController::assignTable()
             xNameAccess = xSup->getTables();
             OSL_ENSURE(xNameAccess.is(),"no nameaccess for the queries!");
 
-            Reference<XPropertySet> xProp;
-            if(xNameAccess->hasByName(m_sName) && ::cppu::extractInterface(xProp,xNameAccess->getByName(m_sName)) && xProp.is())
+            if(xNameAccess->hasByName(m_sName))
             {
-                m_xTable = xProp;
-                startTableListening();
-
-                // check if we set the table editable
-                Reference<XDatabaseMetaData> xMeta = getConnection()->getMetaData();
-                setEditable( xMeta.is() && !xMeta->isReadOnly() && (isAlterAllowed() || isDropAllowed() || isAddAllowed()) );
-                if(!isEditable())
+                Reference<XPropertySet> xProp(xNameAccess->getByName(m_sName), css::uno::UNO_QUERY);
+                if (xProp.is())
                 {
-                    ::std::for_each(m_vRowList.begin(),m_vRowList.end(),boost::bind( &OTableRow::SetReadOnly, _1, boost::cref( sal_True )));
+                    m_xTable = xProp;
+                    startTableListening();
+
+                    // check if we set the table editable
+                    Reference<XDatabaseMetaData> xMeta = getConnection()->getMetaData();
+                    setEditable( xMeta.is() && !xMeta->isReadOnly() && (isAlterAllowed() || isDropAllowed() || isAddAllowed()) );
+                    if(!isEditable())
+                    {
+                        ::std::for_each(m_vRowList.begin(),m_vRowList.end(),boost::bind( &OTableRow::SetReadOnly, _1, boost::cref( sal_True )));
+                    }
+                    m_bNew = sal_False;
+                    // be notified when the table is in disposing
+                    InvalidateAll();
                 }
-                m_bNew = sal_False;
-                // be notified when the table is in disposing
-                InvalidateAll();
             }
         }
     }

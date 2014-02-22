@@ -39,7 +39,6 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/resid.hxx>
 #include <tools/diagnose_ex.h>
@@ -771,8 +770,8 @@ DbGridRow::DbGridRow(CursorWrapper* pCur, sal_Bool bPaintCursor)
         DataColumn* pColumn;
         for (sal_Int32 i = 0; i < xColumns->getCount(); ++i)
         {
-            Reference< XPropertySet > xColSet;
-            ::cppu::extractInterface(xColSet, xColumns->getByIndex(i));
+            Reference< XPropertySet > xColSet(
+                xColumns->getByIndex(i), css::uno::UNO_QUERY);
             pColumn = new DataColumn(xColSet);
             m_aVariants.push_back( pColumn );
         }

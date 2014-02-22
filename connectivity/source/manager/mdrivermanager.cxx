@@ -28,7 +28,6 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 
 #include <tools/diagnose_ex.h>
-#include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -280,7 +279,7 @@ void OSDBCDriverManager::bootstrapDrivers()
         Reference< XServiceInfo > xSI;
         while (xEnumDrivers->hasMoreElements())
         {
-            ::cppu::extractInterface( xFactory, xEnumDrivers->nextElement() );
+            xFactory.set(xEnumDrivers->nextElement(), css::uno::UNO_QUERY);
             OSL_ENSURE( xFactory.is(), "OSDBCDriverManager::bootstrapDrivers: no factory extracted" );
 
             if ( xFactory.is() )
