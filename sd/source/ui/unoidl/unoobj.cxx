@@ -1688,7 +1688,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
 
                 pProperties->Name = maStrPlayFull;
                 pProperties->Handle = -1;
-                pProperties->Value = ::cppu::bool2any(pInfo->mbSecondPlayFull);
+                pProperties->Value = css::uno::makeAny(pInfo->mbSecondPlayFull);
                 pProperties->State = beans::PropertyState_DIRECT_VALUE;
             }
             break;

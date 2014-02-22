@@ -27,7 +27,6 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <comphelper/extract.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -125,57 +124,57 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport,  sal_uInt16 nPrfx, c
                 }
                 else if( IsXMLToken( aLocalName, XML_ANIMATIONS ) )
                 {
-                    aAny = bool2any( IsXMLToken( sValue, XML_ENABLED ) );
+                    aAny <<= IsXMLToken( sValue, XML_ENABLED );
                     mpImpl->mxPresProps->setPropertyValue("AllowAnimations", aAny );
                 }
                 else if( IsXMLToken( aLocalName, XML_STAY_ON_TOP ) )
                 {
-                    aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
+                    aAny <<= IsXMLToken( sValue, XML_TRUE );
                     mpImpl->mxPresProps->setPropertyValue("IsAlwaysOnTop", aAny );
                 }
                 else if( IsXMLToken( aLocalName, XML_FORCE_MANUAL ) )
                 {
-                    aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
+                    aAny <<= IsXMLToken( sValue, XML_TRUE );
                     mpImpl->mxPresProps->setPropertyValue("IsAutomatic", aAny );
                 }
                 else if( IsXMLToken( aLocalName, XML_ENDLESS ) )
                 {
-                    aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
+                    aAny <<= IsXMLToken( sValue, XML_TRUE );
                     mpImpl->mxPresProps->setPropertyValue("IsEndless", aAny );
                 }
                 else if( IsXMLToken( aLocalName, XML_FULL_SCREEN ) )
                 {
-                    aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
+                    aAny <<= IsXMLToken( sValue, XML_TRUE );
                     mpImpl->mxPresProps->setPropertyValue("IsFullScreen", aAny );
                 }
                 else if( IsXMLToken( aLocalName, XML_MOUSE_VISIBLE ) )
                 {
-                    aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
+                    aAny <<= IsXMLToken( sValue, XML_TRUE );
                     mpImpl->mxPresProps->setPropertyValue("IsMouseVisible", aAny );
                 }
                 else if( IsXMLToken( aLocalName, XML_START_WITH_NAVIGATOR ) )
                 {
-                    aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
+                    aAny <<= IsXMLToken( sValue, XML_TRUE );
                     mpImpl->mxPresProps->setPropertyValue("StartWithNavigator", aAny );
                 }
                 else if( IsXMLToken( aLocalName, XML_MOUSE_AS_PEN ) )
                 {
-                    aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
+                    aAny <<= IsXMLToken( sValue, XML_TRUE );
                     mpImpl->mxPresProps->setPropertyValue("UsePen", aAny );
                 }
                 else if( IsXMLToken( aLocalName, XML_TRANSITION_ON_CLICK ) )
                 {
-                    aAny = bool2any( IsXMLToken( sValue, XML_ENABLED ) );
+                    aAny <<= IsXMLToken( sValue, XML_ENABLED );
                     mpImpl->mxPresProps->setPropertyValue("IsTransitionOnClick", aAny );
                 }
                 else if( IsXMLToken( aLocalName, XML_SHOW_LOGO ) )
                 {
-                    aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
+                    aAny <<= IsXMLToken( sValue, XML_TRUE );
                     mpImpl->mxPresProps->setPropertyValue("IsShowLogo", aAny );
                 }
             }
         }
-        aAny = bool2any( bAll );
+        aAny <<= bAll;
         mpImpl->mxPresProps->setPropertyValue("IsShowAll", aAny );
     }
 }

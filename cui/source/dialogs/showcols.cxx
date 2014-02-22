@@ -24,7 +24,6 @@
 #include <dialmgr.hxx>
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 
 #define CUIFM_PROP_HIDDEN "Hidden"
@@ -60,7 +59,7 @@ IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk)
             {
                 try
                 {
-                    xCol->setPropertyValue(CUIFM_PROP_HIDDEN, ::cppu::bool2any(false));
+                    xCol->setPropertyValue(CUIFM_PROP_HIDDEN, css::uno::Any(false));
                 }
                 catch(...)
                 {

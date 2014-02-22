@@ -66,7 +66,6 @@
 #include <com/sun/star/ui/XUIElement.hpp>
 
 #include <comphelper/basicio.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/seqstream.hxx>
@@ -1333,7 +1332,7 @@ void OQueryController::executeQuery()
                 aProps[2].Value <<= sTranslatedStmt;
 
                 aProps[3].Name = PROPERTY_ENABLE_BROWSER;
-                aProps[3].Value = ::cppu::bool2any(false);
+                aProps[3].Value <<= false;
 
                 aProps[4].Name = PROPERTY_ACTIVE_CONNECTION;
                 aProps[4].Value <<= getConnection();
@@ -1348,7 +1347,7 @@ void OQueryController::executeQuery()
                 aProps[7].Value <<= m_sUpdateTableName;
 
                 aProps[8].Name = PROPERTY_ESCAPE_PROCESSING;
-                aProps[8].Value = ::cppu::bool2any(m_bEscapeProcessing);
+                aProps[8].Value <<= m_bEscapeProcessing;
 
                 xDisp->dispatch(aWantToDispatch, aProps);
                 // check the state of the beamer
@@ -1524,7 +1523,7 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
             if ( editingQuery() )
             {
                 xQuery->setPropertyValue( PROPERTY_UPDATE_TABLENAME, makeAny( m_sUpdateTableName ) );
-                xQuery->setPropertyValue( PROPERTY_ESCAPE_PROCESSING,::cppu::bool2any( m_bEscapeProcessing ) );
+                xQuery->setPropertyValue( PROPERTY_ESCAPE_PROCESSING, css::uno::makeAny( m_bEscapeProcessing ) );
 
                 xQuery->setPropertyValue( PROPERTY_LAYOUTINFORMATION, getViewData() );
             }

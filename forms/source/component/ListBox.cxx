@@ -994,7 +994,7 @@ namespace frm
         // - this would be unable to reflect in the db column
         if ( hasField() )
         {
-            setFastPropertyValue( PROPERTY_ID_MULTISELECTION, ::cppu::bool2any( false ) );
+            setFastPropertyValue( PROPERTY_ID_MULTISELECTION, css::uno::Any(false) );
         }
 
         if ( !hasExternalListSource() )

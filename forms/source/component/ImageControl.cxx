@@ -815,7 +815,7 @@ bool OImageControlControl::implInsertGraphics()
         aDialog.SetTitle( sTitle );
 
         Reference< XFilePickerControlAccess > xController( aDialog.GetFilePicker(), UNO_QUERY_THROW );
-        xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, ::cppu::bool2any(true));
+        xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, css::uno::Any(true));
 
         Reference<XPropertySet> xBoundField;
         if ( hasProperty( PROPERTY_BOUNDFIELD, xSet ) )

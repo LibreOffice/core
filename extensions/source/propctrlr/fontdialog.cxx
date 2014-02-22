@@ -405,7 +405,7 @@ namespace pcr
                 const SvxWordLineModeItem& rWordLineModeItem =
                     static_cast<const SvxWordLineModeItem&>(_rSet.Get(CFID_WORDLINEMODE));
 
-                lcl_pushBackPropertyValue( _out_properties, PROPERTY_WORDLINEMODE, ::cppu::bool2any(rWordLineModeItem.GetValue()));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_WORDLINEMODE, css::uno::makeAny(rWordLineModeItem.GetValue()));
             }
 
 

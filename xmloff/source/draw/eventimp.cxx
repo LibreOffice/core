@@ -25,7 +25,6 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <tools/urlobj.hxx>
-#include <comphelper/extract.hxx>
 
 #include <sax/tools/converter.hxx>
 
@@ -462,7 +461,7 @@ void SdXMLEventContext::EndElement()
 
                     pProperties->Name = "PlayFull";
                     pProperties->Handle = -1;
-                    pProperties->Value = ::cppu::bool2any(mbPlayFull);
+                    pProperties->Value <<= mbPlayFull;
                     pProperties->State = beans::PropertyState_DIRECT_VALUE;
                     break;
 

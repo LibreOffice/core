@@ -548,7 +548,7 @@ void SAL_CALL SvXMLImport::endDocument()
                     mxImportInfo->setPropertyValue(sProgressCurrent, aAny);
                 }
                 if (xPropertySetInfo->hasPropertyByName(sRepeat))
-                    mxImportInfo->setPropertyValue(sRepeat, cppu::bool2any(mpProgressBarHelper->GetRepeat()));
+                    mxImportInfo->setPropertyValue(sRepeat, css::uno::makeAny(mpProgressBarHelper->GetRepeat()));
                 // pProgressBarHelper is deleted in dtor
             }
             OUString sNumberStyles(XML_NUMBERSTYLES);

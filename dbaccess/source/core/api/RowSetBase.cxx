@@ -30,7 +30,6 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <comphelper/sequence.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/seqstream.hxx>
 #include <connectivity/dbexception.hxx>
 #include <tools/debug.hxx>
@@ -1292,8 +1291,8 @@ sal_Bool ORowSetBase::isPropertyChangeNotificationEnabled() const
 void ORowSetBase::fireProperty( sal_Int32 _nProperty, sal_Bool _bNew, sal_Bool _bOld )
 {
     SAL_INFO("dbaccess", "ORowSetBase::fireProperty" );
-    Any aNew = bool2any( _bNew );
-    Any aOld = bool2any( _bOld );
+    Any aNew = css::uno::makeAny( _bNew );
+    Any aOld = css::uno::makeAny( _bOld );
     fire( &_nProperty, &aNew, &aOld, 1, sal_False );
 }
 

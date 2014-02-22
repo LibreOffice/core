@@ -331,7 +331,7 @@ bool XMLPMPropHdl_CenterHorizontal::importXML(
         if (IsXMLToken( rStrImpValue, XML_BOTH) ||
             IsXMLToken( rStrImpValue, XML_HORIZONTAL))
         {
-            rValue = ::cppu::bool2any(true);
+            rValue <<= true;
             bRet = true;
         }
 
@@ -372,7 +372,7 @@ bool XMLPMPropHdl_CenterVertical::importXML(
         if (IsXMLToken(rStrImpValue, XML_BOTH) ||
             IsXMLToken(rStrImpValue, XML_VERTICAL) )
         {
-            rValue = ::cppu::bool2any(true);
+            rValue <<= true;
             bRet = true;
         }
 

@@ -561,7 +561,7 @@ SvXMLExport::~SvXMLExport()
                         mxExportInfo->setPropertyValue(sProgressCurrent, aAny);
                     }
                     if (xPropertySetInfo->hasPropertyByName(sRepeat))
-                        mxExportInfo->setPropertyValue(sRepeat, cppu::bool2any(mpProgressBarHelper->GetRepeat()));
+                        mxExportInfo->setPropertyValue(sRepeat, css::uno::makeAny(mpProgressBarHelper->GetRepeat()));
                 }
                 if (mpNumExport && (mnExportFlags & (EXPORT_AUTOSTYLES | EXPORT_STYLES)))
                 {

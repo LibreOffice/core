@@ -933,27 +933,27 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
             OUString aNameString = aPropertyName;
             if ( aNameString.equalsAscii( SC_UNO_DP_COLGRAND ) )
             {
-                aRet = ::cppu::bool2any( aNewData.GetColumnGrand() );
+                aRet <<= aNewData.GetColumnGrand();
             }
             else if ( aNameString.equalsAscii( SC_UNO_DP_IGNORE_EMPTYROWS ) )
             {
-                aRet = ::cppu::bool2any( aNewData.GetIgnoreEmptyRows() );
+                aRet <<= aNewData.GetIgnoreEmptyRows();
             }
             else if ( aNameString.equalsAscii( SC_UNO_DP_REPEATEMPTY ) )
             {
-                aRet = ::cppu::bool2any( aNewData.GetRepeatIfEmpty() );
+                aRet <<= aNewData.GetRepeatIfEmpty();
             }
             else if ( aNameString.equalsAscii( SC_UNO_DP_ROWGRAND ) )
             {
-                aRet = ::cppu::bool2any( aNewData.GetRowGrand() );
+                aRet <<= aNewData.GetRowGrand();
             }
             else if ( aNameString.equalsAscii( SC_UNO_DP_SHOWFILTER ) )
             {
-                aRet = ::cppu::bool2any( aNewData.GetFilterButton() );
+                aRet <<= aNewData.GetFilterButton();
             }
             else if ( aNameString.equalsAscii( SC_UNO_DP_DRILLDOWN ) )
             {
-                aRet = ::cppu::bool2any( aNewData.GetDrillDown() );
+                aRet <<= aNewData.GetDrillDown();
             }
             else if ( aNameString.equalsAscii( SC_UNO_DP_GRANDTOTAL_NAME ) )
             {
@@ -2001,7 +2001,7 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
     else if ( aNameString.equalsAscii( SC_UNONAME_USESELPAGE ) )
         aRet <<= getUseCurrentPage();
     else if ( aNameString.equalsAscii( SC_UNONAME_HASAUTOSHOW ) )
-        aRet = ::cppu::bool2any(getAutoShowInfo() != NULL);
+        aRet <<= (getAutoShowInfo() != NULL);
     else if ( aNameString.equalsAscii( SC_UNONAME_AUTOSHOW ) )
     {
         const DataPilotFieldAutoShowInfo* pInfo = getAutoShowInfo();
@@ -2009,7 +2009,7 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
             aRet <<= DataPilotFieldAutoShowInfo(*pInfo);
     }
     else if ( aNameString.equalsAscii( SC_UNONAME_HASLAYOUTINFO ) )
-        aRet = ::cppu::bool2any(getLayoutInfo() != NULL);
+        aRet <<= (getLayoutInfo() != NULL);
     else if ( aNameString.equalsAscii( SC_UNONAME_LAYOUTINFO ) )
     {
         const DataPilotFieldLayoutInfo* pInfo = getLayoutInfo();
@@ -2017,7 +2017,7 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
             aRet <<= DataPilotFieldLayoutInfo(*pInfo);
     }
     else if ( aNameString.equalsAscii( SC_UNONAME_HASREFERENCE ) )
-        aRet = ::cppu::bool2any(getReference() != NULL);
+        aRet <<= (getReference() != NULL);
     else if ( aNameString.equalsAscii( SC_UNONAME_REFERENCE ) )
     {
         const DataPilotFieldReference* pRef = getReference();
@@ -2025,7 +2025,7 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
             aRet <<= DataPilotFieldReference(*pRef);
     }
     else if ( aNameString.equalsAscii( SC_UNONAME_HASSORTINFO ) )
-        aRet = ::cppu::bool2any(getSortInfo() != NULL);
+        aRet <<= (getSortInfo() != NULL);
     else if ( aNameString.equalsAscii( SC_UNONAME_SORTINFO ) )
     {
         const DataPilotFieldSortInfo* pInfo = getSortInfo();
@@ -2033,7 +2033,7 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
             aRet <<= DataPilotFieldSortInfo(*pInfo);
     }
     else if ( aNameString.equalsAscii( SC_UNONAME_ISGROUP ) )
-        aRet = ::cppu::bool2any(hasGroupInfo());
+        aRet <<= (hasGroupInfo());
     else if ( aNameString.equalsAscii( SC_UNONAME_GROUPINFO ) )
     {
         aRet <<= getGroupInfo();

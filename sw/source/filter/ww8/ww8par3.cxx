@@ -45,7 +45,6 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-#include <comphelper/extract.hxx>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
@@ -2446,7 +2445,7 @@ sal_Bool WW8FormulaListBox::Import(const uno::Reference <
     }
 
     sal_Bool bDropDown(sal_True);
-    xPropSet->setPropertyValue("Dropdown", cppu::bool2any(bDropDown));
+    xPropSet->setPropertyValue("Dropdown", css::uno::makeAny(bDropDown));
 
     if (!maListEntries.empty())
     {

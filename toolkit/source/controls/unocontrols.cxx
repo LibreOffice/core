@@ -44,7 +44,6 @@
 #include <toolkit/awt/vclxwindows.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/extract.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/edit.hxx>
@@ -1121,7 +1120,7 @@ void UnoRadioButtonControl::createPeer( const uno::Reference< awt::XToolkit > & 
     // have it enabled by default because of 85071)
     uno::Reference< awt::XVclWindowPeer >  xVclWindowPeer( getPeer(), uno::UNO_QUERY );
     if ( xVclWindowPeer.is() )
-        xVclWindowPeer->setProperty( GetPropertyName( BASEPROPERTY_AUTOTOGGLE ), ::cppu::bool2any( true ) );
+        xVclWindowPeer->setProperty( GetPropertyName( BASEPROPERTY_AUTOTOGGLE ), css::uno::Any(true) );
 }
 
 void UnoRadioButtonControl::addItemListener(const uno::Reference < awt::XItemListener > & l) throw(uno::RuntimeException)

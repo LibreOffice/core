@@ -23,7 +23,6 @@
 #include "property.hrc"
 #include "services.hxx"
 #include <tools/debug.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/basicio.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>

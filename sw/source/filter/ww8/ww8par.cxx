@@ -80,7 +80,6 @@
 #include <fchrfmt.hxx>
 #include <charfmt.hxx>
 
-#include <comphelper/extract.hxx>
 #include <fltini.hxx>
 
 #include "writerwordglue.hxx"
@@ -1946,7 +1945,7 @@ void SwWW8ImplReader::ImportDop()
             {
                 if (xInfo->hasPropertyByName("ApplyFormDesignMode"))
                 {
-                    xDocProps->setPropertyValue("ApplyFormDesignMode", cppu::bool2any(bValue));
+                    xDocProps->setPropertyValue("ApplyFormDesignMode", css::uno::makeAny(bValue));
                 }
             }
         }

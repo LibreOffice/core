@@ -154,7 +154,7 @@ namespace dbaui
             static const OUString s_sSortPropertyName = "IsAscending";
             static const OUString s_sNamePropertyName = "Name";
             // the index' own props
-            xIndexDescriptor->setPropertyValue(s_sUniquePropertyName, ::cppu::bool2any(_rPos->bUnique));
+            xIndexDescriptor->setPropertyValue(s_sUniquePropertyName, css::uno::makeAny(_rPos->bUnique));
             xIndexDescriptor->setPropertyValue(s_sNamePropertyName, makeAny(_rPos->sName));
 
             // the fields
@@ -169,7 +169,7 @@ namespace dbaui
                 OSL_ENSURE(xColDescriptor.is(), "OIndexCollection::commitNewIndex: invalid column descriptor!");
                 if (xColDescriptor.is())
                 {
-                    xColDescriptor->setPropertyValue(s_sSortPropertyName, ::cppu::bool2any(aFieldLoop->bSortAscending));
+                    xColDescriptor->setPropertyValue(s_sSortPropertyName, css::uno::makeAny(aFieldLoop->bSortAscending));
                     xColDescriptor->setPropertyValue(s_sNamePropertyName, makeAny(OUString(aFieldLoop->sFieldName)));
                     xAppendCols->appendByDescriptor(xColDescriptor);
                 }

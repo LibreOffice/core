@@ -78,7 +78,6 @@
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
-#include <comphelper/extract.hxx>
 #include <comphelper/evtmethodhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
@@ -3613,7 +3612,7 @@ void FmXFormShell::SetWizardUsing(sal_Bool _bUseThem)
     Sequence< OUString > aNames(1);
     aNames[0] = "FormControlPilotsEnabled";
     Sequence< Any > aValues(1);
-    aValues[0] = ::cppu::bool2any(m_bUseWizards);
+    aValues[0] <<= m_bUseWizards;
     PutProperties(aNames, aValues);
 }
 

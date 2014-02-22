@@ -31,7 +31,6 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <comphelper/extract.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/types.hxx>
 #include "connectivity/dbtools.hxx"
@@ -1517,7 +1516,7 @@ void OResultSet::getFastPropertyValue(
     switch(nHandle)
     {
         case PROPERTY_ID_ISBOOKMARKABLE:
-            rValue = bool2any(isBookmarkable());
+            rValue = css::uno::makeAny(isBookmarkable());
             break;
         case PROPERTY_ID_CURSORNAME:
             rValue <<= getCursorName();

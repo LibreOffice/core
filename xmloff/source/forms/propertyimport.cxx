@@ -101,7 +101,7 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
                     OStringBuffer("PropertyConversion::convertString: could not convert \"").
                 append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
                 append("\" into a boolean!").getStr());
-            aReturn = ::cppu::bool2any(_bInvertBoolean ? !bValue : bValue);
+            aReturn <<= (_bInvertBoolean ? !bValue : bValue);
         }
         break;
         case TypeClass_SHORT:       // sal_Int16

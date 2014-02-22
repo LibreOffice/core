@@ -1076,7 +1076,7 @@ sal_Bool ODbaseTable::CreateImpl()
         try
         {
             Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
-            aContent.executeCommand( "delete",bool2any( true ) );
+            aContent.executeCommand( "delete", css::uno::Any( true ) );
         }
         catch(const Exception&) // an exception is thrown when no file exists
         {
@@ -1104,7 +1104,7 @@ sal_Bool ODbaseTable::CreateImpl()
             try
             {
                 Content aMemoContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
-                aMemoContent.executeCommand( "delete",bool2any( true ) );
+                aMemoContent.executeCommand( "delete", css::uno::Any( true ) );
             }
             catch(const Exception&)
             {
@@ -1120,7 +1120,7 @@ sal_Bool ODbaseTable::CreateImpl()
         {
             aURL.setExtension(aExt);      // kill dbf file
             Content aMemoContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
-            aMemoContent.executeCommand( "delete",bool2any( true ) );
+            aMemoContent.executeCommand( "delete", css::uno::Any( true ) );
             return sal_False;
         }
         m_aHeader.db_typ = dBaseIIIMemo;

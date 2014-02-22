@@ -21,7 +21,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include "XMLBitmapLogicalSizePropertyHandler.hxx"
-#include <comphelper/extract.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -40,7 +39,7 @@ bool XMLBitmapLogicalSizePropertyHandler::importXML(
     Any& rValue,
     const SvXMLUnitConverter& ) const
 {
-    rValue = ::cppu::bool2any( rStrImpValue.indexOf( '%' ) == -1 );
+    rValue <<= ( rStrImpValue.indexOf( '%' ) == -1 );
     return true;
 }
 

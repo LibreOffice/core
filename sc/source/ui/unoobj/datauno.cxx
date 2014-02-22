@@ -316,7 +316,7 @@ void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq
     //  Sequence fuellen
 
     pArray[0].Name = OUString( SC_UNONAME_ISSORTCOLUMNS );
-    pArray[0].Value = ::cppu::bool2any(!rParam.bByRow);
+    pArray[0].Value <<= !rParam.bByRow;
 
     pArray[1].Name = OUString( SC_UNONAME_CONTHDR );
     ScUnoHelpFunctions::SetBoolInAny( pArray[1].Value, rParam.bHasHeader );

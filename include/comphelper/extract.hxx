@@ -121,17 +121,6 @@ inline bool SAL_CALL any2bool( const ::com::sun::star::uno::Any & rAny )
     }
 }
 
-/**
- * Puts a boolean in an any.
- *
- * @DEPRECATED : use makeAny< sal_Bool >()
- *
- */
-inline ::com::sun::star::uno::Any SAL_CALL bool2any( bool bBool )
-{
-    return ::com::sun::star::uno::Any( &bBool, ::getCppuBooleanType() );
-}
-
 }
 
 #endif

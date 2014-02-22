@@ -49,7 +49,6 @@
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
 
-#include <comphelper/extract.hxx>
 #include <comphelper/guarding.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -982,13 +981,13 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
                 rValue <<= m_pImpl->m_aPassword;
                 break;
             case PROPERTY_ID_ISPASSWORDREQUIRED:
-                rValue = bool2any(m_pImpl->m_bPasswordRequired);
+                rValue <<= m_pImpl->m_bPasswordRequired;
                 break;
             case PROPERTY_ID_SUPPRESSVERSIONCL:
-                rValue = bool2any(m_pImpl->m_bSuppressVersionColumns);
+                rValue <<= m_pImpl->m_bSuppressVersionColumns;
                 break;
             case PROPERTY_ID_ISREADONLY:
-                rValue = bool2any(m_pImpl->m_bReadOnly);
+                rValue <<= m_pImpl->m_bReadOnly;
                 break;
             case PROPERTY_ID_INFO:
             {

@@ -605,7 +605,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
                         break;
                     default:
                         aCommandType <<= (sal_Int32)CommandType::COMMAND;
-                        xForm->setPropertyValue(FM_PROP_ESCAPE_PROCESSING, bool2any(2 == nCommandType));
+                        xForm->setPropertyValue(FM_PROP_ESCAPE_PROCESSING, css::uno::Any(2 == nCommandType));
                         break;
                 }
                 xForm->setPropertyValue(FM_PROP_COMMANDTYPE, aCommandType);

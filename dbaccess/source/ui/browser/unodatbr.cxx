@@ -2391,7 +2391,7 @@ sal_Bool SbaTableQueryBrowser::implLoadAnything(const OUString& _rDataSourceName
             // set this _before_ setting the connection, else the rowset would rebuild it ...
         xProp->setPropertyValue(PROPERTY_COMMAND_TYPE, makeAny(_nCommandType));
         xProp->setPropertyValue(PROPERTY_COMMAND, makeAny(_rCommand));
-        xProp->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, ::cppu::bool2any(_bEscapeProcessing));
+        xProp->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, css::uno::makeAny(_bEscapeProcessing));
         if ( m_bPreview )
         {
             xProp->setPropertyValue(PROPERTY_FETCHDIRECTION, makeAny(FetchDirection::FORWARD));

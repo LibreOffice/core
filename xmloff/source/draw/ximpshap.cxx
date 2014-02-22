@@ -35,7 +35,6 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <comphelper/extract.hxx>
 #include "ximpshap.hxx"
 #include <xmloff/XMLBase64ImportContext.hxx>
 #include <xmloff/XMLShapeStyleContext.hxx>
@@ -1680,10 +1679,10 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                 if( xPropsInfo.is() )
                 {
                     if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
-                        xProps->setPropertyValue("IsEmptyPresentationObject", ::cppu::bool2any( false ) );
+                        xProps->setPropertyValue("IsEmptyPresentationObject", css::uno::Any(false) );
 
                     if( mbIsUserTransformed && xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
-                        xProps->setPropertyValue("IsPlaceholderDependent", ::cppu::bool2any( false ) );
+                        xProps->setPropertyValue("IsPlaceholderDependent", css::uno::Any(false) );
                 }
             }
         }
@@ -2429,7 +2428,7 @@ void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::
 
             uno::Reference< beans::XPropertySetInfo > xPropsInfo( xPropset->getPropertySetInfo() );
             if( xPropsInfo.is() && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
-                xPropset->setPropertyValue("IsEmptyPresentationObject", ::cppu::bool2any( mbIsPlaceholder ) );
+                xPropset->setPropertyValue("IsEmptyPresentationObject", css::uno::makeAny( mbIsPlaceholder ) );
 
             if( !mbIsPlaceholder )
             {
@@ -2458,7 +2457,7 @@ void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::
                 if( xPropsInfo.is() )
                 {
                     if( xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
-                        xProps->setPropertyValue("IsPlaceholderDependent", ::cppu::bool2any( false ) );
+                        xProps->setPropertyValue("IsPlaceholderDependent", css::uno::Any(false) );
                 }
             }
         }
@@ -2569,7 +2568,7 @@ void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
             {
                 uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
                 if( xPropsInfo.is() && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
-                    xProps->setPropertyValue("IsEmptyPresentationObject", ::cppu::bool2any( false ) );
+                    xProps->setPropertyValue("IsEmptyPresentationObject", css::uno::Any(false) );
 
                 uno::Any aAny;
 
@@ -2596,7 +2595,7 @@ void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
                 if( xPropsInfo.is() )
                 {
                     if( xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
-                        xProps->setPropertyValue("IsPlaceholderDependent", ::cppu::bool2any( false ) );
+                        xProps->setPropertyValue("IsPlaceholderDependent", css::uno::Any(false) );
                 }
             }
         }
@@ -2700,10 +2699,10 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
                 if( xPropsInfo.is() )
                 {
                     if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
-                        xProps->setPropertyValue("IsEmptyPresentationObject", ::cppu::bool2any( false ) );
+                        xProps->setPropertyValue("IsEmptyPresentationObject", css::uno::Any(false) );
 
                     if( mbIsUserTransformed && xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
-                        xProps->setPropertyValue("IsPlaceholderDependent", ::cppu::bool2any( false ) );
+                        xProps->setPropertyValue("IsPlaceholderDependent", css::uno::Any(false) );
                 }
             }
         }
@@ -3080,10 +3079,10 @@ void SdXMLPluginShapeContext::StartElement( const ::com::sun::star::uno::Referen
                 if( xPropsInfo.is() )
                 {
                     if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
-                        xProps->setPropertyValue("IsEmptyPresentationObject", ::cppu::bool2any( false ) );
+                        xProps->setPropertyValue("IsEmptyPresentationObject", css::uno::Any(false) );
 
                     if( mbIsUserTransformed && xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
-                        xProps->setPropertyValue("IsPlaceholderDependent", ::cppu::bool2any( false ) );
+                        xProps->setPropertyValue("IsPlaceholderDependent", css::uno::Any(false) );
                 }
             }
         }
@@ -3887,10 +3886,10 @@ void SdXMLTableShapeContext::StartElement( const ::com::sun::star::uno::Referenc
                 if( xPropsInfo.is() )
                 {
                     if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
-                        xProps->setPropertyValue("IsEmptyPresentationObject", ::cppu::bool2any( false ) );
+                        xProps->setPropertyValue("IsEmptyPresentationObject", css::uno::Any(false) );
 
                     if( mbIsUserTransformed && xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
-                        xProps->setPropertyValue("IsPlaceholderDependent", ::cppu::bool2any( false ) );
+                        xProps->setPropertyValue("IsPlaceholderDependent", css::uno::Any(false) );
                 }
             }
         }

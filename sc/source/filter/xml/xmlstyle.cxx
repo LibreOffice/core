@@ -1814,13 +1814,13 @@ bool XmlScPropHdl_BreakBefore::importXML(
     if (IsXMLToken(rStrImpValue, XML_AUTO))
     {
         bValue = false;
-        rValue = ::cppu::bool2any(bValue);
+        rValue <<= bValue;
         bRetval = true;
     }
     else if (IsXMLToken(rStrImpValue, XML_PAGE))
     {
         bValue = true;
-        rValue = ::cppu::bool2any(bValue);
+        rValue <<= bValue;
         bRetval = true;
     }
 
@@ -1868,12 +1868,12 @@ bool XmlScPropHdl_IsTextWrapped::importXML(
 
     if (IsXMLToken(rStrImpValue, XML_WRAP))
     {
-        rValue = ::cppu::bool2any(true);
+        rValue <<= true;
         bRetval = true;
     }
     else if (IsXMLToken(rStrImpValue, XML_NO_WRAP))
     {
-        rValue = ::cppu::bool2any(false);
+        rValue <<= false;
         bRetval = true;
     }
 
@@ -1937,12 +1937,12 @@ bool XmlScPropHdl_Vertical::importXML(
 
     if (IsXMLToken(rStrImpValue, XML_AUTO))
     {
-        rValue = ::cppu::bool2any(true);
+        rValue <<= true;
         bRetval = true;
     }
     else if (IsXMLToken(rStrImpValue, XML_0))
     {
-        rValue = ::cppu::bool2any(false);
+        rValue <<= false;
         bRetval = true;
     }
 

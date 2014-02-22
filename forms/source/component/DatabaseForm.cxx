@@ -1510,7 +1510,7 @@ Any SAL_CALL ODatabaseForm::getFastPropertyValue( sal_Int32 nHandle )
        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     if ((nHandle == PROPERTY_ID_ISMODIFIED) && (m_nResetsPending > 0))
-        return ::cppu::bool2any(false);
+        return css::uno::Any(false);
         // don't allow the aggregate which is currently being reset to return a (temporary) "yes"
     else
         return OPropertySetAggregationHelper::getFastPropertyValue(nHandle);
@@ -2080,7 +2080,7 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
     // (do this _before_ the listeners are notified ! their reaction (maybe asynchronous) may depend
     // on the modified state of the row)
     if (bInsertRow)
-        m_xAggregateSet->setPropertyValue(PROPERTY_ISMODIFIED, ::cppu::bool2any(false));
+        m_xAggregateSet->setPropertyValue(PROPERTY_ISMODIFIED, css::uno::Any(false));
 
     aResetGuard.clear();
     {
@@ -2091,7 +2091,7 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
     // and again : ensure the row isn't modified
     // we already did this after we (and maybe our dependents) resetted the values, but the listeners may have changed the row, too
     if (bInsertRow)
-        m_xAggregateSet->setPropertyValue(PROPERTY_ISMODIFIED, ::cppu::bool2any(false));
+        m_xAggregateSet->setPropertyValue(PROPERTY_ISMODIFIED, css::uno::Any(false));
 
     --m_nResetsPending;
 }
