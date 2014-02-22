@@ -41,7 +41,7 @@ SwBlink *pBlink = NULL;
 
 SwBlink::SwBlink()
 {
-    bVisible = sal_True;
+    bVisible = true;
     // Prepare the timer
     aTimer.SetTimeout( BLINK_ON_TIME );
     aTimer.SetTimeoutHdl( LINK(this, SwBlink, Blinker) );
@@ -116,7 +116,7 @@ IMPL_LINK_NOARG(SwBlink, Blinker)
     }
     else // If the list is empty, the timer can be stopped
         aTimer.Stop();
-    return sal_True;
+    return 1;
 }
 
 void SwBlink::Insert( const Point& rPoint, const SwLinePortion* pPor,

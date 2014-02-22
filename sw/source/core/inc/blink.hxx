@@ -46,9 +46,9 @@ public:
     const SwRootFrm* GetRootFrm() const{ return pFrm; }
     const SwLinePortion *GetPortion() const{ return pPor; }
     sal_uInt16 GetDirection() const { return nDir; }
-    sal_Bool operator<( const SwBlinkPortion& rBlinkPortion ) const
+    bool operator<( const SwBlinkPortion& rBlinkPortion ) const
     { return (sal_IntPtr)pPor < (sal_IntPtr)rBlinkPortion.pPor; }
-    sal_Bool operator==( const SwBlinkPortion& rBlinkPortion ) const
+    bool operator==( const SwBlinkPortion& rBlinkPortion ) const
     { return (sal_IntPtr)pPor == (sal_IntPtr)rBlinkPortion.pPor; }
 };
 
@@ -58,7 +58,7 @@ class SwBlink
 {
     SwBlinkList     aList;
     AutoTimer       aTimer;
-    sal_Bool            bVisible;
+    bool            bVisible;
 
 public:
     SwBlink();
@@ -71,7 +71,7 @@ public:
     void Replace( const SwLinePortion* pOld, const SwLinePortion* pNew );
     void Delete( const SwLinePortion* pPor );
     void FrmDelete( const SwRootFrm* pRoot );
-    inline sal_Bool IsVisible() const { return bVisible ; }
+    inline bool IsVisible() const { return bVisible ; }
 };
 
 // Blink-Manager, global variable, see Blink.Cxx
