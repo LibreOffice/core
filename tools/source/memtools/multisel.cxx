@@ -102,7 +102,9 @@ bool MultiSelection::ImplMergeSubSelections( size_t nPos1, size_t nPos2 )
 MultiSelection::MultiSelection():
     aTotRange( 0, -1 ),
     nCurSubSel(0),
+    nCurIndex(0),
     nSelCount(0),
+    bInverseCur(false),
     bCurValid(false),
     bSelectNew(false)
 {
