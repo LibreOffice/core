@@ -58,6 +58,8 @@ public:
     uno::Sequence < OUString > getImpressChartColumnDescriptions( const char* pDir, const char* pName );
     OUString getFileExtension( const OUString& rFileName );
 
+    uno::Reference< chart::XChartDocument > getChartDocFromImpress( const char* pDir, const char* pName );
+
     void loadDocx(const char* pDir, const char* pName);
     utl::TempFile reloadDocx();
     virtual void setUp();
@@ -215,7 +217,7 @@ uno::Sequence < OUString > getWriterChartColumnDescriptions( Reference< lang::XC
     return seriesList;
 }
 
-uno::Sequence < OUString > ChartTest::getImpressChartColumnDescriptions( const char* pDir, const char* pName )
+uno::Reference< chart::XChartDocument > ChartTest::getChartDocFromImpress( const char* pDir, const char* pName )
 {
     mxComponent = loadFromDesktop(getURLFromSrc(pDir) + OUString::createFromAscii(pName), "com.sun.star.comp.Draw.PresentationDocument");
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(mxComponent, uno::UNO_QUERY_THROW );
@@ -228,8 +230,15 @@ uno::Sequence < OUString > ChartTest::getImpressChartColumnDescriptions( const c
     uno::Reference< frame::XModel > xDocModel;
     xShapeProps->getPropertyValue("Model") >>= xDocModel;
     CPPUNIT_ASSERT(xDocModel.is());
-    uno::Reference< chart::XChartDocument > xChart1Doc( xDocModel, uno::UNO_QUERY_THROW );
-    uno::Reference< chart::XChartDataArray > xChartData ( xChart1Doc->getData(), uno::UNO_QUERY_THROW);
+    uno::Reference< chart::XChartDocument > xChartDoc( xDocModel, uno::UNO_QUERY_THROW );
+
+    return xChartDoc;
+}
+
+uno::Sequence < OUString > ChartTest::getImpressChartColumnDescriptions( const char* pDir, const char* pName )
+{
+    uno::Reference< chart::XChartDocument > xChartDoc = getChartDocFromImpress( pDir, pName );
+    uno::Reference< chart::XChartDataArray > xChartData ( xChartDoc->getData(), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xChartData.is());
     uno::Sequence < OUString > seriesList = xChartData->getColumnDescriptions();
     return seriesList;

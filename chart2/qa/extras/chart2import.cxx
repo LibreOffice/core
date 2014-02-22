@@ -33,6 +33,7 @@ public:
     void testPPTXChartSeries();
     void testPPTChartSeries();
     void testODPChartSeries();
+    void testBnc864396();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -50,9 +51,10 @@ public:
  *  this causes the UT to crash in sd.
  *  sd::DrawView::Notify tries to reset by calling sd::DrawViewShell::ResetActualPage
  */
-//    CPPUNIT_TEST(testPPTChartSeries);
-//    CPPUNIT_TEST(testPPTXChartSeries);
-//    CPPUNIT_TEST(testODPChartSeries);
+    CPPUNIT_TEST(testPPTChartSeries);
+    CPPUNIT_TEST(testPPTXChartSeries);
+    CPPUNIT_TEST(testODPChartSeries);
+    CPPUNIT_TEST(testBnc864396);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -279,6 +281,21 @@ void Chart2ImportTest::testODPChartSeries()
     CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), seriesList[1]);
     CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), seriesList[2]);
 
+}
+
+void Chart2ImportTest::testBnc864396()
+{
+    uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromImpress("/chart2/qa/extras/data/pptx/", "bnc864396.pptx"), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xChartDoc->hasInternalDataProvider());
+
+    uno::Reference< chart2::XInternalDataProvider > xDataProvider( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
+    uno::Reference< chart::XChartDataArray > xChartDataArray(xDataProvider, uno::UNO_QUERY_THROW);
+    uno::Sequence< OUString > aRowLabels = xChartDataArray->getRowDescriptions();
+    for(sal_Int32 i = 0; i < aRowLabels.getLength(); ++i)
+    {
+        OUString aExpected = OUString("cat") + OUString::number(i+1);
+        CPPUNIT_ASSERT_EQUAL(aExpected, aRowLabels[i]);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
