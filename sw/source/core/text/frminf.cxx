@@ -28,17 +28,15 @@
 sal_Int32 SwTxtMargin::GetTxtStart() const
 {
     const OUString &rTxt = GetInfo().GetTxt();
-    const sal_Int32 nTmpPos = nStart;
-    const sal_Int32 nEnd = nTmpPos + pCurr->GetLen();
-    sal_Int32 i;
+    const sal_Int32 nEnd = nStart + pCurr->GetLen();
 
-    for( i = nTmpPos; i < nEnd; ++i )
+    for( sal_Int32 i = nStart; i < nEnd; ++i )
     {
         const sal_Unicode aChar = rTxt[i];
         if( CH_TAB != aChar && ' ' != aChar )
             return i;
     }
-    return i;
+    return nEnd;
 }
 
 /*************************************************************************
@@ -48,16 +46,14 @@ sal_Int32 SwTxtMargin::GetTxtStart() const
 sal_Int32 SwTxtMargin::GetTxtEnd() const
 {
     const OUString &rTxt = GetInfo().GetTxt();
-    const sal_Int32 nTmpPos = nStart;
-    const sal_Int32 nEnd = nTmpPos + pCurr->GetLen();
-    sal_Int32 i;
-    for( i = nEnd - 1; i >= nTmpPos; --i )
+    const sal_Int32 nEnd = nStart + pCurr->GetLen();
+    for( sal_Int32 i = nEnd - 1; i >= nStart; --i )
     {
-        sal_Unicode aChar = rTxt[i];
+        const sal_Unicode aChar = rTxt[i];
         if( CH_TAB != aChar && CH_BREAK != aChar && ' ' != aChar )
-            return static_cast<sal_Int32>(i + 1);
+            return i + 1;
     }
-    return static_cast<sal_Int32>(i + 1);
+    return nStart;
 }
 
 /*************************************************************************
@@ -70,20 +66,19 @@ bool SwTxtFrmInfo::IsOneLine() const
     const SwLineLayout *pLay = pFrm->GetPara();
     if( !pLay )
         return false;
-    else
+
+    // For follows false of course
+    if( pFrm->GetFollow() )
+        return false;
+
+    pLay = pLay->GetNext();
+    while( pLay )
     {
-        // For follows false of course
-        if( pFrm->GetFollow() )
+        if( pLay->GetLen() )
             return false;
         pLay = pLay->GetNext();
-        while( pLay )
-        {
-            if( pLay->GetLen() )
-                return false;
-            pLay = pLay->GetNext();
-        }
-        return true;
     }
+    return true;
 }
 
 /*************************************************************************
@@ -96,13 +91,11 @@ bool SwTxtFrmInfo::IsFilled( const sal_uInt8 nPercent ) const
     const SwLineLayout *pLay = pFrm->GetPara();
     if( !pLay )
         return false;
-    else
-    {
-        long nWidth = pFrm->Prt().Width();
-        nWidth *= nPercent;
-        nWidth /= 100;
-        return KSHORT(nWidth) <= pLay->Width();
-    }
+
+    long nWidth = pFrm->Prt().Width();
+    nWidth *= nPercent;
+    nWidth /= 100;
+    return KSHORT(nWidth) <= pLay->Width();
 }
 
 /*************************************************************************
@@ -112,19 +105,15 @@ bool SwTxtFrmInfo::IsFilled( const sal_uInt8 nPercent ) const
 // Where does the text start (without whitespace)? (document global)
 SwTwips SwTxtFrmInfo::GetLineStart( const SwTxtCursor &rLine ) const
 {
-    sal_Int32 nTxtStart = rLine.GetTxtStart();
-    SwTwips nStart;
+    const sal_Int32 nTxtStart = rLine.GetTxtStart();
     if( rLine.GetStart() == nTxtStart )
-        nStart = rLine.GetLineStart();
-    else
-    {
-        SwRect aRect;
-        if( ((SwTxtCursor&)rLine).GetCharRect( &aRect, nTxtStart ) )
-            nStart = aRect.Left();
-        else
-            nStart = rLine.GetLineStart();
-    }
-    return nStart;
+        return rLine.GetLineStart();
+
+    SwRect aRect;
+    if( ((SwTxtCursor&)rLine).GetCharRect( &aRect, nTxtStart ) )
+        return aRect.Left();
+
+    return rLine.GetLineStart();
 }
 
 
@@ -293,11 +282,11 @@ SwTwips SwTxtFrmInfo::GetFirstIndent() const
     // At first we only return +1, -1 and 0
     if( nLeft == nFirst )
         return 0;
-    else
-        if( nLeft > nFirst )
-            return -1;
-        else
-            return +1;
+
+    if( nLeft > nFirst )
+        return -1;
+
+    return 1;
 }
 
 /*************************************************************************
@@ -358,7 +347,5 @@ sal_Int32 SwTxtFrmInfo::GetBigIndent( sal_Int32& rFndPos,
             ? static_cast<sal_Int32>(aRect.Left() - pFrm->Frm().Left() - pFrm->Prt().Left())
             : 0;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
