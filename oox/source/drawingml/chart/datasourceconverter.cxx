@@ -50,6 +50,34 @@ Reference< XDataSequence > DataSequenceConverter::createDataSequence( const OUSt
     Reference< XDataSequence > xDataSeq;
     if( getChartConverter() )
     {
+        // the internal data table does not support complex labels
+        // this is only supported in Calc!!!
+        // merge the labels into a single one
+        if(rRole == "label")
+        {
+            mrModel.mnPointCount = std::min<sal_Int32>(mrModel.mnPointCount, 1);
+            OUStringBuffer aTitle;
+            bool bFirst = true;
+            for(DataSequenceModel::AnyMap::const_iterator itr = mrModel.maData.begin(),
+                    itrEnd = mrModel.maData.end(); itr != itrEnd; ++itr)
+            {
+                Any aAny = itr->second;
+                if(aAny.has<OUString>())
+                {
+                    if(!bFirst)
+                        aTitle.append(" ");
+
+                    aTitle.append(aAny.get<OUString>());
+                    bFirst = false;
+                }
+            }
+
+            if(!bFirst)
+            {
+                mrModel.maData.clear();
+                mrModel.maData.insert(std::make_pair<sal_Int32, Any>(1, Any(aTitle.makeStringAndClear())));
+            }
+        }
         xDataSeq = getChartConverter()->createDataSequence( getChartDocument()->getDataProvider(), mrModel );
 
         // set sequen   ce role
