@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//------------------------------------------------------------------------
+
 // include files
-//------------------------------------------------------------------------
+
 #include <sal/types.h>
 
 #include <osl/thread.hxx>
@@ -39,7 +39,7 @@
 #include <time.h>
 #endif
 
-// -----------------------------------------------------------------------------
+
 #define CONST_TEST_STRING "gregorian"
 
 namespace {
@@ -50,7 +50,7 @@ struct Gregorian : public rtl::StaticWithInit<rtl::OUString, Gregorian> {
 };
 }
 
-// -----------------------------------------------------------------------------
+
 namespace ThreadHelper
 {
     // typedef enum {
@@ -81,7 +81,7 @@ namespace ThreadHelper
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** Simple thread for testing Thread-create.
  * Just add 1 of value 0, and after running, result is 1.
@@ -142,7 +142,7 @@ public:
         }
 };
 
-// -----------------------------------------------------------------------------
+
 namespace rtl_DoubleLocking
 {
 
@@ -238,7 +238,7 @@ namespace rtl_DoubleLocking
         CPPUNIT_TEST(getValue_002);
         CPPUNIT_TEST_SUITE_END();
     }; // class create
-// -----------------------------------------------------------------------------
+
     CPPUNIT_TEST_SUITE_REGISTRATION(rtl_DoubleLocking::getValue);
 } // namespace rtl_DoubleLocking
 

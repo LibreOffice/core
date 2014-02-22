@@ -1285,7 +1285,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class b2dvector
 
-// -----------------------------------------------------------------------------
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dsvgdimpex);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2drange);
@@ -1304,7 +1304,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::bcolor);
 } // namespace basegfx2d
 
 
-// -----------------------------------------------------------------------------
+
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

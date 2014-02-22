@@ -34,14 +34,14 @@ using namespace ::rtl;
 
 using ::std::vector;
 
-//----------------------------------------------------------------------
+
 
 struct SfxItemPropertyMapEntryHash
 {
     size_t operator()(const SfxItemPropertyMapEntry* pMap) const { return (size_t)pMap; }
 };
 
-//----------------------------------------------------------------------
+
 
 struct SvxIDPropertyCombine
 {
@@ -56,13 +56,13 @@ SvxItemPropertySet::SvxItemPropertySet( const SfxItemPropertyMapEntry* pMap, Sfx
 {
 }
 
-//----------------------------------------------------------------------
+
 SvxItemPropertySet::~SvxItemPropertySet()
 {
     ClearAllUsrAny();
 }
 
-//----------------------------------------------------------------------
+
 uno::Any* SvxItemPropertySet::GetUsrAnyForID(sal_uInt16 nWID) const
 {
     for ( size_t i = 0, n = aCombineList.size(); i < n; ++i )
@@ -74,7 +74,7 @@ uno::Any* SvxItemPropertySet::GetUsrAnyForID(sal_uInt16 nWID) const
     return NULL;
 }
 
-//----------------------------------------------------------------------
+
 void SvxItemPropertySet::AddUsrAnyForID(const uno::Any& rAny, sal_uInt16 nWID)
 {
     SvxIDPropertyCombine* pNew = new SvxIDPropertyCombine;
@@ -83,7 +83,7 @@ void SvxItemPropertySet::AddUsrAnyForID(const uno::Any& rAny, sal_uInt16 nWID)
     aCombineList.push_back( pNew );
 }
 
-//----------------------------------------------------------------------
+
 
 void SvxItemPropertySet::ClearAllUsrAny()
 {
@@ -92,7 +92,7 @@ void SvxItemPropertySet::ClearAllUsrAny()
     aCombineList.clear();
 }
 
-//----------------------------------------------------------------------
+
 
 sal_Bool SvxUnoCheckForPositiveValue( const uno::Any& rVal )
 {
@@ -104,7 +104,7 @@ sal_Bool SvxUnoCheckForPositiveValue( const uno::Any& rVal )
 }
 
 
-//----------------------------------------------------------------------
+
 uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry* pMap, const SfxItemSet& rSet, bool bSearchInParent, bool bDontConvertNegativeValues ) const
 {
     uno::Any aVal;
@@ -150,7 +150,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
     return aVal;
 }
 
-//----------------------------------------------------------------------
+
 void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const uno::Any& rVal, SfxItemSet& rSet, bool bDontConvertNegativeValues ) const
 {
     if(!pMap || !pMap->nWID)
@@ -202,7 +202,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
     }
 }
 
-//----------------------------------------------------------------------
+
 uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry* pMap ) const
 {
     // Already entered a value? Then finish quickly
@@ -257,7 +257,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
     return aVal;
 }
 
-//----------------------------------------------------------------------
+
 
 void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const uno::Any& rVal ) const
 {
@@ -268,14 +268,14 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
         *pUsrAny = rVal;
 }
 
-//----------------------------------------------------------------------
+
 
 const SfxItemPropertySimpleEntry* SvxItemPropertySet::getPropertyMapEntry(const OUString &rName) const
 {
     return m_aPropertyMap.getByName( rName );
  }
 
-//----------------------------------------------------------------------
+
 
 uno::Reference< beans::XPropertySetInfo >  SvxItemPropertySet::getPropertySetInfo() const
 {
@@ -284,7 +284,7 @@ uno::Reference< beans::XPropertySetInfo >  SvxItemPropertySet::getPropertySetInf
     return m_xInfo;
 }
 
-//----------------------------------------------------------------------
+
 
 #ifndef TWIPS_TO_MM
 #define TWIPS_TO_MM(val) ((val * 127 + 36) / 72)
@@ -330,7 +330,7 @@ void SvxUnoConvertToMM( const SfxMapUnit eSourceMapUnit, uno::Any & rMetric ) th
     }
 }
 
-//----------------------------------------------------------------------
+
 
 /** converts the given any with a metric from 100th/mm to the given metric if needed */
 void SvxUnoConvertFromMM( const SfxMapUnit eDestinationMapUnit, uno::Any & rMetric ) throw()

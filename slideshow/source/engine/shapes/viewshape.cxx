@@ -231,7 +231,7 @@ namespace slideshow
             else
             {
                 // render subsets of whole metafile
-                // --------------------------------
+
 
                 bool bRet(true);
                 VectorOfDocTreeNodes::const_iterator        aIter( rSubsets.begin() );
@@ -556,7 +556,7 @@ namespace slideshow
 
 
             // shape needs repaint - setup all that's needed
-            // ---------------------------------------------
+
 
             boost::optional<basegfx::B2DPolyPolygon> aClip;
 
@@ -580,7 +580,7 @@ namespace slideshow
                         // render with global alpha - have to prepare
                         // a bitmap, and render that with modulated
                         // alpha
-                        // -------------------------------------------
+
 
                         const ::basegfx::B2DHomMatrix aTransform(
                             getShapeTransformation( rBounds,
@@ -721,7 +721,7 @@ namespace slideshow
         }
 
 
-        // -------------------------------------------------------------------------------------
+
 
         ViewShape::ViewShape( const ViewLayerSharedPtr& rViewLayer ) :
             mpViewLayer( rViewLayer ),

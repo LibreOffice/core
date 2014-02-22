@@ -31,7 +31,7 @@ namespace comphelper
 
 const sal_Int32 nConstBufferSize = 32000;
 
-//---------------------------------------------------------------------------
+
 void copyInputToOutput_Impl( const uno::Reference< io::XInputStream >& xIn,
                             const uno::Reference< io::XOutputStream >& xOut )
 {
@@ -52,7 +52,7 @@ void copyInputToOutput_Impl( const uno::Reference< io::XInputStream >& xIn,
     while ( nRead == nConstBufferSize );
 }
 
-//---------------------------------------------------------------------------
+
 OSeekableInputWrapper::OSeekableInputWrapper(
             const uno::Reference< io::XInputStream >& xInStream,
             const uno::Reference< uno::XComponentContext >& rxContext )
@@ -63,12 +63,12 @@ OSeekableInputWrapper::OSeekableInputWrapper(
         throw uno::RuntimeException();
 }
 
-//---------------------------------------------------------------------------
+
 OSeekableInputWrapper::~OSeekableInputWrapper()
 {
 }
 
-//---------------------------------------------------------------------------
+
 uno::Reference< io::XInputStream > OSeekableInputWrapper::CheckSeekableCanWrap(
                             const uno::Reference< io::XInputStream >& xInStream,
                             const uno::Reference< uno::XComponentContext >& rxContext )
@@ -84,7 +84,7 @@ uno::Reference< io::XInputStream > OSeekableInputWrapper::CheckSeekableCanWrap(
     return xNewStream;
 }
 
-//---------------------------------------------------------------------------
+
 void OSeekableInputWrapper::PrepareCopy_Impl()
 {
     if ( !m_xCopyInput.is() )
@@ -114,7 +114,7 @@ void OSeekableInputWrapper::PrepareCopy_Impl()
 }
 
 // XInputStream
-//---------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OSeekableInputWrapper::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
     throw ( io::NotConnectedException,
             io::BufferSizeExceededException,
@@ -131,7 +131,7 @@ sal_Int32 SAL_CALL OSeekableInputWrapper::readBytes( uno::Sequence< sal_Int8 >& 
     return m_xCopyInput->readBytes( aData, nBytesToRead );
 }
 
-//---------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OSeekableInputWrapper::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
     throw ( io::NotConnectedException,
             io::BufferSizeExceededException,
@@ -148,7 +148,7 @@ sal_Int32 SAL_CALL OSeekableInputWrapper::readSomeBytes( uno::Sequence< sal_Int8
     return m_xCopyInput->readSomeBytes( aData, nMaxBytesToRead );
 }
 
-//---------------------------------------------------------------------------
+
 void SAL_CALL OSeekableInputWrapper::skipBytes( sal_Int32 nBytesToSkip )
     throw ( io::NotConnectedException,
             io::BufferSizeExceededException,
@@ -165,7 +165,7 @@ void SAL_CALL OSeekableInputWrapper::skipBytes( sal_Int32 nBytesToSkip )
     m_xCopyInput->skipBytes( nBytesToSkip );
 }
 
-//---------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OSeekableInputWrapper::available()
     throw ( io::NotConnectedException,
             io::IOException,
@@ -181,7 +181,7 @@ sal_Int32 SAL_CALL OSeekableInputWrapper::available()
     return m_xCopyInput->available();
 }
 
-//---------------------------------------------------------------------------
+
 void SAL_CALL OSeekableInputWrapper::closeInput()
     throw ( io::NotConnectedException,
             io::IOException,
@@ -206,7 +206,7 @@ void SAL_CALL OSeekableInputWrapper::closeInput()
 
 
 // XSeekable
-//---------------------------------------------------------------------------
+
 void SAL_CALL OSeekableInputWrapper::seek( sal_Int64 location )
     throw ( lang::IllegalArgumentException,
             io::IOException,
@@ -222,7 +222,7 @@ void SAL_CALL OSeekableInputWrapper::seek( sal_Int64 location )
     m_xCopySeek->seek( location );
 }
 
-//---------------------------------------------------------------------------
+
 sal_Int64 SAL_CALL OSeekableInputWrapper::getPosition()
     throw ( io::IOException,
             uno::RuntimeException )
@@ -237,7 +237,7 @@ sal_Int64 SAL_CALL OSeekableInputWrapper::getPosition()
     return m_xCopySeek->getPosition();
 }
 
-//---------------------------------------------------------------------------
+
 sal_Int64 SAL_CALL OSeekableInputWrapper::getLength()
     throw ( io::IOException,
             uno::RuntimeException )

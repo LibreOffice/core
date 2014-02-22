@@ -51,7 +51,7 @@ ConverterCache::ConverterCache( void)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 ConverterCache::~ConverterCache( void)
 {
@@ -64,7 +64,7 @@ ConverterCache::~ConverterCache( void)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void ConverterCache::ensureConverter( int nSelect )
 {
@@ -93,7 +93,7 @@ void ConverterCache::ensureConverter( int nSelect )
     rtl_resetUnicodeToTextContext( maConverterCache[ nSelect ], aContext );
 }
 
-// --------------------------------------------------------------------
+
 
 sal_uInt16 ConverterCache::convertOne( int nSelect, sal_Unicode aChar )
 {
@@ -118,7 +118,7 @@ sal_uInt16 ConverterCache::convertOne( int nSelect, sal_Unicode aChar )
     return aCode;
 }
 
-// --------------------------------------------------------------------
+
 
 void ConverterCache::convertStr( int nSelect, const sal_Unicode* pSrc, sal_uInt16* pDst, int nCount )
 {

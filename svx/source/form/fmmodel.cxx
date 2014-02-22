@@ -218,13 +218,13 @@ SdrPage* FmFormModel::RemoveMasterPage(sal_uInt16 nPgNum)
     return pPage;
 }
 
-//------------------------------------------------------------------------
+
 SdrLayerID FmFormModel::GetControlExportLayerId( const SdrObject& rObj ) const
 {
     return rObj.GetLayer();
 }
 
-//------------------------------------------------------------------------
+
 void FmFormModel::implSetOpenInDesignMode( sal_Bool _bOpenDesignMode, sal_Bool _bForce )
 {
     if( ( _bOpenDesignMode != m_bOpenInDesignMode ) || _bForce )
@@ -238,19 +238,19 @@ void FmFormModel::implSetOpenInDesignMode( sal_Bool _bOpenDesignMode, sal_Bool _
     m_pImpl->bOpenInDesignIsDefaulted = sal_False;
 }
 
-//------------------------------------------------------------------------
+
 void FmFormModel::SetOpenInDesignMode( sal_Bool bOpenDesignMode )
 {
     implSetOpenInDesignMode( bOpenDesignMode, sal_False );
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmFormModel::OpenInDesignModeIsDefaulted( )
 {
     return m_pImpl->bOpenInDesignIsDefaulted;
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmFormModel::ControlsUseRefDevice() const
 {
     if ( !m_pImpl->aControlsUseRefDevice )
@@ -263,7 +263,7 @@ sal_Bool FmFormModel::ControlsUseRefDevice() const
     return *m_pImpl->aControlsUseRefDevice;
 }
 
-//------------------------------------------------------------------------
+
 void FmFormModel::SetAutoControlFocus( sal_Bool _bAutoControlFocus )
 {
     if( _bAutoControlFocus != m_bAutoControlFocus )
@@ -273,7 +273,7 @@ void FmFormModel::SetAutoControlFocus( sal_Bool _bAutoControlFocus )
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmFormModel::SetObjectShell( SfxObjectShell* pShell )
 {
     if (pShell == m_pObjShell)
@@ -298,7 +298,7 @@ void FmFormModel::SetObjectShell( SfxObjectShell* pShell )
     }
 }
 
-//------------------------------------------------------------------------
+
 FmXUndoEnvironment& FmFormModel::GetUndoEnv()
 {
     return *m_pImpl->pUndoEnv;

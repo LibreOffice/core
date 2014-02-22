@@ -46,7 +46,7 @@ DropTarget::~DropTarget()
         m_pSelectionManager->deregisterDropTarget( m_aTargetWindow );
 }
 
-// --------------------------------------------------------------------------
+
 
 void DropTarget::initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception )
 {
@@ -76,7 +76,7 @@ void DropTarget::initialize( const Sequence< Any >& arguments ) throw( ::com::su
     }
 }
 
-// --------------------------------------------------------------------------
+
 
 void DropTarget::addDropTargetListener( const Reference< XDropTargetListener >& xListener ) throw()
 {
@@ -85,7 +85,7 @@ void DropTarget::addDropTargetListener( const Reference< XDropTargetListener >& 
     m_aListeners.push_back( xListener );
 }
 
-// --------------------------------------------------------------------------
+
 
 void DropTarget::removeDropTargetListener( const Reference< XDropTargetListener >& xListener ) throw()
 {
@@ -94,14 +94,14 @@ void DropTarget::removeDropTargetListener( const Reference< XDropTargetListener 
     m_aListeners.remove( xListener );
 }
 
-// --------------------------------------------------------------------------
+
 
 sal_Bool DropTarget::isActive() throw()
 {
     return m_bActive;
 }
 
-// --------------------------------------------------------------------------
+
 
 void DropTarget::setActive( sal_Bool active ) throw()
 {
@@ -110,14 +110,14 @@ void DropTarget::setActive( sal_Bool active ) throw()
     m_bActive = active;
 }
 
-// --------------------------------------------------------------------------
+
 
 sal_Int8 DropTarget::getDefaultActions() throw()
 {
     return m_nDefaultActions;
 }
 
-// --------------------------------------------------------------------------
+
 
 void DropTarget::setDefaultActions( sal_Int8 actions ) throw()
 {
@@ -126,7 +126,7 @@ void DropTarget::setDefaultActions( sal_Int8 actions ) throw()
     m_nDefaultActions = actions;
 }
 
-// --------------------------------------------------------------------------
+
 
 void DropTarget::drop( const DropTargetDropEvent& dtde ) throw()
 {
@@ -140,7 +140,7 @@ void DropTarget::drop( const DropTargetDropEvent& dtde ) throw()
     }
 }
 
-// --------------------------------------------------------------------------
+
 
 void DropTarget::dragEnter( const DropTargetDragEnterEvent& dtde ) throw()
 {
@@ -154,7 +154,7 @@ void DropTarget::dragEnter( const DropTargetDragEnterEvent& dtde ) throw()
     }
 }
 
-// --------------------------------------------------------------------------
+
 
 void DropTarget::dragExit( const DropTargetEvent& dte ) throw()
 {
@@ -168,7 +168,7 @@ void DropTarget::dragExit( const DropTargetEvent& dte ) throw()
     }
 }
 
-// --------------------------------------------------------------------------
+
 
 void DropTarget::dragOver( const DropTargetDragEvent& dtde ) throw()
 {

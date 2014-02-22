@@ -388,7 +388,7 @@ Rectangle ImplGetThemeRect( HTHEME hTheme, HDC hDC, int iPart, int iState, const
 }
 
 // Helper functions
-// ----
+
 
 void ImplConvertSpinbuttonValues( int nControlPart, const ControlState& rState, const Rectangle& rRect,
                                  int* pLunaPart, int *pLunaState, RECT *pRect )

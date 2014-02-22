@@ -29,7 +29,7 @@ namespace connectivity
 {
     namespace kab
     {
-// -----------------------------------------------------------------------------
+
 // return the value of a KDE address book field, given an addressee and a field number
 QString valueOfKabField(const ::KABC::Addressee &aAddressee, sal_Int32 nFieldNumber)
 {
@@ -42,7 +42,7 @@ QString valueOfKabField(const ::KABC::Addressee &aAddressee, sal_Int32 nFieldNum
             return aFields[nFieldNumber - KAB_DATA_FIELDS]->value(aAddressee);
     }
 }
-// ------------------------------------------------------------------------------
+
 // search the KDE address book field number of a given column name
 sal_uInt32 findKabField(const OUString& columnName) throw(SQLException)
 {
@@ -79,7 +79,7 @@ sal_uInt32 findKabField(const OUString& columnName) throw(SQLException)
     OSL_ASSERT(false);
     return 0;
 }
-// ------------------------------------------------------------------------------
+
     }
 }
 

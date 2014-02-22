@@ -65,12 +65,12 @@
 
 ScDocument* ScPatternAttr::pDoc = NULL;
 
-// -----------------------------------------------------------------------
+
 
 using sc::HMMToTwips;
 using sc::TwipsToHMM;
 
-// -----------------------------------------------------------------------
+
 
 ScPatternAttr::ScPatternAttr( SfxItemSet* pItemSet, const OUString& rStyleName )
     :   SfxSetItem  ( ATTR_PATTERN, pItemSet ),
@@ -934,7 +934,7 @@ static SfxStyleSheetBase* lcl_CopyStyleToPool
         return NULL;
     }
 
-    //--------------------------------------------------------
+
 
     const OUString       aStrSrcStyle = pSrcStyle->GetName();
     const SfxStyleFamily eFamily      = pSrcStyle->GetFamily();

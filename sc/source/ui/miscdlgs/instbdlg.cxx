@@ -22,7 +22,7 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
@@ -71,7 +71,7 @@ ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nT
     Init_Impl( bFromFile );
 }
 
-//------------------------------------------------------------------------
+
 
 ScInsertTableDlg::~ScInsertTableDlg()
 {
@@ -80,7 +80,7 @@ ScInsertTableDlg::~ScInsertTableDlg()
     delete pDocInserter;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScInsertTableDlg::Init_Impl( bool bFromFile )
 {
@@ -130,7 +130,7 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 short ScInsertTableDlg::Execute()
 {
@@ -146,7 +146,7 @@ short ScInsertTableDlg::Execute()
     return nRet;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScInsertTableDlg::SetNewTable_Impl()
 {
@@ -167,7 +167,7 @@ void ScInsertTableDlg::SetNewTable_Impl()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScInsertTableDlg::SetFromTo_Impl()
 {
@@ -184,7 +184,7 @@ void ScInsertTableDlg::SetFromTo_Impl()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScInsertTableDlg::FillTables_Impl( ScDocument* pSrcDoc )
 {
@@ -209,7 +209,7 @@ void ScInsertTableDlg::FillTables_Impl( ScDocument* pSrcDoc )
         m_pLbTables->SelectEntryPos(0);
 }
 
-//------------------------------------------------------------------------
+
 
 const OUString* ScInsertTableDlg::GetFirstTable( sal_uInt16* pN )
 {
@@ -232,7 +232,7 @@ const OUString* ScInsertTableDlg::GetFirstTable( sal_uInt16* pN )
     return pStr;
 }
 
-//------------------------------------------------------------------------
+
 
 const OUString* ScInsertTableDlg::GetNextTable( sal_uInt16* pN )
 {
@@ -251,9 +251,9 @@ const OUString* ScInsertTableDlg::GetNextTable( sal_uInt16* pN )
 }
 
 
-//------------------------------------------------------------------------
+
 // Handler:
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScInsertTableDlg, CountHdl_Impl)
 {
@@ -277,7 +277,7 @@ IMPL_LINK_NOARG(ScInsertTableDlg, CountHdl_Impl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(ScInsertTableDlg, ChoiceHdl_Impl)
 {
     if ( m_pBtnNew->IsChecked() )
@@ -289,7 +289,7 @@ IMPL_LINK_NOARG(ScInsertTableDlg, ChoiceHdl_Impl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScInsertTableDlg, BrowseHdl_Impl)
 {
@@ -301,7 +301,7 @@ IMPL_LINK_NOARG(ScInsertTableDlg, BrowseHdl_Impl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScInsertTableDlg, SelectHdl_Impl)
 {
@@ -309,7 +309,7 @@ IMPL_LINK_NOARG(ScInsertTableDlg, SelectHdl_Impl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScInsertTableDlg::DoEnable_Impl()
 {

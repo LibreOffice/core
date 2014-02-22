@@ -447,7 +447,7 @@ namespace
         xEventManager->registerScriptEvents(nIndex, aTransferable);
     }
 
-    //------------------------------------------------------------------------------
+
     OUString getServiceNameByControlType(sal_Int16 nType)
     {
         switch (nType)
@@ -480,7 +480,7 @@ namespace
 
 }
 
-//------------------------------------------------------------------------------
+
 // check if the control has one of the interfaces we can use for searching
 // *_pCurrentText will be filled with the current text of the control (as used when searching this control)
 sal_Bool IsSearchableControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxControl,
@@ -523,7 +523,7 @@ sal_Bool IsSearchableControl( const ::com::sun::star::uno::Reference< ::com::sun
     return sal_False;
 }
 
-//------------------------------------------------------------------------------
+
 bool FmXBoundFormFieldIterator::ShouldStepInto(const Reference< XInterface>& _rContainer) const
 {
     if (_rContainer == m_xStartingPoint)
@@ -533,7 +533,7 @@ bool FmXBoundFormFieldIterator::ShouldStepInto(const Reference< XInterface>& _rC
     return Reference< XControlModel>(_rContainer, UNO_QUERY).is();
 }
 
-//------------------------------------------------------------------------------
+
 bool FmXBoundFormFieldIterator::ShouldHandleElement(const Reference< XInterface>& _rElement)
 {
     if (!_rElement.is())
@@ -557,7 +557,7 @@ bool FmXBoundFormFieldIterator::ShouldHandleElement(const Reference< XInterface>
     return aVal.hasValue();
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool isControlList(const SdrMarkList& rMarkList)
 {
     // enthaelt die liste nur Controls und mindestens ein control
@@ -600,7 +600,7 @@ sal_Bool isControlList(const SdrMarkList& rMarkList)
     return bControlList && bHadAnyLeafs;
 }
 
-//------------------------------------------------------------------------
+
 Reference< XForm > GetForm(const Reference< XInterface>& _rxElement)
 {
     Reference< XForm > xForm( _rxElement, UNO_QUERY );
@@ -637,7 +637,7 @@ void SAL_CALL FmXFormShell_Base_Disambiguation::disposing()
 // class FmXFormShell
 //========================================================================
 DBG_NAME(FmXFormShell);
-//------------------------------------------------------------------------
+
 FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
         :FmXFormShell_BASE(m_aMutex)
         ,FmXFormShell_CFGBASE(OUString("Office.Common/Misc"), CONFIG_MODE_DELAYED_UPDATE)
@@ -681,14 +681,14 @@ FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
     EnableNotification(aNames);
 }
 
-//------------------------------------------------------------------------
+
 FmXFormShell::~FmXFormShell()
 {
     delete m_pTextShell;
     DBG_DTOR(FmXFormShell,NULL);
 }
 
-//------------------------------------------------------------------
+
 Reference< XModel > FmXFormShell::getContextDocument() const
 {
     Reference< XModel > xModel;
@@ -709,13 +709,13 @@ Reference< XModel > FmXFormShell::getContextDocument() const
     return xModel;
 }
 
-//------------------------------------------------------------------
+
 bool FmXFormShell::isEnhancedForm() const
 {
     return getDocumentType() == eEnhancedForm;
 }
 
-//------------------------------------------------------------------
+
 bool FmXFormShell::impl_checkDisposed() const
 {
     if ( !m_pShell )
@@ -726,7 +726,7 @@ bool FmXFormShell::impl_checkDisposed() const
     return false;
 }
 
-//------------------------------------------------------------------
+
 ::svxform::DocumentType FmXFormShell::getDocumentType() const
 {
     if ( m_eDocumentType != eUnknownDocumentType )
@@ -746,7 +746,7 @@ bool FmXFormShell::impl_checkDisposed() const
     return m_eDocumentType;
 }
 
-//------------------------------------------------------------------
+
 bool FmXFormShell::IsReadonlyDoc() const
 {
     if ( impl_checkDisposed() )
@@ -758,17 +758,17 @@ bool FmXFormShell::IsReadonlyDoc() const
     return true;
 }
 
-//------------------------------------------------------------------
+
 Any SAL_CALL FmXFormShell::queryInterface( const Type& type) throw ( RuntimeException )
 {
     return FmXFormShell_BASE::queryInterface(type);
 }
-//------------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL FmXFormShell::getTypes(  ) throw(RuntimeException)
 {
     return FmXFormShell_BASE::getTypes();
 }
-//------------------------------------------------------------------------------
+
 Sequence< sal_Int8 > SAL_CALL FmXFormShell::getImplementationId() throw(RuntimeException)
 {
     static ::cppu::OImplementationId* pId = 0;
@@ -784,7 +784,7 @@ Sequence< sal_Int8 > SAL_CALL FmXFormShell::getImplementationId() throw(RuntimeE
     return pId->getImplementationId();
 }
 //  EventListener
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXFormShell::disposing(const EventObject& e) throw( RuntimeException )
 {
     impl_checkDisposed();
@@ -823,7 +823,7 @@ void SAL_CALL FmXFormShell::disposing(const EventObject& e) throw( RuntimeExcept
     }
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     if ( impl_checkDisposed() )
@@ -859,7 +859,7 @@ void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt) throw
     LockSlotInvalidation(sal_False);
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatures )
 {
     if ( impl_checkDisposed() )
@@ -888,7 +888,7 @@ void FmXFormShell::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatu
     }
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXFormShell::formActivated(const EventObject& rEvent) throw( RuntimeException )
 {
     if ( impl_checkDisposed() )
@@ -899,7 +899,7 @@ void SAL_CALL FmXFormShell::formActivated(const EventObject& rEvent) throw( Runt
     setActiveController( xController );
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXFormShell::formDeactivated(const EventObject& rEvent) throw( RuntimeException )
 {
     if ( impl_checkDisposed() )
@@ -909,7 +909,7 @@ void SAL_CALL FmXFormShell::formDeactivated(const EventObject& rEvent) throw( Ru
     m_pTextShell->formDeactivated( xController );
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::disposing()
 {
     impl_checkDisposed();
@@ -985,7 +985,7 @@ void FmXFormShell::disposing()
     m_aNavControllerFeatures.dispose();
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::UpdateSlot( sal_Int16 _nId )
 {
     if ( impl_checkDisposed() )
@@ -1006,7 +1006,7 @@ void FmXFormShell::UpdateSlot( sal_Int16 _nId )
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::InvalidateSlot( sal_Int16 nId, sal_Bool bWithId )
 {
     if ( impl_checkDisposed() )
@@ -1025,7 +1025,7 @@ void FmXFormShell::InvalidateSlot( sal_Int16 nId, sal_Bool bWithId )
             m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::LockSlotInvalidation(sal_Bool bLock)
 {
     if ( impl_checkDisposed() )
@@ -1044,7 +1044,7 @@ void FmXFormShell::LockSlotInvalidation(sal_Bool bLock)
     }
 }
 
-//------------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(FmXFormShell, OnInvalidateSlots)
 {
     if ( impl_checkDisposed() )
@@ -1064,7 +1064,7 @@ IMPL_LINK_NOARG(FmXFormShell, OnInvalidateSlots)
     return 0L;
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::ForceUpdateSelection(sal_Bool bAllowInvalidation)
 {
     if ( impl_checkDisposed() )
@@ -1085,7 +1085,7 @@ void FmXFormShell::ForceUpdateSelection(sal_Bool bAllowInvalidation)
     }
 }
 
-//------------------------------------------------------------------------------
+
 PopupMenu* FmXFormShell::GetConversionMenu()
 {
 
@@ -1101,7 +1101,7 @@ PopupMenu* FmXFormShell::GetConversionMenu()
     return pNewMenu;
 }
 
-//------------------------------------------------------------------------------
+
 bool FmXFormShell::isControlConversionSlot( sal_uInt16 nSlotId )
 {
     for ( size_t i = 0; i < sizeof (nConvertSlots) / sizeof (nConvertSlots[0]); ++i )
@@ -1110,7 +1110,7 @@ bool FmXFormShell::isControlConversionSlot( sal_uInt16 nSlotId )
     return false;
 }
 
-//------------------------------------------------------------------------------
+
 bool FmXFormShell::executeControlConversionSlot( sal_uInt16 _nSlotId )
 {
     OSL_PRECOND( canConvertCurrentSelectionToControl( _nSlotId ), "FmXFormShell::executeControlConversionSlot: illegal call!" );
@@ -1121,7 +1121,7 @@ bool FmXFormShell::executeControlConversionSlot( sal_uInt16 _nSlotId )
     return executeControlConversionSlot( Reference< XFormComponent >( *aSelectedElement, UNO_QUERY ), _nSlotId );
 }
 
-//------------------------------------------------------------------------------
+
 bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent >& _rxObject, sal_uInt16 _nSlotId )
 {
     if ( impl_checkDisposed() )
@@ -1328,7 +1328,7 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
     return false;
 }
 
-//------------------------------------------------------------------------------
+
 bool FmXFormShell::canConvertCurrentSelectionToControl( sal_Int16 nConversionSlot )
 {
     if ( m_aCurrentSelection.empty() )
@@ -1366,7 +1366,7 @@ bool FmXFormShell::canConvertCurrentSelectionToControl( sal_Int16 nConversionSlo
     return true;    // all other slots: assume "yes"
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::checkControlConversionSlotsForCurrentSelection( Menu& rMenu )
 {
     for (sal_Int16 i=0; i<rMenu.GetItemCount(); ++i)
@@ -1374,7 +1374,7 @@ void FmXFormShell::checkControlConversionSlotsForCurrentSelection( Menu& rMenu )
         rMenu.EnableItem( rMenu.GetItemId(i), canConvertCurrentSelectionToControl( rMenu.GetItemId( i ) ) );
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::LoopGrids(sal_Int16 nWhat)
 {
     if ( impl_checkDisposed() )
@@ -1443,7 +1443,7 @@ void FmXFormShell::LoopGrids(sal_Int16 nWhat)
     }
 }
 
-//------------------------------------------------------------------------------
+
 Reference< XControlContainer > FmXFormShell::getControlContainerForView()
 {
     if ( impl_checkDisposed() )
@@ -1460,7 +1460,7 @@ Reference< XControlContainer > FmXFormShell::getControlContainerForView()
     return xControlContainer;
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::ExecuteTabOrderDialog( const Reference< XTabControllerModel >& _rxForForm )
 {
     if ( impl_checkDisposed() )
@@ -1489,7 +1489,7 @@ void FmXFormShell::ExecuteTabOrderDialog( const Reference< XTabControllerModel >
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::ExecuteSearch()
 {
     if ( impl_checkDisposed() )
@@ -1635,7 +1635,7 @@ void FmXFormShell::ExecuteSearch()
         // da ich in OnFoundData (fals ich dort war) Controls markiert habe
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool FmXFormShell::GetY2KState(sal_uInt16& n)
 {
     if ( impl_checkDisposed() )
@@ -1674,7 +1674,7 @@ sal_Bool FmXFormShell::GetY2KState(sal_uInt16& n)
     return sal_False;
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::SetY2KState(sal_uInt16 n)
 {
     if ( impl_checkDisposed() )
@@ -1748,7 +1748,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::CloseExternalFormViewer()
 {
     if ( impl_checkDisposed() )
@@ -1769,7 +1769,7 @@ void FmXFormShell::CloseExternalFormViewer()
     m_xExternalDisplayedForm    = NULL;
 }
 
-//------------------------------------------------------------------------------
+
 Reference< XResultSet> FmXFormShell::getInternalForm(const Reference< XResultSet>& _xForm) const
 {
     if ( impl_checkDisposed() )
@@ -1784,7 +1784,7 @@ Reference< XResultSet> FmXFormShell::getInternalForm(const Reference< XResultSet
     return _xForm;
 }
 
-//------------------------------------------------------------------------------
+
 Reference< XForm> FmXFormShell::getInternalForm(const Reference< XForm>& _xForm) const
 {
     if ( impl_checkDisposed() )
@@ -1799,7 +1799,7 @@ Reference< XForm> FmXFormShell::getInternalForm(const Reference< XForm>& _xForm)
     return _xForm;
 }
 
-//------------------------------------------------------------------------
+
 namespace
 {
     static bool lcl_isNavigationRelevant( sal_Int32 _nWhich )
@@ -1812,7 +1812,7 @@ namespace
     }
 }
 
-//------------------------------------------------------------------------------
+
 bool FmXFormShell::IsFormSlotEnabled( sal_Int32 _nSlot, FeatureState* _pCompleteState )
 {
     const ::svx::ControllerFeatures& rController =
@@ -1827,7 +1827,7 @@ bool FmXFormShell::IsFormSlotEnabled( sal_Int32 _nSlot, FeatureState* _pComplete
     return _pCompleteState->Enabled;
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::ExecuteFormSlot( sal_Int32 _nSlot )
 {
     const ::svx::ControllerFeatures& rController =
@@ -1862,7 +1862,7 @@ void FmXFormShell::ExecuteFormSlot( sal_Int32 _nSlot )
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::impl_switchActiveControllerListening( const bool _bListen )
 {
     Reference< XComponent> xComp( m_xActiveController, UNO_QUERY );
@@ -1875,7 +1875,7 @@ void FmXFormShell::impl_switchActiveControllerListening( const bool _bListen )
         xComp->removeEventListener( (XFormControllerListener*)this );
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::setActiveController( const Reference< runtime::XFormController >& xController, sal_Bool _bNoSaveOldContent )
 {
     if ( impl_checkDisposed() )
@@ -1983,13 +1983,13 @@ void FmXFormShell::setActiveController( const Reference< runtime::XFormControlle
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::getCurrentSelection( InterfaceBag& /* [out] */ _rSelection ) const
 {
     _rSelection = m_aCurrentSelection;
 }
 
-//------------------------------------------------------------------------------
+
 bool FmXFormShell::setCurrentSelectionFromMark( const SdrMarkList& _rMarkList )
 {
     m_aLastKnownMarkedControls.clear();
@@ -2000,13 +2000,13 @@ bool FmXFormShell::setCurrentSelectionFromMark( const SdrMarkList& _rMarkList )
     return setCurrentSelection( m_aLastKnownMarkedControls );
 }
 
-//------------------------------------------------------------------------------
+
 bool FmXFormShell::selectLastMarkedControls()
 {
     return setCurrentSelection( m_aLastKnownMarkedControls );
 }
 
-//------------------------------------------------------------------------------
+
 bool FmXFormShell::setCurrentSelection( const InterfaceBag& _rSelection )
 {
     if ( impl_checkDisposed() )
@@ -2087,13 +2087,13 @@ bool FmXFormShell::setCurrentSelection( const InterfaceBag& _rSelection )
     return true;
 }
 
-//------------------------------------------------------------------------------
+
 bool FmXFormShell::isSolelySelected( const Reference< XInterface >& _rxObject )
 {
     return ( m_aCurrentSelection.size() == 1 ) && ( *m_aCurrentSelection.begin() == _rxObject );
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::forgetCurrentForm()
 {
     if ( !m_xCurrentForm.is() )
@@ -2107,7 +2107,7 @@ void FmXFormShell::forgetCurrentForm()
     impl_defaultCurrentForm_nothrow();
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::impl_updateCurrentForm( const Reference< XForm >& _rxNewCurForm )
 {
     if ( impl_checkDisposed() )
@@ -2125,7 +2125,7 @@ void FmXFormShell::impl_updateCurrentForm( const Reference< XForm >& _rxNewCurFo
         InvalidateSlot( DlgSlotMap[i], sal_False );
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::startListening()
 {
     if ( impl_checkDisposed() )
@@ -2204,7 +2204,7 @@ void FmXFormShell::startListening()
     m_xNavigationController = NULL;
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::stopListening()
 {
     if ( impl_checkDisposed() )
@@ -2227,7 +2227,7 @@ void FmXFormShell::stopListening()
     m_xNavigationController = NULL;
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::ShowSelectionProperties( sal_Bool bShow )
 {
     if ( impl_checkDisposed() )
@@ -2246,7 +2246,7 @@ void FmXFormShell::ShowSelectionProperties( sal_Bool bShow )
     InvalidateSlot( SID_FM_CTL_PROPERTIES, sal_False );
 }
 
-//------------------------------------------------------------------------------
+
 IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
 {
     if ( impl_checkDisposed() )
@@ -2330,7 +2330,7 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
     return 0;
 }
 
-//------------------------------------------------------------------------------
+
 IMPL_LINK(FmXFormShell, OnCanceledNotFound, FmFoundRecordInformation*, pfriWhere)
 {
     if ( impl_checkDisposed() )
@@ -2360,7 +2360,7 @@ IMPL_LINK(FmXFormShell, OnCanceledNotFound, FmFoundRecordInformation*, pfriWhere
     return 0L;
 }
 
-//------------------------------------------------------------------------------
+
 IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextInfo)
 {
     if ( impl_checkDisposed() )
@@ -2373,7 +2373,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
     Reference< XResultSet> xIter(xForm, UNO_QUERY);
     DBG_ASSERT(xIter.is(), "FmXFormShell::OnSearchContextRequest : unexpected : context has no iterator !");
 
-    // --------------------------------------------------------------------------------------------
+
     // assemble the list of fields to involve (that is, the ControlSources of all fields that have such a property)
     OUString strFieldList, sFieldDisplayNames;
     m_arrSearchedControls.clear();
@@ -2563,7 +2563,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
 }
 
   // XContainerListener
-//------------------------------------------------------------------------------
+
 void FmXFormShell::elementInserted(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     if ( impl_checkDisposed() )
@@ -2576,7 +2576,7 @@ void FmXFormShell::elementInserted(const ContainerEvent& evt) throw(::com::sun::
     m_pShell->DetermineForms(sal_True);
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::elementReplaced(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     if ( impl_checkDisposed() )
@@ -2589,7 +2589,7 @@ void FmXFormShell::elementReplaced(const ContainerEvent& evt) throw(::com::sun::
     AddElement(xTemp);
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::elementRemoved(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     if ( impl_checkDisposed() )
@@ -2601,7 +2601,7 @@ void FmXFormShell::elementRemoved(const ContainerEvent& evt) throw(::com::sun::s
     m_pShell->DetermineForms(sal_True);
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::UpdateForms( sal_Bool _bInvalidate )
 {
     if ( impl_checkDisposed() )
@@ -2626,14 +2626,14 @@ void FmXFormShell::UpdateForms( sal_Bool _bInvalidate )
     m_pShell->DetermineForms( _bInvalidate );
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::AddElement(const Reference< XInterface>& _xElement)
 {
     if ( impl_checkDisposed() )
         return;
     impl_AddElement_nothrow(_xElement);
 }
-// -----------------------------------------------------------------------------
+
 void FmXFormShell::impl_AddElement_nothrow(const Reference< XInterface>& Element)
 {
     // am Container horchen
@@ -2658,14 +2658,14 @@ void FmXFormShell::impl_AddElement_nothrow(const Reference< XInterface>& Element
         xSelSupplier->addSelectionChangeListener(this);
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::RemoveElement(const Reference< XInterface>& Element)
 {
     if ( impl_checkDisposed() )
         return;
     impl_RemoveElement_nothrow(Element);
 }
-//------------------------------------------------------------------------------
+
 void FmXFormShell::impl_RemoveElement_nothrow(const Reference< XInterface>& Element)
 {
     const Reference< ::com::sun::star::view::XSelectionSupplier> xSelSupplier(Element, UNO_QUERY);
@@ -2694,7 +2694,7 @@ void FmXFormShell::impl_RemoveElement_nothrow(const Reference< XInterface>& Elem
         m_aCurrentSelection.erase( wasSelectedPos );
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::selectionChanged(const EventObject& rEvent) throw(::com::sun::star::uno::RuntimeException)
 {
     if ( impl_checkDisposed() )
@@ -2723,7 +2723,7 @@ void FmXFormShell::selectionChanged(const EventObject& rEvent) throw(::com::sun:
         m_pShell->NotifyMarkListChanged( m_pShell->GetFormView() );
 }
 
-//------------------------------------------------------------------------------
+
 IMPL_LINK(FmXFormShell, OnTimeOut, void*, /*EMPTYTAG*/)
 {
     if ( impl_checkDisposed() )
@@ -2735,7 +2735,7 @@ IMPL_LINK(FmXFormShell, OnTimeOut, void*, /*EMPTYTAG*/)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 void FmXFormShell::SetSelectionDelayed()
 {
     if ( impl_checkDisposed() )
@@ -2745,7 +2745,7 @@ void FmXFormShell::SetSelectionDelayed()
         m_aMarkTimer.Start();
 }
 
-//------------------------------------------------------------------------
+
 void FmXFormShell::SetSelection(const SdrMarkList& rMarkList)
 {
     if ( impl_checkDisposed() )
@@ -2755,14 +2755,14 @@ void FmXFormShell::SetSelection(const SdrMarkList& rMarkList)
     m_pShell->NotifyMarkListChanged(m_pShell->GetFormView());
 }
 
-//------------------------------------------------------------------------
+
 void FmXFormShell::DetermineSelection(const SdrMarkList& rMarkList)
 {
     if ( setCurrentSelectionFromMark( rMarkList ) && IsPropBrwOpen() )
         ShowSelectionProperties( sal_True );
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool FmXFormShell::IsPropBrwOpen() const
 {
     if ( impl_checkDisposed() )
@@ -2772,7 +2772,7 @@ sal_Bool FmXFormShell::IsPropBrwOpen() const
             m_pShell->GetViewShell()->GetViewFrame()->HasChildWindow(SID_FM_SHOW_PROPERTIES) : sal_False );
 }
 
-//------------------------------------------------------------------------------
+
 class FmXFormShell::SuspendPropertyTracking
 {
 private:
@@ -2798,7 +2798,7 @@ public:
     }
 };
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::SetDesignMode(bool bDesign)
 {
     if ( impl_checkDisposed() )
@@ -2884,7 +2884,7 @@ void FmXFormShell::SetDesignMode(bool bDesign)
     m_bChangingDesignMode = sal_False;
 }
 
-//------------------------------------------------------------------------------
+
 Reference< XControl> FmXFormShell::impl_getControl( const Reference< XControlModel >& i_rxModel, const FmFormObj& i_rKnownFormObj )
 {
     if ( impl_checkDisposed() )
@@ -2929,7 +2929,7 @@ Reference< XControl> FmXFormShell::impl_getControl( const Reference< XControlMod
     return xControl;
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::impl_collectFormSearchContexts_nothrow( const Reference< XInterface>& _rxStartingPoint,
     const OUString& _rCurrentLevelPrefix, FmFormArray& _out_rForms, ::std::vector< OUString >& _out_rNames )
 {
@@ -2984,7 +2984,7 @@ void FmXFormShell::impl_collectFormSearchContexts_nothrow( const Reference< XInt
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::startFiltering()
 {
     if ( impl_checkDisposed() )
@@ -3032,7 +3032,7 @@ void FmXFormShell::startFiltering()
     }
 }
 
-//------------------------------------------------------------------------------
+
 void saveFilter(const Reference< runtime::XFormController >& _rxController)
 {
     Reference< XPropertySet> xFormAsSet(_rxController->getModel(), UNO_QUERY);
@@ -3060,7 +3060,7 @@ void saveFilter(const Reference< runtime::XFormController >& _rxController)
 
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::stopFiltering(sal_Bool bSave)
 {
     if ( impl_checkDisposed() )
@@ -3165,7 +3165,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
     m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::CreateExternalView()
 {
     if ( impl_checkDisposed() )
@@ -3574,7 +3574,7 @@ void FmXFormShell::CreateExternalView()
     InvalidateSlot( SID_FM_VIEW_AS_GRID, sal_False );
 }
 
-//------------------------------------------------------------------------
+
 void FmXFormShell::implAdjustConfigCache()
 {
     // get (cache) the wizard usage flag
@@ -3585,7 +3585,7 @@ void FmXFormShell::implAdjustConfigCache()
         m_bUseWizards = ::cppu::any2bool(aFlags[0]);
 }
 
-//------------------------------------------------------------------------
+
 void FmXFormShell::Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames)
 {
     if ( impl_checkDisposed() )
@@ -3605,7 +3605,7 @@ void FmXFormShell::Commit()
 {
 }
 
-//------------------------------------------------------------------------
+
 void FmXFormShell::SetWizardUsing(sal_Bool _bUseThem)
 {
     m_bUseWizards = _bUseThem;
@@ -3617,7 +3617,7 @@ void FmXFormShell::SetWizardUsing(sal_Bool _bUseThem)
     PutProperties(aNames, aValues);
 }
 
-//------------------------------------------------------------------------
+
 void FmXFormShell::viewDeactivated( FmFormView& _rCurrentView, sal_Bool _bDeactivateController /* = sal_True */ )
 {
 
@@ -3658,7 +3658,7 @@ void FmXFormShell::viewDeactivated( FmFormView& _rCurrentView, sal_Bool _bDeacti
     UpdateForms( sal_True );
 }
 
-//------------------------------------------------------------------------
+
 IMPL_LINK( FmXFormShell, OnFirstTimeActivation, void*, /*NOTINTERESTEDIN*/ )
 {
     if ( impl_checkDisposed() )
@@ -3680,14 +3680,14 @@ IMPL_LINK( FmXFormShell, OnFirstTimeActivation, void*, /*NOTINTERESTEDIN*/ )
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 IMPL_LINK( FmXFormShell, OnFormsCreated, FmFormPage*, /*_pPage*/ )
 {
     UpdateForms( sal_True );
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 void FmXFormShell::viewActivated( FmFormView& _rCurrentView, sal_Bool _bSyncAction /* = sal_False */ )
 {
 
@@ -3735,7 +3735,7 @@ void FmXFormShell::viewActivated( FmFormView& _rCurrentView, sal_Bool _bSyncActi
     impl_defaultCurrentForm_nothrow();
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::impl_defaultCurrentForm_nothrow()
 {
     if ( impl_checkDisposed() )
@@ -3765,7 +3765,7 @@ void FmXFormShell::impl_defaultCurrentForm_nothrow()
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormShell::smartControlReset( const Reference< XIndexAccess >& _rxModels )
 {
     if (!_rxModels.is())
@@ -3824,7 +3824,7 @@ void FmXFormShell::smartControlReset( const Reference< XIndexAccess >& _rxModels
     }
 }
 
-//------------------------------------------------------------------------
+
 IMPL_LINK( FmXFormShell, OnLoadForms, FmFormPage*, /*_pPage*/ )
 {
     FmLoadAction aAction = m_aLoadingPages.front();
@@ -3834,7 +3834,7 @@ IMPL_LINK( FmXFormShell, OnLoadForms, FmFormPage*, /*_pPage*/ )
     return 0L;
 }
 
-//------------------------------------------------------------------------------
+
 namespace
 {
     bool lcl_isLoadable( const Reference< XInterface >& _rxLoadable )
@@ -3872,7 +3872,7 @@ namespace
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmXFormShell::loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour /* FORMS_LOAD | FORMS_SYNC */ )
 {
     DBG_ASSERT( ( _nBehaviour & ( FORMS_ASYNC | FORMS_UNLOAD ) )  != ( FORMS_ASYNC | FORMS_UNLOAD ),
@@ -3949,43 +3949,43 @@ void FmXFormShell::loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour /
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmXFormShell::ExecuteTextAttribute( SfxRequest& _rReq )
 {
     m_pTextShell->ExecuteTextAttribute( _rReq );
 }
 
-//------------------------------------------------------------------------
+
 void FmXFormShell::GetTextAttributeState( SfxItemSet& _rSet )
 {
     m_pTextShell->GetTextAttributeState( _rSet );
 }
 
-//------------------------------------------------------------------------
+
 bool FmXFormShell::IsActiveControl( bool _bCountRichTextOnly ) const
 {
     return m_pTextShell->IsActiveControl( _bCountRichTextOnly );
 }
 
-//------------------------------------------------------------------------
+
 void FmXFormShell::ForgetActiveControl()
 {
     m_pTextShell->ForgetActiveControl();
 }
 
-//------------------------------------------------------------------------
+
 void FmXFormShell::SetControlActivationHandler( const Link& _rHdl )
 {
     m_pTextShell->SetControlActivationHandler( _rHdl );
 }
-//------------------------------------------------------------------------
+
 void FmXFormShell::handleShowPropertiesRequest()
 {
     if ( onlyControlsAreMarked() )
         ShowSelectionProperties( sal_True );
 }
 
-//------------------------------------------------------------------------
+
 void FmXFormShell::handleMouseButtonDown( const SdrViewEvent& _rViewEvent )
 {
     // catch simple double clicks
@@ -3999,7 +3999,7 @@ void FmXFormShell::handleMouseButtonDown( const SdrViewEvent& _rViewEvent )
     }
 }
 
-//------------------------------------------------------------------------------
+
 bool FmXFormShell::HasControlFocus() const
 {
     bool bHasControlFocus = false;
@@ -4031,7 +4031,7 @@ SearchableControlIterator::SearchableControlIterator(Reference< XInterface> xSta
 {
 }
 
-//------------------------------------------------------------------------------
+
 bool SearchableControlIterator::ShouldHandleElement(const Reference< XInterface>& xElement)
 {
     // wenn das Ding eine ControlSource und einen BoundField-Property hat
@@ -4063,7 +4063,7 @@ bool SearchableControlIterator::ShouldHandleElement(const Reference< XInterface>
     return false;
 }
 
-//------------------------------------------------------------------------------
+
 bool SearchableControlIterator::ShouldStepInto(const Reference< XInterface>& /*xContainer*/) const
 {
     return true;
@@ -4074,7 +4074,7 @@ bool SearchableControlIterator::ShouldStepInto(const Reference< XInterface>& /*x
 
 SFX_IMPL_MENU_CONTROL(ControlConversionMenuController, SfxBoolItem);
 
-//------------------------------------------------------------------------------
+
 ControlConversionMenuController::ControlConversionMenuController( sal_uInt16 _nId, Menu& _rMenu, SfxBindings& _rBindings )
     :SfxMenuControl( _nId, _rBindings )
     ,m_pMainMenu( &_rMenu )
@@ -4094,14 +4094,14 @@ ControlConversionMenuController::ControlConversionMenuController( sal_uInt16 _nI
     }
 }
 
-//------------------------------------------------------------------------------
+
 ControlConversionMenuController::~ControlConversionMenuController()
 {
     m_pMainMenu->SetPopupMenu(SID_FM_CHANGECONTROLTYPE, NULL);
     delete m_pConversionMenu;
 }
 
-//------------------------------------------------------------------------------
+
 void ControlConversionMenuController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState)
 {
     if (nSID == GetId())

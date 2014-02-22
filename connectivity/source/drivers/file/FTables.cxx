@@ -39,18 +39,18 @@ sdbcx::ObjectType OTables::createObject(const OUString& /*_rName*/)
 {
     return sdbcx::ObjectType();
 }
-// -------------------------------------------------------------------------
+
 void OTables::impl_refresh(  ) throw(RuntimeException)
 {
     static_cast<OFileCatalog&>(m_rParent).refreshTables();
 }
-// -------------------------------------------------------------------------
+
 void OTables::disposing(void)
 {
 m_xMetaData.clear();
     OCollection::disposing();
 }
-//------------------------------------------------------------------
+
 Any SAL_CALL OTables::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     if( rType == ::getCppuType((const Reference<XColumnLocate>*)0) ||
@@ -62,6 +62,6 @@ Any SAL_CALL OTables::queryInterface( const Type & rType ) throw(RuntimeExceptio
     typedef sdbcx::OCollection OTables_BASE;
     return OTables_BASE::queryInterface(rType);
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

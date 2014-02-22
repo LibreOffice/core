@@ -44,7 +44,7 @@ struct PresetColorsPool
     explicit            PresetColorsPool();
 };
 
-// ----------------------------------------------------------------------------
+
 
 PresetColorsPool::PresetColorsPool() :
     maDmlColors( static_cast< size_t >( XML_TOKEN_COUNT ), API_RGB_TRANSPARENT ),
@@ -143,16 +143,16 @@ PresetColorsPool::PresetColorsPool() :
         maVmlColors[ static_cast< size_t >( pnEntry[ 0 ] ) ] = pnEntry[ 1 ];
 }
 
-// ----------------------------------------------------------------------------
+
 
 struct StaticPresetColorsPool : public ::rtl::Static< PresetColorsPool, StaticPresetColorsPool > {};
 
-// ----------------------------------------------------------------------------
+
 
 const double DEC_GAMMA          = 2.3;
 const double INC_GAMMA          = 1.0 / DEC_GAMMA;
 
-// ----------------------------------------------------------------------------
+
 
 inline void lclRgbToRgbComponents( sal_Int32& ornR, sal_Int32& ornG, sal_Int32& ornB, sal_Int32 nRgb )
 {

@@ -65,7 +65,7 @@ void MessBox::ImplInitMessBoxData()
     mbCheck             = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void MessBox::ImplInitButtons()
 {
@@ -144,7 +144,7 @@ void MessBox::ImplInitButtons()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 MessBox::MessBox( Window* pParent, WinBits nStyle,
                   const OUString& rTitle, const OUString& rMessage ) :
@@ -159,7 +159,7 @@ MessBox::MessBox( Window* pParent, WinBits nStyle,
         SetText( rTitle );
 }
 
-// -----------------------------------------------------------------------
+
 
 MessBox::MessBox( Window* pParent, const ResId& rResId ) :
     ButtonDialog( WINDOW_MESSBOX )
@@ -182,7 +182,7 @@ MessBox::MessBox( Window* pParent, const ResId& rResId ) :
     ImplInitButtons();
 }
 
-// -----------------------------------------------------------------------
+
 
 void MessBox::ImplLoadRes( const ResId& )
 {
@@ -191,7 +191,7 @@ void MessBox::ImplLoadRes( const ResId& )
     SetHelpText( ReadStringRes() );
 }
 
-// -----------------------------------------------------------------------
+
 
 MessBox::~MessBox()
 {
@@ -200,7 +200,7 @@ MessBox::~MessBox()
     delete mpCheckBox;
 }
 
-// -----------------------------------------------------------------------
+
 
 void MessBox::ImplPosControls()
 {
@@ -398,7 +398,7 @@ void MessBox::ImplPosControls()
     SetPageSizePixel( aPageSize );
 }
 
-// -----------------------------------------------------------------------
+
 
 void MessBox::StateChanged( StateChangedType nType )
 {
@@ -409,14 +409,14 @@ void MessBox::StateChanged( StateChangedType nType )
     ButtonDialog::StateChanged( nType );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool MessBox::GetCheckBoxState() const
 {
     return mpCheckBox ? mpCheckBox->IsChecked() : mbCheck;
 }
 
-// -----------------------------------------------------------------------
+
 
 void MessBox::SetCheckBoxState( bool bCheck )
 {
@@ -424,7 +424,7 @@ void MessBox::SetCheckBoxState( bool bCheck )
     mbCheck = bCheck;
 }
 
-// -----------------------------------------------------------------------
+
 
 Size MessBox::GetOptimalSize() const
 {
@@ -443,7 +443,7 @@ void InfoBox::ImplInitInfoBoxData()
     SetImage( InfoBox::GetStandardImage() );
 }
 
-// -----------------------------------------------------------------------
+
 
 InfoBox::InfoBox( Window* pParent, const OUString& rMessage ) :
     MessBox( pParent, WB_OK | WB_DEF_OK, OUString(), rMessage )
@@ -451,7 +451,7 @@ InfoBox::InfoBox( Window* pParent, const OUString& rMessage ) :
     ImplInitInfoBoxData();
 }
 
-// -----------------------------------------------------------------------
+
 
 InfoBox::InfoBox( Window* pParent, const ResId & rResId ) :
     MessBox( pParent, rResId.SetRT( RSC_INFOBOX ) )
@@ -459,7 +459,7 @@ InfoBox::InfoBox( Window* pParent, const ResId & rResId ) :
     ImplInitInfoBoxData();
 }
 
-// -----------------------------------------------------------------------
+
 
 InfoBox::InfoBox( Window* pParent, WinBits nStyle, const OUString& rMessage ) :
     MessBox( pParent, nStyle, OUString(), rMessage )
@@ -467,7 +467,7 @@ InfoBox::InfoBox( Window* pParent, WinBits nStyle, const OUString& rMessage ) :
     ImplInitInfoBoxData();
 }
 
-// -----------------------------------------------------------------------
+
 
 Image InfoBox::GetStandardImage()
 {
@@ -486,7 +486,7 @@ void WarningBox::ImplInitWarningBoxData()
     SetImage( WarningBox::GetStandardImage() );
 }
 
-// -----------------------------------------------------------------------
+
 
 WarningBox::WarningBox( Window* pParent, WinBits nStyle,
                         const OUString& rMessage ) :
@@ -495,7 +495,7 @@ WarningBox::WarningBox( Window* pParent, WinBits nStyle,
     ImplInitWarningBoxData();
 }
 
-// -----------------------------------------------------------------------
+
 
 WarningBox::WarningBox( Window* pParent, const ResId& rResId ) :
     MessBox( pParent, rResId.SetRT( RSC_WARNINGBOX ) )
@@ -503,7 +503,7 @@ WarningBox::WarningBox( Window* pParent, const ResId& rResId ) :
     ImplInitWarningBoxData();
 }
 
-// -----------------------------------------------------------------------
+
 
 void WarningBox::SetDefaultCheckBoxText()
 {
@@ -512,7 +512,7 @@ void WarningBox::SetDefaultCheckBoxText()
         maCheckBoxText = ResId(SV_STDTEXT_DONTWARNAGAIN, *pResMgr).toString();
 }
 
-// -----------------------------------------------------------------------
+
 
 Image WarningBox::GetStandardImage()
 {
@@ -531,7 +531,7 @@ void ErrorBox::ImplInitErrorBoxData()
     SetImage( ErrorBox::GetStandardImage() );
 }
 
-// -----------------------------------------------------------------------
+
 
 ErrorBox::ErrorBox( Window* pParent, WinBits nStyle,
                     const OUString& rMessage ) :
@@ -540,7 +540,7 @@ ErrorBox::ErrorBox( Window* pParent, WinBits nStyle,
     ImplInitErrorBoxData();
 }
 
-// -----------------------------------------------------------------------
+
 
 ErrorBox::ErrorBox( Window* pParent, const ResId& rResId ) :
     MessBox( pParent, rResId.SetRT( RSC_ERRORBOX ) )
@@ -548,7 +548,7 @@ ErrorBox::ErrorBox( Window* pParent, const ResId& rResId ) :
     ImplInitErrorBoxData();
 }
 
-// -----------------------------------------------------------------------
+
 
 Image ErrorBox::GetStandardImage()
 {
@@ -576,7 +576,7 @@ void QueryBox::ImplInitQueryBoxData()
     SetImage( QueryBox::GetStandardImage() );
 }
 
-// -----------------------------------------------------------------------
+
 
 QueryBox::QueryBox( Window* pParent, WinBits nStyle, const OUString& rMessage ) :
     MessBox( pParent, nStyle, OUString(), rMessage )
@@ -584,7 +584,7 @@ QueryBox::QueryBox( Window* pParent, WinBits nStyle, const OUString& rMessage ) 
     ImplInitQueryBoxData();
 }
 
-// -----------------------------------------------------------------------
+
 
 QueryBox::QueryBox( Window* pParent, const ResId& rResId ) :
     MessBox( pParent, rResId.SetRT( RSC_QUERYBOX ) )
@@ -592,7 +592,7 @@ QueryBox::QueryBox( Window* pParent, const ResId& rResId ) :
     ImplInitQueryBoxData();
 }
 
-// -----------------------------------------------------------------------
+
 
 void QueryBox::SetDefaultCheckBoxText()
 {
@@ -601,7 +601,7 @@ void QueryBox::SetDefaultCheckBoxText()
         maCheckBoxText = ResId(SV_STDTEXT_DONTASKAGAIN, *pResMgr).toString();
 }
 
-// -----------------------------------------------------------------------
+
 
 Image QueryBox::GetStandardImage()
 {

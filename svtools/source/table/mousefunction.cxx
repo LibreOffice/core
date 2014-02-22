@@ -32,13 +32,13 @@ namespace svt { namespace table
     //==================================================================================================================
     //= MouseFunction
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     oslInterlockedCount MouseFunction::acquire()
     {
         return osl_atomic_increment( &m_refCount );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     oslInterlockedCount MouseFunction::release()
     {
         oslInterlockedCount newCount = osl_atomic_decrement( &m_refCount );
@@ -53,7 +53,7 @@ namespace svt { namespace table
     //==================================================================================================================
     //= ColumnResize
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     FunctionResult ColumnResize::handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event )
     {
         Point const aPoint = i_event.GetPosPixel();
@@ -103,7 +103,7 @@ namespace svt { namespace table
         return ContinueFunction;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     FunctionResult ColumnResize::handleMouseDown( ITableControl& i_tableControl, MouseEvent const & i_event )
     {
         if ( m_nResizingColumn != COL_INVALID )
@@ -128,7 +128,7 @@ namespace svt { namespace table
         return SkipFunction;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     FunctionResult ColumnResize::handleMouseUp( ITableControl& i_tableControl, MouseEvent const & i_event )
     {
         if ( m_nResizingColumn == COL_INVALID )
@@ -183,7 +183,7 @@ namespace svt { namespace table
     //==================================================================================================================
     //= RowSelection
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     FunctionResult RowSelection::handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event )
     {
         OSL_UNUSED( i_tableControl );
@@ -191,7 +191,7 @@ namespace svt { namespace table
         return SkipFunction;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     FunctionResult RowSelection::handleMouseDown( ITableControl& i_tableControl, MouseEvent const & i_event )
     {
         bool handled = false;
@@ -215,7 +215,7 @@ namespace svt { namespace table
         return handled ? ActivateFunction : SkipFunction;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     FunctionResult RowSelection::handleMouseUp( ITableControl& i_tableControl, MouseEvent const & i_event )
     {
         TableCell const tableCell = i_tableControl.hitTest( i_event.GetPosPixel() );
@@ -237,7 +237,7 @@ namespace svt { namespace table
     //==================================================================================================================
     //= ColumnSortHandler
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     FunctionResult ColumnSortHandler::handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event )
     {
         OSL_UNUSED( i_tableControl );
@@ -245,7 +245,7 @@ namespace svt { namespace table
         return SkipFunction;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     FunctionResult ColumnSortHandler::handleMouseDown( ITableControl& i_tableControl, MouseEvent const & i_event )
     {
         if ( m_nActiveColumn != COL_INVALID )
@@ -268,7 +268,7 @@ namespace svt { namespace table
         return ActivateFunction;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     FunctionResult ColumnSortHandler::handleMouseUp( ITableControl& i_tableControl, MouseEvent const & i_event )
     {
         if ( m_nActiveColumn == COL_INVALID )

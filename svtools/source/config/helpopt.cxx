@@ -121,7 +121,7 @@ Sequence< OUString > SvtHelpOptions_Impl::GetPropertyNames()
 }
 
 
-// -----------------------------------------------------------------------
+
 
 SvtHelpOptions_Impl::SvtHelpOptions_Impl()
     : ConfigItem( OUString( "Office.Common/Help" ) )
@@ -134,7 +134,7 @@ SvtHelpOptions_Impl::SvtHelpOptions_Impl()
     EnableNotification( aNames );
 }
 
-// -----------------------------------------------------------------------
+
 static int lcl_MapPropertyName( const OUString rCompare,
                 const uno::Sequence< OUString>& aInternalPropertyNames)
 {
@@ -215,7 +215,7 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< OUString>& rPropertyNames)
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtHelpOptions_Impl::Commit()
 {
@@ -251,7 +251,7 @@ void SvtHelpOptions_Impl::Commit()
     PutProperties( aNames, aValues );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtHelpOptions_Impl::Notify( const Sequence<OUString>& aPropertyNames )
 {
@@ -272,7 +272,7 @@ SvtHelpOptions::SvtHelpOptions()
     pImp = pOptions;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvtHelpOptions::~SvtHelpOptions()
 {
@@ -306,7 +306,7 @@ bool SvtHelpOptions::IsHelpTips() const
     return pImp->IsHelpTips();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtHelpOptions::SetWelcomeScreen( sal_Bool b )
 {

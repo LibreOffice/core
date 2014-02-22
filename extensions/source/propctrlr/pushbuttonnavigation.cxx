@@ -35,7 +35,7 @@ namespace pcr
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::form;
 
-    //------------------------------------------------------------------------
+
     namespace
     {
         static const sal_Int32 s_nFirstVirtualButtonType = 1 + (sal_Int32)FormButtonType_URL;
@@ -79,7 +79,7 @@ namespace pcr
     //========================================================================
     //= PushButtonNavigation
     //========================================================================
-    //------------------------------------------------------------------------
+
     PushButtonNavigation::PushButtonNavigation( const Reference< XPropertySet >& _rxControlModel )
         :m_xControlModel( _rxControlModel )
         ,m_bIsPushButton( sal_False )
@@ -96,7 +96,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     sal_Int32 PushButtonNavigation::implGetCurrentButtonType() const SAL_THROW((Exception))
     {
         sal_Int32 nButtonType = FormButtonType_PUSH;
@@ -119,7 +119,7 @@ namespace pcr
         return nButtonType;
     }
 
-    //------------------------------------------------------------------------
+
     Any PushButtonNavigation::getCurrentButtonType() const SAL_THROW(())
     {
         OSL_ENSURE( m_bIsPushButton, "PushButtonNavigation::getCurrentButtonType: not expected to be called for forms!" );
@@ -136,7 +136,7 @@ namespace pcr
         return aReturn;
     }
 
-    //------------------------------------------------------------------------
+
     void PushButtonNavigation::setCurrentButtonType( const Any& _rValue ) const SAL_THROW(())
     {
         OSL_ENSURE( m_bIsPushButton, "PushButtonNavigation::setCurrentButtonType: not expected to be called for forms!" );
@@ -167,7 +167,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     PropertyState PushButtonNavigation::getCurrentButtonTypeState( ) const SAL_THROW(())
     {
         OSL_ENSURE( m_bIsPushButton, "PushButtonNavigation::getCurrentButtonTypeState: not expected to be called for forms!" );
@@ -201,7 +201,7 @@ namespace pcr
         return eState;
     }
 
-    //------------------------------------------------------------------------
+
     Any PushButtonNavigation::getCurrentTargetURL() const SAL_THROW(())
     {
         Any aReturn;
@@ -231,7 +231,7 @@ namespace pcr
         return aReturn;
     }
 
-    //------------------------------------------------------------------------
+
     void PushButtonNavigation::setCurrentTargetURL( const Any& _rValue ) const SAL_THROW(())
     {
         if ( !m_xControlModel.is() )
@@ -247,7 +247,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+
     PropertyState PushButtonNavigation::getCurrentTargetURLState( ) const SAL_THROW(())
     {
         PropertyState eState = PropertyState_DIRECT_VALUE;
@@ -268,7 +268,7 @@ namespace pcr
         return eState;
     }
 
-    //------------------------------------------------------------------------
+
     bool PushButtonNavigation::currentButtonTypeIsOpenURL() const
     {
         sal_Int32 nButtonType( FormButtonType_PUSH );
@@ -283,7 +283,7 @@ namespace pcr
         return nButtonType == FormButtonType_URL;
     }
 
-    //------------------------------------------------------------------------
+
     bool PushButtonNavigation::hasNonEmptyCurrentTargetURL() const
     {
         OUString sTargetURL;

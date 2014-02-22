@@ -306,9 +306,9 @@ void SAL_CALL SfxStatusIndicator::disposing( const lang::EventObject& /*Source*/
     xProgress.clear();
 }
 
-//________________________________________________________________________________________________________
+
 //  declaration IMPL_SfxBaseController_ListenerHelper
-//________________________________________________________________________________________________________
+
 
 class IMPL_SfxBaseController_ListenerHelper : public ::cppu::WeakImplHelper1< frame::XFrameActionListener >
 {
@@ -382,9 +382,9 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::notifyClosing( const l
 {
 }
 
-//________________________________________________________________________________________________________
+
 //  declaration IMPL_SfxBaseController_DataContainer
-//________________________________________________________________________________________________________
+
 
 struct IMPL_SfxBaseController_DataContainer
 {
@@ -419,18 +419,18 @@ struct IMPL_SfxBaseController_DataContainer
 
 } ; // struct IMPL_SfxBaseController_DataContainer
 
-//________________________________________________________________________________________________________
+
 //  IMPL_SfxBaseController_ListenerHelper constructor
-//________________________________________________________________________________________________________
+
 
 IMPL_SfxBaseController_ListenerHelper::IMPL_SfxBaseController_ListenerHelper(   SfxBaseController*  pController )
         : m_pController ( pController   )
 {
 }
 
-//________________________________________________________________________________________________________
+
 //  IMPL_SfxBaseController_ListenerHelper destructor
-//________________________________________________________________________________________________________
+
 
 IMPL_SfxBaseController_ListenerHelper::~IMPL_SfxBaseController_ListenerHelper()
 {
@@ -457,9 +457,9 @@ void SAL_CALL IMPL_SfxBaseController_ListenerHelper::frameAction( const frame::F
     }
 }
 
-//________________________________________________________________________________________________________
+
 //  IMPL_SfxBaseController_ListenerHelper -> XEventListener
-//________________________________________________________________________________________________________
+
 
 void SAL_CALL IMPL_SfxBaseController_ListenerHelper::disposing( const lang::EventObject& /*aEvent*/ ) throw( RuntimeException )
 {
@@ -468,9 +468,9 @@ void SAL_CALL IMPL_SfxBaseController_ListenerHelper::disposing( const lang::Even
         m_pController->getFrame()->removeFrameActionListener( this ) ;
 }
 
-//________________________________________________________________________________________________________
+
 //  SfxBaseController -> constructor
-//________________________________________________________________________________________________________
+
 DBG_NAME(sfx2_SfxBaseController)
 SfxBaseController::SfxBaseController( SfxViewShell* pViewShell )
     :   m_pData ( new IMPL_SfxBaseController_DataContainer( m_aMutex, pViewShell, this ))
@@ -479,9 +479,9 @@ SfxBaseController::SfxBaseController( SfxViewShell* pViewShell )
     m_pData->m_pViewShell->SetController( this );
 }
 
-//________________________________________________________________________________________________________
+
 //  SfxBaseController -> destructor
-//________________________________________________________________________________________________________
+
 
 SfxBaseController::~SfxBaseController()
 {
@@ -489,9 +489,9 @@ SfxBaseController::~SfxBaseController()
     delete m_pData;
 }
 
-//________________________________________________________________________________________________________
+
 //  SfxBaseController -> XController2
-//________________________________________________________________________________________________________
+
 
 Reference< XWindow > SAL_CALL SfxBaseController::getComponentWindow() throw (RuntimeException)
 {
@@ -542,9 +542,9 @@ SfxViewFrame& SfxBaseController::GetViewFrame_Impl() const
     return *pActFrame;
 }
 
-//________________________________________________________________________________________________________
+
 //  SfxBaseController -> XController2 -> XController
-//________________________________________________________________________________________________________
+
 
 void SAL_CALL SfxBaseController::attachFrame( const Reference< frame::XFrame >& xFrame ) throw( RuntimeException )
 {
@@ -580,9 +580,9 @@ void SAL_CALL SfxBaseController::attachFrame( const Reference< frame::XFrame >& 
     }
 }
 
-//________________________________________________________________________________________________________
+
 //  SfxBaseController -> XController
-//________________________________________________________________________________________________________
+
 
 sal_Bool SAL_CALL SfxBaseController::attachModel( const Reference< frame::XModel >& xModel ) throw( RuntimeException )
 {
@@ -599,9 +599,9 @@ sal_Bool SAL_CALL SfxBaseController::attachModel( const Reference< frame::XModel
     return sal_True;
 }
 
-//________________________________________________________________________________________________________
+
 //  SfxBaseController -> XController
-//________________________________________________________________________________________________________
+
 
 sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( RuntimeException )
 {
@@ -657,9 +657,9 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( Runtime
     }
 }
 
-//________________________________________________________________________________________________________
+
 //  SfxBaseController -> XController
-//________________________________________________________________________________________________________
+
 
 uno::Any SfxBaseController::getViewData() throw( RuntimeException )
 {
@@ -675,9 +675,9 @@ uno::Any SfxBaseController::getViewData() throw( RuntimeException )
     return aAny ;
 }
 
-//________________________________________________________________________________________________________
+
 //  SfxBaseController -> XController
-//________________________________________________________________________________________________________
+
 
 void SAL_CALL SfxBaseController::restoreViewData( const uno::Any& aValue ) throw( RuntimeException )
 {
@@ -690,9 +690,9 @@ void SAL_CALL SfxBaseController::restoreViewData( const uno::Any& aValue ) throw
     }
 }
 
-//________________________________________________________________________________________________________
+
 //  SfxBaseController -> XController
-//________________________________________________________________________________________________________
+
 
 Reference< frame::XFrame > SAL_CALL SfxBaseController::getFrame() throw( RuntimeException )
 {
@@ -700,9 +700,9 @@ Reference< frame::XFrame > SAL_CALL SfxBaseController::getFrame() throw( Runtime
     return m_pData->m_xFrame;
 }
 
-//________________________________________________________________________________________________________
+
 //  SfxBaseController -> XController
-//________________________________________________________________________________________________________
+
 
 Reference< frame::XModel > SAL_CALL SfxBaseController::getModel() throw( RuntimeException )
 {
@@ -710,9 +710,9 @@ Reference< frame::XModel > SAL_CALL SfxBaseController::getModel() throw( Runtime
     return m_pData->m_pViewShell ? m_pData->m_pViewShell->GetObjectShell()->GetModel() : Reference < frame::XModel > () ;
 }
 
-//________________________________________________________________________________________________________
+
 //  SfxBaseController -> XDispatchProvider
-//________________________________________________________________________________________________________
+
 
 Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const   util::URL&             aURL            ,
                                                                     const   OUString&            sTargetFrameName,
@@ -868,9 +868,9 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
     return xDisp;
 }
 
-//________________________________________________________________________________________________________
+
 //  SfxBaseController -> XDispatchProvider
-//________________________________________________________________________________________________________
+
 
 uno::Sequence< Reference< frame::XDispatch > > SAL_CALL SfxBaseController::queryDispatches( const uno::Sequence< frame::DispatchDescriptor >& seqDescripts ) throw( RuntimeException )
 {
@@ -889,9 +889,9 @@ uno::Sequence< Reference< frame::XDispatch > > SAL_CALL SfxBaseController::query
     return lDispatcher;
 }
 
-//________________________________________________________________________________________________________
+
 //  SfxBaseController -> XControllerBorder
-//________________________________________________________________________________________________________
+
 
 frame::BorderWidths SAL_CALL SfxBaseController::getBorder()
     throw ( RuntimeException )
@@ -963,9 +963,9 @@ void SfxBaseController::BorderWidthsChanged_Impl()
     }
 }
 
-//________________________________________________________________________________________________________
+
 //  SfxBaseController -> XComponent
-//________________________________________________________________________________________________________
+
 
 void SAL_CALL SfxBaseController::dispose() throw( RuntimeException )
 {
@@ -1034,18 +1034,18 @@ void SAL_CALL SfxBaseController::dispose() throw( RuntimeException )
     }
 }
 
-//________________________________________________________________________________________________________
+
 //  SfxBaseController -> XComponent
-//________________________________________________________________________________________________________
+
 
 void SAL_CALL SfxBaseController::addEventListener( const Reference< lang::XEventListener >& aListener ) throw( RuntimeException )
 {
     m_pData->m_aListenerContainer.addInterface( ::getCppuType((const Reference< lang::XEventListener >*)0), aListener );
 }
 
-//________________________________________________________________________________________________________
+
 //  SfxBaseController -> XComponent
-//________________________________________________________________________________________________________
+
 
 void SAL_CALL SfxBaseController::removeEventListener( const Reference< lang::XEventListener >& aListener ) throw( RuntimeException )
 {

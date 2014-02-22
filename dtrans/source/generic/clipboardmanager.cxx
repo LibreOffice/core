@@ -32,7 +32,7 @@ using namespace std;
 
 using ::dtrans::ClipboardManager;
 
-// ------------------------------------------------------------------------
+
 
 ClipboardManager::ClipboardManager():
     WeakComponentImplHelper3< XClipboardManager, XEventListener, XServiceInfo > (m_aMutex),
@@ -40,13 +40,13 @@ ClipboardManager::ClipboardManager():
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 ClipboardManager::~ClipboardManager()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 OUString SAL_CALL ClipboardManager::getImplementationName(  )
     throw(RuntimeException)
@@ -60,7 +60,7 @@ sal_Bool SAL_CALL ClipboardManager::supportsService( const OUString& ServiceName
     return cppu::supportsService(this, ServiceName);
 }
 
-// ------------------------------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL ClipboardManager::getSupportedServiceNames(  )
     throw(RuntimeException)
@@ -68,7 +68,7 @@ Sequence< OUString > SAL_CALL ClipboardManager::getSupportedServiceNames(  )
     return ClipboardManager_getSupportedServiceNames();
 }
 
-// ------------------------------------------------------------------------
+
 
 Reference< XClipboard > SAL_CALL ClipboardManager::getClipboard( const OUString& aName )
     throw(NoSuchElementException, RuntimeException)
@@ -89,7 +89,7 @@ Reference< XClipboard > SAL_CALL ClipboardManager::getClipboard( const OUString&
     throw NoSuchElementException(aName, static_cast < XClipboardManager * > (this));
 }
 
-// ------------------------------------------------------------------------
+
 
 void SAL_CALL ClipboardManager::addClipboard( const Reference< XClipboard >& xClipboard )
     throw(IllegalArgumentException, ElementExistException, RuntimeException)
@@ -129,7 +129,7 @@ void SAL_CALL ClipboardManager::addClipboard( const Reference< XClipboard >& xCl
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void SAL_CALL ClipboardManager::removeClipboard( const OUString& aName )
      throw(RuntimeException)
@@ -139,7 +139,7 @@ void SAL_CALL ClipboardManager::removeClipboard( const OUString& aName )
         m_aClipboardMap.erase(aName.getLength() ? aName : m_aDefaultName );
 }
 
-// ------------------------------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL ClipboardManager::listClipboardNames()
     throw(RuntimeException)
@@ -163,7 +163,7 @@ Sequence< OUString > SAL_CALL ClipboardManager::listClipboardNames()
     return aRet;
 }
 
-// ------------------------------------------------------------------------
+
 
 void SAL_CALL ClipboardManager::dispose()
     throw(RuntimeException)
@@ -211,7 +211,7 @@ void SAL_CALL ClipboardManager::dispose()
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void SAL_CALL  ClipboardManager::disposing( const EventObject& event )
     throw(RuntimeException)
@@ -222,7 +222,7 @@ void SAL_CALL  ClipboardManager::disposing( const EventObject& event )
         removeClipboard(xClipboard->getName());
 }
 
-// ------------------------------------------------------------------------
+
 
 Reference< XInterface > SAL_CALL ClipboardManager_createInstance(
     const Reference< XMultiServiceFactory > & /*xMultiServiceFactory*/)
@@ -230,7 +230,7 @@ Reference< XInterface > SAL_CALL ClipboardManager_createInstance(
     return Reference < XInterface >( ( OWeakObject * ) new ClipboardManager());
 }
 
-// ------------------------------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL ClipboardManager_getSupportedServiceNames()
 {

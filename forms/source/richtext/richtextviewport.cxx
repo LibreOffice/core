@@ -28,7 +28,7 @@ namespace frm
     //====================================================================
     //= RichTextViewPort
     //====================================================================
-    //--------------------------------------------------------------------
+
     RichTextViewPort::RichTextViewPort( Window* _pParent )
         :Control ( _pParent )
         ,m_pView(NULL)
@@ -36,20 +36,20 @@ namespace frm
     {
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextViewPort::setView( EditView& _rView )
     {
         m_pView = &_rView;
         SetPointer( _rView.GetPointer() );
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextViewPort::Paint( const Rectangle& _rRect )
     {
         m_pView->Paint( _rRect );
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextViewPort::GetFocus()
     {
         Control::GetFocus();
@@ -57,7 +57,7 @@ namespace frm
         m_pView->ShowCursor( true );
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextViewPort::LoseFocus()
     {
         m_pView->HideCursor();
@@ -65,7 +65,7 @@ namespace frm
         Control::LoseFocus();
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextViewPort::KeyInput( const KeyEvent& _rKEvt )
     {
         if ( !m_pView->PostKeyEvent( _rKEvt ) )
@@ -74,14 +74,14 @@ namespace frm
             implInvalidateAttributes();
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextViewPort::MouseMove( const MouseEvent& _rMEvt )
     {
         Control::MouseMove( _rMEvt );
         m_pView->MouseMove( _rMEvt );
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextViewPort::MouseButtonDown( const MouseEvent& _rMEvt )
     {
         Control::MouseButtonDown( _rMEvt );
@@ -89,7 +89,7 @@ namespace frm
         GrabFocus();
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextViewPort::MouseButtonUp( const MouseEvent& _rMEvt )
     {
         Control::MouseButtonUp( _rMEvt );
@@ -97,7 +97,7 @@ namespace frm
         implInvalidateAttributes();
     }
 
-    //--------------------------------------------------------------------
+
     void RichTextViewPort::SetHideInactiveSelection( bool _bHide )
     {
         if ( m_bHideInactiveSelection == _bHide )
@@ -107,7 +107,7 @@ namespace frm
             m_pView->SetSelectionMode( m_bHideInactiveSelection ? EE_SELMODE_HIDDEN : EE_SELMODE_STD );
     }
 
-    //--------------------------------------------------------------------
+
     bool RichTextViewPort::GetHideInactiveSelection() const
     {
         return m_bHideInactiveSelection;

@@ -152,7 +152,7 @@ private:
     Reference< XAnimate > mxFirstNode;
 };
 
-// --------------------------------------------------------------------
+
 
 SD_DLLPUBLIC Reference< XInterface > RandomAnimationNode_createInstance( sal_Int16 nPresetClass )
 {
@@ -160,7 +160,7 @@ SD_DLLPUBLIC Reference< XInterface > RandomAnimationNode_createInstance( sal_Int
     return xInt;
 }
 
-// --------------------------------------------------------------------
+
 
 Reference< XInterface > SAL_CALL RandomNode_createInstance( const Reference< XMultiServiceFactory > &  )
 {
@@ -168,14 +168,14 @@ Reference< XInterface > SAL_CALL RandomNode_createInstance( const Reference< XMu
     return xInt;
 }
 
-// --------------------------------------------------------------------
+
 
 OUString RandomNode__getImplementationName() throw( RuntimeException )
 {
     return OUString( "sd::RandomAnimationNode" ) ;
 }
 
-// --------------------------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL RandomNode_getSupportedServiceNames() throw( RuntimeException )
 {
@@ -185,7 +185,7 @@ Sequence< OUString > SAL_CALL RandomNode_getSupportedServiceNames() throw( Runti
     return aSeq;
 }
 
-// --------------------------------------------------------------------
+
 
 RandomAnimationNode::RandomAnimationNode( const RandomAnimationNode& rNode )
 :   RandomAnimationNodeBase(),
@@ -208,7 +208,7 @@ RandomAnimationNode::RandomAnimationNode( const RandomAnimationNode& rNode )
 {
 }
 
-// --------------------------------------------------------------------
+
 
 RandomAnimationNode::RandomAnimationNode( sal_Int16 nPresetClass )
 {
@@ -232,7 +232,7 @@ void RandomAnimationNode::init( sal_Int16 nPresetClass )
     mbAutoReverse = sal_False;
 }
 
-// --------------------------------------------------------------------
+
 
 // XInitialization
 void SAL_CALL RandomAnimationNode::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
@@ -254,7 +254,7 @@ void SAL_CALL RandomAnimationNode::initialize( const Sequence< Any >& aArguments
     maTarget = aArguments[0];
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 sal_Int16 SAL_CALL RandomAnimationNode::getType() throw (RuntimeException)
@@ -263,7 +263,7 @@ sal_Int16 SAL_CALL RandomAnimationNode::getType() throw (RuntimeException)
     return ::com::sun::star::animations::AnimationNodeType::PAR;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 Any SAL_CALL RandomAnimationNode::getBegin() throw (RuntimeException)
@@ -272,7 +272,7 @@ Any SAL_CALL RandomAnimationNode::getBegin() throw (RuntimeException)
     return maBegin;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setBegin( const Any& _begin ) throw (RuntimeException)
@@ -281,7 +281,7 @@ void SAL_CALL RandomAnimationNode::setBegin( const Any& _begin ) throw (RuntimeE
     maBegin = _begin;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 Any SAL_CALL RandomAnimationNode::getDuration() throw (RuntimeException)
@@ -290,7 +290,7 @@ Any SAL_CALL RandomAnimationNode::getDuration() throw (RuntimeException)
     return maDuration;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setDuration( const Any& _duration ) throw (RuntimeException)
@@ -299,7 +299,7 @@ void SAL_CALL RandomAnimationNode::setDuration( const Any& _duration ) throw (Ru
     maDuration = _duration;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 Any SAL_CALL RandomAnimationNode::getEnd() throw (RuntimeException)
@@ -308,7 +308,7 @@ Any SAL_CALL RandomAnimationNode::getEnd() throw (RuntimeException)
     return maEnd;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setEnd( const Any& _end ) throw (RuntimeException)
@@ -317,7 +317,7 @@ void SAL_CALL RandomAnimationNode::setEnd( const Any& _end ) throw (RuntimeExcep
     maEnd = _end;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 Any SAL_CALL RandomAnimationNode::getEndSync() throw (RuntimeException)
@@ -326,7 +326,7 @@ Any SAL_CALL RandomAnimationNode::getEndSync() throw (RuntimeException)
     return maEndSync;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setEndSync( const Any& _endsync ) throw (RuntimeException)
@@ -335,7 +335,7 @@ void SAL_CALL RandomAnimationNode::setEndSync( const Any& _endsync ) throw (Runt
     maEndSync = _endsync;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 Any SAL_CALL RandomAnimationNode::getRepeatCount() throw (RuntimeException)
@@ -344,7 +344,7 @@ Any SAL_CALL RandomAnimationNode::getRepeatCount() throw (RuntimeException)
     return maRepeatCount;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setRepeatCount( const Any& _repeatcount ) throw (RuntimeException)
@@ -353,7 +353,7 @@ void SAL_CALL RandomAnimationNode::setRepeatCount( const Any& _repeatcount ) thr
     maRepeatCount = _repeatcount;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 Any SAL_CALL RandomAnimationNode::getRepeatDuration() throw (RuntimeException)
@@ -362,7 +362,7 @@ Any SAL_CALL RandomAnimationNode::getRepeatDuration() throw (RuntimeException)
     return maRepeatDuration;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setRepeatDuration( const Any& _repeatduration ) throw (RuntimeException)
@@ -371,7 +371,7 @@ void SAL_CALL RandomAnimationNode::setRepeatDuration( const Any& _repeatduration
     maRepeatDuration = _repeatduration;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 sal_Int16 SAL_CALL RandomAnimationNode::getFill() throw (RuntimeException)
@@ -380,7 +380,7 @@ sal_Int16 SAL_CALL RandomAnimationNode::getFill() throw (RuntimeException)
     return mnFill;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setFill( sal_Int16 _fill ) throw (RuntimeException)
@@ -389,7 +389,7 @@ void SAL_CALL RandomAnimationNode::setFill( sal_Int16 _fill ) throw (RuntimeExce
     mnFill = _fill;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 sal_Int16 SAL_CALL RandomAnimationNode::getFillDefault() throw (RuntimeException)
@@ -398,7 +398,7 @@ sal_Int16 SAL_CALL RandomAnimationNode::getFillDefault() throw (RuntimeException
     return mnFillDefault;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setFillDefault( sal_Int16 _filldefault ) throw (RuntimeException)
@@ -407,7 +407,7 @@ void SAL_CALL RandomAnimationNode::setFillDefault( sal_Int16 _filldefault ) thro
     mnFillDefault = _filldefault;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 sal_Int16 SAL_CALL RandomAnimationNode::getRestart() throw (RuntimeException)
@@ -416,7 +416,7 @@ sal_Int16 SAL_CALL RandomAnimationNode::getRestart() throw (RuntimeException)
     return mnRestart;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setRestart( sal_Int16 _restart ) throw (RuntimeException)
@@ -425,7 +425,7 @@ void SAL_CALL RandomAnimationNode::setRestart( sal_Int16 _restart ) throw (Runti
     mnRestart = _restart;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 sal_Int16 SAL_CALL RandomAnimationNode::getRestartDefault() throw (RuntimeException)
@@ -434,7 +434,7 @@ sal_Int16 SAL_CALL RandomAnimationNode::getRestartDefault() throw (RuntimeExcept
     return mnRestartDefault;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setRestartDefault( sal_Int16 _restartdefault ) throw (RuntimeException)
@@ -443,7 +443,7 @@ void SAL_CALL RandomAnimationNode::setRestartDefault( sal_Int16 _restartdefault 
     mnRestartDefault = _restartdefault;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 double SAL_CALL RandomAnimationNode::getAcceleration() throw (RuntimeException)
@@ -452,7 +452,7 @@ double SAL_CALL RandomAnimationNode::getAcceleration() throw (RuntimeException)
     return mfAcceleration;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setAcceleration( double _acceleration ) throw (RuntimeException)
@@ -461,7 +461,7 @@ void SAL_CALL RandomAnimationNode::setAcceleration( double _acceleration ) throw
     mfAcceleration = _acceleration;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 double SAL_CALL RandomAnimationNode::getDecelerate() throw (RuntimeException)
@@ -470,7 +470,7 @@ double SAL_CALL RandomAnimationNode::getDecelerate() throw (RuntimeException)
     return mfDecelerate;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setDecelerate( double _decelerate ) throw (RuntimeException)
@@ -479,7 +479,7 @@ void SAL_CALL RandomAnimationNode::setDecelerate( double _decelerate ) throw (Ru
     mfDecelerate = _decelerate;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 sal_Bool SAL_CALL RandomAnimationNode::getAutoReverse() throw (RuntimeException)
@@ -488,7 +488,7 @@ sal_Bool SAL_CALL RandomAnimationNode::getAutoReverse() throw (RuntimeException)
     return mbAutoReverse;
 }
 
-// --------------------------------------------------------------------
+
 
 // XAnimationNode
 void SAL_CALL RandomAnimationNode::setAutoReverse( sal_Bool _autoreverse ) throw (RuntimeException)
@@ -497,7 +497,7 @@ void SAL_CALL RandomAnimationNode::setAutoReverse( sal_Bool _autoreverse ) throw
     mbAutoReverse = _autoreverse;
 }
 
-// --------------------------------------------------------------------
+
 
 Sequence< NamedValue > SAL_CALL RandomAnimationNode::getUserData() throw (RuntimeException)
 {
@@ -505,7 +505,7 @@ Sequence< NamedValue > SAL_CALL RandomAnimationNode::getUserData() throw (Runtim
     return maUserData;
 }
 
-// --------------------------------------------------------------------
+
 
 void SAL_CALL RandomAnimationNode::setUserData( const Sequence< NamedValue >& _userdata ) throw (RuntimeException)
 {
@@ -513,7 +513,7 @@ void SAL_CALL RandomAnimationNode::setUserData( const Sequence< NamedValue >& _u
     maUserData = _userdata;
 }
 
-// --------------------------------------------------------------------
+
 
 // XChild
 Reference< XInterface > SAL_CALL RandomAnimationNode::getParent() throw (RuntimeException)
@@ -522,7 +522,7 @@ Reference< XInterface > SAL_CALL RandomAnimationNode::getParent() throw (Runtime
     return mxParent;
 }
 
-// --------------------------------------------------------------------
+
 
 // XChild
 void SAL_CALL RandomAnimationNode::setParent( const Reference< XInterface >& Parent ) throw (NoSupportException, RuntimeException)
@@ -531,7 +531,7 @@ void SAL_CALL RandomAnimationNode::setParent( const Reference< XInterface >& Par
     mxParent = Parent;
 }
 
-// --------------------------------------------------------------------
+
 
 // XCloneable
 Reference< XCloneable > SAL_CALL RandomAnimationNode::createClone() throw (RuntimeException)
@@ -540,7 +540,7 @@ Reference< XCloneable > SAL_CALL RandomAnimationNode::createClone() throw (Runti
     return xNewNode;
 }
 
-// --------------------------------------------------------------------
+
 
 // XElementAccess
 Type SAL_CALL RandomAnimationNode::getElementType() throw (RuntimeException)
@@ -548,7 +548,7 @@ Type SAL_CALL RandomAnimationNode::getElementType() throw (RuntimeException)
     return ::getCppuType((const Reference< XAnimationNode >*)0);
 }
 
-// --------------------------------------------------------------------
+
 
 // XElementAccess
 sal_Bool SAL_CALL RandomAnimationNode::hasElements() throw (RuntimeException)
@@ -556,7 +556,7 @@ sal_Bool SAL_CALL RandomAnimationNode::hasElements() throw (RuntimeException)
     return sal_True;
 }
 
-// --------------------------------------------------------------------
+
 
 // XEnumerationAccess
 Reference< XEnumeration > SAL_CALL RandomAnimationNode::createEnumeration()
@@ -602,7 +602,7 @@ Reference< XEnumeration > SAL_CALL RandomAnimationNode::createEnumeration()
     return xEnum;
 }
 
-// --------------------------------------------------------------------
+
 
 
 // XTimeContainer
@@ -612,7 +612,7 @@ Reference< XAnimationNode > SAL_CALL RandomAnimationNode::insertBefore( const Re
     return appendChild( newChild );
 }
 
-// --------------------------------------------------------------------
+
 
 // XTimeContainer
 Reference< XAnimationNode > SAL_CALL RandomAnimationNode::insertAfter( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >&  )
@@ -621,7 +621,7 @@ Reference< XAnimationNode > SAL_CALL RandomAnimationNode::insertAfter( const Ref
     return appendChild( newChild );
 }
 
-// --------------------------------------------------------------------
+
 
 // XTimeContainer
 Reference< XAnimationNode > SAL_CALL RandomAnimationNode::replaceChild( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >&  )
@@ -630,7 +630,7 @@ Reference< XAnimationNode > SAL_CALL RandomAnimationNode::replaceChild( const Re
     return appendChild( newChild );
 }
 
-// --------------------------------------------------------------------
+
 
 // XTimeContainer
 Reference< XAnimationNode > SAL_CALL RandomAnimationNode::removeChild( const Reference< XAnimationNode >& oldChild )
@@ -639,7 +639,7 @@ Reference< XAnimationNode > SAL_CALL RandomAnimationNode::removeChild( const Ref
     return oldChild;
 }
 
-// --------------------------------------------------------------------
+
 
 // XTimeContainer
 Reference< XAnimationNode > SAL_CALL RandomAnimationNode::appendChild( const Reference< XAnimationNode >& newChild )

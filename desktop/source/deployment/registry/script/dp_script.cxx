@@ -110,7 +110,7 @@ public:
 
 };
 
-//______________________________________________________________________________
+
 BackendImpl::PackageImpl::PackageImpl(
     ::rtl::Reference<BackendImpl> const & myBackend,
     OUString const & url,
@@ -138,7 +138,7 @@ BackendImpl::PackageImpl::PackageImpl(
     m_displayName = m_name;
 }
 
-//______________________________________________________________________________
+
 BackendImpl::BackendImpl(
     Sequence<Any> const & args,
     Reference<XComponentContext> const & xComponentContext )
@@ -182,14 +182,14 @@ bool BackendImpl::hasActiveEntry(OUString const & url)
 }
 
 // XUpdatable
-//______________________________________________________________________________
+
 void BackendImpl::update() throw (RuntimeException)
 {
     // Nothing to do here after fixing i70283!?
 }
 
 // XPackageRegistry
-//______________________________________________________________________________
+
 Sequence< Reference<deployment::XPackageTypeInfo> >
 BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 {
@@ -210,7 +210,7 @@ void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaT
 }
 
 // PackageRegistryBackend
-//______________________________________________________________________________
+
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString const & url, OUString const & mediaType_,
     sal_Bool bRemoved, OUString const & identifier,

@@ -482,7 +482,7 @@ void XclImpFont::GuessScriptType()
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpFontBuffer::XclImpFontBuffer( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
@@ -719,7 +719,7 @@ void XclImpCellProt::FillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) c
 }
 
 
-// ----------------------------------------------------------------------------
+
 
 void XclImpCellAlign::FillFromXF2( sal_uInt8 nFlags )
 {
@@ -794,7 +794,7 @@ void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFo
     ScfTools::PutItem( rItemSet, SvxFrameDirectionItem( GetScFrameDir(), ATTR_WRITINGDIR ), bSkipPoolDefs );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpCellBorder::XclImpCellBorder()
 {
@@ -960,7 +960,7 @@ void XclImpCellBorder::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette&
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpCellArea::XclImpCellArea()
 {
@@ -1048,7 +1048,7 @@ void XclImpCellArea::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette& r
 }
 
 
-// ----------------------------------------------------------------------------
+
 
 XclImpXF::XclImpXF( const XclImpRoot& rRoot ) :
     XclXFBase( true ),      // default is cell XF
@@ -1401,7 +1401,7 @@ void XclImpXF::SetUsedFlags( sal_uInt8 nUsedFlags )
     mbAreaUsed   = (mbCellXF == ::get_flag( nUsedFlags, EXC_XF_DIFF_AREA ));
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpStyle::XclImpStyle( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
@@ -1495,7 +1495,7 @@ void XclImpStyle::CreateUserStyle( const OUString& rFinalName )
         CreateStyleSheet();
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpXFBuffer::XclImpXFBuffer( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )
@@ -1660,7 +1660,7 @@ bool XclImpXFRange::Expand( const XclImpXFRange& rNextRange )
     return false;
 }
 
-// ----------------------------------------------------------------------------
+
 
 void XclImpXFRangeColumn::SetDefaultXF( const XclImpXFIndex& rXFIndex )
 {
@@ -1672,7 +1672,7 @@ void XclImpXFRangeColumn::SetDefaultXF( const XclImpXFIndex& rXFIndex )
     maIndexList.push_back( new XclImpXFRange( 0, MAXROW, rXFIndex ) );
 }
 
-// ----------------------------------------------------------------------------
+
 
 void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
 {
@@ -1824,7 +1824,7 @@ void XclImpXFRangeColumn::TryConcatPrev( sal_uLong nIndex )
         maIndexList.erase( maIndexList.begin() + nIndex );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpXFRangeBuffer::XclImpXFRangeBuffer( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )

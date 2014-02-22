@@ -58,7 +58,7 @@ void ScCbWarningBox::DisableDialog()
 }
 
 
-// ----------------------------------------------------------------------------
+
 
 ScReplaceWarnBox::ScReplaceWarnBox( Window* pParent ) :
     ScCbWarningBox( pParent, OUString( ScResId( STR_REPLCELLSWARN ) ), true )

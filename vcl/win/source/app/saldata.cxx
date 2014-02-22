@@ -42,7 +42,7 @@ rtl_TextEncoding ImplSalGetSystemEncoding()
     return eEncoding;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString ImplSalGetUniString(const sal_Char* pStr, sal_Int32 const nLen)
 {
@@ -88,28 +88,28 @@ BOOL ImplPostMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
     return PostMessageW( hWnd, nMsg, wParam, lParam );
 }
 
-// -----------------------------------------------------------------------
+
 
 BOOL ImplSendMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     return SendMessageW( hWnd, nMsg, wParam, lParam );
 }
 
-// -----------------------------------------------------------------------
+
 
 BOOL ImplGetMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax )
 {
     return GetMessageW( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax );
 }
 
-// -----------------------------------------------------------------------
+
 
 BOOL ImplPeekMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg )
 {
     return PeekMessageW( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg );
 }
 
-// -----------------------------------------------------------------------
+
 
 LONG ImplDispatchMessage( CONST MSG *lpMsg )
 {

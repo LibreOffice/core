@@ -59,7 +59,7 @@ private:
     RecordParser*           mpParser;
 };
 
-// ----------------------------------------------------------------------------
+
 
 void Locator::dispose()
 {
@@ -118,7 +118,7 @@ private:
     ContextInfoVec      maStack;
 };
 
-// ----------------------------------------------------------------------------
+
 
 ContextStack::ContextStack( FragmentHandlerRef xHandler ) :
     mxHandler( xHandler )

@@ -20,10 +20,10 @@
 #include <stdio.h>
 #include <string.h>
 #include "LocaleNode.hxx"
-//-----------------------------------------
+
 // The document handler, which is needed for the saxparser
 // The Documenthandler for reading sax
-//-----------------------------------------
+
 OFileWriter::OFileWriter(const char *pcFile, const char *locale ) {
 
     strncpy( m_pcFile , pcFile, sizeof(m_pcFile) );

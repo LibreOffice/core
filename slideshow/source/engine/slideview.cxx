@@ -242,7 +242,7 @@ basegfx::B2IRange getLayerBoundsPixel( basegfx::B2DRange const&     rLayerBounds
 }
 
 
-// ----------------------------------------------------------------
+
 
 /** Container class for sprites issued by a ViewLayer
 
@@ -377,7 +377,7 @@ public:
 };
 
 
-// ----------------------------------------------------------------
+
 
 
 /** This class provides layers for a slide view
@@ -500,7 +500,7 @@ public:
 
 private:
     // ViewLayer interface
-    // ----------------------------------------------
+
 
     virtual cppcanvas::CustomSpriteSharedPtr createSprite(
         const ::basegfx::B2DSize& rSpriteSizePixel,
@@ -672,7 +672,7 @@ private:
 };
 
 
-// ---------------------------------------------------------
+
 
 typedef cppu::WeakComponentImplHelper2<
     ::com::sun::star::util::XModifyListener,

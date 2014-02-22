@@ -618,8 +618,8 @@ UString     OMyPersistObject_getImplementationName( ) THROWS(())
 }
 
 
-// ---------------------------------------------
-// -----------------------------------------------
+
+
 class OObjectStreamTest :
         public ODataStreamTest
 {

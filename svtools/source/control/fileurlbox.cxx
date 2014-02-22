@@ -29,14 +29,14 @@ namespace svt
     //=====================================================================
     //= FileURLBox
     //=====================================================================
-    //---------------------------------------------------------------------
+
     FileURLBox::FileURLBox( Window* _pParent, WinBits _nStyle )
         :SvtURLBox( _pParent, _nStyle, INET_PROT_FILE )
     {
         DisableHistory();
     }
 
-    //---------------------------------------------------------------------
+
     void FileURLBox::DisplayURL( const OUString& _rURL )
     {
         OUString sOldText = GetText();
@@ -51,7 +51,7 @@ namespace svt
         UpdatePickList();
     }
 
-    //---------------------------------------------------------------------
+
     bool FileURLBox::PreNotify( NotifyEvent& _rNEvt )
     {
         switch ( _rNEvt.GetType() )
@@ -73,7 +73,7 @@ namespace svt
         return SvtURLBox::PreNotify(_rNEvt);
     }
 
-    //---------------------------------------------------------------------
+
     bool FileURLBox::Notify( NotifyEvent& _rNEvt )
     {
         switch ( _rNEvt.GetType() )

@@ -46,12 +46,12 @@ OFlatDatabaseMetaData::OFlatDatabaseMetaData(::connectivity::file::OConnection* 
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatDatabaseMetaData::OFlatDatabaseMetaData" );
 }
-// -------------------------------------------------------------------------
+
 OFlatDatabaseMetaData::~OFlatDatabaseMetaData()
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatDatabaseMetaData::~OFlatDatabaseMetaData" );
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > OFlatDatabaseMetaData::impl_getTypeInfo_throw(  )
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatDatabaseMetaData::impl_getTypeInfo_throw" );
@@ -150,7 +150,7 @@ Reference< XResultSet > OFlatDatabaseMetaData::impl_getTypeInfo_throw(  )
     pResult->setRows(aRows);
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumns(
     const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& tableNamePattern,
         const OUString& columnNamePattern ) throw(SQLException, RuntimeException)
@@ -240,14 +240,14 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumns(
 
     return xRef;
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL OFlatDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatDatabaseMetaData::getURL" );
     ::osl::MutexGuard aGuard( m_aMutex );
     return OUString("sdbc:flat:") + m_pConnection->getURL();
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

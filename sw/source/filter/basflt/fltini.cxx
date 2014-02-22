@@ -221,9 +221,9 @@ sal_Bool SwReader::CheckPasswd( const OUString& /*rPasswd*/, const Reader& /*rOp
 
 
 
-//-----------------------------------------------------------------------
+
 // Filter Flags lesen, wird von WW8 / W4W / EXCEL / LOTUS benutzt.
-//-----------------------------------------------------------------------
+
 
 /*
 <FilterFlags>

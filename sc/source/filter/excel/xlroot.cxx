@@ -75,7 +75,7 @@ XclDebugObjCounter::~XclDebugObjCounter()
 }
 #endif
 
-// ----------------------------------------------------------------------------
+
 
 XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
         SotStorageRef xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc, bool bExport ) :
@@ -160,7 +160,7 @@ XclRootData::~XclRootData()
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclRoot::XclRoot( XclRootData& rRootData ) :
     mrData( rRootData )

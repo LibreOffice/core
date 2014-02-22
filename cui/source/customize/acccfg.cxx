@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//-----------------------------------------------
+
 // include own files
 
 #include "acccfg.hxx"
@@ -39,7 +39,7 @@
 
 #include <svx/svxids.hrc>
 
-//-----------------------------------------------
+
 // include interface declarations
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>
@@ -60,7 +60,7 @@
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
-//-----------------------------------------------
+
 // include other projects
 #include <comphelper/processfactory.hxx>
 #include <svtools/acceleratorexecute.hxx>
@@ -70,13 +70,13 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
-//-----------------------------------------------
+
 // namespaces
 
 using namespace com::sun::star;
 
 
-//-----------------------------------------------
+
 
 static OUString MODULEPROP_SHORTNAME             ("ooSetupFactoryShortName"                 );
 static OUString MODULEPROP_UINAME                ("ooSetupFactoryUIName"                    );
@@ -87,7 +87,7 @@ static OUString FOLDERNAME_UICONFIG              ("Configurations2"             
 static OUString MEDIATYPE_PROPNAME               ("MediaType"                               );
 static OUString MEDIATYPE_UICONFIG               ("application/vnd.sun.xml.ui.configuration");
 
-//-----------------------------------------------
+
 static const sal_uInt16 KEYCODE_ARRAY[] =
 {
     KEY_F1       ,
@@ -602,7 +602,7 @@ static const sal_uInt16 KEYCODE_ARRAY[] =
 
 static const sal_uInt16 KEYCODE_ARRAY_SIZE = SAL_N_ELEMENTS(KEYCODE_ARRAY);
 
-//-----------------------------------------------
+
 // seems to be needed to layout the list box, which shows all
 // assignable shortcuts
 static long AccCfgTabs[] =
@@ -612,7 +612,7 @@ static long AccCfgTabs[] =
     120 // Function
 };
 
-//-----------------------------------------------
+
 class SfxAccCfgLBoxString_Impl : public SvLBoxString
 {
     public:
@@ -626,7 +626,7 @@ class SfxAccCfgLBoxString_Impl : public SvLBoxString
         const Point& aPos, SvTreeListBox& rDevice, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
 };
 
-//-----------------------------------------------
+
 SfxAccCfgLBoxString_Impl::SfxAccCfgLBoxString_Impl(      SvTreeListEntry* pEntry,
                                                          sal_uInt16       nFlags,
                                                    const OUString&      sText )
@@ -634,7 +634,7 @@ SfxAccCfgLBoxString_Impl::SfxAccCfgLBoxString_Impl(      SvTreeListEntry* pEntry
 {
 }
 
-//-----------------------------------------------
+
 SfxAccCfgLBoxString_Impl::~SfxAccCfgLBoxString_Impl()
 {
 }
@@ -656,7 +656,7 @@ void SfxAccCfgLBoxString_Impl::Paint(
 
 }
 
-//-----------------------------------------------
+
 void SfxAccCfgTabListBox_Impl::InitEntry(SvTreeListEntry* pEntry,
                                          const OUString& rText,
                                          const Image& rImage1,
@@ -666,7 +666,7 @@ void SfxAccCfgTabListBox_Impl::InitEntry(SvTreeListEntry* pEntry,
     SvTabListBox::InitEntry(pEntry, rText, rImage1, rImage2, eButtonKind);
 }
 
-//-----------------------------------------------
+
 /** select the entry, which match the current key input ... excepting
     keys, which are used for the dialog itself.
   */
@@ -712,7 +712,7 @@ void SfxAccCfgTabListBox_Impl::KeyInput(const KeyEvent& aKey)
     SvTabListBox::KeyInput(aKey);
 }
 
-//-----------------------------------------------
+
 SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxItemSet& aSet )
     : SfxTabPage              (pParent, CUI_RES(RID_SVXPAGE_KEYBOARD), aSet)
     , m_pMacroInfoItem        ()
@@ -788,7 +788,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     aKeyBox.SetStyle(aKeyBox.GetStyle()|WB_CLIPCHILDREN|WB_HSCROLL|WB_SORT);
 }
 
-//-----------------------------------------------
+
 SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()
 {
     // free memory - remove all dynamic user data
@@ -818,7 +818,7 @@ SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()
     delete pFunctionBox;
 }
 
-//-----------------------------------------------
+
 void SfxAcceleratorConfigPage::InitAccCfg()
 {
     // already initialized ?
@@ -864,7 +864,7 @@ void SfxAcceleratorConfigPage::InitAccCfg()
         { m_xContext.clear(); }
 }
 
-//-----------------------------------------------
+
 /** Initialize text columns with own class to enable custom painting
     This is needed as we have to paint disabled entries by ourself. No support for that in the
     original SvTabListBox!
@@ -880,7 +880,7 @@ void SfxAcceleratorConfigPage::CreateCustomItems(      SvTreeListEntry* pEntry,
     pEntry->ReplaceItem(pStringItem, 2);
 }
 
-//-----------------------------------------------
+
 void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xAccMgr)
 {
     if (!xAccMgr.is())
@@ -965,7 +965,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
     }
 }
 
-//-----------------------------------------------
+
 void SfxAcceleratorConfigPage::Apply(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xAccMgr)
 {
     if (!xAccMgr.is())
@@ -1003,13 +1003,13 @@ void SfxAcceleratorConfigPage::Apply(const css::uno::Reference< css::ui::XAccele
     }
 }
 
-//-----------------------------------------------
+
 void SfxAcceleratorConfigPage::ResetConfig()
 {
     aEntriesBox.Clear();
 }
 
-//-----------------------------------------------
+
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Load)
 {
     // ask for filename, where we should load the new config data from
@@ -1017,14 +1017,14 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Load)
     return 0;
 }
 
-//-----------------------------------------------
+
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Save)
 {
     StartFileDialog( WB_SAVEAS, aSaveAccelConfigStr );
     return 0;
 }
 
-//-----------------------------------------------
+
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Default)
 {
     css::uno::Reference< css::form::XReset > xReset(m_xAct, css::uno::UNO_QUERY);
@@ -1041,7 +1041,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Default)
     return 0;
 }
 
-//-----------------------------------------------
+
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ChangeHdl)
 {
     sal_uInt16    nPos        = (sal_uInt16) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
@@ -1059,7 +1059,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ChangeHdl)
     return 0;
 }
 
-//-----------------------------------------------
+
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RemoveHdl)
 {
     // get selected entry
@@ -1075,7 +1075,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RemoveHdl)
     return 0;
 }
 
-//-----------------------------------------------
+
 IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
 {
     // disable help
@@ -1164,7 +1164,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
     return 0;
 }
 
-//-----------------------------------------------
+
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl)
 {
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xOld = m_xAct;
@@ -1198,7 +1198,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl)
     return 1L;
 }
 
-//-----------------------------------------------
+
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
 {
     assert(m_pFileDlg);
@@ -1282,7 +1282,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
     return 0;
 }
 
-//-----------------------------------------------
+
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
 {
     assert(m_pFileDlg);
@@ -1383,7 +1383,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
     return 0;
 }
 
-//-----------------------------------------------
+
 void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const OUString& rTitle )
 {
     bool bSave = ( ( nBits & WB_SAVEAS ) == WB_SAVEAS );
@@ -1403,7 +1403,7 @@ void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const OUString& r
     m_pFileDlg->StartExecuteModal( aDlgClosedLink );
 }
 
-//-----------------------------------------------
+
 sal_Bool SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
 {
     Apply(m_xAct);
@@ -1419,7 +1419,7 @@ sal_Bool SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
     return sal_True;
 }
 
-//-----------------------------------------------
+
 void SfxAcceleratorConfigPage::Reset( const SfxItemSet& rSet )
 {
     // open accelerator configs
@@ -1461,7 +1461,7 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& rSet )
     }
 }
 
-//-----------------------------------------------
+
 sal_uInt16 SfxAcceleratorConfigPage::MapKeyCodeToPos(const KeyCode& aKey) const
 {
     sal_uInt16       nCode1 = aKey.GetCode()+aKey.GetModifier();
@@ -1484,7 +1484,7 @@ sal_uInt16 SfxAcceleratorConfigPage::MapKeyCodeToPos(const KeyCode& aKey) const
     return LISTBOX_ENTRY_NOTFOUND;
 }
 
-//-----------------------------------------------
+
 OUString SfxAcceleratorConfigPage::GetLabel4Command(const OUString& sCommand)
 {
     try
@@ -1522,7 +1522,7 @@ SfxTabPage* SfxAcceleratorConfigPage::Create( Window* pParent, const SfxItemSet&
     return new SfxAcceleratorConfigPage( pParent, rAttrSet );
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::frame::XModel > SfxAcceleratorConfigPage::SearchForAlreadyLoadedDoc(const OUString& /*sName*/)
 {
     return css::uno::Reference< css::frame::XModel >();

@@ -261,7 +261,7 @@ void SAL_CALL SdXCustomPresentation::dispose() throw(uno::RuntimeException)
     mpSdCustomShow = NULL;
 }
 
-//----------------------------------------------------------------------
+
 void SAL_CALL SdXCustomPresentation::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
     throw(uno::RuntimeException)
 {
@@ -271,7 +271,7 @@ void SAL_CALL SdXCustomPresentation::addEventListener( const uno::Reference< lan
     aDisposeListeners.addInterface(xListener);
 }
 
-//----------------------------------------------------------------------
+
 void SAL_CALL SdXCustomPresentation::removeEventListener( const uno::Reference< lang::XEventListener >& aListener ) throw(uno::RuntimeException)
 {
     if( !bDisposing )

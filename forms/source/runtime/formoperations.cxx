@@ -61,7 +61,7 @@
 #include <osl/mutex.hxx>
 #include <sal/macros.h>
 
-//--------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_FormOperations()
 {
     static ::frm::OMultiInstanceAutoRegistration< ::frm::FormOperations > aAutoRegistration;
@@ -124,7 +124,7 @@ namespace frm
     //====================================================================
     //= FormOperations
     //====================================================================
-    //--------------------------------------------------------------------
+
     FormOperations::FormOperations( const Reference< XComponentContext >& _rxContext )
         :FormOperations_Base( m_aMutex )
         ,m_xContext( _rxContext )
@@ -137,18 +137,18 @@ namespace frm
     {
     }
 
-    //--------------------------------------------------------------------
+
     FormOperations::~FormOperations()
     {
     }
 
-    //--------------------------------------------------------------------
+
     OUString FormOperations::getImplementationName_Static(  ) throw(RuntimeException)
     {
         return OUString( "com.sun.star.comp.forms.FormOperations" );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > FormOperations::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aNames(1);
@@ -156,13 +156,13 @@ namespace frm
         return aNames;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XInterface > SAL_CALL FormOperations::Create(const Reference< XMultiServiceFactory >& _rxFactory )
     {
         return *new FormOperations( comphelper::getComponentContext(_rxFactory) );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FormOperations::initialize( const Sequence< Any >& _arguments ) throw (Exception, RuntimeException)
     {
         if ( m_bConstructed )
@@ -211,28 +211,28 @@ namespace frm
         return m_xUpdateCursor;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XFormController > SAL_CALL FormOperations::getController() throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         return m_xController;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XFeatureInvalidation > SAL_CALL FormOperations::getFeatureInvalidation() throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         return m_xFeatureInvalidation;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FormOperations::setFeatureInvalidation( const Reference< XFeatureInvalidation > & _rxFeatureInvalidation ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         m_xFeatureInvalidation = _rxFeatureInvalidation;
     }
 
-    //--------------------------------------------------------------------
+
     FeatureState SAL_CALL FormOperations::getState( ::sal_Int16 _nFeature ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -415,7 +415,7 @@ namespace frm
         return aState;
     }
 
-    //--------------------------------------------------------------------
+
     ::sal_Bool SAL_CALL FormOperations::isEnabled( ::sal_Int16 _nFeature ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -424,7 +424,7 @@ namespace frm
         return aState.Enabled;
     }
 
-    //--------------------------------------------------------------------
+
     namespace
     {
         static bool lcl_needConfirmCommit( sal_Int32 _nFeature )
@@ -569,7 +569,7 @@ namespace frm
             return true;
         }
     }
-    //--------------------------------------------------------------------
+
     void SAL_CALL FormOperations::execute( ::sal_Int16 _nFeature ) throw (RuntimeException, IllegalArgumentException, SQLException, WrappedTargetException)
     {
         SolarMutexGuard aSolarGuard;
@@ -828,7 +828,7 @@ namespace frm
         impl_invalidateAllSupportedFeatures_nothrow( aGuard );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FormOperations::executeWithArguments( ::sal_Int16 _nFeature, const Sequence< NamedValue >& _rArguments ) throw (RuntimeException, IllegalArgumentException, SQLException, WrappedTargetException)
     {
         if ( !lcl_requiresArguments( _nFeature ) )
@@ -885,7 +885,7 @@ namespace frm
         }   // switch
     }
 
-    //--------------------------------------------------------------------
+
     ::sal_Bool SAL_CALL FormOperations::commitCurrentRecord( ::sal_Bool& _out_rRecordInserted ) throw (RuntimeException, SQLException)
     {
         MethodGuard aGuard( *this );
@@ -894,7 +894,7 @@ namespace frm
         return impl_commitCurrentRecord_throw( &_out_rRecordInserted );
     }
 
-    //--------------------------------------------------------------------
+
     bool FormOperations::impl_commitCurrentRecord_throw( ::sal_Bool* _pRecordInserted ) const
     {
         DBG_ASSERT( m_nMethodNestingLevel, "FormOperations::impl_commitCurrentRecord_throw: to be called within a MethodGuard'ed section only!" );
@@ -920,14 +920,14 @@ namespace frm
         return bResult;
     }
 
-    //--------------------------------------------------------------------
+
     ::sal_Bool SAL_CALL FormOperations::commitCurrentControl() throw (RuntimeException, SQLException)
     {
         MethodGuard aGuard( *this );
         return impl_commitCurrentControl_throw();
     }
 
-    //--------------------------------------------------------------------
+
     bool FormOperations::impl_commitCurrentControl_throw() const
     {
         DBG_ASSERT( m_nMethodNestingLevel, "FormOperations::impl_commitCurrentControl_throw: to be called within a MethodGuard'ed section only!" );
@@ -969,7 +969,7 @@ namespace frm
         return bSuccess;
     }
 
-    //--------------------------------------------------------------------
+
     ::sal_Bool SAL_CALL FormOperations::isInsertionRow() throw (RuntimeException, WrappedTargetException)
     {
         sal_Bool bIs = sal_False;
@@ -985,7 +985,7 @@ namespace frm
         return bIs;
     }
 
-    //--------------------------------------------------------------------
+
     ::sal_Bool SAL_CALL FormOperations::isModifiedRow() throw (RuntimeException, WrappedTargetException)
     {
         sal_Bool bIs = sal_False;
@@ -1001,7 +1001,7 @@ namespace frm
         return bIs;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FormOperations::cursorMoved( const EventObject& /*_Event*/ ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -1010,19 +1010,19 @@ namespace frm
         impl_invalidateAllSupportedFeatures_nothrow( aGuard );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FormOperations::rowChanged( const EventObject& /*_Event*/ ) throw (RuntimeException)
     {
         // not interested in
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FormOperations::rowSetChanged( const EventObject& /*_Event*/ ) throw (RuntimeException)
     {
         // not interested in
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FormOperations::modified( const EventObject& /*_Source*/ ) throw( RuntimeException )
     {
         MethodGuard aGuard( *this );
@@ -1035,7 +1035,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FormOperations::propertyChange( const PropertyChangeEvent& _rEvent ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -1083,13 +1083,13 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FormOperations::disposing( const EventObject& /*_Source*/ ) throw (RuntimeException)
     {
         // TODO: should we react on this? Or is this the responsibility of our owner to dispose us?
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FormOperations::disposing()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -1127,14 +1127,14 @@ namespace frm
         m_bActiveControlModified = true;
     }
 
-    //--------------------------------------------------------------------
+
     void FormOperations::impl_checkDisposed_throw() const
     {
         if ( impl_isDisposed_nothrow() )
             throw DisposedException( OUString(), *const_cast< FormOperations* >( this ) );
     }
 
-    //--------------------------------------------------------------------
+
     void FormOperations::impl_initFromController_throw()
     {
         OSL_PRECOND( m_xController.is(), "FormOperations::impl_initFromController_throw: invalid controller!" );
@@ -1149,7 +1149,7 @@ namespace frm
             xBroadcaster->addModifyListener( this );
     }
 
-    //--------------------------------------------------------------------
+
     void FormOperations::impl_initFromForm_throw()
     {
         OSL_PRECOND( m_xCursor.is(), "FormOperations::impl_initFromForm_throw: invalid form!" );
@@ -1165,7 +1165,7 @@ namespace frm
         m_xCursorProperties->addPropertyChangeListener( PROPERTY_ISNEW, this );
     }
 
-    //--------------------------------------------------------------------
+
     void FormOperations::createWithFormController( const Reference< XFormController >& _rxController )
     {
         m_xController = _rxController;
@@ -1177,7 +1177,7 @@ namespace frm
         m_bConstructed = true;
     }
 
-    //--------------------------------------------------------------------
+
     void FormOperations::createWithForm( const Reference< XForm >& _rxForm )
     {
         m_xCursor = m_xCursor.query( _rxForm );
@@ -1189,7 +1189,7 @@ namespace frm
         m_bConstructed = true;
     }
 
-    //------------------------------------------------------------------------------
+
     void FormOperations::impl_invalidateAllSupportedFeatures_nothrow( MethodGuard& _rClearForCallback ) const
     {
         if ( !m_xFeatureInvalidation.is() )
@@ -1201,7 +1201,7 @@ namespace frm
         xInvalidation->invalidateAllFeatures();
     }
 
-    //------------------------------------------------------------------------------
+
     void FormOperations::impl_invalidateModifyDependentFeatures_nothrow( MethodGuard& _rClearForCallback ) const
     {
         if ( !m_xFeatureInvalidation.is() )
@@ -1228,7 +1228,7 @@ namespace frm
         xInvalidation->invalidateFeatures( s_aModifyDependentFeatures );
     }
 
-    //--------------------------------------------------------------------
+
     void FormOperations::impl_ensureInitializedParser_nothrow()
     {
         OSL_PRECOND( m_xCursorProperties.is(), "FormOperations::impl_ensureInitializedParser_nothrow: we're disposed!" );
@@ -1281,7 +1281,7 @@ namespace frm
         m_bInitializedParser = true;
     }
 
-    //--------------------------------------------------------------------
+
     void FormOperations::impl_disposeParser_nothrow()
     {
         try
@@ -1308,7 +1308,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     bool FormOperations::impl_canMoveLeft_throw( ) const
     {
         if ( !impl_hasCursor_nothrow() )
@@ -1317,7 +1317,7 @@ namespace frm
         return impl_getRowCount_throw() && ( !m_xCursor->isFirst() || impl_isInsertionRow_throw() );
     }
 
-    //--------------------------------------------------------------------
+
     bool FormOperations::impl_canMoveRight_throw( ) const
     {
         if ( !impl_hasCursor_nothrow() )
@@ -1338,49 +1338,49 @@ namespace frm
         return false;
     }
 
-    //--------------------------------------------------------------------
+
     bool FormOperations::impl_isInsertionRow_throw() const
     {
         return lcl_safeGetPropertyValue_throw( m_xCursorProperties, PROPERTY_ISNEW, false );
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int32 FormOperations::impl_getRowCount_throw() const
     {
         return lcl_safeGetPropertyValue_throw( m_xCursorProperties, PROPERTY_ROWCOUNT, (sal_Int32)0 );
     }
-    //--------------------------------------------------------------------
+
     bool FormOperations::impl_isRowCountFinal_throw() const
     {
         return lcl_safeGetPropertyValue_throw( m_xCursorProperties, PROPERTY_ROWCOUNTFINAL, false );
     }
 
-    //--------------------------------------------------------------------
+
     bool FormOperations::impl_isModifiedRow_throw() const
     {
         return lcl_safeGetPropertyValue_throw( m_xCursorProperties, PROPERTY_ISMODIFIED, false );
     }
 
-    //--------------------------------------------------------------------
+
     bool FormOperations::impl_isParseable_throw() const
     {
         const_cast< FormOperations* >( this )->impl_ensureInitializedParser_nothrow();
         return m_xParser.is() && !m_xParser->getQuery().isEmpty();
     }
 
-    //--------------------------------------------------------------------
+
     bool FormOperations::impl_hasFilterOrOrder_throw() const
     {
         return impl_isParseable_throw() && ( !m_xParser->getFilter().isEmpty() || !m_xParser->getOrder().isEmpty() );
     }
 
-    //--------------------------------------------------------------------
+
     bool FormOperations::impl_isInsertOnlyForm_throw() const
     {
         return lcl_safeGetPropertyValue_throw( m_xCursorProperties, PROPERTY_INSERTONLY, true );
     }
 
-    //------------------------------------------------------------------------------
+
     Reference< XControlModel > FormOperations::impl_getCurrentControlModel_throw() const
     {
         Reference< XControl > xControl( m_xController->getCurrentControl() );
@@ -1405,7 +1405,7 @@ namespace frm
         return xControlModel;
     }
 
-    //------------------------------------------------------------------------------
+
     Reference< XPropertySet > FormOperations::impl_getCurrentBoundField_nothrow( ) const
     {
         OSL_PRECOND( m_xController.is(), "FormOperations::impl_getCurrentBoundField_nothrow: no controller -> no control!" );
@@ -1429,7 +1429,7 @@ namespace frm
         return xField;
     }
 
-    //------------------------------------------------------------------------------
+
     sal_Int16 FormOperations::impl_gridView2ModelPos_nothrow( const Reference< XIndexAccess >& _rxColumns, sal_Int16 _nViewPos ) const
     {
         OSL_PRECOND( _rxColumns.is(), "FormOperations::impl_gridView2ModelPos_nothrow: invalid columns container!" );
@@ -1463,7 +1463,7 @@ namespace frm
         return (sal_Int16)-1;
     }
 
-    //------------------------------------------------------------------------------
+
     bool FormOperations::impl_moveLeft_throw( ) const
     {
         OSL_PRECOND( impl_hasCursor_nothrow(), "FormOperations::impl_moveLeft_throw: no cursor!" );
@@ -1499,7 +1499,7 @@ namespace frm
         return true;
     }
 
-    //--------------------------------------------------------------------
+
     bool FormOperations::impl_moveRight_throw( ) const
     {
         OSL_PRECOND( impl_hasCursor_nothrow(), "FormOperations::impl_moveRight_throw: no cursor!" );
@@ -1528,7 +1528,7 @@ namespace frm
         return true;
     }
 
-    //--------------------------------------------------------------------
+
     void FormOperations::impl_resetAllControls_nothrow() const
     {
         Reference< XIndexAccess > xContainer( m_xCursor, UNO_QUERY );
@@ -1556,7 +1556,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+
     void FormOperations::impl_executeAutoSort_throw( bool _bUp ) const
     {
         OSL_PRECOND( m_xController.is(), "FormOperations::impl_executeAutoSort_throw: need a controller for this!" );
@@ -1619,7 +1619,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+
     void FormOperations::impl_executeAutoFilter_throw( ) const
     {
         OSL_PRECOND( m_xController.is(), "FormOperations::impl_executeAutoFilter_throw: need a controller for this!" );
@@ -1688,7 +1688,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+
     void FormOperations::impl_executeFilterOrSort_throw( bool _bFilter ) const
     {
         OSL_PRECOND( m_xController.is(), "FormOperations::impl_executeFilterOrSort_throw: need a controller for this!" );
@@ -1732,7 +1732,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+
     template < typename FunctObj >
     void FormOperations::impl_doActionInSQLContext_throw( FunctObj f, sal_uInt16 _nErrorResourceId ) const
     {

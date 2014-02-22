@@ -78,7 +78,7 @@ RASReader::~RASReader()
 {
 }
 
-//----------------------------------------------------------------------------
+
 
 sal_Bool RASReader::ReadRAS(Graphic & rGraphic)
 {
@@ -169,7 +169,7 @@ sal_Bool RASReader::ReadRAS(Graphic & rGraphic)
     return mbStatus;
 }
 
-//----------------------------------------------------------------------------
+
 
 sal_Bool RASReader::ImplReadHeader()
 {
@@ -207,7 +207,7 @@ sal_Bool RASReader::ImplReadHeader()
     return mbStatus;
 }
 
-//----------------------------------------------------------------------------
+
 
 sal_Bool RASReader::ImplReadBody()
 {
@@ -302,7 +302,7 @@ sal_Bool RASReader::ImplReadBody()
     return mbStatus;
 }
 
-//----------------------------------------------------------------------------
+
 
 sal_uInt8 RASReader::ImplGetByte()
 {

@@ -153,7 +153,7 @@ SfxImageManager_Impl::SfxImageManager_Impl( SfxModule* pModule )
     m_bAppEventListener = true;
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxImageManager_Impl::~SfxImageManager_Impl()
 {
@@ -164,7 +164,7 @@ SfxImageManager_Impl::~SfxImageManager_Impl()
         delete m_aToolBoxes[i];
 }
 
-//-------------------------------------------------------------------------
+
 
 ImageList* SfxImageManager_Impl::GetImageList( bool bBig )
 {
@@ -180,7 +180,7 @@ ImageList* SfxImageManager_Impl::GetImageList( bool bBig )
     return m_pImageList[nIndex];
 }
 
-//-------------------------------------------------------------------------
+
 
 Image SfxImageManager_Impl::GetImage( sal_uInt16 nId, bool bBig )
 {
@@ -190,7 +190,7 @@ Image SfxImageManager_Impl::GetImage( sal_uInt16 nId, bool bBig )
     return Image();
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
 {
@@ -236,7 +236,7 @@ void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SfxImageManager_Impl, OptionsChanged_Impl)
 {
@@ -244,7 +244,7 @@ IMPL_LINK_NOARG(SfxImageManager_Impl, OptionsChanged_Impl)
     return 0L;
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK( SfxImageManager_Impl, SettingsChanged_Impl, VclWindowEvent*, pEvent)
 {
@@ -274,7 +274,7 @@ IMPL_LINK( SfxImageManager_Impl, SettingsChanged_Impl, VclWindowEvent*, pEvent)
     return 0L;
 }
 
-//-------------------------------------------------------------------------
+
 
 //=========================================================================
 
@@ -283,13 +283,13 @@ SfxImageManager::SfxImageManager( SfxModule* pModule )
     pImp = ::GetImageManager( pModule );
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxImageManager::~SfxImageManager()
 {
 }
 
-//-------------------------------------------------------------------------
+
 
 namespace
 {
@@ -317,7 +317,7 @@ SfxImageManager* SfxImageManager::GetImageManager( SfxModule* pModule )
     return pSfxImageManager;
 }
 
-//-------------------------------------------------------------------------
+
 
 Image SfxImageManager::GetImage( sal_uInt16 nId, bool bBig ) const
 {
@@ -327,7 +327,7 @@ Image SfxImageManager::GetImage( sal_uInt16 nId, bool bBig ) const
     return Image();
 }
 
-//-------------------------------------------------------------------------
+
 
 Image SfxImageManager::GetImage( sal_uInt16 nId ) const
 {
@@ -335,7 +335,7 @@ Image SfxImageManager::GetImage( sal_uInt16 nId ) const
     return GetImage( nId, bLarge );
 }
 
-//-------------------------------------------------------------------------
+
 
 Image SfxImageManager::SeekImage( sal_uInt16 nId, bool bBig ) const
 {
@@ -352,7 +352,7 @@ Image SfxImageManager::SeekImage( sal_uInt16 nId, bool bBig ) const
     return Image();
 }
 
-//-------------------------------------------------------------------------
+
 
 Image SfxImageManager::SeekImage( sal_uInt16 nId ) const
 {
@@ -360,7 +360,7 @@ Image SfxImageManager::SeekImage( sal_uInt16 nId ) const
     return SeekImage( nId, bLarge );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxImageManager::RegisterToolBox( ToolBox *pBox, sal_uInt16 nFlags )
 {
@@ -372,7 +372,7 @@ void SfxImageManager::RegisterToolBox( ToolBox *pBox, sal_uInt16 nFlags )
     pImp->m_aToolBoxes.push_back( pInf );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxImageManager::ReleaseToolBox( ToolBox *pBox )
 {

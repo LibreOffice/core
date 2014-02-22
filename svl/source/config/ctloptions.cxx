@@ -133,13 +133,13 @@ SvtCTLOptions_Impl::~SvtCTLOptions_Impl()
     if ( IsModified() )
         Commit();
 }
-// -----------------------------------------------------------------------------
+
 void SvtCTLOptions_Impl::Notify( const Sequence< OUString >& )
 {
     Load();
     NotifyListeners(SFX_HINT_CTL_SETTINGS_CHANGED);
 }
-// -----------------------------------------------------------------------------
+
 void SvtCTLOptions_Impl::Commit()
 {
     Sequence< OUString > &rPropertyNames = PropertyNames::get();
@@ -231,7 +231,7 @@ void SvtCTLOptions_Impl::Commit()
     //broadcast changes
     NotifyListeners(SFX_HINT_CTL_SETTINGS_CHANGED);
 }
-// -----------------------------------------------------------------------------
+
 void SvtCTLOptions_Impl::Load()
 {
     Sequence< OUString >& rPropertyNames = PropertyNames::get();
@@ -402,7 +402,7 @@ SvtCTLOptions::SvtCTLOptions( bool bDontLoad )
     m_pImp->AddListener(this);
 }
 
-// -----------------------------------------------------------------------
+
 
 SvtCTLOptions::~SvtCTLOptions()
 {
@@ -413,84 +413,84 @@ SvtCTLOptions::~SvtCTLOptions()
     if ( !--nCTLRefCount )
         DELETEZ( pCTLOptions );
 }
-// -----------------------------------------------------------------------------
+
 void SvtCTLOptions::SetCTLFontEnabled( bool _bEnabled )
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     pCTLOptions->SetCTLFontEnabled( _bEnabled );
 }
-// -----------------------------------------------------------------------------
+
 bool SvtCTLOptions::IsCTLFontEnabled() const
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     return pCTLOptions->IsCTLFontEnabled();
 }
-// -----------------------------------------------------------------------------
+
 void SvtCTLOptions::SetCTLSequenceChecking( bool _bEnabled )
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     pCTLOptions->SetCTLSequenceChecking(_bEnabled);
 }
-// -----------------------------------------------------------------------------
+
 bool SvtCTLOptions::IsCTLSequenceChecking() const
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     return pCTLOptions->IsCTLSequenceChecking();
 }
-// -----------------------------------------------------------------------------
+
 void SvtCTLOptions::SetCTLSequenceCheckingRestricted( bool _bEnable )
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     pCTLOptions->SetCTLSequenceCheckingRestricted(_bEnable);
 }
-// -----------------------------------------------------------------------------
+
 bool SvtCTLOptions::IsCTLSequenceCheckingRestricted( void ) const
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     return pCTLOptions->IsCTLSequenceCheckingRestricted();
 }
-// -----------------------------------------------------------------------------
+
 void SvtCTLOptions::SetCTLSequenceCheckingTypeAndReplace( bool _bEnable )
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     pCTLOptions->SetCTLSequenceCheckingTypeAndReplace(_bEnable);
 }
-// -----------------------------------------------------------------------------
+
 bool SvtCTLOptions::IsCTLSequenceCheckingTypeAndReplace() const
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     return pCTLOptions->IsCTLSequenceCheckingTypeAndReplace();
 }
-// -----------------------------------------------------------------------------
+
 void SvtCTLOptions::SetCTLCursorMovement( SvtCTLOptions::CursorMovement _eMovement )
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     pCTLOptions->SetCTLCursorMovement( _eMovement );
 }
-// -----------------------------------------------------------------------------
+
 SvtCTLOptions::CursorMovement SvtCTLOptions::GetCTLCursorMovement() const
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     return pCTLOptions->GetCTLCursorMovement();
 }
-// -----------------------------------------------------------------------------
+
 void SvtCTLOptions::SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumerals )
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     pCTLOptions->SetCTLTextNumerals( _eNumerals );
 }
-// -----------------------------------------------------------------------------
+
 SvtCTLOptions::TextNumerals SvtCTLOptions::GetCTLTextNumerals() const
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     return pCTLOptions->GetCTLTextNumerals();
 }
-// -----------------------------------------------------------------------------
+
 bool SvtCTLOptions::IsReadOnly(EOption eOption) const
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     return pCTLOptions->IsReadOnly(eOption);
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

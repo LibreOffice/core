@@ -102,10 +102,10 @@ EquidistantTickFactory::EquidistantTickFactory(
             fMax = m_fScaledVisibleMax;
     }
 
-    //--
+
     m_fOuterMajorTickBorderMin = EquidistantTickFactory::getMinimumAtIncrement( fMin, m_rIncrement );
     m_fOuterMajorTickBorderMax = EquidistantTickFactory::getMaximumAtIncrement( fMax, m_rIncrement );
-    //--
+
 
     m_fOuterMajorTickBorderMin_Scaled = m_fOuterMajorTickBorderMin;
     m_fOuterMajorTickBorderMax_Scaled = m_fOuterMajorTickBorderMax;

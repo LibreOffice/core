@@ -94,7 +94,7 @@ typedef uno::Reference<
         TRLT_IMPLNAME_PREFIX  #implName, \
         &implName##_CreateInstance }
 
-// -------------------------------------------------------------------------------------
+
 
 using namespace i18n;
 

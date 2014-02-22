@@ -430,7 +430,7 @@ Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
     aBtnSpecularColor.SetAccessibleRelationMemberOf(&aFLMatSpecular);
 }
 
-// -----------------------------------------------------------------------
+
 Svx3DWin::~Svx3DWin()
 {
     delete p3DView;
@@ -446,7 +446,7 @@ Svx3DWin::~Svx3DWin()
     delete mpImpl;
 }
 
-// -----------------------------------------------------------------------
+
 void Svx3DWin::Construct()
 {
     aBtnGeo.Check();
@@ -455,7 +455,7 @@ void Svx3DWin::Construct()
     aCtlLightPreview.Hide();
 }
 
-// -----------------------------------------------------------------------
+
 void Svx3DWin::Reset()
 {
     // Various initializations, default is AllAttributes
@@ -480,7 +480,7 @@ void Svx3DWin::SetUILightState( ImageButton& aBtn, bool bState )
     aBtn.SetModeImage( bState ? aImgLightOn : aImgLightOff );
 }
 
-// -----------------------------------------------------------------------
+
 void Svx3DWin::Update( SfxItemSet& rAttrs )
 {
     // remember 2d attributes
@@ -1708,7 +1708,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     aBtnLatheObject.Enable(pConvertTo3DLatheItem->GetState());
 }
 
-// -----------------------------------------------------------------------
+
 void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 {
     // get remembered 2d attributes from the dialog
@@ -2218,7 +2218,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         rAttrs.InvalidateItem(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY);
 }
 
-// -----------------------------------------------------------------------
+
 void Svx3DWin::Resize()
 {
     if ( !IsFloatingMode() ||
@@ -2311,7 +2311,7 @@ void Svx3DWin::Resize()
     SfxDockingWindow::Resize();
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(Svx3DWin, ClickUpdateHdl)
 {
     bUpdate = !aBtnUpdate.IsChecked();
@@ -2335,7 +2335,7 @@ IMPL_LINK_NOARG(Svx3DWin, ClickUpdateHdl)
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(Svx3DWin, ClickAssignHdl)
 {
     SfxDispatcher* pDispatcher = LocalGetDispatcher(pBindings);
@@ -2349,7 +2349,7 @@ IMPL_LINK_NOARG(Svx3DWin, ClickAssignHdl)
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
 {
@@ -2612,7 +2612,7 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
 {
     bool bUpdatePreview = false;
@@ -2771,7 +2771,7 @@ IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( Svx3DWin, ClickColorHdl, PushButton *, pBtn )
 {
@@ -2801,7 +2801,7 @@ IMPL_LINK( Svx3DWin, ClickColorHdl, PushButton *, pBtn )
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK( Svx3DWin, SelectHdl, void *, p )
 {
     if( p )
@@ -2903,7 +2903,7 @@ IMPL_LINK( Svx3DWin, SelectHdl, void *, p )
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK( Svx3DWin, ModifyHdl, void*, pField )
 {
     if( pField )
@@ -2934,7 +2934,7 @@ IMPL_LINK( Svx3DWin, ModifyHdl, void*, pField )
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Svx3DWin::ClickLight(PushButton& rBtn)
 {
@@ -2962,7 +2962,7 @@ void Svx3DWin::ClickLight(PushButton& rBtn)
     aCtlLightPreview.CheckSelection();
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(Svx3DWin, ChangeLightCallbackHdl)
 {
@@ -2970,7 +2970,7 @@ IMPL_LINK_NOARG(Svx3DWin, ChangeLightCallbackHdl)
 }
 
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(Svx3DWin, ChangeSelectionCallbackHdl)
 {
@@ -3041,10 +3041,10 @@ IMPL_LINK_NOARG(Svx3DWin, ChangeSelectionCallbackHdl)
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 // Method to ensure that the LB is also associated with a color
 // returns true if color was added
-// -----------------------------------------------------------------------
+
 sal_Bool Svx3DWin::LBSelectColor( ColorLB* pLb, const Color& rColor )
 {
     sal_Bool bRet = sal_False;
@@ -3070,7 +3070,7 @@ sal_Bool Svx3DWin::LBSelectColor( ColorLB* pLb, const Color& rColor )
     return( bRet );
 }
 
-// -----------------------------------------------------------------------
+
 void Svx3DWin::UpdatePreview()
 {
     if( pModel == NULL )
@@ -3107,7 +3107,7 @@ void Svx3DWin::DocumentReload()
     mpRemember2DAttributes = 0L;
 }
 
-// -----------------------------------------------------------------------
+
 void Svx3DWin::InitColorLB( const SdrModel* pDoc )
 {
     aLbLight1.Fill( pDoc->GetColorList() );
@@ -3140,7 +3140,7 @@ void Svx3DWin::InitColorLB( const SdrModel* pDoc )
     aLbMatSpecular.SelectEntry( aColWhite );
 }
 
-// -----------------------------------------------------------------------
+
 sal_uInt16 Svx3DWin::GetLightSource( const PushButton* pBtn )
 {
     sal_uInt16 nLight = 8;
@@ -3186,7 +3186,7 @@ sal_uInt16 Svx3DWin::GetLightSource( const PushButton* pBtn )
     return( nLight );
 };
 
-// -----------------------------------------------------------------------
+
 ColorLB* Svx3DWin::GetLbByButton( const PushButton* pBtn )
 {
     ColorLB* pLb = NULL;
@@ -3254,7 +3254,7 @@ Svx3DCtrlItem::Svx3DCtrlItem( sal_uInt16 _nId,
 {
 }
 
-// -----------------------------------------------------------------------
+
 void Svx3DCtrlItem::StateChanged( sal_uInt16 /*nSId*/,
                         SfxItemState /*eState*/, const SfxPoolItem* /*pItem*/ )
 {

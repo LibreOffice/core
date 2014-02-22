@@ -81,7 +81,7 @@ bool lclReadConfigItem( const Reference< XInterface >& rxConfigAccess, const OUS
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 VbaFilterConfig::VbaFilterConfig( const Reference< XComponentContext >& rxContext, const OUString& rConfigCompName )
 {

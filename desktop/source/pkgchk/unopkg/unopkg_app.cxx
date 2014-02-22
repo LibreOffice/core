@@ -64,7 +64,7 @@ struct ExtensionName
     }
 };
 
-//------------------------------------------------------------------------------
+
 const char s_usingText [] =
 "\n"
 "using: " APP_NAME " add <options> extension-path...\n"
@@ -104,7 +104,7 @@ const char s_usingText [] =
 "To learn more about the Extension Manager and extensions, see:\n"
 "http://wiki.openoffice.org/wiki/Documentation/DevGuide/Extensions/Extensions\n\n";
 
-//------------------------------------------------------------------------------
+
 const OptionInfo s_option_infos [] = {
     { RTL_CONSTASCII_STRINGPARAM("help"), 'h', false },
     { RTL_CONSTASCII_STRINGPARAM("version"), 'V', false },

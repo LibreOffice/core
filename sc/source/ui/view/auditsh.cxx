@@ -31,12 +31,12 @@
 #include "sc.hrc"
 #include "document.hxx"
 
-//------------------------------------------------------------------------
+
 
 #define ScAuditingShell
 #include "scslots.hxx"
 
-//------------------------------------------------------------------------
+
 
 TYPEINIT1( ScAuditingShell, SfxShell );
 
@@ -46,7 +46,7 @@ SFX_IMPL_INTERFACE(ScAuditingShell, SfxShell, ScResId(SCSTR_AUDITSHELL))
 }
 
 
-//------------------------------------------------------------------------
+
 
 ScAuditingShell::ScAuditingShell(ScViewData* pData) :
     SfxShell(pData->GetViewShell()),
@@ -65,13 +65,13 @@ ScAuditingShell::ScAuditingShell(ScViewData* pData) :
     SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Auditing));
 }
 
-//------------------------------------------------------------------------
+
 
 ScAuditingShell::~ScAuditingShell()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAuditingShell::Execute( SfxRequest& rReq )
 {
@@ -132,7 +132,7 @@ void ScAuditingShell::Execute( SfxRequest& rReq )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAuditingShell::GetState( SfxItemSet& rSet )
 {

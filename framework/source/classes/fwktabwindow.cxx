@@ -55,7 +55,7 @@ FwkTabControl::FwkTabControl( Window* pParent, const ResId& rResId ) :
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void FwkTabControl::BroadcastEvent( sal_uLong nEvent )
 {
@@ -83,7 +83,7 @@ FwkTabPage::FwkTabPage(
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 FwkTabPage::~FwkTabPage()
 {
@@ -91,7 +91,7 @@ FwkTabPage::~FwkTabPage()
     DeactivatePage();
 }
 
-// -----------------------------------------------------------------------
+
 
 void FwkTabPage::CreateDialog()
 {
@@ -130,7 +130,7 @@ void FwkTabPage::CreateDialog()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool FwkTabPage::CallMethod( const OUString& rMethod )
 {
@@ -149,7 +149,7 @@ sal_Bool FwkTabPage::CallMethod( const OUString& rMethod )
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void FwkTabPage::ActivatePage()
 {
@@ -165,7 +165,7 @@ void FwkTabPage::ActivatePage()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void FwkTabPage::DeactivatePage()
 {
@@ -175,7 +175,7 @@ void FwkTabPage::DeactivatePage()
         m_xPage->setVisible( sal_False );
 }
 
-// -----------------------------------------------------------------------
+
 
 void FwkTabPage::Resize()
 {
@@ -204,14 +204,14 @@ FwkTabWindow::FwkTabWindow( Window* pParent ) :
     m_aTabCtrl.Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 FwkTabWindow::~FwkTabWindow()
 {
     ClearEntryList();
 }
 
-// -----------------------------------------------------------------------
+
 
 void FwkTabWindow::ClearEntryList()
 {
@@ -226,7 +226,7 @@ void FwkTabWindow::ClearEntryList()
     m_TabList.clear();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool FwkTabWindow::RemoveEntry( sal_Int32 nIndex )
 {
@@ -249,7 +249,7 @@ bool FwkTabWindow::RemoveEntry( sal_Int32 nIndex )
         return false;
 }
 
-// -----------------------------------------------------------------------
+
 TabEntry* FwkTabWindow::FindEntry( sal_Int32 nIndex ) const
 {
     TabEntry* pEntry = NULL;
@@ -269,7 +269,7 @@ TabEntry* FwkTabWindow::FindEntry( sal_Int32 nIndex ) const
     return pEntry;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(FwkTabWindow, ActivatePageHdl)
 {
@@ -293,7 +293,7 @@ IMPL_LINK_NOARG(FwkTabWindow, ActivatePageHdl)
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(FwkTabWindow, DeactivatePageHdl)
 {
@@ -301,7 +301,7 @@ IMPL_LINK_NOARG(FwkTabWindow, DeactivatePageHdl)
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 void FwkTabWindow::AddEventListener( const Link& rEventListener )
 {
@@ -313,7 +313,7 @@ void FwkTabWindow::RemoveEventListener( const Link& rEventListener )
     m_aTabCtrl.RemoveEventListener( rEventListener );
 }
 
-// -----------------------------------------------------------------------
+
 
 FwkTabPage* FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< beans::NamedValue >& rProperties )
 {
@@ -356,7 +356,7 @@ FwkTabPage* FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< bea
     return pEntry->m_pPage;
 }
 
-// -----------------------------------------------------------------------
+
 
 void FwkTabWindow::ActivatePage( sal_Int32 nIndex )
 {
@@ -364,7 +364,7 @@ void FwkTabWindow::ActivatePage( sal_Int32 nIndex )
     ActivatePageHdl( &m_aTabCtrl );
 }
 
-// -----------------------------------------------------------------------
+
 
 void FwkTabWindow::RemovePage( sal_Int32 nIndex )
 {
@@ -377,7 +377,7 @@ void FwkTabWindow::RemovePage( sal_Int32 nIndex )
     }
 }
 
-// -----------------------------------------------------------------------
+
 void FwkTabWindow::Resize()
 {
     Size aPageSize = GetSizePixel();

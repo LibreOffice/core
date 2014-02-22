@@ -311,7 +311,7 @@ static void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Refe
     }
 }
 
-// -------------------------------------------------------------------------
+
 
 static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& xSheet,
                     sal_Int32 nStartCol, sal_Int32 nStartRow, sal_Bool bHasHeaders,
@@ -428,7 +428,7 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
 //  rValue.setTypeKind(nType);
 }
 
-// -------------------------------------------------------------------------
+
 
 static OUString lcl_GetColumnStr( sal_Int32 nColumn )
 {
@@ -521,7 +521,7 @@ void OCalcTable::fillColumns()
     }
 }
 
-// -------------------------------------------------------------------------
+
 OCalcTable::OCalcTable(sdbcx::OCollection* _pTables,OCalcConnection* _pConnection,
                     const OUString& _Name,
                     const OUString& _Type,
@@ -543,7 +543,7 @@ OCalcTable::OCalcTable(sdbcx::OCollection* _pTables,OCalcConnection* _pConnectio
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::OCalcTable" );
 }
-// -----------------------------------------------------------------------------
+
 void OCalcTable::construct()
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::construct" );
@@ -626,7 +626,7 @@ void OCalcTable::construct()
 
     refreshColumns();
 }
-// -------------------------------------------------------------------------
+
 void OCalcTable::refreshColumns()
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::refreshColumns" );
@@ -643,14 +643,14 @@ void OCalcTable::refreshColumns()
     else
         m_pColumns  = new OCalcColumns(this,m_aMutex,aVector);
 }
-// -------------------------------------------------------------------------
+
 void OCalcTable::refreshIndexes()
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::refreshIndexes" );
     //  Calc table has no index
 }
 
-// -------------------------------------------------------------------------
+
 void SAL_CALL OCalcTable::disposing(void)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::disposing" );
@@ -662,7 +662,7 @@ void SAL_CALL OCalcTable::disposing(void)
     m_pConnection = NULL;
 
 }
-// -------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OCalcTable::getTypes(  ) throw(RuntimeException)
 {
     //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::getTypes" );
@@ -687,7 +687,7 @@ Sequence< Type > SAL_CALL OCalcTable::getTypes(  ) throw(RuntimeException)
     return Sequence< Type >(pAttrs, aOwnTypes.size());
 }
 
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OCalcTable::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     if( rType == ::getCppuType((const Reference<XKeysSupplier>*)0) ||
@@ -701,7 +701,7 @@ Any SAL_CALL OCalcTable::queryInterface( const Type & rType ) throw(RuntimeExcep
     return aRet.hasValue() ? aRet : OTable_TYPEDEF::queryInterface(rType);
 }
 
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OCalcTable::getUnoTunnelImplementationId()
 {
     //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::getUnoTunnelImplementationId" );
@@ -719,7 +719,7 @@ Sequence< sal_Int8 > OCalcTable::getUnoTunnelImplementationId()
 }
 
 // com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
 sal_Int64 OCalcTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::getSomething" );
@@ -727,17 +727,17 @@ sal_Int64 OCalcTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OCalcTable_BASE::getSomething(rId);
 }
-//------------------------------------------------------------------
+
 sal_Int32 OCalcTable::getCurrentLastPos() const
 {
     //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::getCurrentLastPos" );
     return m_nDataRows;
 }
-//------------------------------------------------------------------
+
 sal_Bool OCalcTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::seekRow" );
-    // ----------------------------------------------------------
+
     // prepare positioning:
 
     sal_uInt32 nNumberOfRecords = m_nDataRows;
@@ -806,7 +806,7 @@ End:
     nCurPos = m_nFilePos;
     return sal_True;
 }
-//------------------------------------------------------------------
+
 sal_Bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
                                 sal_Bool _bUseTableDefs, sal_Bool bRetrieveData )
 {
@@ -843,7 +843,7 @@ sal_Bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
     }
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 void OCalcTable::FileClose()
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::FileClose" );
@@ -851,6 +851,6 @@ void OCalcTable::FileClose()
 
     OCalcTable_BASE::FileClose();
 }
-// -------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

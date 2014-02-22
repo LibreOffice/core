@@ -125,7 +125,7 @@ public:
 
 };
 
-//______________________________________________________________________________
+
 BackendImpl::BackendImpl(
     Sequence<Any> const & args,
     Reference<XComponentContext> const & xComponentContext )
@@ -154,7 +154,7 @@ BackendImpl::BackendImpl(
 }
 
 // XPackageRegistry
-//______________________________________________________________________________
+
 Sequence< Reference<deployment::XPackageTypeInfo> >
 BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 {
@@ -170,7 +170,7 @@ void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaT
 }
 
 // PackageRegistryBackend
-//______________________________________________________________________________
+
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString const & url, OUString const & mediaType_,
     sal_Bool bRemoved, OUString const & identifier,
@@ -323,7 +323,7 @@ bool BackendImpl::PackageImpl::extensionContainsCompiledHelp()
     return bCompiled;
 }
 
-//______________________________________________________________________________
+
 beans::Optional< beans::Ambiguous<sal_Bool> >
 BackendImpl::PackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard &,
@@ -339,7 +339,7 @@ BackendImpl::PackageImpl::isRegistered_(
     return beans::Optional< beans::Ambiguous<sal_Bool> >( true, beans::Ambiguous<sal_Bool>( bReg, false ) );
 }
 
-//______________________________________________________________________________
+
 void BackendImpl::PackageImpl::processPackage_(
     ::osl::ResettableMutexGuard &,
     bool doRegisterPackage,

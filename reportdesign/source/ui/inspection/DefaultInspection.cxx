@@ -50,7 +50,7 @@ namespace rptui
     //====================================================================
     //= DefaultComponentInspectorModel
     //====================================================================
-    //--------------------------------------------------------------------
+
     DefaultComponentInspectorModel::DefaultComponentInspectorModel( const Reference< XComponentContext >& _rxContext)
         :m_xContext( _rxContext )
         ,m_bConstructed( false )
@@ -98,7 +98,7 @@ namespace rptui
         return *(new DefaultComponentInspectorModel( _rxContext ));
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< Any > SAL_CALL DefaultComponentInspectorModel::getHandlerFactories() throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -129,39 +129,39 @@ namespace rptui
 
         return aReturn;
     }
-    //--------------------------------------------------------------------
+
     ::sal_Bool SAL_CALL DefaultComponentInspectorModel::getHasHelpSection() throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         return m_bHasHelpSection;
     }
 
-    //--------------------------------------------------------------------
+
     ::sal_Int32 SAL_CALL DefaultComponentInspectorModel::getMinHelpTextLines() throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         return m_nMinHelpTextLines;
     }
-    //--------------------------------------------------------------------
+
     ::sal_Bool SAL_CALL DefaultComponentInspectorModel::getIsReadOnly() throw (::com::sun::star::uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         return m_bIsReadOnly;
     }
-    //--------------------------------------------------------------------
+
     void SAL_CALL DefaultComponentInspectorModel::setIsReadOnly( ::sal_Bool _isreadonly ) throw (::com::sun::star::uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         m_bIsReadOnly = _isreadonly;
     }
 
-    //--------------------------------------------------------------------
+
     ::sal_Int32 SAL_CALL DefaultComponentInspectorModel::getMaxHelpTextLines() throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         return m_nMaxHelpTextLines;
     }
-    //--------------------------------------------------------------------
+
     void SAL_CALL DefaultComponentInspectorModel::initialize( const Sequence< Any >& _arguments ) throw (Exception, RuntimeException)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
@@ -186,12 +186,12 @@ namespace rptui
         throw lang::IllegalArgumentException( OUString(), *this, 0 );
     }
 
-    //--------------------------------------------------------------------
+
     void DefaultComponentInspectorModel::createDefault()
     {
         m_bConstructed = true;
     }
-    //--------------------------------------------------------------------
+
     void DefaultComponentInspectorModel::createWithHelpSection( sal_Int32 _nMinHelpTextLines, sal_Int32 _nMaxHelpTextLines )
     {
         if ( ( _nMinHelpTextLines <= 0 ) || ( _nMaxHelpTextLines <= 0 ) || ( _nMinHelpTextLines > _nMaxHelpTextLines ) )
@@ -202,7 +202,7 @@ namespace rptui
         m_nMaxHelpTextLines = _nMaxHelpTextLines;
         m_bConstructed = true;
     }
-    //--------------------------------------------------------------------
+
     Sequence< PropertyCategoryDescriptor > SAL_CALL DefaultComponentInspectorModel::describeCategories(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -230,7 +230,7 @@ namespace rptui
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+
     ::sal_Int32 SAL_CALL DefaultComponentInspectorModel::getPropertyOrderIndex( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard(m_aMutex);

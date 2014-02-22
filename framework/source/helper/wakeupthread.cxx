@@ -18,7 +18,7 @@
  */
 
 
-//_______________________________________________
+
 // include files of own module
 #include <helper/wakeupthread.hxx>
 #include <threadhelp/readguard.hxx>

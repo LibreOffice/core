@@ -60,7 +60,7 @@
 #define SMALLBUTTON_OFF_NORMAL_X    3
 #define SMALLBUTTON_OFF_NORMAL_Y    3
 
-// -----------------------------------------------------------------------
+
 
 #define TB_TEXTOFFSET           2
 #define TB_IMAGETEXTOFFSET      3
@@ -91,9 +91,9 @@
 #define DOCK_LINEOFFSET         3
 
 
-// -----------------------------------------------------------------------
+
 static void ImplDrawButton( ToolBox* pThis, const Rectangle &rRect, sal_uInt16 highlight, bool bChecked, bool bEnabled, bool bIsWindow );
-// -----------------------------------------------------------------------
+
 
 typedef ::std::vector< ToolBox* > ImplTBList;
 
@@ -149,7 +149,7 @@ public:
     bool            IsResizeMode() { return mbResizeMode; }
 };
 
-// -----------------------------------------------------------------------
+
 
 static ImplTBDragMgr* ImplGetTBDragMgr()
 {
@@ -159,7 +159,7 @@ static ImplTBDragMgr* ImplGetTBDragMgr()
     return pSVData->maCtrlData.mpTBDragMgr;
 }
 
-// -----------------------------------------------------------------------
+
 
 int ToolBox::ImplGetDragWidth( ToolBox* pThis )
 {
@@ -198,7 +198,7 @@ ButtonType determineButtonType( ImplToolItem* pItem, ButtonType defaultType )
     return tmpButtonType;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::ImplUpdateDragArea( ToolBox *pThis )
 {
@@ -217,7 +217,7 @@ void ToolBox::ImplUpdateDragArea( ToolBox *pThis )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::ImplCalcBorder( WindowAlign eAlign, long& rLeft, long& rTop,
                               long& rRight, long& rBottom, const ToolBox *pThis )
@@ -267,7 +267,7 @@ void ToolBox::ImplCalcBorder( WindowAlign eAlign, long& rLeft, long& rTop,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplCheckUpdate( ToolBox *pThis )
 {
@@ -281,7 +281,7 @@ static void ImplCheckUpdate( ToolBox *pThis )
         pThis->Update();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::ImplDrawGrip( ToolBox* pThis )
 {
@@ -663,7 +663,7 @@ void ToolBox::ImplDrawBorder( ToolBox* pWin )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplIsFixedControl( const ImplToolItem *pItem )
 {
@@ -673,7 +673,7 @@ static bool ImplIsFixedControl( const ImplToolItem *pItem )
              pItem->mpWindow->GetType() == WINDOW_GROUPBOX) );
 }
 
-// -----------------------------------------------------------------------
+
 
 const ImplToolItem *ToolBox::ImplGetFirstClippedItem( const ToolBox* pThis )
 {
@@ -688,7 +688,7 @@ const ImplToolItem *ToolBox::ImplGetFirstClippedItem( const ToolBox* pThis )
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 Size ToolBox::ImplCalcSize( const ToolBox* pThis, sal_uInt16 nCalcLines, sal_uInt16 nCalcMode )
 {
@@ -806,7 +806,7 @@ Size ToolBox::ImplCalcSize( const ToolBox* pThis, sal_uInt16 nCalcLines, sal_uIn
     return aSize;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::ImplCalcFloatSizes( ToolBox* pThis )
 {
@@ -873,7 +873,7 @@ void ToolBox::ImplCalcFloatSizes( ToolBox* pThis )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 Size ToolBox::ImplCalcFloatSize( ToolBox* pThis, sal_uInt16& rLines )
 {
@@ -900,7 +900,7 @@ Size ToolBox::ImplCalcFloatSize( ToolBox* pThis, sal_uInt16& rLines )
     return aSize;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::ImplCalcMinMaxFloatSize( ToolBox* pThis, Size& rMinSize, Size& rMaxSize )
 {
@@ -942,7 +942,7 @@ void ToolBox::ImplSetMinMaxFloatSize( ToolBox *pThis )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 
 sal_uInt16 ToolBox::ImplCalcLines( ToolBox* pThis, long nToolSize )
@@ -976,7 +976,7 @@ sal_uInt16 ToolBox::ImplCalcLines( ToolBox* pThis, long nToolSize )
     return static_cast<sal_uInt16>(nLines);
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ToolBox::ImplTestLineSize( ToolBox* pThis, const Point& rPos )
 {
@@ -1010,7 +1010,7 @@ sal_uInt16 ToolBox::ImplTestLineSize( ToolBox* pThis, const Point& rPos )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRect,
                      sal_uInt16 nLineMode )
@@ -1106,7 +1106,7 @@ void ToolBox::ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRec
     pThis->mnDockLines = i;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ToolBox::ImplFindItemPos( ToolBox* pBox, const Point& rPos )
 {
@@ -1170,7 +1170,7 @@ sal_uInt16 ToolBox::ImplFindItemPos( ToolBox* pBox, const Point& rPos )
     return nPos;
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplTBDragMgr::ImplTBDragMgr()
 {
@@ -1187,14 +1187,14 @@ ImplTBDragMgr::ImplTBDragMgr()
     maAccel.SetSelectHdl( LINK( this, ImplTBDragMgr, SelectHdl ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplTBDragMgr::~ImplTBDragMgr()
 {
     delete mpBoxList;
 }
 
-// -----------------------------------------------------------------------
+
 
 ToolBox* ImplTBDragMgr::FindToolBox( const Rectangle& rRect )
 {
@@ -1225,7 +1225,7 @@ ToolBox* ImplTBDragMgr::FindToolBox( const Rectangle& rRect )
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplTBDragMgr::StartDragging( ToolBox* pToolBox,
                                    const Point& rPos, const Rectangle& rRect,
@@ -1270,7 +1270,7 @@ void ImplTBDragMgr::StartDragging( ToolBox* pToolBox,
     pToolBox->ShowTracking( maRect );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplTBDragMgr::Dragging( const Point& rPos )
 {
@@ -1304,7 +1304,7 @@ void ImplTBDragMgr::Dragging( const Point& rPos )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplTBDragMgr::EndDragging( bool bOK )
 {
@@ -1392,7 +1392,7 @@ void ImplTBDragMgr::EndDragging( bool bOK )
     mpDragBox = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplTBDragMgr::UpdateDragRect()
 {
@@ -1403,7 +1403,7 @@ void ImplTBDragMgr::UpdateDragRect()
     mpDragBox->ShowTracking( maRect );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( ImplTBDragMgr, SelectHdl, Accelerator*, pAccel )
 {
@@ -1415,7 +1415,7 @@ IMPL_LINK( ImplTBDragMgr, SelectHdl, Accelerator*, pAccel )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -1496,7 +1496,7 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     ImplInitSettings( true, true, true );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::ImplInitSettings( bool bFont,
                                 bool bForeground, bool bBackground )
@@ -1563,7 +1563,7 @@ void ToolBox::ImplInitSettings( bool bFont,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::ImplLoadRes( const ResId& rResId )
 {
@@ -1620,7 +1620,7 @@ void ToolBox::ImplLoadRes( const ResId& rResId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 ToolBox::ToolBox( Window* pParent, WinBits nStyle ) :
     DockingWindow( WINDOW_TOOLBOX )
@@ -1628,7 +1628,7 @@ ToolBox::ToolBox( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-// -----------------------------------------------------------------------
+
 
 ToolBox::ToolBox( Window* pParent, const ResId& rResId ) :
     DockingWindow( WINDOW_TOOLBOX )
@@ -1651,7 +1651,7 @@ ToolBox::ToolBox( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 ToolBox::~ToolBox()
 {
@@ -1688,7 +1688,7 @@ ToolBox::~ToolBox()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplToolItem* ToolBox::ImplGetItem( sal_uInt16 nItemId ) const
 {
@@ -1702,7 +1702,7 @@ ImplToolItem* ToolBox::ImplGetItem( sal_uInt16 nItemId ) const
 
     return NULL;
 }
-// -----------------------------------------------------------------------
+
 
 static void ImplAddButtonBorder( long &rWidth, long& rHeight, bool bNativeButtons )
 {
@@ -1717,7 +1717,7 @@ static void ImplAddButtonBorder( long &rWidth, long& rHeight, bool bNativeButton
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ToolBox::ImplCalcItem()
 {
@@ -2005,7 +2005,7 @@ bool ToolBox::ImplCalcItem()
         return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalcHorz )
 {
@@ -2156,7 +2156,7 @@ sal_uInt16 ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalc
     return nLines;
 }
 
-// -----------------------------------------------------------------------
+
 
 Size ToolBox::ImplGetOptimalFloatingSize()
 {
@@ -2708,7 +2708,7 @@ void ToolBox::ImplFormat( bool bResize )
     mbFormat = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ToolBox, ImplDropdownLongClickHdl)
 {
@@ -2739,7 +2739,7 @@ IMPL_LINK_NOARG(ToolBox, ImplDropdownLongClickHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ToolBox, ImplUpdateHdl)
 {
@@ -2750,7 +2750,7 @@ IMPL_LINK_NOARG(ToolBox, ImplUpdateHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 static void ImplDrawMoreIndicator( ToolBox *pBox, const Rectangle& rRect, bool bSetColor, bool bRotate )
 {
     Color aOldFillColor = pBox->GetFillColor();
@@ -2878,7 +2878,7 @@ static void ImplDrawDropdownArrow( ToolBox *pBox, const Rectangle& rDropDownRect
         pBox->SetLineColor( );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::ImplDrawMenubutton( ToolBox *pThis, bool bHighlight )
 {
@@ -2920,7 +2920,7 @@ void ToolBox::ImplDrawMenubutton( ToolBox *pThis, bool bHighlight )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::ImplDrawSpin( bool bUpperIn, bool bLowerIn )
 {
@@ -2951,7 +2951,7 @@ void ToolBox::ImplDrawSpin( bool bUpperIn, bool bLowerIn )
                         bUpperIn, bLowerIn, bTmpUpper, bTmpLower, !mbHorz );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::ImplDrawSeparator( sal_uInt16 nPos, Rectangle rRect )
 {
@@ -3000,7 +3000,7 @@ void ToolBox::ImplDrawSeparator( sal_uInt16 nPos, Rectangle rRect )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplDrawButton( ToolBox* pThis, const Rectangle &rRect, sal_uInt16 highlight, bool bChecked, bool bEnabled, bool bIsWindow )
 {
@@ -3356,7 +3356,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
         pMgr->UpdateDragRect();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::ImplDrawFloatwinBorder( ImplToolItem* pItem )
 {
@@ -3431,7 +3431,7 @@ void ToolBox::ImplFloatControl( bool bStart, FloatingWindow* pFloatWindow )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::ShowLine( bool bNext )
 {
@@ -3466,7 +3466,7 @@ void ToolBox::ShowLine( bool bNext )
     ImplFormat();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat )
 {
@@ -3528,7 +3528,7 @@ bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat )
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
 {
@@ -3646,7 +3646,7 @@ bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::MouseMove( const MouseEvent& rMEvt )
 {
@@ -3867,7 +3867,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
     DockingWindow::MouseMove( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -4093,7 +4093,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
         DockingWindow::MouseButtonDown( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -4111,7 +4111,7 @@ void ToolBox::MouseButtonUp( const MouseEvent& rMEvt )
     DockingWindow::MouseButtonUp( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::Tracking( const TrackingEvent& rTEvt )
 {
@@ -4130,7 +4130,7 @@ void ToolBox::Tracking( const TrackingEvent& rTEvt )
     DockingWindow::Tracking( rTEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::Paint( const Rectangle& rPaintRect )
 {
@@ -4185,14 +4185,14 @@ void ToolBox::Paint( const Rectangle& rPaintRect )
     ImplShowFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::Move()
 {
     DockingWindow::Move();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::Resize()
 {
@@ -4302,7 +4302,7 @@ void ToolBox::Resize()
     }
 }
 
-// -----------------------------------------------------------------------
+
 const OUString& ToolBox::ImplGetHelpText( sal_uInt16 nItemId ) const
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
@@ -4324,7 +4324,7 @@ const OUString& ToolBox::ImplGetHelpText( sal_uInt16 nItemId ) const
     return pItem->maHelpText;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::RequestHelp( const HelpEvent& rHEvt )
 {
@@ -4401,7 +4401,7 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
     DockingWindow::RequestHelp( rHEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ToolBox::Notify( NotifyEvent& rNEvt )
 {
@@ -4486,7 +4486,7 @@ bool ToolBox::Notify( NotifyEvent& rNEvt )
     return DockingWindow::Notify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::Command( const CommandEvent& rCEvt )
 {
@@ -4552,7 +4552,7 @@ void ToolBox::Command( const CommandEvent& rCEvt )
     DockingWindow::Command( rCEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::StateChanged( StateChangedType nType )
 {
@@ -4590,7 +4590,7 @@ void ToolBox::StateChanged( StateChangedType nType )
         maStateChangedHandler.Call( &nType );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -4612,14 +4612,14 @@ void ToolBox::DataChanged( const DataChangedEvent& rDCEvt )
         maDataChangedHandler.Call( (void*)&rDCEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ToolBox::PrepareToggleFloatingMode()
 {
     return DockingWindow::PrepareToggleFloatingMode();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::ToggleFloatingMode()
 {
@@ -4663,7 +4663,7 @@ void ToolBox::ToggleFloatingMode()
     ImplFormat();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::StartDocking()
 {
@@ -4673,7 +4673,7 @@ void ToolBox::StartDocking()
     DockingWindow::StartDocking();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ToolBox::Docking( const Point& rPos, Rectangle& rRect )
 {
@@ -4799,7 +4799,7 @@ bool ToolBox::Docking( const Point& rPos, Rectangle& rRect )
     return bFloatMode;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode )
 {
@@ -4814,7 +4814,7 @@ void ToolBox::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode )
         DockingWindow::EndDocking( rRect, bFloatMode );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::Resizing( Size& rSize )
 {
@@ -4960,7 +4960,7 @@ Size ToolBox::CalcFloatingWindowSizePixel( sal_uInt16 nCalcLines ) const
     return aSize;
 }
 
-// -----------------------------------------------------------------------
+
 
 Size ToolBox::CalcMinimumWindowSizePixel() const
 {
@@ -5003,7 +5003,7 @@ Size ToolBox::CalcMinimumWindowSizePixel() const
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::EnableCustomize( bool bEnable )
 {
@@ -5019,14 +5019,14 @@ void ToolBox::EnableCustomize( bool bEnable )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::GetFocus()
 {
     DockingWindow::GetFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::LoseFocus()
 {
@@ -5035,7 +5035,7 @@ void ToolBox::LoseFocus()
     DockingWindow::LoseFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 // performs the action associated with an item, ie simulates clicking the item
 void ToolBox::TriggerItem( sal_uInt16 nItemId, bool bShift, bool bCtrl )
@@ -5050,7 +5050,7 @@ void ToolBox::TriggerItem( sal_uInt16 nItemId, bool bShift, bool bCtrl )
     ImplActivateItem( aKeyCode );
 }
 
-// -----------------------------------------------------------------------
+
 
 // calls the button's action handler
 // returns sal_True if action was called
@@ -5114,7 +5114,7 @@ bool ToolBox::ImplActivateItem( KeyCode aKeyCode )
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplCloseLastPopup( Window *pParent )
 {
@@ -5181,7 +5181,7 @@ bool ToolBox::ImplOpenItem( KeyCode aKeyCode )
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::KeyInput( const KeyEvent& rKEvt )
 {
@@ -5371,7 +5371,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         DockingWindow::KeyInput( rKEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 // returns the current toolbox line of the item
 sal_uInt16 ToolBox::ImplGetItemLine( ImplToolItem* pCurrentItem )
@@ -5421,7 +5421,7 @@ ImplToolItem* ToolBox::ImplGetFirstValidItem( sal_uInt16 nLine )
     return (it == mpData->m_aItems.end()) ? NULL : &(*it);
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ToolBox::ImplFindItemPos( const ImplToolItem* pItem, const std::vector< ImplToolItem >& rList )
 {
@@ -5519,7 +5519,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus )
     mbChangingHighlight = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 // check for keyboard accessible items
 static bool ImplIsValidItem( const ImplToolItem* pItem, bool bNotClipped )
@@ -5530,7 +5530,7 @@ static bool ImplIsValidItem( const ImplToolItem* pItem, bool bNotClipped )
     return bValid;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
 {
@@ -5693,7 +5693,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::ImplShowFocus()
 {
@@ -5709,7 +5709,7 @@ void ToolBox::ImplShowFocus()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::ImplHideFocus()
 {
@@ -5731,7 +5731,7 @@ void ToolBox::ImplHideFocus()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ToolBox::ImplDisableFlatButtons()
 {

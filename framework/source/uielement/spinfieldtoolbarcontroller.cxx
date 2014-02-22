@@ -51,7 +51,7 @@ using namespace ::com::sun::star::util;
 namespace framework
 {
 
-// ------------------------------------------------------------------
+
 
 // Wrapper class to notify controller about events from combobox.
 // Unfortunaltly the events are notifed through virtual methods instead
@@ -171,7 +171,7 @@ bool SpinfieldControl::PreNotify( NotifyEvent& rNEvt )
     return nRet;
 }
 
-// ------------------------------------------------------------------
+
 
 SpinfieldToolbarController::SpinfieldToolbarController(
     const Reference< XComponentContext >&    rxContext,
@@ -201,13 +201,13 @@ SpinfieldToolbarController::SpinfieldToolbarController(
     m_pToolbar->SetItemWindow( m_nID, m_pSpinfieldControl );
 }
 
-// ------------------------------------------------------------------
+
 
 SpinfieldToolbarController::~SpinfieldToolbarController()
 {
 }
 
-// ------------------------------------------------------------------
+
 
 void SAL_CALL SpinfieldToolbarController::dispose()
 throw ( RuntimeException )
@@ -222,7 +222,7 @@ throw ( RuntimeException )
     m_pSpinfieldControl = 0;
 }
 
-// ------------------------------------------------------------------
+
 Sequence<PropertyValue> SpinfieldToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
     Sequence<PropertyValue> aArgs( 2 );
@@ -239,7 +239,7 @@ Sequence<PropertyValue> SpinfieldToolbarController::getExecuteArgs(sal_Int16 Key
     return aArgs;
 }
 
-// ------------------------------------------------------------------
+
 
 void SpinfieldToolbarController::Up()
 {
@@ -336,7 +336,7 @@ bool SpinfieldToolbarController::PreNotify( NotifyEvent& rNEvt )
     return false;
 }
 
-// --------------------------------------------------------
+
 
 void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {

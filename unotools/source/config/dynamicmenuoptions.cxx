@@ -331,9 +331,9 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
                                                     Sequence< OUString >& lDestination ,
                                               const OUString&             sSetNode     );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private member
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 

@@ -342,7 +342,7 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
     if( m_bDisposed || m_bInDispose )
         return; //behave as passive as possible, if disposed or closed already
 
-    //--------
+
     m_bClosed = sal_True;
 
     NegativeGuard< osl::Mutex > aNegativeGuard( m_aAccessMutex );

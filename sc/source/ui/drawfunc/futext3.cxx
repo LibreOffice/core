@@ -44,12 +44,12 @@
 #include "drawview.hxx"
 #include "undocell.hxx"
 
-// ------------------------------------------------------------------------------------
+
 //  Editieren von Notiz-Legendenobjekten muss immer ueber StopEditMode beendet werden,
 //  damit die Aenderungen ins Dokument uebernommen werden!
 //  (Fontwork-Execute in drawsh und drtxtob passiert nicht fuer Legendenobjekte)
 //  bTextDirection=sal_True means that this function is called from SID_TEXTDIRECTION_XXX(drtxtob.cxx).
-// ------------------------------------------------------------------------------------
+
 
 void FuText::StopEditMode(bool /*bTextDirection*/)
 {

@@ -22,7 +22,7 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #include "scitems.hxx"
 #include <svx/numinf.hxx>
@@ -130,7 +130,7 @@ ScStyleDlg::ScStyleDlg( Window*             pParent,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScStyleDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 {
@@ -182,7 +182,7 @@ void ScStyleDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 }
 
 
-// -----------------------------------------------------------------------
+
 
 const SfxItemSet* ScStyleDlg::GetRefreshedSet()
 {

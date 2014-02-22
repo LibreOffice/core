@@ -30,22 +30,22 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-// -----------------------------------------------------------------------------
+
 // VCLXAccessibleMenu
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleMenu::VCLXAccessibleMenu( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu )
     :VCLXAccessibleMenuItem( pParent, nItemPos, pMenu )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleMenu::~VCLXAccessibleMenu()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleMenu::IsFocused()
 {
@@ -57,7 +57,7 @@ sal_Bool VCLXAccessibleMenu::IsFocused()
     return bFocused;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleMenu::IsPopupMenuOpen()
 {
@@ -73,28 +73,28 @@ sal_Bool VCLXAccessibleMenu::IsPopupMenuOpen()
     return bPopupMenuOpen;
 }
 
-// -----------------------------------------------------------------------------
+
 // XInterface
-// -----------------------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleMenu, VCLXAccessibleMenuItem, VCLXAccessibleMenu_BASE )
 
-// -----------------------------------------------------------------------------
+
 // XTypeProvider
-// -----------------------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleMenu, VCLXAccessibleMenuItem, VCLXAccessibleMenu_BASE )
 
-// -----------------------------------------------------------------------------
+
 // XServiceInfo
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleMenu::getImplementationName() throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleMenu" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > VCLXAccessibleMenu::getSupportedServiceNames() throw (RuntimeException)
 {
@@ -103,9 +103,9 @@ Sequence< OUString > VCLXAccessibleMenu::getSupportedServiceNames() throw (Runti
     return aNames;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleContext
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleMenu::getAccessibleChildCount(  ) throw (RuntimeException)
 {
@@ -114,7 +114,7 @@ sal_Int32 VCLXAccessibleMenu::getAccessibleChildCount(  ) throw (RuntimeExceptio
     return GetChildCount();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > VCLXAccessibleMenu::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -126,7 +126,7 @@ Reference< XAccessible > VCLXAccessibleMenu::getAccessibleChild( sal_Int32 i ) t
     return GetChild( i );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int16 VCLXAccessibleMenu::getAccessibleRole(  ) throw (RuntimeException)
 {
@@ -135,9 +135,9 @@ sal_Int16 VCLXAccessibleMenu::getAccessibleRole(  ) throw (RuntimeException)
     return AccessibleRole::MENU;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleComponent
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > VCLXAccessibleMenu::getAccessibleAtPoint( const awt::Point& rPoint ) throw (RuntimeException)
 {
@@ -146,9 +146,9 @@ Reference< XAccessible > VCLXAccessibleMenu::getAccessibleAtPoint( const awt::Po
     return GetChildAt( rPoint );
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleSelection
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleMenu::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -160,7 +160,7 @@ void VCLXAccessibleMenu::selectAccessibleChild( sal_Int32 nChildIndex ) throw (I
     SelectChild( nChildIndex );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleMenu::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -172,7 +172,7 @@ sal_Bool VCLXAccessibleMenu::isAccessibleChildSelected( sal_Int32 nChildIndex ) 
     return IsChildSelected( nChildIndex );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleMenu::clearAccessibleSelection(  ) throw (RuntimeException)
 {
@@ -181,14 +181,14 @@ void VCLXAccessibleMenu::clearAccessibleSelection(  ) throw (RuntimeException)
     DeSelectAll();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleMenu::selectAllAccessibleChildren(  ) throw (RuntimeException)
 {
     // This method makes no sense in a menu, and so does nothing.
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleMenu::getSelectedAccessibleChildCount(  ) throw (RuntimeException)
 {
@@ -205,7 +205,7 @@ sal_Int32 VCLXAccessibleMenu::getSelectedAccessibleChildCount(  ) throw (Runtime
     return nRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > VCLXAccessibleMenu::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -228,7 +228,7 @@ Reference< XAccessible > VCLXAccessibleMenu::getSelectedAccessibleChild( sal_Int
     return xChild;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleMenu::deselectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -240,7 +240,7 @@ void VCLXAccessibleMenu::deselectAccessibleChild( sal_Int32 nChildIndex ) throw 
     DeSelectAll();
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleMenu::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {

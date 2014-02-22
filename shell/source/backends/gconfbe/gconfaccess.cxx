@@ -200,7 +200,7 @@ static OUString xdg_user_dir_lookup (const char *type)
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 uno::Any makeAnyOfGconfValue( GConfValue *pGconfValue )
 {
@@ -224,7 +224,7 @@ uno::Any makeAnyOfGconfValue( GConfValue *pGconfValue )
     return uno::Any();
 }
 
-//------------------------------------------------------------------------------
+
 
 static void splitFontName( GConfValue *pGconfValue, OUString &rName, sal_Int16 &rHeight)
 {
@@ -242,7 +242,7 @@ static void splitFontName( GConfValue *pGconfValue, OUString &rName, sal_Int16 &
    rName = OStringToOUString( aFont.copy( 0, nIdx ), RTL_TEXTENCODING_UTF8 );
 }
 
-//------------------------------------------------------------------------------
+
 
 uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfValue )
 {
@@ -371,7 +371,7 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
     return uno::Any();
 }
 
-//------------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const ConfigurationValue &rValue )
 {

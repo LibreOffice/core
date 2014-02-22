@@ -108,7 +108,7 @@ SdTabTemplateDlg::SdTabTemplateDlg( Window* pParent,
     nHatchingListState = CT_NONE;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdTabTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
@@ -175,7 +175,7 @@ void SdTabTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 const SfxItemSet* SdTabTemplateDlg::GetRefreshedSet()
 {

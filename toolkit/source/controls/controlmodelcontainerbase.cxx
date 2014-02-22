@@ -83,7 +83,7 @@ struct LanguageDependentProp
     sal_Int32   nPropNameLength;
 };
 
-// ----------------------------------------------------------------------------
+
 namespace
 {
     static const Sequence< OUString >& lcl_getLanguageDependentProperties()
@@ -104,7 +104,7 @@ namespace
     }
 }
 
-// ----------------------------------------------------------------------------
+
 // functor for disposing a control model
 struct DisposeControlModel : public ::std::unary_function< Reference< XControlModel >, void >
 {
@@ -121,7 +121,7 @@ struct DisposeControlModel : public ::std::unary_function< Reference< XControlMo
     }
 };
 
-// ----------------------------------------------------------------------------
+
 // functor for searching control model by name
 struct FindControlModel : public ::std::unary_function< ControlModelContainerBase::UnoControlModelHolder, bool >
 {
@@ -137,7 +137,7 @@ public:
     }
 };
 
-// ----------------------------------------------------------------------------
+
 // functor for cloning a control model, and insertion into a target list
 struct CloneControlModel : public ::std::unary_function< ControlModelContainerBase::UnoControlModelHolder, void >
 {
@@ -160,7 +160,7 @@ public:
     }
 };
 
-// ----------------------------------------------------------------------------
+
 // functor for comparing a XControlModel with a given reference
 struct CompareControlModel : public ::std::unary_function< ControlModelContainerBase::UnoControlModelHolder, bool >
 {
@@ -175,32 +175,32 @@ public:
     }
 };
 
-// ----------------------------------------------------------------------------
+
 static void lcl_throwIllegalArgumentException( )
 {   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
     throw IllegalArgumentException();
 }
 
-// ----------------------------------------------------------------------------
+
 static void lcl_throwNoSuchElementException( )
 {   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
     throw NoSuchElementException();
 }
 
-// ----------------------------------------------------------------------------
+
 static void lcl_throwElementExistException( )
 {   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
     throw ElementExistException();
 }
 
-// ----------------------------------------------------------------------------
+
 static const OUString& getTabIndexPropertyName( )
 {
     static const OUString s_sTabIndexProperty( "TabIndex" );
     return s_sTabIndexProperty;
 }
 
-// ----------------------------------------------------------------------------
+
 static const OUString& getStepPropertyName( )
 {
     static const OUString s_sStepProperty( "Step" );
@@ -666,19 +666,19 @@ void ControlModelContainerBase::removeByName( const OUString& aName ) throw(NoSu
     implNotifyTabModelChange( aName );
 }
 
-// ----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ControlModelContainerBase::getGroupControl(  ) throw (RuntimeException)
 {
     return sal_True;
 }
 
-// ----------------------------------------------------------------------------
+
 void SAL_CALL ControlModelContainerBase::setGroupControl( sal_Bool ) throw (RuntimeException)
 {
     OSL_TRACE( "ControlModelContainerBase::setGroupControl: explicit grouping not supported" );
 }
 
-// ----------------------------------------------------------------------------
+
 void SAL_CALL ControlModelContainerBase::setControlModels( const Sequence< Reference< XControlModel > >& _rControls ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -715,7 +715,7 @@ void SAL_CALL ControlModelContainerBase::setControlModels( const Sequence< Refer
 
 typedef ::std::multimap< sal_Int32, Reference< XControlModel >, ::std::less< sal_Int32 > > MapIndexToModel;
 
-// ----------------------------------------------------------------------------
+
 Sequence< Reference< XControlModel > > SAL_CALL ControlModelContainerBase::getControlModels(  ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -763,7 +763,7 @@ Sequence< Reference< XControlModel > > SAL_CALL ControlModelContainerBase::getCo
     return aReturn;
 }
 
-// ----------------------------------------------------------------------------
+
 void SAL_CALL ControlModelContainerBase::setGroup( const Sequence< Reference< XControlModel > >&, const OUString& ) throw (RuntimeException)
 {
     // not supported. We have only implicit grouping:
@@ -829,7 +829,7 @@ void SAL_CALL ControlModelContainerBase::setToolTip( const OUString& _tooltip ) 
     m_sTooltip = _tooltip;
 }
 
-// ----------------------------------------------------------------------------
+
 namespace
 {
     enum GroupingMachineState
@@ -855,7 +855,7 @@ namespace
     }
 }
 
-// ----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ControlModelContainerBase::getGroupCount(  ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -865,7 +865,7 @@ sal_Int32 SAL_CALL ControlModelContainerBase::getGroupCount(  ) throw (RuntimeEx
     return maGroups.size();
 }
 
-// ----------------------------------------------------------------------------
+
 void SAL_CALL ControlModelContainerBase::getGroup( sal_Int32 _nGroup, Sequence< Reference< XControlModel > >& _rGroup, OUString& _rName ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -889,7 +889,7 @@ void SAL_CALL ControlModelContainerBase::getGroup( sal_Int32 _nGroup, Sequence< 
     }
 }
 
-// ----------------------------------------------------------------------------
+
 void SAL_CALL ControlModelContainerBase::getGroupByName( const OUString& _rName, Sequence< Reference< XControlModel > >& _rGroup ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -898,19 +898,19 @@ void SAL_CALL ControlModelContainerBase::getGroupByName( const OUString& _rName,
     getGroup( _rName.toInt32( ), _rGroup, sDummyName );
 }
 
-// ----------------------------------------------------------------------------
+
 void SAL_CALL ControlModelContainerBase::addChangesListener( const Reference< XChangesListener >& _rxListener ) throw (RuntimeException)
 {
     maChangeListeners.addInterface( _rxListener );
 }
 
-// ----------------------------------------------------------------------------
+
 void SAL_CALL ControlModelContainerBase::removeChangesListener( const Reference< XChangesListener >& _rxListener ) throw (RuntimeException)
 {
     maChangeListeners.removeInterface( _rxListener );
 }
 
-// ----------------------------------------------------------------------------
+
 void ControlModelContainerBase::implNotifyTabModelChange( const OUString& _rAccessor )
 {
     // multiplex to our change listeners:
@@ -933,7 +933,7 @@ void ControlModelContainerBase::implNotifyTabModelChange( const OUString& _rAcce
 }
 
 
-// ----------------------------------------------------------------------------
+
 void ControlModelContainerBase::implUpdateGroupStructure()
 {
     if ( mbGroupsUpToDate )
@@ -1069,7 +1069,7 @@ void ControlModelContainerBase::implUpdateGroupStructure()
     mbGroupsUpToDate = sal_True;
 }
 
-// ----------------------------------------------------------------------------
+
 void SAL_CALL ControlModelContainerBase::propertyChange( const PropertyChangeEvent& _rEvent ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1095,12 +1095,12 @@ void SAL_CALL ControlModelContainerBase::propertyChange( const PropertyChangeEve
     implNotifyTabModelChange( sAccessor );
 }
 
-// ----------------------------------------------------------------------------
+
 void SAL_CALL ControlModelContainerBase::disposing( const EventObject& /*rEvent*/ ) throw (RuntimeException)
 {
 }
 
-// ----------------------------------------------------------------------------
+
 void ControlModelContainerBase::startControlListening( const Reference< XControlModel >& _rxChildModel )
 {
     SolarMutexGuard aGuard;
@@ -1114,7 +1114,7 @@ void ControlModelContainerBase::startControlListening( const Reference< XControl
         xModelProps->addPropertyChangeListener( getTabIndexPropertyName(), this );
 }
 
-// ----------------------------------------------------------------------------
+
 void ControlModelContainerBase::stopControlListening( const Reference< XControlModel >& _rxChildModel )
 {
     SolarMutexGuard aGuard;

@@ -37,7 +37,7 @@ namespace evtlstner
         Reference< XComponentContext > const & xContext )
         SAL_THROW(());
 
-    // -----------------------------------------------------------------------------
+
 
     OUString SAL_CALL getImplementationName();
 
@@ -57,7 +57,7 @@ namespace ooevtdescgen
         Reference< XComponentContext > const & xContext )
         SAL_THROW(());
 
-    // -----------------------------------------------------------------------------
+
 
     OUString SAL_CALL getImplementationName();
 

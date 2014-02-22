@@ -46,20 +46,20 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::sheet;
 
-// -------------------------------------------------------------------------
+
 
 OCalcDatabaseMetaData::OCalcDatabaseMetaData(OConnection* _pCon)    :ODatabaseMetaData(_pCon)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::OCalcDatabaseMetaData" );
 }
 
-// -------------------------------------------------------------------------
+
 
 OCalcDatabaseMetaData::~OCalcDatabaseMetaData()
 {
 }
 
-// -------------------------------------------------------------------------
+
 Reference< XResultSet > OCalcDatabaseMetaData::impl_getTypeInfo_throw(  )
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::impl_getTypeInfo_throw" );
@@ -139,7 +139,7 @@ Reference< XResultSet > OCalcDatabaseMetaData::impl_getTypeInfo_throw(  )
     return xRef;
 }
 
-// -------------------------------------------------------------------------
+
 
 Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getColumns(
     const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& tableNamePattern,
@@ -237,7 +237,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getColumns(
     return xRef;
 }
 
-// -------------------------------------------------------------------------
+
 
 OUString SAL_CALL OCalcDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
@@ -247,7 +247,7 @@ OUString SAL_CALL OCalcDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeE
     return OUString("sdbc:calc:") + m_pConnection->getURL();
 }
 
-// -------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
 {
@@ -255,33 +255,33 @@ sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQ
     return SAL_MAX_INT32;
 }
 
-// -------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxCharLiteralLength(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::getMaxCharLiteralLength" );
     return SAL_MAX_INT32;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnNameLength(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::getMaxColumnNameLength" );
     return SAL_MAX_INT32;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnsInIndex(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::getMaxColumnsInIndex" );
     return 1;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::getMaxColumnsInTable" );
     return 256;
 }
 
-// -------------------------------------------------------------------------
+
 
 static sal_Bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, const OUString& rName )
 {
@@ -353,7 +353,7 @@ static sal_Bool lcl_IsUnnamed( const Reference<XDatabaseRanges>& xRanges, const 
     return bUnnamed;
 }
 
-// -------------------------------------------------------------------------
+
 
 Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
         const Any& /*catalog*/, const OUString& /*schemaPattern*/,
@@ -449,7 +449,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
 
     return xRef;
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

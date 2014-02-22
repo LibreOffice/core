@@ -35,10 +35,10 @@ using namespace ::com::sun::star::lang;
 //**************************************************************
 
 jclass java_sql_DriverPropertyInfo::theClass = 0;
-// --------------------------------------------------------------------------------
+
 java_sql_DriverPropertyInfo::~java_sql_DriverPropertyInfo()
 {}
-// --------------------------------------------------------------------------------
+
 jclass java_sql_DriverPropertyInfo::getMyClass() const
 {
     // the class must be fetched only once, therefore static
@@ -47,7 +47,7 @@ jclass java_sql_DriverPropertyInfo::getMyClass() const
     return theClass;
 }
 
-// --------------------------------------------------------------------------------
+
 java_sql_DriverPropertyInfo::operator starsdbc::DriverPropertyInfo()
 {
     starsdbc::DriverPropertyInfo aInfo;
@@ -59,7 +59,7 @@ java_sql_DriverPropertyInfo::operator starsdbc::DriverPropertyInfo()
 
     return aInfo;
 }
-// --------------------------------------------------------------------------------
+
 OUString java_sql_DriverPropertyInfo::name()
 {
     OUString aStr;
@@ -72,7 +72,7 @@ OUString java_sql_DriverPropertyInfo::name()
     } //t.pEnv
     return aStr;
 }
-// --------------------------------------------------------------------------------
+
 OUString java_sql_DriverPropertyInfo::description()
 {
     OUString aStr;
@@ -85,7 +85,7 @@ OUString java_sql_DriverPropertyInfo::description()
     } //t.pEnv
     return aStr;
 }
-// --------------------------------------------------------------------------------
+
 OUString java_sql_DriverPropertyInfo::value()
 {
     OUString aStr;
@@ -98,7 +98,7 @@ OUString java_sql_DriverPropertyInfo::value()
     } //t.pEnv
     return aStr;
 }
-// --------------------------------------------------------------------------------
+
 sal_Bool java_sql_DriverPropertyInfo::required()
 {
     jboolean out(0);
@@ -111,7 +111,7 @@ sal_Bool java_sql_DriverPropertyInfo::required()
     } //t.pEnv
     return out;
 }
-// --------------------------------------------------------------------------------
+
 Sequence< OUString> java_sql_DriverPropertyInfo::choices()
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
@@ -127,6 +127,6 @@ Sequence< OUString> java_sql_DriverPropertyInfo::choices()
     } //t.pEnv
     return Sequence< OUString>();
 }
-// --------------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

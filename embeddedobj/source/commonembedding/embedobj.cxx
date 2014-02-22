@@ -69,7 +69,7 @@ awt::Rectangle GetRectangleInterception( const awt::Rectangle& aRect1, const awt
     return aResult;
 }
 
-//----------------------------------------------
+
 sal_Int32 OCommonEmbeddedObject::ConvertVerbToState_Impl( sal_Int32 nVerb )
 {
     for ( sal_Int32 nInd = 0; nInd < m_aVerbTable.getLength(); nInd++ )
@@ -79,7 +79,7 @@ sal_Int32 OCommonEmbeddedObject::ConvertVerbToState_Impl( sal_Int32 nVerb )
     throw lang::IllegalArgumentException(); // TODO: unexpected verb provided
 }
 
-//----------------------------------------------
+
 void OCommonEmbeddedObject::Deactivate()
 {
     uno::Reference< util::XModifiable > xModif( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
@@ -112,7 +112,7 @@ void OCommonEmbeddedObject::Deactivate()
     xClientSite->visibilityChanged( sal_False );
 }
 
-//----------------------------------------------
+
 void OCommonEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState ,::osl::ResettableMutexGuard& rGuard )
 {
     if ( m_pInterfaceContainer )
@@ -150,7 +150,7 @@ void OCommonEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange
     }
 }
 
-//----------------------------------------------
+
 void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
 {
     // TODO: may be needs interaction handler to detect wherether the object state
@@ -390,7 +390,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 }
 
-//----------------------------------------------
+
 uno::Sequence< sal_Int32 > OCommonEmbeddedObject::GetIntermediateStatesSequence_Impl( sal_Int32 nNewState )
 {
     sal_Int32 nCurInd = 0;
@@ -417,7 +417,7 @@ uno::Sequence< sal_Int32 > OCommonEmbeddedObject::GetIntermediateStatesSequence_
     return m_pIntermediateStatesSeqs[nCurInd][nDestInd];
 }
 
-//----------------------------------------------
+
 void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
         throw ( embed::UnreachableStateException,
                 embed::WrongStateException,
@@ -490,7 +490,7 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
     }
 }
 
-//----------------------------------------------
+
 uno::Sequence< sal_Int32 > SAL_CALL OCommonEmbeddedObject::getReachableStates()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -505,7 +505,7 @@ uno::Sequence< sal_Int32 > SAL_CALL OCommonEmbeddedObject::getReachableStates()
     return m_aAcceptedStates;
 }
 
-//----------------------------------------------
+
 sal_Int32 SAL_CALL OCommonEmbeddedObject::getCurrentState()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -520,7 +520,7 @@ sal_Int32 SAL_CALL OCommonEmbeddedObject::getCurrentState()
     return m_nObjectState;
 }
 
-//----------------------------------------------
+
 void SAL_CALL OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
@@ -569,7 +569,7 @@ void SAL_CALL OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
     }
 }
 
-//----------------------------------------------
+
 uno::Sequence< embed::VerbDescriptor > SAL_CALL OCommonEmbeddedObject::getSupportedVerbs()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -584,7 +584,7 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OCommonEmbeddedObject::getSuppor
     return m_aObjectVerbs;
 }
 
-//----------------------------------------------
+
 void SAL_CALL OCommonEmbeddedObject::setClientSite(
                 const uno::Reference< embed::XEmbeddedClient >& xClient )
         throw ( embed::WrongStateException,
@@ -605,7 +605,7 @@ void SAL_CALL OCommonEmbeddedObject::setClientSite(
     }
 }
 
-//----------------------------------------------
+
 uno::Reference< embed::XEmbeddedClient > SAL_CALL OCommonEmbeddedObject::getClientSite()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -620,7 +620,7 @@ uno::Reference< embed::XEmbeddedClient > SAL_CALL OCommonEmbeddedObject::getClie
     return m_xClientSite;
 }
 
-//----------------------------------------------
+
 void SAL_CALL OCommonEmbeddedObject::update()
         throw ( embed::WrongStateException,
                 uno::Exception,
@@ -637,7 +637,7 @@ void SAL_CALL OCommonEmbeddedObject::update()
     PostEvent_Impl( OUString( "OnVisAreaChanged" ) );
 }
 
-//----------------------------------------------
+
 void SAL_CALL OCommonEmbeddedObject::setUpdateMode( sal_Int32 nMode )
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -656,7 +656,7 @@ void SAL_CALL OCommonEmbeddedObject::setUpdateMode( sal_Int32 nMode )
     m_nUpdateMode = nMode;
 }
 
-//----------------------------------------------
+
 sal_Int64 SAL_CALL OCommonEmbeddedObject::getStatus( sal_Int64 )
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -667,7 +667,7 @@ sal_Int64 SAL_CALL OCommonEmbeddedObject::getStatus( sal_Int64 )
     return m_nMiscStatus;
 }
 
-//----------------------------------------------
+
 void SAL_CALL OCommonEmbeddedObject::setContainerName( const OUString& sName )
         throw ( uno::RuntimeException )
 {

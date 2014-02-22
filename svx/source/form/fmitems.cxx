@@ -27,27 +27,27 @@
 //========================================================================
 TYPEINIT1(FmInterfaceItem, SfxPoolItem);
 
-//------------------------------------------------------------------------------
+
 bool FmInterfaceItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
     return( xInterface == ((FmInterfaceItem&)rAttr).GetInterface() );
 }
 
-//------------------------------------------------------------------------------
+
 SfxPoolItem* FmInterfaceItem::Clone( SfxItemPool* ) const
 {
     return new FmInterfaceItem( *this );
 }
 
-//------------------------------------------------------------------------------
+
 SvStream& FmInterfaceItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
     OSL_FAIL( "FmInterfaceItem::Store: not implemented!" );
     return rStrm;
 }
 
-//------------------------------------------------------------------------------
+
 SfxPoolItem* FmInterfaceItem::Create( SvStream& /*rStrm*/, sal_uInt16 ) const
 {
     OSL_FAIL( "FmInterfaceItem::Create: not implemented!" );

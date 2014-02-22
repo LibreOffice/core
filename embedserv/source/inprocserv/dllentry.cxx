@@ -164,7 +164,7 @@ protected:
 // Entry points
 // ===========================
 
-// -------------------------------------------------------------------------------
+
 extern "C" INPROC_DLLPUBLIC BOOL WINAPI DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
@@ -178,7 +178,7 @@ extern "C" INPROC_DLLPUBLIC BOOL WINAPI DllMain( HINSTANCE hInstance, DWORD dwRe
     return TRUE;    // ok
 }
 
-// -------------------------------------------------------------------------------
+
 extern "C" STDAPI INPROC_DLLPUBLIC DllGetClassObject( REFCLSID rclsid, REFIID riid, LPVOID* ppv )
 {
     for( int nInd = 0; nInd < SUPPORTED_FACTORIES_NUM; nInd++ )
@@ -195,7 +195,7 @@ extern "C" STDAPI INPROC_DLLPUBLIC DllGetClassObject( REFCLSID rclsid, REFIID ri
     return E_FAIL;
 }
 
-// -------------------------------------------------------------------------------
+
 extern "C" STDAPI INPROC_DLLPUBLIC DllCanUnloadNow()
 {
     if ( !g_nObj && !g_nLock )
@@ -204,7 +204,7 @@ extern "C" STDAPI INPROC_DLLPUBLIC DllCanUnloadNow()
     return S_FALSE;
 }
 
-// -------------------------------------------------------------------------------
+
 STDAPI INPROC_DLLPUBLIC DllRegisterServer( void )
 {
     HMODULE aCurModule = GetModuleHandleA( "inprocserv.dll" );
@@ -222,7 +222,7 @@ STDAPI INPROC_DLLPUBLIC DllRegisterServer( void )
     return E_FAIL;
 }
 
-// -------------------------------------------------------------------------------
+
 STDAPI INPROC_DLLPUBLIC DllUnregisterServer( void )
 {
     return WriteLibraryToRegistry( "ole32.dll", 10 );
@@ -239,13 +239,13 @@ namespace inprocserv
 // InprocCountedObject_Impl implementation
 // ===========================
 
-// -------------------------------------------------------------------------------
+
 InprocCountedObject_Impl::InprocCountedObject_Impl()
 {
     g_nObj++;
 }
 
-// -------------------------------------------------------------------------------
+
 InprocCountedObject_Impl::~InprocCountedObject_Impl()
 {
     g_nObj--;
@@ -255,20 +255,20 @@ InprocCountedObject_Impl::~InprocCountedObject_Impl()
 // InprocEmbedProvider_Impl implementation
 // ===========================
 
-// -------------------------------------------------------------------------------
+
 InprocEmbedProvider_Impl::InprocEmbedProvider_Impl( const GUID& guid )
 : m_refCount( 0 )
 , m_guid( guid )
 {
 }
 
-// -------------------------------------------------------------------------------
+
 InprocEmbedProvider_Impl::~InprocEmbedProvider_Impl()
 {
 }
 
 // IUnknown
-// -------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedProvider_Impl::QueryInterface( REFIID riid, void FAR* FAR* ppv )
 {
     if(IsEqualIID(riid, IID_IUnknown))
@@ -288,13 +288,13 @@ STDMETHODIMP InprocEmbedProvider_Impl::QueryInterface( REFIID riid, void FAR* FA
     return E_NOINTERFACE;
 }
 
-// -------------------------------------------------------------------------------
+
 STDMETHODIMP_(ULONG) InprocEmbedProvider_Impl::AddRef()
 {
     return ++m_refCount;
 }
 
-// -------------------------------------------------------------------------------
+
 STDMETHODIMP_(ULONG) InprocEmbedProvider_Impl::Release()
 {
     sal_Int32 nCount = --m_refCount;
@@ -303,7 +303,7 @@ STDMETHODIMP_(ULONG) InprocEmbedProvider_Impl::Release()
     return nCount;
 }
 
-// -------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedProvider_Impl::CreateInstance(IUnknown FAR* punkOuter,
                                                        REFIID riid,
                                                        void FAR* FAR* ppv)
@@ -327,7 +327,7 @@ STDMETHODIMP InprocEmbedProvider_Impl::CreateInstance(IUnknown FAR* punkOuter,
     return hr;
 }
 
-// -------------------------------------------------------------------------------
+
 STDMETHODIMP InprocEmbedProvider_Impl::LockServer( int fLock )
 {
     if ( fLock )

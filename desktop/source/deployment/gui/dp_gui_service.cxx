@@ -60,17 +60,17 @@ public:
     virtual void DeInit();
 };
 
-//______________________________________________________________________________
+
 MyApp::~MyApp()
 {
 }
 
-//______________________________________________________________________________
+
 MyApp::MyApp()
 {
 }
 
-//______________________________________________________________________________
+
 int MyApp::Main()
 {
     return EXIT_SUCCESS;
@@ -166,7 +166,7 @@ public:
         throw (RuntimeException);
 };
 
-//______________________________________________________________________________
+
 ServiceImpl::ServiceImpl( Sequence<Any> const& args,
                           Reference<XComponentContext> const& xComponentContext)
     : m_xComponentContext(xComponentContext),
@@ -188,7 +188,7 @@ ServiceImpl::ServiceImpl( Sequence<Any> const& args,
 }
 
 // XAsynchronousExecutableDialog
-//______________________________________________________________________________
+
 void ServiceImpl::setDialogTitle( OUString const & title )
     throw (RuntimeException)
 {
@@ -205,7 +205,7 @@ void ServiceImpl::setDialogTitle( OUString const & title )
         m_initialTitle = title;
 }
 
-//______________________________________________________________________________
+
 void ServiceImpl::startExecuteModal(
     Reference< ui::dialogs::XDialogClosedListener > const & xListener )
     throw (RuntimeException)
@@ -296,7 +296,7 @@ void ServiceImpl::startExecuteModal(
 }
 
 // XJobExecutor
-//______________________________________________________________________________
+
 void ServiceImpl::trigger( OUString const &rEvent ) throw (RuntimeException)
 {
     if ( rEvent == "SHOW_UPDATE_DIALOG" )

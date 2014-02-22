@@ -34,9 +34,9 @@ using ::rtl::OString;
 // This file contains cppunit tests for the
 // OString and OStringBuffer classes
 
-//------------------------------------------------------------------------
+
 // testing constructors
-//------------------------------------------------------------------------
+
 
 namespace rtl_OStringBuffer
 {
@@ -166,7 +166,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST_SUITE_END();
     };
 
-// -----------------------------------------------------------------------------
+
 
     class  makeStringAndClear : public CppUnit::TestFixture
     {
@@ -372,7 +372,7 @@ namespace rtl_OStringBuffer
     };
 
 
-// -----------------------------------------------------------------------------
+
 
     class  getLength : public CppUnit::TestFixture
     {
@@ -505,7 +505,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST_SUITE_END();
     };
 
-// -----------------------------------------------------------------------------
+
 
     class  getCapacity : public CppUnit::TestFixture
     {
@@ -689,7 +689,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( getCapacity_013 );
         CPPUNIT_TEST_SUITE_END();
     };
-// -----------------------------------------------------------------------------
+
 
     class  ensureCapacity : public CppUnit::TestFixture
     {
@@ -969,7 +969,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST_SUITE_END();
     };
 
-// -----------------------------------------------------------------------------
+
 
     class  setLength : public CppUnit::TestFixture
     {
@@ -1459,7 +1459,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST_SUITE_END();
     };
 
-// -----------------------------------------------------------------------------
+
 
     class  csuc : public CppUnit::TestFixture
     {
@@ -1505,7 +1505,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST_SUITE_END();
     };
 
-// -----------------------------------------------------------------------------
+
 
     class  getStr : public CppUnit::TestFixture
     {
@@ -1551,7 +1551,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST_SUITE_END();
     };
 
-// -----------------------------------------------------------------------------
+
 
     class  append_001 : public CppUnit::TestFixture
     {
@@ -1960,7 +1960,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST_SUITE_END();
     };
 
-// -----------------------------------------------------------------------------
+
 
     class  append_002 : public CppUnit::TestFixture
     {
@@ -2347,7 +2347,7 @@ namespace rtl_OStringBuffer
 #endif
         CPPUNIT_TEST_SUITE_END();
     };
-// -----------------------------------------------------------------------------
+
 
     class  append_003 : public CppUnit::TestFixture
     {
@@ -2733,7 +2733,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_003_024 );
         CPPUNIT_TEST_SUITE_END();
     };
-//-----------------------------------------------------------------------------
+
 
     class  append_004 : public CppUnit::TestFixture
     {
@@ -2967,9 +2967,9 @@ namespace rtl_OStringBuffer
 #endif
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
+
 // testing the method append(sal_Char c)
-//------------------------------------------------------------------------
+
     class  append_005 : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
@@ -5177,7 +5177,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_099 ); CPPUNIT_TEST( append_100 );
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
+
 // testing the method append( sal_Int32 i, sal_Int16 radix=2 )
 // where i = large constants
 // testing the method append( sal_Int32 i, sal_Int16 radix=8 )
@@ -5188,7 +5188,7 @@ namespace rtl_OStringBuffer
 // where i = large constants
 // testing the method append( sal_Int32 i, sal_Int16 radix=36 )
 // where i = large constants
-//------------------------------------------------------------------------
+
     class  append_006_Int32_Bounderies : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
@@ -6188,7 +6188,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_049 ); CPPUNIT_TEST( append_050 );
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
+
 // testing the method append( sal_Int32 i, sal_Int16 radix=2 )
 // for negative value
 // testing the method append( sal_Int32 i, sal_Int16 radix=8 )
@@ -6199,7 +6199,7 @@ namespace rtl_OStringBuffer
 // for negative value
 // testing the method append( sal_Int32 i, sal_Int16 radix=36 )
 // for negative value
-//------------------------------------------------------------------------
+
     class  append_006_Int32_Negative : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
@@ -8246,9 +8246,9 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_099 ); CPPUNIT_TEST( append_100 );
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
+
 // testing the method append( sal_Int32 i, sal_Int16 radix ) where radix = -5
-//------------------------------------------------------------------------
+
     class  append_006_Int32_WrongRadix : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
@@ -8377,7 +8377,7 @@ namespace rtl_OStringBuffer
 #endif
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
+
     class  append_006_Int32_defaultParam : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
@@ -8945,13 +8945,13 @@ namespace rtl_OStringBuffer
 #endif
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
+
 // testing the method append( sal_Int64 l, sal_Int16 radix=2 )
 // testing the method append( sal_Int64 l, sal_Int16 radix=8 )
 // testing the method append( sal_Int64 l, sal_Int16 radix=10 )
 // testing the method append( sal_Int64 l, sal_Int16 radix=16 )
 // testing the method append( sal_Int64 l, sal_Int16 radix=36 )
-//------------------------------------------------------------------------
+
     class  append_007_Int64 : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
@@ -10926,7 +10926,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_099 ); CPPUNIT_TEST( append_100 );
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
+
 // testing the method append( sal_Int64 i, sal_Int16 radix=2 )
 // where i = large constants
 // testing the method append( sal_Int64 i, sal_Int16 radix=8 )
@@ -10937,7 +10937,7 @@ namespace rtl_OStringBuffer
 // where i = large constants
 // testing the method append( sal_Int64 i, sal_Int16 radix=36 )
 // where i = large constants
-//------------------------------------------------------------------------
+
     class  append_007_Int64_Bounderies : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
@@ -11937,7 +11937,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_049 ); CPPUNIT_TEST( append_050 );
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
+
 // testing the method append( sal_Int64 i, sal_Int16 radix=2 )
 // for negative value
 // testing the method append( sal_Int64 i, sal_Int16 radix=8 )
@@ -11948,7 +11948,7 @@ namespace rtl_OStringBuffer
 // for negative value
 // testing the method append( sal_Int64 i, sal_Int16 radix=36 )
 // for negative value
-//------------------------------------------------------------------------
+
     class  append_007_Int64_Negative : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
@@ -13998,9 +13998,9 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_099 ); CPPUNIT_TEST( append_100 );
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
+
 // testing the method append( sal_Int64 i, sal_Int16 radix ) where radix = -5
-//------------------------------------------------------------------------
+
     class  append_007_Int64_WrongRadix : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
@@ -14127,7 +14127,7 @@ namespace rtl_OStringBuffer
 #endif
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
+
     class  append_007_Int64_defaultParam : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
@@ -14690,9 +14690,9 @@ namespace rtl_OStringBuffer
 #endif
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
+
 // testing the method append( float f )
-//------------------------------------------------------------------------
+
     class checkfloat : public CppUnit::TestFixture
     {
     public:
@@ -14710,7 +14710,7 @@ namespace rtl_OStringBuffer
                 return false;
             }
     };
-// -----------------------------------------------------------------------------
+
     class  append_008_float : public checkfloat
     {
         OString* arrOUS[5];
@@ -15444,9 +15444,9 @@ namespace rtl_OStringBuffer
 #endif
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
+
 // testing the method append( float f ) for negative value
-//------------------------------------------------------------------------
+
     class  append_008_Float_Negative : public checkfloat
     {
         OString* arrOUS[5];
@@ -16176,9 +16176,9 @@ namespace rtl_OStringBuffer
 #endif
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
+
 // testing the method append( double d )
-//------------------------------------------------------------------------
+
 
     class checkdouble : public CppUnit::TestFixture
     {
@@ -16257,9 +16257,9 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST_SUITE_END();
     };
 
-//------------------------------------------------------------------------
+
 // testing the method append( double f ) for negative value
-//------------------------------------------------------------------------
+
     class  append_009_Double_Negative : public checkdouble
     {
         OString* arrOUS[5];
@@ -16320,7 +16320,7 @@ namespace rtl_OStringBuffer
     };
 } // namespace rtl_OStringBuffer
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::makeStringAndClear);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::getLength);

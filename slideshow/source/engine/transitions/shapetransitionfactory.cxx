@@ -62,7 +62,7 @@ public:
     ~ClippingAnimation();
 
     // Animation interface
-    // -------------------
+
     virtual void prefetch( const AnimatableShapeSharedPtr&     rShape,
                            const ShapeAttributeLayerSharedPtr& rAttrLayer );
     virtual void start( const AnimatableShapeSharedPtr&     rShape,
@@ -70,7 +70,7 @@ public:
     virtual void end();
 
     // NumberAnimation interface
-    // -----------------------
+
     virtual bool operator()( double nValue );
     virtual double getUnderlyingValue() const;
 

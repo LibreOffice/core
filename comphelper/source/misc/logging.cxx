@@ -76,7 +76,7 @@ namespace comphelper
     //====================================================================
     //= EventLogger_Impl - implementation
     //====================================================================
-    //--------------------------------------------------------------------
+
     void EventLogger_Impl::impl_createLogger_nothrow()
     {
         try
@@ -97,18 +97,18 @@ namespace comphelper
     //====================================================================
     //= EventLogger
     //====================================================================
-    //--------------------------------------------------------------------
+
     EventLogger::EventLogger( const Reference< XComponentContext >& _rxContext, const sal_Char* _pAsciiLoggerName )
         :m_pImpl( new EventLogger_Impl( _rxContext, OUString::createFromAscii( _pAsciiLoggerName ) ) )
     {
     }
 
-    //--------------------------------------------------------------------
+
     EventLogger::~EventLogger()
     {
     }
 
-    //--------------------------------------------------------------------
+
     bool EventLogger::isLoggable( const sal_Int32 _nLogLevel ) const
     {
         if ( !m_pImpl->isValid() )
@@ -127,7 +127,7 @@ namespace comphelper
         return false;
     }
 
-    //--------------------------------------------------------------------
+
     namespace
     {
         void    lcl_replaceParameter( OUString& _inout_Message, const OUString& _rPlaceHolder, const OUString& _rReplacement )
@@ -141,7 +141,7 @@ namespace comphelper
         }
     }
 
-    //--------------------------------------------------------------------
+
     bool EventLogger::impl_log( const sal_Int32 _nLogLevel,
         const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const OUString& _rMessage,
         const OptionalString& _rArgument1, const OptionalString& _rArgument2,
@@ -222,7 +222,7 @@ namespace comphelper
         }
     };
 
-    //--------------------------------------------------------------------
+
     bool    lcl_loadBundle_nothrow( Reference< XComponentContext > const & _rContext, ResourceBasedEventLogger_Data& _rLoggerData )
     {
         if ( _rLoggerData.bBundleLoaded )
@@ -247,7 +247,7 @@ namespace comphelper
         return _rLoggerData.xBundle.is();
     }
 
-    //--------------------------------------------------------------------
+
     OUString lcl_loadString_nothrow( const Reference< XResourceBundle >& _rxBundle, const sal_Int32 _nMessageResID )
     {
         OSL_PRECOND( _rxBundle.is(), "lcl_loadString_nothrow: this will crash!" );
@@ -270,7 +270,7 @@ namespace comphelper
     //====================================================================
     //= ResourceBasedEventLogger
     //====================================================================
-    //--------------------------------------------------------------------
+
     ResourceBasedEventLogger::ResourceBasedEventLogger( const Reference< XComponentContext >& _rxContext, const sal_Char* _pResourceBundleBaseName,
         const sal_Char* _pAsciiLoggerName )
         :EventLogger( _rxContext, _pAsciiLoggerName )
@@ -279,7 +279,7 @@ namespace comphelper
         m_pData->sBundleBaseName = OUString::createFromAscii( _pResourceBundleBaseName );
     }
 
-    //--------------------------------------------------------------------
+
     OUString ResourceBasedEventLogger::impl_loadStringMessage_nothrow( const sal_Int32 _nMessageResID ) const
     {
         OUString sMessage;

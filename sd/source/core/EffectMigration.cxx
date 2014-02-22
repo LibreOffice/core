@@ -532,7 +532,7 @@ void EffectMigration::SetAnimationEffect( SvxShape* pShape, AnimationEffect eEff
     }
 }
 
-// --------------------------------------------------------------------
+
 
 AnimationEffect EffectMigration::GetAnimationEffect( SvxShape* pShape )
 {
@@ -577,7 +577,7 @@ AnimationEffect EffectMigration::GetAnimationEffect( SvxShape* pShape )
 }
 
 
-// --------------------------------------------------------------------
+
 
 void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect eEffect )
 {
@@ -718,7 +718,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
     }
 }
 
-// --------------------------------------------------------------------
+
 
 AnimationEffect EffectMigration::GetTextAnimationEffect( SvxShape* pShape )
 {
@@ -751,7 +751,7 @@ AnimationEffect EffectMigration::GetTextAnimationEffect( SvxShape* pShape )
     return eEffect;
 }
 
-// --------------------------------------------------------------------
+
 
 bool EffectMigration::ConvertPreset( const OUString& rPresetId, const OUString* pPresetSubType, AnimationEffect& rEffect )
 {
@@ -781,7 +781,7 @@ bool EffectMigration::ConvertPreset( const OUString& rPresetId, const OUString* 
     }
 }
 
-// --------------------------------------------------------------------
+
 
 bool EffectMigration::ConvertAnimationEffect( const AnimationEffect& rEffect, OUString& rPresetId, OUString& rPresetSubType )
 {
@@ -800,7 +800,7 @@ bool EffectMigration::ConvertAnimationEffect( const AnimationEffect& rEffect, OU
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 double EffectMigration::ConvertAnimationSpeed( AnimationSpeed eSpeed )
 {
@@ -814,7 +814,7 @@ double EffectMigration::ConvertAnimationSpeed( AnimationSpeed eSpeed )
     }
     return fDuration;
 }
-// --------------------------------------------------------------------
+
 
 void EffectMigration::SetAnimationSpeed( SvxShape* pShape, AnimationSpeed eSpeed )
 {
@@ -851,7 +851,7 @@ void EffectMigration::SetAnimationSpeed( SvxShape* pShape, AnimationSpeed eSpeed
         pMainSequence->rebuild();
 }
 
-// --------------------------------------------------------------------
+
 
 AnimationSpeed EffectMigration::GetAnimationSpeed( SvxShape* pShape )
 {
@@ -880,7 +880,7 @@ AnimationSpeed EffectMigration::GetAnimationSpeed( SvxShape* pShape )
     return ConvertDuration( fDuration );
 }
 
-// --------------------------------------------------------------------
+
 
 AnimationSpeed EffectMigration::ConvertDuration( double fDuration )
 {
@@ -896,7 +896,7 @@ AnimationSpeed EffectMigration::ConvertDuration( double fDuration )
     return eSpeed;
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectMigration::SetDimColor( SvxShape* pShape, sal_Int32 nColor )
 {
@@ -932,7 +932,7 @@ void EffectMigration::SetDimColor( SvxShape* pShape, sal_Int32 nColor )
         pMainSequence->rebuild();
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Int32 EffectMigration::GetDimColor( SvxShape* pShape )
 {
@@ -964,7 +964,7 @@ sal_Int32 EffectMigration::GetDimColor( SvxShape* pShape )
     return nColor;
 }
 
-// --------------------------------------------------------------------
+
 
 
 void EffectMigration::SetDimHide( SvxShape* pShape, sal_Bool bDimHide )
@@ -1004,7 +1004,7 @@ void EffectMigration::SetDimHide( SvxShape* pShape, sal_Bool bDimHide )
         pMainSequence->rebuild();
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool EffectMigration::GetDimHide( SvxShape* pShape )
 {
@@ -1036,7 +1036,7 @@ sal_Bool EffectMigration::GetDimHide( SvxShape* pShape )
     return bRet;
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectMigration::SetDimPrevious( SvxShape* pShape, sal_Bool bDimPrevious )
 {
@@ -1078,7 +1078,7 @@ void EffectMigration::SetDimPrevious( SvxShape* pShape, sal_Bool bDimPrevious )
         pMainSequence->rebuild();
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool EffectMigration::GetDimPrevious( SvxShape* pShape )
 {
@@ -1110,7 +1110,7 @@ sal_Bool EffectMigration::GetDimPrevious( SvxShape* pShape )
     return bRet;
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectMigration::SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos )
 {
@@ -1201,7 +1201,7 @@ void EffectMigration::SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos 
     }
 }
 
-// --------------------------------------------------------------------
+
 
 /** Returns the position of the given SdrObject in the Presentation order.
  *  This function returns -1 if the SdrObject is not in the Presentation order
@@ -1242,7 +1242,7 @@ sal_Int32 EffectMigration::GetPresentationOrder( SvxShape* pShape )
     return nFound;
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectMigration::UpdateSoundEffect( SvxShape* pShape, SdAnimationInfo* pInfo )
 {
@@ -1282,7 +1282,7 @@ void EffectMigration::UpdateSoundEffect( SvxShape* pShape, SdAnimationInfo* pInf
     }
 }
 
-// --------------------------------------------------------------------
+
 
 OUString EffectMigration::GetSoundFile( SvxShape* pShape )
 {
@@ -1315,14 +1315,14 @@ OUString EffectMigration::GetSoundFile( SvxShape* pShape )
     return aSoundFile;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool EffectMigration::GetSoundOn( SvxShape* pShape )
 {
     return !GetSoundFile( pShape ).isEmpty();
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectMigration::SetAnimationPath( SvxShape* pShape, SdrPathObj* pPathObj )
 {

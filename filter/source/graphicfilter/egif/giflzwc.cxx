@@ -21,9 +21,9 @@
 #include <tools/stream.hxx>
 #include "giflzwc.hxx"
 
-// ----------------------------
+
 // - GIFImageDataOutputStream -
-// ----------------------------
+
 
 class GIFImageDataOutputStream
 {
@@ -46,7 +46,7 @@ public:
     inline void WriteBits( sal_uInt16 nCode, sal_uInt16 nCodeLen );
 };
 
-// ------------------------------------------------------------------------
+
 
 inline void GIFImageDataOutputStream::FlushBitsBufsFullBytes()
 {
@@ -61,7 +61,7 @@ inline void GIFImageDataOutputStream::FlushBitsBufsFullBytes()
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 inline void GIFImageDataOutputStream::WriteBits( sal_uInt16 nCode, sal_uInt16 nCodeLen )
 {
@@ -72,7 +72,7 @@ inline void GIFImageDataOutputStream::WriteBits( sal_uInt16 nCode, sal_uInt16 nC
     nBitsBufSize = nBitsBufSize + nCodeLen;
 }
 
-// ------------------------------------------------------------------------
+
 
 GIFImageDataOutputStream::GIFImageDataOutputStream( SvStream & rGIF, sal_uInt8 nLZWDataSize ) :
         rStream(rGIF)
@@ -84,7 +84,7 @@ GIFImageDataOutputStream::GIFImageDataOutputStream( SvStream & rGIF, sal_uInt8 n
     rStream.WriteUChar( nLZWDataSize );
 }
 
-// ------------------------------------------------------------------------
+
 
 
 GIFImageDataOutputStream::~GIFImageDataOutputStream()
@@ -96,7 +96,7 @@ GIFImageDataOutputStream::~GIFImageDataOutputStream()
     delete[] pBlockBuf;
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFImageDataOutputStream::FlushBlockBuf()
 {
@@ -108,9 +108,9 @@ void GIFImageDataOutputStream::FlushBlockBuf()
     }
 }
 
-// -------------------
+
 // - GIFLZWCTreeNode -
-// -------------------
+
 
 struct GIFLZWCTreeNode
 {
@@ -121,9 +121,9 @@ struct GIFLZWCTreeNode
     sal_uInt16              nValue;         // the pixel value
 };
 
-// --------------------
+
 // - GIFLZWCompressor -
-// --------------------
+
 
 GIFLZWCompressor::GIFLZWCompressor()
     : pIDOS(NULL), pTable(NULL), pPrefix(NULL), nDataSize(0), nClearCode(0),
@@ -131,14 +131,14 @@ GIFLZWCompressor::GIFLZWCompressor()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 GIFLZWCompressor::~GIFLZWCompressor()
 {
     if (pIDOS!=NULL) EndCompression();
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFLZWCompressor::StartCompression( SvStream& rGIF, sal_uInt16 nPixelSize )
 {
@@ -170,7 +170,7 @@ void GIFLZWCompressor::StartCompression( SvStream& rGIF, sal_uInt16 nPixelSize )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFLZWCompressor::Compress( HPBYTE pSrc, sal_uLong nSize )
 {
@@ -230,7 +230,7 @@ void GIFLZWCompressor::Compress( HPBYTE pSrc, sal_uLong nSize )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFLZWCompressor::EndCompression()
 {

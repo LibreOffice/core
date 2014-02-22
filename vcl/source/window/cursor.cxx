@@ -120,7 +120,7 @@ static void ImplCursorInvert( ImplCursorData* pData )
     pWindow->EnableMapMode( bMapMode );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Cursor::ImplDraw()
 {
@@ -150,7 +150,7 @@ void Cursor::ImplDraw()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Cursor::ImplRestore()
 {
@@ -260,7 +260,7 @@ void Cursor::ImplNew()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(Cursor, ImplTimerHdl)
 {
@@ -285,7 +285,7 @@ Cursor::Cursor()
     mbVisible       = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 Cursor::Cursor( const Cursor& rCursor ) :
     maSize( rCursor.maSize ),
@@ -300,7 +300,7 @@ Cursor::Cursor( const Cursor& rCursor ) :
     mbVisible       = rCursor.mbVisible;
 }
 
-// -----------------------------------------------------------------------
+
 
 Cursor::~Cursor()
 {
@@ -313,7 +313,7 @@ Cursor::~Cursor()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Cursor::SetStyle( sal_uInt16 nStyle )
 {
@@ -324,7 +324,7 @@ void Cursor::SetStyle( sal_uInt16 nStyle )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Cursor::Show()
 {
@@ -335,7 +335,7 @@ void Cursor::Show()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Cursor::Hide()
 {
@@ -346,7 +346,7 @@ void Cursor::Hide()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Cursor::SetWindow( Window* pWindow )
 {
@@ -357,7 +357,7 @@ void Cursor::SetWindow( Window* pWindow )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Cursor::SetPos( const Point& rPoint )
 {
@@ -368,7 +368,7 @@ void Cursor::SetPos( const Point& rPoint )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Cursor::SetSize( const Size& rSize )
 {
@@ -379,7 +379,7 @@ void Cursor::SetSize( const Size& rSize )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Cursor::SetWidth( long nNewWidth )
 {
@@ -390,7 +390,7 @@ void Cursor::SetWidth( long nNewWidth )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Cursor::SetOrientation( short nNewOrientation )
 {
@@ -401,7 +401,7 @@ void Cursor::SetOrientation( short nNewOrientation )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Cursor::SetDirection( unsigned char nNewDirection )
 {
@@ -412,7 +412,7 @@ void Cursor::SetDirection( unsigned char nNewDirection )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 Cursor& Cursor::operator=( const Cursor& rCursor )
 {
@@ -427,7 +427,7 @@ Cursor& Cursor::operator=( const Cursor& rCursor )
     return *this;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Cursor::operator==( const Cursor& rCursor ) const
 {

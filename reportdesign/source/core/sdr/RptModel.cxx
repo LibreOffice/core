@@ -45,7 +45,7 @@ using namespace reportdesign;
 using namespace com::sun::star;
 TYPEINIT1(OReportModel,SdrModel);
 
-//----------------------------------------------------------------------------
+
 
 OReportModel::OReportModel(::reportdesign::OReportDefinition* _pReportDefinition) :
     SdrModel(SvtPathOptions().GetPalettePath(),NULL,_pReportDefinition)
@@ -57,13 +57,13 @@ OReportModel::OReportModel(::reportdesign::OReportDefinition* _pReportDefinition
     SetSdrUndoFactory(new OReportUndoFactory);
 }
 
-//----------------------------------------------------------------------------
+
 OReportModel::~OReportModel()
 {
     detachController();
     m_pUndoEnv->release();
 }
-// -----------------------------------------------------------------------------
+
 void OReportModel::detachController()
 {
     m_pReportDefinition = NULL;
@@ -72,14 +72,14 @@ void OReportModel::detachController()
     ClearUndoBuffer();
     m_pUndoEnv->Clear(OXUndoEnvironment::Accessor());
 }
-//----------------------------------------------------------------------------
+
 SdrPage* OReportModel::AllocPage(bool /*bMasterPage*/)
 {
     OSL_FAIL("Who called me!");
     return NULL;
 }
 
-//----------------------------------------------------------------------------
+
 
 void OReportModel::SetChanged( bool bChanged )
 {
@@ -87,25 +87,25 @@ void OReportModel::SetChanged( bool bChanged )
     SetModified( bChanged );
 }
 
-//----------------------------------------------------------------------------
+
 
 OXUndoEnvironment&  OReportModel::GetUndoEnv()
 {
     return *m_pUndoEnv;
 }
-//----------------------------------------------------------------------------
+
 void OReportModel::SetModified(sal_Bool _bModified)
 {
     if ( m_pController )
         m_pController->setModified(_bModified);
 }
-// -----------------------------------------------------------------------------
+
 SdrPage* OReportModel::RemovePage(sal_uInt16 nPgNum)
 {
     OReportPage* pPage = dynamic_cast<OReportPage*>(SdrModel::RemovePage(nPgNum));
     return pPage;
 }
-// -----------------------------------------------------------------------------
+
 OReportPage* OReportModel::createNewPage(const uno::Reference< report::XSection >& _xSection)
 {
     SolarMutexGuard aSolarGuard;
@@ -114,7 +114,7 @@ OReportPage* OReportModel::createNewPage(const uno::Reference< report::XSection 
     m_pUndoEnv->AddSection(_xSection);
     return pPage;
 }
-// -----------------------------------------------------------------------------
+
 OReportPage* OReportModel::getPage(const uno::Reference< report::XSection >& _xSection)
 {
     OReportPage* pPage = NULL;
@@ -127,7 +127,7 @@ OReportPage* OReportModel::getPage(const uno::Reference< report::XSection >& _xS
     }
     return pPage;
 }
-// -----------------------------------------------------------------------------
+
 SvxNumType OReportModel::GetPageNumType() const
 {
     uno::Reference< report::XReportDefinition > xReportDefinition( getReportDefinition() );
@@ -136,19 +136,19 @@ SvxNumType OReportModel::GetPageNumType() const
     return SVX_ARABIC;
 }
 
-// -----------------------------------------------------------------------------
+
 uno::Reference< report::XReportDefinition > OReportModel::getReportDefinition() const
 {
     uno::Reference< report::XReportDefinition > xReportDefinition = m_pReportDefinition;
     OSL_ENSURE( xReportDefinition.is(), "OReportModel::getReportDefinition: invalid model at our controller!" );
     return xReportDefinition;
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > OReportModel::createUnoModel()
 {
     return uno::Reference< uno::XInterface >(getReportDefinition(),uno::UNO_QUERY);
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > OReportModel::createShape(const OUString& aServiceSpecifier,uno::Reference< drawing::XShape >& _rShape,sal_Int32 nOrientation)
 {
     uno::Reference< uno::XInterface > xRet;

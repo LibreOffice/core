@@ -405,7 +405,7 @@ SvtCJKOptions::SvtCJKOptions(bool bDontLoad)
     pImp = pCJKOptions;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvtCJKOptions::~SvtCJKOptions()
 {
@@ -414,43 +414,43 @@ SvtCJKOptions::~SvtCJKOptions()
     if ( !--nCJKRefCount )
         DELETEZ( pCJKOptions );
 }
-// -----------------------------------------------------------------------
+
 bool SvtCJKOptions::IsCJKFontEnabled() const
 {
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsCJKFontEnabled();
 }
-// -----------------------------------------------------------------------
+
 bool SvtCJKOptions::IsVerticalTextEnabled() const
 {
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsVerticalTextEnabled();
 }
-// -----------------------------------------------------------------------
+
 bool SvtCJKOptions::IsAsianTypographyEnabled() const
 {
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsAsianTypographyEnabled();
 }
-// -----------------------------------------------------------------------
+
 bool SvtCJKOptions::IsJapaneseFindEnabled() const
 {
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsJapaneseFindEnabled();
 }
-// -----------------------------------------------------------------------
+
 bool SvtCJKOptions::IsRubyEnabled() const
 {
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsRubyEnabled();
 }
-// -----------------------------------------------------------------------
+
 bool SvtCJKOptions::IsChangeCaseMapEnabled() const
 {
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsChangeCaseMapEnabled();
 }
-// -----------------------------------------------------------------------
+
 bool SvtCJKOptions::IsDoubleLinesEnabled() const
 {
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");

@@ -98,7 +98,7 @@ OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< rep
 
     _propertyChanged(aEvent);
 }
-// -----------------------------------------------------------------------------
+
 OSectionWindow::~OSectionWindow()
 {
     try
@@ -112,7 +112,7 @@ OSectionWindow::~OSectionWindow()
     {
     }
 }
-// -----------------------------------------------------------------------------
+
 void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent) throw( uno::RuntimeException)
 {
     SolarMutexGuard g;
@@ -156,7 +156,7 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReportDefinition>& _xReport,sal_uInt16 _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OReportHelper> _pGetSection,::std::mem_fun_t<sal_Bool,OReportHelper> _pIsSectionOn)
 {
     OReportHelper aReportHelper(_xReport);
@@ -169,7 +169,7 @@ bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReport
     }
     return bRet;
 }
-// -----------------------------------------------------------------------------
+
 bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>& _xGroup,sal_uInt16 _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OGroupHelper> _pGetSection,::std::mem_fun_t<sal_Bool,OGroupHelper> _pIsSectionOn)
 {
     OGroupHelper aGroupHelper(_xGroup);
@@ -190,7 +190,7 @@ bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>&
     }
     return bRet;
 }
-//------------------------------------------------------------------------------
+
 void OSectionWindow::ImplInitSettings()
 {
     static bool t = false;
@@ -202,7 +202,7 @@ void OSectionWindow::ImplInitSettings()
     }
     SetBackground( );
 }
-//-----------------------------------------------------------------------------
+
 void OSectionWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
@@ -214,7 +214,7 @@ void OSectionWindow::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
 }
-//------------------------------------------------------------------------------
+
 void OSectionWindow::Resize()
 {
     Window::Resize();
@@ -265,7 +265,7 @@ void OSectionWindow::Resize()
         m_aEndMarker.SetPosSizePixel(aReportPos,Size(aEndWidth,aOutputSize.Height()));
     }
 }
-// -----------------------------------------------------------------------------
+
 void OSectionWindow::setCollapsed(sal_Bool _bCollapsed)
 {
     if ( m_aStartMarker.isCollapsed() != _bCollapsed )
@@ -273,18 +273,18 @@ void OSectionWindow::setCollapsed(sal_Bool _bCollapsed)
         m_aStartMarker.setCollapsed(_bCollapsed);
     }
 }
-//-----------------------------------------------------------------------------
+
 void OSectionWindow::showProperties()
 {
     m_pParent->getView()->showProperties( m_aReportSection.getSection().get() );
 }
-//-----------------------------------------------------------------------------
+
 void OSectionWindow::setMarked(sal_Bool _bMark)
 {
     m_aStartMarker.setMarked(_bMark);
     m_aEndMarker.setMarked(_bMark);
 }
-// -----------------------------------------------------------------------------
+
 IMPL_LINK( OSectionWindow, Collapsed, OColorListener *, _pMarker )
 {
     if ( _pMarker )
@@ -298,7 +298,7 @@ IMPL_LINK( OSectionWindow, Collapsed, OColorListener *, _pMarker )
     }
     return 0L;
 }
-// -----------------------------------------------------------------------------
+
 void OSectionWindow::zoom(const Fraction& _aZoom)
 {
     setZoomFactor(_aZoom,*this);
@@ -309,20 +309,20 @@ void OSectionWindow::zoom(const Fraction& _aZoom)
     setZoomFactor(_aZoom,m_aEndMarker);
     Invalidate();
 }
-//-----------------------------------------------------------------------------
+
 IMPL_LINK( OSectionWindow, StartSplitHdl, Splitter*,  )
 {
     const OUString sUndoAction( ModuleRes( RID_STR_UNDO_CHANGE_SIZE ) );
     getViewsWindow()->getView()->getReportView()->getController().getUndoManager().EnterListAction( sUndoAction, OUString() );
     return 0L;
 }
-//------------------------------------------------------------------------------
+
 IMPL_LINK( OSectionWindow, EndSplitHdl, Splitter*,  )
 {
     getViewsWindow()->getView()->getReportView()->getController().getUndoManager().LeaveListAction();
     return 0L;
 }
-//-----------------------------------------------------------------------------
+
 IMPL_LINK( OSectionWindow, SplitHdl, Splitter*, _pSplitter )
 {
     if ( !getViewsWindow()->getView()->getReportView()->getController().isEditable() )
@@ -353,20 +353,20 @@ IMPL_LINK( OSectionWindow, SplitHdl, Splitter*, _pSplitter )
 
     return 0L;
 }
-// -----------------------------------------------------------------------------
+
 void lcl_scroll(Window& _rWindow,const Point& _aDelta)
 {
     _rWindow.Scroll(-_aDelta.X(),-_aDelta.Y());
     _rWindow.Invalidate(INVALIDATE_TRANSPARENT);
 }
-// -----------------------------------------------------------------------------
+
 void lcl_setOrigin(Window& _rWindow,long _nX, long _nY)
 {
     MapMode aMap = _rWindow.GetMapMode();
     aMap.SetOrigin( Point(- _nX, - _nY));
     _rWindow.SetMapMode( aMap );
 }
-//----------------------------------------------------------------------------
+
 void OSectionWindow::scrollChildren(long _nX)
 {
     const Point aDelta( _nX,0 );

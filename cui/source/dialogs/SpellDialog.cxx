@@ -72,7 +72,7 @@ struct SpellDialog_Impl
 {
     Sequence< Reference< XDictionary >  >   aDics;
 };
-// -----------------------------------------------------------------------
+
 
 #define SPELLUNDO_START                     200
 
@@ -161,18 +161,18 @@ public:
 }//namespace svx
 using namespace ::svx;
 
-//-----------------------------------------------------------------------
+
 SpellUndoAction_Impl::~SpellUndoAction_Impl()
 {
 }
 
-//-----------------------------------------------------------------------
+
 void SpellUndoAction_Impl::Undo()
 {
     m_rActionLink.Call(this);
 }
 
-//-----------------------------------------------------------------------
+
 sal_uInt16 SpellUndoAction_Impl::GetId()const
 {
     return m_nId;
@@ -248,7 +248,7 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
                         this, SpellDialog, InitHdl ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 SpellDialog::~SpellDialog()
 {
@@ -262,7 +262,7 @@ SpellDialog::~SpellDialog()
     delete pImpl;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpellDialog::Init_Impl()
 {
@@ -297,7 +297,7 @@ void SpellDialog::Init_Impl()
     SvxGetChangeAllList()->clear();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpellDialog::UpdateBoxes_Impl()
 {
@@ -379,7 +379,7 @@ void SpellDialog::UpdateBoxes_Impl()
     if (bOldShowExplain != (bool) m_pExplainLink->IsVisible() || bOldShowGrammar != (bool) m_pCheckGrammarCB->IsVisible())
         setOptimalLayoutSize();
 }
-// -----------------------------------------------------------------------
+
 
 void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrentError )
 {
@@ -450,7 +450,7 @@ IMPL_STATIC_LINK( SpellDialog, InitHdl, SpellDialog *, EMPTYARG )
     return 0;
 };
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SpellDialog, ExtClickHdl, Button *, pBtn )
 {
@@ -484,7 +484,7 @@ IMPL_LINK( SpellDialog, ExtClickHdl, Button *, pBtn )
     }
     return 0;
 }
-// -----------------------------------------------------------------------
+
 IMPL_LINK( SpellDialog, CheckGrammarHdl, CheckBox*, pBox )
 {
     rParent.SetGrammarChecking( pBox->IsChecked() );
@@ -551,7 +551,7 @@ OUString SpellDialog::getReplacementString() const
     return getDotReplacementString(sOrigString, sReplacement);
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SpellDialog, ChangeHdl)
 {
@@ -573,7 +573,7 @@ IMPL_LINK_NOARG(SpellDialog, ChangeHdl)
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SpellDialog, ChangeAllHdl)
 {
@@ -604,7 +604,7 @@ IMPL_LINK_NOARG(SpellDialog, ChangeAllHdl)
     m_pSentenceED->UndoActionEnd();
     return 1;
 }
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SpellDialog, IgnoreAllHdl, Button *, pButton )
 {
@@ -653,7 +653,7 @@ IMPL_LINK( SpellDialog, IgnoreAllHdl, Button *, pButton )
     return 1;
 }
 
-//-----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(SpellDialog, UndoHdl)
 {
     m_pSentenceED->Undo();
@@ -662,7 +662,7 @@ IMPL_LINK_NOARG(SpellDialog, UndoHdl)
     return 0;
 }
 
-//-----------------------------------------------------------------------
+
 IMPL_LINK( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl*, pAction )
 {
     switch(pAction->GetId())
@@ -709,7 +709,7 @@ IMPL_LINK( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl*, pAction )
 
     return 0;
 }
-// -----------------------------------------------------------------------
+
 void SpellDialog::Impl_Restore()
 {
     //clear the "ChangeAllList"
@@ -740,7 +740,7 @@ IMPL_LINK_NOARG(SpellDialog, IgnoreHdl)
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SpellDialog::Close()
 {
@@ -749,14 +749,14 @@ bool SpellDialog::Close()
         SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
     return true;
 }
-// -----------------------------------------------------------------------
+
 
 void SpellDialog::SetSelectedLang_Impl( LanguageType nLang )
 {
     m_pLanguageLB->SelectLanguage( nLang );
 }
 
-// -----------------------------------------------------------------------
+
 
 LanguageType SpellDialog::GetSelectedLang_Impl() const
 {
@@ -764,7 +764,7 @@ LanguageType SpellDialog::GetSelectedLang_Impl() const
     return nLang;
 }
 
-//-------------------------------------------------
+
 IMPL_LINK(SpellDialog, LanguageSelectHdl, SvxLanguageBox*, pBox)
 {
     //If selected language changes, then add->list should be regenerated to
@@ -793,7 +793,7 @@ IMPL_LINK(SpellDialog, LanguageSelectHdl, SvxLanguageBox*, pBox)
     SpellDialog::UpdateBoxes_Impl();
     return 0;
 }
-// -----------------------------------------------------------------------
+
 
 void SpellDialog::SetLanguage( sal_uInt16 nLang )
 /*
@@ -886,19 +886,19 @@ int SpellDialog::InitUserDicts()
     return nDicts;
 }
 
-//-----------------------------------------------------------------------
+
 IMPL_LINK(SpellDialog, AddToDictClickHdl, PushButton*, EMPTYARG )
 {
     return AddToDictionaryExecute(1, m_pAddToDictMB->GetPopupMenu());
 }
 
-//-----------------------------------------------------------------------
+
 IMPL_LINK(SpellDialog, AddToDictSelectHdl, MenuButton*, pButton )
 {
     return AddToDictionaryExecute(pButton->GetCurItemId(), pButton->GetPopupMenu());
 }
 
-//-----------------------------------------------------------------------
+
 int SpellDialog::AddToDictionaryExecute( sal_uInt16 nItemId, PopupMenu *pMenu )
 {
     m_pSentenceED->UndoActionStart( SPELLUNDO_CHANGE_GROUP );
@@ -947,7 +947,7 @@ int SpellDialog::AddToDictionaryExecute( sal_uInt16 nItemId, PopupMenu *pMenu )
     return 0;
 }
 
-//-----------------------------------------------------------------------
+
 IMPL_LINK(SpellDialog, ModifyHdl, SentenceEditWindow_Impl*, pEd)
 {
     if (m_pSentenceED == pEd)
@@ -973,7 +973,7 @@ IMPL_LINK(SpellDialog, ModifyHdl, SentenceEditWindow_Impl*, pEd)
     return 0;
 };
 
-//-----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(SpellDialog, CancelHdl)
 {
     //apply changes and ignored text parts first - if there are any
@@ -982,7 +982,7 @@ IMPL_LINK_NOARG(SpellDialog, CancelHdl)
     return 0;
 }
 
-//-----------------------------------------------------------------------
+
 bool SpellDialog::Notify( NotifyEvent& rNEvt )
 {
     /* #i38338#
@@ -1010,7 +1010,7 @@ bool SpellDialog::Notify( NotifyEvent& rNEvt )
     return SfxModelessDialog::Notify(rNEvt);
 }
 
-//-------------------------------------------------
+
 void SpellDialog::InvalidateDialog()
 {
     if( bFocusLocked )
@@ -1043,7 +1043,7 @@ void SpellDialog::InvalidateDialog()
     SfxModelessDialog::Deactivate();
 }
 
-//-----------------------------------------------------------------------
+
 bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
 {
     bool bRet = false;
@@ -1185,7 +1185,7 @@ bool SpellDialog::ApplyChangeAllList_Impl(SpellPortions& rSentence, bool &bHasRe
     return bRet;
 }
 
-//-----------------------------------------------------------------------
+
 SentenceEditWindow_Impl::SentenceEditWindow_Impl(Window * pParent, WinBits nBits)
     : VclMultiLineEdit(pParent, nBits)
     , m_nErrorStart(0)
@@ -1201,7 +1201,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSentenceEditWindow(Window *
     return new SentenceEditWindow_Impl(pParent, WB_BORDER|WB_VSCROLL|WB_IGNORETAB);
 }
 
-//-----------------------------------------------------------------------
+
 SentenceEditWindow_Impl::~SentenceEditWindow_Impl()
 {
 }
@@ -1545,7 +1545,7 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     return bChange || VclMultiLineEdit::PreNotify(rNEvt);
 }
 
-//-----------------------------------------------------------------------
+
 bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellChecker1> xSpell )
 {
     if (bIgnoreCurrentError)
@@ -1637,7 +1637,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, com::sun:
     return bRet;
 }
 
-//-----------------------------------------------------------------------
+
 void SentenceEditWindow_Impl::MoveErrorMarkTo(sal_uInt16 nStart, sal_uInt16 nEnd, bool bGrammarError)
 {
     TextEngine* pTextEngine = GetTextEngine();
@@ -1649,7 +1649,7 @@ void SentenceEditWindow_Impl::MoveErrorMarkTo(sal_uInt16 nStart, sal_uInt16 nEnd
     m_nErrorEnd = nEnd;
 }
 
-//-----------------------------------------------------------------------
+
 void SentenceEditWindow_Impl::ChangeMarkedWord(const OUString& rNewWord, LanguageType eLanguage)
 {
     //calculate length changes
@@ -1712,13 +1712,13 @@ void SentenceEditWindow_Impl::ChangeMarkedWord(const OUString& rNewWord, Languag
     pTextEngine->UndoActionEnd();
 }
 
-//-------------------------------------------------
+
 OUString SentenceEditWindow_Impl::GetErrorText() const
 {
     return GetTextEngine()->GetText(TextSelection(TextPaM(0, m_nErrorStart), TextPaM(0, m_nErrorEnd) ));
 }
 
-//-----------------------------------------------------------------------
+
 const SpellErrorDescription* SentenceEditWindow_Impl::GetAlternatives()
 {
     TextPaM aCursor(0, m_nErrorStart);
@@ -1727,7 +1727,7 @@ const SpellErrorDescription* SentenceEditWindow_Impl::GetAlternatives()
     return pAttrib ? &pAttrib->GetErrorDescription() : 0;
 }
 
-//-----------------------------------------------------------------------
+
 void SentenceEditWindow_Impl::RestoreCurrentError()
 {
     TextPaM aCursor(0, m_nErrorStart);
@@ -1741,7 +1741,7 @@ void SentenceEditWindow_Impl::RestoreCurrentError()
     }
 }
 
-//-----------------------------------------------------------------------
+
 void SentenceEditWindow_Impl::SetAlternatives( Reference< XSpellAlternatives> xAlt )
 {
     TextPaM aCursor(0, m_nErrorStart);
@@ -1765,20 +1765,20 @@ void SentenceEditWindow_Impl::SetAlternatives( Reference< XSpellAlternatives> xA
     GetTextEngine()->SetAttrib( SpellErrorAttrib(aDesc), 0, m_nErrorStart, m_nErrorEnd );
 }
 
-//-----------------------------------------------------------------------
+
 void SentenceEditWindow_Impl::SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd )
 {
     GetTextEngine()->SetAttrib(rAttr, nPara, nStart, nEnd);
 }
 
-//-----------------------------------------------------------------------
+
 void SentenceEditWindow_Impl::SetText( const OUString& rStr )
 {
     m_nErrorStart = m_nErrorEnd = 0;
     GetTextEngine()->SetText(rStr);
 }
 
-//-----------------------------------------------------------------------
+
 struct LanguagePosition_Impl
 {
     sal_uInt16          nPosition;
@@ -1919,7 +1919,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions( bool bSetIgnore
     return aRet;
 }
 
-//-----------------------------------------------------------------------
+
 void SentenceEditWindow_Impl::Undo()
 {
     ::svl::IUndoManager& rUndoMgr = GetTextEngine()->GetUndoManager();
@@ -1939,13 +1939,13 @@ void SentenceEditWindow_Impl::Undo()
         GetSpellDialog()->UpdateBoxes_Impl();
 }
 
-//-----------------------------------------------------------------------
+
 void SentenceEditWindow_Impl::ResetUndo()
 {
     GetTextEngine()->ResetUndo();
 }
 
-//-----------------------------------------------------------------------
+
 void SentenceEditWindow_Impl::AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg )
 {
     ::svl::IUndoManager& rUndoMgr = GetTextEngine()->GetUndoManager();
@@ -1953,25 +1953,25 @@ void SentenceEditWindow_Impl::AddUndoAction( SfxUndoAction *pAction, sal_Bool bT
     GetSpellDialog()->m_pUndoPB->Enable();
 }
 
-//-----------------------------------------------------------------------
+
 sal_uInt16 SentenceEditWindow_Impl::GetUndoActionCount()
 {
     return GetTextEngine()->GetUndoManager().GetUndoActionCount();
 }
 
-//-----------------------------------------------------------------------
+
 void SentenceEditWindow_Impl::UndoActionStart( sal_uInt16 nId )
 {
     GetTextEngine()->UndoActionStart(nId);
 }
 
-//-----------------------------------------------------------------------
+
 void SentenceEditWindow_Impl::UndoActionEnd()
 {
     GetTextEngine()->UndoActionEnd();
 }
 
-//-----------------------------------------------------------------------
+
 void SentenceEditWindow_Impl::MoveErrorEnd(long nOffset)
 {
     if(nOffset > 0)
@@ -1980,7 +1980,7 @@ void SentenceEditWindow_Impl::MoveErrorEnd(long nOffset)
         m_nErrorEnd = m_nErrorEnd -(sal_uInt16)- nOffset;
 }
 
-//-----------------------------------------------------------------------
+
 void  SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
 {
     DBG_ASSERT(!bSet || m_bIsUndoEditMode != bSet, "SetUndoEditMode with equal values?");

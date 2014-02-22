@@ -151,19 +151,19 @@ static inline sal_Int32 getDescriptionSize( typelib_TypeClass eTypeClass )
 }
 
 
-//-----------------------------------------------------------------------------
+
 extern "C" void SAL_CALL typelib_typedescriptionreference_getByName(
     typelib_TypeDescriptionReference ** ppRet, rtl_uString * pName )
     SAL_THROW_EXTERN_C();
 
-//-----------------------------------------------------------------------------
+
 struct equalStr_Impl
 {
     bool operator()(const sal_Unicode * const & s1, const sal_Unicode * const & s2) const SAL_THROW(())
         { return 0 == rtl_ustr_compare( s1, s2 ); }
 };
 
-//-----------------------------------------------------------------------------
+
 struct hashStr_Impl
 {
     size_t operator()(const sal_Unicode * const & s) const SAL_THROW(())
@@ -171,7 +171,7 @@ struct hashStr_Impl
 };
 
 
-//-----------------------------------------------------------------------------
+
 // Heavy hack, the const sal_Unicode * is hold by the typedescription reference
 typedef boost::unordered_map< const sal_Unicode *, typelib_TypeDescriptionReference *,
                   hashStr_Impl, equalStr_Impl > WeakMap_Impl;
@@ -225,7 +225,7 @@ struct TypeDescriptor_Init_Impl
 
     ~TypeDescriptor_Init_Impl() SAL_THROW(());
 };
-//__________________________________________________________________________________________________
+
 inline Mutex & TypeDescriptor_Init_Impl::getMutex() SAL_THROW(())
 {
     if( !pMutex )
@@ -236,7 +236,7 @@ inline Mutex & TypeDescriptor_Init_Impl::getMutex() SAL_THROW(())
     }
     return * pMutex;
 }
-//__________________________________________________________________________________________________
+
 inline void TypeDescriptor_Init_Impl::callChain(
     typelib_TypeDescription ** ppRet, rtl_uString * pName )
     SAL_THROW(())
@@ -257,7 +257,7 @@ inline void TypeDescriptor_Init_Impl::callChain(
     }
 }
 
-//__________________________________________________________________________________________________
+
 TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW(())
 {
     if( pCache )
@@ -359,7 +359,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_registerCallback
     rInit.pCallbacks->push_back( CallbackEntry( pContext, pCallback ) );
 }
 
-//------------------------------------------------------------------------
+
 extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_revokeCallback(
     void * pContext, typelib_typedescription_Callback pCallback )
     SAL_THROW_EXTERN_C()
@@ -391,7 +391,7 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
     sal_Int32 nOffset, sal_Int32 & rMaxIntegralTypeSize )
     SAL_THROW_EXTERN_C();
 
-//------------------------------------------------------------------------
+
 static inline void typelib_typedescription_initTables(
     typelib_TypeDescription * pTD )
     SAL_THROW(())
@@ -563,7 +563,7 @@ bool complete(typelib_TypeDescription ** ppTypeDescr, bool initTables) {
 
 }
 
-//------------------------------------------------------------------------
+
 extern "C" void SAL_CALL typelib_typedescription_newEmpty(
     typelib_TypeDescription ** ppRet,
     typelib_TypeClass eTypeClass, rtl_uString * pTypeName )
@@ -723,7 +723,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
     *ppRet = pRet;
 }
 
-//------------------------------------------------------------------------
+
 namespace {
 
 void newTypeDescription(
@@ -874,7 +874,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newStruct(
         pMembers);
 }
 
-//------------------------------------------------------------------------
+
 extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newEnum(
     typelib_TypeDescription ** ppRet,
     rtl_uString * pTypeName,
@@ -903,7 +903,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newEnum(
     (*ppRet)->nAlignment = adjustAlignment( (*ppRet)->nAlignment );
 }
 
-//------------------------------------------------------------------------
+
 extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newInterface(
     typelib_InterfaceTypeDescription ** ppRet,
     rtl_uString * pTypeName,
@@ -920,7 +920,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newInterface(
         &pBaseInterface, nMembers, ppMembers);
 }
 
-//------------------------------------------------------------------------
+
 
 namespace {
 
@@ -1101,7 +1101,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newMIInterface(
     *ppRet = pITD;
 }
 
-//------------------------------------------------------------------------
+
 
 namespace {
 
@@ -1203,7 +1203,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newInterfaceMeth
 }
 
 
-//------------------------------------------------------------------------
+
 extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newInterfaceAttribute(
     typelib_InterfaceAttributeTypeDescription ** ppRet,
     sal_Int32 nAbsolutePosition,
@@ -1218,7 +1218,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newInterfaceAttr
         pAttributeTypeName, bReadOnly, 0, 0, 0, 0);
 }
 
-//------------------------------------------------------------------------
+
 extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
     typelib_InterfaceAttributeTypeDescription ** ppRet,
     sal_Int32 nAbsolutePosition,
@@ -1281,7 +1281,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newExtendedInter
         pTmp->pWeakRef = (typelib_TypeDescriptionReference *)pTmp;
 }
 
-//------------------------------------------------------------------------
+
 extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_acquire(
     typelib_TypeDescription * pTypeDescription )
     SAL_THROW_EXTERN_C()
@@ -1289,7 +1289,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_acquire(
     osl_atomic_increment( &pTypeDescription->nRefCount );
 }
 
-//------------------------------------------------------------------------
+
 
 namespace {
 
@@ -1411,7 +1411,7 @@ static inline void typelib_typedescription_destructExtendedMembers(
     }
 }
 
-//------------------------------------------------------------------------
+
 extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_release(
     typelib_TypeDescription * pTD )
     SAL_THROW_EXTERN_C()
@@ -1482,7 +1482,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_release(
     }
 }
 
-//------------------------------------------------------------------------
+
 extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_register(
     typelib_TypeDescription ** ppNewDescription )
     SAL_THROW_EXTERN_C()
@@ -1616,7 +1616,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_register(
     OSL_ASSERT( pTDR->eTypeClass == (*ppNewDescription)->eTypeClass );
 }
 
-//------------------------------------------------------------------------
+
 static inline bool type_equals(
     typelib_TypeDescriptionReference * p1, typelib_TypeDescriptionReference * p2 )
     SAL_THROW(())
@@ -1634,7 +1634,7 @@ extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescription_equals(
         (typelib_TypeDescriptionReference *)p1, (typelib_TypeDescriptionReference *)p2 );
 }
 
-//------------------------------------------------------------------------
+
 extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
     const typelib_TypeDescription * pTypeDescription,
     sal_Int32 nOffset, sal_Int32 & rMaxIntegralTypeSize )
@@ -1771,7 +1771,7 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
     return newAlignedSize( nOffset, nSize, rMaxIntegralTypeSize );
 }
 
-//------------------------------------------------------------------------
+
 
 namespace {
 
@@ -2079,7 +2079,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_newByAs
     OUString aTypeName( OUString::createFromAscii( pTypeName ) );
     typelib_typedescriptionreference_new( ppTDR, eTypeClass, aTypeName.pData );
 }
-//------------------------------------------------------------------------
+
 extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_new(
     typelib_TypeDescriptionReference ** ppTDR,
     typelib_TypeClass eTypeClass, rtl_uString * pTypeName )
@@ -2176,7 +2176,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_new(
     rInit.pWeakMap->operator[]( (*ppTDR)->pTypeName->buffer ) = *ppTDR;
 }
 
-//------------------------------------------------------------------------
+
 extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_acquire(
     typelib_TypeDescriptionReference * pRef )
     SAL_THROW_EXTERN_C()
@@ -2184,7 +2184,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_acquire
     osl_atomic_increment( &pRef->nRefCount );
 }
 
-//------------------------------------------------------------------------
+
 extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_release(
     typelib_TypeDescriptionReference * pRef )
     SAL_THROW_EXTERN_C()
@@ -2220,7 +2220,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_release
     }
 }
 
-//------------------------------------------------------------------------
+
 extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_getDescription(
     typelib_TypeDescription ** ppRet, typelib_TypeDescriptionReference * pRef )
     SAL_THROW_EXTERN_C()
@@ -2269,7 +2269,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_getDesc
     pRef->pType = *ppRet;
 }
 
-//------------------------------------------------------------------------
+
 extern "C" void SAL_CALL typelib_typedescriptionreference_getByName(
     typelib_TypeDescriptionReference ** ppRet, rtl_uString * pName )
     SAL_THROW_EXTERN_C()
@@ -2303,7 +2303,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_getByName(
     }
 }
 
-//------------------------------------------------------------------------
+
 extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescriptionreference_equals(
     const typelib_TypeDescriptionReference * p1,
     const typelib_TypeDescriptionReference * p2 )

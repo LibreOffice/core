@@ -33,9 +33,9 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-//------------------------------------------------------------------------------
+
 IMPLEMENT_SERVICE_INFO(OCatalog,"com.sun.star.comp.connectivity.OCatalog","com.sun.star.sdbcx.DatabaseDefinition")
-//------------------------------------------------------------------------------
+
 OCatalog::OCatalog(const Reference< XConnection> &_xConnection) : OCatalog_BASE(m_aMutex)
             ,connectivity::OSubComponent<OCatalog, OCatalog_BASE>(_xConnection, this)
             ,m_pTables(NULL)
@@ -52,7 +52,7 @@ OCatalog::OCatalog(const Reference< XConnection> &_xConnection) : OCatalog_BASE(
         OSL_FAIL("No Metadata available!");
     }
 }
-//-----------------------------------------------------------------------------
+
 OCatalog::~OCatalog()
 {
     delete m_pTables;
@@ -60,18 +60,18 @@ OCatalog::~OCatalog()
     delete m_pGroups;
     delete m_pUsers;
 }
-//-----------------------------------------------------------------------------
+
 void SAL_CALL OCatalog::acquire() throw()
 {
     OCatalog_BASE::acquire();
 }
-//------------------------------------------------------------------------------
+
 void SAL_CALL OCatalog::release() throw()
 {
     relase_ChildImpl();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OCatalog::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -88,7 +88,7 @@ void SAL_CALL OCatalog::disposing()
     dispose_ChildImpl();
     OCatalog_BASE::disposing();
 }
-//------------------------------------------------------------------------------
+
 // XTablesSupplier
 Reference< XNameAccess > SAL_CALL OCatalog::getTables(  ) throw(RuntimeException)
 {
@@ -112,7 +112,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getTables(  ) throw(RuntimeException
 
     return m_pTables;
 }
-// -------------------------------------------------------------------------
+
 // XViewsSupplier
 Reference< XNameAccess > SAL_CALL OCatalog::getViews(  ) throw(RuntimeException)
 {
@@ -136,7 +136,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getViews(  ) throw(RuntimeException)
 
     return m_pViews;
 }
-// -------------------------------------------------------------------------
+
 // XUsersSupplier
 Reference< XNameAccess > SAL_CALL OCatalog::getUsers(  ) throw(RuntimeException)
 {
@@ -160,7 +160,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getUsers(  ) throw(RuntimeException)
 
     return m_pUsers;
 }
-// -------------------------------------------------------------------------
+
 // XGroupsSupplier
 Reference< XNameAccess > SAL_CALL OCatalog::getGroups(  ) throw(RuntimeException)
 {
@@ -184,7 +184,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getGroups(  ) throw(RuntimeException
 
     return m_pGroups;
 }
-// -----------------------------------------------------------------------------
+
 OUString OCatalog::buildName(const Reference< XRow >& _xRow)
 {
     OUString sCatalog = _xRow->getString(1);
@@ -201,7 +201,7 @@ OUString OCatalog::buildName(const Reference< XRow >& _xRow)
         ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, sal_False, ::dbtools::eInDataManipulation ) );
     return sComposedName;
 }
-// -----------------------------------------------------------------------------
+
 void OCatalog::fillNames(Reference< XResultSet >& _xResult,TStringVector& _rNames)
 {
     if ( _xResult.is() )
@@ -216,16 +216,16 @@ void OCatalog::fillNames(Reference< XResultSet >& _xResult,TStringVector& _rName
         ::comphelper::disposeComponent(_xResult);
     }
 }
-// -------------------------------------------------------------------------
+
 void ODescriptor::construct()
 {
     sal_Int32 nAttrib = isNew() ? 0 : ::com::sun::star::beans::PropertyAttribute::READONLY;
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME), PROPERTY_ID_NAME ,nAttrib,&m_Name,::getCppuType(static_cast< OUString*>(0)));
 }
-// -------------------------------------------------------------------------
+
 ODescriptor::~ODescriptor()
 {
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

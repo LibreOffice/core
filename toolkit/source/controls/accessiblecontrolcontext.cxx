@@ -43,25 +43,25 @@ namespace toolkit
     //====================================================================
     //= OAccessibleControlContext
     //====================================================================
-    //--------------------------------------------------------------------
+
     OAccessibleControlContext::OAccessibleControlContext()
         : OAccessibleControlContext_Base(new VCLExternalSolarLock)
     {
         // nothing to do here, we have a late ctor
     }
 
-    //--------------------------------------------------------------------
+
     OAccessibleControlContext::~OAccessibleControlContext()
     {
         ensureDisposed();
     }
 
-    //--------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XINTERFACE3( OAccessibleControlContext, OAccessibleControlContext_Base, OAccessibleImplementationAccess, OAccessibleControlContext_IBase )
     IMPLEMENT_FORWARD_XTYPEPROVIDER3( OAccessibleControlContext, OAccessibleControlContext_Base, OAccessibleImplementationAccess, OAccessibleControlContext_IBase )
         // (order matters: the first is the class name, the second is the class doing the ref counting)
 
-    //--------------------------------------------------------------------
+
     void OAccessibleControlContext::Init( const Reference< XAccessible >& _rxCreator ) SAL_THROW( ( Exception ) )
     {
         OContextEntryGuard aGuard( this );
@@ -83,7 +83,7 @@ namespace toolkit
         OAccessibleControlContext_Base::lateInit( _rxCreator );
     }
 
-    //--------------------------------------------------------------------
+
     OAccessibleControlContext* OAccessibleControlContext::create( const Reference< XAccessible >& _rxCreator ) SAL_THROW( ( ) )
     {
         OAccessibleControlContext* pNew = NULL;
@@ -99,7 +99,7 @@ namespace toolkit
         return pNew;
     }
 
-    //--------------------------------------------------------------------
+
     void OAccessibleControlContext::startModelListening( ) SAL_THROW( ( Exception ) )
     {
         Reference< XComponent > xModelComp( m_xControlModel, UNO_QUERY );
@@ -108,7 +108,7 @@ namespace toolkit
             xModelComp->addEventListener( this );
     }
 
-    //--------------------------------------------------------------------
+
     void OAccessibleControlContext::stopModelListening( ) SAL_THROW( ( Exception ) )
     {
         Reference< XComponent > xModelComp( m_xControlModel, UNO_QUERY );
@@ -117,21 +117,21 @@ namespace toolkit
             xModelComp->removeEventListener( this );
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int32 SAL_CALL OAccessibleControlContext::getAccessibleChildCount(  ) throw (RuntimeException)
     {
         // we do not have children
         return 0;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XAccessible > SAL_CALL OAccessibleControlContext::getAccessibleChild( sal_Int32 ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         // we do not have children
         throw IndexOutOfBoundsException();
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XAccessible > SAL_CALL OAccessibleControlContext::getAccessibleParent(  ) throw (RuntimeException)
     {
         OContextEntryGuard aGuard( this );
@@ -141,33 +141,33 @@ namespace toolkit
         return implGetForeignControlledParent();
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int16 SAL_CALL OAccessibleControlContext::getAccessibleRole(  ) throw (RuntimeException)
     {
         return AccessibleRole::SHAPE;
     }
 
-    //--------------------------------------------------------------------
+
     OUString SAL_CALL OAccessibleControlContext::getAccessibleDescription(  ) throw (RuntimeException)
     {
         OContextEntryGuard aGuard( this );
         return getModelStringProperty( "HelpText" );
     }
 
-    //--------------------------------------------------------------------
+
     OUString SAL_CALL OAccessibleControlContext::getAccessibleName(  ) throw (RuntimeException)
     {
         OContextEntryGuard aGuard( this );
         return getModelStringProperty( "Name" );
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XAccessibleRelationSet > SAL_CALL OAccessibleControlContext::getAccessibleRelationSet(  ) throw (RuntimeException)
     {
         return NULL;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XAccessibleStateSet > SAL_CALL OAccessibleControlContext::getAccessibleStateSet(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( GetMutex() );
@@ -187,7 +187,7 @@ namespace toolkit
         return pStateSet;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OAccessibleControlContext::disposing( const EventObject&
     #if OSL_DEBUG_LEVEL > 0
     _rSource
@@ -204,7 +204,7 @@ namespace toolkit
         OAccessibleControlContext_Base::disposing();
     }
 
-    //--------------------------------------------------------------------
+
     OUString OAccessibleControlContext::getModelStringProperty( const sal_Char* _pPropertyName )
     {
         OUString sReturn;
@@ -224,7 +224,7 @@ namespace toolkit
         return sReturn;
     }
 
-    //--------------------------------------------------------------------
+
     Window* OAccessibleControlContext::implGetWindow( Reference< awt::XWindow >* _pxUNOWindow ) const
     {
         Reference< awt::XControl > xControl( getAccessibleCreator(), UNO_QUERY );
@@ -239,7 +239,7 @@ namespace toolkit
         return pWindow;
     }
 
-    //--------------------------------------------------------------------
+
     awt::Rectangle SAL_CALL OAccessibleControlContext::implGetBounds(  ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -299,27 +299,27 @@ namespace toolkit
         return aBounds;
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XAccessible > SAL_CALL OAccessibleControlContext::getAccessibleAtPoint( const awt::Point& /* _rPoint */ ) throw (RuntimeException)
     {
         // no children at all
         return NULL;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL OAccessibleControlContext::grabFocus(  ) throw (RuntimeException)
     {
         OSL_FAIL( "OAccessibleControlContext::grabFocus: !isFocusTraversable, but grabFocus!" );
     }
 
-    //--------------------------------------------------------------------
+
     Any SAL_CALL OAccessibleControlContext::getAccessibleKeyBinding(  ) throw (RuntimeException)
     {
         // we do not have any key bindings to activate a UNO control in design mode
         return Any();
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int32 SAL_CALL OAccessibleControlContext::getForeground(  ) throw (::com::sun::star::uno::RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -345,7 +345,7 @@ namespace toolkit
         return nColor;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int32 SAL_CALL OAccessibleControlContext::getBackground(  ) throw (::com::sun::star::uno::RuntimeException)
     {
         SolarMutexGuard aSolarGuard;

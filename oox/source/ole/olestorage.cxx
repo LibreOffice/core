@@ -85,7 +85,7 @@ private:
     OUString            maElementName;
 };
 
-// ----------------------------------------------------------------------------
+
 
 OleOutputStream::OleOutputStream( const Reference< XComponentContext >& rxContext,
         const Reference< XNameContainer >& rxStorage, const OUString& rElementName ) :
@@ -214,7 +214,7 @@ OleStorage::~OleStorage()
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 void OleStorage::initStorage( const Reference< XInputStream >& rxInStream )
 {

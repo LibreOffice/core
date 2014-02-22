@@ -27,7 +27,7 @@
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <tools/debug.hxx>
 
-//------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_CellBindingPropertyHandler()
 {
     ::pcr::CellBindingPropertyHandler::registerImplementation();
@@ -52,7 +52,7 @@ namespace pcr
     //= CellBindingPropertyHandler
     //====================================================================
     DBG_NAME( CellBindingPropertyHandler )
-    //--------------------------------------------------------------------
+
     CellBindingPropertyHandler::CellBindingPropertyHandler( const Reference< XComponentContext >& _rxContext )
         :CellBindingPropertyHandler_Base( _rxContext )
         ,m_pCellExchangeConverter( new DefaultEnumRepresentation( *m_pInfoService, ::getCppuType( static_cast< sal_Int16* >( NULL ) ), PROPERTY_ID_CELL_EXCHANGE_TYPE ) )
@@ -60,13 +60,13 @@ namespace pcr
         DBG_CTOR( CellBindingPropertyHandler, NULL );
     }
 
-    //--------------------------------------------------------------------
+
     OUString SAL_CALL CellBindingPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
         return OUString( "com.sun.star.comp.extensions.CellBindingPropertyHandler" );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL CellBindingPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSupported( 1 );
@@ -74,7 +74,7 @@ namespace pcr
         return aSupported;
     }
 
-    //--------------------------------------------------------------------
+
     void CellBindingPropertyHandler::onNewComponent()
     {
         PropertyHandlerComponent::onNewComponent();
@@ -85,13 +85,13 @@ namespace pcr
             m_pHelper.reset( new CellBindingHelper( m_xComponent, xDocument ) );
     }
 
-    //--------------------------------------------------------------------
+
     CellBindingPropertyHandler::~CellBindingPropertyHandler( )
     {
         DBG_DTOR( CellBindingPropertyHandler, NULL );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL CellBindingPropertyHandler::getActuatingProperties( ) throw (RuntimeException)
     {
         Sequence< OUString > aInterestingProperties( 3 );
@@ -101,7 +101,7 @@ namespace pcr
         return aInterestingProperties;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL CellBindingPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (NullPointerException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -201,7 +201,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     void CellBindingPropertyHandler::impl_updateDependentProperty_nothrow( PropertyId _nPropId, const Reference< XObjectInspectorUI >& _rxInspectorUI ) const
     {
         try
@@ -229,7 +229,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     Any SAL_CALL CellBindingPropertyHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -275,7 +275,7 @@ namespace pcr
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL CellBindingPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -347,7 +347,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     Any SAL_CALL CellBindingPropertyHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -395,7 +395,7 @@ namespace pcr
         return aPropertyValue;
     }
 
-    //--------------------------------------------------------------------
+
     Any SAL_CALL CellBindingPropertyHandler::convertToControlValue( const OUString& _rPropertyName,
         const Any& _rPropertyValue, const Type& /*_rControlValueType*/ ) throw (UnknownPropertyException, RuntimeException)
     {
@@ -450,7 +450,7 @@ namespace pcr
         return aControlValue;
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< Property > SAL_CALL CellBindingPropertyHandler::doDescribeSupportedProperties() const
     {
         ::std::vector< Property > aProperties;

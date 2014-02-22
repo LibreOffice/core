@@ -56,7 +56,7 @@ namespace
     const sal_uInt16 DEFAULT_DATE    =  0x0010;
 }
 
-//------------------------------------------------------------------
+
 OEditBaseModel::OEditBaseModel( const Reference< XComponentContext >& _rxFactory, const OUString& rUnoControlModelName,
         const OUString& rDefault, const sal_Bool _bSupportExternalBinding, const sal_Bool _bSupportsValidation )
     :OBoundControlModel( _rxFactory, rUnoControlModelName, rDefault, sal_True, _bSupportExternalBinding, _bSupportsValidation )
@@ -66,7 +66,7 @@ OEditBaseModel::OEditBaseModel( const Reference< XComponentContext >& _rxFactory
 {
 }
 
-//------------------------------------------------------------------
+
 OEditBaseModel::OEditBaseModel( const OEditBaseModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
      :OBoundControlModel( _pOriginal, _rxFactory )
      ,m_nLastReadVersion(0)
@@ -78,13 +78,13 @@ OEditBaseModel::OEditBaseModel( const OEditBaseModel* _pOriginal, const Referenc
     m_aDefaultText = _pOriginal->m_aDefaultText;
 }
 
-//------------------------------------------------------------------
+
 OEditBaseModel::~OEditBaseModel( )
 {
 }
 
 // XPersist
-//------------------------------------------------------------------------------
+
 void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OBoundControlModel::write(_rxOutStream);
@@ -152,13 +152,13 @@ void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream) t
     // !!! properties common to all OEditBaseModel derived classes should be written in writeCommonEditProperties !!!
 }
 
-//------------------------------------------------------------------------------
+
 sal_uInt16 OEditBaseModel::getPersistenceFlags() const
 {
     return PF_HANDLE_COMMON_PROPS;
 }
 
-//------------------------------------------------------------------------------
+
 void OEditBaseModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OBoundControlModel::read(_rxInStream);
@@ -216,14 +216,14 @@ void OEditBaseModel::read(const Reference<XObjectInputStream>& _rxInStream) thro
         resetNoBroadcast();
 };
 
-//------------------------------------------------------------------------------
+
 void OEditBaseModel::defaultCommonEditProperties()
 {
     OBoundControlModel::defaultCommonProperties();
     // no own common properties at the moment
 }
 
-//------------------------------------------------------------------------------
+
 void OEditBaseModel::readCommonEditProperties(const Reference<XObjectInputStream>& _rxInStream)
 {
     sal_Int32 nLen = _rxInStream->readLong();
@@ -243,7 +243,7 @@ void OEditBaseModel::readCommonEditProperties(const Reference<XObjectInputStream
     xMark->deleteMark(nMark);
 }
 
-//------------------------------------------------------------------------------
+
 void OEditBaseModel::writeCommonEditProperties(const Reference<XObjectOutputStream>& _rxOutStream)
 {
     Reference<XMarkableStream>  xMark(_rxOutStream, UNO_QUERY);
@@ -267,7 +267,7 @@ void OEditBaseModel::writeCommonEditProperties(const Reference<XObjectOutputStre
     xMark->deleteMark(nMark);
 }
 
-//------------------------------------------------------------------------------
+
 void OEditBaseModel::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
     switch (nHandle)
@@ -291,7 +291,7 @@ void OEditBaseModel::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OEditBaseModel::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue,
                                             sal_Int32 nHandle, const Any& rValue ) throw( IllegalArgumentException )
 {
@@ -326,7 +326,7 @@ sal_Bool OEditBaseModel::convertFastPropertyValue( Any& rConvertedValue, Any& rO
     return bModified;
 }
 
-//------------------------------------------------------------------------------
+
 void OEditBaseModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw ( ::com::sun::star::uno::Exception)
 {
     switch (nHandle)
@@ -357,7 +357,7 @@ void OEditBaseModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const 
 }
 
 // XPropertyState
-//------------------------------------------------------------------------------
+
 Any OEditBaseModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 {
     switch (nHandle)

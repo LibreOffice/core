@@ -28,7 +28,6 @@
 using namespace dbaui;
 
 // class OFieldDescGenWin
-
 OFieldDescGenWin::OFieldDescGenWin( Window* pParent, OTableDesignHelpBar* pHelp ) :
      TabPage( pParent, WB_3DLOOK | WB_DIALOGCONTROL )
 {
@@ -69,7 +68,7 @@ OUString OFieldDescGenWin::GetControlText( sal_uInt16 nControlId )
 
 void OFieldDescGenWin::SetControlText( sal_uInt16 nControlId, const OUString& rText )
 {
-    // Texte der Controls setzen
+    // set texts of the controls
     m_pFieldControl->SetControlText(nControlId,rText);
 }
 
@@ -94,7 +93,7 @@ void OFieldDescGenWin::SaveData( OFieldDescription* pFieldDescr )
 
 void OFieldDescGenWin::GetFocus()
 {
-    // Setzt den Focus auf das zuletzt aktive Control
+    // sets the focus to the control that was active last
     TabPage::GetFocus();
     if(m_pFieldControl)
         m_pFieldControl->GetFocus();

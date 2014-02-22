@@ -31,9 +31,9 @@
 #define FREE_HGLOB_ON_RELEASE   TRUE
 #define KEEP_HGLOB_ON_RELEASE   FALSE
 
-//------------------------------------------------------------------------
+
 // ctor
-//------------------------------------------------------------------------
+
 
 CAPNDataObject::CAPNDataObject( IDataObjectPtr rIDataObject ) :
     m_rIDataObjectOrg( rIDataObject ),
@@ -106,9 +106,9 @@ CAPNDataObject::~CAPNDataObject( )
     }
 }
 
-//------------------------------------------------------------------------
+
 // IUnknown->QueryInterface
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP CAPNDataObject::QueryInterface( REFIID iid, LPVOID* ppvObject )
 {
@@ -130,18 +130,18 @@ STDMETHODIMP CAPNDataObject::QueryInterface( REFIID iid, LPVOID* ppvObject )
     return hr;
 }
 
-//------------------------------------------------------------------------
+
 // IUnknown->AddRef
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP_(ULONG) CAPNDataObject::AddRef( )
 {
     return static_cast< ULONG >( InterlockedIncrement( &m_nRefCnt ) );
 }
 
-//------------------------------------------------------------------------
+
 // IUnknown->Release
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP_(ULONG) CAPNDataObject::Release( )
 {
@@ -155,9 +155,9 @@ STDMETHODIMP_(ULONG) CAPNDataObject::Release( )
     return nRefCnt;
 }
 
-//------------------------------------------------------------------------
+
 // IDataObject->GetData
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP CAPNDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium )
 {
@@ -174,9 +174,9 @@ STDMETHODIMP CAPNDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmediu
     return hr;
 }
 
-//------------------------------------------------------------------------
+
 // IDataObject->EnumFormatEtc
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP CAPNDataObject::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC** ppenumFormatetc )
 {
@@ -193,9 +193,9 @@ STDMETHODIMP CAPNDataObject::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC** 
     return hr;
 }
 
-//------------------------------------------------------------------------
+
 // IDataObject->QueryGetData
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP CAPNDataObject::QueryGetData( LPFORMATETC pFormatetc )
 {
@@ -212,9 +212,9 @@ STDMETHODIMP CAPNDataObject::QueryGetData( LPFORMATETC pFormatetc )
     return hr;
 }
 
-//------------------------------------------------------------------------
+
 // IDataObject->GetDataHere
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP CAPNDataObject::GetDataHere( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium )
 {
@@ -231,9 +231,9 @@ STDMETHODIMP CAPNDataObject::GetDataHere( LPFORMATETC pFormatetc, LPSTGMEDIUM pm
     return hr;
 }
 
-//------------------------------------------------------------------------
+
 // IDataObject->GetCanonicalFormatEtc
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP CAPNDataObject::GetCanonicalFormatEtc(LPFORMATETC pFormatectIn, LPFORMATETC pFormatetcOut)
 {
@@ -250,9 +250,9 @@ STDMETHODIMP CAPNDataObject::GetCanonicalFormatEtc(LPFORMATETC pFormatectIn, LPF
     return hr;
 }
 
-//------------------------------------------------------------------------
+
 // IDataObject->SetData
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP CAPNDataObject::SetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium, BOOL fRelease )
 {
@@ -269,9 +269,9 @@ STDMETHODIMP CAPNDataObject::SetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmediu
     return hr;
 }
 
-//------------------------------------------------------------------------
+
 // IDataObject->DAdvise
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP CAPNDataObject::DAdvise( LPFORMATETC pFormatetc, DWORD advf, LPADVISESINK pAdvSink, DWORD * pdwConnection )
 {
@@ -288,9 +288,9 @@ STDMETHODIMP CAPNDataObject::DAdvise( LPFORMATETC pFormatetc, DWORD advf, LPADVI
     return hr;
 }
 
-//------------------------------------------------------------------------
+
 // IDataObject->DUnadvise
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP CAPNDataObject::DUnadvise( DWORD dwConnection )
 {
@@ -307,9 +307,9 @@ STDMETHODIMP CAPNDataObject::DUnadvise( DWORD dwConnection )
     return hr;
 }
 
-//------------------------------------------------------------------------
+
 // IDataObject->EnumDAdvise
-//------------------------------------------------------------------------
+
 
 STDMETHODIMP CAPNDataObject::EnumDAdvise( LPENUMSTATDATA * ppenumAdvise )
 {
@@ -326,18 +326,18 @@ STDMETHODIMP CAPNDataObject::EnumDAdvise( LPENUMSTATDATA * ppenumAdvise )
     return hr;
 }
 
-//------------------------------------------------------------------------
+
 // for our convenience
-//------------------------------------------------------------------------
+
 
 CAPNDataObject::operator IDataObject*( )
 {
     return static_cast< IDataObject* >( this );
 }
 
-//------------------------------------------------------------------------
+
 // helper function
-//------------------------------------------------------------------------
+
 
 HRESULT CAPNDataObject::MarshalIDataObjectIntoCurrentApartment( IDataObject** ppIDataObj )
 {

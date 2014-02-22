@@ -29,7 +29,7 @@
 #include "sc.hrc"
 #include "optdlg.hrc"
 
-// -----------------------------------------------------------------------
+
 
 ScTpPrintOptions::ScTpPrintOptions( Window*           pParent,
                                     const SfxItemSet& rCoreAttrs )
@@ -60,7 +60,7 @@ int ScTpPrintOptions::DeactivatePage( SfxItemSet* pSetP )
     return LEAVE_PAGE;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
 {
@@ -92,7 +92,7 @@ void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
     m_pForceBreaksCB->SaveValue();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool ScTpPrintOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 {

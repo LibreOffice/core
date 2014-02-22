@@ -894,7 +894,7 @@ Sequence<OUString> ODataOutputStream_getSupportedServiceNames(void)
     return aRet;
 }
 
-//--------------------------------------
+
 struct equalObjectContainer_Impl
 {
     bool operator()(const Reference< XInterface > & s1,
@@ -904,7 +904,7 @@ struct equalObjectContainer_Impl
     }
 };
 
-//-----------------------------------------------------------------------------
+
 struct hashObjectContainer_Impl
 {
     size_t operator()(const Reference< XInterface > & xRef) const

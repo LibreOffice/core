@@ -50,10 +50,10 @@ namespace connectivity
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::java;
     using namespace dbtools;
-    //------------------------------------------------------------------------------
+
     const sal_Unicode CHAR_PLACE = '_';
     const sal_Unicode CHAR_WILD  = '%';
-    // -------------------------------------------------------------------------
+
     sal_Bool match(const sal_Unicode* pWild, const sal_Unicode* pStr, const sal_Unicode cEscape)
     {
         int    pos=0;
@@ -111,7 +111,7 @@ namespace connectivity
         }
         return ( *pStr == 0 ) && ( *pWild == 0 );
     }
-    //------------------------------------------------------------------
+
 #if HAVE_FEATURE_JAVA
     ::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM(const Reference<XComponentContext >& _rxContext)
     {
@@ -154,7 +154,7 @@ namespace connectivity
 
         return aRet;
     }
-    //------------------------------------------------------------------------------
+
     sal_Bool existsJavaClassByName( const ::rtl::Reference< jvmaccess::VirtualMachine >& _pJVM,const OUString& _sClassName )
     {
         sal_Bool bRet = sal_False;
@@ -179,7 +179,7 @@ namespace connectivity
 #include <ctype.h>
 namespace dbtools
 {
-//------------------------------------------------------------------
+
 sal_Bool isCharOk(sal_Unicode c,const OUString& _rSpecials)
 {
 
@@ -187,7 +187,7 @@ sal_Bool isCharOk(sal_Unicode c,const OUString& _rSpecials)
           c == '_' || _rSpecials.indexOf(c) != -1);
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool isValidSQLName(const OUString& rName,const OUString& _rSpecials)
 {
     // Test for correct naming (in SQL sense)
@@ -215,7 +215,7 @@ sal_Bool isValidSQLName(const OUString& rName,const OUString& _rSpecials)
 
     return sal_True;
 }
-//------------------------------------------------------------------
+
 // Creates a new name if necessary
 OUString convertName2SQLName(const OUString& rName,const OUString& _rSpecials)
 {
@@ -237,7 +237,7 @@ OUString convertName2SQLName(const OUString& rName,const OUString& _rSpecials)
 
     return aNewName;
 }
-//------------------------------------------------------------------------------
+
 OUString quoteName(const OUString& _rQuote, const OUString& _rName)
 {
     OUString sName = _rName;

@@ -1122,7 +1122,7 @@ void ViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
 {
@@ -1152,7 +1152,7 @@ void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ViewShell::ImpSidUndo(sal_Bool, SfxRequest& rReq)
 {
@@ -1201,7 +1201,7 @@ void ViewShell::ImpSidUndo(sal_Bool, SfxRequest& rReq)
     rReq.Done();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ViewShell::ImpSidRedo(sal_Bool, SfxRequest& rReq)
 {
@@ -1250,7 +1250,7 @@ void ViewShell::ImpSidRedo(sal_Bool, SfxRequest& rReq)
     rReq.Done();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ViewShell::ExecReq( SfxRequest& rReq )
 {

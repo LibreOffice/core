@@ -77,43 +77,43 @@ protected:
         osl_atomic_decrement( &m_refCount );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     SpinningProgressControlModel::SpinningProgressControlModel( const SpinningProgressControlModel& i_copySource )
         :SpinningProgressControlModel_Base( i_copySource )
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     SpinningProgressControlModel::~SpinningProgressControlModel()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     UnoControlModel* SpinningProgressControlModel::Clone() const
     {
         return new SpinningProgressControlModel( *this );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< beans::XPropertySetInfo > SAL_CALL SpinningProgressControlModel::getPropertySetInfo(  ) throw(RuntimeException)
     {
         static Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     OUString SAL_CALL SpinningProgressControlModel::getServiceName() throw(RuntimeException)
     {
         return OUString("com.sun.star.awt.SpinningProgressControlModel");
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     OUString SAL_CALL SpinningProgressControlModel::getImplementationName(  ) throw(RuntimeException)
     {
         return OUString("org.openoffice.comp.toolkit.SpinningProgressControlModel");
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL SpinningProgressControlModel::getSupportedServiceNames() throw(RuntimeException)
     {
         Sequence< OUString > aServiceNames(3);

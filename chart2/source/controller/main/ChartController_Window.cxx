@@ -1022,7 +1022,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                 lcl_insertMenuCommand( xPopupMenu, nUniqueId++, aFormatCommand );
 
                 //some commands for dataseries and points:
-                //-----
+
                 if( OBJECTTYPE_DATA_SERIES == eObjectType || OBJECTTYPE_DATA_POINT == eObjectType )
                 {
                     bool bIsPoint = ( OBJECTTYPE_DATA_POINT == eObjectType );
@@ -1179,7 +1179,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                 }
 
                 //some commands for axes: and grids
-                //-----
+
                 else if( OBJECTTYPE_AXIS  == eObjectType || OBJECTTYPE_GRID == eObjectType || OBJECTTYPE_SUBGRID == eObjectType )
                 {
                     Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getModel() );
@@ -1247,7 +1247,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     if( bHasLegend )
                         lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteLegend" );
                 }
-                //-----
+
 
                 xPopupMenu->insertSeparator( -1 );
                 lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DiagramType" );

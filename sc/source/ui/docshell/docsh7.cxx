@@ -19,7 +19,7 @@
 
 #include "docsh.hxx"
 
-//------------------------------------------------------------------
+
 
 void ScDocShell::GetDrawObjState( SfxItemSet & /* rSet */ )
 {

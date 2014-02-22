@@ -198,9 +198,9 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class valueOf
 
-// -----------------------------------------------------------------------------
+
 // - toDouble (tests)
-// -----------------------------------------------------------------------------
+
 class toDouble : public CppUnit::TestFixture
 {
 
@@ -351,9 +351,9 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class toDouble
 
-// -----------------------------------------------------------------------------
+
 // - getToken (tests)
-// -----------------------------------------------------------------------------
+
 class getToken : public CppUnit::TestFixture
 {
 
@@ -368,7 +368,7 @@ public:
         {
         }
 
-    // -----------------------------------------------------------------------------
+
 
     void getToken_000()
         {
@@ -463,10 +463,10 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class getToken
 
-// -----------------------------------------------------------------------------
+
 // testing the method replaceAt( sal_Int32 index, sal_Int32 count,
 // const OString& newStr )
-// -----------------------------------------------------------------------------
+
 
 // Developer note: Mindy Liu, 2004-04-23
 // stollen from sal/qa/rtl_strings/rtl_OString.cxx
@@ -494,7 +494,7 @@ public:
         sal_Bool bRes = ( expVal->compareTo(aStr1) == 0 );
         return bRes;
     }
-    // -----------------------------------------------------------------------------
+
 
    void replaceAt_001()
         {
@@ -543,7 +543,7 @@ public:
 }; // class replaceAt
 
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OString::valueOf);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OString::toDouble);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OString::getToken);
@@ -552,7 +552,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OString::replaceAt);
 } // namespace rtl_OString
 
 
-// -----------------------------------------------------------------------------
+
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

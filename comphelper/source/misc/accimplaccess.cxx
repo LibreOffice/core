@@ -52,38 +52,38 @@ namespace comphelper
     //=====================================================================
     //= OAccessibleImplementationAccess
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OAccessibleImplementationAccess::OAccessibleImplementationAccess( )
         :m_pImpl( new OAccImpl_Impl )
     {
     }
 
-    //---------------------------------------------------------------------
+
     OAccessibleImplementationAccess::~OAccessibleImplementationAccess( )
     {
         delete m_pImpl;
         m_pImpl = NULL;
     }
 
-    //---------------------------------------------------------------------
+
     Reference< XAccessible > OAccessibleImplementationAccess::implGetForeignControlledParent( ) const
     {
         return m_pImpl->m_xAccParent;
     }
 
-    //---------------------------------------------------------------------
+
     void OAccessibleImplementationAccess::setAccessibleParent( const Reference< XAccessible >& _rxAccParent )
     {
         m_pImpl->m_xAccParent = _rxAccParent;
     }
 
-    //---------------------------------------------------------------------
+
     sal_Int64 OAccessibleImplementationAccess::implGetForeignControlledStates( ) const
     {
         return m_pImpl->m_nForeignControlledStates;
     }
 
-    //---------------------------------------------------------------------
+
     void OAccessibleImplementationAccess::setStateBit( const sal_Int16 _nState, const sal_Bool _bSet )
     {
         OSL_ENSURE( _nState >= 0 && static_cast< sal_uInt16 >(_nState) < sizeof( sal_Int64 ) * 8, "OAccessibleImplementationAccess::setStateBit: no more bits (shutting down the universe now)!" );
@@ -98,14 +98,14 @@ namespace comphelper
 
     namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
 
-    //---------------------------------------------------------------------
+
     const Sequence< sal_Int8 > OAccessibleImplementationAccess::getUnoTunnelImplementationId()
     {
         ::cppu::OImplementationId &rID = lcl_ImplId::get();
         return rID.getImplementationId();
     }
 
-    //---------------------------------------------------------------------
+
     sal_Int64 SAL_CALL OAccessibleImplementationAccess::getSomething( const Sequence< sal_Int8 >& _rIdentifier ) throw (RuntimeException)
     {
         sal_Int64 nReturn( 0 );
@@ -118,7 +118,7 @@ namespace comphelper
         return nReturn;
     }
 
-    //---------------------------------------------------------------------
+
     OAccessibleImplementationAccess* OAccessibleImplementationAccess::getImplementation( const Reference< XAccessibleContext >& _rxComponent )
     {
         OAccessibleImplementationAccess* pImplementation = NULL;
@@ -138,7 +138,7 @@ namespace comphelper
         return pImplementation;
     }
 
-    //---------------------------------------------------------------------
+
     bool OAccessibleImplementationAccess::setAccessibleParent(
             const Reference< XAccessibleContext >& _rxComponent, const Reference< XAccessible >& _rxNewParent )
     {

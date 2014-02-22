@@ -601,9 +601,9 @@ OUString OReadImagesDocumentHandler::getErrorLineString()
 }
 
 
-//_________________________________________________________________________________________________________________
+
 //  OWriteImagesDocumentHandler
-//_________________________________________________________________________________________________________________
+
 
 OWriteImagesDocumentHandler::OWriteImagesDocumentHandler(
     const ImageListsDescriptor& aItems,
@@ -676,9 +676,9 @@ void OWriteImagesDocumentHandler::WriteImagesDocument() throw
     m_xWriteDocumentHandler->endDocument();
 }
 
-//_________________________________________________________________________________________________________________
+
 //  protected member functions
-//_________________________________________________________________________________________________________________
+
 
 void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor* pImageList ) throw
 ( SAXException, RuntimeException )

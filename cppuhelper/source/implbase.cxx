@@ -48,7 +48,7 @@ Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_THROW(())
 }
 
 // ClassDataBase
-//__________________________________________________________________________________________________
+
 ClassDataBase::ClassDataBase() SAL_THROW(())
     : bOffsetsInit( sal_False )
     , nType2Offset( 0 )
@@ -57,7 +57,7 @@ ClassDataBase::ClassDataBase() SAL_THROW(())
     , pId( 0 )
 {
 }
-//__________________________________________________________________________________________________
+
 ClassDataBase::ClassDataBase( sal_Int32 nClassCode_ ) SAL_THROW(())
     : bOffsetsInit( sal_False )
     , nType2Offset( 0 )
@@ -66,7 +66,7 @@ ClassDataBase::ClassDataBase( sal_Int32 nClassCode_ ) SAL_THROW(())
     , pId( 0 )
 {
 }
-//__________________________________________________________________________________________________
+
 ClassDataBase::~ClassDataBase() SAL_THROW(())
 {
     delete pTypes;
@@ -80,7 +80,7 @@ ClassDataBase::~ClassDataBase() SAL_THROW(())
 }
 
 // ClassData
-//__________________________________________________________________________________________________
+
 void ClassData::writeTypeOffset( const Type & rType, sal_Int32 nOffset ) SAL_THROW(())
 {
     arType2Offset[nType2Offset].nOffset = nOffset;
@@ -100,7 +100,7 @@ void ClassData::writeTypeOffset( const Type & rType, sal_Int32 nOffset ) SAL_THR
     }
 #endif
 }
-//__________________________________________________________________________________________________
+
 void ClassData::initTypeProvider() SAL_THROW(())
 {
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -141,14 +141,14 @@ void ClassData::initTypeProvider() SAL_THROW(())
         pTypes = types;
     }
 }
-//__________________________________________________________________________________________________
+
 Sequence< Type > ClassData::getTypes() SAL_THROW(())
 {
     if (! pTypes)
         initTypeProvider();
     return *pTypes;
 }
-//__________________________________________________________________________________________________
+
 Sequence< sal_Int8 > ClassData::getImplementationId() SAL_THROW(())
 {
     if (! pTypes)
@@ -156,7 +156,7 @@ Sequence< sal_Int8 > ClassData::getImplementationId() SAL_THROW(())
     return *pId;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 static inline bool td_equals(
     typelib_TypeDescription * pTD, typelib_TypeDescriptionReference * pType )
     SAL_THROW(())
@@ -165,7 +165,7 @@ static inline bool td_equals(
             (pTD->pTypeName->length == pType->pTypeName->length &&
              rtl_ustr_compare( pTD->pTypeName->buffer, pType->pTypeName->buffer ) == 0));
 }
-//__________________________________________________________________________________________________
+
 Any ClassData::query( const Type & rType, lang::XTypeProvider * pBase ) SAL_THROW(())
 {
     if (rType == ::getCppuType( (const Reference< XInterface > *)0 ))
@@ -196,22 +196,22 @@ Any ClassData::query( const Type & rType, lang::XTypeProvider * pBase ) SAL_THRO
 //##################################################################################################
 
 // WeakComponentImplHelperBase
-//__________________________________________________________________________________________________
+
 WeakComponentImplHelperBase::WeakComponentImplHelperBase( Mutex & rMutex )
     SAL_THROW(())
     : rBHelper( rMutex )
 {
 }
-//__________________________________________________________________________________________________
+
 WeakComponentImplHelperBase::~WeakComponentImplHelperBase()
     SAL_THROW(())
 {
 }
-//__________________________________________________________________________________________________
+
 void WeakComponentImplHelperBase::disposing()
 {
 }
-//__________________________________________________________________________________________________
+
 Any WeakComponentImplHelperBase::queryInterface( Type const & rType )
     throw (RuntimeException)
 {
@@ -222,13 +222,13 @@ Any WeakComponentImplHelperBase::queryInterface( Type const & rType )
     }
     return OWeakObject::queryInterface( rType );
 }
-//__________________________________________________________________________________________________
+
 void WeakComponentImplHelperBase::acquire()
     throw ()
 {
     OWeakObject::acquire();
 }
-//__________________________________________________________________________________________________
+
 void WeakComponentImplHelperBase::release()
     throw ()
 {
@@ -252,7 +252,7 @@ void WeakComponentImplHelperBase::release()
         OWeakObject::release();
     }
 }
-//__________________________________________________________________________________________________
+
 void WeakComponentImplHelperBase::dispose()
     throw (RuntimeException)
 {
@@ -296,7 +296,7 @@ void WeakComponentImplHelperBase::dispose()
         }
     }
 }
-//__________________________________________________________________________________________________
+
 void WeakComponentImplHelperBase::addEventListener(
     Reference< lang::XEventListener > const & xListener )
     throw (RuntimeException)
@@ -313,7 +313,7 @@ void WeakComponentImplHelperBase::addEventListener(
         rBHelper.addListener( ::getCppuType( &xListener ), xListener );
     }
 }
-//__________________________________________________________________________________________________
+
 void WeakComponentImplHelperBase::removeEventListener(
     Reference< lang::XEventListener > const & xListener )
     throw (RuntimeException)
@@ -322,28 +322,28 @@ void WeakComponentImplHelperBase::removeEventListener(
 }
 
 // WeakAggComponentImplHelperBase
-//__________________________________________________________________________________________________
+
 WeakAggComponentImplHelperBase::WeakAggComponentImplHelperBase( Mutex & rMutex )
     SAL_THROW(())
     : rBHelper( rMutex )
 {
 }
-//__________________________________________________________________________________________________
+
 WeakAggComponentImplHelperBase::~WeakAggComponentImplHelperBase()
     SAL_THROW(())
 {
 }
-//__________________________________________________________________________________________________
+
 void WeakAggComponentImplHelperBase::disposing()
 {
 }
-//__________________________________________________________________________________________________
+
 Any WeakAggComponentImplHelperBase::queryInterface( Type const & rType )
     throw (RuntimeException)
 {
     return OWeakAggObject::queryInterface( rType );
 }
-//__________________________________________________________________________________________________
+
 Any WeakAggComponentImplHelperBase::queryAggregation( Type const & rType )
     throw (RuntimeException)
 {
@@ -354,13 +354,13 @@ Any WeakAggComponentImplHelperBase::queryAggregation( Type const & rType )
     }
     return OWeakAggObject::queryAggregation( rType );
 }
-//__________________________________________________________________________________________________
+
 void WeakAggComponentImplHelperBase::acquire()
     throw ()
 {
     OWeakAggObject::acquire();
 }
-//__________________________________________________________________________________________________
+
 void WeakAggComponentImplHelperBase::release()
     throw ()
 {
@@ -388,7 +388,7 @@ void WeakAggComponentImplHelperBase::release()
         OWeakAggObject::release();
     }
 }
-//__________________________________________________________________________________________________
+
 void WeakAggComponentImplHelperBase::dispose()
     throw (RuntimeException)
 {
@@ -432,7 +432,7 @@ void WeakAggComponentImplHelperBase::dispose()
         }
     }
 }
-//__________________________________________________________________________________________________
+
 void WeakAggComponentImplHelperBase::addEventListener(
     Reference< lang::XEventListener > const & xListener )
     throw (RuntimeException)
@@ -449,7 +449,7 @@ void WeakAggComponentImplHelperBase::addEventListener(
         rBHelper.addListener( ::getCppuType( &xListener ), xListener );
     }
 }
-//__________________________________________________________________________________________________
+
 void WeakAggComponentImplHelperBase::removeEventListener(
     Reference< lang::XEventListener > const & xListener )
     throw (RuntimeException)

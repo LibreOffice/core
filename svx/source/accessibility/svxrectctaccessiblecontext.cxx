@@ -792,7 +792,7 @@ void SvxRectCtlAccessibleContext::ThrowExceptionIfNotAlive( void ) throw( lang::
         throw lang::DisposedException();
 }
 
-// -------------------------------------------------------------------------------------------------
+
 
 
 DBG_NAME( SvxRectCtlChildAccessibleContext )
@@ -1096,9 +1096,9 @@ Any SAL_CALL SvxRectCtlChildAccessibleContext::getMinimumValue() throw( RuntimeE
     return aRet;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleAction
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 SvxRectCtlChildAccessibleContext::getAccessibleActionCount( ) throw (RuntimeException)
 {
@@ -1107,7 +1107,7 @@ sal_Int32 SvxRectCtlChildAccessibleContext::getAccessibleActionCount( ) throw (R
     return 1;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SvxRectCtlChildAccessibleContext::doAccessibleAction ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -1123,7 +1123,7 @@ sal_Bool SvxRectCtlChildAccessibleContext::doAccessibleAction ( sal_Int32 nIndex
     return sal_True;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString SvxRectCtlChildAccessibleContext::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -1135,7 +1135,7 @@ OUString SvxRectCtlChildAccessibleContext::getAccessibleActionDescription ( sal_
     return OUString("select");
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessibleKeyBinding > SvxRectCtlChildAccessibleContext::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {

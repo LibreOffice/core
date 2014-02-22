@@ -62,7 +62,7 @@ using namespace ::com::sun::star::util;
 using std::vector;
 using std::lower_bound;
 
-// -------------------------------------------------------------------------
+
 void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::fillColumns" );
@@ -406,7 +406,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
         }
     }
 }
-// -------------------------------------------------------------------------
+
 OFlatTable::OFlatTable(sdbcx::OCollection* _pTables,OFlatConnection* _pConnection,
                     const OUString& _Name,
                     const OUString& _Type,
@@ -427,7 +427,7 @@ OFlatTable::OFlatTable(sdbcx::OCollection* _pTables,OFlatConnection* _pConnectio
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::OFlatTable" );
 
 }
-// -----------------------------------------------------------------------------
+
 void OFlatTable::construct()
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::construct" );
@@ -469,7 +469,7 @@ void OFlatTable::construct()
         refreshColumns();
     }
 }
-// -------------------------------------------------------------------------
+
 OUString OFlatTable::getEntry()
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::getEntry" );
@@ -515,7 +515,7 @@ OUString OFlatTable::getEntry()
     }
     return sURL;
 }
-// -------------------------------------------------------------------------
+
 void OFlatTable::refreshColumns()
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::refreshColumns" );
@@ -533,7 +533,7 @@ void OFlatTable::refreshColumns()
         m_pColumns  = new OFlatColumns(this,m_aMutex,aVector);
 }
 
-// -------------------------------------------------------------------------
+
 void SAL_CALL OFlatTable::disposing(void)
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::disposing" );
@@ -541,7 +541,7 @@ void SAL_CALL OFlatTable::disposing(void)
     ::osl::MutexGuard aGuard(m_aMutex);
     m_aColumns = NULL;
 }
-// -------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OFlatTable::getTypes(  ) throw(RuntimeException)
 {
     Sequence< Type > aTypes = OTable_TYPEDEF::getTypes();
@@ -564,7 +564,7 @@ Sequence< Type > SAL_CALL OFlatTable::getTypes(  ) throw(RuntimeException)
     return Sequence< Type >(pTypes, aOwnTypes.size());
 }
 
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OFlatTable::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     if( rType == ::getCppuType((const Reference<XKeysSupplier>*)0)      ||
@@ -578,7 +578,7 @@ Any SAL_CALL OFlatTable::queryInterface( const Type & rType ) throw(RuntimeExcep
     return aRet.hasValue() ? aRet : ::cppu::queryInterface(rType,static_cast< ::com::sun::star::lang::XUnoTunnel*> (this));
 }
 
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OFlatTable::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId * pId = 0;
@@ -595,7 +595,7 @@ Sequence< sal_Int8 > OFlatTable::getUnoTunnelImplementationId()
 }
 
 // com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
 sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::getSomething" );
@@ -603,7 +603,7 @@ sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OFlatTable_BASE::getSomething(rId);
 }
-//------------------------------------------------------------------
+
 sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, sal_Bool bIsTable, sal_Bool bRetrieveData)
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::fetchRow" );
@@ -747,13 +747,13 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, s
     return result;
 }
 
-// -----------------------------------------------------------------------------
+
 void OFlatTable::refreshHeader()
 {
     SAL_INFO( "connectivity.drivers", "flat lionel@mamane.lu OFlatTable::refreshHeader" );
 }
 
-// -----------------------------------------------------------------------------
+
 namespace
 {
     template< typename Tp, typename Te> struct RangeBefore
@@ -765,12 +765,12 @@ namespace
         }
     };
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::seekRow" );
     OSL_ENSURE(m_pFileStream,"OFlatTable::seekRow: FileStream is NULL!");
-    // ----------------------------------------------------------
+
 
     switch(eCursorPosition)
     {
@@ -918,7 +918,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
     return sal_True;
 }
 
-// -----------------------------------------------------------------------------
+
 bool OFlatTable::readLine(sal_Int32 * const pEndPos, sal_Int32 * const pStartPos, const bool nonEmpty)
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::readLine" );
@@ -953,7 +953,7 @@ bool OFlatTable::readLine(sal_Int32 * const pEndPos, sal_Int32 * const pStartPos
     return true;
 }
 
-// -----------------------------------------------------------------------------
+
 void OFlatTable::setRowPos(const vector<TRowPositionInFile>::size_type rowNum, const TRowPositionInFile &rowPos)
 {
     assert(m_aRowPosToFilePos.size() >= rowNum);

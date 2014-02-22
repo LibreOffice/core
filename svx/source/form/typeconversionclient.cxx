@@ -27,12 +27,12 @@ namespace svxform
     //====================================================================
     //= OTypeConversionClient
     //====================================================================
-    //--------------------------------------------------------------------
+
     OTypeConversionClient::OTypeConversionClient()
     {
     }
 
-    //--------------------------------------------------------------------
+
     bool OTypeConversionClient::ensureLoaded() const
     {
         if ( !ODbtoolsClient::ensureLoaded() )

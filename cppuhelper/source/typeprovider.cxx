@@ -27,12 +27,12 @@ using namespace com::sun::star::uno;
 namespace cppu
 {
 
-//__________________________________________________________________________________________________
+
 OImplementationId::~OImplementationId() SAL_THROW(())
 {
     delete _pSeq;
 }
-//__________________________________________________________________________________________________
+
 Sequence< sal_Int8 > OImplementationId::getImplementationId() const SAL_THROW(())
 {
     if (! _pSeq)
@@ -48,7 +48,7 @@ Sequence< sal_Int8 > OImplementationId::getImplementationId() const SAL_THROW(()
     return *_pSeq;
 }
 
-//--------------------------------------------------------------------------------------------------
+
 static inline void copy( Sequence< Type > & rDest, const Sequence< Type > & rSource, sal_Int32 nOffset )
     SAL_THROW(())
 {
@@ -59,7 +59,7 @@ static inline void copy( Sequence< Type > & rDest, const Sequence< Type > & rSou
         pDest[nOffset+ nPos] = pSource[nPos];
 }
 
-//__________________________________________________________________________________________________
+
 OTypeCollection::OTypeCollection(
     const Type & rType1,
     const Sequence< Type > & rAddTypes )
@@ -69,7 +69,7 @@ OTypeCollection::OTypeCollection(
     _aTypes[0] = rType1;
     copy( _aTypes, rAddTypes, 1 );
 }
-//__________________________________________________________________________________________________
+
 OTypeCollection::OTypeCollection(
     const Type & rType1,
     const Type & rType2,
@@ -81,7 +81,7 @@ OTypeCollection::OTypeCollection(
     _aTypes[1] = rType2;
     copy( _aTypes, rAddTypes, 2 );
 }
-//__________________________________________________________________________________________________
+
 OTypeCollection::OTypeCollection(
     const Type & rType1,
     const Type & rType2,
@@ -95,7 +95,7 @@ OTypeCollection::OTypeCollection(
     _aTypes[2] = rType3;
     copy( _aTypes, rAddTypes, 3 );
 }
-//__________________________________________________________________________________________________
+
 OTypeCollection::OTypeCollection(
     const Type & rType1,
     const Type & rType2,
@@ -111,7 +111,7 @@ OTypeCollection::OTypeCollection(
     _aTypes[3] = rType4;
     copy( _aTypes, rAddTypes, 4 );
 }
-//__________________________________________________________________________________________________
+
 OTypeCollection::OTypeCollection(
     const Type & rType1,
     const Type & rType2,
@@ -129,7 +129,7 @@ OTypeCollection::OTypeCollection(
     _aTypes[4] = rType5;
     copy( _aTypes, rAddTypes, 5 );
 }
-//__________________________________________________________________________________________________
+
 OTypeCollection::OTypeCollection(
     const Type & rType1,
     const Type & rType2,
@@ -149,7 +149,7 @@ OTypeCollection::OTypeCollection(
     _aTypes[5] = rType6;
     copy( _aTypes, rAddTypes, 6 );
 }
-//__________________________________________________________________________________________________
+
 OTypeCollection::OTypeCollection(
     const Type & rType1,
     const Type & rType2,
@@ -171,7 +171,7 @@ OTypeCollection::OTypeCollection(
     _aTypes[6] = rType7;
     copy( _aTypes, rAddTypes, 7 );
 }
-//__________________________________________________________________________________________________
+
 OTypeCollection::OTypeCollection(
     const Type & rType1,
     const Type & rType2,
@@ -195,7 +195,7 @@ OTypeCollection::OTypeCollection(
     _aTypes[7] = rType8;
     copy( _aTypes, rAddTypes, 8 );
 }
-//__________________________________________________________________________________________________
+
 OTypeCollection::OTypeCollection(
     const Type & rType1,
     const Type & rType2,
@@ -221,7 +221,7 @@ OTypeCollection::OTypeCollection(
     _aTypes[8] = rType9;
     copy( _aTypes, rAddTypes, 9 );
 }
-//__________________________________________________________________________________________________
+
 OTypeCollection::OTypeCollection(
     const Type & rType1,
     const Type & rType2,
@@ -249,7 +249,7 @@ OTypeCollection::OTypeCollection(
     _aTypes[9] = rType10;
     copy( _aTypes, rAddTypes, 10 );
 }
-//__________________________________________________________________________________________________
+
 OTypeCollection::OTypeCollection(
     const Type & rType1,
     const Type & rType2,
@@ -279,7 +279,7 @@ OTypeCollection::OTypeCollection(
     _aTypes[10] = rType11;
     copy( _aTypes, rAddTypes, 11 );
 }
-//__________________________________________________________________________________________________
+
 OTypeCollection::OTypeCollection(
     const Type & rType1,
     const Type & rType2,

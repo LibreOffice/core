@@ -65,7 +65,7 @@
 // #i74769#
 #include <svx/sdrpaintwindow.hxx>
 
-//------------------------------------------------------------------------
+
 
 static void lcl_LimitRect( Rectangle& rRect, const Rectangle& rVisible )
 {
@@ -252,7 +252,7 @@ static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, S
     }
 }
 
-//------------------------------------------------------------------------
+
 
 static void lcl_DrawHighlight( ScOutputData& rOutputData, ScViewData* pViewData,
                         const std::vector<ScHighlightEntry>& rHighlightRanges )
@@ -272,7 +272,7 @@ static void lcl_DrawHighlight( ScOutputData& rOutputData, ScViewData* pViewData,
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScGridWindow::DoInvertRect( const Rectangle& rPixel )
 {
@@ -288,7 +288,7 @@ void ScGridWindow::DoInvertRect( const Rectangle& rPixel )
     UpdateHeaderOverlay();      // uses aInvertRect
 }
 
-//------------------------------------------------------------------------
+
 
 void ScGridWindow::PrePaint()
 {
@@ -306,7 +306,7 @@ void ScGridWindow::PrePaint()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScGridWindow::Paint( const Rectangle& rRect )
 {
@@ -480,7 +480,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
                                         nPPTX, nPPTY, false, bFormulaMode,
                                         &pViewData->GetMarkData() );
 
-    //--------------------------------------------------------------------
+
 
     Fraction aZoomX = pViewData->GetZoomX();
     Fraction aZoomY = pViewData->GetZoomY();
@@ -1525,7 +1525,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
     }
 }
 
-// -------------------------------------------------------------------------
+
 
 void ScGridWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {

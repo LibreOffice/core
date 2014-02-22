@@ -34,7 +34,7 @@ using namespace ::com::sun::star;
 sal_Bool KillFile_Impl( const OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory );
 
 
-//------------------------------------------------------
+
 OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory,
                                       const uno::Sequence< sal_Int8 >& aClassID,
                                       const OUString& aClassName )
@@ -68,7 +68,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 {
 }
 
-//------------------------------------------------------
+
 // In case of loading from persistent entry the classID of the object
 // will be retrieved from the entry, during construction it is unknown
 OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory, sal_Bool bLink )
@@ -100,7 +100,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 {
 }
 #ifdef WNT
-//------------------------------------------------------
+
 // this constructor let object be initialized from clipboard
 OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
 : m_pOleComponent( NULL )
@@ -131,7 +131,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 {
 }
 #endif
-//------------------------------------------------------
+
 OleEmbeddedObject::~OleEmbeddedObject()
 {
     OSL_ENSURE( !m_pInterfaceContainer && !m_pOleComponent && !m_xObjectStream.is(),
@@ -153,7 +153,7 @@ OleEmbeddedObject::~OleEmbeddedObject()
            KillFile_Impl( m_aTempDumpURL, m_xFactory );
 }
 
-//------------------------------------------------------
+
 void OleEmbeddedObject::MakeEventListenerNotification_Impl( const OUString& aEventName )
 {
     if ( m_pInterfaceContainer )
@@ -179,7 +179,7 @@ void OleEmbeddedObject::MakeEventListenerNotification_Impl( const OUString& aEve
     }
 }
 #ifdef WNT
-//----------------------------------------------
+
 void OleEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState )
 {
     if ( m_pInterfaceContainer )
@@ -220,7 +220,7 @@ void OleEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange, sa
     }
 }
 #endif
-//------------------------------------------------------
+
 void OleEmbeddedObject::GetRidOfComponent()
 {
 #ifdef WNT
@@ -249,7 +249,7 @@ void OleEmbeddedObject::GetRidOfComponent()
 #endif
 }
 
-//------------------------------------------------------
+
 void OleEmbeddedObject::Dispose()
 {
     if ( m_pInterfaceContainer )
@@ -296,7 +296,7 @@ void OleEmbeddedObject::Dispose()
     m_bDisposed = true;
 }
 
-//------------------------------------------------------
+
 uno::Sequence< sal_Int8 > SAL_CALL OleEmbeddedObject::getClassID()
         throw ( uno::RuntimeException )
 {
@@ -316,7 +316,7 @@ uno::Sequence< sal_Int8 > SAL_CALL OleEmbeddedObject::getClassID()
     return m_aClassID;
 }
 
-//------------------------------------------------------
+
 OUString SAL_CALL OleEmbeddedObject::getClassName()
         throw ( uno::RuntimeException )
 {
@@ -336,7 +336,7 @@ OUString SAL_CALL OleEmbeddedObject::getClassName()
     return m_aClassName;
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::setClassInfo(
                 const uno::Sequence< sal_Int8 >& aClassID, const OUString& aClassName )
         throw ( lang::NoSupportException,
@@ -356,7 +356,7 @@ void SAL_CALL OleEmbeddedObject::setClassInfo(
     throw lang::NoSupportException(); //TODO:
 }
 
-//------------------------------------------------------
+
 uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
         throw ( uno::RuntimeException )
 {
@@ -390,7 +390,7 @@ uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
     return uno::Reference< util::XCloseable >( static_cast< ::cppu::OWeakObject* >( m_pOleComponent ), uno::UNO_QUERY );
 }
 
-//----------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::addStateChangeListener( const uno::Reference< embed::XStateChangeListener >& xListener )
     throw ( uno::RuntimeException )
 {
@@ -415,7 +415,7 @@ void SAL_CALL OleEmbeddedObject::addStateChangeListener( const uno::Reference< e
                                                         xListener );
 }
 
-//----------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::removeStateChangeListener(
                     const uno::Reference< embed::XStateChangeListener >& xListener )
     throw (uno::RuntimeException)
@@ -437,7 +437,7 @@ void SAL_CALL OleEmbeddedObject::removeStateChangeListener(
 }
 
 
-//----------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::close( sal_Bool bDeliverOwnership )
     throw ( util::CloseVetoException,
             uno::RuntimeException )
@@ -501,7 +501,7 @@ void SAL_CALL OleEmbeddedObject::close( sal_Bool bDeliverOwnership )
     Dispose();
 }
 
-//----------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::addCloseListener( const uno::Reference< util::XCloseListener >& xListener )
     throw ( uno::RuntimeException )
 {
@@ -525,7 +525,7 @@ void SAL_CALL OleEmbeddedObject::addCloseListener( const uno::Reference< util::X
     m_pInterfaceContainer->addInterface( ::getCppuType( (const uno::Reference< util::XCloseListener >*)0 ), xListener );
 }
 
-//----------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::removeCloseListener( const uno::Reference< util::XCloseListener >& xListener )
     throw (uno::RuntimeException)
 {
@@ -548,7 +548,7 @@ void SAL_CALL OleEmbeddedObject::removeCloseListener( const uno::Reference< util
                                                 xListener );
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::addEventListener( const uno::Reference< document::XEventListener >& xListener )
         throw ( uno::RuntimeException )
 {
@@ -572,7 +572,7 @@ void SAL_CALL OleEmbeddedObject::addEventListener( const uno::Reference< documen
     m_pInterfaceContainer->addInterface( ::getCppuType( (const uno::Reference< document::XEventListener >*)0 ), xListener );
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::removeEventListener(
                 const uno::Reference< document::XEventListener >& xListener )
         throw ( uno::RuntimeException )
@@ -597,7 +597,7 @@ void SAL_CALL OleEmbeddedObject::removeEventListener(
 }
 
 // XInplaceObject ( wrapper related implementation )
-//------------------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::setObjectRectangles( const awt::Rectangle& aPosRect,
                                                            const awt::Rectangle& aClipRect )
         throw ( embed::WrongStateException,
@@ -617,7 +617,7 @@ void SAL_CALL OleEmbeddedObject::setObjectRectangles( const awt::Rectangle& aPos
     throw embed::WrongStateException();
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::enableModeless( sal_Bool bEnable )
         throw ( embed::WrongStateException,
                 uno::Exception,
@@ -636,7 +636,7 @@ void SAL_CALL OleEmbeddedObject::enableModeless( sal_Bool bEnable )
     throw embed::WrongStateException();
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::translateAccelerators(
                     const uno::Sequence< awt::KeyEvent >& aKeys )
         throw ( embed::WrongStateException,
@@ -655,7 +655,7 @@ void SAL_CALL OleEmbeddedObject::translateAccelerators(
 }
 
 // XChild
-//------------------------------------------------------
+
 com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL OleEmbeddedObject::getParent() throw (::com::sun::star::uno::RuntimeException)
 {
     // begin wrapping related part ====================
@@ -670,7 +670,7 @@ com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL OleEm
     return m_xParent;
 }
 
-//------------------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::setParent( const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& xParent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException)
 {
     // begin wrapping related part ====================

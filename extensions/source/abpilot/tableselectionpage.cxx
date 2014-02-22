@@ -31,7 +31,7 @@ namespace abp
     //=====================================================================
     //= TableSelectionPage
     //=====================================================================
-    //---------------------------------------------------------------------
+
     TableSelectionPage::TableSelectionPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_TABLESELECTION_AB))
         ,m_aLabel           ( this, ModuleRes( FL_TOOMUCHTABLES ) )
@@ -43,7 +43,7 @@ namespace abp
         m_aTableList.SetDoubleClickHdl( LINK( this, TableSelectionPage, OnTableDoubleClicked ) );
     }
 
-    //---------------------------------------------------------------------
+
     void TableSelectionPage::ActivatePage()
     {
         AddressBookSourcePage::ActivatePage();
@@ -51,13 +51,13 @@ namespace abp
         m_aTableList.GrabFocus();
     }
 
-    //---------------------------------------------------------------------
+
     void TableSelectionPage::DeactivatePage()
     {
         AddressBookSourcePage::DeactivatePage();
     }
 
-    //---------------------------------------------------------------------
+
     void TableSelectionPage::initializePage()
     {
         AddressBookSourcePage::initializePage();
@@ -82,7 +82,7 @@ namespace abp
         m_aTableList.SelectEntry( rSettings.sSelectedTable );
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK( TableSelectionPage, OnTableDoubleClicked, void*, /*NOTINTERESTEDIN*/ )
     {
         if ( 1 == m_aTableList.GetSelectEntryCount() )
@@ -91,14 +91,14 @@ namespace abp
         return 0L;
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK( TableSelectionPage, OnTableSelected, void*, /*NOTINTERESTEDIN*/ )
     {
         updateDialogTravelUI();
         return 0L;
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool TableSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!AddressBookSourcePage::commitPage(_eReason))
@@ -110,7 +110,7 @@ namespace abp
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+
     bool TableSelectionPage::canAdvance() const
     {
         return  AddressBookSourcePage::canAdvance()

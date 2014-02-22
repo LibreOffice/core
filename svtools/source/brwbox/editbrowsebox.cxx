@@ -71,7 +71,7 @@ namespace svt
     //==================================================================
     //= EditBrowserHeader
     //==================================================================
-    //------------------------------------------------------------------------------
+
     void EditBrowserHeader::DoubleClick()
     {
         sal_uInt16 nColId = GetCurItemId();
@@ -90,13 +90,13 @@ namespace svt
     //==================================================================
     //= EditBrowseBox
     //==================================================================
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::BrowserMouseEventPtr::Clear()
     {
         DELETEZ(pEvent);
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::BrowserMouseEventPtr::Set(const BrowserMouseEvent* pEvt, sal_Bool bIsDown)
     {
         if (pEvt == pEvent)
@@ -117,7 +117,7 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------------------
+
     DBG_NAME(EditBrowseBox);
     void EditBrowseBox::impl_construct()
     {
@@ -133,7 +133,7 @@ namespace svt
         pCheckBoxPaint->SetBackground();
     }
 
-    //------------------------------------------------------------------------------
+
     EditBrowseBox::EditBrowseBox(Window* pParent, const ResId& rId, sal_Int32 nBrowserFlags, BrowserMode _nMode )
                   :BrowseBox( pParent, rId, _nMode )
                   ,nStartEvent(0)
@@ -176,13 +176,13 @@ namespace svt
         impl_construct();
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::Init()
     {
         // late construction
     }
 
-    //------------------------------------------------------------------------------
+
     EditBrowseBox::~EditBrowseBox()
     {
         if (nStartEvent)
@@ -197,7 +197,7 @@ namespace svt
         DBG_DTOR(EditBrowseBox,NULL);
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::RemoveRows()
     {
         BrowseBox::Clear();
@@ -205,7 +205,7 @@ namespace svt
         nEditCol = nOldEditCol = 0;
     }
 
-    //------------------------------------------------------------------------------
+
     BrowserHeader* EditBrowseBox::CreateHeaderBar(BrowseBox* pParent)
     {
         pHeader = imp_CreateHeaderBar(pParent);
@@ -214,20 +214,20 @@ namespace svt
         return pHeader;
     }
 
-    //------------------------------------------------------------------------------
+
     BrowserHeader* EditBrowseBox::imp_CreateHeaderBar(BrowseBox* pParent)
     {
         return new EditBrowserHeader(pParent);
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::LoseFocus()
     {
         BrowseBox::LoseFocus();
         DetermineFocus( 0 );
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::GetFocus()
     {
         BrowseBox::GetFocus();
@@ -240,14 +240,14 @@ namespace svt
         DetermineFocus( getRealGetFocusFlags( this ) );
     }
 
-    //------------------------------------------------------------------------------
+
     sal_Bool EditBrowseBox::SeekRow(long nRow)
     {
         nPaintRow = nRow;
         return sal_True;
     }
 
-    //------------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(EditBrowseBox, StartEditHdl)
     {
         nStartEvent = 0;
@@ -260,7 +260,7 @@ namespace svt
         return 0;
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::PaintField( OutputDevice& rDev, const Rectangle& rRect,
                                     sal_uInt16 nColumnId ) const
     {
@@ -283,7 +283,7 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------------------
+
     Image EditBrowseBox::GetImage(RowStatus eStatus) const
     {
         if ( !m_aStatusImages.GetImageCount() )
@@ -335,7 +335,7 @@ namespace svt
         return aImage;
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::PaintStatusCell(OutputDevice& rDev, const Rectangle& rRect) const
     {
         if (nPaintRow < 0)
@@ -382,7 +382,7 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::ImplStartTracking()
     {
         bActiveBeforeTracking = IsEditing();
@@ -395,13 +395,13 @@ namespace svt
         BrowseBox::ImplStartTracking();
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::ImplTracking()
     {
         BrowseBox::ImplTracking();
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::ImplEndTracking()
     {
         if ( bActiveBeforeTracking )
@@ -411,7 +411,7 @@ namespace svt
         BrowseBox::ImplEndTracking();
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::RowHeightChanged()
     {
         if ( IsEditing() )
@@ -425,13 +425,13 @@ namespace svt
         BrowseBox::RowHeightChanged();
     }
 
-    //------------------------------------------------------------------------------
+
     EditBrowseBox::RowStatus EditBrowseBox::GetRowStatus(long) const
     {
         return CLEAN;
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::KeyInput( const KeyEvent& rEvt )
     {
         sal_uInt16 nCode = rEvt.GetKeyCode().GetCode();
@@ -474,7 +474,7 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::MouseButtonDown(const BrowserMouseEvent& rEvt)
     {
         sal_uInt16  nColPos = GetColumnPos( rEvt.GetColumnId() );
@@ -520,7 +520,7 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::MouseButtonUp( const BrowserMouseEvent& rEvt )
     {
         // absorb double clicks
@@ -536,7 +536,7 @@ namespace svt
                 implActivateCellOnMouseEvent(rEvt, sal_True);
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::implActivateCellOnMouseEvent(const BrowserMouseEvent& _rEvt, sal_Bool _bUp)
     {
         if (!IsEditing())
@@ -586,7 +586,7 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::Dispatch( sal_uInt16 _nId )
     {
         if ( _nId == BROWSER_ENHANCESELECTION )
@@ -610,7 +610,7 @@ namespace svt
         BrowseBox::Dispatch( _nId );
     }
 
-    //------------------------------------------------------------------------------
+
     bool EditBrowseBox::PreNotify(NotifyEvent& rEvt)
     {
         switch (rEvt.GetType())
@@ -729,13 +729,13 @@ namespace svt
         return BrowseBox::PreNotify(rEvt);
     }
 
-    //------------------------------------------------------------------------------
+
     sal_Bool EditBrowseBox::IsTabAllowed(sal_Bool) const
     {
         return sal_True;
     }
 
-    //------------------------------------------------------------------------------
+
     bool EditBrowseBox::Notify(NotifyEvent& rEvt)
     {
         switch (rEvt.GetType())
@@ -751,7 +751,7 @@ namespace svt
         return BrowseBox::Notify(rEvt);
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::StateChanged( StateChangedType nType )
     {
         BrowseBox::StateChanged( nType );
@@ -799,7 +799,7 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::DataChanged( const DataChangedEvent& rDCEvt )
     {
         BrowseBox::DataChanged( rDCEvt );
@@ -813,7 +813,7 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -863,7 +863,7 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------------------
+
     sal_Bool EditBrowseBox::IsCursorMoveAllowed(long nNewRow, sal_uInt16 nNewColId) const
     {
         sal_uInt16 nInfo = 0;
@@ -951,7 +951,7 @@ namespace svt
             return pTHIS->CursorMoving(nNewRow, nNewColId);
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::ColumnMoved(sal_uInt16 nId)
     {
         BrowseBox::ColumnMoved(nId);
@@ -964,20 +964,20 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------------------
+
     sal_Bool EditBrowseBox::SaveRow()
     {
         return sal_True;
     }
 
-    //------------------------------------------------------------------------------
+
     sal_Bool EditBrowseBox::CursorMoving(long, sal_uInt16)
     {
         ((EditBrowseBox *) this)->DeactivateCell(sal_False);
         return sal_True;
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::CursorMoved()
     {
         long nNewRow = GetCurRow();
@@ -993,7 +993,7 @@ namespace svt
         //BrowseBox::CursorMoved();
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::EndScroll()
     {
         if (IsEditing())
@@ -1005,7 +1005,7 @@ namespace svt
         BrowseBox::EndScroll();
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::ActivateCell(long nRow, sal_uInt16 nCol, sal_Bool bCellFocus)
     {
         if (IsEditing())
@@ -1055,7 +1055,7 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::DeactivateCell(sal_Bool bUpdate)
     {
         if (IsEditing())
@@ -1091,7 +1091,7 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------------------
+
     Rectangle EditBrowseBox::GetCellRect(long nRow, sal_uInt16 nColId, sal_Bool bRel) const
     {
         Rectangle aRect( GetFieldRectPixel(nRow, nColId, bRel));
@@ -1103,7 +1103,7 @@ namespace svt
         return aRect;
     }
 
-    //------------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(EditBrowseBox, EndEditHdl)
     {
         nEndEvent = 0;
@@ -1116,7 +1116,7 @@ namespace svt
         return 0;
     }
 
-    //------------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(EditBrowseBox, ModifyHdl)
     {
         if (nCellModifiedEvent)
@@ -1125,7 +1125,7 @@ namespace svt
         return 0;
     }
 
-    //------------------------------------------------------------------------------
+
     IMPL_LINK_NOARG(EditBrowseBox, CellModifiedHdl)
     {
         nCellModifiedEvent = 0;
@@ -1133,7 +1133,7 @@ namespace svt
         return 0;
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::ColumnResized( sal_uInt16 )
     {
         if (IsEditing())
@@ -1145,7 +1145,7 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------------------
+
     sal_uInt16 EditBrowseBox::AppendColumn(const OUString& rName, sal_uInt16 nWidth, sal_uInt16 nPos, sal_uInt16 nId)
     {
         if (nId == BROWSER_INVALIDID)
@@ -1173,7 +1173,7 @@ namespace svt
         return nId;
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::Resize()
     {
         BrowseBox::Resize();
@@ -1195,46 +1195,46 @@ namespace svt
         ReserveControlArea((sal_uInt16)nX);
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::ArrangeControls(sal_uInt16&, sal_uInt16)
     {
     }
 
-    //------------------------------------------------------------------------------
+
     CellController* EditBrowseBox::GetController(long, sal_uInt16)
     {
         return NULL;
     }
 
-    //-----------------------------------------------------------------------------
+
     void EditBrowseBox::ResizeController(CellControllerRef& rController, const Rectangle& rRect)
     {
         rController->GetWindow().SetPosSizePixel(rRect.TopLeft(), rRect.GetSize());
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::InitController(CellControllerRef&, long, sal_uInt16)
     {
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::ReleaseController(CellControllerRef&, long, sal_uInt16)
     {
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::CellModified()
     {
     }
 
 
-    //------------------------------------------------------------------------------
+
     sal_Bool EditBrowseBox::SaveModified()
     {
         return sal_True;
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::DoubleClick(const BrowserMouseEvent& rEvt)
     {
         // when double clicking on the column, the optimum size will be calculated
@@ -1243,7 +1243,7 @@ namespace svt
             SetColumnWidth(nColId, GetAutoColumnWidth(nColId));
     }
 
-    //------------------------------------------------------------------------------
+
     sal_uInt32 EditBrowseBox::GetAutoColumnWidth(sal_uInt16 nColId)
     {
         sal_uInt32 nCurColWidth  = GetColumnWidth(nColId);
@@ -1265,13 +1265,13 @@ namespace svt
         return nNewColWidth;
     }
 
-    //------------------------------------------------------------------------------
+
     sal_uInt32 EditBrowseBox::GetTotalCellWidth(long, sal_uInt16)
     {
         return 0;
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::InvalidateHandleColumn()
     {
         Rectangle aHdlFieldRect( GetFieldRectPixel( 0, 0 ));
@@ -1280,7 +1280,7 @@ namespace svt
         Invalidate( aInvalidRect );
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::PaintTristate(OutputDevice&, const Rectangle& rRect,const TriState& eState,sal_Bool _bEnabled) const
     {
         pCheckBoxPaint->GetBox().SetState(eState);
@@ -1301,7 +1301,7 @@ namespace svt
         pCheckBoxPaint->SetParentUpdateMode( true );
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::AsynchGetFocus()
     {
         if (nStartEvent)
@@ -1311,7 +1311,7 @@ namespace svt
         nStartEvent = Application::PostUserEvent(LINK(this,EditBrowseBox,StartEditHdl));
     }
 
-    //------------------------------------------------------------------------------
+
     void EditBrowseBox::SetBrowserFlags(sal_Int32 nFlags)
     {
         if (m_nBrowserFlags == nFlags)
@@ -1324,12 +1324,12 @@ namespace svt
         if (RowPicturesChanges)
             InvalidateStatusCell(GetCurRow());
     }
-    //------------------------------------------------------------------------------
+
     inline void EditBrowseBox::HideAndDisable(CellControllerRef& rController)
     {
         rController->suspend();
     }
-    //------------------------------------------------------------------------------
+
     inline void EditBrowseBox::EnableAndShow() const
     {
         Controller()->resume();
@@ -1337,7 +1337,7 @@ namespace svt
     //===============================================================================
 
     DBG_NAME(CellController);
-    //------------------------------------------------------------------------------
+
     CellController::CellController(Control* pW)
                    :pWindow( pW )
                    ,bSuspended( true )
@@ -1348,14 +1348,14 @@ namespace svt
         DBG_ASSERT(!pWindow->IsVisible(), "CellController::CellController: window should not be visible!");
     }
 
-    //-----------------------------------------------------------------------------
+
     CellController::~CellController()
     {
 
         DBG_DTOR(CellController,NULL);
     }
 
-    //-----------------------------------------------------------------------------
+
     void CellController::suspend( )
     {
         DBG_ASSERT( bSuspended == !GetWindow().IsVisible(), "CellController::suspend: inconsistence!" );
@@ -1368,7 +1368,7 @@ namespace svt
         }
     }
 
-    //-----------------------------------------------------------------------------
+
     void CellController::resume( )
     {
         DBG_ASSERT( bSuspended == !GetWindow().IsVisible(), "CellController::resume: inconsistence!" );
@@ -1380,24 +1380,24 @@ namespace svt
         }
     }
 
-    //-----------------------------------------------------------------------------
+
     void CellController::CommitModifications()
     {
         // nothing to do in this base class
     }
 
-    //-----------------------------------------------------------------------------
+
     sal_Bool CellController::WantMouseEvent() const
     {
         return sal_False;
     }
 
-    //-----------------------------------------------------------------------------
+
     void CellController::SetModified()
     {
     }
 
-    //-----------------------------------------------------------------------------
+
     sal_Bool CellController::MoveAllowed(const KeyEvent&) const
     {
         return sal_True;

@@ -121,7 +121,7 @@ namespace frm
 
     };
 
-    //---------------------------------------------------------------------
+
     void ImplNavToolBar::Select()
     {
         if ( m_pDispatcher )
@@ -138,7 +138,7 @@ namespace frm
     //=====================================================================
     //= NavigationToolBar
     //=====================================================================
-    //---------------------------------------------------------------------
+
     NavigationToolBar::NavigationToolBar( Window* _pParent, WinBits _nStyle, const PCommandImageProvider& _pImageProvider,
             const PCommandDescriptionProvider& _pDescriptionProvider )
         :Window( _pParent, _nStyle )
@@ -151,7 +151,7 @@ namespace frm
         implInit( );
     }
 
-    //---------------------------------------------------------------------
+
     NavigationToolBar::~NavigationToolBar( )
     {
         for (   ::std::vector< Window* >::iterator loopChildWins = m_aChildWins.begin();
@@ -164,7 +164,7 @@ namespace frm
         delete m_pToolbar;
     }
 
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::setDispatcher( const IFeatureDispatcher* _pDispatcher )
     {
         m_pDispatcher = _pDispatcher;
@@ -179,7 +179,7 @@ namespace frm
         updateFeatureStates( );
     }
 
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::updateFeatureStates( )
     {
         for ( sal_uInt16 nPos = 0; nPos < m_pToolbar->GetItemCount(); ++nPos )
@@ -195,7 +195,7 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::implEnableItem( sal_uInt16 _nItemId, bool _bEnabled )
     {
         m_pToolbar->EnableItem( _nItemId, _bEnabled );
@@ -207,7 +207,7 @@ namespace frm
             m_pToolbar->EnableItem( LID_RECORD_FILLER, _bEnabled );
     }
 
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::enableFeature( sal_Int16 _nFeatureId, bool _bEnabled )
     {
         DBG_ASSERT( m_pToolbar->GetItemPos( (sal_uInt16)_nFeatureId ) != TOOLBOX_ITEM_NOTFOUND,
@@ -216,7 +216,7 @@ namespace frm
         implEnableItem( (sal_uInt16)_nFeatureId, _bEnabled );
     }
 
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::checkFeature( sal_Int16 _nFeatureId, bool _bEnabled )
     {
         DBG_ASSERT( m_pToolbar->GetItemPos( (sal_uInt16)_nFeatureId ) != TOOLBOX_ITEM_NOTFOUND,
@@ -225,7 +225,7 @@ namespace frm
         m_pToolbar->CheckItem( (sal_uInt16)_nFeatureId, _bEnabled );
     }
 
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::setFeatureText( sal_Int16 _nFeatureId, const OUString& _rText )
     {
         DBG_ASSERT( m_pToolbar->GetItemPos( (sal_uInt16)_nFeatureId ) != TOOLBOX_ITEM_NOTFOUND,
@@ -238,7 +238,7 @@ namespace frm
             m_pToolbar->SetItemText( (sal_uInt16)_nFeatureId, _rText );
     }
 
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::implInit( )
     {
         m_pToolbar = new ImplNavToolBar( this );
@@ -347,7 +347,7 @@ namespace frm
         implUpdateImages();
     }
 
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::implUpdateImages()
     {
         OSL_ENSURE( m_pImageProvider, "NavigationToolBar::implUpdateImages: no image provider => no images!" );
@@ -395,7 +395,7 @@ namespace frm
         Resize();
     }
 
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::implSetImageSize( ImageSize _eSize )
     {
         if ( _eSize != m_eImageSize )
@@ -405,13 +405,13 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::SetImageSize( ImageSize _eSize )
     {
         implSetImageSize( _eSize );
     }
 
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::ShowFunctionGroup( FunctionGroup _eGroup, bool _bShow )
     {
         const sal_uInt16* pGroupIds = NULL;
@@ -459,7 +459,7 @@ namespace frm
                 m_pToolbar->ShowItem( *pGroupIds++, _bShow );
     }
 
-    //---------------------------------------------------------------------
+
     bool NavigationToolBar::IsFunctionGroupVisible( FunctionGroup _eGroup )
     {
         sal_uInt16 nIndicatorItem = 0;
@@ -476,7 +476,7 @@ namespace frm
         return m_pToolbar->IsItemVisible( nIndicatorItem );
     }
 
-    //------------------------------------------------------------------------------
+
     void NavigationToolBar::StateChanged( StateChangedType nType )
     {
         Window::StateChanged( nType );
@@ -510,7 +510,7 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::Resize()
     {
         // resize/position the toolbox as a whole
@@ -523,7 +523,7 @@ namespace frm
         Window::Resize();
     }
 
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::SetControlBackground()
     {
         Window::SetControlBackground();
@@ -533,7 +533,7 @@ namespace frm
         implUpdateImages();
     }
 
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::SetControlBackground( const Color& _rColor )
     {
         Window::SetControlBackground( _rColor );
@@ -543,7 +543,7 @@ namespace frm
         implUpdateImages();
     }
 
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::SetTextLineColor( )
     {
         Window::SetTextLineColor( );
@@ -551,7 +551,7 @@ namespace frm
         forEachItemWindow( &NavigationToolBar::setTextLineColor, NULL );
     }
 
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::SetTextLineColor( const Color& _rColor )
     {
         Window::SetTextLineColor( _rColor );
@@ -559,7 +559,7 @@ namespace frm
         forEachItemWindow( &NavigationToolBar::setTextLineColor, &_rColor );
     }
 
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::forEachItemWindow( ItemWindowHandler _handler, const void* _pParam )
     {
         for ( sal_uInt16 item = 0; item < m_pToolbar->GetItemCount(); ++item )
@@ -571,7 +571,7 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::setItemBackground( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* _pColor ) const
     {
         if ( _pColor )
@@ -580,7 +580,7 @@ namespace frm
             _pItemWindow->SetControlBackground();
     }
 
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::setTextLineColor( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* _pColor ) const
     {
         if ( _pColor )
@@ -589,14 +589,14 @@ namespace frm
             _pItemWindow->SetTextLineColor();
     }
 #if 0
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::setItemWindowZoom( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const
     {
         _pItemWindow->SetZoom( GetZoom() );
         _pItemWindow->SetZoomedPointFont( IsControlFont() ? GetControlFont() : GetPointFont() );
     }
 #endif
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::setItemControlFont( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const
     {
         if ( IsControlFont() )
@@ -605,7 +605,7 @@ namespace frm
             _pItemWindow->SetControlFont( );
     }
 
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::setItemControlForeground( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const
     {
         if ( IsControlForeground() )
@@ -615,7 +615,7 @@ namespace frm
         _pItemWindow->SetTextColor( GetTextColor() );
     }
 
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::adjustItemWindowWidth( sal_uInt16 _nItemId, Window* _pItemWindow, const void* /* _pParam */ ) const
     {
         OUString sItemText;
@@ -645,7 +645,7 @@ namespace frm
         m_pToolbar->SetItemWindow( _nItemId, _pItemWindow );
     }
 
-    //---------------------------------------------------------------------
+
     void NavigationToolBar::enableItemRTL( sal_uInt16 /*_nItemId*/, Window* _pItemWindow, const void* _pIsRTLEnabled ) const
     {
         _pItemWindow->EnableRTL( *static_cast< const sal_Bool* >( _pIsRTLEnabled ) );
@@ -654,7 +654,7 @@ namespace frm
     //=====================================================================
     //= RecordPositionInput
     //=====================================================================
-    //---------------------------------------------------------------------
+
     RecordPositionInput::RecordPositionInput( Window* _pParent )
         :NumericField( _pParent, WB_BORDER | WB_VCENTER )
         ,m_pDispatcher( NULL )
@@ -667,18 +667,18 @@ namespace frm
         SetBorderStyle( WINDOW_BORDER_MONO );
     }
 
-    //---------------------------------------------------------------------
+
     RecordPositionInput::~RecordPositionInput()
     {
     }
 
-    //---------------------------------------------------------------------
+
     void RecordPositionInput::setDispatcher( const IFeatureDispatcher* _pDispatcher )
     {
         m_pDispatcher = _pDispatcher;
     }
 
-    //---------------------------------------------------------------------
+
     void RecordPositionInput::FirePosition( sal_Bool _bForce )
     {
         if ( _bForce || (GetText() != GetSavedValue()) )
@@ -694,13 +694,13 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+
     void RecordPositionInput::LoseFocus()
     {
         FirePosition( sal_False );
     }
 
-    //---------------------------------------------------------------------
+
     void RecordPositionInput::KeyInput( const KeyEvent& rKeyEvent )
     {
         if( rKeyEvent.GetKeyCode() == KEY_RETURN && !GetText().isEmpty() )

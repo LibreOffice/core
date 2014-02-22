@@ -39,7 +39,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL OTable::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     if(isNew())
@@ -47,7 +47,7 @@ OUString SAL_CALL OTable::getImplementationName(  ) throw (::com::sun::star::uno
     return OUString("com.sun.star.sdbcx.Table");
 }
 
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL OTable::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Sequence< OUString > aSupported(1);
@@ -63,7 +63,7 @@ sal_Bool SAL_CALL OTable::supportsService( const OUString& _rServiceName ) throw
 {
     return cppu::supportsService(this, _rServiceName);
 }
-// -------------------------------------------------------------------------
+
 OTable::OTable(OCollection* _pTables,
                sal_Bool _bCase)
                : OTableDescriptor_BASE(m_aMutex)
@@ -74,7 +74,7 @@ OTable::OTable(OCollection* _pTables,
                 ,m_pTables(_pTables)
 {
 }
-// -----------------------------------------------------------------------------
+
 OTable::OTable( OCollection*    _pTables,
                 sal_Bool _bCase,
                 const OUString& _Name,       const OUString& _Type,
@@ -92,14 +92,14 @@ OTable::OTable( OCollection*    _pTables,
 {
     m_Name = _Name;
 }
-// -------------------------------------------------------------------------
+
 OTable::~OTable()
 {
     delete m_pKeys;
     delete m_pColumns;
     delete m_pIndexes;
 }
-// -------------------------------------------------------------------------
+
 void OTable::construct()
 {
     ODescriptor::construct();
@@ -111,18 +111,18 @@ void OTable::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION),     PROPERTY_ID_DESCRIPTION,nAttrib,&m_Description, ::getCppuType(static_cast< OUString*>(0)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),            PROPERTY_ID_TYPE,       nAttrib,&m_Type,        ::getCppuType(static_cast< OUString*>(0)));
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OTable::acquire() throw()
 {
     OTableDescriptor_BASE::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OTable::release() throw()
 {
     OTableDescriptor_BASE::release();
 }
 
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OTable::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = ODescriptor::queryInterface( rType);
@@ -137,14 +137,14 @@ Any SAL_CALL OTable::queryInterface( const Type & rType ) throw(RuntimeException
     }
     return aRet;
 }
-// -------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OTable::getTypes(  ) throw(RuntimeException)
 {
     if(isNew())
         return ::comphelper::concatSequences(ODescriptor::getTypes(),OTableDescriptor_BASE::getTypes());
     return ::comphelper::concatSequences(ODescriptor::getTypes(),OTableDescriptor_BASE::getTypes(),OTable_BASE::getTypes());
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OTable::disposing(void)
 {
     ODescriptor::disposing();
@@ -160,7 +160,7 @@ void SAL_CALL OTable::disposing(void)
 
     m_pTables = NULL;
 }
-// -----------------------------------------------------------------------------
+
 // XColumnsSupplier
 Reference< XNameAccess > SAL_CALL OTable::getColumns(  ) throw(RuntimeException)
 {
@@ -185,7 +185,7 @@ Reference< XNameAccess > SAL_CALL OTable::getColumns(  ) throw(RuntimeException)
     return m_pColumns;
 }
 
-// -------------------------------------------------------------------------
+
 // XKeysSupplier
 Reference< XIndexAccess > SAL_CALL OTable::getKeys(  ) throw(RuntimeException)
 {
@@ -212,17 +212,17 @@ Reference< XIndexAccess > SAL_CALL OTable::getKeys(  ) throw(RuntimeException)
 
     return xKeys;
 }
-// -----------------------------------------------------------------------------
+
 cppu::IPropertyArrayHelper* OTable::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {
     return doCreateArrayHelper();
 }
-// -------------------------------------------------------------------------
+
 cppu::IPropertyArrayHelper & OTable::getInfoHelper()
 {
     return *const_cast<OTable*>(this)->getArrayHelper(isNew() ? 1 : 0);
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > SAL_CALL OTable::createDataDescriptor(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -232,7 +232,7 @@ Reference< XPropertySet > SAL_CALL OTable::createDataDescriptor(  ) throw(Runtim
     pTable->setNew(sal_True);
     return pTable;
 }
-// -------------------------------------------------------------------------
+
 // XIndexesSupplier
 Reference< XNameAccess > SAL_CALL OTable::getIndexes(  ) throw(RuntimeException)
 {
@@ -256,7 +256,7 @@ Reference< XNameAccess > SAL_CALL OTable::getIndexes(  ) throw(RuntimeException)
 
     return m_pIndexes;
 }
-// -------------------------------------------------------------------------
+
 // XRename
 void SAL_CALL OTable::rename( const OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
 {
@@ -272,28 +272,28 @@ void SAL_CALL OTable::rename( const OUString& newName ) throw(SQLException, Elem
 
     m_pTables->renameObject(sOldComposedName,newName);
 }
-// -----------------------------------------------------------------------------
+
 Reference< XDatabaseMetaData> OTable::getMetaData() const
 {
     return NULL;
 }
-// -------------------------------------------------------------------------
+
 // XAlterTable
 void SAL_CALL OTable::alterColumnByName( const OUString& /*colName*/, const Reference< XPropertySet >& /*descriptor*/ ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     throwFeatureNotImplementedException( "XAlterTable::alterColumnByName", *this );
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OTable::alterColumnByIndex( sal_Int32 /*index*/, const Reference< XPropertySet >& /*descriptor*/ ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
 {
     throwFeatureNotImplementedException( "XAlterTable::alterColumnByIndex", *this );
 }
-// -------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OTable::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL OTable::getName() throw(::com::sun::star::uno::RuntimeException)
 {
     // this is only correct for tables who haven't a schema or catalog name
@@ -301,22 +301,22 @@ OUString SAL_CALL OTable::getName() throw(::com::sun::star::uno::RuntimeExceptio
     OSL_ENSURE(m_SchemaName.isEmpty(),"getName(): forgot to overload getName()!");
     return m_Name;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OTable::setName( const OUString& /*aName*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
 }
-// -----------------------------------------------------------------------------
+
 void OTable::refreshColumns()
 {
 }
-// -----------------------------------------------------------------------------
+
 void OTable::refreshKeys()
 {
 }
-// -----------------------------------------------------------------------------
+
 void OTable::refreshIndexes()
 {
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

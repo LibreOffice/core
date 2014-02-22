@@ -41,17 +41,17 @@ sdbcx::ObjectType OUsers::createObject(const OUString& _rName)
 {
     return new OAdoUser(m_pCatalog,isCaseSensitive(),_rName);
 }
-// -------------------------------------------------------------------------
+
 void OUsers::impl_refresh() throw(RuntimeException)
 {
     m_aCollection.Refresh();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OUsers::createDescriptor()
 {
     return new OUserExtend(m_pCatalog,isCaseSensitive());
 }
-// -------------------------------------------------------------------------
+
 // XAppend
 sdbcx::ObjectType OUsers::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
@@ -64,13 +64,13 @@ sdbcx::ObjectType OUsers::appendObject( const OUString& _rForName, const Referen
 
     return createObject( _rForName );
 }
-// -------------------------------------------------------------------------
+
 // XDrop
 void OUsers::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
 {
     m_aCollection.Delete(_sElementName);
 }
-// -------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

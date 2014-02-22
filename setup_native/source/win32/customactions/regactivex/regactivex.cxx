@@ -54,7 +54,7 @@ BOOL UnicodeEquals( wchar_t* pStr1, wchar_t* pStr2 )
     return ( *pStr1 == 0 && *pStr2 == 0 );
 }
 
-//----------------------------------------------------------
+
 char* UnicodeToAnsiString( wchar_t* pUniString )
 {
     int len = WideCharToMultiByte(
@@ -68,7 +68,7 @@ char* UnicodeToAnsiString( wchar_t* pUniString )
     return buff;
 }
 
-//----------------------------------------------------------
+
 void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallForAllUser, BOOL InstallFor64Bit )
 {
     HINSTANCE hModule = LoadLibraryExA( pActiveXPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
@@ -95,7 +95,7 @@ void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallFor
     }
 }
 
-//----------------------------------------------------------
+
 void UnregisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallForAllUser, BOOL InstallFor64Bit )
 {
     HINSTANCE hModule = LoadLibraryExA( pActiveXPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
@@ -109,7 +109,7 @@ void UnregisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallF
     }
 }
 
-//----------------------------------------------------------
+
 BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
 {
     DWORD sz = 0;
@@ -128,7 +128,7 @@ BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
     return FALSE;
 }
 
-//----------------------------------------------------------
+
 BOOL GetActiveXControlPath( MSIHANDLE hMSI, char** ppActiveXPath )
 {
     wchar_t* pProgPath = NULL;
@@ -155,7 +155,7 @@ BOOL GetActiveXControlPath( MSIHANDLE hMSI, char** ppActiveXPath )
     return FALSE;
 }
 
-//----------------------------------------------------------
+
 BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDeinstallMode )
 {
     // for now the chart is always installed
@@ -254,7 +254,7 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
     return TRUE;
 }
 
-//----------------------------------------------------------
+
 BOOL MakeInstallForAllUsers( MSIHANDLE hMSI )
 {
     BOOL bResult = FALSE;
@@ -268,7 +268,7 @@ BOOL MakeInstallForAllUsers( MSIHANDLE hMSI )
     return bResult;
 }
 
-//----------------------------------------------------------
+
 BOOL MakeInstallFor64Bit( MSIHANDLE hMSI )
 {
     BOOL bResult = FALSE;
@@ -281,7 +281,7 @@ BOOL MakeInstallFor64Bit( MSIHANDLE hMSI )
 
     return bResult;
 }
-//----------------------------------------------------------
+
 extern "C" UINT __stdcall InstallActiveXControl( MSIHANDLE hMSI )
 {
     INSTALLSTATE current_state;
@@ -328,7 +328,7 @@ extern "C" UINT __stdcall InstallActiveXControl( MSIHANDLE hMSI )
     return ERROR_SUCCESS;
 }
 
-//----------------------------------------------------------
+
 extern "C" UINT __stdcall DeinstallActiveXControl( MSIHANDLE hMSI )
 {
     INSTALLSTATE current_state;

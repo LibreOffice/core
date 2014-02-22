@@ -79,9 +79,9 @@ using namespace ::com::sun::star::style;
 
 namespace sdr { namespace table {
 
-// --------------------------------------------------------------------
+
 // class SvxTableControllerModifyListener
-// --------------------------------------------------------------------
+
 
 class SvxTableControllerModifyListener : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XModifyListener >
 {
@@ -98,9 +98,9 @@ public:
     SvxTableController* mpController;
 };
 
-// --------------------------------------------------------------------
+
 // XModifyListener
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SvxTableControllerModifyListener::modified( const ::com::sun::star::lang::EventObject&  ) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -108,25 +108,25 @@ void SAL_CALL SvxTableControllerModifyListener::modified( const ::com::sun::star
         mpController->onTableModified();
 }
 
-// --------------------------------------------------------------------
+
 // XEventListener
-// --------------------------------------------------------------------
+
 
 void SAL_CALL SvxTableControllerModifyListener::disposing( const ::com::sun::star::lang::EventObject&  ) throw (::com::sun::star::uno::RuntimeException)
 {
     mpController = 0;
 }
 
-// --------------------------------------------------------------------
+
 // class SvxTableController
-// --------------------------------------------------------------------
+
 
 rtl::Reference< sdr::SelectionController > CreateTableController( SdrObjEditView* pView, const SdrObject* pObj, const rtl::Reference< sdr::SelectionController >& xRefController )
 {
     return SvxTableController::create( pView, pObj, xRefController );
 }
 
-// --------------------------------------------------------------------
+
 
 rtl::Reference< sdr::SelectionController > SvxTableController::create( SdrObjEditView* pView, const SdrObject* pObj, const rtl::Reference< sdr::SelectionController >& xRefController )
 {
@@ -139,7 +139,7 @@ rtl::Reference< sdr::SelectionController > SvxTableController::create( SdrObjEdi
     return new SvxTableController( pView, pObj );
 }
 
-// --------------------------------------------------------------------
+
 
 SvxTableController::SvxTableController( SdrObjEditView* pView, const SdrObject* pObj )
 : mbCellSelectionMode(false)
@@ -169,7 +169,7 @@ SvxTableController::SvxTableController( SdrObjEditView* pView, const SdrObject* 
     }
 }
 
-// --------------------------------------------------------------------
+
 
 SvxTableController::~SvxTableController()
 {
@@ -189,7 +189,7 @@ SvxTableController::~SvxTableController()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 const sal_uInt16 ACTION_NONE = 0;
 const sal_uInt16 ACTION_GOTO_FIRST_CELL = 1;
@@ -244,9 +244,9 @@ bool SvxTableController::onKeyInput(const KeyEvent& rKEvt, Window* pWindow )
     return executeAction( nAction, ( rKEvt.GetKeyCode().IsShift() ) ? sal_True : sal_False, pWindow );
 }
 
-// --------------------------------------------------------------------
+
 // ::com::sun::star::awt::XMouseClickHandler:
-// --------------------------------------------------------------------
+
 
 bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, Window* pWindow )
 {
@@ -299,7 +299,7 @@ bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, Window* pWin
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 bool SvxTableController::onMouseButtonUp(const MouseEvent& rMEvt, Window* /*pWin*/)
 {
@@ -314,7 +314,7 @@ bool SvxTableController::onMouseButtonUp(const MouseEvent& rMEvt, Window* /*pWin
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 bool SvxTableController::onMouseMove(const MouseEvent& rMEvt, Window* pWindow )
 {
@@ -352,7 +352,7 @@ bool SvxTableController::onMouseMove(const MouseEvent& rMEvt, Window* pWindow )
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::onSelectionHasChanged()
 {
@@ -389,7 +389,7 @@ void SvxTableController::onSelectionHasChanged()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::GetState( SfxItemSet& rSet )
 {
@@ -489,7 +489,7 @@ void SvxTableController::GetState( SfxItemSet& rSet )
     delete pSet;
 }
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
 {
@@ -621,7 +621,7 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::onDelete( sal_uInt16 nSId )
 {
@@ -680,7 +680,7 @@ void SvxTableController::onDelete( sal_uInt16 nSId )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::onSelect( sal_uInt16 nSId )
 {
@@ -715,7 +715,7 @@ void SvxTableController::onSelect( sal_uInt16 nSId )
     }
 }
 
-// --------------------------------------------------------------------
+
 void SvxTableController::onFormatTable( SfxRequest& rReq )
 {
     ::sdr::table::SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
@@ -769,7 +769,7 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::Execute( SfxRequest& rReq )
 {
@@ -1223,16 +1223,16 @@ bool SvxTableController::SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRe
     return false;
 }
 
-// --------------------------------------------------------------------
+
 // internals
-// --------------------------------------------------------------------
+
 
 bool SvxTableController::checkTableObject()
 {
     return mxTableObj.is();
 }
 
-// --------------------------------------------------------------------
+
 
 sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, Window* /*pWindow*/ )
 {
@@ -1531,7 +1531,7 @@ bool SvxTableController::executeAction( sal_uInt16 nAction, bool bSelect, Window
     return nAction != ACTION_HANDLED_BY_VIEW;
 }
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::gotoCell( const CellPos& rPos, bool bSelect, Window* pWindow, sal_uInt16 nAction )
 {
@@ -1560,7 +1560,7 @@ void SvxTableController::gotoCell( const CellPos& rPos, bool bSelect, Window* pW
     }
 }
 
-// --------------------------------------------------------------------
+
 
 const CellPos& SvxTableController::getSelectionStart()
 {
@@ -1568,14 +1568,14 @@ const CellPos& SvxTableController::getSelectionStart()
     return maCursorFirstPos;
 }
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::setSelectionStart( const CellPos& rPos )
 {
     maCursorFirstPos = rPos;
 }
 
-// --------------------------------------------------------------------
+
 
 const CellPos& SvxTableController::getSelectionEnd()
 {
@@ -1583,7 +1583,7 @@ const CellPos& SvxTableController::getSelectionEnd()
     return maCursorLastPos;
 }
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, sal_Int32 nLastCol, sal_Int32 nLastRow )
 {
@@ -1613,7 +1613,7 @@ void SvxTableController::MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, s
 
 
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::checkCell( CellPos& rPos )
 {
@@ -1631,7 +1631,7 @@ void SvxTableController::checkCell( CellPos& rPos )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::findMergeOrigin( CellPos& rPos )
 {
@@ -1649,7 +1649,7 @@ void SvxTableController::findMergeOrigin( CellPos& rPos )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::EditCell( const CellPos& rPos, ::Window* pWindow, const awt::MouseEvent* pMouseEvent /*= 0*/, sal_uInt16 nAction /*= ACTION_NONE */ )
 {
@@ -1742,7 +1742,7 @@ void SvxTableController::EditCell( const CellPos& rPos, ::Window* pWindow, const
     }
 }
 
-// --------------------------------------------------------------------
+
 
 bool SvxTableController::StopTextEdit()
 {
@@ -1759,7 +1759,7 @@ bool SvxTableController::StopTextEdit()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::getSelectedCells( CellPos& rFirst, CellPos& rLast )
 {
@@ -1843,7 +1843,7 @@ void SvxTableController::getSelectedCells( CellPos& rFirst, CellPos& rLast )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::StartSelection( const CellPos& rPos )
 {
@@ -1853,7 +1853,7 @@ void SvxTableController::StartSelection( const CellPos& rPos )
     mpView->MarkListHasChanged();
 }
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::setSelectedCells( const CellPos& rStart, const CellPos& rEnd )
 {
@@ -1863,7 +1863,7 @@ void SvxTableController::setSelectedCells( const CellPos& rStart, const CellPos&
     UpdateSelection( rEnd );
 }
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::UpdateSelection( const CellPos& rPos )
 {
@@ -1871,14 +1871,14 @@ void SvxTableController::UpdateSelection( const CellPos& rPos )
     mpView->MarkListHasChanged();
 }
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::clearSelection()
 {
     RemoveSelection();
 }
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::selectAll()
 {
@@ -1892,7 +1892,7 @@ void SvxTableController::selectAll()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::RemoveSelection()
 {
@@ -1903,14 +1903,14 @@ void SvxTableController::RemoveSelection()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::onTableModified()
 {
     if( mnUpdateEvent == 0 )
         mnUpdateEvent = Application::PostUserEvent( LINK( this, SvxTableController, UpdateHdl ) );
 }
-// --------------------------------------------------------------------
+
 
 void SvxTableController::updateSelectionOverlay()
 {
@@ -1965,7 +1965,7 @@ void SvxTableController::updateSelectionOverlay()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::destroySelectionOverlay()
 {
@@ -1976,7 +1976,7 @@ void SvxTableController::destroySelectionOverlay()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::MergeAttrFromSelectedCells(SfxItemSet& rAttr, bool bOnlyHardAttr) const
 {
@@ -2018,7 +2018,7 @@ void SvxTableController::MergeAttrFromSelectedCells(SfxItemSet& rAttr, bool bOnl
     }
 }
 
-// --------------------------------------------------------------------
+
 
 const sal_uInt16 CELL_BEFORE = 0x0001;
 const sal_uInt16 CELL_LEFT   = 0x0002;
@@ -2030,7 +2030,7 @@ const sal_uInt16 CELL_TOP    = 0x0020;
 const sal_uInt16 CELL_BOTTOM = 0x0040;
 const sal_uInt16 CELL_LOWER  = 0x0080;
 
-// --------------------------------------------------------------------
+
 
 static void ImplSetLinePreserveColor( SvxBoxItem& rNewFrame, const SvxBorderLine* pNew, sal_uInt16 nLine )
 {
@@ -2048,7 +2048,7 @@ static void ImplSetLinePreserveColor( SvxBoxItem& rNewFrame, const SvxBorderLine
     rNewFrame.SetLine( pNew, nLine );
 }
 
-// --------------------------------------------------------------------
+
 
 static void ImplApplyBoxItem( sal_uInt16 nCellFlags, const SvxBoxItem* pBoxItem, const SvxBoxInfoItem* pBoxInfoItem, SvxBoxItem& rNewFrame )
 {
@@ -2106,7 +2106,7 @@ static void ImplApplyBoxItem( sal_uInt16 nCellFlags, const SvxBoxItem* pBoxItem,
     }
 }
 
-// --------------------------------------------------------------------
+
 
 static void ImplSetLineColor( SvxBoxItem& rNewFrame, sal_uInt16 nLine, const Color& rColor )
 {
@@ -2119,7 +2119,7 @@ static void ImplSetLineColor( SvxBoxItem& rNewFrame, sal_uInt16 nLine, const Col
     }
 }
 
-// --------------------------------------------------------------------
+
 
 static void ImplApplyLineColorItem( sal_uInt16 nCellFlags, const SvxColorItem* pLineColorItem, SvxBoxItem& rNewFrame )
 {
@@ -2138,7 +2138,7 @@ static void ImplApplyLineColorItem( sal_uInt16 nCellFlags, const SvxColorItem* p
         ImplSetLineColor( rNewFrame, BOX_LINE_LEFT, aColor );
 }
 
-// --------------------------------------------------------------------
+
 
 static void ImplApplyBorderLineItem( sal_uInt16 nCellFlags, const SvxBorderLine* pBorderLineItem, SvxBoxItem& rNewFrame )
 {
@@ -2184,7 +2184,7 @@ static void ImplApplyBorderLineItem( sal_uInt16 nCellFlags, const SvxBorderLine*
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::ApplyBorderAttr( const SfxItemSet& rAttr )
 {
@@ -2273,7 +2273,7 @@ void SvxTableController::ApplyBorderAttr( const SfxItemSet& rAttr )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::UpdateTableShape()
 {
@@ -2287,7 +2287,7 @@ void SvxTableController::UpdateTableShape()
 }
 
 
-// --------------------------------------------------------------------
+
 
 void SvxTableController::SetAttrToSelectedCells(const SfxItemSet& rAttr, bool bReplaceAll)
 {
@@ -2339,7 +2339,7 @@ void SvxTableController::SetAttrToSelectedCells(const SfxItemSet& rAttr, bool bR
     }
 }
 
-// --------------------------------------------------------------------
+
 
 bool SvxTableController::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const
 {
@@ -2369,7 +2369,7 @@ bool SvxTableController::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAtt
     }
 }
 
-// --------------------------------------------------------------------
+
 
 bool SvxTableController::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
 {
@@ -2381,7 +2381,7 @@ bool SvxTableController::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 bool SvxTableController::GetMarkedObjModel( SdrPage* pNewPage )
 {
@@ -2409,7 +2409,7 @@ bool SvxTableController::GetMarkedObjModel( SdrPage* pNewPage )
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 bool SvxTableController::PasteObjModel( const SdrModel& rModel )
 {
@@ -2429,7 +2429,7 @@ bool SvxTableController::PasteObjModel( const SdrModel& rModel )
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 bool SvxTableController::PasteObject( SdrTableObj* pPasteTableObj )
 {
@@ -2568,7 +2568,7 @@ bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNo
 }
 
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxTableController, UpdateHdl)
 {

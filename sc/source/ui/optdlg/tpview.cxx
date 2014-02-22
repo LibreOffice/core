@@ -22,7 +22,7 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #include "scitems.hxx"
 #include "tpview.hxx"
@@ -309,7 +309,7 @@ void ScTpContentOptions::InitGridOpt()
         if ( !pColorList.is() )
             return;
 
-        //------------------------------------------------------
+
 
         pColorLB->SetUpdateMode( false );
 

@@ -45,7 +45,7 @@ static LanguageType GetSVLang( LANGID nWinLangId )
     return LanguageType( static_cast<sal_uInt16>(nWinLangId & 0xffff));
 }
 
-// -----------------------------------------------------------------------
+
 
 typedef LANGID (WINAPI *getLangFromEnv)();
 
@@ -79,7 +79,7 @@ static void getPlatformSystemLanguageImpl( LanguageType& rSystemLanguage,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 LanguageType MsLangId::getPlatformSystemLanguage()
 {
@@ -88,7 +88,7 @@ LanguageType MsLangId::getPlatformSystemLanguage()
     return nImplSystemLanguage;
 }
 
-// -----------------------------------------------------------------------
+
 
 LanguageType MsLangId::getPlatformSystemUILanguage()
 {

@@ -170,7 +170,7 @@ void XclImpPageSettings::SetPaperSize( sal_uInt16 nXclPaperSize, bool bPortrait 
     mbValidPaper = true;
 }
 
-// ----------------------------------------------------------------------------
+
 
 namespace {
 

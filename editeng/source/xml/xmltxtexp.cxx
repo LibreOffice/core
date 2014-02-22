@@ -86,7 +86,7 @@ public:
 ///////////////////////////////////////////////////////////////////////
 
 
-//------------------------------------------------------------------------
+
 
 SvxEditEngineSourceImpl::SvxEditEngineSourceImpl( EditEngine* pEditEngine )
 : maRefCount(0),
@@ -95,21 +95,21 @@ SvxEditEngineSourceImpl::SvxEditEngineSourceImpl( EditEngine* pEditEngine )
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SvxEditEngineSourceImpl::~SvxEditEngineSourceImpl()
 {
     delete mpTextForwarder;
 }
 
-//------------------------------------------------------------------------
+
 
 void SAL_CALL SvxEditEngineSourceImpl::acquire()
 {
     osl_atomic_increment( &maRefCount );
 }
 
-//------------------------------------------------------------------------
+
 
 void SAL_CALL SvxEditEngineSourceImpl::release()
 {
@@ -117,7 +117,7 @@ void SAL_CALL SvxEditEngineSourceImpl::release()
         delete this;
 }
 
-//------------------------------------------------------------------------
+
 
 SvxTextForwarder* SvxEditEngineSourceImpl::GetTextForwarder()
 {
@@ -127,9 +127,9 @@ SvxTextForwarder* SvxEditEngineSourceImpl::GetTextForwarder()
     return mpTextForwarder;
 }
 
-// --------------------------------------------------------------------
+
 // SvxTextEditSource
-// --------------------------------------------------------------------
+
 
 SvxEditEngineSource::SvxEditEngineSource( EditEngine* pEditEngine )
 {
@@ -137,7 +137,7 @@ SvxEditEngineSource::SvxEditEngineSource( EditEngine* pEditEngine )
     mpImpl->acquire();
 }
 
-// --------------------------------------------------------------------
+
 
 SvxEditEngineSource::SvxEditEngineSource( SvxEditEngineSourceImpl* pImpl )
 {
@@ -145,28 +145,28 @@ SvxEditEngineSource::SvxEditEngineSource( SvxEditEngineSourceImpl* pImpl )
     mpImpl->acquire();
 }
 
-//------------------------------------------------------------------------
+
 
 SvxEditEngineSource::~SvxEditEngineSource()
 {
     mpImpl->release();
 }
 
-//------------------------------------------------------------------------
+
 
 SvxEditSource* SvxEditEngineSource::Clone() const
 {
     return new SvxEditEngineSource( mpImpl );
 }
 
-//------------------------------------------------------------------------
+
 
 SvxTextForwarder* SvxEditEngineSource::GetTextForwarder()
 {
     return mpImpl->GetTextForwarder();
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxEditEngineSource::UpdateData()
 {

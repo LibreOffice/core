@@ -44,9 +44,9 @@
  */
 
 
-//------------------------------------------------------------------------
+
 // include files
-//------------------------------------------------------------------------
+
 
 #include <sal/types.h>
 #include <osl_Socket_Const_orig.h>
@@ -79,9 +79,9 @@ using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OString;
 
-//------------------------------------------------------------------------
+
 // helper functions
-//------------------------------------------------------------------------
+
 
 /** compare two OUString.
 */
@@ -450,7 +450,7 @@ public:
     }
 };
 
-// -----------------------------------------------------------------------------
+
 // Helper functions, to create buffers, check buffers
 class ValueCheckProvider
 {
@@ -504,7 +504,7 @@ public:
 
 };
 
-// -----------------------------------------------------------------------------
+
 /** Client Socket Thread, served as a temp little client to communicate with server.
 */
 
@@ -647,7 +647,7 @@ public:
 
 };
 
-// -----------------------------------------------------------------------------
+
 // just used to test socket::close() when accepting
 class AcceptorThread : public Thread
 {
@@ -726,9 +726,9 @@ public:
     }
 };
 
-//------------------------------------------------------------------------
+
 // tests cases begins here
-//------------------------------------------------------------------------
+
 
 namespace osl_SocketAddr
 {
@@ -1468,7 +1468,7 @@ namespace osl_SocketAddr
 
     }; // class gettheServicePort
 
-// -----------------------------------------------------------------------------
+
 
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::ctors, "osl_SocketAddr");
@@ -2773,7 +2773,7 @@ namespace osl_Socket
     }; // class getHandle
 
 
-// -----------------------------------------------------------------------------
+
 
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Socket::ctors, "osl_Socket");
@@ -3175,7 +3175,7 @@ protected:
         CPPUNIT_TEST_SUITE_END();
     }; // class isExceptionPending
 
-// -----------------------------------------------------------------------------
+
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_StreamSocket::ctors, "osl_StreamSocket");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_StreamSocket::send_recv, "osl_StreamSocket");
@@ -3337,7 +3337,7 @@ namespace osl_ConnectorSocket
     }; // class connect
 
 
-// -----------------------------------------------------------------------------
+
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_ConnectorSocket::ctors, "osl_ConnectorSocket");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_ConnectorSocket::connect, "osl_ConnectorSocket");
@@ -3467,7 +3467,7 @@ namespace osl_AcceptorSocket
     }; // class listen_accept
 
 
-// -----------------------------------------------------------------------------
+
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_AcceptorSocket::ctors, "osl_AcceptorSocket");
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_AcceptorSocket::operator_assign, "osl_AcceptorSocket");
@@ -3677,7 +3677,7 @@ public:
 
     }; // class sendTo_recvFrom
 
-// -----------------------------------------------------------------------------
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_DatagramSocket::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_DatagramSocket::sendTo_recvFrom);
@@ -3685,7 +3685,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(osl_DatagramSocket::sendTo_recvFrom);
 } // namespace osl_DatagramSocket
 
 
-// -----------------------------------------------------------------------------
+
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

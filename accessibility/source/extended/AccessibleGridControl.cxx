@@ -79,11 +79,11 @@ AccessibleGridControl::AccessibleGridControl(
     m_pImpl->m_aCreator = _rxCreator;
 }
 
-// -----------------------------------------------------------------------------
+
 AccessibleGridControl::~AccessibleGridControl()
 {
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL AccessibleGridControl::disposing()
 {
@@ -114,7 +114,7 @@ void SAL_CALL AccessibleGridControl::disposing()
     ::comphelper::disposeComponent(m_pImpl->m_xColumnHeaderBar);
     AccessibleGridControlBase::disposing();
 }
-// -----------------------------------------------------------------------------
+
 
 // XAccessibleContext ---------------------------------------------------------
 
@@ -125,7 +125,7 @@ sal_Int32 SAL_CALL AccessibleGridControl::getAccessibleChildCount()
     ensureIsAlive();
     return m_aTable.GetAccessibleControlCount();
 }
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > SAL_CALL
 AccessibleGridControl::getAccessibleChild( sal_Int32 nChildIndex )
@@ -170,7 +170,7 @@ AccessibleGridControl::getAccessibleChild( sal_Int32 nChildIndex )
     }
     return xChild;
 }
-// -----------------------------------------------------------------------------
+
 
 sal_Int16 SAL_CALL AccessibleGridControl::getAccessibleRole()
     throw ( uno::RuntimeException )
@@ -180,7 +180,7 @@ sal_Int16 SAL_CALL AccessibleGridControl::getAccessibleRole()
     ensureIsAlive();
     return AccessibleRole::PANEL;
 }
-// -----------------------------------------------------------------------------
+
 
 // XAccessibleComponent -------------------------------------------------------
 
@@ -213,7 +213,7 @@ AccessibleGridControl::getAccessibleAtPoint( const awt::Point& rPoint )
     }
     return xChild;
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL AccessibleGridControl::grabFocus()
     throw ( uno::RuntimeException )
@@ -222,7 +222,7 @@ void SAL_CALL AccessibleGridControl::grabFocus()
     ensureIsAlive();
         m_aTable.GrabFocus();
 }
-// -----------------------------------------------------------------------------
+
 
 Any SAL_CALL AccessibleGridControl::getAccessibleKeyBinding()
     throw ( uno::RuntimeException )
@@ -232,7 +232,7 @@ Any SAL_CALL AccessibleGridControl::getAccessibleKeyBinding()
     ensureIsAlive();
     return Any();
 }
-// -----------------------------------------------------------------------------
+
 
 // XServiceInfo ---------------------------------------------------------------
 
@@ -241,7 +241,7 @@ OUString SAL_CALL AccessibleGridControl::getImplementationName()
 {
     return OUString( "com.sun.star.accessibility.AccessibleGridControl" );
 }
-// -----------------------------------------------------------------------------
+
 
 // internal virtual methods ---------------------------------------------------
 
@@ -251,7 +251,7 @@ Rectangle AccessibleGridControl::implGetBoundingBox()
     OSL_ENSURE( pParent, "implGetBoundingBox - missing parent window" );
     return m_aTable.GetWindowExtentsRelative( pParent );
 }
-// -----------------------------------------------------------------------------
+
 
 Rectangle AccessibleGridControl::implGetBoundingBoxOnScreen()
 {
@@ -268,7 +268,7 @@ Reference< XAccessible > AccessibleGridControl::implGetTable()
     }
     return m_pImpl->m_xTable;
 }
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible >
 AccessibleGridControl::implGetHeaderBar( AccessibleTableControlObjType eObjType )
@@ -299,7 +299,7 @@ AccessibleGridControl::implGetHeaderBar( AccessibleTableControlObjType eObjType 
     }
     return xRet;
 }
-// -----------------------------------------------------------------------------
+
 Reference< XAccessible >
 AccessibleGridControl::implGetFixedChild( sal_Int32 nChildIndex )
 {
@@ -318,14 +318,14 @@ AccessibleGridControl::implGetFixedChild( sal_Int32 nChildIndex )
     }
     return xRet;
 }
-// -----------------------------------------------------------------------------
+
 AccessibleGridControlTable* AccessibleGridControl::createAccessibleTable()
 {
     Reference< XAccessible > xCreator = (Reference< XAccessible >)m_pImpl->m_aCreator;
         OSL_ENSURE( xCreator.is(), "accessibility/extended/AccessibleGirdControl::createAccessibleTable: my creator died - how this?" );
     return new AccessibleGridControlTable( xCreator, m_aTable, TCTYPE_TABLE );
 }
-// -----------------------------------------------------------------------------
+
 void AccessibleGridControl::commitCellEvent(sal_Int16 _nEventId,const Any& _rNewValue,const Any& _rOldValue)
 {
     sal_Int32 nChildCount = getAccessibleChildCount();
@@ -406,7 +406,7 @@ void AccessibleGridControl::commitTableEvent(sal_Int16 _nEventId,const Any& _rNe
 // = AccessibleGridControlAccess
 // ============================================================================
 
-// -----------------------------------------------------------------------------
+
 AccessibleGridControlAccess::AccessibleGridControlAccess(
         const Reference< XAccessible >& rxParent, IAccessibleTable& rTable )
     : m_xParent( rxParent )
@@ -415,12 +415,12 @@ AccessibleGridControlAccess::AccessibleGridControlAccess(
 {
 }
 
-// -----------------------------------------------------------------------------
+
 AccessibleGridControlAccess::~AccessibleGridControlAccess()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 void AccessibleGridControlAccess::DisposeAccessImpl()
 {
     SolarMutexGuard g;
@@ -430,7 +430,7 @@ void AccessibleGridControlAccess::DisposeAccessImpl()
     ::comphelper::disposeComponent( m_xContext );
 }
 
-// -----------------------------------------------------------------------------
+
 Reference< XAccessibleContext > SAL_CALL AccessibleGridControlAccess::getAccessibleContext() throw ( RuntimeException )
 {
     SolarMutexGuard g;
@@ -450,7 +450,7 @@ Reference< XAccessibleContext > SAL_CALL AccessibleGridControlAccess::getAccessi
     return m_xContext;
 }
 
-// -----------------------------------------------------------------------------
+
 bool AccessibleGridControlAccess::isContextAlive() const
 {
     return  ( NULL != m_pContext ) && m_pContext->isAlive();

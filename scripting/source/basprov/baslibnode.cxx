@@ -58,15 +58,15 @@ namespace basprov
         }
     }
 
-    // -----------------------------------------------------------------------------
+
 
     BasicLibraryNodeImpl::~BasicLibraryNodeImpl()
     {
     }
 
-    // -----------------------------------------------------------------------------
+
     // XBrowseNode
-    // -----------------------------------------------------------------------------
+
 
     OUString BasicLibraryNodeImpl::getName(  ) throw (RuntimeException)
     {
@@ -75,7 +75,7 @@ namespace basprov
         return m_sLibName;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     Sequence< Reference< browse::XBrowseNode > > BasicLibraryNodeImpl::getChildNodes(  ) throw (RuntimeException)
     {
@@ -109,7 +109,7 @@ namespace basprov
         return aChildNodes;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     sal_Bool BasicLibraryNodeImpl::hasChildNodes(  ) throw (RuntimeException)
     {
@@ -122,7 +122,7 @@ namespace basprov
         return bReturn;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     sal_Int16 BasicLibraryNodeImpl::getType(  ) throw (RuntimeException)
     {
@@ -131,7 +131,7 @@ namespace basprov
         return browse::BrowseNodeTypes::CONTAINER;
     }
 
-    // -----------------------------------------------------------------------------
+
 
 //.........................................................................
 }   // namespace basprov

@@ -102,7 +102,7 @@ const sal_uInt8 BIFF12_PCDEFINITION_SUPPORTDRILL    = 0x08;
 const sal_uInt8 BIFF12_PCDWBSOURCE_HASRELID         = 0x01;
 const sal_uInt8 BIFF12_PCDWBSOURCE_HASSHEET         = 0x02;
 
-// ----------------------------------------------------------------------------
+
 
 const sal_uInt16 BIFF_PC_NOSTRING                   = 0xFFFF;
 
@@ -127,7 +127,7 @@ const sal_uInt16 BIFF_PCDEFINITION_OPTIMIZEMEMORY   = 0x0008;
 const sal_uInt16 BIFF_PCDEFINITION_BACKGROUNDQUERY  = 0x0010;
 const sal_uInt16 BIFF_PCDEFINITION_ENABLEREFRESH    = 0x0020;
 
-// ----------------------------------------------------------------------------
+
 
 /** Adjusts the weird date format read from binary streams.
 
@@ -305,7 +305,7 @@ OUString PivotCacheItem::getName() const
     return OUString();
 }
 
-// ----------------------------------------------------------------------------
+
 
 PivotCacheItemList::PivotCacheItemList( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -439,7 +439,7 @@ PCFieldModel::PCFieldModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 PCSharedItemsModel::PCSharedItemsModel() :
     mbHasSemiMixed( true ),
@@ -455,7 +455,7 @@ PCSharedItemsModel::PCSharedItemsModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 PCFieldGroupModel::PCFieldGroupModel() :
     mfStartValue( 0.0 ),
@@ -478,7 +478,7 @@ void PCFieldGroupModel::setBiffGroupBy( sal_uInt8 nGroupBy )
     mnGroupBy = STATIC_ARRAY_SELECT( spnGroupBy, nGroupBy, XML_range );
 }
 
-// ----------------------------------------------------------------------------
+
 
 PivotCacheField::PivotCacheField( const WorkbookHelper& rHelper, bool bIsDatabaseField ) :
     WorkbookHelper( rHelper ),
@@ -1053,7 +1053,7 @@ PCDefinitionModel::PCDefinitionModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 PCSourceModel::PCSourceModel() :
     mnSourceType( XML_TOKEN_INVALID ),
@@ -1061,14 +1061,14 @@ PCSourceModel::PCSourceModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 PCWorksheetSourceModel::PCWorksheetSourceModel()
 {
     maRange.StartColumn = maRange.StartRow = maRange.EndColumn = maRange.EndRow = -1;
 }
 
-// ----------------------------------------------------------------------------
+
 
 PivotCache::PivotCache( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),

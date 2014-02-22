@@ -48,7 +48,7 @@ protected:
 
 } // namespace http_dav_ucp
 
-// -------------------------------------------------------------------
+
 void TickerThread::run()
 {
     OSL_TRACE( "TickerThread: start." );
@@ -74,7 +74,7 @@ void TickerThread::run()
     OSL_TRACE( "TickerThread: stop." );
 }
 
-// -------------------------------------------------------------------
+
 SerfLockStore::SerfLockStore()
     : m_pSerfLockStore( ne_lockstore_create() ),
       m_pTickerThread( 0 )
@@ -82,7 +82,7 @@ SerfLockStore::SerfLockStore()
     OSL_ENSURE( m_pSerfLockStore, "Unable to create neon lock store!" );
 }
 
-// -------------------------------------------------------------------
+
 SerfLockStore::~SerfLockStore()
 {
     stopTicker();
@@ -107,7 +107,7 @@ SerfLockStore::~SerfLockStore()
     ne_lockstore_destroy( m_pSerfLockStore );
 }
 
-// -------------------------------------------------------------------
+
 void SerfLockStore::startTicker()
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -119,7 +119,7 @@ void SerfLockStore::startTicker()
     }
 }
 
-// -------------------------------------------------------------------
+
 void SerfLockStore::stopTicker()
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -133,7 +133,7 @@ void SerfLockStore::stopTicker()
     }
 }
 
-// -------------------------------------------------------------------
+
 void SerfLockStore::registerSession( HttpSession * pHttpSession )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -141,7 +141,7 @@ void SerfLockStore::registerSession( HttpSession * pHttpSession )
     ne_lockstore_register( m_pSerfLockStore, pHttpSession );
 }
 
-// -------------------------------------------------------------------
+
 SerfLock * SerfLockStore::findByUri( OUString const & rUri )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -152,7 +152,7 @@ SerfLock * SerfLockStore::findByUri( OUString const & rUri )
     return ne_lockstore_findbyuri( m_pSerfLockStore, &aUri );
 }
 
-// -------------------------------------------------------------------
+
 void SerfLockStore::addLock( SerfLock * pLock,
                              rtl::Reference< SerfSession > const & xSession,
                              sal_Int32 nLastChanceToSendRefreshRequest )
@@ -166,7 +166,7 @@ void SerfLockStore::addLock( SerfLock * pLock,
     startTicker();
 }
 
-// -------------------------------------------------------------------
+
 void SerfLockStore::updateLock( SerfLock * pLock,
                                 sal_Int32 nLastChanceToSendRefreshRequest )
 {
@@ -183,7 +183,7 @@ void SerfLockStore::updateLock( SerfLock * pLock,
     }
 }
 
-// -------------------------------------------------------------------
+
 void SerfLockStore::removeLock( SerfLock * pLock )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -195,7 +195,7 @@ void SerfLockStore::removeLock( SerfLock * pLock )
         stopTicker();
 }
 
-// -------------------------------------------------------------------
+
 void SerfLockStore::refreshLocks()
 {
     osl::MutexGuard aGuard( m_aMutex );

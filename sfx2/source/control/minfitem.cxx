@@ -23,7 +23,7 @@
 
 TYPEINIT1(SfxMacroInfoItem, SfxPoolItem);
 
-// -----------------------------------------------------------------------
+
 
 SfxMacroInfoItem::SfxMacroInfoItem(
     sal_uInt16 nWhichId,        // Slot-ID
@@ -41,7 +41,7 @@ SfxMacroInfoItem::SfxMacroInfoItem(
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 // copy constructor
 
@@ -55,7 +55,7 @@ SfxMacroInfoItem::SfxMacroInfoItem(const SfxMacroInfoItem& rCopy):
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 // op ==
 
@@ -69,14 +69,14 @@ bool SfxMacroInfoItem::operator==( const SfxPoolItem& rCmp) const
             aCommentText == ((const SfxMacroInfoItem&)rCmp).aCommentText;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem *SfxMacroInfoItem::Clone( SfxItemPool *) const
 {
     return new SfxMacroInfoItem(*this);
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString SfxMacroInfoItem::GetQualifiedName() const
 {

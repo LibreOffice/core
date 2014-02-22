@@ -67,7 +67,7 @@ HCURSOR ImplLoadSalCursor( int nId )
     return hCursor;
 }
 
-// -----------------------------------------------------------------------
+
 
 HBITMAP ImplLoadSalBitmap( int nId )
 {
@@ -80,7 +80,7 @@ HBITMAP ImplLoadSalBitmap( int nId )
     return hBitmap;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon )
 {

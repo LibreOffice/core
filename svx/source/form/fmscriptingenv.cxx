@@ -180,18 +180,18 @@ namespace svxform
     //====================================================================
     //= FormScriptListener
     //====================================================================
-    //--------------------------------------------------------------------
+
     FormScriptListener::FormScriptListener( FormScriptingEnvironment* pScriptExecutor )
         :m_pScriptExecutor( pScriptExecutor )
     {
     }
 
-    //--------------------------------------------------------------------
+
     FormScriptListener::~FormScriptListener()
     {
     }
 
-    //--------------------------------------------------------------------
+
     bool FormScriptListener::impl_allowAsynchronousCall_nothrow( const OUString& _rListenerType, const OUString& _rMethodName ) const
     {
         // This used to be implemented as:
@@ -728,7 +728,7 @@ namespace svxform
         return delayed_event_listeners.find(k) != delayed_event_listeners.end();
     }
 
-    //--------------------------------------------------------------------
+
     void FormScriptListener::impl_doFireScriptEvent_nothrow( ::osl::ClearableMutexGuard& _rGuard, const ScriptEvent& _rEvent, Any* _pSyncronousResult )
     {
         OSL_PRECOND( m_pScriptExecutor, "FormScriptListener::impl_doFireScriptEvent_nothrow: this will crash!" );
@@ -737,7 +737,7 @@ namespace svxform
         m_pScriptExecutor->doFireScriptEvent( _rEvent, _pSyncronousResult );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FormScriptListener::firing( const ScriptEvent& _rEvent ) throw (RuntimeException)
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
@@ -758,7 +758,7 @@ namespace svxform
         Application::PostUserEvent( LINK( this, FormScriptListener, OnAsyncScriptEvent ), new ScriptEvent( _rEvent ) );
     }
 
-    //--------------------------------------------------------------------
+
     Any SAL_CALL FormScriptListener::approveFiring( const ScriptEvent& _rEvent ) throw (InvocationTargetException, RuntimeException)
     {
         Any aResult;
@@ -770,20 +770,20 @@ namespace svxform
         return aResult;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FormScriptListener::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
     {
         // not interested in
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL FormScriptListener::dispose()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         m_pScriptExecutor = NULL;
     }
 
-    //--------------------------------------------------------------------
+
     IMPL_LINK( FormScriptListener, OnAsyncScriptEvent, ScriptEvent*, _pEvent )
     {
         OSL_PRECOND( _pEvent != NULL, "FormScriptListener::OnAsyncScriptEvent: invalid event!" );
@@ -806,7 +806,7 @@ namespace svxform
     //====================================================================
     //= FormScriptingEnvironment
     //====================================================================
-    //--------------------------------------------------------------------
+
     FormScriptingEnvironment::FormScriptingEnvironment( FmFormModel& _rModel )
         :m_refCount( 0 )
         ,m_pScriptListener( NULL )
@@ -818,12 +818,12 @@ namespace svxform
         // This cycle is broken up when our instance is disposed.
     }
 
-    //--------------------------------------------------------------------
+
     FormScriptingEnvironment::~FormScriptingEnvironment()
     {
     }
 
-    //--------------------------------------------------------------------
+
     void FormScriptingEnvironment::impl_registerOrRevoke_throw( const Reference< XEventAttacherManager >& _rxManager, bool _bRegister )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -847,25 +847,25 @@ namespace svxform
         }
     }
 
-    //--------------------------------------------------------------------
+
     void FormScriptingEnvironment::registerEventAttacherManager( const Reference< XEventAttacherManager >& _rxManager )
     {
         impl_registerOrRevoke_throw( _rxManager, true );
     }
 
-    //--------------------------------------------------------------------
+
     void FormScriptingEnvironment::revokeEventAttacherManager( const Reference< XEventAttacherManager >& _rxManager )
     {
         impl_registerOrRevoke_throw( _rxManager, false );
     }
 
-    //--------------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL FormScriptingEnvironment::acquire()
     {
         return osl_atomic_increment( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
+
     oslInterlockedCount SAL_CALL FormScriptingEnvironment::release()
     {
         if ( 0 == osl_atomic_decrement( &m_refCount ) )
@@ -876,12 +876,12 @@ namespace svxform
         return m_refCount;
     }
 
-    //--------------------------------------------------------------------
+
     IFormScriptingEnvironment::~IFormScriptingEnvironment()
     {
     }
 
-    //--------------------------------------------------------------------
+
     namespace
     {
         //................................................................
@@ -936,7 +936,7 @@ namespace svxform
         }
     }
 
-    //--------------------------------------------------------------------
+
     void FormScriptingEnvironment::doFireScriptEvent( const ScriptEvent& _rEvent, Any* _pSyncronousResult )
     {
 #ifdef DISABLE_SCRIPTING
@@ -1022,7 +1022,7 @@ namespace svxform
 #endif
     }
 
-    //--------------------------------------------------------------------
+
     void FormScriptingEnvironment::dispose()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -1030,7 +1030,7 @@ namespace svxform
         m_pScriptListener->dispose();
     }
 
-    //--------------------------------------------------------------------
+
     PFormScriptingEnvironment createDefaultFormScriptingEnvironment( FmFormModel& _rModel )
     {
         return new FormScriptingEnvironment( _rModel );

@@ -28,7 +28,7 @@ namespace dbp
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::container;
 
-    //---------------------------------------------------------------------
+
     void disambiguateName(const Reference< XNameAccess >& _rxContainer, OUString& _rElementsName)
     {
         DBG_ASSERT(_rxContainer.is(), "::dbp::disambiguateName: invalid container!");

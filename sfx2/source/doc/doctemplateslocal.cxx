@@ -32,7 +32,7 @@
 
 using namespace ::com::sun::star;
 
-// -----------------------------------
+
 uno::Sequence< beans::StringPair > DocTemplLocaleHelper::ReadGroupLocalizationSequence( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
@@ -40,7 +40,7 @@ uno::Sequence< beans::StringPair > DocTemplLocaleHelper::ReadGroupLocalizationSe
     return ReadLocalizationSequence_Impl( xInStream, aStringID, xContext );
 }
 
-// -----------------------------------
+
 void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::Reference< io::XOutputStream >& xOutStream, const uno::Sequence< beans::StringPair >& aSequence, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
@@ -89,7 +89,7 @@ void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::R
 
 // ==================================================================================
 
-// -----------------------------------
+
 uno::Sequence< beans::StringPair > SAL_CALL DocTemplLocaleHelper::ReadLocalizationSequence_Impl( const uno::Reference< io::XInputStream >& xInStream, const OUString& aStringID, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
@@ -110,7 +110,7 @@ uno::Sequence< beans::StringPair > SAL_CALL DocTemplLocaleHelper::ReadLocalizati
     return pHelper->GetParsingResult();
 }
 
-// -----------------------------------
+
 DocTemplLocaleHelper::DocTemplLocaleHelper()
 : m_aGroupListElement( "groupuinames:template-group-list" )
 , m_aGroupElement( "groupuinames:template-group" )
@@ -119,12 +119,12 @@ DocTemplLocaleHelper::DocTemplLocaleHelper()
 {
 }
 
-// -----------------------------------
+
 DocTemplLocaleHelper::~DocTemplLocaleHelper()
 {
 }
 
-// -----------------------------------
+
 uno::Sequence< beans::StringPair > DocTemplLocaleHelper::GetParsingResult()
 {
     if ( m_aElementsSeq.getLength() )
@@ -133,19 +133,19 @@ uno::Sequence< beans::StringPair > DocTemplLocaleHelper::GetParsingResult()
     return m_aResultSeq;
 }
 
-// -----------------------------------
+
 void SAL_CALL DocTemplLocaleHelper::startDocument()
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
-// -----------------------------------
+
 void SAL_CALL DocTemplLocaleHelper::endDocument()
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
-// -----------------------------------
+
 void SAL_CALL DocTemplLocaleHelper::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
         throw( xml::sax::SAXException, uno::RuntimeException )
 {
@@ -197,7 +197,7 @@ void SAL_CALL DocTemplLocaleHelper::startElement( const OUString& aName, const u
     }
 }
 
-// -----------------------------------
+
 void SAL_CALL DocTemplLocaleHelper::endElement( const OUString& aName )
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
@@ -211,25 +211,25 @@ void SAL_CALL DocTemplLocaleHelper::endElement( const OUString& aName )
     m_aElementsSeq.realloc( nLength - 1 );
 }
 
-// -----------------------------------
+
 void SAL_CALL DocTemplLocaleHelper::characters( const OUString& /*aChars*/ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
-// -----------------------------------
+
 void SAL_CALL DocTemplLocaleHelper::ignorableWhitespace( const OUString& /*aWhitespaces*/ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
-// -----------------------------------
+
 void SAL_CALL DocTemplLocaleHelper::processingInstruction( const OUString& /*aTarget*/, const OUString& /*aData*/ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
-// -----------------------------------
+
 void SAL_CALL DocTemplLocaleHelper::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /*xLocator*/ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {

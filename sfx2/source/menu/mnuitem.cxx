@@ -88,7 +88,7 @@ void SfxMenuControl::Bind(
 }
 
 
-//--------------------------------------------------------------------
+
 
 // binds the item to the specified menu and assignes the title
 
@@ -106,7 +106,7 @@ void SfxMenuControl::Bind(
     aTitle = rTitle;
 }
 
-//--------------------------------------------------------------------
+
 
 // Constructor for explicit registration
 
@@ -117,7 +117,7 @@ SfxMenuControl::SfxMenuControl( sal_Bool bShowStrings )
 {
 }
 
-//--------------------------------------------------------------------
+
 
 // Constructor for array
 SfxMenuControl::SfxMenuControl():
@@ -127,7 +127,7 @@ SfxMenuControl::SfxMenuControl():
 {
 }
 
-//--------------------------------------------------------------------
+
 
 SfxMenuControl::SfxMenuControl(sal_uInt16 nSlotId, SfxBindings& rBindings):
     SfxControllerItem(nSlotId, rBindings),
@@ -143,14 +143,14 @@ SfxMenuControl::SfxMenuControl(sal_uInt16 nSlotId, SfxBindings& rBindings):
 }
 
 
-//--------------------------------------------------------------------
+
 
 SfxMenuControl::~SfxMenuControl()
 {
     delete pSubMenu;
 }
 
-//--------------------------------------------------------------------
+
 
 // changes the state in the virtual menu
 
@@ -236,7 +236,7 @@ void SfxMenuControl::StateChanged
     pOwnMenu->CheckItem( GetId(), bCheck );
 }
 
-//--------------------------------------------------------------------
+
 
 SfxMenuControl* SfxMenuControl::CreateImpl( sal_uInt16 /*nId*/, Menu& /*rMenu*/, SfxBindings& /*rBindings*/ )
 {
@@ -249,7 +249,7 @@ void SfxMenuControl::RegisterControl( sal_uInt16 nSlotId, SfxModule *pMod )
                 SfxMenuControl::CreateImpl, TYPE(SfxStringItem), nSlotId ) );
 }
 
-//--------------------------------------------------------------------
+
 void SfxMenuControl::RegisterMenuControl(SfxModule* pMod, SfxMenuCtrlFactory* pFact)
 {
     SFX_APP()->RegisterMenuControl_Impl( pMod, pFact );
@@ -288,7 +288,7 @@ SfxMenuControl* SfxMenuControl::CreateControl( sal_uInt16 nId, Menu &rMenu, SfxB
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 
 PopupMenu* SfxMenuControl::GetPopup () const
 {

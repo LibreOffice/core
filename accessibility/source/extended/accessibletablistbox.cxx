@@ -35,9 +35,9 @@ namespace accessibility
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star;
 
-    // -----------------------------------------------------------------------------
+
     // Ctor() and Dtor()
-    // -----------------------------------------------------------------------------
+
     AccessibleTabListBox::AccessibleTabListBox( const Reference< XAccessible >& rxParent, SvHeaderTabListBox& rBox )
         :AccessibleBrowseBox( rxParent, NULL, rBox )
         ,m_pTabListBox( &rBox )
@@ -50,7 +50,7 @@ namespace accessibility
         osl_atomic_decrement( &m_refCount );
     }
 
-    // -----------------------------------------------------------------------------
+
     AccessibleTabListBox::~AccessibleTabListBox()
     {
         if ( isAlive() )
@@ -60,7 +60,7 @@ namespace accessibility
             dispose();
         }
     }
-    // -----------------------------------------------------------------------------
+
     AccessibleBrowseBoxTable* AccessibleTabListBox::createAccessibleTable()
     {
         return new AccessibleTabListBoxTable( this, *m_pTabListBox );
@@ -80,13 +80,13 @@ namespace accessibility
         return 2; // header and table
     }
 
-    // -----------------------------------------------------------------------------
+
     Reference< XAccessibleContext > SAL_CALL AccessibleTabListBox::getAccessibleContext() throw ( RuntimeException )
     {
         return this;
     }
 
-    // -----------------------------------------------------------------------------
+
     Reference< XAccessible > SAL_CALL
     AccessibleTabListBox::getAccessibleChild( sal_Int32 nChildIndex )
         throw ( IndexOutOfBoundsException, RuntimeException )

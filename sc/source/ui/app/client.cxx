@@ -38,7 +38,7 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 ScClient::ScClient( ScTabViewShell* pViewShell, Window* pDraw, SdrModel* pSdrModel, SdrOle2Obj* pObj ) :
     SfxInPlaceClient( pViewShell, pDraw, pObj->GetAspect() ),

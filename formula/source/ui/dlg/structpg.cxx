@@ -29,7 +29,7 @@
 #include "formula/IFunctionDescription.hxx"
 #include "ForResId.hrc"
 
-//----------------------------------------------------------------------------
+
 namespace formula
 {
 StructListBox::StructListBox(Window* pParent, const ResId& rResId ):

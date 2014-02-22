@@ -35,7 +35,7 @@ ORelationTableConnection::ORelationTableConnection( ORelationTableView* pContain
 ORelationTableConnection::ORelationTableConnection( const ORelationTableConnection& rConn )
     : OTableConnection( rConn )
 {
-    // keine eigenen Members, also reicht die Basisklassenfunktionalitaet
+    // no own members, thus the base class functionality is enough
 }
 
 ORelationTableConnection::~ORelationTableConnection()
@@ -44,7 +44,7 @@ ORelationTableConnection::~ORelationTableConnection()
 
 ORelationTableConnection& ORelationTableConnection::operator=( const ORelationTableConnection& rConn )
 {
-    // nicht dass es was aendern wuerde, da die Basisklasse das auch testet und ich keine eigenen Members zu kopieren habe
+    // this doesn't change anything, since the base class tests this, too and I don't have my own members to copy
     if (&rConn == this)
         return *this;
 
@@ -59,7 +59,7 @@ void ORelationTableConnection::Draw( const Rectangle& rRect )
     if ( pData && (pData->GetCardinality() == CARDINAL_UNDEFINED) )
         return;
 
-    // Linien nach oberster Linie durchsuchen
+    // search lines for top line
     Rectangle aBoundingRect;
     long nTop = GetBoundingRect().Bottom();
     long nTemp;
@@ -82,7 +82,7 @@ void ORelationTableConnection::Draw( const Rectangle& rRect )
         }
     }
 
-    // Kardinalitaet antragen
+    // cardinality
     if( !pTopLine )
         return;
 

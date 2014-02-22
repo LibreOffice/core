@@ -44,7 +44,7 @@ namespace pcr
     //==================================================================
     // NumberFormatSampleField
     //==================================================================
-    //------------------------------------------------------------------
+
     bool NumberFormatSampleField::PreNotify( NotifyEvent& rNEvt )
     {
         // want to handle two keys myself : Del/Backspace should empty the window (setting my prop to "standard" this way)
@@ -64,7 +64,7 @@ namespace pcr
         return BaseClass::PreNotify( rNEvt );
     }
 
-    //------------------------------------------------------------------
+
     void NumberFormatSampleField::SetFormatSupplier( const SvNumberFormatsSupplierObj* pSupplier )
     {
         if ( pSupplier )
@@ -86,13 +86,13 @@ namespace pcr
     //==================================================================
     // OFormatSampleControl
     //==================================================================
-    //------------------------------------------------------------------
+
     OFormatSampleControl::OFormatSampleControl( Window* pParent, WinBits nWinStyle )
         :OFormatSampleControl_Base( PropertyControlType::Unknown, pParent, nWinStyle )
     {
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL OFormatSampleControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
         sal_Int32 nFormatKey = 0;
@@ -114,7 +114,7 @@ namespace pcr
         else
             getTypedControlWindow()->SetText( "" );
     }
-    //------------------------------------------------------------------
+
     double OFormatSampleControl::getPreviewValue( const SvNumberformat& i_rEntry )
     {
         double nValue = 1234.56789;
@@ -140,7 +140,7 @@ namespace pcr
         return nValue;
     }
 
-    //------------------------------------------------------------------
+
     double OFormatSampleControl::getPreviewValue(SvNumberFormatter* _pNF,sal_Int32 _nFormatKey)
     {
         const SvNumberformat* pEntry = _pNF->GetEntry(_nFormatKey);
@@ -150,7 +150,7 @@ namespace pcr
             nValue = getPreviewValue( *pEntry );
         return nValue;
     }
-    //------------------------------------------------------------------
+
     Any SAL_CALL OFormatSampleControl::getValue() throw (RuntimeException)
     {
         Any aPropValue;
@@ -159,7 +159,7 @@ namespace pcr
         return aPropValue;
     }
 
-    //------------------------------------------------------------------
+
     Type SAL_CALL OFormatSampleControl::getValueType() throw (RuntimeException)
     {
         return ::getCppuType( static_cast< sal_Int32* >( NULL ) );
@@ -169,7 +169,7 @@ namespace pcr
     // class OFormattedNumericControl
     //==================================================================
     DBG_NAME(OFormattedNumericControl);
-    //------------------------------------------------------------------
+
     OFormattedNumericControl::OFormattedNumericControl( Window* pParent, WinBits nWinStyle )
         :OFormattedNumericControl_Base( PropertyControlType::Unknown, pParent, nWinStyle )
     {
@@ -180,13 +180,13 @@ namespace pcr
         m_nLastDecimalDigits = getTypedControlWindow()->GetDecimalDigits();
     }
 
-    //------------------------------------------------------------------
+
     OFormattedNumericControl::~OFormattedNumericControl()
     {
         DBG_DTOR(OFormattedNumericControl,NULL);
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL OFormattedNumericControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
         double nValue( 0 );
@@ -196,7 +196,7 @@ namespace pcr
             getTypedControlWindow()->SetText("");
     }
 
-    //------------------------------------------------------------------
+
     Any SAL_CALL OFormattedNumericControl::getValue() throw (RuntimeException)
     {
         Any aPropValue;
@@ -205,13 +205,13 @@ namespace pcr
         return aPropValue;
     }
 
-    //------------------------------------------------------------------
+
     Type SAL_CALL OFormattedNumericControl::getValueType() throw (RuntimeException)
     {
         return ::getCppuType( static_cast< double* >( NULL ) );
     }
 
-    //------------------------------------------------------------------
+
     void OFormattedNumericControl::SetFormatDescription(const FormatDescription& rDesc)
     {
         sal_Bool bFallback = sal_True;
@@ -264,7 +264,7 @@ namespace pcr
     //========================================================================
     //= OFileUrlControl
     //========================================================================
-    //------------------------------------------------------------------
+
     OFileUrlControl::OFileUrlControl( Window* pParent, WinBits nWinStyle )
         :OFileUrlControl_Base( PropertyControlType::Unknown, pParent, nWinStyle | WB_DROPDOWN )
     {
@@ -272,12 +272,12 @@ namespace pcr
         getTypedControlWindow()->SetPlaceHolder( PcrRes( RID_EMBED_IMAGE_PLACEHOLDER ).toString() ) ;
     }
 
-    //------------------------------------------------------------------
+
     OFileUrlControl::~OFileUrlControl()
     {
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL OFileUrlControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
         OUString sURL;
@@ -292,7 +292,7 @@ namespace pcr
             getTypedControlWindow()->SetText( "" );
     }
 
-    //------------------------------------------------------------------
+
     Any SAL_CALL OFileUrlControl::getValue() throw (RuntimeException)
     {
         Any aPropValue;
@@ -301,7 +301,7 @@ namespace pcr
         return aPropValue;
     }
 
-    //------------------------------------------------------------------
+
     Type SAL_CALL OFileUrlControl::getValueType() throw (RuntimeException)
     {
         return ::getCppuType( static_cast< OUString* >( NULL ) );
@@ -310,7 +310,7 @@ namespace pcr
     //========================================================================
     //= OTimeDurationControl
     //========================================================================
-    //------------------------------------------------------------------
+
     OTimeDurationControl::OTimeDurationControl( ::Window* pParent, WinBits nWinStyle )
         :ONumericControl( pParent, nWinStyle )
     {
@@ -319,12 +319,12 @@ namespace pcr
         getTypedControlWindow()->SetCustomConvertHdl( LINK( this, OTimeDurationControl, OnCustomConvert ) );
     }
 
-    //------------------------------------------------------------------
+
     OTimeDurationControl::~OTimeDurationControl()
     {
     }
 
-    //------------------------------------------------------------------
+
     ::sal_Int16 SAL_CALL OTimeDurationControl::getControlType() throw (::com::sun::star::uno::RuntimeException)
     {
         // don't use the base class'es method, it would claim we're a standard control, which
@@ -332,7 +332,7 @@ namespace pcr
         return PropertyControlType::Unknown;
     }
 
-    //------------------------------------------------------------------
+
     IMPL_LINK( OTimeDurationControl, OnCustomConvert, MetricField*, /*pField*/ )
     {
         long nMultiplier = 1;

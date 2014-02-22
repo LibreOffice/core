@@ -58,9 +58,9 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
 
-// -----------------------------------------------------------------------------
+
 // Ctor() and Dtor()
-// -----------------------------------------------------------------------------
+
 VCLXAccessibleListItem::VCLXAccessibleListItem( ::accessibility::IComboListBoxHelper* _pListBoxHelper, sal_Int32 _nIndexInParent, const Reference< XAccessible >& _xParent ) :
 
     VCLXAccessibleListItem_BASE ( m_aMutex ),
@@ -79,11 +79,11 @@ VCLXAccessibleListItem::VCLXAccessibleListItem( ::accessibility::IComboListBoxHe
     if ( m_pListBoxHelper )
         m_sEntryText = m_pListBoxHelper->GetEntry( (sal_uInt16)_nIndexInParent );
 }
-// -----------------------------------------------------------------------------
+
 VCLXAccessibleListItem::~VCLXAccessibleListItem()
 {
 }
-// -----------------------------------------------------------------------------
+
 void VCLXAccessibleListItem::SetSelected( sal_Bool _bSelected )
 {
     if ( m_bSelected != _bSelected )
@@ -98,7 +98,7 @@ void VCLXAccessibleListItem::SetSelected( sal_Bool _bSelected )
         NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
     }
 }
-// -----------------------------------------------------------------------------
+
 void VCLXAccessibleListItem::SetVisible( sal_Bool _bVisible )
 {
     if ( m_bVisible != _bVisible )
@@ -111,7 +111,7 @@ void VCLXAccessibleListItem::SetVisible( sal_Bool _bVisible )
         NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
     }
 }
-// -----------------------------------------------------------------------------
+
 void VCLXAccessibleListItem::NotifyAccessibleEvent( sal_Int16 _nEventId,
                                                     const ::com::sun::star::uno::Any& _aOldValue,
                                                     const ::com::sun::star::uno::Any& _aNewValue )
@@ -125,49 +125,49 @@ void VCLXAccessibleListItem::NotifyAccessibleEvent( sal_Int16 _nEventId,
     if (m_nClientId)
         comphelper::AccessibleEventNotifier::addEvent( m_nClientId, aEvt );
 }
-// -----------------------------------------------------------------------------
+
 // OCommonAccessibleText
-// -----------------------------------------------------------------------------
+
 OUString VCLXAccessibleListItem::implGetText()
 {
     return m_sEntryText;
 }
-// -----------------------------------------------------------------------------
+
 Locale VCLXAccessibleListItem::implGetLocale()
 {
     return Application::GetSettings().GetLanguageTag().getLocale();
 }
-// -----------------------------------------------------------------------------
+
 void VCLXAccessibleListItem::implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex )
 {
     nStartIndex = 0;
     nEndIndex = 0;
 }
-// -----------------------------------------------------------------------------
+
 // XInterface
-// -----------------------------------------------------------------------------
+
 Any SAL_CALL VCLXAccessibleListItem::queryInterface( Type const & rType ) throw (RuntimeException)
 {
     return VCLXAccessibleListItem_BASE::queryInterface( rType );
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL VCLXAccessibleListItem::acquire() throw ()
 {
     VCLXAccessibleListItem_BASE::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL VCLXAccessibleListItem::release() throw ()
 {
     VCLXAccessibleListItem_BASE::release();
 }
-// -----------------------------------------------------------------------------
+
 // XTypeProvider
-// -----------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL VCLXAccessibleListItem::getTypes(  ) throw (RuntimeException)
 {
     return VCLXAccessibleListItem_BASE::getTypes();
 }
-// -----------------------------------------------------------------------------
+
 Sequence< sal_Int8 > VCLXAccessibleListItem::getImplementationId() throw (RuntimeException)
 {
     static ::cppu::OImplementationId* pId = NULL;
@@ -184,9 +184,9 @@ Sequence< sal_Int8 > VCLXAccessibleListItem::getImplementationId() throw (Runtim
     }
     return pId->getImplementationId();
 }
-// -----------------------------------------------------------------------------
+
 // XComponent
-// -----------------------------------------------------------------------------
+
 void SAL_CALL VCLXAccessibleListItem::disposing()
 {
     comphelper::AccessibleEventNotifier::TClientId nId( 0 );
@@ -210,19 +210,19 @@ void SAL_CALL VCLXAccessibleListItem::disposing()
     if ( nId )
             comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( nId, *this );
 }
-// -----------------------------------------------------------------------------
+
 // XServiceInfo
-// -----------------------------------------------------------------------------
+
 OUString VCLXAccessibleListItem::getImplementationName() throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleListItem" );
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool VCLXAccessibleListItem::supportsService( const OUString& rServiceName ) throw (RuntimeException)
 {
     return cppu::supportsService(this, rServiceName);
 }
-// -----------------------------------------------------------------------------
+
 Sequence< OUString > VCLXAccessibleListItem::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< OUString > aNames(3);
@@ -231,51 +231,51 @@ Sequence< OUString > VCLXAccessibleListItem::getSupportedServiceNames() throw (R
     aNames[2] = "com.sun.star.accessibility.AccessibleListItem";
     return aNames;
 }
-// -----------------------------------------------------------------------------
+
 // XAccessible
-// -----------------------------------------------------------------------------
+
 Reference< XAccessibleContext > SAL_CALL VCLXAccessibleListItem::getAccessibleContext(  ) throw (RuntimeException)
 {
     return this;
 }
-// -----------------------------------------------------------------------------
+
 // XAccessibleContext
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL VCLXAccessibleListItem::getAccessibleChildCount(  ) throw (RuntimeException)
 {
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 Reference< XAccessible > SAL_CALL VCLXAccessibleListItem::getAccessibleChild( sal_Int32 ) throw (RuntimeException)
 {
     return Reference< XAccessible >();
 }
-// -----------------------------------------------------------------------------
+
 Reference< XAccessible > SAL_CALL VCLXAccessibleListItem::getAccessibleParent(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     return m_xParent;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL VCLXAccessibleListItem::getAccessibleIndexInParent(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return m_nIndexInParent;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int16 SAL_CALL VCLXAccessibleListItem::getAccessibleRole(  ) throw (RuntimeException)
 {
     return AccessibleRole::LIST_ITEM;
     //  return AccessibleRole::LABEL;
 }
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL VCLXAccessibleListItem::getAccessibleDescription(  ) throw (RuntimeException)
 {
     // no description for every item
     return OUString();
 }
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL VCLXAccessibleListItem::getAccessibleName(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -283,14 +283,14 @@ OUString SAL_CALL VCLXAccessibleListItem::getAccessibleName(  ) throw (RuntimeEx
     // entry text == accessible name
     return implGetText();
 }
-// -----------------------------------------------------------------------------
+
 Reference< XAccessibleRelationSet > SAL_CALL VCLXAccessibleListItem::getAccessibleRelationSet(  ) throw (RuntimeException)
 {
     utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
     Reference< XAccessibleRelationSet > xSet = pRelationSetHelper;
     return xSet;
 }
-// -----------------------------------------------------------------------------
+
 Reference< XAccessibleStateSet > SAL_CALL VCLXAccessibleListItem::getAccessibleStateSet(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -322,7 +322,7 @@ Reference< XAccessibleStateSet > SAL_CALL VCLXAccessibleListItem::getAccessibleS
 
     return xStateSet;
 }
-// -----------------------------------------------------------------------------
+
 Locale SAL_CALL VCLXAccessibleListItem::getLocale(  ) throw (IllegalAccessibleComponentStateException, RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -330,9 +330,9 @@ Locale SAL_CALL VCLXAccessibleListItem::getLocale(  ) throw (IllegalAccessibleCo
 
     return implGetLocale();
 }
-// -----------------------------------------------------------------------------
+
 // XAccessibleComponent
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL VCLXAccessibleListItem::containsPoint( const awt::Point& _aPoint ) throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -347,12 +347,12 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::containsPoint( const awt::Point& _aPoi
     }
     return bInside;
 }
-// -----------------------------------------------------------------------------
+
 Reference< XAccessible > SAL_CALL VCLXAccessibleListItem::getAccessibleAtPoint( const awt::Point& ) throw (RuntimeException)
 {
     return Reference< XAccessible >();
 }
-// -----------------------------------------------------------------------------
+
 awt::Rectangle SAL_CALL VCLXAccessibleListItem::getBounds(  ) throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -364,7 +364,7 @@ awt::Rectangle SAL_CALL VCLXAccessibleListItem::getBounds(  ) throw (RuntimeExce
 
     return aRect;
 }
-// -----------------------------------------------------------------------------
+
 awt::Point SAL_CALL VCLXAccessibleListItem::getLocation(  ) throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -378,7 +378,7 @@ awt::Point SAL_CALL VCLXAccessibleListItem::getLocation(  ) throw (RuntimeExcept
     }
     return AWTPoint( aPoint );
 }
-// -----------------------------------------------------------------------------
+
 awt::Point SAL_CALL VCLXAccessibleListItem::getLocationOnScreen(  ) throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -393,7 +393,7 @@ awt::Point SAL_CALL VCLXAccessibleListItem::getLocationOnScreen(  ) throw (Runti
     }
     return AWTPoint( aPoint );
 }
-// -----------------------------------------------------------------------------
+
 awt::Size SAL_CALL VCLXAccessibleListItem::getSize(  ) throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -405,19 +405,19 @@ awt::Size SAL_CALL VCLXAccessibleListItem::getSize(  ) throw (RuntimeException)
 
     return AWTSize( aSize );
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL VCLXAccessibleListItem::grabFocus(  ) throw (RuntimeException)
 {
     // no focus for each item
 }
-// -----------------------------------------------------------------------------
+
 // XAccessibleText
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL VCLXAccessibleListItem::getCaretPosition() throw (RuntimeException)
 {
     return -1;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL VCLXAccessibleListItem::setCaretPosition( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -428,7 +428,7 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::setCaretPosition( sal_Int32 nIndex ) t
 
     return sal_False;
 }
-// -----------------------------------------------------------------------------
+
 sal_Unicode SAL_CALL VCLXAccessibleListItem::getCharacter( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -436,7 +436,7 @@ sal_Unicode SAL_CALL VCLXAccessibleListItem::getCharacter( sal_Int32 nIndex ) th
 
     return OCommonAccessibleText::getCharacter( nIndex );
 }
-// -----------------------------------------------------------------------------
+
 Sequence< PropertyValue > SAL_CALL VCLXAccessibleListItem::getCharacterAttributes( sal_Int32 nIndex, const Sequence< OUString >& ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -448,7 +448,7 @@ Sequence< PropertyValue > SAL_CALL VCLXAccessibleListItem::getCharacterAttribute
 
     return Sequence< PropertyValue >();
 }
-// -----------------------------------------------------------------------------
+
 awt::Rectangle SAL_CALL VCLXAccessibleListItem::getCharacterBounds( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -469,7 +469,7 @@ awt::Rectangle SAL_CALL VCLXAccessibleListItem::getCharacterBounds( sal_Int32 nI
 
     return aBounds;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL VCLXAccessibleListItem::getCharacterCount() throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -477,7 +477,7 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getCharacterCount() throw (RuntimeExc
 
     return OCommonAccessibleText::getCharacterCount();
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL VCLXAccessibleListItem::getIndexAtPoint( const awt::Point& aPoint ) throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -496,7 +496,7 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getIndexAtPoint( const awt::Point& aP
     }
     return nIndex;
 }
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL VCLXAccessibleListItem::getSelectedText() throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -504,7 +504,7 @@ OUString SAL_CALL VCLXAccessibleListItem::getSelectedText() throw (RuntimeExcept
 
     return OCommonAccessibleText::getSelectedText();
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL VCLXAccessibleListItem::getSelectionStart() throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -512,7 +512,7 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getSelectionStart() throw (RuntimeExc
 
     return OCommonAccessibleText::getSelectionStart();
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL VCLXAccessibleListItem::getSelectionEnd() throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -520,7 +520,7 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getSelectionEnd() throw (RuntimeExcep
 
     return OCommonAccessibleText::getSelectionEnd();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL VCLXAccessibleListItem::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -531,7 +531,7 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::setSelection( sal_Int32 nStartIndex, s
 
     return sal_False;
 }
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL VCLXAccessibleListItem::getText() throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -539,7 +539,7 @@ OUString SAL_CALL VCLXAccessibleListItem::getText() throw (RuntimeException)
 
     return OCommonAccessibleText::getText();
 }
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL VCLXAccessibleListItem::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -547,7 +547,7 @@ OUString SAL_CALL VCLXAccessibleListItem::getTextRange( sal_Int32 nStartIndex, s
 
     return OCommonAccessibleText::getTextRange( nStartIndex, nEndIndex );
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::accessibility::TextSegment SAL_CALL VCLXAccessibleListItem::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -555,7 +555,7 @@ OUString SAL_CALL VCLXAccessibleListItem::getTextRange( sal_Int32 nStartIndex, s
 
     return OCommonAccessibleText::getTextAtIndex( nIndex, aTextType );
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::accessibility::TextSegment SAL_CALL VCLXAccessibleListItem::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -563,7 +563,7 @@ OUString SAL_CALL VCLXAccessibleListItem::getTextRange( sal_Int32 nStartIndex, s
 
     return OCommonAccessibleText::getTextBeforeIndex( nIndex, aTextType );
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::accessibility::TextSegment SAL_CALL VCLXAccessibleListItem::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -571,7 +571,7 @@ OUString SAL_CALL VCLXAccessibleListItem::getTextRange( sal_Int32 nStartIndex, s
 
     return OCommonAccessibleText::getTextBehindIndex( nIndex, aTextType );
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL VCLXAccessibleListItem::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -602,9 +602,9 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::copyText( sal_Int32 nStartIndex, sal_I
 
     return bRet;
 }
-// -----------------------------------------------------------------------------
+
 // XAccessibleEventBroadcaster
-// -----------------------------------------------------------------------------
+
 void SAL_CALL VCLXAccessibleListItem::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
 {
     if (xListener.is())
@@ -614,7 +614,7 @@ void SAL_CALL VCLXAccessibleListItem::addAccessibleEventListener( const Referenc
         comphelper::AccessibleEventNotifier::addEventListener( m_nClientId, xListener );
     }
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL VCLXAccessibleListItem::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
 {
     if ( xListener.is() && m_nClientId )
@@ -635,7 +635,7 @@ void SAL_CALL VCLXAccessibleListItem::removeAccessibleEventListener( const Refer
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 
 
 
@@ -656,6 +656,6 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getBackground (void)
 {
     return COL_WHITE;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

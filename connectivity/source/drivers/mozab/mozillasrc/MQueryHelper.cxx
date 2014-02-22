@@ -290,7 +290,7 @@ MQueryHelper::waitForRow( sal_Int32 rowNum )
     return( sal_True );
 }
 
-// -------------------------------------------------------------------------
+
 
 sal_Int32
 MQueryHelper::getResultCount() const
@@ -308,7 +308,7 @@ MQueryHelper::getResultCount() const
     }
 }
 
-// -------------------------------------------------------------------------
+
 
 sal_uInt32
 MQueryHelper::getRealCount() const
@@ -317,7 +317,7 @@ MQueryHelper::getRealCount() const
     return static_cast<sal_Int32>(m_aResults.size());
 }
 
-// -------------------------------------------------------------------------
+
 NS_IMETHODIMP MQueryHelper::OnQueryItem(nsIAbDirectoryQueryResult *result)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -398,7 +398,7 @@ NS_IMETHODIMP MQueryHelper::OnQueryItem(nsIAbDirectoryQueryResult *result)
     return(NS_OK);
 }
 
-// -----------------------------------------------------------------------------
+
 void MQueryHelper::notifyQueryError()
 {
     m_bQueryComplete = sal_True ;
@@ -591,7 +591,7 @@ sal_Bool MQueryHelper::resyncRow(sal_uInt32 rowIndex)
     getCardValues(card,rowIndex);
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 MQueryHelper::createNewCard()
 {
     ::osl::MutexGuard aGuard( m_aMutex );

@@ -49,7 +49,7 @@ using namespace ::com::sun::star::lang;
 using namespace dbtools;
 typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
-// -------------------------------------------------------------------------
+
 HViews::HViews( const Reference< XConnection >& _rxConnection, ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
     const TStringVector &_rVector )
     :sdbcx::OCollection( _rParent, sal_True, _rMutex, _rVector )
@@ -59,7 +59,7 @@ HViews::HViews( const Reference< XConnection >& _rxConnection, ::cppu::OWeakObje
 {
 }
 
-// -------------------------------------------------------------------------
+
 sdbcx::ObjectType HViews::createObject(const OUString& _rName)
 {
     OUString sCatalog,sSchema,sTable;
@@ -72,32 +72,32 @@ sdbcx::ObjectType HViews::createObject(const OUString& _rName)
     return new HView( m_xConnection, isCaseSensitive(), sSchema, sTable );
 }
 
-// -------------------------------------------------------------------------
+
 void HViews::impl_refresh(  ) throw(RuntimeException)
 {
     static_cast<OHCatalog&>(m_rParent).refreshTables();
 }
-// -------------------------------------------------------------------------
+
 void HViews::disposing(void)
 {
 m_xMetaData.clear();
     OCollection::disposing();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > HViews::createDescriptor()
 {
     Reference<XConnection> xConnection = static_cast<OHCatalog&>(m_rParent).getConnection();
     connectivity::sdbcx::OView* pNew = new connectivity::sdbcx::OView(sal_True,xConnection->getMetaData());
     return pNew;
 }
-// -------------------------------------------------------------------------
+
 // XAppend
 sdbcx::ObjectType HViews::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     createView(descriptor);
     return createObject( _rForName );
 }
-// -------------------------------------------------------------------------
+
 // XDrop
 void HViews::dropObject(sal_Int32 _nPos,const OUString /*_sElementName*/)
 {
@@ -119,14 +119,14 @@ void HViews::dropObject(sal_Int32 _nPos,const OUString /*_sElementName*/)
         ::comphelper::disposeComponent(xStmt);
     }
 }
-// -----------------------------------------------------------------------------
+
 void HViews::dropByNameImpl(const OUString& elementName)
 {
     m_bInDrop = sal_True;
     OCollection_TYPE::dropByName(elementName);
     m_bInDrop = sal_False;
 }
-// -----------------------------------------------------------------------------
+
 void HViews::createView( const Reference< XPropertySet >& descriptor )
 {
     Reference<XConnection> xConnection = static_cast<OHCatalog&>(m_rParent).getConnection();
@@ -153,6 +153,6 @@ void HViews::createView( const Reference< XPropertySet >& descriptor )
         pTables->appendNew(sName);
     }
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

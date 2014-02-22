@@ -147,7 +147,7 @@ SvxLineDefTabPage::SvxLineDefTabPage
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineDefTabPage::Construct()
 {
@@ -155,7 +155,7 @@ void SvxLineDefTabPage::Construct()
     m_pLbLineStyles->Fill( pDashList );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineDefTabPage::ActivatePage( const SfxItemSet& )
 {
@@ -187,7 +187,7 @@ void SvxLineDefTabPage::ActivatePage( const SfxItemSet& )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 int SvxLineDefTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
@@ -199,7 +199,7 @@ int SvxLineDefTabPage::DeactivatePage( SfxItemSet* _pSet )
     return( LEAVE_PAGE );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineDefTabPage::CheckChanges_Impl()
 {
@@ -255,7 +255,7 @@ void SvxLineDefTabPage::CheckChanges_Impl()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxLineDefTabPage::FillItemSet( SfxItemSet& rAttrs )
 {
@@ -273,7 +273,7 @@ sal_Bool SvxLineDefTabPage::FillItemSet( SfxItemSet& rAttrs )
     return( sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineDefTabPage::Reset( const SfxItemSet& rAttrs )
 {
@@ -319,14 +319,14 @@ void SvxLineDefTabPage::Reset( const SfxItemSet& rAttrs )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SvxLineDefTabPage::Create( Window* pWindow, const SfxItemSet& rOutAttrs )
 {
     return( new SvxLineDefTabPage( pWindow, rOutAttrs ) );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( SvxLineDefTabPage, SelectLinestyleHdl_Impl, void *, p )
 {
@@ -360,7 +360,7 @@ IMPL_LINK( SvxLineDefTabPage, SelectLinestyleHdl_Impl, void *, p )
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(SvxLineDefTabPage, ChangePreviewHdl_Impl)
 {
@@ -371,7 +371,7 @@ IMPL_LINK_NOARG_INLINE_START(SvxLineDefTabPage, ChangePreviewHdl_Impl)
 }
 IMPL_LINK_NOARG_INLINE_END(SvxLineDefTabPage, ChangePreviewHdl_Impl)
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber1Hdl_Impl)
 {
@@ -391,7 +391,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber1Hdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber2Hdl_Impl)
 {
@@ -412,7 +412,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber2Hdl_Impl)
 }
 
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( SvxLineDefTabPage, ChangeMetricHdl_Impl, void *, p )
 {
@@ -482,7 +482,7 @@ IMPL_LINK( SvxLineDefTabPage, ChangeMetricHdl_Impl, void *, p )
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( SvxLineDefTabPage, SelectTypeHdl_Impl, void *, p )
 {
@@ -517,7 +517,7 @@ IMPL_LINK( SvxLineDefTabPage, SelectTypeHdl_Impl, void *, p )
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
 {
@@ -608,7 +608,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl)
 {
@@ -680,7 +680,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl)
 {
@@ -717,7 +717,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl)
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl)
 {
@@ -790,7 +790,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl)
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl)
 {
@@ -837,7 +837,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxLineDefTabPage::FillDash_Impl()
 {
@@ -861,7 +861,7 @@ void SvxLineDefTabPage::FillDash_Impl()
     m_pCtlPreview->SetLineAttributes(aXLineAttr.GetItemSet());
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxLineDefTabPage::FillDialog_Impl()
 {

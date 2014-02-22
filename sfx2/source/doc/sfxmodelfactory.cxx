@@ -100,7 +100,7 @@ namespace sfx2
     //====================================================================
     //= SfxModelFactory - implementation
     //====================================================================
-    //--------------------------------------------------------------------
+
     SfxModelFactory::SfxModelFactory( const Reference< XMultiServiceFactory >& _rxServiceFactory,
             const OUString& _rImplementationName, const SfxModelFactoryFunc _pComponentFactoryFunc,
             const Sequence< OUString >& _rServiceNames )
@@ -111,24 +111,24 @@ namespace sfx2
     {
     }
 
-    //--------------------------------------------------------------------
+
     SfxModelFactory::~SfxModelFactory()
     {
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XInterface > SfxModelFactory::impl_createInstance( const sal_uInt64 _nCreationFlags ) const
     {
         return (*m_pComponentFactoryFunc)( m_xServiceFactory, _nCreationFlags );
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XInterface > SAL_CALL SfxModelFactory::createInstance(  ) throw (Exception, RuntimeException)
     {
         return createInstanceWithArguments( Sequence< Any >() );
     }
 
-    //--------------------------------------------------------------------
+
     namespace
     {
         struct IsSpecialArgument : public ::std::unary_function< Any, bool >
@@ -151,7 +151,7 @@ namespace sfx2
         };
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XInterface > SAL_CALL SfxModelFactory::createInstanceWithArguments( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
     {
         ::comphelper::NamedValueCollection aArgs( _rArguments );

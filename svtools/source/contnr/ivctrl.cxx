@@ -54,7 +54,7 @@ OUString SvxIconChoiceCtrlEntry::GetDisplayText() const
     return MnemonicGenerator::EraseAllMnemonicChars( aText );
 }
 
-// ----------------------------------------------------------------------------
+
 
 SvxIconChoiceCtrlColumnInfo::SvxIconChoiceCtrlColumnInfo( const SvxIconChoiceCtrlColumnInfo& rInfo )
     : aColText( rInfo.aColText ), aColImage( rInfo.aColImage )

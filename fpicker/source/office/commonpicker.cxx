@@ -45,7 +45,7 @@ namespace svt
     using namespace     ::com::sun::star::beans;
     using namespace     ::comphelper;
 
-    //---------------------------------------------------------------------
+
     OCommonPicker::OCommonPicker( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory )
         :OCommonPicker_Base( m_aMutex )
         ,OPropertyContainer( GetBroadcastHelper() )
@@ -68,7 +68,7 @@ namespace svt
         );
     }
 
-    //---------------------------------------------------------------------
+
     OCommonPicker::~OCommonPicker()
     {
         if ( !GetBroadcastHelper().bDisposed )
@@ -78,19 +78,19 @@ namespace svt
         }
     }
 
-    //---------------------------------------------------------------------
+
     // disambiguate XInterface
-    //---------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XINTERFACE2( OCommonPicker, OCommonPicker_Base, OPropertyContainer )
 
-    //---------------------------------------------------------------------
+
     // disambiguate XTypeProvider
-    //---------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OCommonPicker, OCommonPicker_Base, OPropertyContainer )
 
-    //---------------------------------------------------------------------
+
     // XComponent related methods
-    //---------------------------------------------------------------------
+
     void OCommonPicker::checkAlive() const SAL_THROW( (DisposedException) )
     {
         if ( GetBroadcastHelper().bInDispose || GetBroadcastHelper().bDisposed )
@@ -107,7 +107,7 @@ namespace svt
             getDialog()->SetText( m_aTitle );
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OCommonPicker::disposing()
     {
         SolarMutexGuard aGuard;
@@ -129,16 +129,16 @@ namespace svt
         m_xDialogParent = NULL;
     }
 
-    //---------------------------------------------------------------------
+
     void OCommonPicker::stopWindowListening()
     {
         disposeComponent( m_xWindowListenerAdapter );
         disposeComponent( m_xParentListenerAdapter );
     }
 
-    //---------------------------------------------------------------------
+
     // XEventListener
-    //---------------------------------------------------------------------
+
     void SAL_CALL OCommonPicker::disposing( const EventObject& _rSource ) throw (RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -162,9 +162,9 @@ namespace svt
         }
     }
 
-    //---------------------------------------------------------------------
+
     // property set related methods
-    //---------------------------------------------------------------------
+
     ::cppu::IPropertyArrayHelper* OCommonPicker::createArrayHelper( ) const
     {
         Sequence< Property > aProps;
@@ -172,19 +172,19 @@ namespace svt
         return new cppu::OPropertyArrayHelper( aProps );
     }
 
-    //---------------------------------------------------------------------
+
     ::cppu::IPropertyArrayHelper& SAL_CALL OCommonPicker::getInfoHelper()
     {
         return *const_cast< OCommonPicker* >( this )->getArrayHelper();
     }
 
-    //---------------------------------------------------------------------
+
     Reference< XPropertySetInfo > SAL_CALL OCommonPicker::getPropertySetInfo(  ) throw(RuntimeException)
     {
         return ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OCommonPicker::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw (Exception)
     {
         OPropertyContainer::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
@@ -196,7 +196,7 @@ namespace svt
     }
 
 
-    //---------------------------------------------------------------------
+
     sal_Bool OCommonPicker::createPicker()
     {
         SolarMutexGuard aGuard;
@@ -245,9 +245,9 @@ namespace svt
         return NULL != m_pDlg;
     }
 
-    //---------------------------------------------------------------------
+
     // XControlAccess functions
-    //---------------------------------------------------------------------
+
     void SAL_CALL OCommonPicker::setControlProperty( const OUString& aControlName, const OUString& aControlProperty, const Any& aValue ) throw (IllegalArgumentException, RuntimeException)
     {
         checkAlive();
@@ -260,7 +260,7 @@ namespace svt
         }
     }
 
-    //---------------------------------------------------------------------
+
     Any SAL_CALL OCommonPicker::getControlProperty( const OUString& aControlName, const OUString& aControlProperty ) throw (IllegalArgumentException, RuntimeException)
     {
         checkAlive();
@@ -275,9 +275,9 @@ namespace svt
         return Any();
     }
 
-    //---------------------------------------------------------------------
+
     // XControlInformation functions
-    //---------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL OCommonPicker::getSupportedControls(  ) throw (RuntimeException)
     {
         checkAlive();
@@ -292,7 +292,7 @@ namespace svt
         return Sequence< OUString >();
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool SAL_CALL OCommonPicker::isControlSupported( const OUString& aControlName ) throw (RuntimeException)
     {
         checkAlive();
@@ -307,7 +307,7 @@ namespace svt
         return sal_False;
     }
 
-    //---------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL OCommonPicker::getSupportedControlProperties( const OUString& aControlName ) throw (IllegalArgumentException, RuntimeException)
     {
         checkAlive();
@@ -322,7 +322,7 @@ namespace svt
         return Sequence< OUString >();
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool SAL_CALL OCommonPicker::isControlPropertySupported( const OUString& aControlName, const OUString& aControlProperty ) throw (IllegalArgumentException, RuntimeException)
     {
         checkAlive();
@@ -337,16 +337,16 @@ namespace svt
         return sal_False;
     }
 
-    //---------------------------------------------------------------------
+
     // XExecutableDialog functions
-    //---------------------------------------------------------------------
+
     void SAL_CALL OCommonPicker::setTitle( const OUString& _rTitle ) throw( RuntimeException )
     {
         SolarMutexGuard aGuard;
         m_aTitle = _rTitle;
     }
 
-    //---------------------------------------------------------------------
+
     sal_Int16 OCommonPicker::execute() throw (RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -366,9 +366,9 @@ namespace svt
         return nResult;
     }
 
-    //---------------------------------------------------------------------
+
     // XCancellable functions
-    //---------------------------------------------------------------------
+
     void SAL_CALL OCommonPicker::cancel(  ) throw (RuntimeException)
     {
         {
@@ -391,7 +391,7 @@ namespace svt
         m_nCancelEvent = Application::PostUserEvent( LINK( this, OCommonPicker, OnCancelPicker ) );
     }
 
-    //---------------------------------------------------------------------
+
     IMPL_LINK_NOARG(OCommonPicker, OnCancelPicker)
     {
         // By definition, the solar mutex is locked when we arrive here. Note that this
@@ -412,9 +412,9 @@ namespace svt
         return 0L;
     }
 
-    //------------------------------------------------------------------------------------
+
     // XInitialization functions
-    //------------------------------------------------------------------------------------
+
     void SAL_CALL OCommonPicker::initialize( const Sequence< Any >& _rArguments )
         throw ( Exception, RuntimeException )
     {
@@ -475,7 +475,7 @@ namespace svt
         }
     }
 
-    //---------------------------------------------------------------------
+
     sal_Bool OCommonPicker::implHandleInitializationArgument( const OUString& _rName, const Any& _rValue ) SAL_THROW( ( Exception, RuntimeException ) )
     {
         sal_Bool bKnown = sal_True;

@@ -82,7 +82,7 @@ namespace basprov
         return *pImplName;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     static Sequence< OUString > getSupportedServiceNames_BasicProviderImpl()
     {
@@ -118,13 +118,13 @@ namespace basprov
     {
     }
 
-    // -----------------------------------------------------------------------------
+
 
     BasicProviderImpl::~BasicProviderImpl()
     {
     }
 
-    // -----------------------------------------------------------------------------
+
 
     bool BasicProviderImpl::isLibraryShared( const Reference< script::XLibraryContainer >& rxLibContainer, const OUString& rLibName )
     {
@@ -197,9 +197,9 @@ namespace basprov
         return getSupportedServiceNames_BasicProviderImpl();
     }
 
-    // -----------------------------------------------------------------------------
+
     // XInitialization
-    // -----------------------------------------------------------------------------
+
 
     void BasicProviderImpl::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
     {
@@ -288,10 +288,10 @@ namespace basprov
             m_xLibContainerApp = Reference< script::XLibraryContainer >( SFX_APP()->GetBasicContainer(), UNO_QUERY );
     }
 
-    // -----------------------------------------------------------------------------
+
 
     // XScriptProvider
-    // -----------------------------------------------------------------------------
+
 
     Reference < provider::XScript > BasicProviderImpl::getScript( const OUString& scriptURI )
         throw ( provider::ScriptFrameworkErrorException, RuntimeException)
@@ -413,9 +413,9 @@ namespace basprov
         return xScript;
     }
 
-    // -----------------------------------------------------------------------------
+
     // XBrowseNode
-    // -----------------------------------------------------------------------------
+
 
     OUString BasicProviderImpl::getName(  ) throw (RuntimeException)
     {
@@ -426,7 +426,7 @@ namespace basprov
         return OUString("Basic");
     }
 
-    // -----------------------------------------------------------------------------
+
 
     Sequence< Reference< browse::XBrowseNode > > BasicProviderImpl::getChildNodes(  ) throw (RuntimeException)
     {
@@ -484,7 +484,7 @@ namespace basprov
         return aChildNodes;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     sal_Bool BasicProviderImpl::hasChildNodes(  ) throw (RuntimeException)
     {
@@ -506,7 +506,7 @@ namespace basprov
         return bReturn;
     }
 
-    // -----------------------------------------------------------------------------
+
 
     sal_Int16 BasicProviderImpl::getType(  ) throw (RuntimeException)
     {
@@ -526,7 +526,7 @@ namespace basprov
         return static_cast< lang::XTypeProvider * >( new BasicProviderImpl( xContext ) );
     }
 
-    // -----------------------------------------------------------------------------
+
 
     static struct ::cppu::ImplementationEntry s_component_entries [] =
     {
@@ -538,7 +538,7 @@ namespace basprov
         { 0, 0, 0, 0, 0, 0 }
     };
 
-    // -----------------------------------------------------------------------------
+
 
 //.........................................................................
 }   // namespace basprov

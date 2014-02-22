@@ -25,7 +25,7 @@
 #include "markdata.hxx"
 #include "prevloc.hxx"
 
-//------------------------------------------------------------------------
+
 
 ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
                                     const ScPrintSelectionStatus& rStatus ) :

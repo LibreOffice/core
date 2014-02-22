@@ -150,7 +150,7 @@ ScFormatShell::~ScFormatShell()
 {
 }
 
-//------------------------------------------------------------------
+
 
 void ScFormatShell::GetStyleState( SfxItemSet& rSet )
 {
@@ -246,7 +246,7 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
     }
 }
 
-//------------------------------------------------------------------
+
 
 void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 {
@@ -257,7 +257,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         return;
     }
 
-    //--------------------------------------------------------------------
+
     SfxBindings&        rBindings   = pViewData->GetBindings();
     const SfxItemSet*   pArgs       = rReq.GetArgs();
     const sal_uInt16        nSlotId     = rReq.GetSlot();
@@ -1252,7 +1252,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
 }
 
 
-//------------------------------------------------------------------
+
 
 void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
 {
@@ -1604,7 +1604,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
 
 }
 
-//------------------------------------------------------------------
+
 
 void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 {
@@ -2149,7 +2149,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
     Invalidate(SID_ATTR_ALIGN_STACKED);
 }
 
-//------------------------------------------------------------------
+
 
 void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
 {
@@ -2173,11 +2173,11 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     SfxItemState eState;
 //  const SfxPoolItem* pItem;
 
-    //--------------------------------------------------------------------
+
     // eigene Kontrolle ueber RadioButton-Funktionalitaet:
-    //--------------------------------------------------------------------
+
     // Unterstreichung
-    //------------------------
+
 
     eState = rAttrSet.GetItemState( ATTR_FONT_UNDERLINE, true );
     if ( eState == SFX_ITEM_DONTCARE )
@@ -2203,9 +2203,9 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
         rSet.Put( SfxBoolItem( nId, true ) );
     }
 
-    //------------------------
+
     // horizontale Ausrichtung
-    //------------------------
+
 
     const SvxHorJustifyItem* pHorJustify = NULL;
     const SvxVerJustifyItem* pVerJustify = NULL;
@@ -2276,9 +2276,9 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
         bJustifyStd = false;
     }
 
-    //------------------------
+
     // vertikale Ausrichtung
-    //------------------------
+
 
     nWhich = 0;
     aBoolItem.SetValue( true );
@@ -2340,7 +2340,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
 }
 
 
-//------------------------------------------------------------------
+
 
 void ScFormatShell::GetBorderState( SfxItemSet& rSet )
 {
@@ -2356,7 +2356,7 @@ void ScFormatShell::GetBorderState( SfxItemSet& rSet )
         rSet.Put( aInfoItem );
 }
 
-//------------------------------------------------------------------
+
 
 void ScFormatShell::GetAlignState( SfxItemSet& rSet )
 {

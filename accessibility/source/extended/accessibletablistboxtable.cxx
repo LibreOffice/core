@@ -36,9 +36,9 @@ namespace accessibility
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star;
 
-    // -----------------------------------------------------------------------------
+
     // Ctor() and Dtor()
-    // -----------------------------------------------------------------------------
+
     AccessibleTabListBoxTable::AccessibleTabListBoxTable( const Reference< XAccessible >& rxParent, SvHeaderTabListBox& rBox ) :
 
         AccessibleBrowseBoxTable( rxParent, rBox ),
@@ -48,7 +48,7 @@ namespace accessibility
     {
         m_pTabListBox->AddEventListener( LINK( this, AccessibleTabListBoxTable, WindowEventListener ) );
     }
-    // -----------------------------------------------------------------------------
+
     AccessibleTabListBoxTable::~AccessibleTabListBoxTable()
     {
         if ( isAlive() )
@@ -60,7 +60,7 @@ namespace accessibility
             dispose();
         }
     }
-    // -----------------------------------------------------------------------------
+
     void AccessibleTabListBoxTable::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     {
         if ( isAlive() )
@@ -250,7 +250,7 @@ namespace accessibility
             }
         }
     }
-    // -----------------------------------------------------------------------------
+
     IMPL_LINK( AccessibleTabListBoxTable, WindowEventListener, VclSimpleEvent*, pEvent )
     {
         OSL_ENSURE( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
@@ -313,21 +313,21 @@ namespace accessibility
 
         return 0;
     }
-    // -----------------------------------------------------------------------------
+
     // XInterface & XTypeProvider
-    // -----------------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XINTERFACE2(AccessibleTabListBoxTable, AccessibleBrowseBoxTable, AccessibleTabListBoxTableImplHelper)
     IMPLEMENT_FORWARD_XTYPEPROVIDER2(AccessibleTabListBoxTable, AccessibleBrowseBoxTable, AccessibleTabListBoxTableImplHelper)
-    // -----------------------------------------------------------------------------
+
     // XServiceInfo
-    // -----------------------------------------------------------------------------
+
     OUString AccessibleTabListBoxTable::getImplementationName (void) throw (RuntimeException)
     {
         return OUString( "com.sun.star.comp.svtools.AccessibleTabListBoxTable" );
     }
-    // -----------------------------------------------------------------------------
+
     // XAccessibleSelection
-    // -----------------------------------------------------------------------------
+
     void SAL_CALL AccessibleTabListBoxTable::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -338,7 +338,7 @@ namespace accessibility
 
         implSelectRow( implGetRow( nChildIndex ), sal_True );
     }
-    // -----------------------------------------------------------------------------
+
     sal_Bool SAL_CALL AccessibleTabListBoxTable::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -349,7 +349,7 @@ namespace accessibility
 
         return implIsRowSelected( implGetRow( nChildIndex ) );
     }
-    // -----------------------------------------------------------------------------
+
     void SAL_CALL AccessibleTabListBoxTable::clearAccessibleSelection(  ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -359,7 +359,7 @@ namespace accessibility
 
         m_pTabListBox->SetNoSelection();
     }
-    // -----------------------------------------------------------------------------
+
     void SAL_CALL AccessibleTabListBoxTable::selectAllAccessibleChildren(  ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -369,7 +369,7 @@ namespace accessibility
 
         m_pTabListBox->SelectAll();
     }
-    // -----------------------------------------------------------------------------
+
     sal_Int32 SAL_CALL AccessibleTabListBoxTable::getSelectedAccessibleChildCount(  ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -379,7 +379,7 @@ namespace accessibility
 
         return implGetColumnCount() * implGetSelRowCount();
     }
-    // -----------------------------------------------------------------------------
+
     Reference< XAccessible > SAL_CALL AccessibleTabListBoxTable::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -395,7 +395,7 @@ namespace accessibility
         sal_Int32 nColumn = nSelectedChildIndex / nRows;
         return getAccessibleCellAt( nRow, nColumn );
     }
-    // -----------------------------------------------------------------------------
+
     void SAL_CALL AccessibleTabListBoxTable::deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;

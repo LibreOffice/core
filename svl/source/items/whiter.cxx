@@ -23,7 +23,7 @@
 
 DBG_NAME(SfxWhichIter)
 
-// -----------------------------------------------------------------------
+
 
 SfxWhichIter::SfxWhichIter( const SfxItemSet& rSet, sal_uInt16 nFromWh, sal_uInt16 nToWh ):
     pRanges(rSet.GetRanges()),
@@ -35,14 +35,14 @@ SfxWhichIter::SfxWhichIter( const SfxItemSet& rSet, sal_uInt16 nFromWh, sal_uInt
         FirstWhich();
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxWhichIter::~SfxWhichIter()
 {
     DBG_DTOR(SfxWhichIter, 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 SfxWhichIter::NextWhich()
 {
@@ -63,7 +63,7 @@ sal_uInt16 SfxWhichIter::NextWhich()
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 SfxWhichIter::FirstWhich()
 {

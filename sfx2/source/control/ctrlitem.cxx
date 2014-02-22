@@ -30,7 +30,7 @@
 
 DBG_NAME(SfxControllerItem);
 
-//--------------------------------------------------------------------
+
 #ifdef DBG_UTIL
 
 void SfxControllerItem::CheckConfigure_Impl( sal_uIntPtr nType )
@@ -52,7 +52,7 @@ void SfxControllerItem::CheckConfigure_Impl( sal_uIntPtr nType )
 
 #endif
 
-//--------------------------------------------------------------------
+
 // returns the next registered SfxControllerItem with the same id
 
 SfxControllerItem* SfxControllerItem::GetItemLink()
@@ -61,7 +61,7 @@ SfxControllerItem* SfxControllerItem::GetItemLink()
     return pNext == this ? 0 : pNext;
 }
 
-//--------------------------------------------------------------------
+
 // returns sal_True if this binding is really bound to a function
 
 sal_Bool SfxControllerItem::IsBound() const
@@ -159,7 +159,7 @@ DBG_CHKTHIS(SfxControllerItem, 0);
     pBindings->Register(*this);
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxControllerItem::ClearCache()
 
@@ -190,7 +190,7 @@ void SfxControllerItem::ClearCache()
     pBindings->ClearCache_Impl( GetId() );
 }
 
-//--------------------------------------------------------------------
+
 // replaces the successor in the list of bindings of the same id
 
 SfxControllerItem* SfxControllerItem::ChangeItemLink( SfxControllerItem* pNewLink )
@@ -201,7 +201,7 @@ SfxControllerItem* SfxControllerItem::ChangeItemLink( SfxControllerItem* pNewLin
     return pOldLink == this ? 0 : pOldLink;
 }
 
-//--------------------------------------------------------------------
+
 // changes the id of unbound functions (e.g. for sub-menu-ids)
 
 void SfxControllerItem::SetId( sal_uInt16 nItemId )
@@ -211,7 +211,7 @@ void SfxControllerItem::SetId( sal_uInt16 nItemId )
     nId = nItemId;
 }
 
-//--------------------------------------------------------------------
+
 
 // creates a atomic item for a controller without registration.
 
@@ -223,7 +223,7 @@ SfxControllerItem::SfxControllerItem():
     DBG_CTOR(SfxControllerItem, 0);
 }
 
-//--------------------------------------------------------------------
+
 // creates a representation of the function nId and registeres it
 
 SfxControllerItem::SfxControllerItem( sal_uInt16 nID, SfxBindings &rBindings ):
@@ -235,7 +235,7 @@ SfxControllerItem::SfxControllerItem( sal_uInt16 nID, SfxBindings &rBindings ):
     Bind(nId, &rBindings);
 }
 
-//--------------------------------------------------------------------
+
 // unregisteres the item in the bindings
 
 SfxControllerItem::~SfxControllerItem()
@@ -245,7 +245,7 @@ SfxControllerItem::~SfxControllerItem()
     DBG_DTOR(SfxControllerItem, 0);
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxControllerItem::StateChanged
 (
@@ -278,14 +278,14 @@ void SfxControllerItem::StateChanged
     DBG_CHKTHIS(SfxControllerItem, 0);
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxControllerItem::DeleteFloatingWindow()
 {
     DBG_CHKTHIS(SfxControllerItem, 0);
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxStatusForwarder::StateChanged
 (
@@ -298,7 +298,7 @@ void SfxStatusForwarder::StateChanged
     pMaster->StateChanged( nSID, eState, pState );
 }
 
-//--------------------------------------------------------------------
+
 
 SfxStatusForwarder::SfxStatusForwarder(
             sal_uInt16              nSlotId,
@@ -308,7 +308,7 @@ SfxStatusForwarder::SfxStatusForwarder(
 {
 }
 
-//--------------------------------------------------------------------
+
 
 SfxItemState SfxControllerItem::GetItemState
 (
@@ -353,7 +353,7 @@ SfxItemState SfxControllerItem::GetItemState
                         : SFX_ITEM_AVAILABLE;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxMapUnit SfxControllerItem::GetCoreMetric() const
 

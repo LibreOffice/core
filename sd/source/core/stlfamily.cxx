@@ -45,7 +45,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::beans;
 
-// ----------------------------------------------------------
+
 
 typedef std::map< OUString, rtl::Reference< SdStyleSheet > > PresStyleMap;
 
@@ -88,7 +88,7 @@ PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
     return maStyleSheets;
 }
 
-// ----------------------------------------------------------
+
 
 SdStyleFamily::SdStyleFamily( const rtl::Reference< SfxStyleSheetPool >& xPool, SfxStyleFamily nFamily )
 : mnFamily( nFamily )
@@ -97,7 +97,7 @@ SdStyleFamily::SdStyleFamily( const rtl::Reference< SfxStyleSheetPool >& xPool, 
 {
 }
 
-// ----------------------------------------------------------
+
 
 SdStyleFamily::SdStyleFamily( const rtl::Reference< SfxStyleSheetPool >& xPool, const SdPage* pMasterPage )
 : mnFamily( SD_STYLE_FAMILY_MASTERPAGE )
@@ -108,7 +108,7 @@ SdStyleFamily::SdStyleFamily( const rtl::Reference< SfxStyleSheetPool >& xPool, 
     mpImpl->mxPool = xPool;
 }
 
-// ----------------------------------------------------------
+
 
 SdStyleFamily::~SdStyleFamily()
 {
@@ -116,7 +116,7 @@ SdStyleFamily::~SdStyleFamily()
     delete mpImpl;
 }
 
-// ----------------------------------------------------------
+
 
 void SdStyleFamily::throwIfDisposed() const throw(RuntimeException)
 {
@@ -124,7 +124,7 @@ void SdStyleFamily::throwIfDisposed() const throw(RuntimeException)
         throw DisposedException();
 }
 
-// ----------------------------------------------------------
+
 
 SdStyleSheet* SdStyleFamily::GetValidNewSheet( const Any& rElement ) throw(IllegalArgumentException)
 {
@@ -137,7 +137,7 @@ SdStyleSheet* SdStyleFamily::GetValidNewSheet( const Any& rElement ) throw(Illeg
     return pStyle;
 }
 
-// ----------------------------------------------------------
+
 
 SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName ) throw(NoSuchElementException, WrappedTargetException )
 {
@@ -212,15 +212,15 @@ OUString SAL_CALL SdStyleFamily::getName() throw (RuntimeException)
     }
 }
 
-// ----------------------------------------------------------
+
 
 void SAL_CALL SdStyleFamily::setName( const OUString& ) throw (RuntimeException)
 {
 }
 
-// ----------------------------------------------------------
+
 // XNameAccess
-// ----------------------------------------------------------
+
 
 Any SAL_CALL SdStyleFamily::getByName( const OUString& rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
@@ -229,7 +229,7 @@ Any SAL_CALL SdStyleFamily::getByName( const OUString& rName ) throw(NoSuchEleme
     return Any( Reference< XStyle >( static_cast<SfxUnoStyleSheet*>(GetSheetByName( rName )) ) );
 }
 
-// ----------------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames() throw(RuntimeException)
 {
@@ -269,7 +269,7 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames() throw(RuntimeExce
     }
 }
 
-// ----------------------------------------------------------
+
 
 sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName ) throw(RuntimeException)
 {
@@ -299,16 +299,16 @@ sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName ) throw(Runtim
     return sal_False;
 }
 
-// ----------------------------------------------------------
+
 // XElementAccess
-// ----------------------------------------------------------
+
 
 Type SAL_CALL SdStyleFamily::getElementType() throw(RuntimeException)
 {
     return cppu::UnoType<XStyle>::get();
 }
 
-// ----------------------------------------------------------
+
 
 sal_Bool SAL_CALL SdStyleFamily::hasElements() throw(RuntimeException)
 {
@@ -333,9 +333,9 @@ sal_Bool SAL_CALL SdStyleFamily::hasElements() throw(RuntimeException)
     return sal_False;
 }
 
-// ----------------------------------------------------------
+
 // XIndexAccess
-// ----------------------------------------------------------
+
 
 sal_Int32 SAL_CALL SdStyleFamily::getCount() throw(RuntimeException)
 {
@@ -361,7 +361,7 @@ sal_Int32 SAL_CALL SdStyleFamily::getCount() throw(RuntimeException)
     return nCount;
 }
 
-// ----------------------------------------------------------
+
 
 Any SAL_CALL SdStyleFamily::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
@@ -401,9 +401,9 @@ Any SAL_CALL SdStyleFamily::getByIndex( sal_Int32 Index ) throw(IndexOutOfBounds
     throw IndexOutOfBoundsException();
 }
 
-// ----------------------------------------------------------
+
 // XNameContainer
-// ----------------------------------------------------------
+
 
 void SAL_CALL SdStyleFamily::insertByName( const OUString& rName, const Any& rElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
@@ -421,7 +421,7 @@ void SAL_CALL SdStyleFamily::insertByName( const OUString& rName, const Any& rEl
     mxPool->Insert( pStyle );
 }
 
-// ----------------------------------------------------------
+
 
 void SAL_CALL SdStyleFamily::removeByName( const OUString& rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
@@ -436,9 +436,9 @@ void SAL_CALL SdStyleFamily::removeByName( const OUString& rName ) throw(NoSuchE
     mxPool->Remove( pStyle );
 }
 
-// ----------------------------------------------------------
+
 // XNameReplace
-// ----------------------------------------------------------
+
 
 void SAL_CALL SdStyleFamily::replaceByName( const OUString& rName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
 {
@@ -452,9 +452,9 @@ void SAL_CALL SdStyleFamily::replaceByName( const OUString& rName, const Any& aE
     mxPool->Insert( pNewStyle );
 }
 
-// ----------------------------------------------------------
+
 // XSingleServiceFactory
-// ----------------------------------------------------------
+
 
 Reference< XInterface > SAL_CALL SdStyleFamily::createInstance() throw(Exception, RuntimeException)
 {
@@ -471,16 +471,16 @@ Reference< XInterface > SAL_CALL SdStyleFamily::createInstance() throw(Exception
     }
 }
 
-// ----------------------------------------------------------
+
 
 Reference< XInterface > SAL_CALL SdStyleFamily::createInstanceWithArguments( const Sequence< Any >&  ) throw(Exception, RuntimeException)
 {
     return createInstance();
 }
 
-// ----------------------------------------------------------
+
 // XComponent
-// ----------------------------------------------------------
+
 
 void SAL_CALL SdStyleFamily::dispose(  ) throw (RuntimeException)
 {
@@ -494,21 +494,21 @@ void SAL_CALL SdStyleFamily::dispose(  ) throw (RuntimeException)
     }
 }
 
-// ----------------------------------------------------------
+
 
 void SAL_CALL SdStyleFamily::addEventListener( const Reference< XEventListener >&  ) throw (RuntimeException)
 {
 }
 
-// ----------------------------------------------------------
+
 
 void SAL_CALL SdStyleFamily::removeEventListener( const Reference< XEventListener >&  ) throw (RuntimeException)
 {
 }
 
-// ----------------------------------------------------------
+
 // XPropertySet
-// ----------------------------------------------------------
+
 
 Reference<XPropertySetInfo> SdStyleFamily::getPropertySetInfo() throw (RuntimeException)
 {
@@ -516,14 +516,14 @@ Reference<XPropertySetInfo> SdStyleFamily::getPropertySetInfo() throw (RuntimeEx
     return Reference<XPropertySetInfo>();
 }
 
-// ----------------------------------------------------------
+
 
 void SdStyleFamily::setPropertyValue( const OUString& , const Any&  ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     OSL_FAIL( "###unexpected!" );
 }
 
-// ----------------------------------------------------------
+
 
 Any SdStyleFamily::getPropertyValue( const OUString& PropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
@@ -545,28 +545,28 @@ Any SdStyleFamily::getPropertyValue( const OUString& PropertyName ) throw (Unkno
     }
 }
 
-// ----------------------------------------------------------
+
 
 void SdStyleFamily::addPropertyChangeListener( const OUString& , const Reference<XPropertyChangeListener>&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     OSL_FAIL( "###unexpected!" );
 }
 
-// ----------------------------------------------------------
+
 
 void SdStyleFamily::removePropertyChangeListener( const OUString& , const Reference<XPropertyChangeListener>&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     OSL_FAIL( "###unexpected!" );
 }
 
-// ----------------------------------------------------------
+
 
 void SdStyleFamily::addVetoableChangeListener( const OUString& , const Reference<XVetoableChangeListener>& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     OSL_FAIL( "###unexpected!" );
 }
 
-// ----------------------------------------------------------
+
 
 void SdStyleFamily::removeVetoableChangeListener( const OUString& , const Reference<XVetoableChangeListener>&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {

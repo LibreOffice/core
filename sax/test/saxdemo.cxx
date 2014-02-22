@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//------------------------------------------------------
+
 // testcomponent - Loads a service and its testcomponent from dlls performs a test.
 // Expands the dll-names depending on the actual environment.
 // Example : testcomponent com.sun.star.io.Pipe stm
@@ -103,9 +103,9 @@ public:
     sal_Int32 nPos;
 };
 
-//-------------------------------
+
 // Helper : create an input stream from a file
-//------------------------------
+
 Reference< XInputStream > createStreamFromFile(
     const char *pcFile )
 {
@@ -126,10 +126,10 @@ Reference< XInputStream > createStreamFromFile(
     return r;
 }
 
-//-----------------------------------------
+
 // The document handler, which is needed for the saxparser
 // The Documenthandler for reading sax
-//-----------------------------------------
+
 class TestDocumentHandler :
     public WeakImplHelper3< XExtendedDocumentHandler , XEntityResolver , XErrorHandler >
 {
@@ -247,10 +247,10 @@ public:
     int m_iCharCount;
 };
 
-//--------------------------------------
+
 // helper implementation for writing
 // implements an XAttributeList
-//-------------------------------------
+
 struct AttributeListImpl_impl;
 class AttributeListImpl : public WeakImplHelper1< XAttributeList >
 {
@@ -397,13 +397,13 @@ void AttributeListImpl::clear()
 }
 
 
-//--------------------------------------
+
 // helper function for writing
 // ensures that linebreaks are inserted
 // when writing a long text.
 // Note: this implementation may be a bit slow,
 // but it shows, how the SAX-Writer handles the allowLineBreak calls.
-//--------------------------------------
+
 void writeParagraphHelper(
     const  Reference< XExtendedDocumentHandler > &r ,
     const OUString & s)
@@ -427,10 +427,10 @@ void writeParagraphHelper(
 }
 
 
-//---------------------------------
+
 // helper implementation for SAX-Writer
 // writes data to a file
-//--------------------------------
+
 class OFileWriter :
         public WeakImplHelper1< XOutputStream >
 {
@@ -528,10 +528,10 @@ int main (int argc, char **argv)
     }
 
 
-    //--------------------------------
+
     // parser demo
     // read xml from a file and count elements
-    //--------------------------------
+
     Reference< XInterface > x = xSMgr->createInstance(
         OUString("com.sun.star.xml.sax.Parser") );
     if( x.is() )
@@ -570,9 +570,9 @@ int main (int argc, char **argv)
     }
 
 
-    //----------------------
+
     // The SAX-Writer demo
-    //----------------------
+
     x= xSMgr->createInstance("com.sun.star.xml.sax.Writer");
     if( x.is() )
     {

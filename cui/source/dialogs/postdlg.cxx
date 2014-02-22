@@ -121,7 +121,7 @@ SvxPostItDialog::SvxPostItDialog(Window* pParent, const SfxItemSet& rCoreSet,
         SetText( get<FixedText>("alttitle")->GetText() );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxPostItDialog::~SvxPostItDialog()
 {
@@ -129,7 +129,7 @@ SvxPostItDialog::~SvxPostItDialog()
     pOutSet = 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPostItDialog::ShowLastAuthor(const OUString& rAuthor, const OUString& rDate)
 {
@@ -139,7 +139,7 @@ void SvxPostItDialog::ShowLastAuthor(const OUString& rAuthor, const OUString& rD
     m_pLastEditFT->SetText( sTxt );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16* SvxPostItDialog::GetRanges()
 {
@@ -152,7 +152,7 @@ sal_uInt16* SvxPostItDialog::GetRanges()
     return pRanges;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPostItDialog::EnableTravel(sal_Bool bNext, sal_Bool bPrev)
 {
@@ -160,7 +160,7 @@ void SvxPostItDialog::EnableTravel(sal_Bool bNext, sal_Bool bPrev)
     m_pNextBtn->Enable(bNext);
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(SvxPostItDialog, PrevHdl)
 {
@@ -169,7 +169,7 @@ IMPL_LINK_NOARG_INLINE_START(SvxPostItDialog, PrevHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SvxPostItDialog, PrevHdl)
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(SvxPostItDialog, NextHdl)
 {
@@ -178,7 +178,7 @@ IMPL_LINK_NOARG_INLINE_START(SvxPostItDialog, NextHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SvxPostItDialog, NextHdl)
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxPostItDialog, Stamp)
 {
@@ -208,7 +208,7 @@ IMPL_LINK_NOARG(SvxPostItDialog, Stamp)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxPostItDialog, OKHdl)
 {

@@ -44,24 +44,24 @@ bool operator==( const ::com::sun::star::awt::FontDescriptor& _lhs, const ::com:
         &&  ( _lhs.Type           == _rhs.Type );
 }
 
-// -----------------------------------------------------------------------------
+
 // XContainer
 void OReportControlModel::addContainerListener( const uno::Reference< container::XContainerListener >& xListener ) throw (uno::RuntimeException)
 {
     aContainerListeners.addInterface(xListener);
 }
-// -----------------------------------------------------------------------------
+
 void OReportControlModel::removeContainerListener( const uno::Reference< container::XContainerListener >& xListener ) throw (uno::RuntimeException)
 {
     aContainerListeners.removeInterface(xListener);
 }
-// -----------------------------------------------------------------------------
+
 ::sal_Bool OReportControlModel::hasElements(  ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     return !m_aFormatConditions.empty();
 }
-// -----------------------------------------------------------------------------
+
 // XIndexContainer
 void OReportControlModel::insertByIndex( ::sal_Int32 Index, const uno::Any& Element ) throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -83,7 +83,7 @@ void OReportControlModel::insertByIndex( ::sal_Int32 Index, const uno::Any& Elem
     container::ContainerEvent aEvent(xBroadcaster, uno::makeAny(Index), Element, uno::Any());
     aContainerListeners.notifyEach(&container::XContainerListener::elementInserted,aEvent);
 }
-// -----------------------------------------------------------------------------
+
 void OReportControlModel::removeByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any Element;
@@ -98,7 +98,7 @@ void OReportControlModel::removeByIndex( ::sal_Int32 Index ) throw (lang::IndexO
     container::ContainerEvent aEvent(xBroadcaster, uno::makeAny(Index), Element, uno::Any());
     aContainerListeners.notifyEach(&container::XContainerListener::elementRemoved,aEvent);
 }
-// -----------------------------------------------------------------------------
+
 // XIndexReplace
 void OReportControlModel::replaceByIndex( ::sal_Int32 Index, const uno::Any& Element ) throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -115,14 +115,14 @@ void OReportControlModel::replaceByIndex( ::sal_Int32 Index, const uno::Any& Ele
     container::ContainerEvent aEvent(xBroadcaster, uno::makeAny(Index), Element, uno::Any());
     aContainerListeners.notifyEach(&container::XContainerListener::elementReplaced,aEvent);
 }
-// -----------------------------------------------------------------------------
+
 // XIndexAccess
 ::sal_Int32 OReportControlModel::getCount(  ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     return m_aFormatConditions.size();
 }
-// -----------------------------------------------------------------------------
+
 uno::Any OReportControlModel::getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aElement;
@@ -133,18 +133,18 @@ uno::Any OReportControlModel::getByIndex( ::sal_Int32 Index ) throw (lang::Index
     }
     return aElement;
 }
-// -----------------------------------------------------------------------------
+
 void OReportControlModel::checkIndex(sal_Int32 _nIndex)
 {
     if ( _nIndex < 0 || static_cast<sal_Int32>(m_aFormatConditions.size()) <= _nIndex )
         throw lang::IndexOutOfBoundsException();
 }
-// -----------------------------------------------------------------------------
+
 bool OReportControlModel::isInterfaceForbidden(const uno::Type& _rType)
 {
     return (_rType == ::getCppuType((const uno::Reference< beans::XPropertyState>* )0) || _rType == ::getCppuType((const uno::Reference< beans::XMultiPropertySet>* )0));
 }
-// -----------------------------------------------------------------------------
+
 } // reportdesign
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

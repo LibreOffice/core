@@ -57,7 +57,7 @@ namespace basprov
     // BasicScriptImpl
     // =============================================================================
 
-    // -----------------------------------------------------------------------------
+
 
     BasicScriptImpl::BasicScriptImpl( const OUString& funcName, SbMethodRef xMethod )
         : ::scripting_helper::OBroadcastHelperHolder( m_aMutex )
@@ -70,7 +70,7 @@ namespace basprov
         registerProperty( BASSCRIPT_PROPERTY_CALLER, BASSCRIPT_PROPERTY_ID_CALLER, BASSCRIPT_DEFAULT_ATTRIBS(), &m_caller, ::getCppuType( &m_caller ) );
     }
 
-    // -----------------------------------------------------------------------------
+
 
     BasicScriptImpl::BasicScriptImpl( const OUString& funcName, SbMethodRef xMethod,
         BasicManager& documentBasicManager, const Reference< XScriptInvocationContext >& documentScriptContext ) : ::scripting_helper::OBroadcastHelperHolder( m_aMutex )
@@ -84,16 +84,16 @@ namespace basprov
         registerProperty( BASSCRIPT_PROPERTY_CALLER, BASSCRIPT_PROPERTY_ID_CALLER, BASSCRIPT_DEFAULT_ATTRIBS(), &m_caller, ::getCppuType( &m_caller ) );
     }
 
-    // -----------------------------------------------------------------------------
+
     BasicScriptImpl::~BasicScriptImpl()
     {
         if ( m_documentBasicManager )
             EndListening( *m_documentBasicManager );
     }
 
-    // -----------------------------------------------------------------------------
+
     // SfxListener
-    // -----------------------------------------------------------------------------
+
     void BasicScriptImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
         if ( &rBC != m_documentBasicManager )
@@ -110,30 +110,30 @@ namespace basprov
         }
     }
 
-    // -----------------------------------------------------------------------------
+
     // XInterface
-    // -----------------------------------------------------------------------------
+
 
     IMPLEMENT_FORWARD_XINTERFACE2( BasicScriptImpl, BasicScriptImpl_BASE, OPropertyContainer )
 
-    // -----------------------------------------------------------------------------
+
     // XTypeProvider
-    // -----------------------------------------------------------------------------
+
 
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( BasicScriptImpl, BasicScriptImpl_BASE, OPropertyContainer )
 
-    // -----------------------------------------------------------------------------
+
     // OPropertySetHelper
-    // -----------------------------------------------------------------------------
+
 
     ::cppu::IPropertyArrayHelper& BasicScriptImpl::getInfoHelper(  )
     {
         return *getArrayHelper();
     }
 
-    // -----------------------------------------------------------------------------
+
     // OPropertyArrayUsageHelper
-    // -----------------------------------------------------------------------------
+
 
     ::cppu::IPropertyArrayHelper* BasicScriptImpl::createArrayHelper(  ) const
     {
@@ -142,9 +142,9 @@ namespace basprov
         return new ::cppu::OPropertyArrayHelper( aProps );
     }
 
-    // -----------------------------------------------------------------------------
+
     // XPropertySet
-    // -----------------------------------------------------------------------------
+
 
     Reference< XPropertySetInfo > BasicScriptImpl::getPropertySetInfo(  ) throw (RuntimeException)
     {
@@ -152,9 +152,9 @@ namespace basprov
         return xInfo;
     }
 
-    // -----------------------------------------------------------------------------
+
     // XScript
-    // -----------------------------------------------------------------------------
+
 
     Any BasicScriptImpl::invoke( const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
         throw ( provider::ScriptFrameworkErrorException, reflection::InvocationTargetException, uno::RuntimeException)
@@ -289,7 +289,7 @@ namespace basprov
         return aReturn;
     }
 
-    // -----------------------------------------------------------------------------
+
 
 //.........................................................................
 }   // namespace basprov

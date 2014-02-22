@@ -41,7 +41,7 @@ SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlDraw, SfxAllEnumItem);
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
-// -----------------------------------------------------------------------
+
 
 SvxTbxCtlDraw::SvxTbxCtlDraw( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
 
@@ -54,7 +54,7 @@ SvxTbxCtlDraw::SvxTbxCtlDraw( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx 
     rTbx.Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxTbxCtlDraw::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState )
@@ -68,14 +68,14 @@ void SvxTbxCtlDraw::StateChanged( sal_uInt16 nSID, SfxItemState eState,
             GetId(), xLayoutMgr->isElementVisible( m_sToolboxName ) != sal_False );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindowType SvxTbxCtlDraw::GetPopupWindowType() const
 {
     return SFX_POPUPWINDOW_ONCLICK;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxTbxCtlDraw::toggleToolbox()
 {
@@ -99,7 +99,7 @@ void SvxTbxCtlDraw::toggleToolbox()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxTbxCtlDraw::Select( sal_Bool )
 {

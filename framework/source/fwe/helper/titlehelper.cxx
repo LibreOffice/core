@@ -38,7 +38,7 @@
 
 namespace framework{
 
-//-----------------------------------------------
+
 TitleHelper::TitleHelper(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
     : ::cppu::BaseMutex ()
     , m_xContext        (rxContext)
@@ -52,12 +52,12 @@ TitleHelper::TitleHelper(const css::uno::Reference< css::uno::XComponentContext 
 {
 }
 
-//-----------------------------------------------
+
 TitleHelper::~TitleHelper()
 {
 }
 
-//-----------------------------------------------
+
 void TitleHelper::setOwner(const css::uno::Reference< css::uno::XInterface >& xOwner)
 {
     // SYNCHRONIZED ->
@@ -90,7 +90,7 @@ void TitleHelper::setOwner(const css::uno::Reference< css::uno::XInterface >& xO
     }
 }
 
-//-----------------------------------------------
+
 OUString SAL_CALL TitleHelper::getTitle()
     throw (css::uno::RuntimeException)
 {
@@ -115,7 +115,7 @@ OUString SAL_CALL TitleHelper::getTitle()
     // <- SYNCHRONIZED
 }
 
-//-----------------------------------------------
+
 void TitleHelper::connectWithUntitledNumbers (const css::uno::Reference< css::frame::XUntitledNumbers >& xNumbers)
 {
     // SYNCHRONIZED ->
@@ -126,7 +126,7 @@ void TitleHelper::connectWithUntitledNumbers (const css::uno::Reference< css::fr
     // <- SYNCHRONIZED
 }
 
-//-----------------------------------------------
+
 void SAL_CALL TitleHelper::setTitle(const OUString& sTitle)
     throw (css::uno::RuntimeException)
 {
@@ -142,7 +142,7 @@ void SAL_CALL TitleHelper::setTitle(const OUString& sTitle)
     impl_sendTitleChangedEvent ();
 }
 
-//-----------------------------------------------
+
 void SAL_CALL TitleHelper::addTitleChangeListener(const css::uno::Reference< css::frame::XTitleChangeListener >& xListener)
     throw (css::uno::RuntimeException)
 {
@@ -150,7 +150,7 @@ void SAL_CALL TitleHelper::addTitleChangeListener(const css::uno::Reference< css
     m_aListener.addInterface( ::getCppuType( (const css::uno::Reference< css::frame::XTitleChangeListener >*)NULL ), xListener );
 }
 
-//-----------------------------------------------
+
 void SAL_CALL TitleHelper::removeTitleChangeListener(const css::uno::Reference< css::frame::XTitleChangeListener >& xListener)
     throw (css::uno::RuntimeException)
 {
@@ -158,7 +158,7 @@ void SAL_CALL TitleHelper::removeTitleChangeListener(const css::uno::Reference< 
     m_aListener.removeInterface( ::getCppuType( (const css::uno::Reference< css::frame::XTitleChangeListener >*)NULL ), xListener );
 }
 
-//-----------------------------------------------
+
 void SAL_CALL TitleHelper::titleChanged(const css::frame::TitleChangedEvent& aEvent)
     throw (css::uno::RuntimeException)
 {
@@ -176,7 +176,7 @@ void SAL_CALL TitleHelper::titleChanged(const css::frame::TitleChangedEvent& aEv
     impl_updateTitle ();
 }
 
-//-----------------------------------------------
+
 void SAL_CALL TitleHelper::notifyEvent(const css::document::EventObject& aEvent)
     throw (css::uno::RuntimeException)
 {
@@ -204,7 +204,7 @@ void SAL_CALL TitleHelper::notifyEvent(const css::document::EventObject& aEvent)
     impl_updateTitle ();
 }
 
-//-----------------------------------------------
+
 void SAL_CALL TitleHelper::frameAction(const css::frame::FrameActionEvent& aEvent)
     throw(css::uno::RuntimeException)
 {
@@ -232,7 +232,7 @@ void SAL_CALL TitleHelper::frameAction(const css::frame::FrameActionEvent& aEven
     }
 }
 
-//-----------------------------------------------
+
 void SAL_CALL TitleHelper::disposing(const css::lang::EventObject& aEvent)
     throw (css::uno::RuntimeException)
 {
@@ -268,7 +268,7 @@ void SAL_CALL TitleHelper::disposing(const css::lang::EventObject& aEvent)
     impl_sendTitleChangedEvent ();
 }
 
-//-----------------------------------------------
+
 void TitleHelper::impl_sendTitleChangedEvent ()
 {
     // SYNCHRONIZED ->
@@ -297,7 +297,7 @@ void TitleHelper::impl_sendTitleChangedEvent ()
     }
 }
 
-//-----------------------------------------------
+
 void TitleHelper::impl_updateTitle (bool init)
 {
     // SYNCHRONIZED ->
@@ -324,7 +324,7 @@ void TitleHelper::impl_updateTitle (bool init)
     }
 }
 
-//-----------------------------------------------
+
 void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::frame::XModel >& xModel, bool init)
 {
     // SYNCHRONIZED ->
@@ -395,7 +395,7 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
         impl_sendTitleChangedEvent ();
 }
 
-//-----------------------------------------------
+
 void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css::frame::XController >& xController, bool init)
 {
     // SYNCHRONIZED ->
@@ -461,7 +461,7 @@ void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css:
         impl_sendTitleChangedEvent ();
 }
 
-//-----------------------------------------------
+
 void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::frame::XFrame >& xFrame, bool init)
 {
     if ( ! xFrame.is ())
@@ -582,7 +582,7 @@ void TitleHelper::impl_appendDebugVersion (OUStringBuffer&)
 }
 #endif
 
-//-----------------------------------------------
+
 void TitleHelper::impl_startListeningForModel (const css::uno::Reference< css::frame::XModel >& xModel)
 {
     css::uno::Reference< css::document::XEventBroadcaster > xBroadcaster(xModel, css::uno::UNO_QUERY);
@@ -592,28 +592,28 @@ void TitleHelper::impl_startListeningForModel (const css::uno::Reference< css::f
     xBroadcaster->addEventListener (static_cast< css::document::XEventListener* >(this));
 }
 
-//-----------------------------------------------
+
 void TitleHelper::impl_startListeningForController (const css::uno::Reference< css::frame::XController >& xController)
 {
     css::uno::Reference< css::frame::XTitle > xSubTitle(xController->getModel (), css::uno::UNO_QUERY);
     impl_setSubTitle (xSubTitle);
 }
 
-//-----------------------------------------------
+
 void TitleHelper::impl_startListeningForFrame (const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
     xFrame->addFrameActionListener(this  );
     impl_updateListeningForFrame  (xFrame);
 }
 
-//-----------------------------------------------
+
 void TitleHelper::impl_updateListeningForFrame (const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
     css::uno::Reference< css::frame::XTitle > xSubTitle(xFrame->getController (), css::uno::UNO_QUERY);
     impl_setSubTitle (xSubTitle);
 }
 
-//-----------------------------------------------
+
 void TitleHelper::impl_setSubTitle (const css::uno::Reference< css::frame::XTitle >& xSubTitle)
 {
     // SYNCHRONIZED ->
@@ -640,7 +640,7 @@ void TitleHelper::impl_setSubTitle (const css::uno::Reference< css::frame::XTitl
         xNewBroadcaster->addTitleChangeListener (xThis);
 }
 
-//-----------------------------------------------
+
 OUString TitleHelper::impl_convertURL2Title(const OUString& sURL)
 {
     INetURLObject   aURL (sURL);

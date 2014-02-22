@@ -218,9 +218,9 @@ bool WW8Export::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich 
     return bRet;
 }
 
-//------------------------------------------------------------
+
 //  Hilfsroutinen fuer Styles
-//------------------------------------------------------------
+
 
 void MSWordExportBase::ExportPoolItemsToCHP( sw::PoolItems &rItems, sal_uInt16 nScript )
 {
@@ -911,7 +911,7 @@ OUString MSWordExportBase::GetBookmarkName( sal_uInt16 nTyp, const OUString* pNa
     return BookmarkToWord( sRet ); // #i43956# - encode bookmark accordingly
 }
 
-//-----------------------------------------------------------------------
+
 /* File CHRATR.HXX: */
 void WW8AttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 nScript )
 {
@@ -3021,7 +3021,7 @@ void AttributeOutputBase::TextFlyContent( const SwFmtFlyCnt& rFlyContent )
 // Detaillierte Einstellungen zur Trennung erlaubt WW nur dokumentenweise.
 // Man koennte folgende Mimik einbauen: Die Werte des Style "Standard" werden,
 // falls vorhanden, in die Document Properties ( DOP ) gesetzt.
-// ---
+
 // ACK.  Dieser Vorschlag passt exakt zu unserer Implementierung des Import,
 // daher setze ich das gleich mal um. (KHZ, 07/15/2000)
 void WW8AttributeOutput::ParaHyphenZone( const SvxHyphenZoneItem& rHyphenZone )
@@ -5077,7 +5077,7 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
     }
 }
 
-//-----------------------------------------------------------------------
+
 
 void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
 {

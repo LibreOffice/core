@@ -53,7 +53,7 @@
 #include "postit.hxx"
 #include "global.hxx"
 #include "globstr.hrc"
-// -----------------------------------------------------------------------
+
 
 bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
 {
@@ -240,7 +240,7 @@ bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
     return bDone;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
 {

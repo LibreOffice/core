@@ -207,7 +207,7 @@ private:
         return static_cast< const SortableGridDataModel* >( _pInstance )->checkInvariants();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     const char* SortableGridDataModel::checkInvariants() const
     {
         if ( m_publicToPrivateRowIndex.size() != m_privateToPublicRowIndex.size() )
@@ -247,7 +247,7 @@ private:
 #define DBG_CHECK_ME() \
     DBG_CHKTHIS( SortableGridDataModel, SortableGridDataModel_checkInvariants )
 
-    //------------------------------------------------------------------------------------------------------------------
+
     namespace
     {
         template< class STLCONTAINER >
@@ -262,7 +262,7 @@ private:
     //= SortableGridDataModel
     //==================================================================================================================
     DBG_NAME( SortableGridDataModel )
-    //------------------------------------------------------------------------------------------------------------------
+
     SortableGridDataModel::SortableGridDataModel( Reference< XComponentContext > const & rxContext )
         :SortableGridDataModel_Base( m_aMutex )
         ,SortableGridDataModel_PrivateBase()
@@ -278,7 +278,7 @@ private:
         DBG_CTOR( SortableGridDataModel, SortableGridDataModel_checkInvariants );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     SortableGridDataModel::SortableGridDataModel( SortableGridDataModel const & i_copySource )
         :cppu::BaseMutex()
         ,SortableGridDataModel_Base( m_aMutex )
@@ -299,7 +299,7 @@ private:
         m_delegator.set( i_copySource.m_delegator->createClone(), UNO_QUERY_THROW );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     SortableGridDataModel::~SortableGridDataModel()
     {
         if ( !rBHelper.bDisposed )
@@ -311,7 +311,7 @@ private:
         DBG_DTOR( SortableGridDataModel, SortableGridDataModel_checkInvariants );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Any SAL_CALL SortableGridDataModel::queryInterface( const Type& aType ) throw (RuntimeException)
     {
         Any aReturn( SortableGridDataModel_Base::queryInterface( aType ) );
@@ -320,33 +320,33 @@ private:
         return aReturn;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::acquire(  ) throw ()
     {
         SortableGridDataModel_Base::acquire();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::release(  ) throw ()
     {
         SortableGridDataModel_Base::release();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Sequence< Type > SAL_CALL SortableGridDataModel::getTypes(  ) throw (RuntimeException)
     {
         return SortableGridDataModel_Base::getTypes();
         // don't expose the types got via SortableGridDataModel_PrivateBase - they're private, after all
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Sequence< ::sal_Int8 > SAL_CALL SortableGridDataModel::getImplementationId(  ) throw (RuntimeException)
     {
         static ::cppu::OImplementationId aId;
         return aId.getImplementationId();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     namespace
     {
         Reference< XCollator > lcl_loadDefaultCollator_throw( const Reference<XComponentContext> & rxContext )
@@ -357,7 +357,7 @@ private:
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::initialize( const Sequence< Any >& i_arguments ) throw (Exception, RuntimeException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
@@ -393,7 +393,7 @@ private:
         m_isInitialized = true;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     GridDataEvent SortableGridDataModel::impl_createPublicEvent( GridDataEvent const & i_originalEvent ) const
     {
         GridDataEvent aEvent( i_originalEvent );
@@ -403,7 +403,7 @@ private:
         return aEvent;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SortableGridDataModel::impl_broadcast( void ( SAL_CALL XGridDataListener::*i_listenerMethod )( const GridDataEvent & ),
             GridDataEvent const & i_publicEvent, MethodGuard& i_instanceLock )
     {
@@ -415,7 +415,7 @@ private:
         pListeners->notifyEach( i_listenerMethod, i_publicEvent );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::rowsInserted( const GridDataEvent& i_event ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -433,7 +433,7 @@ private:
         impl_broadcast( &XGridDataListener::rowsInserted, aEvent, aGuard );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     namespace
     {
         void lcl_decrementValuesGreaterThan( ::std::vector< ::sal_Int32 > & io_indexMap, sal_Int32 const i_threshold )
@@ -449,7 +449,7 @@ private:
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SortableGridDataModel::impl_rebuildIndexesAndNotify( MethodGuard& i_instanceLock )
     {
         OSL_PRECOND( impl_isSorted_nothrow(), "SortableGridDataModel::impl_rebuildIndexesAndNotify: illegal call!" );
@@ -475,7 +475,7 @@ private:
         impl_broadcast( &XGridDataListener::rowsInserted, aAdditionEvent, i_instanceLock );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::rowsRemoved( const GridDataEvent& i_event ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -536,7 +536,7 @@ private:
         impl_broadcast( &XGridDataListener::rowsRemoved, aEvent, aGuard );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::dataChanged( const GridDataEvent& i_event ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -546,7 +546,7 @@ private:
         impl_broadcast( &XGridDataListener::dataChanged, aEvent, aGuard );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::rowHeadingChanged( const GridDataEvent& i_event ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -556,14 +556,14 @@ private:
         impl_broadcast( &XGridDataListener::rowHeadingChanged, aEvent, aGuard );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::disposing( const EventObject& i_event ) throw (RuntimeException)
     {
         // not interested in
         OSL_UNUSED( i_event );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     namespace
     {
         class CellDataLessComparison : public ::std::binary_function< sal_Int32, sal_Int32, bool >
@@ -604,7 +604,7 @@ private:
         };
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     bool SortableGridDataModel::impl_reIndex_nothrow( ::sal_Int32 const i_columnIndex, sal_Bool const i_sortAscending )
     {
         ::sal_Int32 const rowCount( getRowCount() );
@@ -650,7 +650,7 @@ private:
         return true;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::sortByColumn( ::sal_Int32 i_columnIndex, ::sal_Bool i_sortAscending ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -672,7 +672,7 @@ private:
         );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SortableGridDataModel::impl_removeColumnSort_noBroadcast()
     {
         lcl_clear( m_publicToPrivateRowIndex );
@@ -682,7 +682,7 @@ private:
         m_sortAscending = sal_True;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SortableGridDataModel::impl_removeColumnSort( MethodGuard& i_instanceLock )
     {
         impl_removeColumnSort_noBroadcast();
@@ -693,7 +693,7 @@ private:
         );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::removeColumnSort(  ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -701,7 +701,7 @@ private:
         impl_removeColumnSort( aGuard );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     css::beans::Pair< ::sal_Int32, ::sal_Bool > SAL_CALL SortableGridDataModel::getCurrentSortOrder(  ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -710,7 +710,7 @@ private:
         return css::beans::Pair< ::sal_Int32, ::sal_Bool >( m_currentSortColumn, m_sortAscending );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::addRow( const Any& i_heading, const Sequence< Any >& i_data ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -721,7 +721,7 @@ private:
         delegator->addRow( i_heading, i_data );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::addRows( const Sequence< Any >& i_headings, const Sequence< Sequence< Any > >& i_data ) throw (IllegalArgumentException, RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -732,7 +732,7 @@ private:
         delegator->addRows( i_headings, i_data );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::insertRow( ::sal_Int32 i_index, const Any& i_heading, const Sequence< Any >& i_data ) throw (RuntimeException, IndexOutOfBoundsException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -746,7 +746,7 @@ private:
         delegator->insertRow( rowIndex, i_heading, i_data );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::insertRows( ::sal_Int32 i_index, const Sequence< Any>& i_headings, const Sequence< Sequence< Any > >& i_data ) throw (IllegalArgumentException, IndexOutOfBoundsException, RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -760,7 +760,7 @@ private:
         delegator->insertRows( rowIndex, i_headings, i_data );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::removeRow( ::sal_Int32 i_rowIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -773,7 +773,7 @@ private:
         delegator->removeRow( rowIndex );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::removeAllRows(  ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -784,7 +784,7 @@ private:
         delegator->removeAllRows();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::updateCellData( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex, const Any& i_value ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -797,7 +797,7 @@ private:
         delegator->updateCellData( i_columnIndex, rowIndex, i_value );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::updateRowData( const Sequence< ::sal_Int32 >& i_columnIndexes, ::sal_Int32 i_rowIndex, const Sequence< Any >& i_values ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -810,7 +810,7 @@ private:
         delegator->updateRowData( i_columnIndexes, rowIndex, i_values );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::updateRowHeading( ::sal_Int32 i_rowIndex, const Any& i_heading ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -823,7 +823,7 @@ private:
         delegator->updateRowHeading( rowIndex, i_heading );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::updateCellToolTip( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex, const Any& i_value ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -836,7 +836,7 @@ private:
         delegator->updateCellToolTip( i_columnIndex, rowIndex, i_value );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::updateRowToolTip( ::sal_Int32 i_rowIndex, const Any& i_value ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -849,19 +849,19 @@ private:
         delegator->updateRowToolTip( rowIndex, i_value );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::addGridDataListener( const Reference< XGridDataListener >& i_listener ) throw (RuntimeException)
     {
         rBHelper.addListener( cppu::UnoType<XGridDataListener>::get(), i_listener );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::removeGridDataListener( const Reference< XGridDataListener >& i_listener ) throw (RuntimeException)
     {
         rBHelper.removeListener( cppu::UnoType<XGridDataListener>::get(), i_listener );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     ::sal_Int32 SAL_CALL SortableGridDataModel::getRowCount() throw (RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -872,7 +872,7 @@ private:
         return delegator->getRowCount();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     ::sal_Int32 SAL_CALL SortableGridDataModel::getColumnCount() throw (RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -883,7 +883,7 @@ private:
         return delegator->getColumnCount();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Any SAL_CALL SortableGridDataModel::getCellData( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -896,7 +896,7 @@ private:
         return delegator->getCellData( i_columnIndex, rowIndex );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Any SAL_CALL SortableGridDataModel::getCellToolTip( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -909,7 +909,7 @@ private:
         return delegator->getCellToolTip( i_columnIndex, rowIndex );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Any SAL_CALL SortableGridDataModel::getRowHeading( ::sal_Int32 i_rowIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -922,7 +922,7 @@ private:
         return delegator->getRowHeading( rowIndex );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Sequence< Any > SAL_CALL SortableGridDataModel::getRowData( ::sal_Int32 i_rowIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -935,7 +935,7 @@ private:
         return delegator->getRowData( rowIndex );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     void SAL_CALL SortableGridDataModel::disposing()
     {
         m_currentSortColumn = -1;
@@ -954,7 +954,7 @@ private:
         lcl_clear( m_privateToPublicRowIndex );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Reference< css::util::XCloneable > SAL_CALL SortableGridDataModel::createClone(  ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
@@ -963,7 +963,7 @@ private:
         return new SortableGridDataModel( *this );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     OUString SAL_CALL SortableGridDataModel::getImplementationName(  ) throw (RuntimeException)
     {
         return OUString( "org.openoffice.comp.toolkit.SortableGridDataModel" );
@@ -981,7 +981,7 @@ private:
         return aServiceNames;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     ::sal_Int32 SortableGridDataModel::impl_getPrivateRowIndex_throw( ::sal_Int32 const i_publicRowIndex ) const
     {
         if ( ( i_publicRowIndex < 0 ) || ( i_publicRowIndex >= m_delegator->getRowCount() ) )
@@ -999,7 +999,7 @@ private:
         return m_publicToPrivateRowIndex[ i_publicRowIndex ];
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     ::sal_Int32 SortableGridDataModel::impl_getPublicRowIndex_nothrow( ::sal_Int32 const i_privateRowIndex ) const
     {
         if ( !impl_isSorted_nothrow() )

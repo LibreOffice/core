@@ -937,7 +937,7 @@ ScVbaApplication::getPathSeparator() throw (uno::RuntimeException)
     return OUString( (sal_Unicode) SAL_PATHDELIMITER );
 }
 
-// ----------------------------------------------------------------------------
+
 // Helpers for Intersect and Union
 
 namespace {
@@ -1113,7 +1113,7 @@ uno::Reference< excel::XRange > lclCreateVbaRange(
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 uno::Reference< excel::XRange > SAL_CALL ScVbaApplication::Intersect(
         const uno::Reference< excel::XRange >& rArg1, const uno::Reference< excel::XRange >& rArg2,

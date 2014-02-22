@@ -223,9 +223,9 @@ ITag* CMetaInfoReader::chooseTagReader( const std::wstring& tag_name, const XmlT
 
 }
 
-//------------------------------
+
 // save the received content into structure.
-//------------------------------
+
 void CMetaInfoReader::saveTagContent( const std::wstring& tag_name )
 {
     ITag* pTagBuilder;
@@ -250,9 +250,9 @@ void CMetaInfoReader::saveTagContent( const std::wstring& tag_name )
 
 /***********************   event handler functions  ***********************/
 
-//------------------------------
+
 // start_element occurs when a tag is start
-//------------------------------
+
 
 void CMetaInfoReader::start_element(
     const std::wstring& /*raw_name*/,
@@ -267,9 +267,9 @@ void CMetaInfoReader::start_element(
 
 }
 
-//------------------------------
+
 // end_element occurs when a tag is closed
-//------------------------------
+
 
 void CMetaInfoReader::end_element(const std::wstring& /*raw_name*/, const std::wstring& local_name)
 {
@@ -282,9 +282,9 @@ void CMetaInfoReader::end_element(const std::wstring& /*raw_name*/, const std::w
 
 }
 
-//------------------------------
+
 // characters occurs when receiving characters
-//------------------------------
+
 
 void CMetaInfoReader::characters( const std::wstring& character )
 {

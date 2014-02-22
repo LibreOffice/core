@@ -75,9 +75,9 @@
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/xbtmpit.hxx>
 
-// --------------
+
 // - Namespaces -
-// --------------
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

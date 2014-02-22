@@ -109,7 +109,7 @@ SFX_IMPL_INTERFACE(SfxApplication,SfxShell,SfxResId(RID_DESKTOP))
     SFX_CHILDWINDOW_REGISTRATION(SID_DOCKWIN_9);
 }
 
-//--------------------------------------------------------------------
+
 SfxProgress* SfxApplication::GetProgress() const
 
 /*  [Description]
@@ -159,7 +159,7 @@ SfxSlotPool& SfxApplication::GetAppSlotPool_Impl() const { return *pAppData_Impl
 bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWidth)
 {
     // Load from disk
-    // ---------------------------------------------------------------------
+
     OUString aBaseName = OUString("/") + OUString::createFromAscii( pName );
 
     rtl_Locale *pLoc = NULL;
@@ -172,7 +172,7 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
     SvgData aSvgData(aObj.PathToFileName());
 
     // transform into [0,0,width,width*aspect] std dimensions
-    // ---------------------------------------------------------------------
+
     basegfx::B2DRange aRange(aSvgData.getRange());
     const double fAspectRatio(aRange.getWidth()/aRange.getHeight());
     basegfx::B2DHomMatrix aTransform(
@@ -188,7 +188,7 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
             aSvgData.getPrimitive2DSequence()));
 
     // UNO dance to render from drawinglayer
-    // ---------------------------------------------------------------------
+
     uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
 
     try

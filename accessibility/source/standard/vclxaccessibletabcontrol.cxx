@@ -49,13 +49,13 @@ VCLXAccessibleTabControl::VCLXAccessibleTabControl( VCLXWindow* pVCLXWindow )
         m_aAccessibleChildren.assign( m_pTabControl->GetPageCount(), Reference< XAccessible >() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleTabControl::~VCLXAccessibleTabControl()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTabControl::UpdateFocused()
 {
@@ -71,7 +71,7 @@ void VCLXAccessibleTabControl::UpdateFocused()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTabControl::UpdateSelected( sal_Int32 i, bool bSelected )
 {
@@ -87,7 +87,7 @@ void VCLXAccessibleTabControl::UpdateSelected( sal_Int32 i, bool bSelected )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTabControl::UpdatePageText( sal_Int32 i )
 {
@@ -103,7 +103,7 @@ void VCLXAccessibleTabControl::UpdatePageText( sal_Int32 i )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTabControl::UpdateTabPage( sal_Int32 i, bool bNew )
 {
@@ -119,7 +119,7 @@ void VCLXAccessibleTabControl::UpdateTabPage( sal_Int32 i, bool bNew )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTabControl::InsertChild( sal_Int32 i )
 {
@@ -139,7 +139,7 @@ void VCLXAccessibleTabControl::InsertChild( sal_Int32 i )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTabControl::RemoveChild( sal_Int32 i )
 {
@@ -165,7 +165,7 @@ void VCLXAccessibleTabControl::RemoveChild( sal_Int32 i )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTabControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
@@ -260,7 +260,7 @@ void VCLXAccessibleTabControl::ProcessWindowEvent( const VclWindowEvent& rVclWin
    }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTabControl::ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent )
 {
@@ -291,7 +291,7 @@ void VCLXAccessibleTabControl::ProcessWindowChildEvent( const VclWindowEvent& rV
 }
 
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTabControl::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
@@ -301,21 +301,21 @@ void VCLXAccessibleTabControl::FillAccessibleStateSet( utl::AccessibleStateSetHe
         rStateSet.AddState( AccessibleStateType::FOCUSABLE );
 }
 
-// -----------------------------------------------------------------------------
+
 // XInterface
-// -----------------------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleTabControl, VCLXAccessibleComponent, VCLXAccessibleTabControl_BASE )
 
-// -----------------------------------------------------------------------------
+
 // XTypeProvider
-// -----------------------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleTabControl, VCLXAccessibleComponent, VCLXAccessibleTabControl_BASE )
 
-// -----------------------------------------------------------------------------
+
 // XComponent
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTabControl::disposing()
 {
@@ -336,16 +336,16 @@ void VCLXAccessibleTabControl::disposing()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 // XServiceInfo
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleTabControl::getImplementationName() throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleTabControl" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > VCLXAccessibleTabControl::getSupportedServiceNames() throw (RuntimeException)
 {
@@ -354,9 +354,9 @@ Sequence< OUString > VCLXAccessibleTabControl::getSupportedServiceNames() throw 
     return aNames;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleContext
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleTabControl::getAccessibleChildCount() throw (RuntimeException)
 {
@@ -365,7 +365,7 @@ sal_Int32 VCLXAccessibleTabControl::getAccessibleChildCount() throw (RuntimeExce
     return m_aAccessibleChildren.size();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > VCLXAccessibleTabControl::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -391,7 +391,7 @@ Reference< XAccessible > VCLXAccessibleTabControl::getAccessibleChild( sal_Int32
     return xChild;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int16 VCLXAccessibleTabControl::getAccessibleRole(  ) throw (RuntimeException)
 {
@@ -400,7 +400,7 @@ sal_Int16 VCLXAccessibleTabControl::getAccessibleRole(  ) throw (RuntimeExceptio
     return AccessibleRole::PAGE_TAB_LIST;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleTabControl::getAccessibleName(  ) throw (RuntimeException)
 {
@@ -409,9 +409,9 @@ OUString VCLXAccessibleTabControl::getAccessibleName(  ) throw (RuntimeException
     return OUString();
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleSelection
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTabControl::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -424,7 +424,7 @@ void VCLXAccessibleTabControl::selectAccessibleChild( sal_Int32 nChildIndex ) th
         m_pTabControl->SelectTabPage( m_pTabControl->GetPageId( (sal_uInt16)nChildIndex ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleTabControl::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -440,14 +440,14 @@ sal_Bool VCLXAccessibleTabControl::isAccessibleChildSelected( sal_Int32 nChildIn
     return bSelected;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTabControl::clearAccessibleSelection(  ) throw (RuntimeException)
 {
     // This method makes no sense in a tab control, and so does nothing.
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTabControl::selectAllAccessibleChildren(  ) throw (RuntimeException)
 {
@@ -456,7 +456,7 @@ void VCLXAccessibleTabControl::selectAllAccessibleChildren(  ) throw (RuntimeExc
     selectAccessibleChild( 0 );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleTabControl::getSelectedAccessibleChildCount(  ) throw (RuntimeException)
 {
@@ -465,7 +465,7 @@ sal_Int32 VCLXAccessibleTabControl::getSelectedAccessibleChildCount(  ) throw (R
     return 1;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > VCLXAccessibleTabControl::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -488,7 +488,7 @@ Reference< XAccessible > VCLXAccessibleTabControl::getSelectedAccessibleChild( s
     return xChild;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTabControl::deselectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -500,6 +500,6 @@ void VCLXAccessibleTabControl::deselectAccessibleChild( sal_Int32 nChildIndex ) 
     // This method makes no sense in a tab control, and so does nothing.
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

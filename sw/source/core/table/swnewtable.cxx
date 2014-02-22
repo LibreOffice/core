@@ -46,7 +46,7 @@
 #define CHECK_TABLE(t)
 #endif
 
-// ---------------------------------------------------------------
+
 
 /** SwBoxSelection is a small helperclass (structure) to handle selections
     of cells (boxes) between table functions

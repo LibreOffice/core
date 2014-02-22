@@ -50,7 +50,7 @@ static ::osl::Mutex& ImplGetOwnStaticMutex()
 }
 
 // Window
-// ------------------------------------------------------------------------------
+
 
 Window::Window( const uno::Reference< lang::XMultiServiceFactory >& rxMgr, Player& rPlayer ) :
     mxMgr( rxMgr ),
@@ -67,7 +67,7 @@ Window::~Window()
 }
 
 // XPlayerWindow
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL Window::update(  )
     throw (uno::RuntimeException)
@@ -106,7 +106,7 @@ void SAL_CALL Window::setPointerType( sal_Int32 nPointerType )
 }
 
 // XWindow
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL Window::setPosSize( sal_Int32 /*X*/, sal_Int32 /*Y*/, sal_Int32 /*Width*/, sal_Int32 /*Height*/, sal_Int16 /*Flags*/ )
     throw (uno::RuntimeException)
@@ -201,7 +201,7 @@ void SAL_CALL Window::removePaintListener( const uno::Reference< awt::XPaintList
 }
 
 // XComponent
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL Window::dispose(  )
     throw (uno::RuntimeException)
@@ -219,7 +219,7 @@ void SAL_CALL Window::removeEventListener( const uno::Reference< lang::XEventLis
 }
 
 // XServiceInfo
-// ------------------------------------------------------------------------------
+
 
 OUString SAL_CALL Window::getImplementationName(  )
     throw (uno::RuntimeException)

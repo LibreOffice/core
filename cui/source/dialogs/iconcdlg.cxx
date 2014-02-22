@@ -76,7 +76,7 @@ IconChoicePage::IconChoicePage( Window *pParent, const ResId &rResId,
     SetStyle ( GetStyle()  | WB_DIALOGCONTROL | WB_HIDE );
 }
 
-// -----------------------------------------------------------------------
+
 
 IconChoicePage::~IconChoicePage()
 {
@@ -92,7 +92,7 @@ void IconChoicePage::ActivatePage( const SfxItemSet& )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 int IconChoicePage::DeactivatePage( SfxItemSet* )
 {
@@ -109,14 +109,14 @@ void IconChoicePage::FillUserData()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool IconChoicePage::IsReadOnly() const
 {
     return sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool IconChoicePage::QueryClose()
 {
@@ -152,7 +152,7 @@ void IconChoicePage::ImplInitSettings()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void IconChoicePage::StateChanged( StateChangedType nType )
 {
@@ -165,7 +165,7 @@ void IconChoicePage::StateChanged( StateChangedType nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void IconChoicePage::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -248,7 +248,7 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
     SetPosSizeCtrls ( sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 
 IconChoiceDialog ::~IconChoiceDialog ()
 {
@@ -396,7 +396,7 @@ void IconChoiceDialog::ShowPageImpl ( IconChoicePageData* pData )
         pData->pPage->Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 void IconChoiceDialog::HidePageImpl ( IconChoicePageData* pData )
 {
@@ -404,7 +404,7 @@ void IconChoiceDialog::HidePageImpl ( IconChoicePageData* pData )
         pData->pPage->Hide();
 }
 
-// -----------------------------------------------------------------------
+
 
 void IconChoiceDialog::ShowPage( sal_uInt16 nId )
 {
@@ -680,7 +680,7 @@ IMPL_LINK_NOARG(IconChoiceDialog, OkHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(IconChoiceDialog, ResetHdl)
 {
@@ -702,7 +702,7 @@ IMPL_LINK_NOARG(IconChoiceDialog, ResetHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(IconChoiceDialog, CancelHdl)
 {
@@ -774,7 +774,7 @@ void IconChoiceDialog::ActivatePageImpl ()
 
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool IconChoiceDialog::DeActivatePageImpl ()
 {
@@ -841,7 +841,7 @@ sal_Bool IconChoiceDialog::DeActivatePageImpl ()
         return sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 void IconChoiceDialog::ResetPageImpl ()
 {
@@ -912,7 +912,7 @@ const sal_uInt16* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
     return pRanges;
 }
 
-// -----------------------------------------------------------------------
+
 
 void IconChoiceDialog::SetInputSet( const SfxItemSet* pInSet )
 {
@@ -927,14 +927,14 @@ void IconChoiceDialog::SetInputSet( const SfxItemSet* pInSet )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void IconChoiceDialog::PageCreated( sal_uInt16 /*nId*/, IconChoicePage& /*rPage*/ )
 {
     // not interested in
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxItemSet* IconChoiceDialog::CreateInputItemSet( sal_uInt16 )
 {
@@ -959,7 +959,7 @@ short IconChoiceDialog::Execute()
     return Dialog::Execute();
 }
 
-// -----------------------------------------------------------------------
+
 
 void IconChoiceDialog::Start( sal_Bool bShow )
 {
@@ -974,7 +974,7 @@ void IconChoiceDialog::Start( sal_Bool bShow )
 
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool IconChoiceDialog::QueryClose()
 {
@@ -991,7 +991,7 @@ sal_Bool IconChoiceDialog::QueryClose()
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void IconChoiceDialog::Start_Impl()
 {
@@ -1029,7 +1029,7 @@ void IconChoiceDialog::Start_Impl()
     ActivatePageImpl();
 }
 
-// -----------------------------------------------------------------------
+
 
 const SfxItemSet* IconChoiceDialog::GetRefreshedSet()
 {
@@ -1097,7 +1097,7 @@ sal_Bool IconChoiceDialog::OK_Impl()
     return bEnd;
 }
 
-// -----------------------------------------------------------------------
+
 
 short IconChoiceDialog::Ok()
 {
@@ -1146,7 +1146,7 @@ short IconChoiceDialog::Ok()
     return _bModified ? RET_OK : RET_CANCEL;
 }
 
-// -----------------------------------------------------------------------
+
 
 void IconChoiceDialog::FocusOnIcon( sal_uInt16 nId )
 {

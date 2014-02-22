@@ -47,17 +47,17 @@ sdbcx::ObjectType OColumns::createObject(const OUString& _rName)
     return new OAdoColumn(isCaseSensitive(),m_pConnection,m_aCollection.GetItem(_rName));
 }
 
-// -------------------------------------------------------------------------
+
 void OColumns::impl_refresh() throw(RuntimeException)
 {
     m_aCollection.Refresh();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OColumns::createDescriptor()
 {
     return new OAdoColumn(isCaseSensitive(),m_pConnection);
 }
-// -------------------------------------------------------------------------
+
 // XAppend
 sdbcx::ObjectType OColumns::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
 {
@@ -125,14 +125,14 @@ sdbcx::ObjectType OColumns::appendObject( const OUString&, const Reference< XPro
 
     return new OAdoColumn(isCaseSensitive(),m_pConnection,pColumn->getColumnImpl());
 }
-// -------------------------------------------------------------------------
+
 // XDrop
 void OColumns::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
 {
     if(!m_aCollection.Delete(_sElementName))
         ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
 }
-// -----------------------------------------------------------------------------
+
 
 
 

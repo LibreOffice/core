@@ -3948,9 +3948,9 @@ void GtkSalFrame::signalDestroy( GtkWidget* pObj, gpointer frame )
     }
 }
 
-// ----------------------------------------------------------------------
+
 // GtkSalFrame::IMHandler
-// ----------------------------------------------------------------------
+
 
 GtkSalFrame::IMHandler::IMHandler( GtkSalFrame* pFrame )
 : m_pFrame(pFrame),

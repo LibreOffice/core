@@ -425,7 +425,7 @@ void * pRegReturn = &nRegReturn;
     }
 
 }
-//__________________________________________________________________________________________________
+
 
 int const codeSnippetSize = 56;
 unsigned char * codeSnippet(

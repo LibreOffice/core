@@ -42,7 +42,7 @@ namespace frm
     //==================================================================
     //= OFormNavigationHelper
     //==================================================================
-    //------------------------------------------------------------------
+
     OFormNavigationHelper::OFormNavigationHelper( const Reference< XComponentContext >& _rxORB )
         :m_xORB( _rxORB )
         ,m_nConnectedFeatures( 0 )
@@ -50,51 +50,51 @@ namespace frm
         m_pFeatureInterception.reset( new ControlFeatureInterception( m_xORB ) );
     }
 
-    //------------------------------------------------------------------
+
     OFormNavigationHelper::~OFormNavigationHelper()
     {
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL OFormNavigationHelper::dispose( ) throw( RuntimeException )
     {
         m_pFeatureInterception->dispose();
         disconnectDispatchers();
     }
 
-    //------------------------------------------------------------------
+
     void OFormNavigationHelper::interceptorsChanged( )
     {
         updateDispatches();
     }
 
-    //------------------------------------------------------------------
+
     void OFormNavigationHelper::featureStateChanged( sal_Int16 /*_nFeatureId*/, sal_Bool /*_bEnabled*/ )
     {
         // not interested in
     }
 
-    //------------------------------------------------------------------
+
     void OFormNavigationHelper::allFeatureStatesChanged( )
     {
         // not interested in
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL OFormNavigationHelper::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException)
     {
         m_pFeatureInterception->registerDispatchProviderInterceptor( _rxInterceptor );
         interceptorsChanged();
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL OFormNavigationHelper::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException)
     {
         m_pFeatureInterception->releaseDispatchProviderInterceptor( _rxInterceptor );
         interceptorsChanged();
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL OFormNavigationHelper::statusChanged( const FeatureStateEvent& _rState ) throw (RuntimeException)
     {
         for (   FeatureMap::iterator aFeature = m_aSupportedFeatures.begin();
@@ -122,7 +122,7 @@ namespace frm
         OSL_FAIL( "OFormNavigationHelper::statusChanged: huh? An invalid/unknown URL?" );
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL OFormNavigationHelper::disposing( const EventObject& _rSource ) throw (RuntimeException)
     {
         // was it one of our external dispatchers?
@@ -148,7 +148,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+
     void OFormNavigationHelper::updateDispatches()
     {
         if ( !m_nConnectedFeatures )
@@ -193,7 +193,7 @@ namespace frm
         allFeatureStatesChanged( );
     }
 
-    //------------------------------------------------------------------
+
     void OFormNavigationHelper::connectDispatchers()
     {
         if ( m_nConnectedFeatures )
@@ -225,7 +225,7 @@ namespace frm
         allFeatureStatesChanged( );
     }
 
-    //------------------------------------------------------------------
+
     void OFormNavigationHelper::disconnectDispatchers()
     {
         if ( m_nConnectedFeatures )
@@ -250,7 +250,7 @@ namespace frm
         allFeatureStatesChanged( );
     }
 
-    //------------------------------------------------------------------
+
     void OFormNavigationHelper::initializeSupportedFeatures( )
     {
         if ( m_aSupportedFeatures.empty() )
@@ -279,13 +279,13 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+
     Reference< XDispatch > OFormNavigationHelper::queryDispatch( const URL& _rURL )
     {
         return m_pFeatureInterception->queryDispatch( _rURL );
     }
 
-    //------------------------------------------------------------------
+
     void OFormNavigationHelper::dispatchWithArgument( sal_Int16 _nFeatureId, const sal_Char* _pParamAsciiName,
         const Any& _rParamValue ) const
     {
@@ -303,7 +303,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+
     void OFormNavigationHelper::dispatch( sal_Int16 _nFeatureId ) const
     {
         FeatureMap::const_iterator aInfo = m_aSupportedFeatures.find( _nFeatureId );
@@ -317,7 +317,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+
     bool OFormNavigationHelper::isEnabled( sal_Int16 _nFeatureId ) const
     {
         FeatureMap::const_iterator aInfo = m_aSupportedFeatures.find( _nFeatureId );
@@ -327,7 +327,7 @@ namespace frm
         return false;
     }
 
-    //------------------------------------------------------------------
+
     bool OFormNavigationHelper::getBooleanState( sal_Int16 _nFeatureId ) const
     {
         sal_Bool bState = sal_False;
@@ -339,7 +339,7 @@ namespace frm
         return (bool)bState;
     }
 
-    //------------------------------------------------------------------
+
     OUString OFormNavigationHelper::getStringState( sal_Int16 _nFeatureId ) const
     {
         OUString sState;
@@ -351,7 +351,7 @@ namespace frm
         return sState;
     }
 
-    //------------------------------------------------------------------
+
     sal_Int32 OFormNavigationHelper::getIntegerState( sal_Int16 _nFeatureId ) const
     {
         sal_Int32 nState = 0;
@@ -363,7 +363,7 @@ namespace frm
         return nState;
     }
 
-    //------------------------------------------------------------------
+
     void OFormNavigationHelper::invalidateSupportedFeaturesSet()
     {
         disconnectDispatchers( );
@@ -375,18 +375,18 @@ namespace frm
     //==================================================================
     //= OFormNavigationMapper
     //==================================================================
-    //------------------------------------------------------------------
+
     OFormNavigationMapper::OFormNavigationMapper( const Reference< XComponentContext >& _rxORB )
     {
         m_pUrlTransformer.reset( new UrlTransformer( _rxORB ) );
     }
 
-    //------------------------------------------------------------------
+
     OFormNavigationMapper::~OFormNavigationMapper( )
     {
     }
 
-    //------------------------------------------------------------------
+
     bool OFormNavigationMapper::getFeatureURL( sal_Int16 _nFeatureId, URL& /* [out] */ _rURL )
     {
         // get the ascii version of the URL
@@ -397,7 +397,7 @@ namespace frm
         return ( pAsciiURL != NULL );
     }
 
-    //------------------------------------------------------------------
+
     namespace
     {
         struct FeatureURL
@@ -440,7 +440,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+
     const char* OFormNavigationMapper::getFeatureURLAscii( sal_Int16 _nFeatureId )
     {
         const FeatureURL* pFeatures = lcl_getFeatureTable();
@@ -453,7 +453,7 @@ namespace frm
         return NULL;
     }
 
-    //------------------------------------------------------------------
+
     sal_Int16 OFormNavigationMapper::getFeatureId( const OUString& _rCompleteURL )
     {
         const FeatureURL* pFeatures = lcl_getFeatureTable();

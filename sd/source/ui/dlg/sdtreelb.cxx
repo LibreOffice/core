@@ -82,9 +82,9 @@ sal_Bool SdPageObjsTLB::IsInDrag()
 
 sal_uInt32 SdPageObjsTLB::SdPageObjsTransferable::mnListBoxDropFormatId = SAL_MAX_UINT32;
 
-// -----------------------------------------
+
 // - SdPageObjsTLB::SdPageObjsTransferable -
-// -----------------------------------------
+
 
 SdPageObjsTLB::SdPageObjsTransferable::SdPageObjsTransferable(
     SdPageObjsTLB& rParent,
@@ -114,7 +114,7 @@ SdPageObjsTLB::SdPageObjsTransferable::~SdPageObjsTransferable()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdPageObjsTLB::SdPageObjsTransferable::AddSupportedFormats()
 {
@@ -123,7 +123,7 @@ void SdPageObjsTLB::SdPageObjsTransferable::AddSupportedFormats()
     AddFormat(GetListBoxDropFormatId());
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SdPageObjsTLB::SdPageObjsTransferable::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
@@ -143,7 +143,7 @@ sal_Bool SdPageObjsTLB::SdPageObjsTransferable::GetData( const ::com::sun::star:
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdPageObjsTLB::SdPageObjsTransferable::DragFinished( sal_Int8 nDropAction )
 {
@@ -151,21 +151,21 @@ void SdPageObjsTLB::SdPageObjsTransferable::DragFinished( sal_Int8 nDropAction )
     SdTransferable::DragFinished(nDropAction);
 }
 
-// -----------------------------------------------------------------------------
+
 
 ::sd::DrawDocShell& SdPageObjsTLB::SdPageObjsTransferable::GetDocShell() const
 {
     return mrDocShell;
 }
 
-// -----------------------------------------------------------------------------
+
 
 NavigatorDragType SdPageObjsTLB::SdPageObjsTransferable::GetDragType() const
 {
     return meDragType;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int64 SAL_CALL SdPageObjsTLB::SdPageObjsTransferable::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException )
 {
@@ -192,7 +192,7 @@ const ::com::sun::star::uno::Sequence< sal_Int8 >& SdPageObjsTLB::SdPageObjsTran
     return theSdPageObjsTLBUnoTunnelId::get().getSeq();
 }
 
-// -----------------------------------------------------------------------------
+
 
 SdPageObjsTLB::SdPageObjsTransferable* SdPageObjsTLB::SdPageObjsTransferable::getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData )
     throw()

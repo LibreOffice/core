@@ -71,9 +71,9 @@ static const sal_IntPtr aStdSizeAry[] =
 
 // =======================================================================
 
-// -----------------------------
+
 // - class ImplFontListFonInfo -
-// -----------------------------
+
 
 class ImplFontListFontInfo : public FontInfo
 {
@@ -94,9 +94,9 @@ public:
     OutputDevice*           GetDevice() const { return mpDevice; }
 };
 
-// ------------------------------
+
 // - class ImplFontListNameInfo -
-// ------------------------------
+
 
 class ImplFontListNameInfo
 {
@@ -152,7 +152,7 @@ static OUString ImplMakeSearchString(const OUString& rStr)
     return rStr.toAsciiLowerCase();
 }
 
-// -----------------------------------------------------------------------
+
 
 static OUString ImplMakeSearchStringFromName(const OUString& rStr)
 {
@@ -164,7 +164,7 @@ static OUString ImplMakeSearchStringFromName(const OUString& rStr)
     return ImplMakeSearchString(rStr.getToken( 0, ';' ));
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uLong* pIndex) const
 {
@@ -371,7 +371,7 @@ FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, sal_Bool bAll
         ImplInsertFonts( pDevice2, bAll, !bCompareWindow );
 }
 
-// -----------------------------------------------------------------------
+
 
 FontList::~FontList()
 {
@@ -392,7 +392,7 @@ FontList::~FontList()
         }
     }
 }
-// -----------------------------------------------------------------------
+
 FontList* FontList::Clone() const
 {
     FontList* pReturn = new FontList(
@@ -400,7 +400,7 @@ FontList* FontList::Clone() const
     return pReturn;
 }
 
-// -----------------------------------------------------------------------
+
 
 const OUString& FontList::GetStyleName(FontWeight eWeight, FontItalic eItalic) const
 {
@@ -441,7 +441,7 @@ const OUString& FontList::GetStyleName(FontWeight eWeight, FontItalic eItalic) c
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString FontList::GetStyleName(const FontInfo& rInfo) const
 {
@@ -494,7 +494,7 @@ OUString FontList::GetStyleName(const FontInfo& rInfo) const
     return aStyleName;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString FontList::GetFontMapText( const FontInfo& rInfo ) const
 {
@@ -675,7 +675,7 @@ FontInfo FontList::Get(const OUString& rName, const OUString& rStyleName) const
     return aInfo;
 }
 
-// -----------------------------------------------------------------------
+
 
 FontInfo FontList::Get(const OUString& rName,
                         FontWeight eWeight, FontItalic eItalic) const
@@ -713,14 +713,14 @@ FontInfo FontList::Get(const OUString& rName,
     return aInfo;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool FontList::IsAvailable(const OUString& rName) const
 {
     return (ImplFindByName( rName ) != 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 const FontInfo& FontList::GetFontName( sal_uInt16 nFont ) const
 {
@@ -729,7 +729,7 @@ const FontInfo& FontList::GetFontName( sal_uInt16 nFont ) const
     return *(maEntries[nFont].mpFirst);
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Handle FontList::GetFirstFontInfo(const OUString& rName) const
 {
@@ -740,7 +740,7 @@ sal_Handle FontList::GetFirstFontInfo(const OUString& rName) const
         return (sal_Handle)pData->mpFirst;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Handle FontList::GetNextFontInfo( sal_Handle hFontInfo ) const
 {
@@ -748,7 +748,7 @@ sal_Handle FontList::GetNextFontInfo( sal_Handle hFontInfo ) const
     return (sal_Handle)(pInfo->mpNext);
 }
 
-// -----------------------------------------------------------------------
+
 
 const FontInfo& FontList::GetFontInfo( sal_Handle hFontInfo ) const
 {
@@ -756,7 +756,7 @@ const FontInfo& FontList::GetFontInfo( sal_Handle hFontInfo ) const
     return *pInfo;
 }
 
-// -----------------------------------------------------------------------
+
 
 const sal_IntPtr* FontList::GetSizeAry( const FontInfo& rInfo ) const
 {
@@ -806,7 +806,7 @@ const sal_IntPtr* FontList::GetSizeAry( const FontInfo& rInfo ) const
     return mpSizeAry;
 }
 
-// -----------------------------------------------------------------------
+
 
 const sal_IntPtr* FontList::GetStdSizeAry()
 {
@@ -815,9 +815,9 @@ const sal_IntPtr* FontList::GetStdSizeAry()
 
 // =======================================================================
 
-// ---------------------------------
+
 // - FontSizeNames & FsizeNameItem -
-// ---------------------------------
+
 
 struct ImplFSNameItem
 {
@@ -825,7 +825,7 @@ struct ImplFSNameItem
     const char* mszUtf8Name;
 };
 
-//------------------------------------------------------------------------
+
 
 static const ImplFSNameItem aImplSimplifiedChinese[] =
 {
@@ -847,7 +847,7 @@ static const ImplFSNameItem aImplSimplifiedChinese[] =
     { 420, "\xe5\x88\x9d\xe5\x8f\xb7" }
 };
 
-//------------------------------------------------------------------------
+
 
 FontSizeNames::FontSizeNames( LanguageType eLanguage )
 {
@@ -869,7 +869,7 @@ FontSizeNames::FontSizeNames( LanguageType eLanguage )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 long FontSizeNames::Name2Size( const OUString& rName ) const
 {
@@ -887,7 +887,7 @@ long FontSizeNames::Name2Size( const OUString& rName ) const
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 OUString FontSizeNames::Size2Name( long nValue ) const
 {
@@ -911,7 +911,7 @@ OUString FontSizeNames::Size2Name( long nValue ) const
     return aStr;
 }
 
-//------------------------------------------------------------------------
+
 
 OUString FontSizeNames::GetIndexName( sal_uLong nIndex ) const
 {
@@ -923,7 +923,7 @@ OUString FontSizeNames::GetIndexName( sal_uLong nIndex ) const
     return aStr;
 }
 
-//------------------------------------------------------------------------
+
 
 long FontSizeNames::GetIndexSize( sal_uLong nIndex ) const
 {

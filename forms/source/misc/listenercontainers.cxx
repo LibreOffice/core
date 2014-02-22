@@ -31,7 +31,7 @@ namespace frm
     //====================================================================
     //= ResetListeners
     //====================================================================
-    //---------------------------------------------------------------------
+
     bool ResetListeners::implTypedNotify( const Reference< XResetListener >& _rxListener,
         const EventObject& _rEvent )   SAL_THROW( ( Exception ) )
     {

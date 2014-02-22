@@ -92,14 +92,14 @@
 struct FactoryInfo
 {
     public:
-        //---------------------------------------------------------------------------------------------------------
+
         // initialize empty struct
         FactoryInfo()
         {
             free();
         }
 
-        //---------------------------------------------------------------------------------------------------------
+
         // easy way to reset struct member!
         void free()
         {
@@ -119,7 +119,7 @@ struct FactoryInfo
             bDefaultFilterReadonly      = false;
         }
 
-        //---------------------------------------------------------------------------------------------------------
+
         // returns list of properties, which has changed only!
         // We use given value of sNodeBase to build full qualified paths ...
         // Last sign of it must be "/". because we use it directly, without any additional things!
@@ -184,7 +184,7 @@ struct FactoryInfo
             return lProperties;
         }
 
-        //---------------------------------------------------------------------------------------------------------
+
         // We must support setting AND marking of changed values.
         // That's why we can't make our member public. We must use get/set/init methods
         // to control access on it!
@@ -197,7 +197,7 @@ struct FactoryInfo
         bool            isDefaultFilterReadonly() const { return bDefaultFilterReadonly; }
         sal_Int32           getIcon             () const { return nIcon;              };
 
-        //---------------------------------------------------------------------------------------------------------
+
         // If you call set-methods - we check for changes of valkues and mark it.
         // But if you wish to set it without that ... you must initialize it!
         void initInstalled        ( bool               bNewInstalled        ) { bInstalled        = bNewInstalled        ; }
@@ -209,7 +209,7 @@ struct FactoryInfo
         void setDefaultFilterReadonly( const bool bVal){bDefaultFilterReadonly = bVal;}
         void initIcon             ( sal_Int32              nNewIcon             ) { nIcon             = nNewIcon             ; }
 
-        //---------------------------------------------------------------------------------------------------------
+
         void initTemplateFile( const OUString& sNewTemplateFile )
         {
             if ( !sNewTemplateFile.isEmpty() )
@@ -224,7 +224,7 @@ struct FactoryInfo
             }
         }
 
-        //---------------------------------------------------------------------------------------------------------
+
         void setTemplateFile( const OUString& sNewTemplateFile )
         {
             if( sTemplateFile != sNewTemplateFile )
@@ -234,7 +234,7 @@ struct FactoryInfo
             }
         };
 
-        //---------------------------------------------------------------------------------------------------------
+
         void setWindowAttributes( const OUString& sNewWindowAttributes )
         {
             if( sWindowAttributes != sNewWindowAttributes )
@@ -244,7 +244,7 @@ struct FactoryInfo
             }
         };
 
-        //---------------------------------------------------------------------------------------------------------
+
         void setDefaultFilter( const OUString& sNewDefaultFilter )
         {
             if( sDefaultFilter != sNewDefaultFilter )
@@ -299,25 +299,25 @@ typedef FactoryInfo   FactoryInfoList[FACTORYCOUNT];
 *//*-*************************************************************************************************************/
 class SvtModuleOptions_Impl : public ::utl::ConfigItem
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
     public:
-        //---------------------------------------------------------------------------------------------------------
+
         //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
+
          SvtModuleOptions_Impl();
         ~SvtModuleOptions_Impl();
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  overloaded methods of baseclass
-        //---------------------------------------------------------------------------------------------------------
+
         virtual void Notify( const css::uno::Sequence< OUString >& lPropertyNames );
         virtual void Commit(                                                             );
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  public interface
-        //---------------------------------------------------------------------------------------------------------
+
         bool        IsModuleInstalled         (       SvtModuleOptions::EModule     eModule    ) const;
         ::com::sun::star::uno::Sequence < OUString > GetAllServiceNames();
         OUString GetFactoryName            (       SvtModuleOptions::EFactory    eFactory   ) const;
@@ -334,21 +334,21 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
                                                     const OUString&              sFilter    );
         void            MakeReadonlyStatesAvailable();
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private methods
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
         static css::uno::Sequence< OUString > impl_ExpandSetNames ( const css::uno::Sequence< OUString >& lSetNames   );
                void                                  impl_Read           ( const css::uno::Sequence< OUString >& lSetNames   );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private types
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private member
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
         FactoryInfoList     m_lFactories;
         bool            m_bReadOnlyStatesWellKnown;

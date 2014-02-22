@@ -162,13 +162,13 @@ namespace extensions { namespace resource
     {
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XResourceBundle > SAL_CALL OpenOfficeResourceLoader::loadBundle_Default( const OUString& _baseName ) throw (MissingResourceException, RuntimeException)
     {
         return loadBundle( _baseName, Application::GetSettings().GetUILanguageTag().getLocale() );
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XResourceBundle > SAL_CALL OpenOfficeResourceLoader::loadBundle( const OUString& _baseName, const Locale& _locale ) throw (MissingResourceException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );

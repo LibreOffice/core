@@ -52,7 +52,7 @@ inline void appendChar( OUStringBuffer & buf, sal_Unicode c )
     }
 }
 
-//------------------------------------------------------------------------------
+
 void appendValue( OUStringBuffer & buf,
                   void const * val, typelib_TypeDescriptionReference * typeRef,
                   bool prependType )

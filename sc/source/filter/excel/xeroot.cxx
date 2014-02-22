@@ -63,7 +63,7 @@ XclExpRootData::~XclExpRootData()
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpRoot::XclExpRoot( XclExpRootData& rExpRootData ) :
     XclRoot( rExpRootData ),

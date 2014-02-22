@@ -151,7 +151,7 @@ SfxVersionTableDtor& SfxVersionTableDtor::operator=( const SfxVersionTableDtor& 
     return *this;
 }
 
-//----------------------------------------------------------------
+
 SfxVersionInfo::SfxVersionInfo()
     : aCreationDate( DateTime::EMPTY )
 {

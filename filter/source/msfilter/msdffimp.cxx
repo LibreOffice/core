@@ -2837,9 +2837,9 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet,MSO_FillType eMSO_
     }
 }
 
-//---------------------------------------------------------------------------
+
 //- Record Manager ----------------------------------------------------------
-//---------------------------------------------------------------------------
+
 
 DffRecordList::DffRecordList( DffRecordList* pList ) :
     nCount                  ( 0 ),
@@ -3029,9 +3029,9 @@ DffRecordHeader* DffRecordManager::GetRecordHeader( sal_uInt16 nRecId, DffSeekTo
     return pHd;
 }
 
-//---------------------------------------------------------------------------
+
 //  private methods
-//---------------------------------------------------------------------------
+
 
 bool CompareSvxMSDffShapeInfoById::operator() (
     ::boost::shared_ptr<SvxMSDffShapeInfo> const& lhs,
@@ -5436,9 +5436,9 @@ void SvxMSDffManager::RemoveFromShapeOrder( SdrObject* pObject ) const
 
 
 
-//---------------------------------------------------------------------------
+
 //  exported class: Public Methods
-//---------------------------------------------------------------------------
+
 
 SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
                                  const OUString& rBaseURL,

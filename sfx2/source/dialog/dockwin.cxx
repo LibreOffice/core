@@ -433,7 +433,7 @@ friend class SfxDockingWindow;
                         { eDockAlignment = eAlign; }
 };
 
-//-------------------------------------------------------------------------
+
 
 void SfxDockingWindow::Resize()
 
@@ -483,7 +483,7 @@ void SfxDockingWindow::Resize()
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 bool SfxDockingWindow::PrepareToggleFloatingMode()
 
@@ -536,7 +536,7 @@ bool SfxDockingWindow::PrepareToggleFloatingMode()
     return true;
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxDockingWindow::ToggleFloatingMode()
 
@@ -623,7 +623,7 @@ void SfxDockingWindow::ToggleFloatingMode()
         pWorkWin->ConfigChild_Impl( eIdent, SFX_TOGGLEFLOATMODE, pMgr->GetType() );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxDockingWindow::StartDocking()
 
@@ -654,7 +654,7 @@ void SfxDockingWindow::StartDocking()
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 bool SfxDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
 
@@ -757,7 +757,7 @@ bool SfxDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
     return bFloatMode;
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxDockingWindow::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode )
 
@@ -830,7 +830,7 @@ void SfxDockingWindow::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode )
     SetAlignment( IsFloatingMode() ? SFX_ALIGN_NOALIGNMENT : pImp->GetDockAlignment() );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxDockingWindow::Resizing( Size& /*rSize*/ )
 
@@ -846,7 +846,7 @@ void SfxDockingWindow::Resizing( Size& /*rSize*/ )
 
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     Window* pParent, WinBits nWinBits) :
@@ -897,7 +897,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxDockingWindow,TimerHdl));
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     Window* pParent, const ResId& rResId) :
@@ -948,7 +948,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxDockingWindow,TimerHdl));
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
 /*  [Description]
@@ -1177,7 +1177,7 @@ void SfxDockingWindow::Initialize_Impl()
     pImp->bConstructed = sal_True;
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxDockingWindow::FillInfo(SfxChildWinInfo& rInfo) const
 
@@ -1222,7 +1222,7 @@ void SfxDockingWindow::FillInfo(SfxChildWinInfo& rInfo) const
     rInfo.aExtraString += ")";
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxDockingWindow::~SfxDockingWindow()
 {
@@ -1241,7 +1241,7 @@ void SfxDockingWindow::ReleaseChildWindow_Impl()
     pMgr=NULL;
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& rRect)
 
@@ -1600,7 +1600,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
     return eDockAlign;
 }
 
-//-------------------------------------------------------------------------
+
 
 Size SfxDockingWindow::CalcDockingSize(SfxChildAlignment eAlign)
 
@@ -1649,7 +1649,7 @@ Size SfxDockingWindow::CalcDockingSize(SfxChildAlignment eAlign)
     return aSize;
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxChildAlignment SfxDockingWindow::CheckAlignment(SfxChildAlignment,
     SfxChildAlignment eAlign)
@@ -1665,7 +1665,7 @@ SfxChildAlignment SfxDockingWindow::CheckAlignment(SfxChildAlignment,
     return eAlign;
 }
 
-//-------------------------------------------------------------------------
+
 
 bool SfxDockingWindow::Close()
 
@@ -1687,7 +1687,7 @@ bool SfxDockingWindow::Close()
     return true;
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxDockingWindow::Paint(const Rectangle& /*rRect*/)
 
@@ -1740,7 +1740,7 @@ void SfxDockingWindow::Paint(const Rectangle& /*rRect*/)
     aView.DrawFrame( aRect, FRAME_DRAW_OUT );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxDockingWindow::SetMinOutputSizePixel( const Size& rSize )
 
@@ -1755,7 +1755,7 @@ void SfxDockingWindow::SetMinOutputSizePixel( const Size& rSize )
     DockingWindow::SetMinOutputSizePixel( rSize );
 }
 
-//-------------------------------------------------------------------------
+
 
 Size SfxDockingWindow::GetMinOutputSizePixel() const
 
@@ -1768,7 +1768,7 @@ Size SfxDockingWindow::GetMinOutputSizePixel() const
     return pImp->aMinSize;
 }
 
-//-------------------------------------------------------------------------
+
 
 bool SfxDockingWindow::Notify( NotifyEvent& rEvt )
 {
@@ -1813,7 +1813,7 @@ sal_uInt16 SfxDockingWindow::GetWinBits_Impl() const
     return nBits;
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxDockingWindow::SetItemSize_Impl( const Size& rSize )
 {

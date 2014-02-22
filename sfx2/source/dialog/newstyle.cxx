@@ -49,7 +49,7 @@ IMPL_LINK( SfxNewStyleDlg, OKHdl, Control *, pControl )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_INLINE_START( SfxNewStyleDlg, ModifyHdl, ComboBox *, pBox )
 {
@@ -86,7 +86,7 @@ SfxNewStyleDlg::SfxNewStyleDlg( Window* pParent, SfxStyleSheetBasePool& rInPool 
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxNewStyleDlg::~SfxNewStyleDlg()
 {

@@ -35,7 +35,7 @@ using namespace ::com::sun::star::uno;
 
 SFX_IMPL_MENU_CONTROL(SvxSmartTagsControl, SvxSmartTagItem);
 
-//--------------------------------------------------------------------
+
 
 SvxSmartTagsControl::SvxSmartTagsControl
 (
@@ -50,7 +50,7 @@ SvxSmartTagsControl::SvxSmartTagsControl
     rMenu.SetPopupMenu( _nId, mpMenu );
 }
 
-//--------------------------------------------------------------------
+
 
 const sal_uInt16 MN_ST_INSERT_START = 500;
 
@@ -135,7 +135,7 @@ void SvxSmartTagsControl::FillMenu()
     }
 }
 
-//--------------------------------------------------------------------
+
 
 void SvxSmartTagsControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 
@@ -154,7 +154,7 @@ void SvxSmartTagsControl::StateChanged( sal_uInt16, SfxItemState eState, const S
     }
 }
 
-//--------------------------------------------------------------------
+
 
 IMPL_LINK_INLINE_START( SvxSmartTagsControl, MenuSelect, PopupMenu *, pMen )
 {
@@ -191,7 +191,7 @@ IMPL_LINK_INLINE_START( SvxSmartTagsControl, MenuSelect, PopupMenu *, pMen )
 }
 IMPL_LINK_INLINE_END( SvxSmartTagsControl, MenuSelect, PopupMenu *, pMen )
 
-//--------------------------------------------------------------------
+
 
 SvxSmartTagsControl::~SvxSmartTagsControl()
 {
@@ -199,7 +199,7 @@ SvxSmartTagsControl::~SvxSmartTagsControl()
     delete mpMenu;
 }
 
-//--------------------------------------------------------------------
+
 
 PopupMenu* SvxSmartTagsControl::GetPopup() const
 {

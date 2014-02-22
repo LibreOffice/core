@@ -35,7 +35,7 @@ namespace pcr
     //========================================================================
     //= HelpIdUrl
     //========================================================================
-    //------------------------------------------------------------------------
+
     OString HelpIdUrl::getHelpId( const OUString& _rHelpURL )
     {
         INetURLObject aHID( _rHelpURL );
@@ -45,7 +45,7 @@ namespace pcr
             return OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );
     }
 
-    //------------------------------------------------------------------------
+
     OUString HelpIdUrl::getHelpURL( const OString& sHelpId )
     {
         OUStringBuffer aBuffer;

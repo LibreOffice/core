@@ -19,7 +19,7 @@
 
 
 
-//___________________________________________________________________
+
 #include "xmllabri.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -29,7 +29,7 @@ using namespace ::com::sun::star;
 using namespace xmloff::token;
 
 
-//___________________________________________________________________
+
 
 ScXMLLabelRangesContext::ScXMLLabelRangesContext(
         ScXMLImport& rImport,
@@ -71,7 +71,7 @@ void ScXMLLabelRangesContext::EndElement()
 }
 
 
-//___________________________________________________________________
+
 
 ScXMLLabelRangeContext::ScXMLLabelRangeContext(
         ScXMLImport& rImport,

@@ -127,7 +127,7 @@ bool lclReadString( AxAlignedInputStream& rInStrm, OUString& rValue, sal_uInt32 
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+
 
 AxBinaryPropertyReader::ComplexProperty::~ComplexProperty()
 {
@@ -175,7 +175,7 @@ bool AxBinaryPropertyReader::PictureProperty::readProperty( AxAlignedInputStream
     return OleHelper::importStdPic( mrPicData, rInStrm, true );
 }
 
-// ----------------------------------------------------------------------------
+
 
 AxBinaryPropertyReader::AxBinaryPropertyReader( BinaryInputStream& rInStrm, bool b64BitPropFlags ) :
     maInStrm( rInStrm ),

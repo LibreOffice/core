@@ -822,9 +822,9 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
 
     WriteFieldIntroducer(0,DscGrfObjMagic,0,0);
 
-    //------------------------------------------------------------------------------
+
     // The following is the OS2 original documentation and the associated implementation
-    //------------------------------------------------------------------------------
+
 
     //  Parameters (all required and in this order)
 

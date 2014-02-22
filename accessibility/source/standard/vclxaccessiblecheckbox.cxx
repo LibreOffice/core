@@ -41,9 +41,9 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-// -----------------------------------------------------------------------------
+
 // VCLXAccessibleCheckBox
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleCheckBox::VCLXAccessibleCheckBox( VCLXWindow* pVCLWindow )
     :VCLXAccessibleTextComponent( pVCLWindow )
@@ -52,13 +52,13 @@ VCLXAccessibleCheckBox::VCLXAccessibleCheckBox( VCLXWindow* pVCLWindow )
     m_bIndeterminate = IsIndeterminate();
 }
 
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleCheckBox::~VCLXAccessibleCheckBox()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool VCLXAccessibleCheckBox::IsChecked()
 {
@@ -71,7 +71,7 @@ bool VCLXAccessibleCheckBox::IsChecked()
     return bChecked;
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool VCLXAccessibleCheckBox::IsIndeterminate()
 {
@@ -84,7 +84,7 @@ bool VCLXAccessibleCheckBox::IsIndeterminate()
     return bIndeterminate;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleCheckBox::SetChecked( bool bChecked )
 {
@@ -100,7 +100,7 @@ void VCLXAccessibleCheckBox::SetChecked( bool bChecked )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleCheckBox::SetIndeterminate( bool bIndeterminate )
 {
@@ -116,7 +116,7 @@ void VCLXAccessibleCheckBox::SetIndeterminate( bool bIndeterminate )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
@@ -133,7 +133,7 @@ void VCLXAccessibleCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindo
    }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleCheckBox::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
@@ -148,28 +148,28 @@ void VCLXAccessibleCheckBox::FillAccessibleStateSet( utl::AccessibleStateSetHelp
         rStateSet.AddState( AccessibleStateType::INDETERMINATE );
 }
 
-// -----------------------------------------------------------------------------
+
 // XInterface
-// -----------------------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleCheckBox, VCLXAccessibleTextComponent, VCLXAccessibleCheckBox_BASE )
 
-// -----------------------------------------------------------------------------
+
 // XTypeProvider
-// -----------------------------------------------------------------------------
+
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleCheckBox, VCLXAccessibleTextComponent, VCLXAccessibleCheckBox_BASE )
 
-// -----------------------------------------------------------------------------
+
 // XServiceInfo
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleCheckBox::getImplementationName() throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleCheckBox" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > VCLXAccessibleCheckBox::getSupportedServiceNames() throw (RuntimeException)
 {
@@ -178,9 +178,9 @@ Sequence< OUString > VCLXAccessibleCheckBox::getSupportedServiceNames() throw (R
     return aNames;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleAction
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleCheckBox::getAccessibleActionCount( ) throw (RuntimeException)
 {
@@ -189,7 +189,7 @@ sal_Int32 VCLXAccessibleCheckBox::getAccessibleActionCount( ) throw (RuntimeExce
     return 1;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleCheckBox::doAccessibleAction ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -221,7 +221,7 @@ sal_Bool VCLXAccessibleCheckBox::doAccessibleAction ( sal_Int32 nIndex ) throw (
     return sal_True;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleCheckBox::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -236,7 +236,7 @@ OUString VCLXAccessibleCheckBox::getAccessibleActionDescription ( sal_Int32 nInd
         return TK_RES_STRING( RID_STR_ACC_ACTION_CHECK );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessibleKeyBinding > VCLXAccessibleCheckBox::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -275,9 +275,9 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleCheckBox::getAccessibleActionKe
     return xKeyBinding;
 }
 
-// -----------------------------------------------------------------------------
+
 // XAccessibleValue
-// -----------------------------------------------------------------------------
+
 
 Any VCLXAccessibleCheckBox::getCurrentValue(  ) throw (RuntimeException)
 {
@@ -292,7 +292,7 @@ Any VCLXAccessibleCheckBox::getCurrentValue(  ) throw (RuntimeException)
     return aValue;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleCheckBox::setCurrentValue( const Any& aNumber ) throw (RuntimeException)
 {
@@ -320,7 +320,7 @@ sal_Bool VCLXAccessibleCheckBox::setCurrentValue( const Any& aNumber ) throw (Ru
     return bReturn;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Any VCLXAccessibleCheckBox::getMaximumValue(  ) throw (RuntimeException)
 {
@@ -337,7 +337,7 @@ Any VCLXAccessibleCheckBox::getMaximumValue(  ) throw (RuntimeException)
     return aValue;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Any VCLXAccessibleCheckBox::getMinimumValue(  ) throw (RuntimeException)
 {
@@ -349,6 +349,6 @@ Any VCLXAccessibleCheckBox::getMinimumValue(  ) throw (RuntimeException)
     return aValue;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

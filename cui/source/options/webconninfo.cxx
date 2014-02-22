@@ -101,7 +101,7 @@ void PasswordTable::setColWidths()
 
 // class WebConnectionInfoDialog -----------------------------------------
 
-// -----------------------------------------------------------------------
+
 WebConnectionInfoDialog::WebConnectionInfoDialog(Window* pParent)
     : ModalDialog(pParent, "StoredWebConnectionDialog", "cui/ui/storedwebconnectiondialog.ui")
     , m_nPos( -1 )
@@ -145,14 +145,14 @@ WebConnectionInfoDialog::~WebConnectionInfoDialog()
     delete m_pPasswordsLB;
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK( WebConnectionInfoDialog, HeaderBarClickedHdl, SvSimpleTable*, pTable )
 {
     m_pPasswordsLB->Resort( NULL == pTable );
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 void WebConnectionInfoDialog::FillPasswordList()
 {
     try
@@ -200,7 +200,7 @@ void WebConnectionInfoDialog::FillPasswordList()
     {}
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(WebConnectionInfoDialog, RemovePasswordHdl)
 {
     try
@@ -232,7 +232,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemovePasswordHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(WebConnectionInfoDialog, RemoveAllPasswordsHdl)
 {
     try
@@ -256,7 +256,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemoveAllPasswordsHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl)
 {
     try
@@ -295,7 +295,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(WebConnectionInfoDialog, EntrySelectedHdl)
 {
     SvTreeListEntry* pEntry = m_pPasswordsLB->GetCurEntry();

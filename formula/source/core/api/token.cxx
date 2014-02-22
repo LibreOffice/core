@@ -255,7 +255,7 @@ bool FormulaToken::TextEqual( const FormulaToken& rToken ) const
 }
 // ==========================================================================
 // real implementations of virtual functions
-// --------------------------------------------------------------------------
+
 
 
 sal_uInt8 FormulaByteToken::GetByte() const                       { return nByte; }
@@ -1337,10 +1337,10 @@ bool FormulaTokenIterator::IsEndOfPath() const
     return GetNonEndOfPathToken( pCur->nPC + 1) == NULL;
 }
 
-// -----------------------------------------------------------------------------
+
 // ==========================================================================
 // real implementations of virtual functions
-// --------------------------------------------------------------------------
+
 
 double      FormulaDoubleToken::GetDouble() const            { return fDouble; }
 double &    FormulaDoubleToken::GetDoubleAsReference()       { return fDouble; }
@@ -1451,8 +1451,8 @@ bool FormulaUnknownToken::operator==( const FormulaToken& r ) const
     return FormulaToken::operator==( r );
 }
 
-// -----------------------------------------------------------------------------
+
 } // formula
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

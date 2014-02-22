@@ -34,11 +34,11 @@
 
 using namespace ::com::sun::star;
 
-//---------------------------------------------
+
 // this struct conforms to the Microsoft
 // OBJECTDESCRIPTOR -> see oleidl.h
 // (MS platform sdk)
-//---------------------------------------------
+
 
 struct OleObjectDescriptor
 {
@@ -91,7 +91,7 @@ void SvObjectServerList::Remove( const SvGlobalName & rName )
     }
 }
 
-//---------------------------------------------------------------------
+
 void SvObjectServerList::FillInsertObjects()
 /* [Description]
 
@@ -282,7 +282,7 @@ OUString SvPasteObjectHelper::GetSotFormatUIName( SotFormatStringId nId )
 
     return aUIName;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rData, OUString& _rName, OUString& _rSource, SotFormatStringId& _nFormat)
 {
     sal_Bool bRet = sal_False;
@@ -339,6 +339,6 @@ sal_Bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rDat
     }
     return bRet;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

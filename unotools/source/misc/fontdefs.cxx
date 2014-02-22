@@ -320,7 +320,7 @@ static ImplLocalizedFontName aImplLocalizedNamesList[] =
 {   NULL,                   NULL },
 };
 
-// -----------------------------------------------------------------------
+
 
 void GetEnglishSearchFontName( OUString& rName )
 {
@@ -442,7 +442,7 @@ void GetEnglishSearchFontName( OUString& rName )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex )
 {
@@ -505,7 +505,7 @@ static bool ImplIsFontToken( const OUString& rName, const OUString& rToken )
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplAppendFontToken( OUString& rName, const OUString& rNewToken )
 {
@@ -578,7 +578,7 @@ OUString GetSubsFontName( const OUString& rName, sal_uLong nFlags )
     return aName;
 }
 
-// -----------------------------------------------------------------------
+
 
 // TODO: use a more generic String hash
 int FontNameHash::operator()( const OUString& rStr ) const

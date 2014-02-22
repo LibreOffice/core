@@ -258,7 +258,7 @@ Reference<XInterface> AccInstanceProvider::getInstance (const OUString& aName )
 }
 
 // component management stuff...
-// ----------------------------------------------------------------------------
+
 extern "C"
 {
 using namespace desktop;

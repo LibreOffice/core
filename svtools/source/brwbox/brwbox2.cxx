@@ -220,14 +220,14 @@ void BrowseBox::Select()
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::DoubleClick( const BrowserMouseEvent & )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 }
 
-//-------------------------------------------------------------------
+
 
 long BrowseBox::QueryMinimumRowHeight()
 {
@@ -235,35 +235,35 @@ long BrowseBox::QueryMinimumRowHeight()
     return CalcZoom( 5 );
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::ImplStartTracking()
 {
     DBG_CHKTHIS( BrowseBox, BrowseBoxCheckInvariants );
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::ImplTracking()
 {
     DBG_CHKTHIS( BrowseBox, BrowseBoxCheckInvariants );
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::ImplEndTracking()
 {
     DBG_CHKTHIS( BrowseBox, BrowseBoxCheckInvariants );
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::RowHeightChanged()
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 }
 
-//-------------------------------------------------------------------
+
 
 long BrowseBox::QueryColumnResize( sal_uInt16, long nWidth )
 {
@@ -271,21 +271,21 @@ long BrowseBox::QueryColumnResize( sal_uInt16, long nWidth )
     return nWidth;
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::ColumnResized( sal_uInt16 )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::ColumnMoved( sal_uInt16 )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::StartScroll()
 {
@@ -293,7 +293,7 @@ void BrowseBox::StartScroll()
     DoHideCursor( "StartScroll" );
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::EndScroll()
 {
@@ -303,7 +303,7 @@ void BrowseBox::EndScroll()
     DoShowCursor( "EndScroll" );
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::ToggleSelection( sal_Bool bForce )
 {
@@ -378,7 +378,7 @@ void BrowseBox::ToggleSelection( sal_Bool bForce )
     bNotToggleSel = sal_False;
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::DrawCursor()
 {
@@ -448,7 +448,7 @@ void BrowseBox::DrawCursor()
     }
 }
 
-//-------------------------------------------------------------------
+
 
 sal_uLong BrowseBox::GetColumnWidth( sal_uInt16 nId ) const
 {
@@ -460,7 +460,7 @@ sal_uLong BrowseBox::GetColumnWidth( sal_uInt16 nId ) const
     return (*pCols)[ nItemPos ]->Width();
 }
 
-//-------------------------------------------------------------------
+
 
 sal_uInt16 BrowseBox::GetColumnId( sal_uInt16 nPos ) const
 {
@@ -471,7 +471,7 @@ sal_uInt16 BrowseBox::GetColumnId( sal_uInt16 nPos ) const
     return (*pCols)[ nPos ]->GetId();
 }
 
-//-------------------------------------------------------------------
+
 
 sal_uInt16 BrowseBox::GetColumnPos( sal_uInt16 nId ) const
 {
@@ -483,7 +483,7 @@ sal_uInt16 BrowseBox::GetColumnPos( sal_uInt16 nId ) const
     return BROWSER_INVALIDID;
 }
 
-//-------------------------------------------------------------------
+
 
 sal_Bool BrowseBox::IsFrozen( sal_uInt16 nColumnId ) const
 {
@@ -495,7 +495,7 @@ sal_Bool BrowseBox::IsFrozen( sal_uInt16 nColumnId ) const
     return sal_False;
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::ExpandRowSelection( const BrowserMouseEvent& rEvt )
 {
@@ -561,7 +561,7 @@ void BrowseBox::ExpandRowSelection( const BrowserMouseEvent& rEvt )
     DoShowCursor( "ExpandRowSelection" );
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::Resize()
 {
@@ -640,7 +640,7 @@ void BrowseBox::Resize()
     DoShowCursor( "Resize" );
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::Paint( const Rectangle& rRect )
 {
@@ -735,13 +735,13 @@ void BrowseBox::Paint( const Rectangle& rRect )
     }
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::PaintRow( OutputDevice&, const Rectangle& )
 {
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
@@ -884,7 +884,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
     pDev->Pop();
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, sal_Bool _bForeignDevice, sal_Bool _bDrawSelections)
 {
@@ -1131,7 +1131,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, sal_
     _rOut.SetLineColor( aOldLineColor );
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::PaintData( Window& rWin, const Rectangle& rRect )
 {
@@ -1149,7 +1149,7 @@ void BrowseBox::PaintData( Window& rWin, const Rectangle& rRect )
     ImplPaintData(rWin, rRect, sal_False, sal_True);
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::UpdateScrollbars()
 {
@@ -1324,7 +1324,7 @@ void BrowseBox::UpdateScrollbars()
     }
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::SetUpdateMode( sal_Bool bUpdate )
 {
@@ -1355,7 +1355,7 @@ void BrowseBox::SetUpdateMode( sal_Bool bUpdate )
         DoHideCursor( "SetUpdateMode" );
 }
 
-//-------------------------------------------------------------------
+
 
 sal_Bool BrowseBox::GetUpdateMode() const
 {
@@ -1364,7 +1364,7 @@ sal_Bool BrowseBox::GetUpdateMode() const
     return getDataWindow()->IsUpdateMode();
 }
 
-//-------------------------------------------------------------------
+
 
 long BrowseBox::GetFrozenWidth() const
 {
@@ -1378,7 +1378,7 @@ long BrowseBox::GetFrozenWidth() const
     return nWidth;
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::ColumnInserted( sal_uInt16 nPos )
 {
@@ -1389,7 +1389,7 @@ void BrowseBox::ColumnInserted( sal_uInt16 nPos )
     UpdateScrollbars();
 }
 
-//-------------------------------------------------------------------
+
 
 sal_uInt16 BrowseBox::FrozenColCount() const
 {
@@ -1402,7 +1402,7 @@ sal_uInt16 BrowseBox::FrozenColCount() const
     return nCol;
 }
 
-//-------------------------------------------------------------------
+
 
 IMPL_LINK(BrowseBox,ScrollHdl,ScrollBar*,pBar)
 {
@@ -1425,7 +1425,7 @@ IMPL_LINK(BrowseBox,ScrollHdl,ScrollBar*,pBar)
     return 0;
 }
 
-//-------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(BrowseBox, EndScrollHdl)
 {
@@ -1440,7 +1440,7 @@ IMPL_LINK_NOARG(BrowseBox, EndScrollHdl)
     return 0;
 }
 
-//-------------------------------------------------------------------
+
 
 IMPL_LINK( BrowseBox, StartDragHdl, HeaderBar*, pBar )
 {
@@ -1448,7 +1448,7 @@ IMPL_LINK( BrowseBox, StartDragHdl, HeaderBar*, pBar )
     return 0;
 }
 
-//-------------------------------------------------------------------
+
 // usually only the first column was resized
 
 void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
@@ -1505,7 +1505,7 @@ void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
         SetNoSelection();
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::MouseMove( const MouseEvent& rEvt )
 {
@@ -1559,7 +1559,7 @@ void BrowseBox::MouseMove( const MouseEvent& rEvt )
     SetPointer( aNewPointer );
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::MouseButtonUp( const MouseEvent & rEvt )
 {
@@ -1596,7 +1596,7 @@ void BrowseBox::MouseButtonUp( const MouseEvent & rEvt )
                     rEvt.GetModifier() ) ) );
 }
 
-//-------------------------------------------------------------------
+
 
 sal_Bool bExtendedMode = sal_False;
 sal_Bool bFieldMode = sal_False;
@@ -1748,14 +1748,14 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
     }
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::MouseMove( const BrowserMouseEvent& )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::MouseButtonUp( const BrowserMouseEvent &rEvt )
 {
@@ -1794,7 +1794,7 @@ void BrowseBox::MouseButtonUp( const BrowserMouseEvent &rEvt )
     }
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::KeyInput( const KeyEvent& rEvt )
 {
@@ -1802,7 +1802,7 @@ void BrowseBox::KeyInput( const KeyEvent& rEvt )
         Control::KeyInput( rEvt );
 }
 
-//-------------------------------------------------------------------
+
 
 sal_Bool BrowseBox::ProcessKey( const KeyEvent& rEvt )
 {
@@ -1873,7 +1873,7 @@ sal_Bool BrowseBox::ProcessKey( const KeyEvent& rEvt )
     return nId != BROWSER_NONE;
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::Dispatch( sal_uInt16 nId )
 {
@@ -2056,7 +2056,7 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
     //! return bDone;
 }
 
-//-------------------------------------------------------------------
+
 
 void BrowseBox::SetCursorColor(const Color& _rCol)
 {
@@ -2074,7 +2074,7 @@ void BrowseBox::SetCursorColor(const Color& _rCol)
         DoShowCursor("SetCursorColor - force");
     DoShowCursor("SetCursorColor");
 }
-// -----------------------------------------------------------------------------
+
 Rectangle BrowseBox::calcHeaderRect(sal_Bool _bIsColumnBar,sal_Bool _bOnScreen)
 {
     Window* pParent = NULL;
@@ -2098,7 +2098,7 @@ Rectangle BrowseBox::calcHeaderRect(sal_Bool _bIsColumnBar,sal_Bool _bOnScreen)
     aTopLeft += GetWindowExtentsRelative( pParent ).TopLeft();
     return Rectangle(aTopLeft,Size(nWidth,nHeight));
 }
-// -----------------------------------------------------------------------------
+
 Rectangle BrowseBox::calcTableRect(sal_Bool _bOnScreen)
 {
     Window* pParent = NULL;
@@ -2114,7 +2114,7 @@ Rectangle BrowseBox::calcTableRect(sal_Bool _bOnScreen)
 
     return Rectangle(aRowBar.TopRight(), Size(aSize.A() - nX, aSize.B() - nY - aHScroll.GetSizePixel().Height()) );
 }
-// -----------------------------------------------------------------------------
+
 Rectangle BrowseBox::GetFieldRectPixelAbs( sal_Int32 _nRowId,sal_uInt16 _nColId, sal_Bool /*_bIsHeader*/, sal_Bool _bOnScreen )
 {
     Window* pParent = NULL;

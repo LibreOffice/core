@@ -30,9 +30,9 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/view/XControlAccess.hpp>
 
-// -------------
+
 // - UnoDialog -
-// -------------
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star::awt;
@@ -67,14 +67,14 @@ UnoDialog::UnoDialog( const Reference< XComponentContext > &rxContext, Reference
     createWindowPeer( mxWindowPeer );
 }
 
-// -----------------------------------------------------------------------------
+
 
 UnoDialog::~UnoDialog()
 {
 
 }
 
-// -----------------------------------------------------------------------------
+
 
 void UnoDialog::execute()
 {
@@ -89,7 +89,7 @@ void UnoDialog::endExecute( sal_Bool bStatus )
     mxDialog->endExecute();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XWindowPeer > UnoDialog::createWindowPeer( Reference< XWindowPeer > xParentPeer )
     throw ( Exception )
@@ -104,7 +104,7 @@ Reference< XWindowPeer > UnoDialog::createWindowPeer( Reference< XWindowPeer > x
     return mxDialog->getPeer();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XInterface > UnoDialog::insertControlModel( const OUString& rServiceName, const OUString& rName,
                                                         const Sequence< OUString >& rPropertyNames, const Sequence< Any >& rPropertyValues )
@@ -123,7 +123,7 @@ Reference< XInterface > UnoDialog::insertControlModel( const OUString& rServiceN
     return xControlModel;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void UnoDialog::setVisible( const OUString& rName, sal_Bool bVisible )
 {
@@ -138,7 +138,7 @@ void UnoDialog::setVisible( const OUString& rName, sal_Bool bVisible )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XButton > UnoDialog::insertButton( const OUString& rName, Reference< XActionListener > xActionListener,
             const Sequence< OUString >& rPropertyNames, const Sequence< Any >& rPropertyValues )
@@ -165,7 +165,7 @@ Reference< XButton > UnoDialog::insertButton( const OUString& rName, Reference< 
     return xButton;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XFixedText > UnoDialog::insertFixedText( const OUString& rName, const Sequence< OUString > rPropertyNames, const Sequence< Any > rPropertyValues )
 {
@@ -183,7 +183,7 @@ Reference< XFixedText > UnoDialog::insertFixedText( const OUString& rName, const
     return xFixedText;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XCheckBox > UnoDialog::insertCheckBox( const OUString& rName, const Sequence< OUString > rPropertyNames, const Sequence< Any > rPropertyValues )
 {
@@ -201,7 +201,7 @@ Reference< XCheckBox > UnoDialog::insertCheckBox( const OUString& rName, const S
     return xCheckBox;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XControl > UnoDialog::insertFormattedField( const OUString& rName, const Sequence< OUString > rPropertyNames, const Sequence< Any > rPropertyValues )
 {
@@ -219,7 +219,7 @@ Reference< XControl > UnoDialog::insertFormattedField( const OUString& rName, co
     return xControl;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XComboBox > UnoDialog::insertComboBox( const OUString& rName, const Sequence< OUString > rPropertyNames, const Sequence< Any > rPropertyValues )
 {
@@ -237,7 +237,7 @@ Reference< XComboBox > UnoDialog::insertComboBox( const OUString& rName, const S
     return xControl;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XRadioButton > UnoDialog::insertRadioButton( const OUString& rName, const Sequence< OUString > rPropertyNames, const Sequence< Any > rPropertyValues )
 {
@@ -255,7 +255,7 @@ Reference< XRadioButton > UnoDialog::insertRadioButton( const OUString& rName, c
     return xControl;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XListBox > UnoDialog::insertListBox( const OUString& rName, const Sequence< OUString > rPropertyNames, const Sequence< Any > rPropertyValues )
 {
@@ -273,7 +273,7 @@ Reference< XListBox > UnoDialog::insertListBox( const OUString& rName, const Seq
     return xControl;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XControl > UnoDialog::insertImage( const OUString& rName, const Sequence< OUString > rPropertyNames, const Sequence< Any > rPropertyValues )
 {
@@ -291,7 +291,7 @@ Reference< XControl > UnoDialog::insertImage( const OUString& rName, const Seque
     return xControl;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void UnoDialog::setControlProperty( const OUString& rControlName, const OUString& rPropertyName, const Any& rPropertyValue )
 {
@@ -308,7 +308,7 @@ void UnoDialog::setControlProperty( const OUString& rControlName, const OUString
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 Any UnoDialog::getControlProperty( const OUString& rControlName, const OUString& rPropertyName )
 {
@@ -327,7 +327,7 @@ Any UnoDialog::getControlProperty( const OUString& rControlName, const OUString&
     return aRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void UnoDialog::enableControl( const OUString& rControlName )
 {
@@ -335,7 +335,7 @@ void UnoDialog::enableControl( const OUString& rControlName )
     setControlProperty( rControlName, sEnabled, Any( sal_True ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void UnoDialog::disableControl( const OUString& rControlName )
 {
@@ -343,6 +343,6 @@ void UnoDialog::disableControl( const OUString& rControlName )
     setControlProperty( rControlName, sEnabled, Any( sal_False ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

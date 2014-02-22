@@ -283,7 +283,7 @@ void SfxOleTextEncoding::SetCodePage( sal_uInt16 nCodePage )
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 OUString SfxOleStringHelper::LoadString8( SvStream& rStrm ) const
 {
@@ -384,7 +384,7 @@ void SfxOleStringHelper::ImplSaveString16( SvStream& rStrm, const OUString& rVal
         rStrm.WriteUInt16( sal_uInt16( 0 ) );
 }
 
-// ----------------------------------------------------------------------------
+
 
 SfxOleObjectBase::~SfxOleObjectBase()
 {
@@ -416,7 +416,7 @@ void SfxOleObjectBase::SaveObject( SvStream& rStrm, SfxOleObjectBase& rObj )
     SetError( rObj.Save( rStrm ) );
 }
 
-// ----------------------------------------------------------------------------
+
 
 SfxOleCodePageProperty::SfxOleCodePageProperty() :
     SfxOlePropertyBase( PROPID_CODEPAGE, PROPTYPE_INT16 )
@@ -437,7 +437,7 @@ void SfxOleCodePageProperty::ImplSave( SvStream& rStrm )
     rStrm.WriteUInt16( GetCodePage() );
 }
 
-// ----------------------------------------------------------------------------
+
 
 SfxOleInt32Property::SfxOleInt32Property( sal_Int32 nPropId, sal_Int32 nValue ) :
     SfxOlePropertyBase( nPropId, PROPTYPE_INT32 ),
@@ -455,7 +455,7 @@ void SfxOleInt32Property::ImplSave( SvStream& rStrm )
     rStrm.WriteInt32( mnValue );
 }
 
-// ----------------------------------------------------------------------------
+
 
 SfxOleDoubleProperty::SfxOleDoubleProperty( sal_Int32 nPropId, double fValue ) :
     SfxOlePropertyBase( nPropId, PROPTYPE_DOUBLE ),
@@ -473,7 +473,7 @@ void SfxOleDoubleProperty::ImplSave( SvStream& rStrm )
     rStrm.WriteDouble( mfValue );
 }
 
-// ----------------------------------------------------------------------------
+
 
 SfxOleBoolProperty::SfxOleBoolProperty( sal_Int32 nPropId, bool bValue ) :
     SfxOlePropertyBase( nPropId, PROPTYPE_BOOL ),
@@ -493,7 +493,7 @@ void SfxOleBoolProperty::ImplSave( SvStream& rStrm )
     rStrm.WriteInt16( static_cast< sal_Int16 >( mbValue ? -1 : 0 ) );
 }
 
-// ----------------------------------------------------------------------------
+
 
 SfxOleStringPropertyBase::SfxOleStringPropertyBase(
         sal_Int32 nPropId, sal_Int32 nPropType, const SfxOleTextEncoding& rTextEnc ) :
@@ -517,7 +517,7 @@ SfxOleStringPropertyBase::SfxOleStringPropertyBase(
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 SfxOleString8Property::SfxOleString8Property(
         sal_Int32 nPropId, const SfxOleTextEncoding& rTextEnc ) :
@@ -541,7 +541,7 @@ void SfxOleString8Property::ImplSave( SvStream& rStrm )
     SaveString8( rStrm, GetValue() );
 }
 
-// ----------------------------------------------------------------------------
+
 
 SfxOleString16Property::SfxOleString16Property( sal_Int32 nPropId ) :
     SfxOleStringPropertyBase( nPropId, PROPTYPE_STRING16, RTL_TEXTENCODING_UCS2 )
@@ -558,7 +558,7 @@ void SfxOleString16Property::ImplSave( SvStream& rStrm )
     SaveString16( rStrm, GetValue() );
 }
 
-// ----------------------------------------------------------------------------
+
 
 SfxOleFileTimeProperty::SfxOleFileTimeProperty( sal_Int32 nPropId ) :
     SfxOlePropertyBase( nPropId, PROPTYPE_FILETIME )
@@ -643,7 +643,7 @@ void SfxOleDateProperty::ImplSave( SvStream& rStrm )
     rStrm.WriteDouble( fValue );
 }
 
-// ----------------------------------------------------------------------------
+
 
 SfxOleThumbnailProperty::SfxOleThumbnailProperty(
         sal_Int32 nPropId, const uno::Sequence<sal_uInt8> & i_rData) :
@@ -693,7 +693,7 @@ void SfxOleThumbnailProperty::ImplSave( SvStream& rStrm )
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 SfxOleBlobProperty::SfxOleBlobProperty( sal_Int32 nPropId,
         const uno::Sequence<sal_uInt8> & i_rData) :
@@ -718,7 +718,7 @@ void SfxOleBlobProperty::ImplSave( SvStream& rStrm )
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 SfxOleDictionaryProperty::SfxOleDictionaryProperty( const SfxOleTextEncoding& rTextEnc ) :
     SfxOlePropertyBase( PROPID_DICTIONARY, 0 ),
@@ -765,7 +765,7 @@ void SfxOleDictionaryProperty::ImplSave( SvStream& rStrm )
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 SfxOleSection::SfxOleSection( bool bSupportsDict ) :
     maDictProp( maCodePageProp ),
@@ -1151,7 +1151,7 @@ void SfxOleSection::SaveProperty( SvStream& rStrm, SfxOlePropertyBase& rProp, sa
     rnPropPosPos = rStrm.Tell();
 }
 
-// ----------------------------------------------------------------------------
+
 
 ErrCode SfxOlePropertySet::LoadPropertySet( SotStorage* pStrg, const OUString& rStrmName )
 {

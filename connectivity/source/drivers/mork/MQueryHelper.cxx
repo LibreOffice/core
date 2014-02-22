@@ -92,7 +92,7 @@ MQueryHelper::~MQueryHelper()
     OSL_TRACE("OUT MQueryHelper::~MQueryHelper()");
 }
 
-// -------------------------------------------------------------------------
+
 void MQueryHelper::setAddressbook(OUString &ab)
 {
     SAL_INFO("connectivity.mork", "MQueryHelper::setAddressbook()");
@@ -103,7 +103,7 @@ void MQueryHelper::setAddressbook(OUString &ab)
 
     OSL_TRACE("\tOUT MQuery::setAddressbook()");
 }
-// -------------------------------------------------------------------------
+
 void MQueryHelper::setExpression( MQueryExpression &_expr )
 {
     SAL_INFO("connectivity.mork", "MQueryHelper::setExpression()");
@@ -164,7 +164,7 @@ sal_Int32 MQueryHelper::getResultCount() const
     return result;
 }
 
-// -------------------------------------------------------------------------
+
 
 sal_Bool MQueryHelper::queryComplete() const
 {

@@ -26,7 +26,7 @@
 #include "svx/svdmodel.hxx"
 #include "svx/svdotable.hxx"
 
-// -----------------------------------------------------------------------------
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -34,7 +34,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::beans;
 
-// -----------------------------------------------------------------------------
+
 
 namespace sdr { namespace table {
 
@@ -43,9 +43,9 @@ const sal_Int32 Property_OptimalHeight = 1;
 const sal_Int32 Property_IsVisible = 2;
 const sal_Int32 Property_IsStartOfNewPage = 3;
 
-// -----------------------------------------------------------------------------
+
 // TableRow
-// -----------------------------------------------------------------------------
+
 
 TableRow::TableRow( const TableModelRef& xTableModel, sal_Int32 nRow, sal_Int32 nColumns )
 : TableRowBase( getStaticPropertySetInfo() )
@@ -67,13 +67,13 @@ TableRow::TableRow( const TableModelRef& xTableModel, sal_Int32 nRow, sal_Int32 
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 TableRow::~TableRow()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableRow::dispose()
 {
@@ -87,7 +87,7 @@ void TableRow::dispose()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableRow::throwIfDisposed() const throw (::com::sun::star::uno::RuntimeException)
 {
@@ -95,7 +95,7 @@ void TableRow::throwIfDisposed() const throw (::com::sun::star::uno::RuntimeExce
         throw DisposedException();
 }
 
-// -----------------------------------------------------------------------------
+
 
 TableRow& TableRow::operator=( const TableRow& r )
 {
@@ -109,7 +109,7 @@ TableRow& TableRow::operator=( const TableRow& r )
     return *this;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableRow::insertColumns( sal_Int32 nIndex, sal_Int32 nCount, CellVector::iterator* pIter /* = 0 */  )
 {
@@ -129,7 +129,7 @@ void TableRow::insertColumns( sal_Int32 nIndex, sal_Int32 nCount, CellVector::it
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableRow::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
 {
@@ -161,9 +161,9 @@ void TableRow::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 // XCellRange
-// -----------------------------------------------------------------------------
+
 
 Reference< XCell > SAL_CALL TableRow::getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -174,7 +174,7 @@ Reference< XCell > SAL_CALL TableRow::getCellByPosition( sal_Int32 nColumn, sal_
     return mxTableModel->getCellByPosition( nColumn, mnRow );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XCellRange > SAL_CALL TableRow::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -186,7 +186,7 @@ Reference< XCellRange > SAL_CALL TableRow::getCellRangeByPosition( sal_Int32 nLe
     throw IndexOutOfBoundsException();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XCellRange > SAL_CALL TableRow::getCellRangeByName( const OUString& /*aRange*/ ) throw (RuntimeException)
 {
@@ -194,25 +194,25 @@ Reference< XCellRange > SAL_CALL TableRow::getCellRangeByName( const OUString& /
     return Reference< XCellRange >();
 }
 
-// -----------------------------------------------------------------------------
+
 // XNamed
-// -----------------------------------------------------------------------------
+
 
 OUString SAL_CALL TableRow::getName() throw (RuntimeException)
 {
     return maName;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TableRow::setName( const OUString& aName ) throw (RuntimeException)
 {
     maName = aName;
 }
 
-// -----------------------------------------------------------------------------
+
 // XFastPropertySet
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, RuntimeException)
 {
@@ -301,7 +301,7 @@ void SAL_CALL TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aVal
     delete pUndo;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Any SAL_CALL TableRow::getFastPropertyValue( sal_Int32 nHandle ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
@@ -315,7 +315,7 @@ Any SAL_CALL TableRow::getFastPropertyValue( sal_Int32 nHandle ) throw (UnknownP
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 rtl::Reference< FastPropertySetInfo > TableRow::getStaticPropertySetInfo()
 {
@@ -364,7 +364,7 @@ rtl::Reference< FastPropertySetInfo > TableRow::getStaticPropertySetInfo()
     return xInfo;
 }
 
-// -----------------------------------------------------------------------------
+
 
 
 } }

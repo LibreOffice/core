@@ -43,7 +43,7 @@ namespace comphelper
     // OPropertyStateHelper
     //=====================================================================
 
-    //---------------------------------------------------------------------
+
     ::com::sun::star::uno::Any SAL_CALL OPropertyStateHelper::queryInterface(const  ::com::sun::star::uno::Type& _rType) throw( ::com::sun::star::uno::RuntimeException)
     {
         ::com::sun::star::uno::Any aReturn = OPropertySetHelper2::queryInterface(_rType);
@@ -54,7 +54,7 @@ namespace comphelper
         return aReturn;
     }
 
-    //---------------------------------------------------------------------
+
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> OPropertyStateHelper::getTypes() throw( ::com::sun::star::uno::RuntimeException)
     {
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> aTypes(4);
@@ -75,14 +75,14 @@ namespace comphelper
 
     OPropertyStateHelper::~OPropertyStateHelper() {}
 
-    //---------------------------------------------------------------------
+
     void OPropertyStateHelper::firePropertyChange(sal_Int32 nHandle, const  ::com::sun::star::uno::Any& aNewValue, const  ::com::sun::star::uno::Any& aOldValue)
     {
         fire(&nHandle, &aNewValue, &aOldValue, 1, sal_False);
     }
 
     // XPropertyState
-    //---------------------------------------------------------------------
+
     ::com::sun::star::beans::PropertyState SAL_CALL OPropertyStateHelper::getPropertyState(const OUString& _rsName) throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::uno::RuntimeException)
     {
         cppu::IPropertyArrayHelper& rPH = getInfoHelper();
@@ -94,7 +94,7 @@ namespace comphelper
         return getPropertyStateByHandle(nHandle);
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OPropertyStateHelper::setPropertyToDefault(const OUString& _rsName) throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::uno::RuntimeException)
     {
         cppu::IPropertyArrayHelper& rPH = getInfoHelper();
@@ -106,7 +106,7 @@ namespace comphelper
         setPropertyToDefaultByHandle(nHandle);
     }
 
-    //---------------------------------------------------------------------
+
     ::com::sun::star::uno::Any SAL_CALL OPropertyStateHelper::getPropertyDefault(const OUString& _rsName) throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::lang::WrappedTargetException,  ::com::sun::star::uno::RuntimeException)
     {
         cppu::IPropertyArrayHelper& rPH = getInfoHelper();
@@ -118,7 +118,7 @@ namespace comphelper
         return getPropertyDefaultByHandle(nHandle);
     }
 
-    //---------------------------------------------------------------------
+
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState> SAL_CALL OPropertyStateHelper::getPropertyStates(const  ::com::sun::star::uno::Sequence< OUString >& _rPropertyNames) throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::uno::RuntimeException)
     {
         sal_Int32 nLen = _rPropertyNames.getLength();
@@ -148,7 +148,7 @@ namespace comphelper
         return aRet;
     }
 
-    //---------------------------------------------------------------------
+
     ::com::sun::star::beans::PropertyState OPropertyStateHelper::getPropertyStateByHandle( sal_Int32 _nHandle )
     {
         // simply compare the current and the default value
@@ -164,13 +164,13 @@ namespace comphelper
         return bEqual ? PropertyState_DEFAULT_VALUE : PropertyState_DIRECT_VALUE;
     }
 
-    //---------------------------------------------------------------------
+
     void OPropertyStateHelper::setPropertyToDefaultByHandle( sal_Int32 _nHandle )
     {
         setFastPropertyValue( _nHandle, getPropertyDefaultByHandle( _nHandle ) );
     }
 
-    //---------------------------------------------------------------------
+
     ::com::sun::star::uno::Any OPropertyStateHelper::getPropertyDefaultByHandle( sal_Int32 ) const
     {
         return  ::com::sun::star::uno::Any();
@@ -179,18 +179,18 @@ namespace comphelper
     //=====================================================================
     // OStatefulPropertySet
     //=====================================================================
-    //---------------------------------------------------------------------
+
     OStatefulPropertySet::OStatefulPropertySet()
         :OPropertyStateHelper( GetBroadcastHelper() )
     {
     }
 
-    //---------------------------------------------------------------------
+
     OStatefulPropertySet::~OStatefulPropertySet()
     {
     }
 
-    //---------------------------------------------------------------------
+
     Sequence< Type > SAL_CALL OStatefulPropertySet::getTypes() throw(RuntimeException)
     {
         Sequence< Type > aOwnTypes( 2 );
@@ -205,14 +205,14 @@ namespace comphelper
 
     namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
 
-    //---------------------------------------------------------------------
+
     Sequence< sal_Int8 > SAL_CALL OStatefulPropertySet::getImplementationId() throw(RuntimeException)
     {
         ::cppu::OImplementationId &rID = lcl_ImplId::get();
         return rID.getImplementationId();
     }
 
-    //---------------------------------------------------------------------
+
     Any SAL_CALL OStatefulPropertySet::queryInterface( const Type& _rType ) throw(RuntimeException)
     {
         Any aReturn = OWeakObject::queryInterface( _rType );
@@ -223,13 +223,13 @@ namespace comphelper
         return aReturn;
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OStatefulPropertySet::acquire() throw()
     {
         ::cppu::OWeakObject::acquire();
     }
 
-    //---------------------------------------------------------------------
+
     void SAL_CALL OStatefulPropertySet::release() throw()
     {
         ::cppu::OWeakObject::release();

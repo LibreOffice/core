@@ -33,7 +33,7 @@ using namespace ::com::sun::star::lang;
 extern "C"
 {
 
-//---------------------------------------------------------------------------------------
+
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL sdbc2_component_getFactory(const sal_Char* _pImplName, ::com::sun::star::lang::XMultiServiceFactory* _pServiceManager, void* /*_pRegistryKey*/)
 {
     void* pRet = NULL;

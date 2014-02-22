@@ -1228,7 +1228,7 @@ static bool _UCBOpenContentSync(
     return ( bAborted || bException );
 }
 
-//----------------------------------------------------------------------------
+
 UcbLockBytes::UcbLockBytes( UcbLockBytesHandler* pHandler )
     : m_aExpireDate( DateTime::EMPTY )
     , m_xInputStream (NULL)
@@ -1242,7 +1242,7 @@ UcbLockBytes::UcbLockBytes( UcbLockBytesHandler* pHandler )
     SetSynchronMode( true );
 }
 
-//----------------------------------------------------------------------------
+
 UcbLockBytes::~UcbLockBytes()
 {
     if ( !m_bDontClose )
@@ -1284,7 +1284,7 @@ Reference < XInputStream > UcbLockBytes::getInputStream()
     return m_xInputStream;
 }
 
-//----------------------------------------------------------------------------
+
 
 bool UcbLockBytes::setStream_Impl( const Reference<XStream>& aStream )
 {
@@ -1350,7 +1350,7 @@ void UcbLockBytes::SetStreamValid_Impl()
         m_aInitialized.set();
 }
 
-//----------------------------------------------------------------------------
+
 void UcbLockBytes::terminate_Impl()
 {
     m_bTerminated = true;
@@ -1367,13 +1367,13 @@ void UcbLockBytes::terminate_Impl()
         m_xHandler->Handle( UcbLockBytesHandler::DONE, this );
 }
 
-//----------------------------------------------------------------------------
+
 void UcbLockBytes::SetSynchronMode (bool bSynchron)
 {
     SvLockBytes::SetSynchronMode (bSynchron);
 }
 
-//----------------------------------------------------------------------------
+
 ErrCode UcbLockBytes::ReadAt ( sal_uLong nPos, void *pBuffer, sal_uLong nCount, sal_uLong *pRead) const
 {
     if ( IsSynchronMode() )
@@ -1441,7 +1441,7 @@ ErrCode UcbLockBytes::ReadAt ( sal_uLong nPos, void *pBuffer, sal_uLong nCount, 
     return ERRCODE_NONE;
 }
 
-//----------------------------------------------------------------------------
+
 ErrCode UcbLockBytes::WriteAt ( sal_uLong nPos, const void *pBuffer, sal_uLong nCount, sal_uLong *pWritten)
 {
     if ( pWritten )
@@ -1480,7 +1480,7 @@ ErrCode UcbLockBytes::WriteAt ( sal_uLong nPos, const void *pBuffer, sal_uLong n
     return ERRCODE_NONE;
 }
 
-//----------------------------------------------------------------------------
+
 ErrCode UcbLockBytes::Flush() const
 {
     Reference <XOutputStream > xOutputStream = getOutputStream_Impl();
@@ -1499,7 +1499,7 @@ ErrCode UcbLockBytes::Flush() const
     return ERRCODE_NONE;
 }
 
-//----------------------------------------------------------------------------
+
 ErrCode UcbLockBytes::SetSize (sal_uLong nNewSize)
 {
     SvLockBytesStat aStat;
@@ -1533,7 +1533,7 @@ ErrCode UcbLockBytes::SetSize (sal_uLong nNewSize)
     return ERRCODE_NONE;
 }
 
-//----------------------------------------------------------------------------
+
 ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
 {
     if ( IsSynchronMode() )
@@ -1570,7 +1570,7 @@ ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
     return ERRCODE_NONE;
 }
 
-//----------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(UcbLockBytes, DataAvailHdl)
 {
     if ( hasInputStream_Impl() && m_xHandler.Is() )

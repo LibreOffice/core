@@ -33,7 +33,7 @@
 
 SFX_IMPL_MENU_CONTROL(SvxFontMenuControl, SvxFontItem);
 
-//--------------------------------------------------------------------
+
 
 /*  [Beschreibung]
 
@@ -56,7 +56,7 @@ SvxFontMenuControl::SvxFontMenuControl
     FillMenu();
 }
 
-//--------------------------------------------------------------------
+
 
 /*  [Beschreibung]
 
@@ -78,7 +78,7 @@ void SvxFontMenuControl::FillMenu()
     }
 }
 
-//--------------------------------------------------------------------
+
 
 /*  [Beschreibung]
 
@@ -110,7 +110,7 @@ void SvxFontMenuControl::StateChanged(
     }
 }
 
-//--------------------------------------------------------------------
+
 
 /*  [Beschreibung]
 
@@ -126,7 +126,7 @@ void SvxFontMenuControl::Notify( SfxBroadcaster&, const SfxHint& rHint )
         FillMenu();
 }
 
-//--------------------------------------------------------------------
+
 
 /*  [Beschreibung]
 
@@ -144,7 +144,7 @@ IMPL_LINK_INLINE_START( SvxFontMenuControl, MenuSelect, FontNameMenu *, pMen )
 }
 IMPL_LINK_INLINE_END( SvxFontMenuControl, MenuSelect, FontNameMenu *, pMen )
 
-//--------------------------------------------------------------------
+
 
 /*  [Beschreibung]
 
@@ -156,7 +156,7 @@ SvxFontMenuControl::~SvxFontMenuControl()
     delete pMenu;
 }
 
-//--------------------------------------------------------------------
+
 
 /*  [Beschreibung]
 

@@ -26,7 +26,7 @@
 #include <comphelper/types.hxx>
 #include "TConnection.hxx"
 
-// -------------------------------------------------------------------------
+
 using namespace comphelper;
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;
@@ -35,12 +35,12 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
 //  IMPLEMENT_SERVICE_INFO(OAdoView,"com.sun.star.sdbcx.AView","com.sun.star.sdbcx.View");
-// -------------------------------------------------------------------------
+
 OAdoView::OAdoView(sal_Bool _bCase,ADOView* _pView) : OView_ADO(_bCase,NULL)
 ,m_aView(_pView)
 {
 }
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OAdoView::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId * pId = 0;
@@ -57,7 +57,7 @@ Sequence< sal_Int8 > OAdoView::getUnoTunnelImplementationId()
 }
 
 // com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
 sal_Int64 OAdoView::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
@@ -65,7 +65,7 @@ sal_Int64 OAdoView::getSomething( const Sequence< sal_Int8 > & rId ) throw (Runt
                 : OView_ADO::getSomething(rId);
 }
 
-// -------------------------------------------------------------------------
+
 void OAdoView::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
 {
     if(m_aView.IsValid())
@@ -98,17 +98,17 @@ void OAdoView::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
     else
         OView_ADO::getFastPropertyValue(rValue,nHandle);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OAdoView::acquire() throw()
 {
     OView_ADO::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OAdoView::release() throw()
 {
     OView_ADO::release();
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -39,22 +39,22 @@
 #include "htmlex.hxx"
 #include "sdhtmlfilter.hxx"
 
-// ---------------
+
 // - SdPPTFilter -
-// ---------------
+
 
 SdHTMLFilter::SdHTMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress ) :
     SdFilter( rMedium, rDocShell, bShowProgress )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 SdHTMLFilter::~SdHTMLFilter()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SdHTMLFilter::Export()
 {

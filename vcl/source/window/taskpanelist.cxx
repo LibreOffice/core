@@ -75,7 +75,7 @@ struct LTRSortBackward : public ::std::binary_function< const Window*, const Win
     }
 };
 
-// --------------------------------------------------
+
 
 static void ImplTaskPaneListGrabFocus( Window *pWindow, bool bForward )
 {
@@ -86,7 +86,7 @@ static void ImplTaskPaneListGrabFocus( Window *pWindow, bool bForward )
     pWindow->ImplGrabFocus( GETFOCUS_F6 | (bForward ? GETFOCUS_FORWARD : GETFOCUS_BACKWARD));
 }
 
-// --------------------------------------------------
+
 
 TaskPaneList::TaskPaneList()
 {
@@ -96,7 +96,7 @@ TaskPaneList::~TaskPaneList()
 {
 }
 
-// --------------------------------------------------
+
 
 void TaskPaneList::AddWindow( Window *pWindow )
 {
@@ -136,7 +136,7 @@ void TaskPaneList::AddWindow( Window *pWindow )
     }
 }
 
-// --------------------------------------------------
+
 
 void TaskPaneList::RemoveWindow( Window *pWindow )
 {
@@ -149,7 +149,7 @@ void TaskPaneList::RemoveWindow( Window *pWindow )
     }
 }
 
-// --------------------------------------------------
+
 
 bool TaskPaneList::IsInList( Window *pWindow )
 {
@@ -161,7 +161,7 @@ bool TaskPaneList::IsInList( Window *pWindow )
         return false;
 }
 
-// --------------------------------------------------
+
 
 bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
 {
@@ -249,7 +249,7 @@ bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
     return false;
 }
 
-// --------------------------------------------------
+
 
 // returns next splitter
 Window* TaskPaneList::FindNextSplitter( Window *pWindow, bool bForward )
@@ -288,7 +288,7 @@ Window* TaskPaneList::FindNextSplitter( Window *pWindow, bool bForward )
     return pWindow;
 }
 
-// --------------------------------------------------
+
 
 // returns first valid item (regardless of type) if pWindow==0, otherwise returns next valid float
 Window* TaskPaneList::FindNextFloat( Window *pWindow, bool bForward )
@@ -332,6 +332,6 @@ Window* TaskPaneList::FindNextFloat( Window *pWindow, bool bForward )
     return pWindow;
 }
 
-// --------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

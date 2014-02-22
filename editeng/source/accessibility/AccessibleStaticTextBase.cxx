@@ -18,11 +18,11 @@
  */
 
 
-//------------------------------------------------------------------------
+
 //
 // Global header
 //
-//------------------------------------------------------------------------
+
 
 #include <limits.h>
 #include <vector>
@@ -38,11 +38,11 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 
-//------------------------------------------------------------------------
+
 //
 // Project-local header
 //
-//------------------------------------------------------------------------
+
 
 #include <editeng/editdata.hxx>
 #include <editeng/unopracc.hxx>
@@ -78,11 +78,11 @@ namespace accessibility
         }
     };
     sal_Unicode cNewLine(0x0a);
-    //------------------------------------------------------------------------
+
     //
     // Static Helper
     //
-    //------------------------------------------------------------------------
+
     ESelection MakeSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                               sal_Int32 nEndPara, sal_Int32 nEndIndex )
     {
@@ -96,11 +96,11 @@ namespace accessibility
                            nEndPara, static_cast< sal_uInt16 >(nEndIndex) );
     }
 
-    //------------------------------------------------------------------------
+
     //
     // AccessibleStaticTextBase_Impl declaration
     //
-    //------------------------------------------------------------------------
+
 
 
     /** AccessibleStaticTextBase_Impl
@@ -208,11 +208,11 @@ namespace accessibility
 
     };
 
-    //------------------------------------------------------------------------
+
     //
     // AccessibleStaticTextBase_Impl implementation
     //
-    //------------------------------------------------------------------------
+
 
     AccessibleStaticTextBase_Impl::AccessibleStaticTextBase_Impl() :
         mxThis( NULL ),
@@ -492,11 +492,11 @@ namespace accessibility
         }
         return sal_False;
     }
-    //------------------------------------------------------------------------
+
     //
     // AccessibleStaticTextBase implementation
     //
-    //------------------------------------------------------------------------
+
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     AccessibleStaticTextBase::AccessibleStaticTextBase( ::std::auto_ptr< SvxEditSource >        pEditSource ) :
@@ -1126,6 +1126,6 @@ namespace accessibility
 
 }  // end of namespace accessibility
 
-//------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

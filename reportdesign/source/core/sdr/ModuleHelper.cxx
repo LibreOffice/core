@@ -54,20 +54,20 @@ public:
     ResMgr* getResManager();
 };
 
-//-------------------------------------------------------------------------
+
 OModuleImpl::OModuleImpl()
     :m_pResources(NULL)
 {
 }
 
-//-------------------------------------------------------------------------
+
 OModuleImpl::~OModuleImpl()
 {
     if (m_pResources)
         delete m_pResources;
 }
 
-//-------------------------------------------------------------------------
+
 ResMgr* OModuleImpl::getResManager()
 {
     // note that this method is not threadsafe, which counts for the whole class !
@@ -92,21 +92,21 @@ namespace
 
 sal_Int32       OModule::s_nClients = 0;
 OModuleImpl*    OModule::s_pImpl = NULL;
-//-------------------------------------------------------------------------
+
 ResMgr* OModule::getResManager()
 {
     ENTER_MOD_METHOD();
     return s_pImpl->getResManager();
 }
 
-//-------------------------------------------------------------------------
+
 void OModule::registerClient()
 {
     ::osl::MutexGuard aGuard(theOModuleMutex::get());
     ++s_nClients;
 }
 
-//-------------------------------------------------------------------------
+
 void OModule::revokeClient()
 {
     ::osl::MutexGuard aGuard(theOModuleMutex::get());
@@ -117,7 +117,7 @@ void OModule::revokeClient()
     }
 }
 
-//-------------------------------------------------------------------------
+
 void OModule::ensureImpl()
 {
     if (s_pImpl)

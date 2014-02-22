@@ -134,7 +134,7 @@ private:
     ShapeVector maShapes;
 };
 
-// ----------------------------------------------------------------------------
+
 
 ScVbaObjectContainer::ScVbaObjectContainer(
         const uno::Reference< XHelperInterface >& rxParent,
@@ -251,7 +251,7 @@ private:
     ScVbaObjectContainerRef mxContainer;
 };
 
-// ----------------------------------------------------------------------------
+
 
 ScVbaObjectEnumeration::ScVbaObjectEnumeration( const ScVbaObjectContainerRef& rxContainer ) :
     SimpleEnumerationBase( rxContainer->getParent(), rxContainer->getContext(), rxContainer.get() ),
@@ -371,7 +371,7 @@ protected:
     sal_Int16 mnComponentType;
 };
 
-// ----------------------------------------------------------------------------
+
 
 ScVbaControlContainer::ScVbaControlContainer(
         const uno::Reference< XHelperInterface >& rxParent,
@@ -473,7 +473,7 @@ protected:
     virtual bool implCheckProperties( const uno::Reference< beans::XPropertySet >& rxModelProps ) const;
 };
 
-// ----------------------------------------------------------------------------
+
 
 ScVbaButtonContainer::ScVbaButtonContainer(
         const uno::Reference< XHelperInterface >& rxParent,

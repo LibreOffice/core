@@ -652,9 +652,9 @@ void DemoApp::Main()
         return;
     }
 
-    //-------------------------------------------------
+
     // create the global service-manager
-    //-------------------------------------------------
+
     uno::Reference< lang::XMultiServiceFactory > xFactory;
     try
     {

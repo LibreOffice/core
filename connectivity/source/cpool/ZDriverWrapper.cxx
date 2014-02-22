@@ -33,7 +33,7 @@ namespace connectivity
     //====================================================================
     //= ODriverWrapper
     //====================================================================
-    //--------------------------------------------------------------------
+
     ODriverWrapper::ODriverWrapper( Reference< XAggregation >& _rxAggregateDriver, OConnectionPool* _pPool )
         :m_pConnectionPool(_pPool)
     {
@@ -60,7 +60,7 @@ namespace connectivity
         osl_atomic_decrement( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
+
     ODriverWrapper::~ODriverWrapper()
     {
         if (m_xDriverAggregate.is())
@@ -71,14 +71,14 @@ namespace connectivity
         m_pConnectionPool = NULL;
     }
 
-    //--------------------------------------------------------------------
+
     Any SAL_CALL ODriverWrapper::queryInterface( const Type& _rType ) throw (RuntimeException)
     {
         Any aReturn = ODriverWrapper_BASE::queryInterface(_rType);
         return aReturn.hasValue() ? aReturn : (m_xDriverAggregate.is() ? m_xDriverAggregate->queryAggregation(_rType) : aReturn);
     }
 
-    //--------------------------------------------------------------------
+
     Reference< XConnection > SAL_CALL ODriverWrapper::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException)
     {
         Reference< XConnection > xConnection;
@@ -91,13 +91,13 @@ namespace connectivity
         return xConnection;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Bool SAL_CALL ODriverWrapper::acceptsURL( const OUString& url ) throw (SQLException, RuntimeException)
     {
         return m_xDriver.is() && m_xDriver->acceptsURL(url);
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< DriverPropertyInfo > SAL_CALL ODriverWrapper::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException)
     {
         Sequence< DriverPropertyInfo > aInfo;
@@ -106,13 +106,13 @@ namespace connectivity
         return aInfo;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int32 SAL_CALL ODriverWrapper::getMajorVersion(  ) throw (RuntimeException)
     {
         return m_xDriver.is() ? m_xDriver->getMajorVersion() : 0;
     }
 
-    //--------------------------------------------------------------------
+
     sal_Int32 SAL_CALL ODriverWrapper::getMinorVersion(  ) throw (RuntimeException)
     {
         return m_xDriver.is() ? m_xDriver->getMinorVersion() : 0;

@@ -52,7 +52,7 @@ private:
     virtual void    Select();
 };
 
-// -----------------------------------------------------------------------
+
 
 ZoomPopup_Impl::ZoomPopup_Impl( sal_uInt16 nZ, sal_uInt16 nValueSet )
     : PopupMenu(ResId(RID_SVXMNU_ZOOM, DIALOG_MGR()))
@@ -75,7 +75,7 @@ ZoomPopup_Impl::ZoomPopup_Impl( sal_uInt16 nZ, sal_uInt16 nValueSet )
             EnableItem( aTable[nPos+1], false );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ZoomPopup_Impl::Select()
 {
@@ -108,7 +108,7 @@ SvxZoomStatusBarControl::SvxZoomStatusBarControl( sal_uInt16 _nSlotId,
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
                                             const SfxPoolItem* pState )
@@ -138,7 +138,7 @@ void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxZoomStatusBarControl::Paint( const UserDrawEvent& )
 {
@@ -146,7 +146,7 @@ void SvxZoomStatusBarControl::Paint( const UserDrawEvent& )
     GetStatusBar().SetItemText( GetId(), aStr );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
 {

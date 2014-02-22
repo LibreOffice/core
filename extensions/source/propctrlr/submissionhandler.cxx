@@ -30,7 +30,7 @@
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 
-//------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_SubmissionPropertyHandler()
 {
     ::pcr::SubmissionPropertyHandler::registerImplementation();
@@ -55,7 +55,7 @@ namespace pcr
     //====================================================================
     //= SubmissionHelper
     //====================================================================
-    //--------------------------------------------------------------------
+
     SubmissionHelper::SubmissionHelper( ::osl::Mutex& _rMutex, const Reference< XPropertySet >& _rxIntrospectee, const Reference< frame::XModel >& _rxContextDocument )
         :EFormsHelper( _rMutex, _rxIntrospectee, _rxContextDocument )
     {
@@ -63,7 +63,7 @@ namespace pcr
             "SubmissionHelper::SubmissionHelper: you should not have instantiated me!" );
     }
 
-    //--------------------------------------------------------------------
+
     bool SubmissionHelper::canTriggerSubmissions( const Reference< XPropertySet >& _rxControlModel,
         const Reference< frame::XModel >& _rxContextDocument ) SAL_THROW(())
     {
@@ -87,7 +87,7 @@ namespace pcr
     //= SubmissionPropertyHandler
     //====================================================================
     DBG_NAME( SubmissionPropertyHandler )
-    //--------------------------------------------------------------------
+
     SubmissionPropertyHandler::SubmissionPropertyHandler( const Reference< XComponentContext >& _rxContext )
         :EditPropertyHandler_Base( _rxContext )
         ,OPropertyChangeListener( m_aMutex )
@@ -96,20 +96,20 @@ namespace pcr
         DBG_CTOR( SubmissionPropertyHandler, NULL );
     }
 
-    //--------------------------------------------------------------------
+
     SubmissionPropertyHandler::~SubmissionPropertyHandler( )
     {
         disposeAdapter();
         DBG_DTOR( SubmissionPropertyHandler, NULL );
     }
 
-    //--------------------------------------------------------------------
+
     OUString SAL_CALL SubmissionPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
         return OUString( "com.sun.star.comp.extensions.SubmissionPropertyHandler" );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL SubmissionPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSupported( 1 );
@@ -117,7 +117,7 @@ namespace pcr
         return aSupported;
     }
 
-    //--------------------------------------------------------------------
+
     Any SAL_CALL SubmissionPropertyHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -166,7 +166,7 @@ namespace pcr
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL SubmissionPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -209,7 +209,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL SubmissionPropertyHandler::getActuatingProperties( ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -221,7 +221,7 @@ namespace pcr
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL SubmissionPropertyHandler::getSupersededProperties( ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -235,7 +235,7 @@ namespace pcr
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+
     void SubmissionPropertyHandler::onNewComponent()
     {
         if ( m_pPropChangeMultiplexer )
@@ -262,7 +262,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< Property > SAL_CALL SubmissionPropertyHandler::doDescribeSupportedProperties() const
     {
         ::std::vector< Property > aProperties;
@@ -276,7 +276,7 @@ namespace pcr
         return Sequence< Property >( &(*aProperties.begin()), aProperties.size() );
     }
 
-    //--------------------------------------------------------------------
+
     LineDescriptor SAL_CALL SubmissionPropertyHandler::describePropertyLine( const OUString& _rPropertyName,
         const Reference< XPropertyControlFactory >& _rxControlFactory )
         throw (UnknownPropertyException, NullPointerException, RuntimeException)
@@ -317,7 +317,7 @@ namespace pcr
         return aDescriptor;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL SubmissionPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool ) throw (NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )
@@ -343,7 +343,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     Any SAL_CALL SubmissionPropertyHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -382,7 +382,7 @@ namespace pcr
         return aPropertyValue;
     }
 
-    //--------------------------------------------------------------------
+
     Any SAL_CALL SubmissionPropertyHandler::convertToControlValue( const OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -423,7 +423,7 @@ namespace pcr
         return aControlValue;
     }
 
-    //--------------------------------------------------------------------
+
     void SubmissionPropertyHandler::_propertyChanged( const PropertyChangeEvent& _rEvent ) throw(RuntimeException)
     {
         if ( _rEvent.PropertyName == PROPERTY_BUTTONTYPE )

@@ -25,11 +25,11 @@
 
 DBG_NAME(SvxMacroItem);
 
-// -----------------------------------------------------------------------
+
 
 TYPEINIT1_FACTORY(SvxMacroItem, SfxPoolItem, new SvxMacroItem(0));
 
-// -----------------------------------------------------------------------
+
 
 SvxMacro::SvxMacro( const OUString &rMacName, const OUString &rLanguage)
     : aMacName( rMacName ), aLibName( rLanguage),
@@ -70,7 +70,7 @@ SvxMacro& SvxMacro::operator=( const SvxMacro& rBase )
     return *this;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxMacroTableDtor& SvxMacroTableDtor::operator=( const SvxMacroTableDtor& rTbl )
 {
@@ -190,7 +190,7 @@ bool SvxMacroTableDtor::Erase(sal_uInt16 nEvent)
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxMacroItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -202,7 +202,7 @@ bool SvxMacroItem::operator==( const SfxPoolItem& rAttr ) const
     return rOwn == rOther;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxMacroItem::Clone( SfxItemPool* ) const
 {
@@ -237,14 +237,14 @@ SfxItemPresentation SvxMacroItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SvxMacroItem::Store( SvStream& rStrm , sal_uInt16 ) const
 {
     return aMacroTable.Write( rStrm );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxMacroItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
 {
@@ -253,14 +253,14 @@ SfxPoolItem* SvxMacroItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
     return pAttr;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxMacroItem::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
 {
     aMacroTable.Insert( nEvent, rMacro);
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 SvxMacroItem::GetVersion( sal_uInt16 nFileFormatVersion ) const
 {

@@ -106,7 +106,7 @@ CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
 #endif
 }
 
-// -----------------------------------------------------------------------
+
 
 CoreTextStyle::~CoreTextStyle( void )
 {
@@ -114,7 +114,7 @@ CoreTextStyle::~CoreTextStyle( void )
         CFRelease( mpStyleDict );
 }
 
-// -----------------------------------------------------------------------
+
 
 void CoreTextStyle::GetFontMetric( ImplFontMetricData& rMetric ) const
 {
@@ -136,7 +136,7 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricData& rMetric ) const
     rMetric.mbKernableFont = true;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool CoreTextStyle::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect ) const
 {
@@ -154,7 +154,7 @@ bool CoreTextStyle::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect ) 
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 // callbacks from CTFontCreatePathForGlyph+CGPathApply for GetGlyphOutline()
 struct GgoData { basegfx::B2DPolygon maPolygon; basegfx::B2DPolyPolygon* mpPolyPoly; };
@@ -216,7 +216,7 @@ bool CoreTextStyle::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolyg
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void CoreTextStyle::SetTextColor( const RGBAColor& rColor )
 {
@@ -235,21 +235,21 @@ PhysicalFontFace* CoreTextFontData::Clone( void ) const
     return new CoreTextFontData( *this);
 }
 
-// -----------------------------------------------------------------------
+
 
 CoreTextStyle* CoreTextFontData::CreateTextStyle( const FontSelectPattern& rFSD ) const
 {
     return new CoreTextStyle( rFSD);
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplFontEntry* CoreTextFontData::CreateFontInstance( /*const*/ FontSelectPattern& rFSD ) const
 {
     return new ImplFontEntry( rFSD);
 }
 
-// -----------------------------------------------------------------------
+
 
 int CoreTextFontData::GetFontTable( const char pTagName[5], unsigned char* pResultBuf ) const
 {
@@ -424,7 +424,7 @@ SystemFontList::SystemFontList()
 ,   mpCTFontArray( NULL )
 {}
 
-// -----------------------------------------------------------------------
+
 
 SystemFontList::~SystemFontList()
 {
@@ -439,7 +439,7 @@ SystemFontList::~SystemFontList()
         CFRelease( mpCTFontCollection );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemFontList::AddFont( CoreTextFontData* pFontData )
 {
@@ -447,7 +447,7 @@ void SystemFontList::AddFont( CoreTextFontData* pFontData )
     maFontContainer[ nFontId ] = pFontData;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemFontList::AnnounceFonts( ImplDevFontList& rFontList ) const
 {
@@ -456,7 +456,7 @@ void SystemFontList::AnnounceFonts( ImplDevFontList& rFontList ) const
         rFontList.Add( (*it).second->Clone() );
 }
 
-// -----------------------------------------------------------------------
+
 
 CoreTextFontData* SystemFontList::GetFontDataFromId( sal_IntPtr nFontId ) const
 {
@@ -466,7 +466,7 @@ CoreTextFontData* SystemFontList::GetFontDataFromId( sal_IntPtr nFontId ) const
     return (*it).second;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SystemFontList::Init( void )
 {

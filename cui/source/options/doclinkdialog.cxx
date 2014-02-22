@@ -42,7 +42,7 @@ namespace svx
     //==================================================================
     //= ODocumentLinkDialog
     //==================================================================
-    //------------------------------------------------------------------
+
     ODocumentLinkDialog::ODocumentLinkDialog( Window* _pParent, sal_Bool _bCreateNew )
         : ModalDialog(_pParent, "DatabaseLinkDialog",
             "cui/ui/databaselinkdialog.ui")
@@ -70,7 +70,7 @@ namespace svx
         m_pURL->SetDropDownLineCount( 5 );
     }
 
-    //------------------------------------------------------------------
+
     void ODocumentLinkDialog::setLink( const OUString& _rName, const OUString& _rURL )
     {
         m_pName->SetText(_rName);
@@ -78,21 +78,21 @@ namespace svx
         validate();
     }
 
-    //------------------------------------------------------------------
+
     void ODocumentLinkDialog::getLink( OUString& _rName, OUString& _rURL ) const
     {
         _rName = m_pName->GetText();
         _rURL = m_pURL->GetText();
     }
 
-    //------------------------------------------------------------------
+
     void ODocumentLinkDialog::validate( )
     {
 
         m_pOK->Enable( ( !m_pName->GetText().isEmpty()) && ( !m_pURL->GetText().isEmpty() ) );
     }
 
-    //------------------------------------------------------------------
+
     IMPL_LINK_NOARG(ODocumentLinkDialog, OnOk)
     {
         // get the current URL
@@ -150,7 +150,7 @@ namespace svx
         return 0L;
     }
 
-    //------------------------------------------------------------------
+
     IMPL_LINK_NOARG(ODocumentLinkDialog, OnBrowseFile)
     {
         ::sfx2::FileDialogHelper aFileDlg(
@@ -195,7 +195,7 @@ namespace svx
         return 0L;
     }
 
-    //------------------------------------------------------------------
+
     IMPL_LINK_NOARG(ODocumentLinkDialog, OnTextModified)
     {
         validate( );

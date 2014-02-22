@@ -28,7 +28,7 @@
 #define TEXTTYPE_MULTILINE      1
 #define TEXTTYPE_RICHTEXT       2
 
-//------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_EditPropertyHandler()
 {
     ::pcr::EditPropertyHandler::registerImplementation();
@@ -50,26 +50,26 @@ namespace pcr
     //= EditPropertyHandler
     //====================================================================
     DBG_NAME( EditPropertyHandler )
-    //--------------------------------------------------------------------
+
     EditPropertyHandler::EditPropertyHandler( const Reference< XComponentContext >& _rxContext )
         :EditPropertyHandler_Base( _rxContext )
     {
         DBG_CTOR( EditPropertyHandler, NULL );
     }
 
-    //--------------------------------------------------------------------
+
     EditPropertyHandler::~EditPropertyHandler( )
     {
         DBG_DTOR( EditPropertyHandler, NULL );
     }
 
-    //--------------------------------------------------------------------
+
     OUString SAL_CALL EditPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
         return OUString( "com.sun.star.comp.extensions.EditPropertyHandler" );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL EditPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSupported( 1 );
@@ -77,7 +77,7 @@ namespace pcr
         return aSupported;
     }
 
-    //--------------------------------------------------------------------
+
     Any SAL_CALL EditPropertyHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -133,7 +133,7 @@ namespace pcr
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL EditPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -186,7 +186,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+
     bool EditPropertyHandler::implHaveBothScrollBarProperties() const
     {
         // have a "Scrollbars" property if the object supports both "HScroll" and "VScroll"
@@ -199,7 +199,7 @@ namespace pcr
             && xPSI->hasPropertyByName( PROPERTY_VSCROLL );
     }
 
-    //--------------------------------------------------------------------
+
     bool EditPropertyHandler::implHaveTextTypeProperty() const
     {
         // have a "Scrollbars" property if the object supports both "HScroll" and "VScroll"
@@ -212,7 +212,7 @@ namespace pcr
             && xPSI->hasPropertyByName( PROPERTY_MULTILINE );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< Property > SAL_CALL EditPropertyHandler::doDescribeSupportedProperties() const
     {
         ::std::vector< Property > aProperties;
@@ -228,7 +228,7 @@ namespace pcr
         return Sequence< Property >( &(*aProperties.begin()), aProperties.size() );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL EditPropertyHandler::getSupersededProperties( ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -248,7 +248,7 @@ namespace pcr
         return Sequence< OUString >( &(*aSuperseded.begin()), aSuperseded.size() );
     }
 
-    //--------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL EditPropertyHandler::getActuatingProperties( ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -259,7 +259,7 @@ namespace pcr
         return Sequence< OUString >( &(*aInterestingActuatingProps.begin()), aInterestingActuatingProps.size() );
     }
 
-    //--------------------------------------------------------------------
+
     void SAL_CALL EditPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool ) throw (NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )

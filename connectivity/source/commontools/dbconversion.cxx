@@ -60,13 +60,13 @@ namespace dbtools
     using namespace ::com::sun::star::beans;
 
 
-    //------------------------------------------------------------------------------
+
     ::com::sun::star::util::Date DBTypeConversion::getStandardDate()
     {
         static ::com::sun::star::util::Date STANDARD_DB_DATE(1,1,1900);
         return STANDARD_DB_DATE;
     }
-    //------------------------------------------------------------------------------
+
     OUString DBTypeConversion::toDateString(const utl::Date& rDate)
     {
         sal_Char s[11];
@@ -79,7 +79,7 @@ namespace dbtools
         s[10] = 0;
         return OUString::createFromAscii(s);
     }
-    //------------------------------------------------------------------
+
     OUString DBTypeConversion::toTimeStringS(const utl::Time& rTime)
     {
         std::ostringstream ostr;
@@ -90,7 +90,7 @@ namespace dbtools
              << setw(2) << rTime.Seconds;
         return OUString::createFromAscii(ostr.str().c_str());
     }
-    //------------------------------------------------------------------
+
     OUString DBTypeConversion::toTimeString(const utl::Time& rTime)
     {
         std::ostringstream ostr;
@@ -102,7 +102,7 @@ namespace dbtools
              << setw(9) << rTime.NanoSeconds;
         return OUString::createFromAscii(ostr.str().c_str());
     }
-    //------------------------------------------------------------------
+
     OUString DBTypeConversion::toDateTimeString(const utl::DateTime& _rDateTime)
     {
         utl::Date aDate(_rDateTime.Day,_rDateTime.Month,_rDateTime.Year);
@@ -113,7 +113,7 @@ namespace dbtools
         aTemp.append( toTimeString(aTime) );
         return  aTemp.makeStringAndClear();
     }
-    //------------------------------------------------------------------------------
+
     utl::Date DBTypeConversion::toDate(sal_Int32 _nVal)
     {
         utl::Date aReturn;
@@ -123,7 +123,7 @@ namespace dbtools
         return aReturn;
     }
 
-    //------------------------------------------------------------------------------
+
     utl::Time DBTypeConversion::toTime(sal_Int64 _nVal)
     {
         utl::Time aReturn;
@@ -148,11 +148,11 @@ namespace dbtools
                nHour * (minInHour * secInMin * nanoSecInSec);
     }
 
-    //------------------------------------------------------------------------------
+
     static const sal_Int32 aDaysInMonth[12] = {   31, 28, 31, 30, 31, 30,
                                             31, 31, 30, 31, 30, 31 };
 
-    //------------------------------------------------------------------------------
+
     static sal_Bool implIsLeapYear(sal_Int32 _nYear)
     {
         return  (   (   ((_nYear % 4) == 0)
@@ -163,7 +163,7 @@ namespace dbtools
                 ;
     }
 
-    //------------------------------------------------------------------------------
+
     static sal_Int32 implDaysInMonth(sal_Int32 _nMonth, sal_Int32 _nYear)
     {
         OSL_ENSURE(_nMonth > 0 && _nMonth < 13,"Month as invalid value!");
@@ -178,7 +178,7 @@ namespace dbtools
         }
     }
 
-    //------------------------------------------------------------------------------
+
     static sal_Int32 implRelativeToAbsoluteNull(const utl::Date& _rDate)
     {
         sal_Int32 nDays = 0;
@@ -195,7 +195,7 @@ namespace dbtools
         nDays += _rDate.Day;
         return nDays;
     }
-    //------------------------------------------------------------------------------
+
     static void implBuildFromRelative( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_Int16& rYear)
     {
         sal_Int32   nTempDays;
@@ -236,25 +236,25 @@ namespace dbtools
         }
         rDay = (sal_uInt16)nTempDays;
     }
-    //------------------------------------------------------------------------------
+
     sal_Int32 DBTypeConversion::toDays(const utl::Date& _rVal, const utl::Date& _rNullDate)
     {
         return implRelativeToAbsoluteNull(_rVal) - implRelativeToAbsoluteNull(_rNullDate);
     }
 
-    //------------------------------------------------------------------------------
+
     double DBTypeConversion::toDouble(const utl::Date& rVal, const utl::Date& _rNullDate)
     {
         return (double)toDays(rVal, _rNullDate);
     }
 
-    //------------------------------------------------------------------------------
+
     double DBTypeConversion::toDouble(const utl::Time& rVal)
     {
         return (double)getNsFromTime(rVal) / fNanoSecondsPerDay;
     }
 
-    //------------------------------------------------------------------------------
+
     double DBTypeConversion::toDouble(const utl::DateTime& _rVal, const utl::Date& _rNullDate)
     {
         sal_Int64   nTime     = toDays(utl::Date(_rVal.Day, _rVal.Month, _rVal.Year), _rNullDate);
@@ -267,7 +267,7 @@ namespace dbtools
 
         return ((double)nTime) + toDouble(aTimePart);
     }
-    // -------------------------------------------------------------------------
+
     static void addDays(sal_Int32 nDays, utl::Date& _rDate)
     {
         sal_Int32   nTempDays = implRelativeToAbsoluteNull( _rDate );
@@ -288,7 +288,7 @@ namespace dbtools
         else
             implBuildFromRelative( nTempDays, _rDate.Day, _rDate.Month, _rDate.Year );
     }
-    // -----------------------------------------------------------------------
+
     static void subDays( sal_Int32 nDays, utl::Date& _rDate )
     {
         sal_Int32   nTempDays = implRelativeToAbsoluteNull( _rDate );
@@ -309,7 +309,7 @@ namespace dbtools
         else
             implBuildFromRelative( nTempDays, _rDate.Day, _rDate.Month, _rDate.Year );
     }
-    // -------------------------------------------------------------------------
+
     utl::Date DBTypeConversion::toDate(double dVal, const utl::Date& _rNullDate)
     {
         utl::Date aRet = _rNullDate;
@@ -322,7 +322,7 @@ namespace dbtools
 
         return aRet;
     }
-    // -------------------------------------------------------------------------
+
     utl::Time DBTypeConversion::toTime(double dVal, short nDigits)
     {
         sal_Int32 nDays     = (sal_Int32)dVal;
@@ -370,7 +370,7 @@ namespace dbtools
         }
         return xRet;
     }
-    //------------------------------------------------------------------------------
+
     utl::DateTime DBTypeConversion::toDateTime(double dVal, const utl::Date& _rNullDate)
     {
         utl::Date aDate = toDate(dVal, _rNullDate);
@@ -394,7 +394,7 @@ namespace dbtools
 
         return xRet;
     }
-    //------------------------------------------------------------------------------
+
     utl::Date DBTypeConversion::toDate(const OUString& _sSQLString)
     {
         // get the token out of a string
@@ -415,7 +415,7 @@ namespace dbtools
         return utl::Date(nDay,nMonth,nYear);
     }
 
-    //-----------------------------------------------------------------------------
+
     utl::DateTime DBTypeConversion::toDateTime(const OUString& _sSQLString)
     {
         //@see http://java.sun.com/j2se/1.4.2/docs/api/java/sql/Timestamp.html#valueOf(java.lang.String)
@@ -439,7 +439,7 @@ namespace dbtools
                         aDate.Day, aDate.Month, aDate.Year, false);
     }
 
-    //-----------------------------------------------------------------------------
+
     utl::Time DBTypeConversion::toTime(const OUString& _sSQLString)
     {
         utl::Time aTime;

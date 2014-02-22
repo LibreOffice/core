@@ -2062,7 +2062,7 @@ void ScTextWnd::RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextDat
         maAccTextDatas.erase( aIt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTextWnd::DataChanged( const DataChangedEvent& rDCEvt )
 {

@@ -34,7 +34,7 @@
 //  FmShowColsDialog
 //==========================================================================
 DBG_NAME(FmShowColsDialog)
-//--------------------------------------------------------------------------
+
 FmShowColsDialog::FmShowColsDialog(Window* pParent)
     : ModalDialog(pParent, "ShowColDialog", "cui/ui/showcoldialog.ui")
 {
@@ -46,7 +46,7 @@ FmShowColsDialog::FmShowColsDialog(Window* pParent)
     m_pOK->SetClickHdl( LINK( this, FmShowColsDialog, OnClickedOk ) );
 }
 
-//--------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk)
 {
     DBG_ASSERT(m_xColumns.is(), "FmShowColsDialog::OnClickedOk : you should call SetColumns before executing the dialog !");
@@ -74,7 +74,7 @@ IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk)
     return 0L;
 }
 
-//--------------------------------------------------------------------------
+
 void FmShowColsDialog::SetColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& xCols)
 {
     DBG_ASSERT(xCols.is(), "FmShowColsDialog::SetColumns : invalid columns !");

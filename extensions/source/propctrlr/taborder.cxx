@@ -71,7 +71,7 @@ namespace pcr
     //= TabOrderDialog
     //========================================================================
     DBG_NAME(TabOrderDialog)
-    //------------------------------------------------------------------------
+
     TabOrderDialog::TabOrderDialog( Window* _pParent, const Reference< XTabControllerModel >& _rxTabModel,
                     const Reference< XControlContainer >& _rxControlCont, const Reference< XComponentContext >& _rxORB )
         :ModalDialog( _pParent, "TabOrderDialog", "modules/spropctrlr/ui/taborder.ui")
@@ -111,13 +111,13 @@ namespace pcr
 
     }
 
-    //------------------------------------------------------------------------
+
     void TabOrderDialog::SetModified()
     {
         m_pPB_OK->Enable();
     }
 
-    //------------------------------------------------------------------------
+
     TabOrderDialog::~TabOrderDialog()
     {
         m_pLB_Controls->Hide();
@@ -127,7 +127,7 @@ namespace pcr
         DBG_DTOR(TabOrderDialog,NULL);
     }
 
-    //------------------------------------------------------------------------
+
     Image TabOrderDialog::GetImage( const Reference< XPropertySet >& _rxSet ) const
     {
         sal_uInt16 nImageId = RID_SVXIMG_CONTROL;
@@ -165,7 +165,7 @@ namespace pcr
         return pImageList->GetImage( nImageId );
     }
 
-    //------------------------------------------------------------------------
+
     void TabOrderDialog::FillList()
     {
         DBG_ASSERT( m_xTempModel.is() && m_xControlContainer.is(), "TabOrderDialog::FillList: invalid call!" );
@@ -219,21 +219,21 @@ namespace pcr
             m_pLB_Controls->Select( pFirstEntry );
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK( TabOrderDialog, MoveUpClickHdl, Button*, /*pButton*/ )
     {
         m_pLB_Controls->MoveSelection( -1 );
         return 0;
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK( TabOrderDialog, MoveDownClickHdl, Button*, /*pButton*/ )
     {
         m_pLB_Controls->MoveSelection( 1 );
         return 0;
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK( TabOrderDialog, AutoOrderClickHdl, Button*, /*pButton*/ )
     {
         try
@@ -257,7 +257,7 @@ namespace pcr
         return 0;
     }
 
-    //------------------------------------------------------------------------
+
     IMPL_LINK( TabOrderDialog, OKClickHdl, Button*, /*pButton*/ )
     {
         sal_uLong nEntryCount = m_pLB_Controls->GetEntryCount();
@@ -292,7 +292,7 @@ namespace pcr
     //= TabOrderListBox
     //========================================================================
     DBG_NAME(TabOrderListBox);
-    //------------------------------------------------------------------------
+
     TabOrderListBox::TabOrderListBox( Window* pParent, WinBits nBits  )
         :SvTreeListBox( pParent, nBits  )
     {
@@ -313,13 +313,13 @@ namespace pcr
          return new TabOrderListBox(pParent, nWinStyle);
     }
 
-    //------------------------------------------------------------------------
+
     TabOrderListBox::~TabOrderListBox()
     {
         DBG_DTOR(TabOrderListBox,NULL);
     }
 
-    //------------------------------------------------------------------------
+
     void TabOrderListBox::ModelHasMoved( SvTreeListEntry* _pSource )
     {
         SvTreeListBox::ModelHasMoved( _pSource );
@@ -327,7 +327,7 @@ namespace pcr
         ((TabOrderDialog*)GetParentDialog())->SetModified();
     }
 
-    //------------------------------------------------------------------------
+
     void TabOrderListBox::MoveSelection( long nRelPos )
     {
         OUString aSelEntryPrevText, aSelEntryNextText;

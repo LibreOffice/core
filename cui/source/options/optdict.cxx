@@ -117,7 +117,7 @@ SvxNewDictionaryDialog::SvxNewDictionaryDialog( Window* pParent,
     pLanguageLB->SelectEntryPos(0);
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
 {
@@ -191,7 +191,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(SvxNewDictionaryDialog, ModifyHdl_Impl)
 {
@@ -330,13 +330,13 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxEditDictionaryDialog::~SvxEditDictionaryDialog()
 {
 }
 
-// -----------------------------------------------------------------------
+
 /*
 void SvxEditDictionaryDialog::Paint( const Rectangle& rRect )
 {
@@ -348,7 +348,7 @@ void SvxEditDictionaryDialog::Paint( const Rectangle& rRect )
 //    aDecoView.DrawButton( aRect, nStyle);
 }
 */
-// -----------------------------------------------------------------------
+
 
 void SvxEditDictionaryDialog::SetDicReadonly_Impl(
             Reference< XDictionary >  &xDic )
@@ -367,7 +367,7 @@ void SvxEditDictionaryDialog::SetDicReadonly_Impl(
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxEditDictionaryDialog::SetLanguage_Impl( util::Language nLanguage )
 {
@@ -414,7 +414,7 @@ void SvxEditDictionaryDialog::RemoveDictEntry(SvTreeListEntry* pEntry)
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectBookHdl_Impl)
 {
@@ -439,7 +439,7 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectBookHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl)
 {
@@ -474,7 +474,7 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl)
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
 {
@@ -546,7 +546,7 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
     LeaveWait();
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK(SvxEditDictionaryDialog, SelectHdl, SvTabListBox*, pBox)
 {
@@ -573,7 +573,7 @@ IMPL_LINK(SvxEditDictionaryDialog, SelectHdl, SvTabListBox*, pBox)
     return 0;
 };
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
 {
@@ -671,7 +671,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
 {

@@ -25,7 +25,7 @@
 
 #include "salgdi.hxx"
 
-// -----------------------------------------------------------------------
+
 
 static bool lcl_enableNativeWidget( const OutputDevice& i_rDevice )
 {
@@ -140,12 +140,12 @@ PushButtonValue* PushButtonValue::clone() const
     return new PushButtonValue( *this );
 }
 
-// -----------------------------------------------------------------------
+
 // These functions are mainly passthrough functions that allow access to
 // the SalFrame behind a Window object for native widget rendering purposes.
-// -----------------------------------------------------------------------
 
-// -----------------------------------------------------------------------
+
+
 
 bool OutputDevice::IsNativeControlSupported( ControlType nType, ControlPart nPart ) const
 {
@@ -160,7 +160,7 @@ bool OutputDevice::IsNativeControlSupported( ControlType nType, ControlPart nPar
 }
 
 
-// -----------------------------------------------------------------------
+
 
 bool OutputDevice::HitTestNativeControl( ControlType nType,
                               ControlPart nPart,
@@ -183,7 +183,7 @@ bool OutputDevice::HitTestNativeControl( ControlType nType,
         rIsInside, this ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 static boost::shared_ptr< ImplControlValue > lcl_transformControlValue( const ImplControlValue& rVal, const OutputDevice& rDev )
 {
@@ -303,7 +303,7 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool OutputDevice::GetNativeControlRegion(  ControlType nType,
                                 ControlPart nPart,

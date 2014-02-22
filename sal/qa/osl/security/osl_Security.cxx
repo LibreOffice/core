@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//------------------------------------------------------------------------
+
 // header file
-//------------------------------------------------------------------------
+
 #ifdef WNT
 #include <windows.h>
 #undef min
@@ -33,9 +33,9 @@ using namespace osl;
 using namespace rtl;
 
 
-//------------------------------------------------------------------------
+
 // helper functions and classes
-//------------------------------------------------------------------------
+
 
 /** print Boolean value.
 */
@@ -57,9 +57,9 @@ inline void printUString( const ::rtl::OUString & str )
 }
 
 
-//------------------------------------------------------------------------
+
 // test code start here
-//------------------------------------------------------------------------
+
 
 namespace osl_Security
 {
@@ -310,7 +310,7 @@ namespace osl_Security
         CPPUNIT_TEST_SUITE_END( );
     }; // class loginUserOnFileServer
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::logonUser);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::getUserIdent);
@@ -321,7 +321,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::getHandle);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::UserProfile);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::loginUserOnFileServer);
 
-// -----------------------------------------------------------------------------
+
 
 } // namespace osl_Security
 

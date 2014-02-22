@@ -347,7 +347,7 @@ void Table::setName( const OUString& aName ) throw (::com::sun::star::uno::Runti
 
 
 
-//________________________________________________________________________
+
 TableDescriptor::TableDescriptor(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
     const Reference< com::sun::star::sdbc::XConnection > & connection,

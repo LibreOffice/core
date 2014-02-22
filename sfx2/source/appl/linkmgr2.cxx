@@ -103,7 +103,7 @@ void LinkManager::CloseCachedComps()
     maCachedComps.clear();
 }
 
-//--------------------------------------------------------------------------
+
 
 void LinkManager::Remove( SvBaseLink *pLink )
 {
@@ -338,7 +338,7 @@ void LinkManager::UpdateAllLinks(
     CloseCachedComps();
 }
 
-//--------------------------------------------------------------------------
+
 
 SvLinkSourceRef LinkManager::CreateObj( SvBaseLink * pLink )
 {
@@ -503,7 +503,7 @@ sal_uIntPtr LinkManager::RegisterStatusInfoId()
     return nFormat;
 }
 
-// ----------------------------------------------------------------------
+
 
 sal_Bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue,
@@ -547,7 +547,7 @@ sal_Bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
 }
 
 
-// ----------------------------------------------------------------------
+
 OUString lcl_DDE_RelToAbs( const OUString& rTopic, const OUString& rBaseURL )
 {
     OUString sRet;

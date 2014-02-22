@@ -37,7 +37,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
-//------------------------------------------------------------------------------
+
 OColumnAlias::OColumnAlias( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB )
 {
     static const sal_Char* s_pProgrammaticNames[] =
@@ -87,7 +87,7 @@ OColumnAlias::OColumnAlias( const ::com::sun::star::uno::Reference< ::com::sun::
     initialize( _rxORB );
 }
 
-//------------------------------------------------------------------------------
+
 void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB )
 {
     Reference< XNameAccess > xAliasesNode(
@@ -125,7 +125,7 @@ void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::su
     }
 }
 
-//------------------------------------------------------------------
+
 OString OColumnAlias::getProgrammaticNameOrFallbackToUTF8Alias( const OUString& _rAlias ) const
 {
     AliasMap::const_iterator pos = m_aAliasMap.find( _rAlias );

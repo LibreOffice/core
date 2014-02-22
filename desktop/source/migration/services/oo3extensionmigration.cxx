@@ -73,7 +73,7 @@ OUString OO3ExtensionMigration_getImplementationName()
     return *pImplName;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > OO3ExtensionMigration_getSupportedServiceNames()
 {
@@ -100,7 +100,7 @@ m_ctx(ctx)
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 OO3ExtensionMigration::~OO3ExtensionMigration()
 {
@@ -322,16 +322,16 @@ void OO3ExtensionMigration::migrateExtension( const OUString& sSourceDir )
 }
 
 
-// -----------------------------------------------------------------------------
+
 // XServiceInfo
-// -----------------------------------------------------------------------------
+
 
 OUString OO3ExtensionMigration::getImplementationName() throw (RuntimeException)
 {
     return OO3ExtensionMigration_getImplementationName();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool OO3ExtensionMigration::supportsService(OUString const & ServiceName)
     throw (css::uno::RuntimeException)
@@ -339,16 +339,16 @@ sal_Bool OO3ExtensionMigration::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > OO3ExtensionMigration::getSupportedServiceNames() throw (RuntimeException)
 {
     return OO3ExtensionMigration_getSupportedServiceNames();
 }
 
-// -----------------------------------------------------------------------------
+
 // XInitialization
-// -----------------------------------------------------------------------------
+
 
 void OO3ExtensionMigration::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
 {
@@ -408,9 +408,9 @@ Any OO3ExtensionMigration::execute( const Sequence< beans::NamedValue >& )
     return Any();
 }
 
-// -----------------------------------------------------------------------------
+
 // TmpRepositoryCommandEnv
-// -----------------------------------------------------------------------------
+
 
 TmpRepositoryCommandEnv::TmpRepositoryCommandEnv()
 {
@@ -420,14 +420,14 @@ TmpRepositoryCommandEnv::~TmpRepositoryCommandEnv()
 {
 }
 // XCommandEnvironment
-//______________________________________________________________________________
+
 uno::Reference< task::XInteractionHandler > TmpRepositoryCommandEnv::getInteractionHandler()
 throw ( uno::RuntimeException )
 {
     return this;
 }
 
-//______________________________________________________________________________
+
 uno::Reference< ucb::XProgressHandler > TmpRepositoryCommandEnv::getProgressHandler()
 throw ( uno::RuntimeException )
 {
@@ -491,7 +491,7 @@ Reference< XInterface > SAL_CALL OO3ExtensionMigration_create(
         ctx) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 }   // namespace migration
 

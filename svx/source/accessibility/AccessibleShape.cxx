@@ -887,13 +887,13 @@ void SAL_CALL
 //=====  XAccessibleSelection  ============================================
 //
 
-//--------------------------------------------------------------------------------
+
 void SAL_CALL AccessibleShape::selectAccessibleChild( sal_Int32 )
 throw ( IndexOutOfBoundsException, RuntimeException )
 {
 }
 
-//----------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL AccessibleShape::isAccessibleChildSelected( sal_Int32 nChildIndex )
 throw ( IndexOutOfBoundsException,
        RuntimeException )
@@ -936,19 +936,19 @@ throw ( IndexOutOfBoundsException,
     return sal_False;
 }
 
-//---------------------------------------------------------------------
+
 void SAL_CALL AccessibleShape::clearAccessibleSelection(  )
 throw ( RuntimeException )
 {
 }
 
-//-------------------------------------------------------------------------
+
 void SAL_CALL AccessibleShape::selectAllAccessibleChildren(  )
 throw ( RuntimeException )
 {
 }
 
-//----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL AccessibleShape::getSelectedAccessibleChildCount()
 throw ( RuntimeException )
 {
@@ -960,7 +960,7 @@ throw ( RuntimeException )
     return nCount;
 }
 
-//--------------------------------------------------------------------------------------
+
 Reference<XAccessible> SAL_CALL AccessibleShape::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
 throw ( IndexOutOfBoundsException, RuntimeException)
 {
@@ -977,7 +977,7 @@ throw ( IndexOutOfBoundsException, RuntimeException)
     return Reference<XAccessible>();
 }
 
-//----------------------------------------------------------------------------------
+
 void SAL_CALL AccessibleShape::deselectAccessibleChild( sal_Int32 )
                                                             throw ( IndexOutOfBoundsException,
                                                             RuntimeException )
@@ -1154,7 +1154,7 @@ const uno::Sequence< sal_Int8 >&
     return theAccessibleShapeImplementationId::get().getSeq();
 }
 
-//------------------------------------------------------------------------------
+
 AccessibleShape*
     AccessibleShape::getImplementation( const uno::Reference< uno::XInterface >& rxIFace )
     throw()
@@ -1168,7 +1168,7 @@ AccessibleShape*
     return( pReturn );
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int64 SAL_CALL
     AccessibleShape::getSomething( const uno::Sequence< sal_Int8 >& rIdentifier )
     throw(uno::RuntimeException)

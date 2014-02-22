@@ -493,7 +493,7 @@ void ScDPSubtotalDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncDa
     mpBtnOptions->SetClickHdl( LINK( this, ScDPSubtotalDlg, ClickHdl ) );
 }
 
-// ----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScDPSubtotalDlg, RadioClickHdl, RadioButton*, pBtn )
 {

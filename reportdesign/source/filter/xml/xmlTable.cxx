@@ -112,11 +112,11 @@ OXMLTable::OXMLTable( ORptFilter& rImport
         OSL_FAIL("Exception catched while filling the section props");
     }
 }
-// -----------------------------------------------------------------------------
+
 OXMLTable::~OXMLTable()
 {
 }
-// -----------------------------------------------------------------------------
+
 
 SvXMLImportContext* OXMLTable::CreateChildContext(
         sal_uInt16 _nPrefix,
@@ -154,12 +154,12 @@ SvXMLImportContext* OXMLTable::CreateChildContext(
 
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 ORptFilter& OXMLTable::GetOwnImport()
 {
     return static_cast<ORptFilter&>(GetImport());
 }
-// -----------------------------------------------------------------------------
+
 void OXMLTable::EndElement()
 {
     try
@@ -270,7 +270,7 @@ void OXMLTable::EndElement()
         OSL_FAIL("OXMLTable::EndElement -> exception catched");
     }
 }
-// -----------------------------------------------------------------------------
+
 void OXMLTable::addCell(const Reference<XReportComponent>& _xElement)
 {
     uno::Reference<report::XShape> xShape(_xElement,uno::UNO_QUERY);
@@ -293,15 +293,15 @@ void OXMLTable::addCell(const Reference<XReportComponent>& _xElement)
     if ( !xShape.is() )
         m_nColSpan = m_nRowSpan = 1;
 }
-// -----------------------------------------------------------------------------
+
 void OXMLTable::incrementRowIndex()
 {
     ++m_nRowIndex;
     m_nColumnIndex = 0;
     m_aGrid.push_back(::std::vector<TCell>(m_aWidth.size()));
 }
-//----------------------------------------------------------------------------
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -56,7 +56,7 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame ) :
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 AquaSalObject::~AquaSalObject()
 {
@@ -93,7 +93,7 @@ AquaSalObject::~AquaSalObject()
    This is gives us an 80% solution only, though.
 */
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalObject::ResetClipRegion()
 {
@@ -101,21 +101,21 @@ void AquaSalObject::ResetClipRegion()
     setClippedPosSize();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 AquaSalObject::GetClipRegionType()
 {
     return SAL_OBJECT_CLIP_INCLUDERECTS;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalObject::BeginSetClipRegion( sal_uLong )
 {
     mbClip = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 {
@@ -146,14 +146,14 @@ void AquaSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalObject::EndSetClipRegion()
 {
     setClippedPosSize();
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 {
@@ -164,7 +164,7 @@ void AquaSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
     setClippedPosSize();
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalObject::setClippedPosSize()
 {
@@ -194,7 +194,7 @@ void AquaSalObject::setClippedPosSize()
     [mpClipView scrollToPoint: aClipPt];
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalObject::Show( sal_Bool bVisible )
 {
@@ -202,7 +202,7 @@ void AquaSalObject::Show( sal_Bool bVisible )
         [mpClipView setHidden: (bVisible ? NO : YES)];
 }
 
-// -----------------------------------------------------------------------
+
 
 const SystemEnvData* AquaSalObject::GetSystemData() const
 {

@@ -24,14 +24,14 @@
 #include "subtotalparam.hxx"
 
 
-//------------------------------------------------------------------------
+
 
 ScSortParam::ScSortParam()
 {
     Clear();
 }
 
-//------------------------------------------------------------------------
+
 
 ScSortParam::ScSortParam( const ScSortParam& r ) :
         nCol1(r.nCol1),nRow1(r.nRow1),nCol2(r.nCol2),nRow2(r.nRow2),nUserIndex(r.nUserIndex),
@@ -47,7 +47,7 @@ ScSortParam::ScSortParam( const ScSortParam& r ) :
 
 ScSortParam::~ScSortParam() {}
 
-//------------------------------------------------------------------------
+
 
 void ScSortParam::Clear()
 {
@@ -71,7 +71,7 @@ void ScSortParam::Clear()
     maKeyState.assign( DEFSORT, aKeyState );
 }
 
-//------------------------------------------------------------------------
+
 
 ScSortParam& ScSortParam::operator=( const ScSortParam& r )
 {
@@ -98,7 +98,7 @@ ScSortParam& ScSortParam::operator=( const ScSortParam& r )
     return *this;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScSortParam::operator==( const ScSortParam& rOther ) const
 {
@@ -154,7 +154,7 @@ bool ScSortParam::operator==( const ScSortParam& rOther ) const
     return bEqual;
 }
 
-//------------------------------------------------------------------------
+
 
 ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld ) :
         nCol1(rSub.nCol1),nRow1(rSub.nRow1),nCol2(rSub.nCol2),nRow2(rSub.nRow2),nUserIndex(rSub.nUserIndex),
@@ -199,7 +199,7 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
         }
 }
 
-//------------------------------------------------------------------------
+
 
 ScSortParam::ScSortParam( const ScQueryParam& rParam, SCCOL nCol ) :
         nCol1(nCol),nRow1(rParam.nRow1),nCol2(nCol),nRow2(rParam.nRow2),nUserIndex(0),
@@ -225,7 +225,7 @@ ScSortParam::ScSortParam( const ScQueryParam& rParam, SCCOL nCol ) :
         maKeyState.push_back( aKeyState );
 }
 
-//------------------------------------------------------------------------
+
 
 void ScSortParam::MoveToDest()
 {

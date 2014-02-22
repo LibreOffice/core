@@ -203,7 +203,7 @@ void ColumnLineChartTypeTemplate::createChartTypes(
             nNumberOfColumns = nNumberOfSeries - nNumberOfLines;
 
         // Columns
-        // -------
+
         Reference< XChartType > xCT(
             xFact->createInstance( CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ), uno::UNO_QUERY_THROW );
 
@@ -223,7 +223,7 @@ void ColumnLineChartTypeTemplate::createChartTypes(
         }
 
         // Lines
-        // -----
+
         xCT.set( xFact->createInstance( CHART2_SERVICE_NAME_CHARTTYPE_LINE ), uno::UNO_QUERY_THROW );
         xCTCnt.set( rCoordSys[ 0 ], uno::UNO_QUERY_THROW );
         xCTCnt->addChartType( xCT );

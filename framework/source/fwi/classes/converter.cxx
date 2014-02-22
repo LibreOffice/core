@@ -22,7 +22,7 @@
 
 namespace framework{
 
-//-----------------------------------------------------------------------------
+
 /**
  * converts a sequence of PropertyValue to a sequence of NamedValue.
  */
@@ -38,7 +38,7 @@ css::uno::Sequence< css::beans::NamedValue > Converter::convert_seqPropVal2seqNa
     return lDestination;
 }
 
-//-----------------------------------------------------------------------------
+
 /**
  * converts a sequence of unicode strings into a vector of such items
  */

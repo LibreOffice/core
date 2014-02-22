@@ -31,7 +31,7 @@ namespace pcr
     //====================================================================
     //= NewDataTypeDialog
     //====================================================================
-    //--------------------------------------------------------------------
+
     NewDataTypeDialog::NewDataTypeDialog( Window* _pParent, const OUString& _rNameBase, const ::std::vector< OUString >& _rProhibitedNames )
         :ModalDialog( _pParent, PcrRes( RID_DLG_NEW_DATA_TYPE ) )
         ,m_aLabel   ( this, PcrRes( FT_LABEL  ) )
@@ -72,7 +72,7 @@ namespace pcr
         OnNameModified( NULL );
     }
 
-    //--------------------------------------------------------------------
+
     IMPL_LINK( NewDataTypeDialog, OnNameModified, void*, /*_pNotInterestedIn*/ )
     {
         OUString sCurrentName = GetName();

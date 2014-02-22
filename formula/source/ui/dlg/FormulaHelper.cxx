@@ -120,7 +120,7 @@ bool FormulaHelper::GetNextFunc( const OUString&  rFormula,
     return bFound;
 }
 
-//------------------------------------------------------------------------
+
 
 void FormulaHelper::FillArgStrings( const OUString&   rFormula,
                                     sal_Int32         nFuncPos,
@@ -160,7 +160,7 @@ void FormulaHelper::FillArgStrings( const OUString&   rFormula,
             _rArgs.push_back(OUString());
 }
 
-//------------------------------------------------------------------------
+
 
 void FormulaHelper::GetArgStrings( ::std::vector< OUString >& _rArgs,
                                    const OUString& rFormula,
@@ -173,7 +173,7 @@ void FormulaHelper::GetArgStrings( ::std::vector< OUString >& _rArgs,
     }
 }
 
-//------------------------------------------------------------------------
+
 
 inline sal_Bool IsFormulaText( const CharClass* _pCharClass,const OUString& rStr, sal_Int32 nPos )
 {
@@ -280,7 +280,7 @@ sal_Int32 FormulaHelper::GetFunctionStart( const OUString&   rFormula,
     return nFStart;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Int32  FormulaHelper::GetFunctionEnd( const OUString& rStr, sal_Int32 nStart ) const
 {
@@ -338,7 +338,7 @@ sal_Int32  FormulaHelper::GetFunctionEnd( const OUString& rStr, sal_Int32 nStart
     return nStart;
 }
 
-//------------------------------------------------------------------
+
 
 sal_Int32 FormulaHelper::GetArgStart( const OUString& rStr, sal_Int32 nStart, sal_uInt16 nArg ) const
 {

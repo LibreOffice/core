@@ -50,7 +50,7 @@ void SpinButton::ImplInit( Window* pParent, WinBits nStyle )
     Control::ImplInit( pParent, nStyle, NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 SpinButton::SpinButton( Window* pParent, WinBits nStyle )
     :Control( WINDOW_SPINBUTTON )
@@ -59,13 +59,13 @@ SpinButton::SpinButton( Window* pParent, WinBits nStyle )
     ImplInit( pParent, nStyle );
 }
 
-// -----------------------------------------------------------------------
+
 
 SpinButton::~SpinButton()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SpinButton, ImplTimeout, Timer*, pTimer )
 {
@@ -85,7 +85,7 @@ IMPL_LINK( SpinButton, ImplTimeout, Timer*, pTimer )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::Up()
 {
@@ -100,7 +100,7 @@ void SpinButton::Up()
     ImplCallEventListenersAndHandler( VCLEVENT_SPINBUTTON_UP, maUpHdlLink, this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::Down()
 {
@@ -115,7 +115,7 @@ void SpinButton::Down()
     ImplCallEventListenersAndHandler( VCLEVENT_SPINBUTTON_DOWN, maDownHdlLink, this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::Resize()
 {
@@ -140,7 +140,7 @@ void SpinButton::Resize()
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
@@ -199,7 +199,7 @@ void SpinButton::Paint( const Rectangle& )
         ShowFocus( maFocusRect );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -225,7 +225,7 @@ void SpinButton::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::MouseButtonUp( const MouseEvent& )
 {
@@ -254,7 +254,7 @@ void SpinButton::MouseButtonUp( const MouseEvent& )
     mbInitialUp = mbInitialDown = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::MouseMove( const MouseEvent& rMEvt )
 {
@@ -297,7 +297,7 @@ void SpinButton::MouseMove( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::KeyInput( const KeyEvent& rKEvt )
 {
@@ -336,7 +336,7 @@ void SpinButton::KeyInput( const KeyEvent& rKEvt )
         Control::KeyInput( rKEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::StateChanged( StateChangedType nType )
 {
@@ -373,21 +373,21 @@ void SpinButton::StateChanged( StateChangedType nType )
     Control::StateChanged( nType );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::SetRangeMin( long nNewRange )
 {
     SetRange( Range( nNewRange, GetRangeMax() ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::SetRangeMax( long nNewRange )
 {
     SetRange( Range( GetRangeMin(), nNewRange ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::SetRange( const Range& rRange )
 {
@@ -414,7 +414,7 @@ void SpinButton::SetRange( const Range& rRange )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::SetValue( long nValue )
 {
@@ -431,7 +431,7 @@ void SpinButton::SetValue( long nValue )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::GetFocus()
 {
@@ -439,7 +439,7 @@ void SpinButton::GetFocus()
     Control::GetFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::LoseFocus()
 {
@@ -447,7 +447,7 @@ void SpinButton::LoseFocus()
     Control::LoseFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SpinButton::ImplMoveFocus( bool _bUpper )
 {
@@ -461,7 +461,7 @@ bool SpinButton::ImplMoveFocus( bool _bUpper )
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::ImplCalcFocusRect( bool _bUpper )
 {
@@ -474,7 +474,7 @@ void SpinButton::ImplCalcFocusRect( bool _bUpper )
     mbUpperIsFocused = _bUpper;
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle* SpinButton::ImplFindPartRect( const Point& rPt )
 {
@@ -523,6 +523,6 @@ bool SpinButton::PreNotify( NotifyEvent& rNEvt )
     return Control::PreNotify(rNEvt);
 }
 
-// -----------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

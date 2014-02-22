@@ -13,9 +13,9 @@
 
 using namespace com::sun::star;
 
-// ------------------------------------------------------
+
 // ---------- EnhancedCustomShapeExtrusion.idl ----------
-// ------------------------------------------------------
+
 
 void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference< beans::XPropertySet > xPropSet)
 {
@@ -356,9 +356,9 @@ void EnhancedShapeDumper::dumpExtrusionColorAsAttribute(sal_Bool bExtrusionColor
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusionColor"), "%s", "false");
 }
 
-// ------------------------------------------------------
+
 // ---------- EnhancedCustomShapeGeometry.idl -----------
-// ------------------------------------------------------
+
 
 void EnhancedShapeDumper::dumpEnhancedCustomShapeGeometryService(uno::Reference< beans::XPropertySet > xPropSet)
 {
@@ -613,9 +613,9 @@ void EnhancedShapeDumper::dumpHandlesAsElement(uno::Sequence< beans::PropertyVal
     xmlTextWriterEndElement( xmlWriter );
 }
 
-// ------------------------------------------------------
+
 // ---------- EnhancedCustomShapeHandle.idl -----------
-// ------------------------------------------------------
+
 
 void EnhancedShapeDumper::dumpEnhancedCustomShapeHandleService(uno::Reference< beans::XPropertySet > xPropSet)
 {
@@ -823,9 +823,9 @@ void EnhancedShapeDumper::dumpRadiusRangeMaximumAsElement(drawing::EnhancedCusto
     xmlTextWriterEndElement( xmlWriter );
 }
 
-// ------------------------------------------------------
+
 // ---------- EnhancedCustomShapePath.idl ---------------
-// ------------------------------------------------------
+
 
 void EnhancedShapeDumper::dumpEnhancedCustomShapePathService(uno::Reference< beans::XPropertySet > xPropSet)
 {
@@ -1030,9 +1030,9 @@ void EnhancedShapeDumper::dumpSubViewSizeAsElement(uno::Sequence< awt::Size > aS
     xmlTextWriterEndElement( xmlWriter );
 }
 
-// ----------------------------------------------------------
+
 // ---------- EnhancedCustomShapeTextPath.idl ---------------
-// ----------------------------------------------------------
+
 
 void EnhancedShapeDumper::dumpEnhancedCustomShapeTextPathService(uno::Reference< beans::XPropertySet > xPropSet)
 {

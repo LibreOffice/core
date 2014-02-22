@@ -65,9 +65,9 @@ AddonMenu::~AddonMenu()
     }
 }
 
-// ------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------
+
+
 // Check if command URL string has the unique prefix to identify addon popup menus
 sal_Bool AddonPopupMenu::IsCommandURLPrefix( const OUString& aCmdURL )
 {
@@ -85,7 +85,7 @@ AddonPopupMenu::~AddonPopupMenu()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 static Reference< XModel > GetModelFromFrame( const Reference< XFrame >& rFrame )
 {
@@ -101,7 +101,7 @@ static Reference< XModel > GetModelFromFrame( const Reference< XFrame >& rFrame 
     return xModel;
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool AddonMenuManager::HasAddonMenuElements()
 {

@@ -152,7 +152,7 @@ using namespace ::svxform;
     namespace CommandType = ::com::sun::star::sdb::CommandType;
     namespace DataType = ::com::sun::star::sdbc::DataType;
 
-//------------------------------------------------------------------------------
+
 class FmXFormView::ObjectRemoveListener : public SfxListener
 {
     FmXFormView* m_pParent;
@@ -163,7 +163,7 @@ public:
 
 //========================================================================
 DBG_NAME(FormViewPageWindowAdapter)
-//------------------------------------------------------------------------
+
 FormViewPageWindowAdapter::FormViewPageWindowAdapter( const css::uno::Reference<css::uno::XComponentContext>& _rContext, const SdrPageWindow& _rWindow, FmXFormView* _pViewImpl )
 :   m_xControlContainer( _rWindow.GetControlContainer() ),
     m_xContext( _rContext ),
@@ -194,13 +194,13 @@ FormViewPageWindowAdapter::FormViewPageWindowAdapter( const css::uno::Reference<
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 FormViewPageWindowAdapter::~FormViewPageWindowAdapter()
 {
     DBG_DTOR(FormViewPageWindowAdapter,NULL);
 }
 
-//------------------------------------------------------------------
+
 void FormViewPageWindowAdapter::dispose()
 {
     for (   ::std::vector< Reference< XFormController > >::const_iterator i = m_aControllerList.begin();
@@ -234,33 +234,33 @@ void FormViewPageWindowAdapter::dispose()
 }
 
 
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL FormViewPageWindowAdapter::hasElements(void) throw( RuntimeException )
 {
     return getCount() != 0;
 }
 
-//------------------------------------------------------------------------------
+
 Type SAL_CALL  FormViewPageWindowAdapter::getElementType(void) throw( RuntimeException )
 {
     return ::getCppuType((const Reference< XFormController>*)0);
 }
 
 // XEnumerationAccess
-//------------------------------------------------------------------------------
+
 Reference< XEnumeration >  SAL_CALL FormViewPageWindowAdapter::createEnumeration(void) throw( RuntimeException )
 {
     return new ::comphelper::OEnumerationByIndex(this);
 }
 
 // XIndexAccess
-//------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL FormViewPageWindowAdapter::getCount(void) throw( RuntimeException )
 {
     return m_aControllerList.size();
 }
 
-//------------------------------------------------------------------------------
+
 Any SAL_CALL FormViewPageWindowAdapter::getByIndex(sal_Int32 nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
     if (nIndex < 0 ||
@@ -272,7 +272,7 @@ Any SAL_CALL FormViewPageWindowAdapter::getByIndex(sal_Int32 nIndex) throw( Inde
     return aElement;
 }
 
-//------------------------------------------------------------------------
+
 void SAL_CALL FormViewPageWindowAdapter::makeVisible( const Reference< XControl >& _Control ) throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -287,7 +287,7 @@ void SAL_CALL FormViewPageWindowAdapter::makeVisible( const Reference< XControl 
     }
 }
 
-//------------------------------------------------------------------------
+
 Reference< XFormController >  getControllerSearchChildren( const Reference< XIndexAccess > & xIndex, const Reference< XTabControllerModel > & xModel)
 {
     if (xIndex.is() && xIndex->getCount())
@@ -311,7 +311,7 @@ Reference< XFormController >  getControllerSearchChildren( const Reference< XInd
 }
 
 // Search the according controller
-//------------------------------------------------------------------------
+
 Reference< XFormController >  FormViewPageWindowAdapter::getController( const Reference< XForm > & xForm ) const
 {
     Reference< XTabControllerModel >  xModel(xForm, UNO_QUERY);
@@ -329,7 +329,7 @@ Reference< XFormController >  FormViewPageWindowAdapter::getController( const Re
     return Reference< XFormController > ();
 }
 
-//------------------------------------------------------------------------
+
 void FormViewPageWindowAdapter::setController(const Reference< XForm > & xForm, const Reference< XFormController >& _rxParentController )
 {
     DBG_ASSERT( xForm.is(), "FormViewPageWindowAdapter::setController: there should be a form!" );
@@ -383,7 +383,7 @@ void FormViewPageWindowAdapter::setController(const Reference< XForm > & xForm, 
     }
 }
 
-//------------------------------------------------------------------------
+
 void FormViewPageWindowAdapter::updateTabOrder( const Reference< XForm >& _rxForm )
 {
     OSL_PRECOND( _rxForm.is(), "FormViewPageWindowAdapter::updateTabOrder: illegal argument!" );
@@ -417,7 +417,7 @@ void FormViewPageWindowAdapter::updateTabOrder( const Reference< XForm >& _rxFor
     }
 }
 
-//------------------------------------------------------------------------
+
 FmXFormView::FmXFormView(FmFormView* _pView )
     :m_pMarkedGrid(NULL)
     ,m_pView(_pView)
@@ -431,7 +431,7 @@ FmXFormView::FmXFormView(FmFormView* _pView )
 {
 }
 
-//------------------------------------------------------------------------
+
 void FmXFormView::cancelEvents()
 {
     if ( m_nActivationEvent )
@@ -459,7 +459,7 @@ void FmXFormView::cancelEvents()
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmXFormView::notifyViewDying( )
 {
     DBG_ASSERT( m_pView, "FmXFormView::notifyViewDying: my view already died!" );
@@ -467,7 +467,7 @@ void FmXFormView::notifyViewDying( )
     cancelEvents();
 }
 
-//------------------------------------------------------------------------
+
 FmXFormView::~FmXFormView()
 {
     DBG_ASSERT( m_aPageWindowAdapters.empty(), "FmXFormView::~FmXFormView: Window list not empty!" );
@@ -489,7 +489,7 @@ FmXFormView::~FmXFormView()
 }
 
 //      EventListener
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXFormView::disposing(const EventObject& Source) throw( RuntimeException )
 {
     if ( m_xWindow.is() && Source.Source == m_xWindow )
@@ -497,14 +497,14 @@ void SAL_CALL FmXFormView::disposing(const EventObject& Source) throw( RuntimeEx
 }
 
 // XFormControllerListener
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXFormView::formActivated(const EventObject& rEvent) throw( RuntimeException )
 {
     if ( m_pView && m_pView->GetFormShell() && m_pView->GetFormShell()->GetImpl() )
         m_pView->GetFormShell()->GetImpl()->formActivated( rEvent );
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXFormView::formDeactivated(const EventObject& rEvent) throw( RuntimeException )
 {
     if ( m_pView && m_pView->GetFormShell() && m_pView->GetFormShell()->GetImpl() )
@@ -512,7 +512,7 @@ void SAL_CALL FmXFormView::formDeactivated(const EventObject& rEvent) throw( Run
 }
 
 // XContainerListener
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXFormView::elementInserted(const ContainerEvent& evt) throw( RuntimeException )
 {
     try
@@ -540,18 +540,18 @@ void SAL_CALL FmXFormView::elementInserted(const ContainerEvent& evt) throw( Run
     }
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXFormView::elementReplaced(const ContainerEvent& evt) throw( RuntimeException )
 {
     elementInserted(evt);
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL FmXFormView::elementRemoved(const ContainerEvent& /*evt*/) throw( RuntimeException )
 {
 }
 
-//------------------------------------------------------------------------------
+
 PFormViewPageWindowAdapter FmXFormView::findWindow( const Reference< XControlContainer >& _rxCC )  const
 {
     for (   PageWindowAdapterList::const_iterator i = m_aPageWindowAdapters.begin();
@@ -565,7 +565,7 @@ PFormViewPageWindowAdapter FmXFormView::findWindow( const Reference< XControlCon
     return NULL;
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormView::addWindow(const SdrPageWindow& rWindow)
 {
     FmFormPage* pFormPage = PTR_CAST( FmFormPage, rWindow.GetPageView().GetPage() );
@@ -587,7 +587,7 @@ void FmXFormView::addWindow(const SdrPageWindow& rWindow)
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormView::removeWindow( const Reference< XControlContainer >& _rxCC )
 {
     // Wird gerufen, wenn
@@ -614,7 +614,7 @@ void FmXFormView::removeWindow( const Reference< XControlContainer >& _rxCC )
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormView::displayAsyncErrorMessage( const SQLErrorEvent& _rEvent )
 {
     DBG_ASSERT( 0 == m_nErrorMessageEvent, "FmXFormView::displayAsyncErrorMessage: not too fast, please!" );
@@ -624,7 +624,7 @@ void FmXFormView::displayAsyncErrorMessage( const SQLErrorEvent& _rEvent )
     m_nErrorMessageEvent = Application::PostUserEvent( LINK( this, FmXFormView, OnDelayedErrorMessage ) );
 }
 
-//------------------------------------------------------------------------------
+
 IMPL_LINK(FmXFormView, OnDelayedErrorMessage, void*, /*EMPTYTAG*/)
 {
     m_nErrorMessageEvent = 0;
@@ -632,21 +632,21 @@ IMPL_LINK(FmXFormView, OnDelayedErrorMessage, void*, /*EMPTYTAG*/)
     return 0L;
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormView::onFirstViewActivation( const FmFormModel* _pDocModel )
 {
     if ( _pDocModel && _pDocModel->GetAutoControlFocus() )
         m_nAutoFocusEvent = Application::PostUserEvent( LINK( this, FmXFormView, OnAutoFocus ) );
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormView::suspendTabOrderUpdate()
 {
     OSL_ENSURE( !m_isTabOrderUpdateSuspended, "FmXFormView::suspendTabOrderUpdate: nesting not allowed!" );
     m_isTabOrderUpdateSuspended = true;
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormView::resumeTabOrderUpdate()
 {
     OSL_ENSURE( m_isTabOrderUpdateSuspended, "FmXFormView::resumeTabOrderUpdate: not suspended!" );
@@ -673,7 +673,7 @@ void FmXFormView::resumeTabOrderUpdate()
     m_aNeedTabOrderUpdate.clear();
 }
 
-//------------------------------------------------------------------------------
+
 IMPL_LINK(FmXFormView, OnActivate, void*, /*EMPTYTAG*/)
 {
     m_nActivationEvent = 0;
@@ -735,7 +735,7 @@ IMPL_LINK(FmXFormView, OnActivate, void*, /*EMPTYTAG*/)
     return 0;
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormView::Activate(sal_Bool bSync)
 {
     if (m_nActivationEvent)
@@ -752,7 +752,7 @@ void FmXFormView::Activate(sal_Bool bSync)
         m_nActivationEvent = Application::PostUserEvent(LINK(this,FmXFormView,OnActivate));
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormView::Deactivate(sal_Bool bDeactivateController)
 {
     if (m_nActivationEvent)
@@ -766,12 +766,12 @@ void FmXFormView::Deactivate(sal_Bool bDeactivateController)
         pShImpl->setActiveController( NULL );
 }
 
-//------------------------------------------------------------------------------
+
 FmFormShell* FmXFormView::GetFormShell() const
 {
     return m_pView ? m_pView->GetFormShell() : NULL;
 }
-// -----------------------------------------------------------------------------
+
 void FmXFormView::AutoFocus( sal_Bool _bSync )
 {
     if (m_nAutoFocusEvent)
@@ -783,7 +783,7 @@ void FmXFormView::AutoFocus( sal_Bool _bSync )
         m_nAutoFocusEvent = Application::PostUserEvent(LINK(this, FmXFormView, OnAutoFocus));
 }
 
-// -----------------------------------------------------------------------------
+
 bool FmXFormView::isFocusable( const Reference< XControl >& i_rControl )
 {
     if ( !i_rControl.is() )
@@ -824,7 +824,7 @@ bool FmXFormView::isFocusable( const Reference< XControl >& i_rControl )
     return false;
 }
 
-// -----------------------------------------------------------------------------
+
 static Reference< XControl > lcl_firstFocussableControl( const Sequence< Reference< XControl > >& _rControls )
 {
     Reference< XControl > xReturn;
@@ -850,7 +850,7 @@ static Reference< XControl > lcl_firstFocussableControl( const Sequence< Referen
     return xReturn;
 }
 
-// -----------------------------------------------------------------------------
+
 namespace
 {
     // .........................................................................
@@ -883,7 +883,7 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------------
+
 Reference< XFormController > FmXFormView::getFormController( const Reference< XForm >& _rxForm, const OutputDevice& _rDevice ) const
 {
     Reference< XFormController > xController;
@@ -911,7 +911,7 @@ Reference< XFormController > FmXFormView::getFormController( const Reference< XF
     return xController;
 }
 
-// -----------------------------------------------------------------------------
+
 IMPL_LINK(FmXFormView, OnAutoFocus, void*, /*EMPTYTAG*/)
 {
     m_nAutoFocusEvent = 0;
@@ -987,7 +987,7 @@ IMPL_LINK(FmXFormView, OnAutoFocus, void*, /*EMPTYTAG*/)
     return 1L;
 }
 
-// -----------------------------------------------------------------------------
+
 void FmXFormView::onCreatedFormObject( FmFormObj& _rFormObject )
 {
     FmFormShell* pShell = m_pView ? m_pView->GetFormShell() : NULL;
@@ -1024,7 +1024,7 @@ void FmXFormView::onCreatedFormObject( FmFormObj& _rFormObject )
     m_nControlWizardEvent = Application::PostUserEvent( LINK( this, FmXFormView, OnStartControlWizard ) );
 }
 
-// -----------------------------------------------------------------------------
+
 IMPL_LINK( FmXFormView, OnStartControlWizard, void*, /**/ )
 {
     m_nControlWizardEvent = 0;
@@ -1097,7 +1097,7 @@ IMPL_LINK( FmXFormView, OnStartControlWizard, void*, /**/ )
     return 1L;
 }
 
-// -----------------------------------------------------------------------------
+
 namespace
 {
     void lcl_insertIntoFormComponentHierarchy_throw( const FmFormView& _rView, const SdrUnoObj& _rSdrObj,
@@ -1118,7 +1118,7 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------------
+
 SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescriptor& _rColumnDescriptor )
 {
     // not if we're in design mode
@@ -1352,7 +1352,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
     return NULL;
 }
 
-// -----------------------------------------------------------------------------
+
 SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor &_rDesc )
 {
     // not if we're in design mode
@@ -1482,7 +1482,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
     return NULL;
 }
 
-//------------------------------------------------------------------------
+
 bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
         const Reference< XPropertySet >& _rxField, const Reference< XNumberFormats >& _rxNumberFormats,
         sal_uInt16 _nControlObjectID, const OUString& _rFieldPostfix,
@@ -1510,7 +1510,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
     return true;
 }
 
-//------------------------------------------------------------------------
+
 bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
     const Reference< XPropertySet >& _rxField,
     const Reference< XNumberFormats >& _rxNumberFormats, sal_uInt16 _nControlObjectID,
@@ -1669,20 +1669,20 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
     return true;
 }
 
-//------------------------------------------------------------------------------
+
 FmXFormView::ObjectRemoveListener::ObjectRemoveListener( FmXFormView* pParent )
     :m_pParent( pParent )
 {
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormView::ObjectRemoveListener::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if (rHint.ISA(SdrHint) && (((SdrHint&)rHint).GetKind() == HINT_OBJREMOVED))
         m_pParent->ObjectRemovedInAliveMode(((SdrHint&)rHint).GetObject());
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormView::ObjectRemovedInAliveMode( const SdrObject* pObject )
 {
     // wenn das entfernte Objekt in meiner MarkList, die ich mir beim Umschalten in den Alive-Mode gemerkt habe, steht,
@@ -1704,7 +1704,7 @@ void FmXFormView::ObjectRemovedInAliveMode( const SdrObject* pObject )
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormView::stopMarkListWatching()
 {
     if ( m_pWatchStoredList )
@@ -1715,7 +1715,7 @@ void FmXFormView::stopMarkListWatching()
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormView::startMarkListWatching()
 {
     if ( !m_pWatchStoredList )
@@ -1731,7 +1731,7 @@ void FmXFormView::startMarkListWatching()
     }
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormView::saveMarkList( sal_Bool _bSmartUnmark )
 {
     if ( m_pView )
@@ -1778,7 +1778,7 @@ void FmXFormView::saveMarkList( sal_Bool _bSmartUnmark )
     }
 }
 
-//--------------------------------------------------------------------------
+
 static sal_Bool lcl_hasObject( SdrObjListIter& rIter, SdrObject* pObj )
 {
     sal_Bool bFound = sal_False;
@@ -1789,7 +1789,7 @@ static sal_Bool lcl_hasObject( SdrObjListIter& rIter, SdrObject* pObj )
     return bFound;
 }
 
-//------------------------------------------------------------------------------
+
 void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
 {
     if ( !m_pView )
@@ -1876,7 +1876,7 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
         m_aMark.Clear();
     }
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL FmXFormView::focusGained( const FocusEvent& /*e*/ ) throw (RuntimeException)
 {
     if ( m_xWindow.is() && m_pView )
@@ -1884,7 +1884,7 @@ void SAL_CALL FmXFormView::focusGained( const FocusEvent& /*e*/ ) throw (Runtime
         m_pView->SetMoveOutside( true, FmFormView::ImplAccess() );
     }
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL FmXFormView::focusLost( const FocusEvent& /*e*/ ) throw (RuntimeException)
 {
     // when switch the focus outside the office the mark didn't change
@@ -1894,7 +1894,7 @@ void SAL_CALL FmXFormView::focusLost( const FocusEvent& /*e*/ ) throw (RuntimeEx
         m_pView->SetMoveOutside( false, FmFormView::ImplAccess() );
     }
 }
-// -----------------------------------------------------------------------------
+
 void FmXFormView::removeGridWindowListening()
 {
     if ( m_xWindow.is() )
@@ -1908,7 +1908,7 @@ void FmXFormView::removeGridWindowListening()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 DocumentType FmXFormView::impl_getDocumentType() const
 {
     if ( GetFormShell() && GetFormShell()->GetImpl() )

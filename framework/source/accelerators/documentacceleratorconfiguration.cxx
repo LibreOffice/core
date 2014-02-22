@@ -55,7 +55,7 @@ class DocumentAcceleratorConfiguration : public DocumentAcceleratorConfiguration
 {
 private:
 
-    //----------------------------------
+
     /** points to the root storage of the outside document,
         where we can read/save our configuration data. */
     css::uno::Reference< css::embed::XStorage > m_xDocumentRoot;
@@ -110,7 +110,7 @@ private:
     void impl_ts_clearCache();
 };
 
-//-----------------------------------------------
+
 DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& lArguments)
@@ -136,13 +136,13 @@ DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(
     impl_ts_fillCache();
 }
 
-//-----------------------------------------------
+
 DocumentAcceleratorConfiguration::~DocumentAcceleratorConfiguration()
 {
     m_aPresetHandler.removeStorageListener(this);
 }
 
-//-----------------------------------------------
+
 void SAL_CALL DocumentAcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
     throw(css::uno::RuntimeException)
 {
@@ -162,7 +162,7 @@ void SAL_CALL DocumentAcceleratorConfiguration::setStorage(const css::uno::Refer
         impl_ts_fillCache();
 }
 
-//-----------------------------------------------
+
 sal_Bool SAL_CALL DocumentAcceleratorConfiguration::hasStorage()
     throw(css::uno::RuntimeException)
 {
@@ -172,7 +172,7 @@ sal_Bool SAL_CALL DocumentAcceleratorConfiguration::hasStorage()
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+
 void DocumentAcceleratorConfiguration::impl_ts_fillCache()
 {
     // SAFE -> ----------------------------------
@@ -213,7 +213,7 @@ void DocumentAcceleratorConfiguration::impl_ts_fillCache()
     {}
 }
 
-//-----------------------------------------------
+
 void DocumentAcceleratorConfiguration::impl_ts_clearCache()
 {
     m_aPresetHandler.forgetCachedStorages();

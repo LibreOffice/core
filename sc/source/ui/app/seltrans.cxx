@@ -39,7 +39,7 @@
 
 using namespace com::sun::star;
 
-// -----------------------------------------------------------------------
+
 
 static sal_Bool lcl_IsURLButton( SdrObject* pObject )
 {
@@ -334,14 +334,14 @@ void ScSelectionTransferObj::CreateDrawData()
             const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
             ScDrawView::CheckOle( rMarkList, bAnyOle, bOneOle );
 
-            //---------------------------------------------------------
+
             ScDocShellRef aDragShellRef;
             if (bAnyOle)
             {
                 aDragShellRef = new ScDocShell;     // ohne Ref lebt die DocShell nicht !!!
                 aDragShellRef->DoInitNew(NULL);
             }
-            //---------------------------------------------------------
+
 
             ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
             SdrModel* pModel = pDrawView->GetMarkedObjModel();

@@ -72,13 +72,13 @@ using namespace ::com::sun::star::form::binding;
 //========================================================================
 // class OComboBoxModel
 //========================================================================
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OComboBoxModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return (*new OComboBoxModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> OComboBoxModel::_getTypes()
 {
     return ::comphelper::concatSequences(
@@ -89,7 +89,7 @@ Sequence<Type> OComboBoxModel::_getTypes()
 }
 
 // XServiceInfo
-//------------------------------------------------------------------------------
+
 StringSequence SAL_CALL OComboBoxModel::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
@@ -112,7 +112,7 @@ StringSequence SAL_CALL OComboBoxModel::getSupportedServiceNames() throw(Runtime
     return aSupported;
 }
 
-//------------------------------------------------------------------------------
+
 Any SAL_CALL OComboBoxModel::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn = OBoundControlModel::queryAggregation( _rType );
@@ -123,8 +123,8 @@ Any SAL_CALL OComboBoxModel::queryAggregation(const Type& _rType) throw (Runtime
     return aReturn;
 }
 
-//------------------------------------------------------------------
-//------------------------------------------------------------------
+
+
 OComboBoxModel::OComboBoxModel(const Reference<XComponentContext>& _rxFactory)
     :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_COMBOBOX, FRM_SUN_CONTROL_COMBOBOX, sal_True, sal_True, sal_True )
                     // use the old control name for compytibility reasons
@@ -138,7 +138,7 @@ OComboBoxModel::OComboBoxModel(const Reference<XComponentContext>& _rxFactory)
     initValueProperty( PROPERTY_TEXT, PROPERTY_ID_TEXT );
 }
 
-//------------------------------------------------------------------
+
 OComboBoxModel::OComboBoxModel( const OComboBoxModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OBoundControlModel( _pOriginal, _rxFactory )
     ,OEntryListHelper( *_pOriginal, (OControlModel&)*this )
@@ -151,7 +151,7 @@ OComboBoxModel::OComboBoxModel( const OComboBoxModel* _pOriginal, const Referenc
 {
 }
 
-//------------------------------------------------------------------
+
 OComboBoxModel::~OComboBoxModel()
 {
     if (!OComponentHelper::rBHelper.bDisposed)
@@ -163,10 +163,10 @@ OComboBoxModel::~OComboBoxModel()
 }
 
 // XCloneable
-//------------------------------------------------------------------------------
+
 IMPLEMENT_DEFAULT_CLONING( OComboBoxModel )
 
-//------------------------------------------------------------------------------
+
 void OComboBoxModel::disposing()
 {
     OBoundControlModel::disposing();
@@ -175,7 +175,7 @@ void OComboBoxModel::disposing()
     m_xFormatter = NULL;
 }
 
-//------------------------------------------------------------------------------
+
 void OComboBoxModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
 {
     switch (_nHandle)
@@ -205,7 +205,7 @@ void OComboBoxModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) cons
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OComboBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue)
                         throw (Exception)
 {
@@ -260,7 +260,7 @@ void OComboBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const 
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OComboBoxModel::convertFastPropertyValue(
                         Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
                         throw (IllegalArgumentException)
@@ -295,7 +295,7 @@ sal_Bool OComboBoxModel::convertFastPropertyValue(
     return bModified;
 }
 
-//------------------------------------------------------------------------------
+
 void OComboBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 6, OBoundControlModel )
@@ -308,7 +308,7 @@ void OComboBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) co
     END_DESCRIBE_PROPERTIES();
 }
 
-//------------------------------------------------------------------------------
+
 void OComboBoxModel::describeAggregateProperties( Sequence< Property >& _rAggregateProps ) const
 {
     OBoundControlModel::describeAggregateProperties( _rAggregateProps );
@@ -317,13 +317,13 @@ void OComboBoxModel::describeAggregateProperties( Sequence< Property >& _rAggreg
     RemoveProperty( _rAggregateProps, PROPERTY_STRINGITEMLIST );
 }
 
-//------------------------------------------------------------------------------
+
 OUString SAL_CALL OComboBoxModel::getServiceName() throw(RuntimeException)
 {
     return OUString(FRM_COMPONENT_COMBOBOX);  // old (non-sun) name for compatibility !
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OComboBoxModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream)
         throw(stario::IOException, RuntimeException)
 {
@@ -361,7 +361,7 @@ void SAL_CALL OComboBoxModel::write(const Reference<stario::XObjectOutputStream>
     writeCommonProperties(_rxOutStream);
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, RuntimeException)
 {
     OBoundControlModel::read(_rxInStream);
@@ -460,7 +460,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OComboBoxModel::loadData( bool _bForce )
 {
     DBG_ASSERT(m_eListSourceType != ListSourceType_VALUELIST, "OComboBoxModel::loadData : do not call for a value list !");
@@ -675,7 +675,7 @@ void OComboBoxModel::loadData( bool _bForce )
     setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( aStringSeq ) );
 }
 
-//------------------------------------------------------------------------------
+
 void OComboBoxModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 {
     Reference<XPropertySet> xField = getField();
@@ -688,7 +688,7 @@ void OComboBoxModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm
         loadData( false );
 }
 
-//------------------------------------------------------------------------------
+
 void OComboBoxModel::onDisconnectedDbColumn()
 {
     m_pValueFormatter.reset();
@@ -700,7 +700,7 @@ void OComboBoxModel::onDisconnectedDbColumn()
     m_aListRowSet.dispose();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OComboBoxModel::reloaded( const EventObject& aEvent ) throw(RuntimeException)
 {
     OBoundControlModel::reloaded(aEvent);
@@ -710,14 +710,14 @@ void SAL_CALL OComboBoxModel::reloaded( const EventObject& aEvent ) throw(Runtim
         loadData( false );
 }
 
-//------------------------------------------------------------------------------
+
 void OComboBoxModel::resetNoBroadcast()
 {
     OBoundControlModel::resetNoBroadcast();
     m_aLastKnownValue.clear();
 }
 
-//-----------------------------------------------------------------------------
+
 sal_Bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
 {
     Any aNewValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
@@ -791,7 +791,7 @@ sal_Bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
 }
 
 // XPropertiesChangeListener
-//------------------------------------------------------------------------------
+
 Any OComboBoxModel::translateDbColumnToControlValue()
 {
     OSL_PRECOND( m_pValueFormatter.get(), "OComboBoxModel::translateDbColumnToControlValue: no value formatter!" );
@@ -818,32 +818,32 @@ Any OComboBoxModel::translateDbColumnToControlValue()
         // (m_aLastKnownValue is alllowed to be VOID, the control value isn't)
 }
 
-//------------------------------------------------------------------------------
+
 Any OComboBoxModel::getDefaultForReset() const
 {
     return makeAny( m_aDefaultText );
 }
 
-//--------------------------------------------------------------------
+
 void OComboBoxModel::stringItemListChanged( ControlModelLock& /*_rInstanceLock*/ )
 {
     if ( m_xAggregateSet.is() )
         m_xAggregateSet->setPropertyValue( PROPERTY_STRINGITEMLIST, makeAny( getStringItemList() ) );
 }
 
-//--------------------------------------------------------------------
+
 void OComboBoxModel::connectedExternalListSource( )
 {
     // TODO?
 }
 
-//--------------------------------------------------------------------
+
 void OComboBoxModel::disconnectedExternalListSource( )
 {
     // TODO?
 }
 
-//--------------------------------------------------------------------
+
 void OComboBoxModel::refreshInternalEntryList()
 {
     DBG_ASSERT( !hasExternalListSource(), "OComboBoxModel::refreshInternalEntryList: invalid call!" );
@@ -857,7 +857,7 @@ void OComboBoxModel::refreshInternalEntryList()
     }
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL OComboBoxModel::disposing( const EventObject& _rSource ) throw ( RuntimeException )
 {
     if ( !OEntryListHelper::handleDisposing( _rSource ) )
@@ -868,19 +868,19 @@ void SAL_CALL OComboBoxModel::disposing( const EventObject& _rSource ) throw ( R
 //= OComboBoxControl
 //========================================================================
 
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OComboBoxControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return *(new OComboBoxControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 OComboBoxControl::OComboBoxControl(const Reference<XComponentContext>& _rxContext)
     :OBoundControl(_rxContext, VCL_CONTROL_COMBOBOX)
 {
 }
 
-//------------------------------------------------------------------------------
+
 StringSequence SAL_CALL OComboBoxControl::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();

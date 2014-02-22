@@ -132,7 +132,7 @@ void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName, sal_Bool /*bNew*
     }
 }
 
-//--------------------------------------------------------------------
+
 
 IMPL_STATIC_LINK_NOINSTANCE( SfxURLToolBoxControl_Impl, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {

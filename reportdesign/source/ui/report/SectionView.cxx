@@ -35,7 +35,7 @@ namespace rptui
     using namespace ::com::sun::star;
 TYPEINIT1( OSectionView, SdrView );
 
-//----------------------------------------------------------------------------
+
 OSectionView::OSectionView( SdrModel* pModel, OReportSection* _pSectionWindow, OReportWindow* pEditor )
     :SdrView( pModel, _pSectionWindow )
     ,m_pReportWindow( pEditor )
@@ -49,13 +49,13 @@ OSectionView::OSectionView( SdrModel* pModel, OReportSection* _pSectionWindow, O
     SetQuickTextEditMode(sal_False);
 }
 
-//----------------------------------------------------------------------------
+
 
 OSectionView::~OSectionView()
 {
 }
 
-//----------------------------------------------------------------------------
+
 
 void OSectionView::MarkListHasChanged()
 {
@@ -69,7 +69,7 @@ void OSectionView::MarkListHasChanged()
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 void OSectionView::MakeVisible( const Rectangle& rRect, Window& rWin )
 {
@@ -126,7 +126,7 @@ void OSectionView::MakeVisible( const Rectangle& rRect, Window& rWin )
         rWin.Invalidate(INVALIDATE_NOERASE);
     }
 }
-//------------------------------------------------------------------------------
+
 void OSectionView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     SdrView::Notify(rBC,rHint);
@@ -142,7 +142,7 @@ void OSectionView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OSectionView::ObjectRemovedInAliveMode( const SdrObject* _pObject )
 {
     const SdrMarkList& rMarkedList = GetMarkedObjectList();
@@ -161,7 +161,7 @@ void OSectionView::ObjectRemovedInAliveMode( const SdrObject* _pObject )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 void OSectionView::SetMarkedToLayer( SdrLayerID _nLayerNo )
 {
     if (AreObjectsMarked())
@@ -198,7 +198,7 @@ void OSectionView::SetMarkedToLayer( SdrLayerID _nLayerNo )
         MarkListHasChanged();
     }
 }
-// -----------------------------------------------------------------------------
+
 bool OSectionView::OnlyShapesMarked() const
 {
     const SdrMarkList& rMark = GetMarkedObjectList();
@@ -232,7 +232,7 @@ bool OSectionView::IsDragResize() const
     return false;
 }
 
-// -----------------------------------------------------------------------------
+
 short OSectionView::GetLayerIdOfMarkedObjects() const
 {
     short nRet = SHRT_MAX;

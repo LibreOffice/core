@@ -22,7 +22,7 @@
 #include <osl/diagnose.h>
 #include "cmdline.hxx"
 
-//---------------------------------
+
 /** Simple command line abstraction
 */
 

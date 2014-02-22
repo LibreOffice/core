@@ -52,7 +52,7 @@ using namespace ::com::sun::star::uno;
 namespace climaker
 {
 
-//------------------------------------------------------------------------------
+
 static char const s_usingText [] =
 "\n"
 "using: climaker <switches> [registry-file-1 registry-file-2 ...]\n"
@@ -94,7 +94,7 @@ struct OptionInfo
 
 bool g_verbose = false;
 
-//------------------------------------------------------------------------------
+
 static const OptionInfo s_option_infos [] = {
     { RTL_CONSTASCII_STRINGPARAM("out"), 'O', true },
     { RTL_CONSTASCII_STRINGPARAM("types"), 'T', true },

@@ -165,9 +165,9 @@ XML_SERVICES* getServices( bool bImport, bool bDraw, sal_uLong nStoreVer )
 }
 
 
-// ----------------
+
 // - SdXMLWrapper -
-// ----------------
+
 
 SdXMLFilter::SdXMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress, SdXMLFilterMode eFilterMode, sal_uLong nStoreVer ) :
     SdFilter( rMedium, rDocShell, bShowProgress ), meFilterMode( eFilterMode ), mnStoreVer( nStoreVer )
@@ -414,7 +414,7 @@ sal_Int32 ReadThroughComponent(
     return SD_XML_READERROR;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SdXMLFilter::Import( ErrCode& nError )
 {
@@ -424,7 +424,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     Reference< uno::XComponentContext > rxContext =
             comphelper::getProcessComponentContext();
 
-    // -------------------------------------
+
 
     SdDrawDocument* pDoc = mrDocShell.GetDoc();
     pDoc->EnableUndo(false);
@@ -432,11 +432,11 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     pDoc->CreateFirstPages();
     pDoc->StopWorkStartupDelay();
 
-    // -------------------------------------
+
 
     mxModel->lockControllers();
 
-    // -------------------------------------
+
 
     /** property map for import info set */
     PropertyMapEntry const aImportInfoMap[] =
@@ -490,7 +490,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         }
     }
 
-    // -------------------------------------
+
 
     Reference< io::XActiveDataSource > xSource;
     Reference< XInterface > xPipe;
@@ -501,7 +501,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
 
     Reference< lang::XComponent > xModelComp( mxModel, uno::UNO_QUERY );
 
-    // -------------------------------------
+
 
     // try to get an XStatusIndicator from the Medium
     if( mbShowProgress )
@@ -536,9 +536,9 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         }
     }
 
-    // -------------------------------------
+
     // get the input stream (storage or stream)
-    // -------------------------------------
+
 
     SvStorageStreamRef xDocStream;
     Reference<io::XInputStream> xInputStream;
@@ -586,7 +586,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     if (SDXMLMODE_Organizer == meFilterMode)
         xInfoSet->setPropertyValue("OrganizerMode", uno::makeAny(sal_True));
 
-    // -------------------------------------
+
 
     if( 0 == nRet )
     {
@@ -645,7 +645,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         }
     }
 
-    // -------------------------------------
+
     if( pGraphicHelper )
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
     xGraphicResolver = 0;
@@ -785,7 +785,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     return nRet == 0;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SdXMLFilter::Export()
 {

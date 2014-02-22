@@ -20,7 +20,7 @@ using namespace ::com::sun::star::xml::sax;
 // CT_EffectProperties
 
 namespace oox { namespace drawingml {
-// ---------------------------------------------------------------------
+
 
 EffectPropertiesContext::EffectPropertiesContext( ContextHandler2Helper& rParent,
     EffectProperties& rEffectProperties ) throw()

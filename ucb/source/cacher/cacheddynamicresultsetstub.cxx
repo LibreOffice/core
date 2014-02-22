@@ -74,9 +74,9 @@ void SAL_CALL CachedDynamicResultSetStub
     m_xMyResultTwo = xStub;
 }
 
-//--------------------------------------------------------------------------
+
 // XInterface methods.
-//--------------------------------------------------------------------------
+
 XINTERFACE_COMMON_IMPL( CachedDynamicResultSetStub )
 
 Any SAL_CALL CachedDynamicResultSetStub
@@ -96,9 +96,9 @@ Any SAL_CALL CachedDynamicResultSetStub
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
-//--------------------------------------------------------------------------
+
 // XTypeProvider methods.
-//--------------------------------------------------------------------------
+
 //list all interfaces exclusive baseclasses
 XTYPEPROVIDER_IMPL_5( CachedDynamicResultSetStub
                     , XTypeProvider
@@ -108,19 +108,19 @@ XTYPEPROVIDER_IMPL_5( CachedDynamicResultSetStub
                     , XSourceInitialization
                     );
 
-//--------------------------------------------------------------------------
+
 // XServiceInfo methods.
-//--------------------------------------------------------------------------
+
 
 XSERVICEINFO_NOFACTORY_IMPL_1( CachedDynamicResultSetStub,
                         OUString( "com.sun.star.comp.ucb.CachedDynamicResultSetStub" ),
                         OUString( CACHED_DRS_STUB_SERVICE_NAME ) );
 
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 // class CachedDynamicResultSetStubFactory
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
 
 CachedDynamicResultSetStubFactory::CachedDynamicResultSetStubFactory(
         const Reference< XComponentContext > & rxContext )
@@ -132,41 +132,41 @@ CachedDynamicResultSetStubFactory::~CachedDynamicResultSetStubFactory()
 {
 }
 
-//--------------------------------------------------------------------------
+
 // CachedDynamicResultSetStubFactory XInterface methods.
-//--------------------------------------------------------------------------
+
 
 XINTERFACE_IMPL_3( CachedDynamicResultSetStubFactory,
                    XTypeProvider,
                    XServiceInfo,
                    XCachedDynamicResultSetStubFactory );
 
-//--------------------------------------------------------------------------
+
 // CachedDynamicResultSetStubFactory XTypeProvider methods.
-//--------------------------------------------------------------------------
+
 
 XTYPEPROVIDER_IMPL_3( CachedDynamicResultSetStubFactory,
                       XTypeProvider,
                          XServiceInfo,
                       XCachedDynamicResultSetStubFactory );
 
-//--------------------------------------------------------------------------
+
 // CachedDynamicResultSetStubFactory XServiceInfo methods.
-//--------------------------------------------------------------------------
+
 
 XSERVICEINFO_IMPL_1_CTX( CachedDynamicResultSetStubFactory,
                      OUString( "com.sun.star.comp.ucb.CachedDynamicResultSetStubFactory" ),
                      OUString( CACHED_DRS_STUB_FACTORY_NAME ) );
 
-//--------------------------------------------------------------------------
+
 // Service factory implementation.
-//--------------------------------------------------------------------------
+
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( CachedDynamicResultSetStubFactory );
 
-//--------------------------------------------------------------------------
+
 // CachedDynamicResultSetStubFactory XCachedDynamicResultSetStubFactory methods.
-//--------------------------------------------------------------------------
+
 
 //virtual
 Reference< XDynamicResultSet > SAL_CALL CachedDynamicResultSetStubFactory

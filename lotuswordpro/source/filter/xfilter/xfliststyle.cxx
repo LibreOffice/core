@@ -74,7 +74,7 @@ void XFListLevel::ToXml(IXFStream * /*pStrm*/)
 {
 }
 
-//----------------------------------------------------
+
 
 void XFListlevelNumber::ToXml(IXFStream *pStrm)
 {
@@ -153,7 +153,7 @@ void    XFListLevelBullet::ToXml(IXFStream *pStrm)
     pStrm->EndElement( A2OUSTR("text:list-level-style-bullet") );
 }
 
-//----------------------------------------------------
+
 XFListStyle::XFListStyle()
 {
     XFNumFmt    nf;

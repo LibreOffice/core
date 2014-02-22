@@ -58,36 +58,36 @@ VCLXAccessibleHeaderBar::VCLXAccessibleHeaderBar( VCLXWindow* pVCLWindow )
     m_pHeadBar = static_cast< HeaderBar* >( GetWindow() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleHeaderBar::~VCLXAccessibleHeaderBar()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleHeaderBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleHeaderBar::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
     VCLXAccessibleComponent::FillAccessibleStateSet( rStateSet );
 }
 
-// -----------------------------------------------------------------------------
+
 // XServiceInfo
-// -----------------------------------------------------------------------------
+
 
 ::rtl::OUString VCLXAccessibleHeaderBar::getImplementationName() throw (RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleHeaderBar" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< ::rtl::OUString > VCLXAccessibleHeaderBar::getSupportedServiceNames() throw (RuntimeException)
 {

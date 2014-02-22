@@ -89,9 +89,9 @@ using namespace sw::util;
 using namespace sw::types;
 using namespace sw::mark;
 
-//-----------------------------------------
+
 //            UNO-Controls
-//-----------------------------------------
+
 
 //cmc, OCX i.e. word 97 form controls
 eF_ResT SwWW8ImplReader::Read_F_OCX( WW8FieldDesc*, OUString& )
@@ -318,7 +318,7 @@ void SwWW8ImplReader::DeleteFormImpl()
     delete pFormImpl, pFormImpl = 0;
 }
 
-//----------------------------------------------------------------------------
+
 //          WW8ListManager          oeffentliche Methoden stehen ganz am Ende
 //------------------------- ============ --------------- ============ --------
 
@@ -1640,9 +1640,9 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     return pRet;
 }
 
-//----------------------------------------------------------------------------
+
 //          SwWW8ImplReader:  anhaengen einer Liste an einen Style oder Absatz
-//----------------------------------------------------------------------------
+
 bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
     SwWW8StyInf& rStyleInfo)
 {
@@ -2088,9 +2088,9 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
     }
 }
 
-// -------------------------------------------------------------------
+
 // ------------------------- Reading Controls ------------------------
-// -------------------------------------------------------------------
+
 
 bool SwWW8ImplReader::ImportFormulaControl(WW8FormulaControl &aFormula,
     WW8_CP nStart, SwWw8ControlType nWhich )

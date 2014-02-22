@@ -100,9 +100,9 @@ public:
     void        SetConvertToGreyscales( sal_Bool bState ) ;
     void        SetPDFAsStandardPrintJobFormat( sal_Bool bState ) ;
 
-//-------------------------------------------------------------------------------------------------------------
+
 //  private API
-//-------------------------------------------------------------------------------------------------------------
+
 
 private:
     void impl_setValue (const OUString& sProp,
@@ -110,9 +110,9 @@ private:
     void impl_setValue (const OUString& sProp,
                               ::sal_Int16      nNew );
 
-//-------------------------------------------------------------------------------------------------------------
+
 //  private member
-//-------------------------------------------------------------------------------------------------------------
+
 
 private:
        css::uno::Reference< css::container::XNameAccess > m_xCfg;

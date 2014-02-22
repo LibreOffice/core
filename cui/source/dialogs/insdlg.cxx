@@ -100,7 +100,7 @@ InsertObjectDialog_Impl::InsertObjectDialog_Impl(Window * pParent, const OString
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(SvInsertOleDlg, DoubleClickHdl)
 {
@@ -109,7 +109,7 @@ IMPL_LINK_NOARG_INLINE_START(SvInsertOleDlg, DoubleClickHdl)
 }
 IMPL_LINK_INLINE_END( SvInsertOleDlg, DoubleClickHdl, ListBox *, pListBox )
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl)
 {
@@ -140,7 +140,7 @@ IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvInsertOleDlg, RadioHdl)
 {
@@ -157,14 +157,14 @@ IMPL_LINK_NOARG(SvInsertOleDlg, RadioHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvInsertOleDlg::SelectDefault()
 {
     m_pLbObjecttype->SelectEntryPos(0);
 }
 
-// -----------------------------------------------------------------------
+
 SvInsertOleDlg::SvInsertOleDlg
 (
     Window* pParent,
@@ -382,7 +382,7 @@ IMPL_LINK_NOARG(SvInsertPlugInDialog, BrowseHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvInsertPlugInDialog::SvInsertPlugInDialog(Window* pParent,
     const uno::Reference < embed::XStorage >& xStorage)
@@ -400,7 +400,7 @@ SvInsertPlugInDialog::~SvInsertPlugInDialog()
     delete m_pURL;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void Plugin_ImplFillCommandSequence( const OUString& aCommands, uno::Sequence< beans::PropertyValue >& aCommandSequence )
 {
@@ -692,7 +692,7 @@ short SfxInsertFloatingFrameDialog::Execute()
     return nRet;
 }
 
-//------------------------------------------------------------------------------
+
 
 IMPL_STATIC_LINK( SfxInsertFloatingFrameDialog, CheckHdl, CheckBox*, pCB )
 {
@@ -715,7 +715,7 @@ IMPL_STATIC_LINK( SfxInsertFloatingFrameDialog, CheckHdl, CheckBox*, pCB )
     return 0L;
 }
 
-//------------------------------------------------------------------------------
+
 
 IMPL_STATIC_LINK( SfxInsertFloatingFrameDialog, OpenHdl, PushButton*, EMPTYARG )
 {

@@ -480,7 +480,7 @@ struct XmlIdRegistryDocument::XmlIdRegistry_Impl
     XmlIdReverseMap_t m_XmlIdReverseMap;
 };
 
-// -------------------------------------------------------------------
+
 
 static void
 rmIter(XmlIdMap_t & i_rXmlIdMap, XmlIdMap_t::iterator const& i_rIter,
@@ -498,7 +498,7 @@ rmIter(XmlIdMap_t & i_rXmlIdMap, XmlIdMap_t::iterator const& i_rIter,
     }
 }
 
-// -------------------------------------------------------------------
+
 
 const XmlIdList_t *
 XmlIdRegistryDocument::XmlIdRegistry_Impl::LookupElementList(
@@ -806,7 +806,7 @@ void XmlIdRegistryDocument::RemoveXmlIdForElement(const Metadatable& i_rObject)
     }
 }
 
-// -------------------------------------------------------------------
+
 
 void XmlIdRegistryDocument::RegisterCopy(Metadatable const& i_rSource,
     Metadatable & i_rCopy, const bool i_bCopyPrecedesSource)
@@ -965,7 +965,7 @@ struct XmlIdRegistryClipboard::XmlIdRegistry_Impl
     ClipboardXmlIdReverseMap_t m_XmlIdReverseMap;
 };
 
-// -------------------------------------------------------------------
+
 
 static void
 rmIter(ClipboardXmlIdMap_t & i_rXmlIdMap,
@@ -987,7 +987,7 @@ rmIter(ClipboardXmlIdMap_t & i_rXmlIdMap,
     }
 }
 
-// -------------------------------------------------------------------
+
 
 Metadatable* const*
 XmlIdRegistryClipboard::XmlIdRegistry_Impl::LookupEntry(
@@ -1232,7 +1232,7 @@ void XmlIdRegistryClipboard::RemoveXmlIdForElement(const Metadatable& i_rObject)
     }
 }
 
-// -------------------------------------------------------------------
+
 
 ::boost::shared_ptr<MetadatableClipboard>
 XmlIdRegistryClipboard::CreateClipboard(const bool i_isInContent)

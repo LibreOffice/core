@@ -20,7 +20,7 @@
 
 
 
-//___________________________________________________________________
+
 #include "XMLCellRangeSourceContext.hxx"
 
 #include <sax/tools/converter.hxx>
@@ -31,7 +31,7 @@
 using namespace ::com::sun::star;
 
 
-//___________________________________________________________________
+
 
 ScMyImpCellRangeSource::ScMyImpCellRangeSource() :
     nColumns( 0 ),
@@ -41,7 +41,7 @@ ScMyImpCellRangeSource::ScMyImpCellRangeSource() :
 }
 
 
-//___________________________________________________________________
+
 
 ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
         ScXMLImport& rImport,

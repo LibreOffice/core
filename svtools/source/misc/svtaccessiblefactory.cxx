@@ -220,23 +220,23 @@ namespace svt
             }
         };
 
-        //----------------------------------------------------------------
+
         AccessibleDummyFactory::AccessibleDummyFactory()
         {
         }
 
-        //----------------------------------------------------------------
+
         AccessibleDummyFactory::~AccessibleDummyFactory()
         {
         }
 
-        //----------------------------------------------------------------
+
         oslInterlockedCount SAL_CALL AccessibleDummyFactory::acquire()
         {
             return osl_atomic_increment( &m_refCount );
         }
 
-        //----------------------------------------------------------------
+
         oslInterlockedCount SAL_CALL AccessibleDummyFactory::release()
         {
             if ( 0 == osl_atomic_decrement( &m_refCount ) )
@@ -251,13 +251,13 @@ namespace svt
     //====================================================================
     //= AccessibleFactoryAccess
     //====================================================================
-    //--------------------------------------------------------------------
+
     AccessibleFactoryAccess::AccessibleFactoryAccess()
         :m_bInitialized( false )
     {
     }
 
-    //--------------------------------------------------------------------
+
 #ifndef DISABLE_DYNLOADING
     extern "C" { static void SAL_CALL thisModule() {} }
 #else
@@ -315,7 +315,7 @@ namespace svt
         m_bInitialized = true;
     }
 
-    //--------------------------------------------------------------------
+
     AccessibleFactoryAccess::~AccessibleFactoryAccess()
     {
         if ( m_bInitialized )
@@ -337,7 +337,7 @@ namespace svt
         }
     }
 
-    //--------------------------------------------------------------------
+
     IAccessibleFactory& AccessibleFactoryAccess::getFactory()
     {
         ensureInitialized();

@@ -274,7 +274,7 @@ HRESULT EmbedDocument_Impl::SaveTo_Impl( IStorage* pStg )
     return hr;
 }
 
-//-------------------------------------------------------------------------------
+
 // IUnknown
 
 STDMETHODIMP EmbedDocument_Impl::QueryInterface( REFIID riid, void FAR* FAR* ppv )
@@ -362,7 +362,7 @@ STDMETHODIMP_(ULONG) EmbedDocument_Impl::Release()
     return nCount;
 }
 
-//-------------------------------------------------------------------------------
+
 // IPersist
 
 STDMETHODIMP EmbedDocument_Impl::GetClassID( CLSID* pClassId )
@@ -371,7 +371,7 @@ STDMETHODIMP EmbedDocument_Impl::GetClassID( CLSID* pClassId )
     return S_OK;
 }
 
-//-------------------------------------------------------------------------------
+
 // IPersistStorage
 
 STDMETHODIMP EmbedDocument_Impl::IsDirty()
@@ -738,7 +738,7 @@ STDMETHODIMP EmbedDocument_Impl::HandsOffStorage()
     return S_OK;
 }
 
-//-------------------------------------------------------------------------------
+
 // IPersistFile
 
 STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )

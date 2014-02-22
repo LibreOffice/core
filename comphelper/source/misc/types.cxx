@@ -41,7 +41,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 
-//-------------------------------------------------------------------------
+
 bool operator ==(const DateTime& _rLeft, const DateTime& _rRight)
 {
     return ( _rLeft.NanoSeconds == _rRight.NanoSeconds) &&
@@ -53,7 +53,7 @@ bool operator ==(const DateTime& _rLeft, const DateTime& _rRight)
     ( _rLeft.Year == _rRight.Year) ;
 }
 
-//-------------------------------------------------------------------------
+
 bool operator ==(const Date& _rLeft, const Date& _rRight)
 {
     return ( _rLeft.Day == _rRight.Day) &&
@@ -61,7 +61,7 @@ bool operator ==(const Date& _rLeft, const Date& _rRight)
     ( _rLeft.Year == _rRight.Year) ;
 }
 
-//-------------------------------------------------------------------------
+
 bool operator ==(const Time& _rLeft, const Time& _rRight)
 {
     return ( _rLeft.NanoSeconds == _rRight.NanoSeconds) &&
@@ -70,7 +70,7 @@ bool operator ==(const Time& _rLeft, const Time& _rRight)
     ( _rLeft.Hours == _rRight.Hours) ;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int64 getINT64(const Any& _rAny)
 {
     sal_Int64 nReturn = 0;
@@ -78,7 +78,7 @@ sal_Int64 getINT64(const Any& _rAny)
     return nReturn;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int32 getINT32(const Any& _rAny)
 {
     sal_Int32 nReturn = 0;
@@ -86,7 +86,7 @@ sal_Int32 getINT32(const Any& _rAny)
     return nReturn;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int16 getINT16(const Any& _rAny)
 {
     sal_Int16 nReturn = 0;
@@ -94,7 +94,7 @@ sal_Int16 getINT16(const Any& _rAny)
     return nReturn;
 }
 
-//------------------------------------------------------------------------------
+
 double getDouble(const Any& _rAny)
 {
     double nReturn = 0.0;
@@ -102,7 +102,7 @@ double getDouble(const Any& _rAny)
     return nReturn;
 }
 
-//------------------------------------------------------------------------------
+
 float getFloat(const Any& _rAny)
 {
     float nReturn = 0.0;
@@ -110,7 +110,7 @@ float getFloat(const Any& _rAny)
     return nReturn;
 }
 
-//------------------------------------------------------------------------------
+
 OUString getString(const Any& _rAny)
 {
     OUString nReturn;
@@ -118,7 +118,7 @@ OUString getString(const Any& _rAny)
     return nReturn;
 }
 
-//------------------------------------------------------------------------------
+
 bool getBOOL(const Any& _rAny)
 {
     bool nReturn = false;
@@ -129,7 +129,7 @@ bool getBOOL(const Any& _rAny)
     return nReturn;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int32 getEnumAsINT32(const Any& _rAny) throw(IllegalArgumentException)
 {
     sal_Int32 nReturn = 0;
@@ -138,7 +138,7 @@ sal_Int32 getEnumAsINT32(const Any& _rAny) throw(IllegalArgumentException)
     return nReturn;
 }
 
-//------------------------------------------------------------------------------
+
 FontDescriptor  getDefaultFont()
 {
     FontDescriptor aReturn;
@@ -148,7 +148,7 @@ FontDescriptor  getDefaultFont()
     return aReturn;
 }
 
-//------------------------------------------------------------------------------
+
 bool isAssignableFrom(const Type& _rAssignable, const Type& _rFrom)
 {
     // getthe type lib descriptions
@@ -162,7 +162,7 @@ bool isAssignableFrom(const Type& _rAssignable, const Type& _rFrom)
     return typelib_typedescription_isAssignableFrom(pAssignable, pFrom);
 }
 
-//------------------------------------------------------------------
+
 template<class TYPE>
 bool tryCompare(const void* _pData, const Any& _rValue, bool& _bIdentical, TYPE& _rOut)
 {
@@ -171,7 +171,7 @@ bool tryCompare(const void* _pData, const Any& _rValue, bool& _bIdentical, TYPE&
     return bSuccess;
 }
 
-//------------------------------------------------------------------
+
 bool tryCompare(const void* _pData, const Any& _rValue, bool& _bIdentical, sal_Unicode& _rOut)
 {
     bool bSuccess = ( _rValue.getValueTypeClass() == TypeClass_CHAR );
@@ -181,7 +181,7 @@ bool tryCompare(const void* _pData, const Any& _rValue, bool& _bIdentical, sal_U
     return bSuccess;
 }
 
-//------------------------------------------------------------------
+
 bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
 {
     bool bRes = true;
@@ -421,13 +421,13 @@ bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
     return bRes;
 }
 
-//------------------------------------------------------------------------------
+
 bool compare(const Any& rLeft, const Any& rRight)
 {
     return compare_impl(rLeft.getValueType(), rLeft.getValue(), rRight);
 }
 
-//-------------------------------------------------------------------------
+
 bool    operator ==(const FontDescriptor& _rLeft, const FontDescriptor& _rRight)
 {
     return ( _rLeft.Name.equals( _rRight.Name ) ) &&
@@ -448,7 +448,7 @@ bool    operator ==(const FontDescriptor& _rLeft, const FontDescriptor& _rRight)
     ( _rLeft.Type == _rRight.Type ) ;
 }
 
-//-------------------------------------------------------------------------
+
 Type getSequenceElementType(const Type& _rSequenceType)
 {
     OSL_ENSURE(_rSequenceType.getTypeClass() == TypeClass_SEQUENCE,

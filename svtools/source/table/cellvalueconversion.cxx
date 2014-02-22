@@ -64,7 +64,7 @@ namespace svt
     //==================================================================================================================
     namespace
     {
-        //--------------------------------------------------------------------------------------------------------------
+
         double lcl_convertDateToDays( long const i_day, long const i_month, long const i_year )
         {
             long const nNullDateDays = ::Date::DateToDays( 1, 1, 1900 );
@@ -73,7 +73,7 @@ namespace svt
             return nValueDateDays - nNullDateDays;
         }
 
-        //--------------------------------------------------------------------------------------------------------------
+
         double lcl_convertTimeToDays( long const i_hours, long const i_minutes, long const i_seconds, long const i_100thSeconds )
         {
             return Time( i_hours, i_minutes, i_seconds, i_100thSeconds ).GetTimeInDays();
@@ -312,7 +312,7 @@ namespace svt
     //==================================================================================================================
     namespace
     {
-        //--------------------------------------------------------------------------------------------------------------
+
         bool lcl_ensureNumberFormatter( CellValueConversion_Data & io_data )
         {
             if ( io_data.bAttemptedFormatterCreation )
@@ -350,7 +350,7 @@ namespace svt
             return io_data.xNumberFormatter.is();
         }
 
-        //--------------------------------------------------------------------------------------------------------------
+
         bool lcl_getValueNormalizer( CellValueConversion_Data & io_data, Type const & i_valueType,
             PValueNormalization & o_formatter )
         {
@@ -411,18 +411,18 @@ namespace svt
     //==================================================================================================================
     //= CellValueConversion
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     CellValueConversion::CellValueConversion()
         :m_pData( new CellValueConversion_Data )
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     CellValueConversion::~CellValueConversion()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     OUString CellValueConversion::convertToString( const Any& i_value )
     {
         OUString sStringValue;

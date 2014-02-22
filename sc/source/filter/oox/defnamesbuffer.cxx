@@ -63,7 +63,7 @@ const sal_uInt16 BIFF_REFFLAG_ROW1REL       = 0x0002;
 const sal_uInt16 BIFF_REFFLAG_COL2REL       = 0x0004;
 const sal_uInt16 BIFF_REFFLAG_ROW2REL       = 0x0008;
 
-// ----------------------------------------------------------------------------
+
 
 const sal_Char* const spcOoxPrefix = "_xlnm.";
 

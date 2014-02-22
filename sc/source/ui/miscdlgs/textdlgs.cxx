@@ -30,7 +30,7 @@
 #include "sc.hrc"
 #include <svl/intitem.hxx>
 #include <svx/flagsdef.hxx>
-// -----------------------------------------------------------------------
+
 
 ScCharDlg::ScCharDlg( Window* pParent, const SfxItemSet* pAttr,
                     const SfxObjectShell* pDocShell )
@@ -45,7 +45,7 @@ ScCharDlg::ScCharDlg( Window* pParent, const SfxItemSet* pAttr,
     AddTabPage("position", RID_SVXPAGE_CHAR_POSITION);
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
@@ -65,7 +65,7 @@ void ScCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 ScParagraphDlg::ScParagraphDlg(Window* pParent, const SfxItemSet* pAttr)
     : SfxTabDialog(pParent, "ParagraphDialog",
@@ -82,7 +82,7 @@ ScParagraphDlg::ScParagraphDlg(Window* pParent, const SfxItemSet* pAttr)
     m_nTabPageId = AddTabPage("labelTP_TABULATOR", RID_SVXPAGE_TABULATOR);
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScParagraphDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {

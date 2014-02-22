@@ -27,23 +27,23 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 
 
-// -------------------------------------------------------------------------
+
 using namespace connectivity;
 using namespace connectivity::ado;
-// -------------------------------------------------------------------------
+
 OCatalog::OCatalog(_ADOCatalog* _pCatalog,OConnection* _pCon) : connectivity::sdbcx::OCatalog(_pCon)
                 ,m_aCatalog(_pCatalog)
                 ,m_pConnection(_pCon)
 {
 }
-// -----------------------------------------------------------------------------
+
 OCatalog::~OCatalog()
 {
     if(m_aCatalog.IsValid())
         m_aCatalog.putref_ActiveConnection(NULL);
     m_aCatalog.clear();
 }
-// -----------------------------------------------------------------------------
+
 void OCatalog::refreshTables()
 {
     TStringVector aVector;
@@ -72,7 +72,7 @@ void OCatalog::refreshTables()
     else
         m_pTables = new OTables(this,m_aMutex,aVector,aTables,m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers());
 }
-// -------------------------------------------------------------------------
+
 void OCatalog::refreshViews()
 {
     TStringVector aVector;
@@ -85,7 +85,7 @@ void OCatalog::refreshViews()
     else
         m_pViews = new OViews(this,m_aMutex,aVector,aViews,m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers());
 }
-// -------------------------------------------------------------------------
+
 void OCatalog::refreshGroups()
 {
     TStringVector aVector;
@@ -98,7 +98,7 @@ void OCatalog::refreshGroups()
     else
         m_pGroups = new OGroups(this,m_aMutex,aVector,aGroups,m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers());
 }
-// -------------------------------------------------------------------------
+
 void OCatalog::refreshUsers()
 {
     TStringVector aVector;
@@ -111,7 +111,7 @@ void OCatalog::refreshUsers()
     else
         m_pUsers = new OUsers(this,m_aMutex,aVector,aUsers,m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers());
 }
-// -------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

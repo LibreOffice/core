@@ -38,7 +38,7 @@
 
 const double SvxNumberFormatShell::DEFAULT_NUMVALUE = 1234.56789;
 
-// -----------------------------------------------------------------------
+
 
 
 
@@ -61,7 +61,7 @@ SvxNumberFormatShell* SvxNumberFormatShell::Create( SvNumberFormatter* pNumForma
                                     eNumValType,nNumVal,pNumStr );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
                                             sal_uInt32          nFormatKey,
@@ -93,7 +93,7 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
                                             sal_uInt32          nFormatKey,
@@ -130,7 +130,7 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxNumberFormatShell::~SvxNumberFormatShell()
 {
@@ -154,14 +154,14 @@ SvxNumberFormatShell::~SvxNumberFormatShell()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 size_t SvxNumberFormatShell::GetUpdateDataCount() const
 {
     return aDelList.size();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberFormatShell::GetUpdateData( sal_uInt32* pDelArray, const sal_uInt32 nSize )
 {
@@ -174,7 +174,7 @@ void SvxNumberFormatShell::GetUpdateData( sal_uInt32* pDelArray, const sal_uInt3
             *pDelArray++ = *it;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberFormatShell::CategoryChanged( sal_uInt16 nCatLbPos,
                                             short& rFmtSelPos,
@@ -191,7 +191,7 @@ void SvxNumberFormatShell::CategoryChanged( sal_uInt16 nCatLbPos,
     rFmtSelPos = FillEntryList_Impl( rFmtEntries );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberFormatShell::LanguageChanged( LanguageType eLangType,
                                             short& rFmtSelPos,
@@ -204,7 +204,7 @@ void SvxNumberFormatShell::LanguageChanged( LanguageType eLangType,
     rFmtSelPos = FillEntryList_Impl( rFmtEntries );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberFormatShell::FormatChanged( sal_uInt16  nFmtLbPos,
                                           OUString&   rPreviewStr,
@@ -228,7 +228,7 @@ void SvxNumberFormatShell::FormatChanged( sal_uInt16  nFmtLbPos,
         }
     }
 }
-// -----------------------------------------------------------------------
+
 
 bool SvxNumberFormatShell::AddFormat( OUString& rFormat, sal_Int32& rErrPos,
                                       sal_uInt16& rCatLbSelPos, short& rFmtSelPos,
@@ -300,7 +300,7 @@ bool SvxNumberFormatShell::AddFormat( OUString& rFormat, sal_Int32& rErrPos,
     return bInserted;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxNumberFormatShell::RemoveFormat( const OUString& rFormat,
                                          sal_uInt16& rCatLbSelPos,
@@ -336,7 +336,7 @@ bool SvxNumberFormatShell::RemoveFormat( const OUString& rFormat,
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberFormatShell::MakeFormat( OUString& rFormat,
                                        bool bThousand, bool bNegRed,
@@ -375,7 +375,7 @@ void SvxNumberFormatShell::MakeFormat( OUString& rFormat,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberFormatShell::GetOptions( const OUString&  rFormat,
                                        bool&            rThousand,
@@ -417,7 +417,7 @@ void SvxNumberFormatShell::GetOptions( const OUString&  rFormat,
 
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberFormatShell::MakePreviewString( const OUString& rFormatStr,
                                               OUString&       rPreviewStr,
@@ -461,7 +461,7 @@ void SvxNumberFormatShell::MakePreviewString( const OUString& rFormatStr,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxNumberFormatShell::IsUserDefined( const OUString& rFmtString )
 {
@@ -487,7 +487,7 @@ bool SvxNumberFormatShell::IsUserDefined( const OUString& rFmtString )
     return bFlag;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxNumberFormatShell::FindEntry( const OUString& rFmtString, sal_uInt32* pAt /* = NULL */ )
 {
@@ -517,7 +517,7 @@ bool SvxNumberFormatShell::FindEntry( const OUString& rFmtString, sal_uInt32* pA
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberFormatShell::GetInitSettings( sal_uInt16& nCatLbPos,
                                             LanguageType& rLangType,
@@ -526,7 +526,7 @@ void SvxNumberFormatShell::GetInitSettings( sal_uInt16& nCatLbPos,
                                             OUString& rPrevString,
                                             Color*&   rpPrevColor )
 {
-    // -------------------------------------------------------------------
+
     // Vorbedingung: Zahlenformatierer gefunden
     DBG_ASSERT( pFormatter != NULL, "Zahlenformatierer nicht gefunden!" );
 
@@ -557,7 +557,7 @@ void SvxNumberFormatShell::GetInitSettings( sal_uInt16& nCatLbPos,
     GetPreviewString_Impl( rPrevString, rpPrevColor );
 }
 
-// -----------------------------------------------------------------------
+
 
 short SvxNumberFormatShell::FillEntryList_Impl( std::vector<OUString>& rList )
 {
@@ -1122,7 +1122,7 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<OUString>& rList,
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberFormatShell::GetPreviewString_Impl( OUString& rString, Color*& rpColor )
 {
@@ -1148,37 +1148,37 @@ void SvxNumberFormatShell::GetPreviewString_Impl( OUString& rString, Color*& rpC
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 ::std::vector<sal_uInt32>::iterator SvxNumberFormatShell::GetRemoved_Impl( size_t nKey )
 {
     return ::std::find(aDelList.begin(), aDelList.end(), nKey);
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxNumberFormatShell::IsRemoved_Impl( size_t nKey )
 {
     return GetRemoved_Impl( nKey ) != aDelList.end();
 }
 
-// -----------------------------------------------------------------------
+
 
 ::std::vector<sal_uInt32>::iterator SvxNumberFormatShell::GetAdded_Impl( size_t nKey )
 {
     return ::std::find(aAddList.begin(), aAddList.end(), nKey);
 }
 
-//------------------------------------------------------------------------
+
 
 bool SvxNumberFormatShell::IsAdded_Impl( size_t nKey )
 {
     return GetAdded_Impl( nKey ) != aAddList.end();
 }
 
-// -----------------------------------------------------------------------
+
 // Konvertierungs-Routinen:
-// ------------------------
+
 
 void SvxNumberFormatShell::PosToCategory_Impl( sal_uInt16 nPos, short& rCategory )
 {
@@ -1200,7 +1200,7 @@ void SvxNumberFormatShell::PosToCategory_Impl( sal_uInt16 nPos, short& rCategory
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberFormatShell::CategoryToPos_Impl( short nCategory, sal_uInt16& rPos )
 {

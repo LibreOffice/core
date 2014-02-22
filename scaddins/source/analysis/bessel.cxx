@@ -57,7 +57,7 @@ const double f_2_DIV_PI = 2.0 / f_PI;
     alpha_k=1 for k=N and alpha_k=0 otherwise
 */
 
-// ----------------------------------------------------------------------------
+
 
 double BesselJ( double x, sal_Int32 N ) throw (IllegalArgumentException, NoConvergenceException)
 
@@ -171,7 +171,7 @@ double BesselJ( double x, sal_Int32 N ) throw (IllegalArgumentException, NoConve
     No asymptotic approximation used, see issue 43040.
  */
 
-// ----------------------------------------------------------------------------
+
 
 double BesselI( double x, sal_Int32 n ) throw( IllegalArgumentException, NoConvergenceException )
 {

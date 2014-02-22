@@ -117,7 +117,7 @@ namespace
         : public rtl::Static< ::osl::Mutex, SingletonMutex > {};
 }
 
-// -----------------------------------------------------------------------
+
 // class SvtAccessibilityOptions_Impl ---------------------------------------------
 
 SvtAccessibilityOptions_Impl::SvtAccessibilityOptions_Impl()
@@ -144,7 +144,7 @@ SvtAccessibilityOptions_Impl::~SvtAccessibilityOptions_Impl()
 {
 }
 
-// -----------------------------------------------------------------------
+
 sal_Bool SvtAccessibilityOptions_Impl::GetAutoDetectSystemHC()
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
@@ -701,7 +701,7 @@ void SvtAccessibilityOptions_Impl::SetPreviewUsesCheckeredBackground(sal_Bool bS
     }
 }
 
-// -----------------------------------------------------------------------
+
 // class SvtAccessibilityOptions --------------------------------------------------
 
 SvtAccessibilityOptions::SvtAccessibilityOptions()
@@ -718,7 +718,7 @@ SvtAccessibilityOptions::SvtAccessibilityOptions()
     //StartListening( *sm_pSingleImplConfig, sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvtAccessibilityOptions::~SvtAccessibilityOptions()
 {
@@ -732,7 +732,7 @@ SvtAccessibilityOptions::~SvtAccessibilityOptions()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtAccessibilityOptions::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
@@ -744,7 +744,7 @@ void SvtAccessibilityOptions::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvtAccessibilityOptions::IsModified() const
 {
@@ -755,7 +755,7 @@ void SvtAccessibilityOptions::Commit()
     //sm_pSingleImplConfig->Commit();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvtAccessibilityOptions::GetAutoDetectSystemHC() const
 {
@@ -810,7 +810,7 @@ sal_Bool SvtAccessibilityOptions::GetPreviewUsesCheckeredBackground() const
     return sm_pSingleImplConfig->GetPreviewUsesCheckeredBackground();
 }
 
-// -----------------------------------------------------------------------
+
 void SvtAccessibilityOptions::SetAutoDetectSystemHC(sal_Bool bSet)
 {
     sm_pSingleImplConfig->SetAutoDetectSystemHC(bSet);
@@ -868,6 +868,6 @@ void SvtAccessibilityOptions::SetPreviewUsesCheckeredBackground(sal_Bool bSet)
     sm_pSingleImplConfig->SetPreviewUsesCheckeredBackground(bSet);
 }
 
-// -----------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

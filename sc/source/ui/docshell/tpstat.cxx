@@ -38,7 +38,7 @@ SfxTabPage* ScDocStatPage::Create( Window *pParent, const SfxItemSet& rSet )
     return new ScDocStatPage( pParent, rSet );
 }
 
-//------------------------------------------------------------------------
+
 
 ScDocStatPage::ScDocStatPage( Window *pParent, const SfxItemSet& rSet )
     :   SfxTabPage( pParent, "StatisticsInfoPage", "modules/scalc/ui/statisticsinfopage.ui", rSet )
@@ -62,20 +62,20 @@ ScDocStatPage::ScDocStatPage( Window *pParent, const SfxItemSet& rSet )
 
 }
 
-//------------------------------------------------------------------------
+
 
 ScDocStatPage::~ScDocStatPage()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool ScDocStatPage::FillItemSet( SfxItemSet& /* rSet */ )
 {
     return false;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScDocStatPage::Reset( const SfxItemSet& /* rSet */ )
 {

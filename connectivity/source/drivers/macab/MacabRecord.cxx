@@ -32,14 +32,14 @@ using namespace connectivity::macab;
 using namespace com::sun::star::util;
 using namespace ::dbtools;
 
-// -------------------------------------------------------------------------
+
 MacabRecord::MacabRecord()
 {
     size = 0;
     fields = NULL;
 }
 
-// -------------------------------------------------------------------------
+
 MacabRecord::MacabRecord(const sal_Int32 _size)
 {
     size = _size;
@@ -49,7 +49,7 @@ MacabRecord::MacabRecord(const sal_Int32 _size)
         fields[i] = NULL;
 }
 
-// -------------------------------------------------------------------------
+
 MacabRecord::~MacabRecord()
 {
     if(size > 0)
@@ -65,7 +65,7 @@ MacabRecord::~MacabRecord()
     fields = NULL;
 }
 
-// -------------------------------------------------------------------------
+
 void MacabRecord::insertAtColumn (CFTypeRef _value, ABPropertyType _type, const sal_Int32 _column)
 {
     if(_column < size)
@@ -80,7 +80,7 @@ void MacabRecord::insertAtColumn (CFTypeRef _value, ABPropertyType _type, const 
     }
 }
 
-// -------------------------------------------------------------------------
+
 sal_Bool MacabRecord::contains (const macabfield *_field) const
 {
     if(_field == NULL)
@@ -89,7 +89,7 @@ sal_Bool MacabRecord::contains (const macabfield *_field) const
         return contains(_field->value);
 }
 
-// -------------------------------------------------------------------------
+
 sal_Bool MacabRecord::contains (const CFTypeRef _value) const
 {
     sal_Int32 i;
@@ -107,13 +107,13 @@ sal_Bool MacabRecord::contains (const CFTypeRef _value) const
     return sal_False;
 }
 
-// -------------------------------------------------------------------------
+
 sal_Int32 MacabRecord::getSize() const
 {
     return size;
 }
 
-// -------------------------------------------------------------------------
+
 macabfield *MacabRecord::copy(const sal_Int32 i) const
 {
     /* Note: copy(i) creates a new macabfield identical to that at
@@ -133,7 +133,7 @@ macabfield *MacabRecord::copy(const sal_Int32 i) const
     return NULL;
 }
 
-// -------------------------------------------------------------------------
+
 macabfield *MacabRecord::get(const sal_Int32 i) const
 {
     /* Note: copy(i) creates a new macabfield identical to that at
@@ -148,7 +148,7 @@ macabfield *MacabRecord::get(const sal_Int32 i) const
     return NULL;
 }
 
-// -------------------------------------------------------------------------
+
 void MacabRecord::releaseFields()
 {
     /* This method is, at the moment, only used in MacabHeader.cxx, but
@@ -161,7 +161,7 @@ void MacabRecord::releaseFields()
         CFRelease(fields[i]->value);
 }
 
-// -------------------------------------------------------------------------
+
 sal_Int32 MacabRecord::compareFields(const macabfield *_field1, const macabfield *_field2)
 {
 
@@ -217,7 +217,7 @@ sal_Int32 MacabRecord::compareFields(const macabfield *_field1, const macabfield
     return (sal_Int32) result;
 }
 
-// -------------------------------------------------------------------------
+
 /* Create a macabfield out of an OUString and type. Together with the
  * method fieldToString() (below), it is possible to switch conveniently
  * between an OUString and a macabfield (for use when creating and handling
@@ -285,7 +285,7 @@ macabfield *MacabRecord::createMacabField(const OUString _newFieldString, const 
     return newField;
 }
 
-// -------------------------------------------------------------------------
+
 /* Create an OUString out of a macabfield. Together with the method
  * createMacabField() (above), it is possible to switch conveniently
  * between an OUString and a macabfield (for use when creating and handling

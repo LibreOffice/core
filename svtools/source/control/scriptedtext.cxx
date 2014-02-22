@@ -32,7 +32,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 
 
-//_____________________________________________________________________________
+
 
 class SvtScriptedTextHelper_Impl
 {
@@ -307,7 +307,7 @@ void SvtScriptedTextHelper_Impl::DrawText( const Point& _rPos )
 }
 
 
-//_____________________________________________________________________________
+
 
 SvtScriptedTextHelper::SvtScriptedTextHelper( OutputDevice& _rOutDevice ) :
     mpImpl( new SvtScriptedTextHelper_Impl( _rOutDevice, NULL, NULL, NULL ) )
@@ -350,6 +350,6 @@ void SvtScriptedTextHelper::DrawText( const Point& _rPos )
 }
 
 
-//_____________________________________________________________________________
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

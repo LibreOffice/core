@@ -68,7 +68,7 @@ jclass java_sql_Date::st_getMyClass()
         theClass = findMyClass("java/sql/Date");
     return theClass;
 }
-// -----------------------------------------------------------------------------
+
 
 java_sql_Date::operator ::com::sun::star::util::Date()
 {
@@ -121,7 +121,7 @@ java_sql_Time::java_sql_Time( const ::com::sun::star::util::Time& _rOut ): java_
     t.pEnv->DeleteLocalRef( tempObj );
     // and clean
 }
-// -----------------------------------------------------------------------------
+
 java_sql_Time::operator ::com::sun::star::util::Time()
 {
     return ::dbtools::DBTypeConversion::toTime(toString());
@@ -176,12 +176,12 @@ java_sql_Timestamp::java_sql_Timestamp(const ::com::sun::star::util::DateTime& _
     // and clean
 }
 
-// -----------------------------------------------------------------------------
+
 java_sql_Timestamp::operator ::com::sun::star::util::DateTime()
 {
     return ::dbtools::DBTypeConversion::toDateTime(toString());
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

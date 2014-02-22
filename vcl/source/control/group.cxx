@@ -43,7 +43,7 @@ void GroupBox::ImplInit( Window* pParent, WinBits nStyle )
     ImplInitSettings( true, true, true );
 }
 
-// -----------------------------------------------------------------------
+
 
 WinBits GroupBox::ImplInitStyle( WinBits nStyle )
 {
@@ -52,20 +52,20 @@ WinBits GroupBox::ImplInitStyle( WinBits nStyle )
     return nStyle;
 }
 
-// -----------------------------------------------------------------
+
 
 const Font& GroupBox::GetCanonicalFont( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetGroupFont();
 }
 
-// -----------------------------------------------------------------
+
 const Color& GroupBox::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetGroupTextColor();
 }
 
-// -----------------------------------------------------------------------
+
 
 void GroupBox::ImplInitSettings( bool bFont,
                                  bool bForeground, bool bBackground )
@@ -98,7 +98,7 @@ void GroupBox::ImplInitSettings( bool bFont,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 GroupBox::GroupBox( Window* pParent, WinBits nStyle ) :
     Control( WINDOW_GROUPBOX )
@@ -106,7 +106,7 @@ GroupBox::GroupBox( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-// -----------------------------------------------------------------------
+
 
 GroupBox::GroupBox( Window* pParent, const ResId& rResId ) :
     Control( WINDOW_GROUPBOX )
@@ -120,7 +120,7 @@ GroupBox::GroupBox( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                          const Point& rPos, const Size& rSize, bool bLayout )
@@ -212,7 +212,7 @@ void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     DrawControlText( *pDev, aRect, aText, nTextStyle, pVector, pDisplayText );
 }
 
-// -----------------------------------------------------------------------
+
 
 void GroupBox::FillLayoutData() const
 {
@@ -220,14 +220,14 @@ void GroupBox::FillLayoutData() const
     const_cast<GroupBox*>(this)->   ImplDraw( const_cast<GroupBox*>(this), 0, Point(), GetOutputSizePixel(), true );
 }
 
-// -----------------------------------------------------------------------
+
 
 void GroupBox::Paint( const Rectangle& )
 {
     ImplDraw( this, 0, Point(), GetOutputSizePixel() );
 }
 
-// -----------------------------------------------------------------------
+
 
 void GroupBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
                      sal_uLong nFlags )
@@ -249,7 +249,7 @@ void GroupBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->Pop();
 }
 
-// -----------------------------------------------------------------------
+
 
 void GroupBox::Resize()
 {
@@ -257,7 +257,7 @@ void GroupBox::Resize()
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void GroupBox::StateChanged( StateChangedType nType )
 {
@@ -295,7 +295,7 @@ void GroupBox::StateChanged( StateChangedType nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void GroupBox::DataChanged( const DataChangedEvent& rDCEvt )
 {

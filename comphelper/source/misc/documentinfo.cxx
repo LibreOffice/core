@@ -71,7 +71,7 @@ namespace comphelper {
     //====================================================================
     //= DocumentInfo
     //====================================================================
-    //--------------------------------------------------------------------
+
     OUString DocumentInfo::getDocumentTitle( const Reference< XModel >& _rxDocument )
     {
         OUString sTitle;

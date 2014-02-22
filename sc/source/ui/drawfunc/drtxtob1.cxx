@@ -38,7 +38,7 @@
 #include "scresid.hxx"
 
 #include "scabstdlg.hxx"
-//------------------------------------------------------------------------
+
 
 bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
                                                 SfxItemSet& rOutSet , sal_uInt16 nSlot)

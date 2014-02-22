@@ -148,7 +148,7 @@ namespace sfx2
 // = reading of configuration data
 // =======================================================================
 
-    //--------------------------------------------------------------------
+
     void lcl_ReadFilterClass( const OConfigurationNode& _rClassesNode, const OUString& _rLogicalClassName,
         FilterClass& /* [out] */ _rClass )
     {
@@ -163,7 +163,7 @@ namespace sfx2
         aClassDesc.getNodeValue( sSubFiltersNodeName ) >>= _rClass.aSubFilters;
     }
 
-    //--------------------------------------------------------------------
+
     struct CreateEmptyClassRememberPos : public ::std::unary_function< FilterName, void >
     {
     protected:
@@ -190,7 +190,7 @@ namespace sfx2
         }
     };
 
-    //--------------------------------------------------------------------
+
     struct ReadGlobalFilter : public ::std::unary_function< FilterName, void >
     {
     protected:
@@ -223,7 +223,7 @@ namespace sfx2
         }
     };
 
-    //--------------------------------------------------------------------
+
     void lcl_ReadGlobalFilters( const OConfigurationNode& _rFilterClassification, FilterClassList& _rGlobalClasses, StringArray& _rGlobalClassNames )
     {
         _rGlobalClasses.clear();
@@ -267,7 +267,7 @@ namespace sfx2
         );
     }
 
-    //--------------------------------------------------------------------
+
     struct ReadLocalFilter : public ::std::unary_function< FilterName, void >
     {
     protected:
@@ -293,7 +293,7 @@ namespace sfx2
         }
     };
 
-    //--------------------------------------------------------------------
+
     void lcl_ReadLocalFilters( const OConfigurationNode& _rFilterClassification, FilterClassList& _rLocalClasses )
     {
         _rLocalClasses.clear();
@@ -310,7 +310,7 @@ namespace sfx2
         );
     }
 
-    //--------------------------------------------------------------------
+
     void lcl_ReadClassification( FilterClassList& _rGlobalClasses, StringArray& _rGlobalClassNames, FilterClassList& _rLocalClasses )
     {
         //================================================================
@@ -336,7 +336,7 @@ namespace sfx2
 // = grouping and classifying
 // =======================================================================
 
-    //--------------------------------------------------------------------
+
     // a struct which adds helps remembering a reference to a class entry
     struct ReferToFilterEntry : public ::std::unary_function< FilterName, void >
     {
@@ -362,7 +362,7 @@ namespace sfx2
         }
     };
 
-    //--------------------------------------------------------------------
+
     struct FillClassGroup : public ::std::unary_function< FilterClass, void >
     {
     protected:
@@ -400,7 +400,7 @@ namespace sfx2
         }
     };
 
-    //--------------------------------------------------------------------
+
     static const sal_Unicode s_cWildcardSeparator( ';' );
 
     //====================================================================
@@ -504,7 +504,7 @@ namespace sfx2
             aWildCards.push_back( OUString( pTokenStart, pTokenLoop - pTokenStart ) );
     }
 
-    //--------------------------------------------------------------------
+
     void lcl_InitGlobalClasses( GroupedFilterList& _rAllFilters, const FilterClassList& _rGlobalClasses, FilterGroupEntryReferrer& _rGlobalClassesRef )
     {
         // we need an extra group in our "all filters" container
@@ -527,7 +527,7 @@ namespace sfx2
             //  and modify the descriptor for this class accordingly
     }
 
-    //--------------------------------------------------------------------
+
     typedef ::std::vector< ::std::pair< FilterGroupEntryReferrer::mapped_type, FilterGroup::iterator > >
             MapGroupEntry2GroupEntry;
             // this is not really a map - it's just called this way because it is used as a map
@@ -554,7 +554,7 @@ namespace sfx2
         }
     };
 
-    //--------------------------------------------------------------------
+
     struct CopyNonEmptyFilter : public ::std::unary_function< FilterDescriptor, void >
     {
         FilterGroup& rTarget;
@@ -567,7 +567,7 @@ namespace sfx2
         }
     };
 
-    //--------------------------------------------------------------------
+
     void lcl_GroupAndClassify( TSortedFilterList& _rFilterMatcher, GroupedFilterList& _rAllFilters )
     {
         _rAllFilters.clear();
@@ -728,7 +728,7 @@ namespace sfx2
         rGlobalFilters.swap( aNonEmptyGlobalFilters );
     }
 
-    //--------------------------------------------------------------------
+
     struct AppendFilter : public ::std::unary_function< FilterDescriptor, void >
     {
         protected:
@@ -763,7 +763,7 @@ namespace sfx2
 // = handling for the "all files" entry
 // =======================================================================
 
-    //--------------------------------------------------------------------
+
     sal_Bool lcl_hasAllFilesFilter( TSortedFilterList& _rFilterMatcher, OUString& /* [out] */ _rAllFilterName )
     {
         sal_Bool        bHasAll = sal_False;
@@ -779,7 +779,7 @@ namespace sfx2
         return bHasAll;
     }
 
-    //--------------------------------------------------------------------
+
     void lcl_EnsureAllFilesEntry( TSortedFilterList& _rFilterMatcher, GroupedFilterList& _rFilters )
     {
         // ===============================================================
@@ -800,7 +800,7 @@ namespace sfx2
 // = filling an XFilterManager
 // =======================================================================
 
-    //--------------------------------------------------------------------
+
     struct AppendFilterGroup : public ::std::unary_function< FilterGroup, void >
     {
     protected:
@@ -864,7 +864,7 @@ namespace sfx2
         }
     };
 
-    //--------------------------------------------------------------------
+
     TSortedFilterList::TSortedFilterList(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >& xFilterList)
         : m_nIterator(0)
     {
@@ -883,21 +883,21 @@ namespace sfx2
         }
     }
 
-    //--------------------------------------------------------------------
+
     const SfxFilter* TSortedFilterList::First()
     {
         m_nIterator = 0;
         return impl_getFilter(m_nIterator);
     }
 
-    //--------------------------------------------------------------------
+
     const SfxFilter* TSortedFilterList::Next()
     {
         ++m_nIterator;
         return impl_getFilter(m_nIterator);
     }
 
-    //--------------------------------------------------------------------
+
     const SfxFilter* TSortedFilterList::impl_getFilter(sal_Int32 nIndex)
     {
         if (nIndex<0 || nIndex>=(sal_Int32)m_lFilters.size())
@@ -908,7 +908,7 @@ namespace sfx2
         return SfxFilter::GetFilterByName(sFilterName);
     }
 
-    //--------------------------------------------------------------------
+
     void appendFiltersForSave( TSortedFilterList& _rFilterMatcher,
                                const Reference< XFilterManager >& _rxFilterManager,
                                OUString& _rFirstNonEmpty, FileDialogHelper_Impl& _rFileDlgImpl,
@@ -971,7 +971,7 @@ namespace sfx2
         OUString aWildcard;
     };
 
-    //--------------------------------------------------------------------
+
     void appendExportFilters( TSortedFilterList& _rFilterMatcher,
                               const Reference< XFilterManager >& _rxFilterManager,
                               OUString& _rFirstNonEmpty, FileDialogHelper_Impl& _rFileDlgImpl )
@@ -1130,7 +1130,7 @@ namespace sfx2
         }
     }
 
-    //--------------------------------------------------------------------
+
     void appendFiltersForOpen( TSortedFilterList& _rFilterMatcher,
                                const Reference< XFilterManager >& _rxFilterManager,
                                OUString& _rFirstNonEmpty, FileDialogHelper_Impl& _rFileDlgImpl )

@@ -26,34 +26,34 @@ namespace rptui
 // OObjectListener
 //============================================================================
 
-//----------------------------------------------------------------------------
+
 OObjectListener::OObjectListener(OObjectBase* _pObject)
           :m_pObject(_pObject)
 {
 }
 
-//----------------------------------------------------------------------------
+
 
 OObjectListener::~OObjectListener()
 {
 }
 
 // XEventListener
-//----------------------------------------------------------------------------
+
 
 void SAL_CALL OObjectListener::disposing( const  ::com::sun::star::lang::EventObject& ) throw( ::com::sun::star::uno::RuntimeException)
 {
 }
 
 // XPropertyChangeListener
-//----------------------------------------------------------------------------
+
 
 void SAL_CALL OObjectListener::propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException)
 {
     m_pObject->_propertyChange( evt );
 }
 
-//----------------------------------------------------------------------------
+
 
 //============================================================================
 // DlgEdHint
@@ -61,7 +61,7 @@ void SAL_CALL OObjectListener::propertyChange( const  ::com::sun::star::beans::P
 
 TYPEINIT1( DlgEdHint, SfxHint );
 
-//----------------------------------------------------------------------------
+
 
 DlgEdHint::DlgEdHint(DlgEdHintKind eHint)
     : eHintKind(eHint)
@@ -69,11 +69,11 @@ DlgEdHint::DlgEdHint(DlgEdHintKind eHint)
 {
 }
 
-//----------------------------------------------------------------------------
+
 DlgEdHint::~DlgEdHint()
 {
 }
-//----------------------------------------------------------------------------
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

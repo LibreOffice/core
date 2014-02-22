@@ -813,7 +813,7 @@ Sequence< OUString > SAL_CALL SmGraphicAccessible::getSupportedServiceNames()
 
 //////////////////////////////////////////////////////////////////////
 
-//------------------------------------------------------------------------
+
 
 SmEditSource::SmEditSource( SmEditWindow * /*pWin*/, SmEditAccessible &rAcc ) :
     aViewFwd    (rAcc),
@@ -867,7 +867,7 @@ SfxBroadcaster & SmEditSource::GetBroadcaster() const
     return ((SmEditSource *) this)->aBroadCaster;
 }
 
-//------------------------------------------------------------------------
+
 
 SmViewForwarder::SmViewForwarder( SmEditAccessible &rAcc ) :
     rEditAcc(rAcc)
@@ -945,7 +945,7 @@ Point SmViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMapMod
 }
 
 
-//------------------------------------------------------------------------
+
 
 SmTextForwarder::SmTextForwarder( SmEditAccessible& rAcc, SmEditSource & rSource) :
     rEditAcc ( rAcc ),
@@ -1483,7 +1483,7 @@ void SmTextForwarder::CopyText(const SvxTextForwarder& rSource)
     }
 }
 
-//------------------------------------------------------------------------
+
 
 SmEditViewForwarder::SmEditViewForwarder( SmEditAccessible& rAcc ) :
     rEditAcc( rAcc )
@@ -1622,7 +1622,7 @@ sal_Bool SmEditViewForwarder::Paste()
     return bRes;
 }
 
-//------------------------------------------------------------------------
+
 
 SmEditAccessible::SmEditAccessible( SmEditWindow *pEditWin ) :
     aAccName            (SM_RESSTR(STR_CMDBOXWINDOW)),

@@ -624,5 +624,4 @@ inline sal_Int8 DropTarget::getFilteredActions( DWORD grfKeyState, DWORD dwEffec
     return actions &  m_nDefaultActions;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

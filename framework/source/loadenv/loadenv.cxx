@@ -106,14 +106,14 @@ class LoadEnvListener : private ThreadHelpBase
 
     public:
 
-        //_______________________________________
+
         LoadEnvListener(LoadEnv* pLoadEnv)
             : m_bWaitingResult(true)
             , m_pLoadEnv(pLoadEnv)
         {
         }
 
-        //_______________________________________
+
         // frame.XLoadEventListener
         virtual void SAL_CALL loadFinished(const css::uno::Reference< css::frame::XFrameLoader >& xLoader)
             throw(css::uno::RuntimeException);
@@ -121,12 +121,12 @@ class LoadEnvListener : private ThreadHelpBase
         virtual void SAL_CALL loadCancelled(const css::uno::Reference< css::frame::XFrameLoader >& xLoader)
             throw(css::uno::RuntimeException);
 
-        //_______________________________________
+
         // frame.XDispatchResultListener
         virtual void SAL_CALL dispatchFinished(const css::frame::DispatchResultEvent& aEvent)
             throw(css::uno::RuntimeException);
 
-        //_______________________________________
+
         // lang.XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
             throw(css::uno::RuntimeException);
@@ -208,7 +208,7 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
     return xComponent;
 }
 
-//-----------------------------------------------
+
 utl::MediaDescriptor impl_mergeMediaDescriptorWithMightExistingModelArgs(const css::uno::Sequence< css::beans::PropertyValue >& lOutsideDescriptor)
 {
     utl::MediaDescriptor lDescriptor(lOutsideDescriptor);
@@ -568,7 +568,7 @@ void LoadEnv::impl_setResult(sal_Bool bResult)
 LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                                 sURL            ,
                                                const css::uno::Sequence< css::beans::PropertyValue >& lMediaDescriptor)
 {
-    //-------------------------------------------
+
     // (i) Filter some special well known URL protocols,
     //     which can not be handled or loaded in general.
     //     Of course an empty URL must be ignored here too.
@@ -591,7 +591,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
         return E_UNSUPPORTED_CONTENT;
     }
 
-    //-------------------------------------------
+
     // (ii) Some special URLs indicates a given input stream,
     //      a full featured document model directly or
     //      specify a request for opening an empty document.
@@ -654,7 +654,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     css::uno::Sequence< OUString >                  lTypesReg(1);
 
 
-    //-------------------------------------------
+
     // (iii) If a FrameLoader service (or at least
     //      a Filter) can be found, which supports
     //      this URL - it must be a loadable content.
@@ -680,7 +680,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     if (xSet->hasMoreElements())
         return E_CAN_BE_LOADED;
 
-    //-------------------------------------------
+
     // (iv) Some URL protocols are supported by special services.
     //      E.g. ContentHandler.
     //      Such contents can be handled ... but not loaded.
@@ -695,7 +695,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     if (xSet->hasMoreElements())
         return E_CAN_BE_HANDLED;
 
-    //-------------------------------------------
+
     // (v) Last but not least the UCB is used inside office to
     //     load contents. He has a special configuration to know
     //     which URL schemata can be used inside office.
@@ -703,7 +703,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     if (xUCB->queryContentProvider(sURL).is())
         return E_CAN_BE_LOADED;
 
-    //-------------------------------------------
+
     // (TODO) At this point, we have no idea .-)
     //        But it seems to be better, to break all
     //        further requests for this URL. Otherwise
@@ -975,7 +975,7 @@ sal_Bool LoadEnv::impl_handleContent()
     return sal_False;
 }
 
-//-----------------------------------------------
+
 sal_Bool LoadEnv::impl_furtherDocsAllowed()
 {
     // SAFE ->
@@ -1056,7 +1056,7 @@ sal_Bool LoadEnv::impl_furtherDocsAllowed()
     return bAllowed;
 }
 
-//-----------------------------------------------
+
 sal_Bool LoadEnv::impl_loadContent()
     throw(LoadEnvException, css::uno::RuntimeException)
 {

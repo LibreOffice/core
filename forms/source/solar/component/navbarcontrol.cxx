@@ -39,7 +39,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-//--------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_ONavigationBarControl()
 {
     static ::frm::OMultiInstanceAutoRegistration< ::frm::ONavigationBarControl > aAutoRegistration;
@@ -68,21 +68,21 @@ namespace frm
     //==================================================================
     // ONavigationBarControl
     //==================================================================
-    //------------------------------------------------------------------
+
     ONavigationBarControl::ONavigationBarControl( const Reference< XComponentContext >& _rxORB)
         :UnoControl(), m_xContext(_rxORB)
     {
     }
 
-    //------------------------------------------------------------------
+
     ONavigationBarControl::~ONavigationBarControl()
     {
     }
 
-    //------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ONavigationBarControl, UnoControl, ONavigationBarControl_Base )
 
-    //------------------------------------------------------------------
+
     Any SAL_CALL ONavigationBarControl::queryAggregation( const Type& _rType ) throw ( RuntimeException )
     {
         Any aReturn = UnoControl::queryAggregation( _rType );
@@ -93,7 +93,7 @@ namespace frm
         return aReturn;
     }
 
-    //------------------------------------------------------------------
+
     namespace
     {
         //..............................................................
@@ -123,7 +123,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL ONavigationBarControl::createPeer( const Reference< XToolkit >& /*_rToolkit*/, const Reference< XWindowPeer >& _rParentPeer ) throw( RuntimeException )
     {
         SolarMutexGuard aGuard;
@@ -177,25 +177,25 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+
     OUString SAL_CALL ONavigationBarControl::getImplementationName()  throw( RuntimeException )
     {
         return getImplementationName_Static();
     }
 
-    //------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL ONavigationBarControl::getSupportedServiceNames()  throw( RuntimeException )
     {
         return getSupportedServiceNames_Static();
     }
 
-    //------------------------------------------------------------------
+
     OUString SAL_CALL ONavigationBarControl::getImplementationName_Static()
     {
         return OUString( "com.sun.star.comp.form.ONavigationBarControl" );
     }
 
-    //------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL ONavigationBarControl::getSupportedServiceNames_Static()
     {
         Sequence< OUString > aServices( 2 );
@@ -204,25 +204,25 @@ namespace frm
         return aServices;
     }
 
-    //------------------------------------------------------------------
+
     Reference< XInterface > SAL_CALL ONavigationBarControl::Create( const Reference< XMultiServiceFactory >& _rxFactory )
     {
         return *( new ONavigationBarControl( comphelper::getComponentContext(_rxFactory) ) );
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL ONavigationBarControl::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException)
     {
         FORWARD_TO_PEER_1( XDispatchProviderInterception, registerDispatchProviderInterceptor, _rxInterceptor );
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL ONavigationBarControl::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException)
     {
         FORWARD_TO_PEER_1( XDispatchProviderInterception, releaseDispatchProviderInterceptor, _rxInterceptor );
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL ONavigationBarControl::setDesignMode( sal_Bool _bOn ) throw( RuntimeException )
     {
         UnoControl::setDesignMode( _bOn );
@@ -232,7 +232,7 @@ namespace frm
     //==================================================================
     // ONavigationBarPeer
     //==================================================================
-    //------------------------------------------------------------------
+
     ONavigationBarPeer* ONavigationBarPeer::Create( const Reference< XComponentContext >& _rxORB,
         Window* _pParentWindow, const Reference< XControlModel >& _rxModel )
     {
@@ -267,31 +267,31 @@ namespace frm
         return pPeer;
     }
 
-    //------------------------------------------------------------------
+
     ONavigationBarPeer::ONavigationBarPeer( const Reference< XComponentContext >& _rxORB )
         :OFormNavigationHelper( _rxORB )
     {
     }
 
-    //------------------------------------------------------------------
+
     ONavigationBarPeer::~ONavigationBarPeer()
     {
     }
 
-    //------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XINTERFACE2( ONavigationBarPeer, VCLXWindow, OFormNavigationHelper )
 
-    //------------------------------------------------------------------
+
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ONavigationBarPeer, VCLXWindow, OFormNavigationHelper )
 
-    //------------------------------------------------------------------
+
     void SAL_CALL ONavigationBarPeer::dispose(  ) throw( RuntimeException )
     {
         VCLXWindow::dispose();
         OFormNavigationHelper::dispose();
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL ONavigationBarPeer::setProperty( const OUString& _rPropertyName, const Any& _rValue ) throw( RuntimeException )
     {
         SolarMutexGuard aGuard;
@@ -371,7 +371,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+
     Any SAL_CALL ONavigationBarPeer::getProperty( const OUString& _rPropertyName ) throw( RuntimeException )
     {
         SolarMutexGuard aGuard;
@@ -415,7 +415,7 @@ namespace frm
         return aReturn;
     }
 
-    //------------------------------------------------------------------
+
     void ONavigationBarPeer::interceptorsChanged( )
     {
         if ( isDesignMode() )
@@ -425,7 +425,7 @@ namespace frm
         OFormNavigationHelper::interceptorsChanged();
     }
 
-    //------------------------------------------------------------------
+
     void ONavigationBarPeer::featureStateChanged( sal_Int16 _nFeatureId, sal_Bool _bEnabled )
     {
         // enable this button on the toolbox
@@ -453,7 +453,7 @@ namespace frm
         OFormNavigationHelper::featureStateChanged( _nFeatureId, _bEnabled );
     }
 
-    //------------------------------------------------------------------
+
     void ONavigationBarPeer::allFeatureStatesChanged( )
     {
         // force the control to update it's states
@@ -465,7 +465,7 @@ namespace frm
         OFormNavigationHelper::allFeatureStatesChanged( );
     }
 
-    //------------------------------------------------------------------
+
     bool ONavigationBarPeer::isEnabled( sal_Int16 _nFeatureId ) const
     {
         if ( const_cast< ONavigationBarPeer* >( this )->isDesignMode() )
@@ -474,7 +474,7 @@ namespace frm
         return OFormNavigationHelper::isEnabled( _nFeatureId );
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL ONavigationBarPeer::setDesignMode( sal_Bool _bOn ) throw( RuntimeException )
     {
         VCLXWindow::setDesignMode( _bOn  );
@@ -486,14 +486,14 @@ namespace frm
             // this will connect if not already connected and just update else
     }
 
-    //------------------------------------------------------------------
+
     void SAL_CALL ONavigationBarPeer::disposing( const EventObject& _rSource ) throw (RuntimeException)
     {
         VCLXWindow::disposing( _rSource );
         OFormNavigationHelper::disposing( _rSource );
     }
 
-    //------------------------------------------------------------------
+
     void ONavigationBarPeer::getSupportedFeatures( ::std::vector< sal_Int16 >& _rFeatureIds )
     {
         _rFeatureIds.push_back( FormFeature::MoveAbsolute );

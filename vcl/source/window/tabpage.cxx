@@ -49,7 +49,7 @@ void TabPage::ImplInit( Window* pParent, WinBits nStyle )
         EnableChildTransparentMode( true );
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabPage::ImplInitSettings()
 {
@@ -74,7 +74,7 @@ void TabPage::ImplInitSettings()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 TabPage::TabPage( Window* pParent, WinBits nStyle ) :
     Window( WINDOW_TABPAGE )
@@ -82,7 +82,7 @@ TabPage::TabPage( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-// -----------------------------------------------------------------------
+
 
 TabPage::TabPage( Window* pParent, const ResId& rResId ) :
     Window( WINDOW_TABPAGE )
@@ -103,7 +103,7 @@ TabPage::TabPage(Window *pParent, const OString& rID, const OUString& rUIXMLDesc
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabPage::StateChanged( StateChangedType nType )
 {
@@ -123,7 +123,7 @@ void TabPage::StateChanged( StateChangedType nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabPage::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -137,7 +137,7 @@ void TabPage::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabPage::Paint( const Rectangle& )
 {
@@ -161,7 +161,7 @@ void TabPage::Paint( const Rectangle& )
     }
 }
 
-// -----------------------------------------------------------------------
+
 void TabPage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong )
 {
     Point aPos = pDev->LogicToPixel( rPos );
@@ -189,13 +189,13 @@ void TabPage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sa
     pDev->Pop();
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabPage::ActivatePage()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabPage::DeactivatePage()
 {
