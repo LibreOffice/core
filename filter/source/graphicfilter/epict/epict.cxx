@@ -38,8 +38,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-//============================== PictWriter ===================================
-
+// PictWriter
 struct PictWriterAttrStackMember {
     struct PictWriterAttrStackMember *  pSucc;
     Color                               aLineColor;
@@ -172,9 +171,7 @@ public:
 };
 
 
-//========================== Methods of PictWriter ==========================
-
-
+// Methods of PictWriter
 void PictWriter::MayCallback()
 {
     if ( xStatusIndicator.is() )
@@ -235,8 +232,7 @@ Polygon PictWriter::PolyPolygonToPolygon(const PolyPolygon & rPolyPoly)
     for (np=1; np<nCount; np++) {
         aPoly2=rPolyPoly.GetObject(np);
 
-        //-----------------The following code merges aPoly1 and aPoly2 to aPoly1-----------------
-
+        // The following code merges aPoly1 and aPoly2 to aPoly1
         nSize1=aPoly1.GetSize();
         nSize2=aPoly2.GetSize();
 
@@ -277,9 +273,6 @@ Polygon PictWriter::PolyPolygonToPolygon(const PolyPolygon & rPolyPoly)
         for (i2=0;         i2<=nBestIdx2; i2++) aPoly3.SetPoint(aPoly2.GetPoint(i2),i3++);
 
         aPoly1=aPoly3;
-
-        //-----------------------------------------------------------------------------------
-
     }
     return aPoly1;
 }
@@ -1150,13 +1143,12 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
         // allocate memory for a row:
         pPix = new sal_uInt8[ nSrcRowBytes ];
 
-        // Position der Map-Daten in Ziel merken:
+        // remember position of the map-data in the target:
         nDstMapPos=pPict->Tell();
 
         // loop trough rows:
         for ( ny = 0; ny < nHeight; ny++ )
         {
-
             // read line ny of source into the buffer:
             switch ( nBitsPerPixel )
             {
@@ -1600,7 +1592,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
             case META_CHORD_ACTION:
             {
-//                OSL_FAIL( "Unsupported PICT-Action: META_CHORD_ACTION!" );
+                // OSL_FAIL( "Unsupported PICT-Action: META_CHORD_ACTION!" );
             }
             break;
 
@@ -1775,7 +1767,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
             case META_TEXTRECT_ACTION:
             {
-//                OSL_FAIL( "Unsupported PICT-Action: META_TEXTRECT_ACTION!" );
+                // OSL_FAIL( "Unsupported PICT-Action: META_TEXTRECT_ACTION!" );
             }
             break;
 
@@ -1858,7 +1850,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             case META_MASKSCALE_ACTION:
             case META_MASKSCALEPART_ACTION:
             {
-//                OSL_FAIL( "Unsupported PICT-Action: META_MASK..._ACTION!" );
+                // OSL_FAIL( "Unsupported PICT-Action: META_MASK..._ACTION!" );
             }
             break;
 
@@ -1888,13 +1880,13 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
             case META_WALLPAPER_ACTION:
             {
-//                OSL_FAIL( "Unsupported PICT-Action: META_WALLPAPER_ACTION!" );
+                // OSL_FAIL( "Unsupported PICT-Action: META_WALLPAPER_ACTION!" );
             }
             break;
 
             case META_CLIPREGION_ACTION:
             {
-//                OSL_FAIL( "Unsupported PICT-Action: META_CLIPREGION_ACTION!" );
+                // OSL_FAIL( "Unsupported PICT-Action: META_CLIPREGION_ACTION!" );
             }
             break;
 
@@ -1907,13 +1899,13 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
             case META_ISECTREGIONCLIPREGION_ACTION:
             {
-//                OSL_FAIL( "Unsupported PICT-Action: META_ISECTREGIONCLIPREGION_ACTION!" );
+                // OSL_FAIL( "Unsupported PICT-Action: META_ISECTREGIONCLIPREGION_ACTION!" );
             }
             break;
 
             case META_MOVECLIPREGION_ACTION:
             {
-//                OSL_FAIL( "Unsupported PICT-Action: META_MOVECLIPREGION_ACTION!" );
+                // OSL_FAIL( "Unsupported PICT-Action: META_MOVECLIPREGION_ACTION!" );
             }
             break;
 
@@ -1959,7 +1951,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
             case META_TEXTALIGN_ACTION:
             {
-//                OSL_FAIL( "Unsupported PICT-Action: META_TEXTALIGN_ACTION!" );
+                // OSL_FAIL( "Unsupported PICT-Action: META_TEXTALIGN_ACTION!" );
             }
             break;
 
@@ -2262,7 +2254,7 @@ sal_Bool PictWriter::WritePict(const GDIMetaFile & rMTF, SvStream & rTargetStrea
     return bStatus;
 }
 
-//================== GraphicExport - the exported Function ================
+// GraphicExport - the exported Function
 
 // this needs to be kept in sync with
 // ImpFilterLibCacheEntry::GetImportFunction() from

@@ -116,7 +116,7 @@ namespace dbaui
     void BasicInteractionHandler::implHandle(const ParametersRequest& _rParamRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
         SolarMutexGuard aGuard;
-            // want to open a dialog ....
+        // want to open a dialog...
 
         sal_Int32 nAbortPos = getContinuation(ABORT, _rContinuations);
         sal_Int32 nParamPos = getContinuation(SUPPLY_PARAMETERS, _rContinuations);
@@ -154,7 +154,7 @@ namespace dbaui
     void BasicInteractionHandler::implHandle(const SQLExceptionInfo& _rSqlInfo, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
         SolarMutexGuard aGuard;
-            // want to open a dialog ....
+        // want to open a dialog...
 
         sal_Int32 nApprovePos = getContinuation(APPROVE, _rContinuations);
         sal_Int32 nDisapprovePos = getContinuation(DISAPPROVE, _rContinuations);
@@ -182,7 +182,7 @@ namespace dbaui
 
         // execute the dialog
         OSQLMessageBox aDialog(NULL, _rSqlInfo, nDialogStyle);
-            // TODO: need a way to specify the parent window
+        // TODO: need a way to specify the parent window
         sal_Int16 nResult = aDialog.Execute();
         try
         {
@@ -227,7 +227,7 @@ namespace dbaui
     void BasicInteractionHandler::implHandle(const DocumentSaveRequest& _rDocuRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
         SolarMutexGuard aGuard;
-            // want to open a dialog ....
+        // want to open a dialog ....
 
         sal_Int32 nApprovePos = getContinuation(APPROVE, _rContinuations);
         sal_Int32 nDisApprovePos = getContinuation(DISAPPROVE, _rContinuations);
@@ -236,7 +236,7 @@ namespace dbaui
         short nRet = RET_YES;
         if ( -1 != nApprovePos )
         {
-            // fragen, ob gespeichert werden soll
+            // ask whether it should be saved
             nRet = ExecuteQuerySaveDocument(NULL,_rDocuRequest.Name);
         }
 

@@ -29,11 +29,8 @@
 
 #include <algorithm>
 
-//.........................................................................
 namespace frm
 {
-//.........................................................................
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
@@ -58,23 +55,18 @@ namespace
     }
 }
 
-//========================================================================
 // class OGroupCompAcc
-//========================================================================
-//------------------------------------------------------------------
 OGroupCompAcc::OGroupCompAcc(const Reference<XPropertySet>& rxElement, const OGroupComp& _rGroupComp )
                :m_xComponent( rxElement )
                ,m_aGroupComp( _rGroupComp )
 {
 }
 
-//------------------------------------------------------------------
 sal_Bool OGroupCompAcc::operator==( const OGroupCompAcc& rCompAcc ) const
 {
     return (m_xComponent == rCompAcc.GetComponent());
 }
 
-//------------------------------------------------------------------
 class OGroupCompAccLess : public ::std::binary_function<OGroupCompAcc, OGroupCompAcc, sal_Bool>
 {
 public:
@@ -86,18 +78,13 @@ public:
     }
 };
 
-//========================================================================
 // class OGroupComp
-//========================================================================
-
-//------------------------------------------------------------------
 OGroupComp::OGroupComp()
     :m_nPos( -1 )
     ,m_nTabIndex( 0 )
 {
 }
 
-//------------------------------------------------------------------
 OGroupComp::OGroupComp(const OGroupComp& _rSource)
     :m_aName( _rSource.m_aName )
     ,m_xComponent( _rSource.m_xComponent )
@@ -107,7 +94,6 @@ OGroupComp::OGroupComp(const OGroupComp& _rSource)
 {
 }
 
-//------------------------------------------------------------------
 OGroupComp::OGroupComp(const Reference<XPropertySet>& rxSet, sal_Int32 nInsertPos )
     : m_aName( OGroupManager::GetGroupName( rxSet ) )
     , m_xComponent( rxSet )
@@ -118,18 +104,16 @@ OGroupComp::OGroupComp(const Reference<XPropertySet>& rxSet, sal_Int32 nInsertPo
     if (m_xComponent.is())
     {
         if (hasProperty( PROPERTY_TABINDEX, m_xComponent ) )
-            // Indices kleiner 0 werden wie 0 behandelt
+            // Indices smaller than 0 are treated like 0
             m_nTabIndex = std::max(getINT16(m_xComponent->getPropertyValue( PROPERTY_TABINDEX )) , sal_Int16(0));
     }
 }
 
-//------------------------------------------------------------------
 sal_Bool OGroupComp::operator==( const OGroupComp& rComp ) const
 {
     return m_nTabIndex == rComp.GetTabIndex() && m_nPos == rComp.GetPos();
 }
 
-//------------------------------------------------------------------
 class OGroupCompLess : public ::std::binary_function<OGroupComp, OGroupComp, sal_Bool>
 {
 public:
@@ -147,23 +131,17 @@ public:
     }
 };
 
-//========================================================================
 // class OGroup
-//========================================================================
-
-//------------------------------------------------------------------
 OGroup::OGroup( const OUString& rGroupName )
         :m_aGroupName( rGroupName )
         ,m_nInsertPos(0)
 {
 }
 
-//------------------------------------------------------------------
 OGroup::~OGroup()
 {
 }
 
-//------------------------------------------------------------------
 void OGroup::InsertComponent( const Reference<XPropertySet>& xSet )
 {
     OGroupComp aNewGroupComp( xSet, m_nInsertPos );
@@ -174,7 +152,6 @@ void OGroup::InsertComponent( const Reference<XPropertySet>& xSet )
     m_nInsertPos++;
 }
 
-//------------------------------------------------------------------
 void OGroup::RemoveComponent( const Reference<XPropertySet>& rxElement )
 {
     sal_Int32 nGroupCompAccPos;
@@ -190,12 +167,12 @@ void OGroup::RemoveComponent( const Reference<XPropertySet>& rxElement )
             m_aCompAccArray.erase( m_aCompAccArray.begin() + nGroupCompAccPos );
             m_aCompArray.erase( m_aCompArray.begin() + nGroupCompPos );
 
-            /*============================================================
+            /*
             Durch das Entfernen der GroupComp ist die Einfuegeposition
             ungueltig geworden. Sie braucht hier aber nicht angepasst werden,
             da sie fortlaufend vergeben wird und damit immer
             aufsteigend eindeutig ist.
-            ============================================================*/
+            */
         }
         else
         {
@@ -208,13 +185,11 @@ void OGroup::RemoveComponent( const Reference<XPropertySet>& rxElement )
     }
 }
 
-//------------------------------------------------------------------
 sal_Bool OGroup::operator==( const OGroup& rGroup ) const
 {
     return m_aGroupName.equals(rGroup.GetGroupName());
 }
 
-//------------------------------------------------------------------
 class OGroupLess : public ::std::binary_function<OGroup, OGroup, sal_Bool>
 {
 public:
@@ -224,7 +199,6 @@ public:
     }
 };
 
-//------------------------------------------------------------------
 Sequence< Reference<XControlModel>  > OGroup::GetControlModels() const
 {
     sal_Int32 nLen = m_aCompArray.size();
@@ -240,7 +214,7 @@ Sequence< Reference<XControlModel>  > OGroup::GetControlModels() const
 }
 
 DBG_NAME(OGroupManager);
-//------------------------------------------------------------------
+
 OGroupManager::OGroupManager(const Reference< XContainer >& _rxContainer)
     :m_pCompGroup( new OGroup( OUString("AllComponentGroup") ) )
     ,m_xContainer(_rxContainer)
@@ -254,16 +228,14 @@ OGroupManager::OGroupManager(const Reference< XContainer >& _rxContainer)
     decrement(m_refCount);
 }
 
-//------------------------------------------------------------------
 OGroupManager::~OGroupManager()
 {
     DBG_DTOR(OGroupManager,NULL);
-    // Alle Components und CompGroup loeschen
+    // delete all Components and CompGroup
     delete m_pCompGroup;
 }
 
 // XPropertyChangeListener
-//------------------------------------------------------------------
 void OGroupManager::disposing(const EventObject& evt) throw( RuntimeException )
 {
     Reference<XContainer>  xContainer(evt.Source, UNO_QUERY);
@@ -271,23 +243,22 @@ void OGroupManager::disposing(const EventObject& evt) throw( RuntimeException )
     {
         DELETEZ(m_pCompGroup);
 
-        ////////////////////////////////////////////////////////////////
-        // Gruppen loeschen
+        // delete group
         m_aGroupArr.clear();
         m_xContainer.clear();
     }
 }
-// -----------------------------------------------------------------------------
+
 void OGroupManager::removeFromGroupMap(const OUString& _sGroupName,const Reference<XPropertySet>& _xSet)
 {
-    // Component aus CompGroup entfernen
+    // remove Component from CompGroup
     m_pCompGroup->RemoveComponent( _xSet );
 
     OGroupArr::iterator aFind = m_aGroupArr.find(_sGroupName);
 
     if ( aFind != m_aGroupArr.end() )
     {
-        // Gruppe vorhanden
+        // group exists
         aFind->second.RemoveComponent( _xSet );
 
         // Wenn Anzahl der Gruppenelemente == 1 ist, Gruppe deaktivieren
@@ -317,12 +288,12 @@ void OGroupManager::removeFromGroupMap(const OUString& _sGroupName,const Referen
     if (hasProperty(PROPERTY_TABINDEX, _xSet))
         _xSet->removePropertyChangeListener( PROPERTY_TABINDEX, this );
 }
-//------------------------------------------------------------------
+
 void SAL_CALL OGroupManager::propertyChange(const PropertyChangeEvent& evt) throw ( ::com::sun::star::uno::RuntimeException)
 {
     Reference<XPropertySet>  xSet(evt.Source, UNO_QUERY);
 
-    // Component aus Gruppe entfernen
+    // remove Component from group
     OUString     sGroupName;
     if (hasProperty( PROPERTY_GROUP_NAME, xSet ))
         xSet->getPropertyValue( PROPERTY_GROUP_NAME ) >>= sGroupName;
@@ -349,7 +320,6 @@ void SAL_CALL OGroupManager::propertyChange(const PropertyChangeEvent& evt) thro
 }
 
 // XContainerListener
-//------------------------------------------------------------------
 void SAL_CALL OGroupManager::elementInserted(const ContainerEvent& Event) throw ( ::com::sun::star::uno::RuntimeException)
 {
     Reference< XPropertySet > xProps;
@@ -358,7 +328,6 @@ void SAL_CALL OGroupManager::elementInserted(const ContainerEvent& Event) throw 
         InsertElement( xProps );
 }
 
-//------------------------------------------------------------------
 void SAL_CALL OGroupManager::elementRemoved(const ContainerEvent& Event) throw ( ::com::sun::star::uno::RuntimeException)
 {
     Reference<XPropertySet> xProps;
@@ -367,7 +336,6 @@ void SAL_CALL OGroupManager::elementRemoved(const ContainerEvent& Event) throw (
         RemoveElement( xProps );
 }
 
-//------------------------------------------------------------------
 void SAL_CALL OGroupManager::elementReplaced(const ContainerEvent& Event) throw ( ::com::sun::star::uno::RuntimeException)
 {
     Reference<XPropertySet> xProps;
@@ -382,19 +350,16 @@ void SAL_CALL OGroupManager::elementReplaced(const ContainerEvent& Event) throw 
 }
 
 // Other functions
-//------------------------------------------------------------------
 Sequence<Reference<XControlModel> > OGroupManager::getControlModels()
 {
     return m_pCompGroup->GetControlModels();
 }
 
-//------------------------------------------------------------------
 sal_Int32 OGroupManager::getGroupCount()
 {
     return m_aActiveGroupMap.size();
 }
 
-//------------------------------------------------------------------
 void OGroupManager::getGroup(sal_Int32 nGroup, Sequence< Reference<XControlModel> >& _rGroup, OUString& _rName)
 {
     OSL_ENSURE(nGroup >= 0 && (size_t)nGroup < m_aActiveGroupMap.size(),"OGroupManager::getGroup: Invalid group index!");
@@ -403,7 +368,6 @@ void OGroupManager::getGroup(sal_Int32 nGroup, Sequence< Reference<XControlModel
     _rGroup                         = aGroupPos->second.GetControlModels();
 }
 
-//------------------------------------------------------------------
 void OGroupManager::getGroupByName(const OUString& _rName, Sequence< Reference<XControlModel>  >& _rGroup)
 {
     OGroupArr::iterator aFind = m_aGroupArr.find(_rName);
@@ -411,7 +375,6 @@ void OGroupManager::getGroupByName(const OUString& _rName, Sequence< Reference<X
         _rGroup = aFind->second.GetControlModels();
 }
 
-//------------------------------------------------------------------
 void OGroupManager::InsertElement( const Reference<XPropertySet>& xSet )
 {
     // Nur ControlModels
@@ -458,7 +421,6 @@ void OGroupManager::InsertElement( const Reference<XPropertySet>& xSet )
             m_aActiveGroupMap.push_back(  aFind );
     }
 
-
     // Bei Component als PropertyChangeListener anmelden
     xSet->addPropertyChangeListener( PROPERTY_NAME, this );
     if (hasProperty(PROPERTY_GROUP_NAME, xSet))
@@ -467,10 +429,8 @@ void OGroupManager::InsertElement( const Reference<XPropertySet>& xSet )
     // Tabindex muss nicht jeder unterstuetzen
     if (hasProperty(PROPERTY_TABINDEX, xSet))
         xSet->addPropertyChangeListener( PROPERTY_TABINDEX, this );
-
 }
 
-//------------------------------------------------------------------
 void OGroupManager::RemoveElement( const Reference<XPropertySet>& xSet )
 {
     // Nur ControlModels
@@ -498,9 +458,6 @@ OUString OGroupManager::GetGroupName( ::com::sun::star::uno::Reference< ::com::s
         xComponent->getPropertyValue( PROPERTY_NAME ) >>= sGroupName;
     return sGroupName;
 }
-
-//.........................................................................
 }   // namespace frm
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

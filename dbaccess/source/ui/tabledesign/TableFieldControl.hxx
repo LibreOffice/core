@@ -32,7 +32,7 @@ namespace dbaui
     protected:
         virtual void        ActivateAggregate( EControlType eType );
         virtual void        DeactivateAggregate( EControlType eType );
-        // Sind von den abgeleiteten Klassen zu impl.
+        // are to be implemented by the derived classes
         virtual void        CellModified(long nRow, sal_uInt16 nColId );
         virtual sal_Bool        IsReadOnly();
         virtual void        SetModified(sal_Bool bModified);
