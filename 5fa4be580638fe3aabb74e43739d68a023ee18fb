@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a890539_0d8fd124",
+        "filename": "vcl/source/app/settings_impl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-02-22T15:04:31Z",
+      "side": 1,
+      "message": "Why an extra header file? The definitions can go directly to settings.cxx",
+      "revId": "5fa4be580638fe3aabb74e43739d68a023ee18fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
