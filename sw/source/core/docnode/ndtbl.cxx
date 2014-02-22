@@ -1029,7 +1029,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                     if (rTxt[nChPos] == cCh)
                     {
                         aPosArr.push_back( static_cast<sal_uInt16>(
-                                        aFInfo.GetCharPos( nChPos+1, sal_False )) );
+                                        aFInfo.GetCharPos( nChPos+1, false )) );
                     }
                 }
 

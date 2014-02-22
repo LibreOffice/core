@@ -37,22 +37,22 @@ public:
     inline SwTxtFrmInfo( const SwTxtFrm *pTxtFrm ) : pFrm(pTxtFrm) { }
 
     // Does the paragraph fit into a single line?
-    sal_Bool IsOneLine() const;
+    bool IsOneLine() const;
 
     // Is the line filled to X%?
-    sal_Bool IsFilled( const sal_uInt8 nPercent ) const;
+    bool IsFilled( const sal_uInt8 nPercent ) const;
 
     // Where does the text (w/o whitespaces) start (rel. in frame)?
     SwTwips GetLineStart() const;
 
     // return center position of the next character
-    SwTwips GetCharPos( sal_Int32 nChar, sal_Bool bCenter = sal_True ) const;
+    SwTwips GetCharPos( sal_Int32 nChar, bool bCenter = true ) const;
 
     // collect all whitespaces at the beginning and end of a line in Pam
-    void GetSpaces( SwPaM &rPam, sal_Bool bWithLineBreak ) const;
+    void GetSpaces( SwPaM &rPam, bool bWithLineBreak ) const;
 
     // Is a bullet point/symbol/etc. at the first text position?
-    sal_Bool IsBullet( sal_Int32 nTxtPos ) const;
+    bool IsBullet( sal_Int32 nTxtPos ) const;
 
     // determine intentation for first line
     SwTwips GetFirstIndent() const;

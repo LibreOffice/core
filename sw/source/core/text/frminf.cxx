@@ -65,24 +65,24 @@ sal_Int32 SwTxtMargin::GetTxtEnd() const
  *************************************************************************/
 
 // Does the paragraph fit into one line?
-sal_Bool SwTxtFrmInfo::IsOneLine() const
+bool SwTxtFrmInfo::IsOneLine() const
 {
     const SwLineLayout *pLay = pFrm->GetPara();
     if( !pLay )
-        return sal_False;
+        return false;
     else
     {
         // For follows false of course
         if( pFrm->GetFollow() )
-            return sal_False;
+            return false;
         pLay = pLay->GetNext();
         while( pLay )
         {
             if( pLay->GetLen() )
-                return sal_False;
+                return false;
             pLay = pLay->GetNext();
         }
-        return sal_True;
+        return true;
     }
 }
 
@@ -91,11 +91,11 @@ sal_Bool SwTxtFrmInfo::IsOneLine() const
  *************************************************************************/
 
 // Is the line filled for X percent?
-sal_Bool SwTxtFrmInfo::IsFilled( const sal_uInt8 nPercent ) const
+bool SwTxtFrmInfo::IsFilled( const sal_uInt8 nPercent ) const
 {
     const SwLineLayout *pLay = pFrm->GetPara();
     if( !pLay )
-        return sal_False;
+        return false;
     else
     {
         long nWidth = pFrm->Prt().Width();
@@ -141,7 +141,7 @@ SwTwips SwTxtFrmInfo::GetLineStart() const
 }
 
 // Calculates the character's position and returns the middle position
-SwTwips SwTxtFrmInfo::GetCharPos( sal_Int32 nChar, sal_Bool bCenter ) const
+SwTwips SwTxtFrmInfo::GetCharPos( sal_Int32 nChar, bool bCenter ) const
 {
     SWRECTFN( pFrm )
     SwFrmSwapper aSwapper( pFrm, true );
@@ -208,7 +208,7 @@ SwPaM *AddPam( SwPaM *pPam, const SwTxtFrm* pTxtFrm,
 }
 
 // Accumulates the whitespace at line start and end in the Pam
-void SwTxtFrmInfo::GetSpaces( SwPaM &rPam, sal_Bool bWithLineBreak ) const
+void SwTxtFrmInfo::GetSpaces( SwPaM &rPam, bool bWithLineBreak ) const
 {
     SwTxtSizeInfo aInf( (SwTxtFrm*)pFrm );
     SwTxtMargin aLine( (SwTxtFrm*)pFrm, &aInf );
@@ -251,7 +251,7 @@ void SwTxtFrmInfo::GetSpaces( SwPaM &rPam, sal_Bool bWithLineBreak ) const
 
 // Is there a bullet/symbol etc. at the text position?
 // Fonts: CharSet, SYMBOL und DONTKNOW
-sal_Bool SwTxtFrmInfo::IsBullet( sal_Int32 nTxtStart ) const
+bool SwTxtFrmInfo::IsBullet( sal_Int32 nTxtStart ) const
 {
     SwTxtSizeInfo aInf( (SwTxtFrm*)pFrm );
     SwTxtMargin aLine( (SwTxtFrm*)pFrm, &aInf );
