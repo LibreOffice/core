@@ -516,16 +516,14 @@ bool SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             }
             if ( !bRet )
             {
-                Point *pPoint = pCMS && pCMS->pFill ? new Point( rPoint ) : NULL;
+                const bool bFill = pCMS && pCMS->pFill;
+                Point aPoint( rPoint );
                 const SwCntntFrm *pCnt = GetCntntPos( rPoint, true );
-                if( pPoint && pCnt->IsTxtFrm() )
+                if( bFill && pCnt->IsTxtFrm() )
                 {
-                    pCnt->GetCrsrOfst( pPos, *pPoint, pCMS );
-                    rPoint = *pPoint;
+                    rPoint = aPoint;
                 }
-                else
-                    pCnt->GetCrsrOfst( pPos, rPoint, pCMS );
-                delete pPoint;
+                pCnt->GetCrsrOfst( pPos, rPoint, pCMS );
             }
             return true;
         }
@@ -599,18 +597,16 @@ bool SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         }
         if ( !bRet )
         {
-            Point *pPoint = pCMS && pCMS->pFill ? new Point( rPoint ) : NULL;
+            const bool bFill = pCMS && pCMS->pFill;
+            Point aPoint( rPoint );
             const SwCntntFrm *pCnt = GetCntntPos( rPoint, true, false, false, pCMS );
             if ( pCMS && pCMS->bStop )
                 return false;
-            if( pPoint && pCnt->IsTxtFrm() )
+            if( bFill && pCnt->IsTxtFrm() )
             {
-                pCnt->GetCrsrOfst( pPos, *pPoint, pCMS );
-                rPoint = *pPoint;
+                rPoint = aPoint;
             }
-            else
-                pCnt->GetCrsrOfst( pPos, rPoint, pCMS );
-            delete pPoint;
+            pCnt->GetCrsrOfst( pPos, rPoint, pCMS );
             bRet = true;
         }
     }
