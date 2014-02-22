@@ -98,7 +98,7 @@ public:
     }
 };
 
-OUString TextEffectsHandler::getSchemeColorTypeString(sal_Int32 nType)
+OUString TextEffectsHandler::getSchemeColorValTypeString(sal_Int32 nType)
 {
     switch (nType)
     {
@@ -118,15 +118,68 @@ OUString TextEffectsHandler::getSchemeColorTypeString(sal_Int32 nType)
     return OUString();
 }
 
+OUString TextEffectsHandler::getRectAlignmentString(sal_Int32 nType)
+{
+    switch (nType)
+    {
+        case NS_ooxml::LN_ST_RectAlignment_none: return OUString("none");
+        case NS_ooxml::LN_ST_RectAlignment_tl: return OUString("tl");
+        case NS_ooxml::LN_ST_RectAlignment_t: return OUString("t");
+        case NS_ooxml::LN_ST_RectAlignment_tr: return OUString("tr");
+        case NS_ooxml::LN_ST_RectAlignment_l: return OUString("l");
+        case NS_ooxml::LN_ST_RectAlignment_ctr: return OUString("ctr");
+        case NS_ooxml::LN_ST_RectAlignment_r: return OUString("r");
+        case NS_ooxml::LN_ST_RectAlignment_bl: return OUString("bl");
+        case NS_ooxml::LN_ST_RectAlignment_b: return OUString("b");
+        case NS_ooxml::LN_ST_RectAlignment_br: return OUString("br");
 
-TextEffectsHandler::TextEffectsHandler() :
+        default: break;
+    }
+    return OUString();
+}
+
+void TextEffectsHandler::convertElementIdToPropertyId(sal_Int32 aElementId)
+{
+    switch(aElementId)
+    {
+        case NS_ooxml::LN_glow_glow:
+            maPropertyId = PROP_CHAR_GLOW_TEXT_EFFECT;
+            maElementName = "glow";
+            break;
+        case NS_ooxml::LN_shadow_shadow:
+            maPropertyId = PROP_CHAR_SHADOW_TEXT_EFFECT;
+            maElementName = "shadow";
+            break;
+        case NS_ooxml::LN_reflection_reflection:
+        case NS_ooxml::LN_textOutline_textOutline:
+        case NS_ooxml::LN_textFill_textFill:
+        case NS_ooxml::LN_scene3d_scene3d:
+        case NS_ooxml::LN_props3d_props3d:
+        case NS_ooxml::LN_ligatures_ligatures:
+        case NS_ooxml::LN_numForm_numForm:
+        case NS_ooxml::LN_numSpacing_numSpacing:
+        case NS_ooxml::LN_stylisticSets_stylisticSets:
+        case NS_ooxml::LN_cntxtAlts_cntxtAlts:
+        default:
+            break;
+    }
+}
+
+TextEffectsHandler::TextEffectsHandler(sal_uInt32 aElementId) :
     LoggedProperties(dmapper_logger, "TextEffectsHandler"),
     mpGrabBagStack(NULL)
 {
+    convertElementIdToPropertyId(aElementId);
+    mpGrabBagStack.reset(new GrabBagStack(maElementName));
 }
 
 TextEffectsHandler::~TextEffectsHandler()
 {
+}
+
+boost::optional<PropertyIds> TextEffectsHandler::getGrabBagPropertyId()
+{
+    return maPropertyId;
 }
 
 void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
@@ -147,7 +200,7 @@ void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
             mpGrabBagStack->appendElement("val", makeAny(sal_Int32(aValue.getInt())));
             break;
         case NS_ooxml::LN_CT_SchemeColor_val:
-            mpGrabBagStack->appendElement("val", makeAny(getSchemeColorTypeString(sal_Int32(aValue.getInt()))));
+            mpGrabBagStack->appendElement("val", makeAny(getSchemeColorValTypeString(sal_Int32(aValue.getInt()))));
             break;
         case NS_ooxml::LN_CT_SRgbColor_val:
             {
@@ -155,11 +208,38 @@ void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
                 OUStringBuffer aStr;
                 comphelper::string::padToLength(aStr, 6 - aBuf.getLength(), '0');
                 aStr.append(aBuf.getStr());
-                mpGrabBagStack->appendElement("val", makeAny(aStr.makeStringAndClear()));
+                mpGrabBagStack->appendElement("val", makeAny(aStr.makeStringAndClear().toAsciiUpperCase()));
             }
             break;
         case NS_ooxml::LN_CT_Glow_rad:
             mpGrabBagStack->appendElement("rad", makeAny(sal_Int32(aValue.getInt())));
+            break;
+        case NS_ooxml::LN_CT_Shadow_blurRad:
+            mpGrabBagStack->appendElement("blurRad", makeAny(sal_Int32(aValue.getInt())));
+            break;
+        case NS_ooxml::LN_CT_Shadow_dist:
+            mpGrabBagStack->appendElement("dist", makeAny(sal_Int32(aValue.getInt())));
+            break;
+        case NS_ooxml::LN_CT_Shadow_dir:
+            mpGrabBagStack->appendElement("dir", makeAny(sal_Int32(aValue.getInt())));
+            break;
+        case NS_ooxml::LN_CT_Shadow_sx:
+            mpGrabBagStack->appendElement("sx", makeAny(sal_Int32(aValue.getInt())));
+            break;
+        case NS_ooxml::LN_CT_Shadow_sy:
+            mpGrabBagStack->appendElement("sy", makeAny(sal_Int32(aValue.getInt())));
+            break;
+        case NS_ooxml::LN_CT_Shadow_kx:
+            mpGrabBagStack->appendElement("kx", makeAny(sal_Int32(aValue.getInt())));
+            break;
+        case NS_ooxml::LN_CT_Shadow_ky:
+            mpGrabBagStack->appendElement("ky", makeAny(sal_Int32(aValue.getInt())));
+            break;
+        case NS_ooxml::LN_CT_Shadow_algn:
+            {
+                uno::Any aAny = makeAny(getRectAlignmentString(sal_Int32(aValue.getInt())));
+                mpGrabBagStack->appendElement("algn", aAny);
+            }
             break;
         default:
             break;
@@ -250,22 +330,6 @@ beans::PropertyValue TextEffectsHandler::getInteropGrabBag()
     mpGrabBagStack.reset();
     return aReturn;
 }
-
-void TextEffectsHandler::enableInteropGrabBag(OUString aName)
-{
-    mpGrabBagStack.reset(new GrabBagStack(aName));
-}
-
-void TextEffectsHandler::disableInteropGrabBag()
-{
-    mpGrabBagStack.reset();
-}
-
-bool TextEffectsHandler::isInteropGrabBagEnabled()
-{
-    return mpGrabBagStack.get() != NULL;
-}
-
 
 }//namespace dmapper
 } //namespace writerfilter

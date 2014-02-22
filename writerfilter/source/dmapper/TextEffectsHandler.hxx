@@ -13,10 +13,15 @@
 
 #include <WriterFilterDllApi.hxx>
 #include <resourcemodel/LoggedResources.hxx>
+
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <i18nlangtag/languagetag.hxx>
+
+#include <PropertyIds.hxx>
+
 #include <boost/scoped_ptr.hpp>
+#include <boost/optional.hpp>
 
 namespace writerfilter {
 namespace dmapper
@@ -28,22 +33,26 @@ class GrabBagStack;
 class TextEffectsHandler : public LoggedProperties
 {
 private:
+    boost::optional<PropertyIds>    maPropertyId;
+    OUString                        maElementName;
     boost::scoped_ptr<GrabBagStack> mpGrabBagStack;
+
+    void convertElementIdToPropertyId(sal_Int32 aElementId);
 
     // LoggedProperties
     virtual void lcl_attribute(Id aName, Value& aValue);
     virtual void lcl_sprm(Sprm& sprm);
 
 public:
-    TextEffectsHandler();
+    TextEffectsHandler(sal_uInt32 aElementId);
     virtual ~TextEffectsHandler();
 
-    css::beans::PropertyValue getInteropGrabBag();
-    void enableInteropGrabBag(OUString aName);
-    void disableInteropGrabBag();
-    bool isInteropGrabBagEnabled();
+    boost::optional<PropertyIds> getGrabBagPropertyId();
 
-    static OUString getSchemeColorTypeString(sal_Int32 nType);
+    css::beans::PropertyValue getInteropGrabBag();
+
+    static OUString getSchemeColorValTypeString(sal_Int32 nType);
+    static OUString getRectAlignmentString(sal_Int32 nType);
 };
 
 typedef boost::shared_ptr<TextEffectsHandler> TextEffectsHandlerPtr;

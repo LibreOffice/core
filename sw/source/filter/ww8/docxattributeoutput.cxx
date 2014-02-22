@@ -1123,6 +1123,7 @@ void DocxAttributeOutput::InitCollectedRunProperties()
         FSNS( XML_w, XML_oMath ),
         FSNS( XML_w, XML_rPrChange ),
         FSNS( XML_w14, XML_glow ),
+        FSNS( XML_w14, XML_shadow ),
     };
 
     // postpone the output so that we can later [in EndParagraphProperties()]
@@ -1145,10 +1146,22 @@ struct NameToId
     const sal_Int32 maId;
 };
 
-const NameToId aNameToIdMapping[] =
+const NameToId constNameToIdMapping[] =
 {
+    { OUString("glow"),      FSNS( XML_w14, XML_glow ) },
+    { OUString("shadow"),    FSNS( XML_w14, XML_shadow ) },
+
     { OUString("val"),       FSNS( XML_w14, XML_val ) },
     { OUString("rad"),       FSNS( XML_w14, XML_rad ) },
+    { OUString("blurRad"),   FSNS( XML_w14, XML_blurRad ) },
+    { OUString("dist"),      FSNS( XML_w14, XML_dist ) },
+    { OUString("dir"),       FSNS( XML_w14, XML_dir ) },
+    { OUString("sx"),        FSNS( XML_w14, XML_sx ) },
+    { OUString("sy"),        FSNS( XML_w14, XML_sy ) },
+    { OUString("kx"),        FSNS( XML_w14, XML_kx ) },
+    { OUString("ky"),        FSNS( XML_w14, XML_ky ) },
+    { OUString("algn"),      FSNS( XML_w14, XML_algn ) },
+
     { OUString("schemeClr"), FSNS( XML_w14, XML_schemeClr ) },
     { OUString("srgbClr"),   FSNS( XML_w14, XML_srgbClr ) },
     { OUString("tint"),      FSNS( XML_w14, XML_tint ) },
@@ -1162,6 +1175,19 @@ const NameToId aNameToIdMapping[] =
     { OUString("lumOff"),    FSNS( XML_w14, XML_lumOff ) },
     { OUString("lumMod"),    FSNS( XML_w14, XML_lumMod ) },
 };
+
+boost::optional<sal_Int32> lclGetElementIdForName(OUString aName)
+{
+    sal_Int32 aLength = sizeof (constNameToIdMapping) / sizeof(NameToId);
+    for (sal_Int32 i=0; i < aLength; ++i)
+    {
+        if(aName == constNameToIdMapping[i].maName)
+        {
+            return constNameToIdMapping[i].maId;
+        }
+    }
+    return boost::optional<sal_Int32>();
+}
 
 void lclProcessRecursiveGrabBag(sal_Int32 aElementId, css::uno::Sequence<css::beans::PropertyValue> aElements, sax_fastparser::FSHelperPtr pSerializer)
 {
@@ -1190,14 +1216,9 @@ void lclProcessRecursiveGrabBag(sal_Int32 aElementId, css::uno::Sequence<css::be
             aValue =  OUStringToOString(aAny.get<OUString>(), RTL_TEXTENCODING_ASCII_US);
         }
 
-        sal_Int32 aLength = sizeof (aNameToIdMapping) / sizeof(NameToId);
-        for (sal_Int32 i=0; i < aLength; ++i)
-        {
-            if(aAttributes[j].Name == aNameToIdMapping[i].maName)
-            {
-                pAttributes->add( aNameToIdMapping[i].maId, aValue.getStr());
-            }
-        }
+        boost::optional<sal_Int32> aSubElementId = lclGetElementIdForName(aAttributes[j].Name);
+        if(aSubElementId)
+            pAttributes->add(*aSubElementId, aValue.getStr());
     }
 
     XFastAttributeListRef xAttributesList( pAttributes );
@@ -1208,14 +1229,11 @@ void lclProcessRecursiveGrabBag(sal_Int32 aElementId, css::uno::Sequence<css::be
     {
         css::uno::Sequence<css::beans::PropertyValue> aSumElements;
 
-        sal_Int32 aLength = sizeof (aNameToIdMapping) / sizeof(NameToId);
-        for (sal_Int32 i=0; i < aLength; ++i)
+        boost::optional<sal_Int32> aSubElementId = lclGetElementIdForName(aElements[j].Name);
+        if(aSubElementId)
         {
-            if( aElements[j].Name == aNameToIdMapping[i].maName)
-            {
-                aElements[j].Value >>= aSumElements;
-                lclProcessRecursiveGrabBag(aNameToIdMapping[i].maId, aSumElements, pSerializer);
-            }
+            aElements[j].Value >>= aSumElements;
+            lclProcessRecursiveGrabBag(*aSubElementId, aSumElements, pSerializer);
         }
     }
 
@@ -1261,7 +1279,16 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
 
     if (m_aTextEffectsGrabBag.getLength() > 0)
     {
-        lclProcessRecursiveGrabBag(FSNS( XML_w14, XML_glow ), m_aTextEffectsGrabBag, m_pSerializer);
+        for (sal_Int32 i=0; i < m_aTextEffectsGrabBag.getLength(); ++i)
+        {
+            boost::optional<sal_Int32> aElementId = lclGetElementIdForName(m_aTextEffectsGrabBag[i].Name);
+            if(aElementId)
+            {
+                uno::Sequence<beans::PropertyValue> aGrabBagSeq;
+                m_aTextEffectsGrabBag[i].Value >>= aGrabBagSeq;
+                lclProcessRecursiveGrabBag(*aElementId, aGrabBagSeq, m_pSerializer);
+            }
+        }
         m_aTextEffectsGrabBag.realloc(0);
     }
 }
@@ -6437,11 +6464,14 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
         {
             // just skip these, they were processed before
         }
-        else if (i->first == "CharGlowTextEffect")
+        else if (i->first == "CharGlowTextEffect" ||
+                 i->first == "CharShadowTextEffect")
         {
-            uno::Sequence<beans::PropertyValue> aGrabBagSeq;
-            i->second >>= aGrabBagSeq;
-            m_aTextEffectsGrabBag = aGrabBagSeq;
+            beans::PropertyValue aPropertyValue;
+            i->second >>= aPropertyValue;
+            sal_Int32 aLength = m_aTextEffectsGrabBag.getLength();
+            m_aTextEffectsGrabBag.realloc(m_aTextEffectsGrabBag.getLength() + 1);
+            m_aTextEffectsGrabBag[aLength] = aPropertyValue;
         }
         else
             SAL_INFO("sw.ww8", "DocxAttributeOutput::CharGrabBag: unhandled grab bag property " << i->first);

@@ -2336,20 +2336,29 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         m_pImpl->m_nTableDepth--;
     break;
     case NS_ooxml::LN_glow_glow:
+    case NS_ooxml::LN_shadow_shadow:
+    case NS_ooxml::LN_reflection_reflection:
+    case NS_ooxml::LN_textOutline_textOutline:
+    case NS_ooxml::LN_textFill_textFill:
+    case NS_ooxml::LN_scene3d_scene3d:
+    case NS_ooxml::LN_props3d_props3d:
+    case NS_ooxml::LN_ligatures_ligatures:
+    case NS_ooxml::LN_numForm_numForm:
+    case NS_ooxml::LN_numSpacing_numSpacing:
+    case NS_ooxml::LN_stylisticSets_stylisticSets:
+    case NS_ooxml::LN_cntxtAlts_cntxtAlts:
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if( pProperties.get())
         {
-            TextEffectsHandlerPtr pTextEffectsHandlerPtr( new TextEffectsHandler );
-            sal_Bool bEnableTempGrabBag = !pTextEffectsHandlerPtr->isInteropGrabBagEnabled();
-            if( bEnableTempGrabBag )
-                pTextEffectsHandlerPtr->enableInteropGrabBag( "glow" );
+            TextEffectsHandlerPtr pTextEffectsHandlerPtr( new TextEffectsHandler(nSprmId) );
+            boost::optional<PropertyIds> aPropertyId = pTextEffectsHandlerPtr->getGrabBagPropertyId();
 
-            pProperties->resolve(*pTextEffectsHandlerPtr);
-
-            rContext->Insert(PROP_CHAR_GLOW_TEXT_EFFECT,  pTextEffectsHandlerPtr->getInteropGrabBag().Value, true, CHAR_GRAB_BAG);
-            if(bEnableTempGrabBag)
-                pTextEffectsHandlerPtr->disableInteropGrabBag();
+            if(aPropertyId)
+            {
+                pProperties->resolve(*pTextEffectsHandlerPtr);
+                rContext->Insert(*aPropertyId, uno::makeAny(pTextEffectsHandlerPtr->getInteropGrabBag()), true, CHAR_GRAB_BAG);
+            }
         }
     }
     break;

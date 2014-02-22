@@ -115,7 +115,6 @@ OUString PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_CHAR_BOTTOM_BORDER_DISTANCE: sName = "CharBottomBorderDistance"; break;
             case PROP_CHAR_SHADOW_FORMAT: sName = "CharShadowFormat"; break;
             case PROP_CHAR_HIGHLIGHT: sName = "CharHighlight"; break;
-
             case PROP_PARA_STYLE_NAME:      sName = "ParaStyleName"; break;
             case PROP_PARA_ADJUST:     sName = "ParaAdjust"; break;
             case PROP_PARA_VERT_ALIGNMENT: sName = "ParaVertAlignment"; break;
@@ -377,6 +376,7 @@ OUString PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_TOC_PARAGRAPH_OUTLINE_LEVEL   :   sName = "TOCParagraphOutlineLevel"; break;
             case PROP_CHAR_THEME_COLOR_TINT         :   sName = "CharThemeColorTint"; break;
             case PROP_CHAR_GLOW_TEXT_EFFECT         :   sName = "CharGlowTextEffect"; break;
+            case PROP_CHAR_SHADOW_TEXT_EFFECT       :   sName = "CharShadowTextEffect"; break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));
