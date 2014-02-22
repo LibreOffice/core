@@ -177,11 +177,6 @@ struct ImplThresholdRes
 #define IMAGE_DRAW_COLORTRANSFORM       ((sal_uInt16)0x0008)
 #define IMAGE_DRAW_SEMITRANSPARENT      ((sal_uInt16)0x0010)
 
-// WaveLine
-#define WAVE_FLAT                       1
-#define WAVE_SMALL                      2
-#define WAVE_NORMAL                     3
-
 // Grid
 #define GRID_DOTS                       ((sal_uLong)0x00000001)
 #define GRID_HORZLINES                  ((sal_uLong)0x00000002)
@@ -1046,7 +1041,7 @@ public:
 #endif
 
     void                        DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpaper );
-    void                        DrawWaveLine( const Point& rStartPos, const Point& rEndPos, sal_uInt16 nStyle );
+    void                        DrawWaveLine( const Point& rStartPos, const Point& rEndPos );
     void                        DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags );
 
     void                        DrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );

@@ -83,8 +83,6 @@ using namespace ::com::sun::star::linguistic2;
 #define RESDIFF     10
 
 #define WRONG_SHOW_MIN       5
-#define WRONG_SHOW_SMALL    11
-#define WRONG_SHOW_MEDIUM   15
 
 struct TabInfo
 {
@@ -169,14 +167,6 @@ static void lcl_DrawRedLines(
     long nHght = pOutDev->LogicToPixel( Size( 0, nFontHeight ) ).Height();
     if( WRONG_SHOW_MIN < nHght )
     {
-        sal_uInt16 nStyle;
-        if( WRONG_SHOW_MEDIUM < nHght )
-            nStyle = WAVE_NORMAL;
-        else if( WRONG_SHOW_SMALL < nHght )
-            nStyle = WAVE_SMALL;
-        else
-            nStyle = WAVE_FLAT;
-
         size_t nEnd, nStart = nIndex;
         bool bWrong = pWrongs->NextWrong( nStart, nEnd );
         while ( bWrong )
@@ -189,12 +179,12 @@ static void lcl_DrawRedLines(
             if ( nEnd > nMaxEnd )
                 nEnd = nMaxEnd;
             Point aPnt1( rPnt );
-            if ( bVertical && ( nStyle != WAVE_FLAT ) )
+            if ( bVertical )
             {
                 // VCL doesn't know that the text is vertical, and is manipulating
                 // the positions a little bit in y direction...
                 long nOnePixel = pOutDev->PixelToLogic( Size( 0, 1 ) ).Height();
-                long nCorrect = ( nStyle == WAVE_NORMAL ) ? 2*nOnePixel : nOnePixel;
+                long nCorrect = 2*nOnePixel;
                 aPnt1.Y() -= nCorrect;
                 aPnt1.X() -= nCorrect;
             }
@@ -227,7 +217,7 @@ static void lcl_DrawRedLines(
                 aPnt2 = Rotate( aPnt2, nOrientation, rOrigin );
             }
 
-            pOutDev->DrawWaveLine( aPnt1, aPnt2, nStyle );
+            pOutDev->DrawWaveLine( aPnt1, aPnt2 );
 
             nStart = nEnd+1;
             if ( nEnd < nMaxEnd )

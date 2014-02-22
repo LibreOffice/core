@@ -38,9 +38,6 @@ enum WrongAreaLineType
 {
     WRONGAREA_DASHED,
     WRONGAREA_WAVE,
-    WRONGAREA_WAVE_NORMAL,
-    WRONGAREA_WAVE_SMALL,
-    WRONGAREA_WAVE_FLAT,
     WRONGAREA_NONE
 };
 
@@ -122,11 +119,11 @@ private:
                 }
                 if (::com::sun::star::awt::FontUnderline::WAVE == lineType)
                 {
-                    return WRONGAREA_WAVE_NORMAL;
+                    return WRONGAREA_WAVE;
                 }
                 if (::com::sun::star::awt::FontUnderline::SMALLWAVE == lineType)
                 {
-                    return WRONGAREA_WAVE_SMALL;
+                    return WRONGAREA_WAVE; //Code draws wave height based on space that fits.
                 }
             }
         }
