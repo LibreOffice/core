@@ -350,7 +350,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
                     nCount = aToken.toInt32();
                     aCoordinates.realloc(nCount);
                 }
-                else
+                else if (aToken.getLength())
                 {
                     // The coordinates are in an (x,y) form.
                     aToken = aToken.copy(1, aToken.getLength() - 2);
