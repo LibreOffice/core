@@ -873,7 +873,7 @@ SvStream& connectivity::dbase::WriteONDXPage(SvStream &rStream, const ONDXPage& 
     // check if we have to fill the stream with '\0'
     if(i < rPage.rIndex.getHeader().db_maxkeys)
     {
-        sal_uIntPtr nTell = rStream.Tell() % DINDEX_PAGE_SIZE;
+        size_t nTell = rStream.Tell() % DINDEX_PAGE_SIZE;
         sal_uInt16 nBufferSize = rStream.GetBufferSize();
         sal_uIntPtr nRemainSize = nBufferSize - nTell;
         if ( nRemainSize <= nBufferSize )

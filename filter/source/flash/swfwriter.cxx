@@ -114,10 +114,10 @@ void ImplCopySvStreamToXOutputStream( SvStream& rIn, Reference< XOutputStream > 
     sal_uInt32 nBufferSize = 64*1024;
 
     rIn.Seek( STREAM_SEEK_TO_END );
-    sal_uInt32 nSize = rIn.Tell();
+    size_t nSize = rIn.Tell();
     rIn.Seek( STREAM_SEEK_TO_BEGIN );
 
-    Sequence< sal_Int8 > aBuffer( min( nBufferSize, nSize ) );
+    Sequence< sal_Int8 > aBuffer( min( (size_t)nBufferSize, nSize ) );
 
     while( nSize )
     {
@@ -159,7 +159,7 @@ void Writer::storeTo( Reference< XOutputStream > &xOutStream )
     aHeader.addUI8( 'S' );
     aHeader.addUI8( 5 );
 
-    sal_uInt32 nSizePos = aHeader.Tell();
+    size_t nSizePos = aHeader.Tell();
 
     aHeader.WriteUInt32( (sal_uInt32)0 );
 
@@ -173,7 +173,7 @@ void Writer::storeTo( Reference< XOutputStream > &xOutStream )
 
     aHeader.addUI16( _uInt16(mnFrames) );
 
-    const sal_uInt32 nSize = aHeader.Tell() + mpFontsStream->Tell() + mpMovieStream->Tell();
+    const size_t nSize = aHeader.Tell() + mpFontsStream->Tell() + mpMovieStream->Tell();
 
     aHeader.Seek( nSizePos );
     aHeader.WriteUInt32( (sal_uInt32)nSize );

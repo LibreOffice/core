@@ -76,13 +76,13 @@ class BaseStorageStream : public StorageBase
 {
 public:
                         TYPEINFO();
-    virtual sal_uLong   Read( void * pData, sal_uLong nSize ) = 0;
-    virtual sal_uLong   Write( const void* pData, sal_uLong nSize ) = 0;
-    virtual sal_uLong   Seek( sal_uLong nPos ) = 0;
-    virtual sal_uLong   Tell() = 0;
+    virtual size_t      Read( void * pData, size_t nSize ) = 0;
+    virtual size_t      Write( const void* pData, size_t nSize ) = 0;
+    virtual size_t      Seek( size_t nPos ) = 0;
+    virtual size_t      Tell() = 0;
     virtual void        Flush() = 0;
-    virtual bool        SetSize( sal_uLong nNewSize ) = 0;
-    virtual sal_uLong   GetSize() const = 0;
+    virtual bool        SetSize( size_t nNewSize ) = 0;
+    virtual size_t      GetSize() const = 0;
     virtual bool        CopyTo( BaseStorageStream * pDestStm ) = 0;
     virtual bool        Commit() = 0;
     virtual bool        Revert() = 0;
@@ -152,19 +152,19 @@ public:
 class StorageStream : public BaseStorageStream, public OLEStorageBase
 {
 //friend class Storage;
-    sal_uLong           nPos;                             // current position
+    size_t           nPos;                             // current position
 protected:
                         ~StorageStream();
 public:
                         TYPEINFO();
                         StorageStream( StgIo*, StgDirEntry*, StreamMode );
-    virtual sal_uLong   Read( void * pData, sal_uLong nSize );
-    virtual sal_uLong   Write( const void* pData, sal_uLong nSize );
-    virtual sal_uLong   Seek( sal_uLong nPos );
-    virtual sal_uLong   Tell() { return nPos; }
+    virtual size_t      Read( void * pData, size_t nSize );
+    virtual size_t      Write( const void* pData, size_t nSize );
+    virtual size_t      Seek( size_t nPos );
+    virtual size_t      Tell() { return nPos; }
     virtual void        Flush();
-    virtual bool        SetSize( sal_uLong nNewSize );
-    virtual sal_uLong   GetSize() const;
+    virtual bool        SetSize( size_t nNewSize );
+    virtual size_t      GetSize() const;
     virtual bool        CopyTo( BaseStorageStream * pDestStm );
     virtual bool        Commit();
     virtual bool        Revert();
@@ -253,13 +253,13 @@ public:
                                 UCBStorageStream( const OUString& rName, StreamMode nMode, bool bDirect, const OString* pKey, bool bRepair, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XProgressHandler > xProgress );
                                 UCBStorageStream( UCBStorageStream_Impl* );
 
-    virtual sal_uLong           Read( void * pData, sal_uLong nSize );
-    virtual sal_uLong           Write( const void* pData, sal_uLong nSize );
-    virtual sal_uLong           Seek( sal_uLong nPos );
-    virtual sal_uLong           Tell();
+    virtual size_t              Read( void * pData, size_t nSize );
+    virtual size_t              Write( const void* pData, size_t nSize );
+    virtual size_t              Seek( size_t nPos );
+    virtual size_t              Tell();
     virtual void                Flush();
-    virtual bool                SetSize( sal_uLong nNewSize );
-    virtual sal_uLong           GetSize() const;
+    virtual bool                SetSize( size_t nNewSize );
+    virtual size_t              GetSize() const;
     virtual bool                CopyTo( BaseStorageStream * pDestStm );
     virtual bool                Commit();
     virtual bool                Revert();

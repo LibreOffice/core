@@ -123,14 +123,14 @@ class METWriter
 {
 private:
 
-    sal_Bool                bStatus;
-    sal_uLong               nLastPercent; // with which number pCallback has been called the last time
+    sal_Bool            bStatus;
+    sal_uLong           nLastPercent; // with which number pCallback has been called the last time
     SvStream*           pMET;
     Rectangle           aPictureRect;
     MapMode             aPictureMapMode;
     MapMode             aTargetMapMode;
-    sal_uLong               nActualFieldStartPos;     // start position of the current 'Field'
-    sal_uLong               nNumberOfDataFields;  // number of commenced 'Graphcis Data Fields'
+    size_t              nActualFieldStartPos;     // start position of the current 'Field'
+    sal_uLong           nNumberOfDataFields;  // number of commenced 'Graphcis Data Fields'
     Color               aGDILineColor;
     Color               aGDIFillColor;
     RasterOp            eGDIRasterOp;
@@ -277,10 +277,10 @@ void METWriter::MayCallback()
     if ( xStatusIndicator.is() )
     {
         sal_uLong nPercent;
-        nPercent=((nWrittenBitmaps<<14)+(nActBitmapPercent<<14)/100+nWrittenActions)
-                *100/((nNumberOfBitmaps<<14)+nNumberOfActions);
+        nPercent = ((nWrittenBitmaps << 14) + (nActBitmapPercent << 14) / 100 +
+                    nWrittenActions) * 100 / ((nNumberOfBitmaps << 14) + nNumberOfActions);
 
-        if (nPercent>=nLastPercent+3)
+        if (nPercent >= nLastPercent + 3)
         {
             nLastPercent = nPercent;
             if ( nPercent <= 100 )
@@ -309,7 +309,7 @@ void METWriter::CountActionsAndBitmaps(const GDIMetaFile * pMTF)
 {
     const MetaAction* pMA;
 
-    for( size_t nAction = 0, nActionCount=pMTF->GetActionSize(); nAction < nActionCount; nAction++ )
+    for( size_t nAction = 0, nActionCount = pMTF->GetActionSize(); nAction < nActionCount; nAction++ )
     {
         pMA =  pMTF->GetAction(nAction);
 
@@ -348,8 +348,8 @@ void METWriter::WriteBigEndianShort(sal_uInt16 nWord)
 
 void METWriter::WriteBigEndianLong(sal_uLong nLong)
 {
-    WriteBigEndianShort((sal_uInt16)(nLong>>16));
-    WriteBigEndianShort((sal_uInt16)(nLong&0x0000ffff));
+    WriteBigEndianShort((sal_uInt16)(nLong >> 16));
+    WriteBigEndianShort((sal_uInt16)(nLong & 0x0000ffff));
 }
 
 
@@ -373,11 +373,11 @@ void METWriter::WriteFieldIntroducer(sal_uInt16 nFieldSize, sal_uInt16 nFieldTyp
 
 void METWriter::UpdateFieldSize()
 {
-    sal_uLong nPos;
+    size_t nPos;
 
     nPos=pMET->Tell();
     pMET->Seek(nActualFieldStartPos);
-    WriteBigEndianShort((sal_uInt16)(nPos-nActualFieldStartPos));
+    WriteBigEndianShort((sal_uInt16)(nPos - nActualFieldStartPos));
     pMET->Seek(nPos);
 }
 
@@ -387,17 +387,18 @@ void METWriter::WriteFieldId(sal_uLong nId)
     sal_uInt8 nbyte;
     short i;
 
-    for (i=1; i<=8; i++) {
-        nbyte= '0' + (sal_uInt8)((nId >> (32-i*4)) & 0x0f);
+    for (i = 1; i <= 8; i++)
+    {
+        nbyte= '0' + (sal_uInt8)((nId >> (32 - i * 4)) & 0x0f);
         pMET->WriteUChar( nbyte );
     }
 }
 
 
-void METWriter::CreateChrSets(const GDIMetaFile * pMTF)
+void METWriter::CreateChrSets(const GDIMetaFile* pMTF)
 {
     size_t nAction, nActionCount;
-    const MetaAction * pMA;
+    const MetaAction* pMA;
 
     if (bStatus==sal_False)
         return;
@@ -440,9 +441,9 @@ sal_uInt8 METWriter::FindChrSet(const Font & rFont)
 {
     METChrSet* pCS;
 
-    for (pCS=pChrSetList; pCS!=NULL; pCS=pCS->pSucc)
+    for (pCS = pChrSetList; pCS != NULL; pCS = pCS->pSucc)
     {
-        if (pCS->aName==rFont.GetName() && pCS->eWeight==rFont.GetWeight() )
+        if (pCS->aName == rFont.GetName() && pCS->eWeight == rFont.GetWeight() )
             return pCS->nSet;
     }
 
@@ -454,13 +455,13 @@ void METWriter::WriteChrSets()
 {
     sal_uInt16 i;
     char c = 0;
-    METChrSet * pCS;
+    METChrSet* pCS;
     sal_uInt8 nbyte;
 
-    for (pCS=pChrSetList; pCS!=NULL; pCS=pCS->pSucc)
+    for (pCS = pChrSetList; pCS != NULL; pCS = pCS->pSucc)
     {
 
-        WriteFieldIntroducer(0x58,MapCodFntMagic,0,0);
+        WriteFieldIntroducer(0x58, MapCodFntMagic, 0, 0);
 
         WriteBigEndianShort(0x0050);
 
@@ -473,16 +474,16 @@ void METWriter::WriteChrSets()
         pMET->WriteUChar( (sal_uInt8)0x14 ).WriteUChar( (sal_uInt8)0x1f );
         switch (pCS->eWeight)
         {
-            case WEIGHT_THIN:       nbyte=1; break;
-            case WEIGHT_ULTRALIGHT: nbyte=2; break;
-            case WEIGHT_LIGHT:      nbyte=3; break;
-            case WEIGHT_SEMILIGHT:  nbyte=4; break;
-            case WEIGHT_NORMAL:     nbyte=5; break;
-            case WEIGHT_SEMIBOLD:   nbyte=6; break;
-            case WEIGHT_BOLD:       nbyte=7; break;
-            case WEIGHT_ULTRABOLD:  nbyte=8; break;
-            case WEIGHT_BLACK:      nbyte=9; break;
-            default:                nbyte=5;
+        case WEIGHT_THIN:       nbyte = 1; break;
+        case WEIGHT_ULTRALIGHT: nbyte = 2; break;
+        case WEIGHT_LIGHT:      nbyte = 3; break;
+        case WEIGHT_SEMILIGHT:  nbyte = 4; break;
+        case WEIGHT_NORMAL:     nbyte = 5; break;
+        case WEIGHT_SEMIBOLD:   nbyte = 6; break;
+        case WEIGHT_BOLD:       nbyte = 7; break;
+        case WEIGHT_ULTRABOLD:  nbyte = 8; break;
+        case WEIGHT_BLACK:      nbyte = 9; break;
+        default:                nbyte = 5; break;
         }
         pMET->WriteUChar( nbyte );
         pMET->WriteUChar( (sal_uInt8)0x05 );
@@ -495,9 +496,8 @@ void METWriter::WriteChrSets()
         pMET->WriteUChar( (sal_uInt8)0x03 ).WriteUChar( (sal_uInt8)0x52 );
 
         pMET->WriteUChar( (sal_uInt8)0x24 ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x08 ).WriteUChar( (sal_uInt8)0x00 );
-        OString n(OUStringToOString(pCS->aName,
-            osl_getThreadTextEncoding()));
-        for (i=0; i<32; i++)
+        OString n(OUStringToOString(pCS->aName, osl_getThreadTextEncoding()));
+        for (i = 0; i < 32; i++)
         {
             if ( i == 0 || c != 0 )
                 c = n[i];
@@ -509,16 +509,16 @@ void METWriter::WriteChrSets()
 
 void METWriter::WriteColorAttributeTable(sal_uLong nFieldId, BitmapPalette* pPalette, sal_uInt8 nBasePartFlags, sal_uInt8 nBasePartLCTID)
 {
-    sal_uInt16 nIndex,nNumI,i;
+    sal_uInt16 nIndex, nNumI, i;
 
     if (bStatus==sal_False) return;
 
     //--- The Field 'Begin Color Attribute Table':
-    WriteFieldIntroducer(16,BegColAtrMagic,0,0);
+    WriteFieldIntroducer(16, BegColAtrMagic, 0, 0);
     WriteFieldId(nFieldId);
 
     //--- The Field 'Color Attribute Table':
-    WriteFieldIntroducer(0,BlkColAtrMagic,0,0);
+    WriteFieldIntroducer(0, BlkColAtrMagic, 0, 0);
     pMET->WriteUChar( nBasePartFlags ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( nBasePartLCTID ); // 'Base Part'
     if (pPalette!=NULL)
     {
@@ -526,10 +526,12 @@ void METWriter::WriteColorAttributeTable(sal_uLong nFieldId, BitmapPalette* pPal
         while (nIndex<pPalette->GetEntryCount())
         {
             nNumI=pPalette->GetEntryCount()-nIndex;
-            if (nNumI>81) nNumI=81;
-            pMET->WriteUChar( (sal_uInt8)(11+nNumI*3) );                   // length of the parameter
+            if (nNumI>81)
+                nNumI=81;
+            pMET->WriteUChar( (sal_uInt8)(11 + nNumI * 3) );                   // length of the parameter
             pMET->WriteUChar( (sal_uInt8)1 ).WriteUChar( (sal_uInt8)0 ).WriteUChar( (sal_uInt8)1 );        // typ: element list, Reserved, Format: RGB
-            pMET->WriteUChar( (sal_uInt8)0 ); WriteBigEndianShort(nIndex); // start-Index (3 Bytes)
+            pMET->WriteUChar( (sal_uInt8)0 );
+            WriteBigEndianShort(nIndex); // start-Index (3 Bytes)
             pMET->WriteUChar( (sal_uInt8)8 ).WriteUChar( (sal_uInt8)8 ).WriteUChar( (sal_uInt8)8 );        // Bits per component R,G,B
             pMET->WriteUChar( (sal_uInt8)3 );                              // number of bytes per entry
             for (i=0; i<nNumI; i++)
@@ -552,7 +554,7 @@ void METWriter::WriteColorAttributeTable(sal_uLong nFieldId, BitmapPalette* pPal
     UpdateFieldSize();
 
     //--- The Field 'End Color Attribute Table':
-    WriteFieldIntroducer(16,EndColAtrMagic,0,0);
+    WriteFieldIntroducer(16, EndColAtrMagic, 0, 0);
     WriteFieldId(nFieldId);
 
     if (pMET->GetError())
@@ -562,21 +564,22 @@ void METWriter::WriteColorAttributeTable(sal_uLong nFieldId, BitmapPalette* pPal
 
 void METWriter::WriteImageObject(const Bitmap & rBitmap)
 {
-    SvMemoryStream aTemp(0x00010000,0x00010000);
-    sal_uInt32 nWidth,nHeight,nResX,nResY;
-    sal_uLong nBytesPerLine,i,j,nNumColors,ny,nLines;
+    SvMemoryStream aTemp(0x00010000, 0x00010000);
+    sal_uInt32 nWidth, nHeight, nResX, nResY;
+    sal_uLong nBytesPerLine, i, j, nNumColors, ny, nLines;
     sal_uLong nActColMapId;
     sal_uInt16 nBitsPerPixel;
-    sal_uInt8 nbyte, * pBuf;
+    sal_uInt8 nbyte;
+    sal_uInt8* pBuf;
 
     if (bStatus==sal_False)
         return;
 
-    nActColMapId=((nActBitmapId>>24)&0x000000ff) | ((nActBitmapId>> 8)&0x0000ff00) |
-                 ((nActBitmapId<< 8)&0x00ff0000) | ((nActBitmapId<<24)&0xff000000);
+    nActColMapId=((nActBitmapId >>24) & 0x000000ff) | ((nActBitmapId >> 8) & 0x0000ff00) |
+                 ((nActBitmapId << 8) & 0x00ff0000) | ((nActBitmapId << 24) & 0xff000000);
 
     //--- The Field 'Begin Image Object':
-    WriteFieldIntroducer(16,BegImgObjMagic,0,0);
+    WriteFieldIntroducer(16, BegImgObjMagic, 0, 0);
     WriteFieldId(nActBitmapId);
 
     // generate Windows-BMP file
@@ -592,50 +595,50 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
     aTemp.ReadUInt32( nResX ).ReadUInt32( nResY );
     aTemp.SeekRel(8);
 
-    nNumColors=1<<nBitsPerPixel;
-    nBytesPerLine=((nWidth*nBitsPerPixel+0x0000001f) & 0xffffffe0 ) >> 3;
+    nNumColors= 1 << nBitsPerPixel;
+    nBytesPerLine=((nWidth*nBitsPerPixel + 0x0000001f) & 0xffffffe0 ) >> 3;
 
     // read color palette as the case may be and write it to the MET file:
-    if (nBitsPerPixel<=8)
+    if (nBitsPerPixel <= 8)
     {
-        BitmapPalette   aPal( (sal_uInt16) nNumColors );
-        sal_uInt8           nr,ng,nb;
+        BitmapPalette aPal( (sal_uInt16) nNumColors );
+        sal_uInt8 nr,ng,nb;
 
-        for (i=0; i<nNumColors; i++)
+        for (i = 0; i < nNumColors; i++)
         {
             aTemp.ReadUChar( nb ).ReadUChar( ng ).ReadUChar( nr ); aTemp.SeekRel(1);
             aPal[ (sal_uInt16) i ] = BitmapColor( nr, ng, nb );
         }
 
         //--- The Field 'Begin Resource Group':
-        WriteFieldIntroducer(16,BegResGrpMagic,0,0);
+        WriteFieldIntroducer(16, BegResGrpMagic, 0, 0);
         WriteFieldId(nActColMapId);
 
         //--- writer color table:
-        WriteColorAttributeTable(nActColMapId,&aPal,0,1);
+        WriteColorAttributeTable(nActColMapId, &aPal, 0, 1);
 
         //--- The Field 'End Resource Group':
-        WriteFieldIntroducer(16,EndResGrpMagic,0,0);
+        WriteFieldIntroducer(16, EndResGrpMagic, 0, 0);
         WriteFieldId(nActColMapId);
 
         //--- The Field 'Begin Object Environment Group':
-        WriteFieldIntroducer(16,BegObjEnvMagic,0,0);
+        WriteFieldIntroducer(16, BegObjEnvMagic, 0, 0);
         WriteFieldId(nActBitmapId);
 
         //--- The Field 'Map Color Attribute Table':
-        WriteFieldIntroducer(26,MapColAtrMagic,0,0);
+        WriteFieldIntroducer(26, MapColAtrMagic, 0, 0);
         WriteBigEndianShort(0x0012);
         pMET->WriteUChar( (sal_uInt8)0x0c ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x84 ).WriteUChar( (sal_uInt8)0x00 );
         WriteFieldId(nActColMapId);
         pMET->WriteUChar( (sal_uInt8)0x04 ).WriteUChar( (sal_uInt8)0x24 ).WriteUChar( (sal_uInt8)0x07 ).WriteUChar( (sal_uInt8)0x01 );
 
         //--- The Field 'End Object Environment Group':
-        WriteFieldIntroducer(16,EndObjEnvMagic,0,0);
+        WriteFieldIntroducer(16,EndObjEnvMagic, 0, 0);
         WriteFieldId(nActBitmapId);
     }
 
     //--- The Field 'Image Data Descriptor':
-    WriteFieldIntroducer(17,DscImgObjMagic,0,0);
+    WriteFieldIntroducer(17, DscImgObjMagic, 0, 0);
     pMET->WriteUChar( (sal_uInt8)0x01 ); // Unit of measure: tens of centimeters
     WriteBigEndianShort((sal_uInt16)nResX);
     WriteBigEndianShort((sal_uInt16)nResY);
@@ -663,47 +666,61 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
     // Image IDE-Size:
     pMET->WriteUChar( (sal_uInt8)0x96 ).WriteUChar( (sal_uInt8)0x01 ).WriteUChar( (sal_uInt8)nBitsPerPixel );
 
-    if (nBitsPerPixel<=8) {
+    if (nBitsPerPixel<=8)
+    {
         // Image LUT-ID
         pMET->WriteUChar( (sal_uInt8)0x97 ).WriteUChar( (sal_uInt8)0x01 ).WriteUChar( (sal_uInt8)0x01 );
     }
-    else {
+    else
+    {
         // IDE Structure
         pMET->WriteUChar( (sal_uInt8)0x9b ).WriteUChar( (sal_uInt8)0x08 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x01 );
         pMET->WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x08 );
         pMET->WriteUChar( (sal_uInt8)0x08 ).WriteUChar( (sal_uInt8)0x08 );
     }
 
-    pBuf=new sal_uInt8[nBytesPerLine];
-    ny=0;
-    while (ny<nHeight) {
-
+    pBuf = new sal_uInt8[nBytesPerLine];
+    ny = 0;
+    while (ny<nHeight)
+    {
         // finalize the previous field 'Image Picture Data':
         UpdateFieldSize();
 
         // and start a new field 'Image Picture Data':
-        WriteFieldIntroducer(0,DatImgObjMagic,0,0);
+        WriteFieldIntroducer(0, DatImgObjMagic, 0, 0);
 
         // read and write several Scanlines:
-        nLines=nHeight-ny;
-        if (nLines*nBytesPerLine>30000) nLines=30000/nBytesPerLine;
-        if (nLines<1) nLines=1;
+        nLines = nHeight - ny;
+        if (nLines*nBytesPerLine > 30000)
+            nLines = 30000 / nBytesPerLine;
+        if (nLines < 1)
+            nLines=1;
         WriteBigEndianShort(0xfe92);
         WriteBigEndianShort((sal_uInt16)(nLines*nBytesPerLine));
-        for (i=0; i<nLines; i++) {
+        for (i = 0; i < nLines; i++)
+        {
             aTemp.Read(pBuf,nBytesPerLine);
-            if (nBitsPerPixel==24) {
-                for (j=2; j<nBytesPerLine; j+=3) {
-                    nbyte=pBuf[j]; pBuf[j]=pBuf[j-2]; pBuf[j-2]=nbyte;
+            if (nBitsPerPixel==24)
+            {
+                for (j = 2; j < nBytesPerLine; j += 3)
+                {
+                    nbyte = pBuf[j];
+                    pBuf[j] = pBuf[j-2];
+                    pBuf[j-2] = nbyte;
                 }
             }
             pMET->Write(pBuf,nBytesPerLine);
             ny++;
         }
-        if (aTemp.GetError() || pMET->GetError()) bStatus=sal_False;
+        if (aTemp.GetError() || pMET->GetError())
+            bStatus=sal_False;
         nActBitmapPercent=(ny+1)*100/nHeight;
         MayCallback();
-        if (bStatus==sal_False) { delete[] pBuf; return; }
+        if (bStatus==sal_False)
+        {
+            delete[] pBuf;
+            return;
+        }
     }
     delete[] pBuf;
 
@@ -1119,7 +1136,8 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
     //       2-3     Usage Flags 0x8000
     //       4-7     Bit-map handle
     //       8       Lcid
-    if (nNumberOfBitmaps>0) {
+    if (nNumberOfBitmaps>0)
+    {
         pMET->WriteUChar( (sal_uInt8)0xe7 ).WriteUChar( (sal_uInt8)0x07 ).WriteUChar( (sal_uInt8)0x80 ).WriteUChar( (sal_uInt8)0x00 );
         WriteBigEndianLong(nActBitmapId);
         pMET->WriteUChar( (sal_uInt8)0xfe );
@@ -1138,7 +1156,7 @@ void METWriter::WillWriteOrder(sal_uLong nNextOrderMaximumLength)
     // of the field minus the 'Structured Field Introducer' (size 8).
     // So the size of the whole field can be at most 8+32759=32767=0x7fff.
     // To be on the safe side whe use 30000 as the limit.
-    if (pMET->Tell()-nActualFieldStartPos+nNextOrderMaximumLength>30000)
+    if (pMET->Tell() - nActualFieldStartPos + nNextOrderMaximumLength>30000)
     {
         UpdateFieldSize();
         WriteFieldIntroducer(0,DatGrfObjMagic,0,0);
@@ -1154,8 +1172,8 @@ void METWriter::METBitBlt(Point aPt, Size aSize, const Size& rBmpSizePixel)
     pMET->WriteUChar( (sal_uInt8)0xd6 ).WriteUChar( (sal_uInt8)44 ).WriteUInt16( (sal_uInt16)0 ).WriteUInt16( (sal_uInt16) 0x00cc );
     WriteBigEndianLong(nActBitmapId++);
     pMET->WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 );
-    WritePoint(Point(aPt.X(),aPt.Y()+aSize.Height()));
-    WritePoint(Point(aPt.X()+aSize.Width(),aPt.Y()));
+    WritePoint(Point(aPt.X(),aPt.Y() + aSize.Height()));
+    WritePoint(Point(aPt.X() + aSize.Width(), aPt.Y()));
     pMET->WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 )
          .WriteUInt32( (sal_uInt32)(rBmpSizePixel.Width()) )
          .WriteUInt32( (sal_uInt32)(rBmpSizePixel.Height()) );
@@ -1166,11 +1184,11 @@ void METWriter::METSetAndPushLineInfo( const LineInfo& rLineInfo )
     sal_Int32 nWidth = pCompDev->LogicToLogic( Size( rLineInfo.GetWidth(),0 ), aPictureMapMode, aTargetMapMode ).Width();
 
     WillWriteOrder( 8 );            // set stroke linewidth
-    pMET  ->WriteUChar( (sal_uInt8)0x15 )
-           .WriteUChar( (sal_uInt8)6 )
-           .WriteUChar( (sal_uInt8)0 )             // Flags
-           .WriteUChar( (sal_uInt8)0 )
-           .WriteInt32( nWidth );
+    pMET->WriteUChar( (sal_uInt8)0x15 )
+        .WriteUChar( (sal_uInt8)6 )
+        .WriteUChar( (sal_uInt8)0 )             // Flags
+        .WriteUChar( (sal_uInt8)0 )
+        .WriteInt32( nWidth );
 
     if ( rLineInfo.GetStyle() != LINE_SOLID )
     {
@@ -1291,24 +1309,30 @@ void METWriter::METLine(Point aPt1, Point aPt2)
 
 void METWriter::METLine(const Polygon & rPolygon)
 {
-    sal_uInt16 nNumPoints,i,j,nOrderPoints;
+    sal_uInt16 nNumPoints, i, j, nOrderPoints;
     sal_Bool bFirstOrder;
 
-    bFirstOrder=sal_True;
-    i=0; nNumPoints=rPolygon.GetSize();
-    while (i<nNumPoints) {
+    bFirstOrder = sal_True;
+    i = 0;
+    nNumPoints = rPolygon.GetSize();
+    while (i<nNumPoints)
+    {
         nOrderPoints=nNumPoints-i;
-        if (nOrderPoints>30) nOrderPoints=30;
+        if (nOrderPoints>30)
+            nOrderPoints = 30;
         WillWriteOrder(nOrderPoints*8+2);
-        if (bFirstOrder==sal_True) {
+        if (bFirstOrder==sal_True)
+        {
             pMET->WriteUChar( (sal_uInt8)0xc1 ); // Line at given pos
             bFirstOrder=sal_False;
         }
-        else {
+        else
+        {
             pMET->WriteUChar( (sal_uInt8)0x81 ); // Line at current pos
         }
         pMET->WriteUChar( (sal_uInt8)(nOrderPoints*8) );
-        for (j=0; j<nOrderPoints; j++) WritePoint(rPolygon.GetPoint(i++));
+        for (j=0; j<nOrderPoints; j++)
+            WritePoint(rPolygon.GetPoint(i++));
     }
 }
 
@@ -1317,7 +1341,8 @@ void METWriter::METLine(const PolyPolygon & rPolyPolygon)
 {
     sal_uInt16 i,nCount;
     nCount=rPolyPolygon.Count();
-    for (i=0; i<nCount; i++) {
+    for (i=0; i<nCount; i++)
+    {
         METLine(rPolyPolygon.GetObject(i));
         METCloseFigure();
     }
@@ -1336,7 +1361,7 @@ void METWriter::METBox(sal_Bool bFill, sal_Bool bBoundary,
                        Rectangle aRect, sal_uInt32 nHAxis, sal_uInt32 nVAxis)
 {
     sal_uInt8 nFlags=0;
-    if (bFill)     nFlags|=0x40;
+    if (bFill) nFlags|=0x40;
     if (bBoundary) nFlags|=0x20;
 
     WillWriteOrder(28);
@@ -1352,25 +1377,25 @@ void METWriter::METFullArc(Point aCenter, double fMultiplier)
     WillWriteOrder(14);
     pMET->WriteUChar( (sal_uInt8)0xc7 ).WriteUChar( (sal_uInt8)12 );
     WritePoint(aCenter);
-    pMET->WriteInt32( (sal_Int32)(fMultiplier*65536.0+0.5) );
+    pMET->WriteInt32( (sal_Int32)(fMultiplier * 65536.0 + 0.5) );
 }
 
 
 void METWriter::METPartialArcAtCurPos(Point aCenter, double fMultiplier,
                                       double fStartAngle, double fSweepAngle)
 {
-    fStartAngle*=180.0/3.14159265359;
-    while (fStartAngle>360.0) fStartAngle-=360.0;
-    while (fStartAngle<0.0) fStartAngle+=360.0;
+    fStartAngle *= 180.0 / 3.14159265359;
+    while (fStartAngle>360.0) fStartAngle -= 360.0;
+    while (fStartAngle<0.0) fStartAngle += 360.0;
     fSweepAngle*=180.0/3.14159265359;
-    while (fSweepAngle>360.0) fSweepAngle-=360.0;
-    while (fSweepAngle<.00) fSweepAngle+=360.0;
+    while (fSweepAngle>360.0) fSweepAngle -= 360.0;
+    while (fSweepAngle<.00) fSweepAngle += 360.0;
     WillWriteOrder(22);
     pMET->WriteUChar( (sal_uInt8)0xa3 ).WriteUChar( (sal_uInt8)20 );
     WritePoint(aCenter);
-    pMET->WriteInt32( (sal_Int32)(fMultiplier*65536.0+0.5) );
-    pMET->WriteInt32( (sal_Int32)(fStartAngle*65536.0+0.5) );
-    pMET->WriteInt32( (sal_Int32)(fSweepAngle*65536.0+0.5) );
+    pMET->WriteInt32( (sal_Int32)(fMultiplier * 65536.0 + 0.5) );
+    pMET->WriteInt32( (sal_Int32)(fStartAngle * 65536.0 + 0.5) );
+    pMET->WriteInt32( (sal_Int32)(fSweepAngle * 65536.0 + 0.5) );
 }
 
 
@@ -1621,31 +1646,31 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 Point                   aStartPos,aCenter;
                 double                  fdx,fdy,fa1,fa2;
 
-                aCenter.X()=(pA->GetRect().Left()+pA->GetRect().Right())/2;
-                aCenter.Y()=(pA->GetRect().Top()+pA->GetRect().Bottom())/2;
-                fdx=(double)(pA->GetStartPoint().X()-aCenter.X());
-                fdy=(double)(pA->GetStartPoint().Y()-aCenter.Y());
-                fdx*=(double)pA->GetRect().GetHeight();
-                fdy*=(double)pA->GetRect().GetWidth();
-                if (fdx==0.0 && fdy==0.0) fdx=1.0;
-                fa1=atan2(-fdy,fdx);
-                fdx=(double)(pA->GetEndPoint().X()-aCenter.X());
-                fdy=(double)(pA->GetEndPoint().Y()-aCenter.Y());
-                fdx*=(double)pA->GetRect().GetHeight();
-                fdy*=(double)pA->GetRect().GetWidth();
-                if (fdx==0.0 && fdy==0.0) fdx=1.0;
-                fa2=atan2(-fdy,fdx);
-                aStartPos.X()=aCenter.X()+(long)(((double)pA->GetRect().GetWidth())*cos(fa1)/2.0+0.5);
-                aStartPos.Y()=aCenter.Y()-(long)(((double)pA->GetRect().GetHeight())*sin(fa1)/2.0+0.5);
+                aCenter.X() = (pA->GetRect().Left() + pA->GetRect().Right()) / 2;
+                aCenter.Y() = (pA->GetRect().Top() + pA->GetRect().Bottom()) / 2;
+                fdx = (double)(pA->GetStartPoint().X() - aCenter.X());
+                fdy = (double)(pA->GetStartPoint().Y() - aCenter.Y());
+                fdx *= (double)pA->GetRect().GetHeight();
+                fdy *= (double)pA->GetRect().GetWidth();
+                if (fdx == 0.0 && fdy == 0.0) fdx = 1.0;
+                fa1 = atan2(-fdy, fdx);
+                fdx = (double)(pA->GetEndPoint().X() - aCenter.X());
+                fdy = (double)(pA->GetEndPoint().Y() - aCenter.Y());
+                fdx *= (double)pA->GetRect().GetHeight();
+                fdy *= (double)pA->GetRect().GetWidth();
+                if (fdx == 0.0 && fdy == 0.0) fdx = 1.0;
+                fa2 = atan2(-fdy, fdx);
+                aStartPos.X() = aCenter.X() + (long)(((double)pA->GetRect().GetWidth()) * cos(fa1) / 2.0 + 0.5);
+                aStartPos.Y() = aCenter.Y() - (long)(((double)pA->GetRect().GetHeight()) * sin(fa1) / 2.0 + 0.5);
 
                 if( aGDILineColor != Color( COL_TRANSPARENT ) )
                 {
                     METSetMix( eGDIRasterOp );
                     METSetColor( aGDILineColor );
-                    METSetArcParams(pA->GetRect().GetWidth(), pA->GetRect().GetHeight(),0,0);
+                    METSetArcParams(pA->GetRect().GetWidth(), pA->GetRect().GetHeight(), 0, 0);
                     METBeginPath(1);
                     METMove(aStartPos);
-                    METPartialArcAtCurPos(aCenter,0.5,fa1,fa2-fa1);
+                    METPartialArcAtCurPos(aCenter, 0.5, fa1, fa2 - fa1);
                     METEndPath();
                     METOutlinePath(1);
                 }
@@ -1658,22 +1683,22 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 Point                   aCenter;
                 double                  fdx,fdy,fa1,fa2;
 
-                aCenter.X()=(pA->GetRect().Left()+pA->GetRect().Right())/2;
-                aCenter.Y()=(pA->GetRect().Top()+pA->GetRect().Bottom())/2;
-                fdx=(double)(pA->GetStartPoint().X()-aCenter.X());
-                fdy=(double)(pA->GetStartPoint().Y()-aCenter.Y());
-                fdx*=(double)pA->GetRect().GetHeight();
-                fdy*=(double)pA->GetRect().GetWidth();
-                if (fdx==0.0 && fdy==0.0) fdx=1.0;
-                fa1=atan2(-fdy,fdx);
-                fdx=(double)(pA->GetEndPoint().X()-aCenter.X());
-                fdy=(double)(pA->GetEndPoint().Y()-aCenter.Y());
-                fdx*=(double)pA->GetRect().GetHeight();
-                fdy*=(double)pA->GetRect().GetWidth();
-                if (fdx==0.0 && fdy==0.0) fdx=1.0;
-                fa2=atan2(-fdy,fdx);
+                aCenter.X() = (pA->GetRect().Left() + pA->GetRect().Right()) / 2;
+                aCenter.Y() = (pA->GetRect().Top() + pA->GetRect().Bottom()) / 2;
+                fdx = (double)(pA->GetStartPoint().X()-aCenter.X());
+                fdy = (double)(pA->GetStartPoint().Y()-aCenter.Y());
+                fdx *= (double)pA->GetRect().GetHeight();
+                fdy *= (double)pA->GetRect().GetWidth();
+                if (fdx == 0.0 && fdy == 0.0) fdx = 1.0;
+                fa1 = atan2(-fdy, fdx);
+                fdx = (double)(pA->GetEndPoint().X() - aCenter.X());
+                fdy = (double)(pA->GetEndPoint().Y() - aCenter.Y());
+                fdx *= (double)pA->GetRect().GetHeight();
+                fdy *= (double)pA->GetRect().GetWidth();
+                if (fdx == 0.0 && fdy == 0.0) fdx = 1.0;
+                fa2 = atan2(-fdy, fdx);
 
-                METSetArcParams(pA->GetRect().GetWidth(), pA->GetRect().GetHeight(),0,0);
+                METSetArcParams(pA->GetRect().GetWidth(), pA->GetRect().GetHeight(), 0, 0);
 
                 if( aGDIFillColor != Color( COL_TRANSPARENT ) )
                 {
@@ -1682,7 +1707,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                     METSetBackgroundColor( aGDIFillColor );
                     METBeginPath(1);
                     METMove(aCenter);
-                    METPartialArcAtCurPos(aCenter,0.5,fa1,fa2-fa1);
+                    METPartialArcAtCurPos(aCenter, 0.5, fa1, fa2 - fa1);
                     METLineAtCurPos(aCenter);
                     METEndPath();
                     METFillPath(1);
@@ -1694,7 +1719,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                     METSetColor( aGDILineColor );
                     METBeginPath(1);
                     METMove(aCenter);
-                    METPartialArcAtCurPos(aCenter,0.5,fa1,fa2-fa1);
+                    METPartialArcAtCurPos(aCenter, 0.5, fa1, fa2 - fa1);
                     METLineAtCurPos(aCenter);
                     METEndPath();
                     METOutlinePath(1);
@@ -1708,22 +1733,22 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 Point                   aStartPos,aCenter;
                 double                  fdx,fdy,fa1,fa2;
 
-                aCenter.X()=(pA->GetRect().Left()+pA->GetRect().Right())/2;
-                aCenter.Y()=(pA->GetRect().Top()+pA->GetRect().Bottom())/2;
-                fdx=(double)(pA->GetStartPoint().X()-aCenter.X());
-                fdy=(double)(pA->GetStartPoint().Y()-aCenter.Y());
-                fdx*=(double)pA->GetRect().GetHeight();
-                fdy*=(double)pA->GetRect().GetWidth();
-                if (fdx==0.0 && fdy==0.0) fdx=1.0;
-                fa1=atan2(-fdy,fdx);
-                fdx=(double)(pA->GetEndPoint().X()-aCenter.X());
-                fdy=(double)(pA->GetEndPoint().Y()-aCenter.Y());
-                fdx*=(double)pA->GetRect().GetHeight();
-                fdy*=(double)pA->GetRect().GetWidth();
-                if (fdx==0.0 && fdy==0.0) fdx=1.0;
-                fa2=atan2(-fdy,fdx);
-                aStartPos.X()=aCenter.X()+(long)(((double)pA->GetRect().GetWidth())*cos(fa1)/2.0+0.5);
-                aStartPos.Y()=aCenter.Y()-(long)(((double)pA->GetRect().GetHeight())*sin(fa1)/2.0+0.5);
+                aCenter.X() = (pA->GetRect().Left() + pA->GetRect().Right()) / 2;
+                aCenter.Y() = (pA->GetRect().Top() + pA->GetRect().Bottom()) / 2;
+                fdx = (double)(pA->GetStartPoint().X() - aCenter.X());
+                fdy = (double)(pA->GetStartPoint().Y() - aCenter.Y());
+                fdx *= (double)pA->GetRect().GetHeight();
+                fdy *= (double)pA->GetRect().GetWidth();
+                if (fdx == 0.0 && fdy == 0.0) fdx = 1.0;
+                fa1 = atan2(-fdy, fdx);
+                fdx = (double)(pA->GetEndPoint().X() - aCenter.X());
+                fdy = (double)(pA->GetEndPoint().Y() - aCenter.Y());
+                fdx *= (double)pA->GetRect().GetHeight();
+                fdy *= (double)pA->GetRect().GetWidth();
+                if (fdx == 0.0 && fdy == 0.0) fdx = 1.0;
+                fa2 = atan2(-fdy, fdx);
+                aStartPos.X() = aCenter.X() + (long)(((double)pA->GetRect().GetWidth()) * cos(fa1) / 2.0 + 0.5);
+                aStartPos.Y() = aCenter.Y() - (long)(((double)pA->GetRect().GetHeight()) * sin(fa1) / 2.0 + 0.5);
 
                 if( aGDIFillColor != Color( COL_TRANSPARENT ) )
                 {
@@ -1732,7 +1757,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                     METSetBackgroundColor( aGDIFillColor );
                     METBeginPath(1);
                     METMove(aStartPos);
-                    METPartialArcAtCurPos(aCenter,0.5,fa1,fa2-fa1);
+                    METPartialArcAtCurPos(aCenter, 0.5, fa1, fa2 - fa1);
                     METLineAtCurPos(aStartPos);
                     METEndPath();
                     METFillPath(1);
@@ -1744,7 +1769,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                     METSetColor( aGDILineColor );
                     METBeginPath(1);
                     METMove(aStartPos);
-                    METPartialArcAtCurPos(aCenter,0.5,fa1,fa2-fa1);
+                    METPartialArcAtCurPos(aCenter, 0.5, fa1, fa2 - fa1);
                     METLineAtCurPos(aStartPos);
                     METEndPath();
                     METOutlinePath(1);
@@ -1929,16 +1954,16 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_STRETCHTEXT_ACTION:
             {
-                const MetaStretchTextAction*    pA = (const MetaStretchTextAction*) pMA;
-                VirtualDevice                   aVDev;
-                sal_uInt16                          i;
-                sal_Int32*                  pDXAry;
-                sal_Int32                       nNormSize;
-                OUString                        aStr;
-                Polygon                         aPolyDummy(1);
-                short                           nOrientation;
-                Point                           aPt( pA->GetPoint() );
-                Point                           aPt2;
+                const MetaStretchTextAction* pA = (const MetaStretchTextAction*) pMA;
+                VirtualDevice aVDev;
+                sal_uInt16 i;
+                sal_Int32* pDXAry;
+                sal_Int32 nNormSize;
+                OUString aStr;
+                Polygon aPolyDummy(1);
+                short nOrientation;
+                Point aPt( pA->GetPoint() );
+                Point aPt2;
 
                 aVDev.SetFont( aGDIFont );
 
@@ -1956,7 +1981,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 METSetChrCellSize(aGDIFont.GetSize());
                 METSetChrAngle( nOrientation = aGDIFont.GetOrientation() );
                 METSetChrSet(FindChrSet(aGDIFont));
-                aStr = pA->GetText().copy(pA->GetIndex(),pA->GetLen());
+                aStr = pA->GetText().copy(pA->GetIndex(), pA->GetLen());
                 pDXAry = new sal_Int32[aStr.getLength()];
                 nNormSize = aVDev.GetTextArray( aStr, pDXAry );
 
@@ -1965,7 +1990,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                     aPt2 = aPt;
                     if ( i > 0 )
                     {
-                        aPt2.X() += pDXAry[i-1]*((long)pA->GetWidth())/ nNormSize;
+                        aPt2.X() += pDXAry[i-1] * ((long)pA->GetWidth()) / nNormSize;
                         if ( nOrientation )
                         {
                             aPolyDummy.SetPoint( aPt2, 0 );
@@ -2007,8 +2032,8 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_BMPSCALEPART_ACTION:
             {
-                const MetaBmpScalePartAction*   pA = (const MetaBmpScalePartAction*) pMA;
-                Bitmap                          aTmp( pA->GetBitmap() );
+                const MetaBmpScalePartAction* pA = (const MetaBmpScalePartAction*) pMA;
+                Bitmap aTmp( pA->GetBitmap() );
 
                 aTmp.Crop( Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
                 METSetMix( eGDIRasterOp );
@@ -2018,8 +2043,8 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_BMPEX_ACTION:
             {
-                const MetaBmpExAction*  pA = (const MetaBmpExAction*) pMA;
-                const Size              aSizePixel( pA->GetBitmapEx().GetSizePixel() );
+                const MetaBmpExAction* pA = (const MetaBmpExAction*) pMA;
+                const Size aSizePixel( pA->GetBitmapEx().GetSizePixel() );
 
                 METSetMix( eGDIRasterOp );
                 METBitBlt( pA->GetPoint(), pCompDev->PixelToLogic( aSizePixel, aPictureMapMode ), aSizePixel );
@@ -2029,7 +2054,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             case META_BMPEXSCALE_ACTION:
             {
                 const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pMA;
-                const Size                  aSizePixel( pA->GetBitmapEx().GetSizePixel() );
+                const Size aSizePixel( pA->GetBitmapEx().GetSizePixel() );
 
                 METSetMix( eGDIRasterOp );
                 METBitBlt( pA->GetPoint(), pA->GetSize(), aSizePixel );
@@ -2039,7 +2064,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             case META_BMPEXSCALEPART_ACTION:
             {
                 const MetaBmpExScalePartAction* pA = (const MetaBmpExScalePartAction*) pMA;
-                Bitmap                          aTmp( Graphic( pA->GetBitmapEx() ).GetBitmap() );
+                Bitmap aTmp( Graphic( pA->GetBitmapEx() ).GetBitmap() );
 
                 aTmp.Crop( Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
                 METSetMix( eGDIRasterOp );
@@ -2078,9 +2103,9 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_GRADIENT_ACTION:
             {
-                VirtualDevice               aVDev;
-                GDIMetaFile                 aTmpMtf;
-                const MetaGradientAction*   pA = (const MetaGradientAction*) pMA;
+                VirtualDevice aVDev;
+                GDIMetaFile aTmpMtf;
+                const MetaGradientAction* pA = (const MetaGradientAction*) pMA;
 
                 aVDev.SetMapMode( aTargetMapMode );
                 aVDev.AddGradientActions( pA->GetRect(), pA->GetGradient(), aTmpMtf );
@@ -2090,9 +2115,9 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_HATCH_ACTION:
             {
-                VirtualDevice           aVDev;
-                GDIMetaFile             aTmpMtf;
-                const MetaHatchAction*  pA = (const MetaHatchAction*) pMA;
+                VirtualDevice aVDev;
+                GDIMetaFile aTmpMtf;
+                const MetaHatchAction* pA = (const MetaHatchAction*) pMA;
 
                 aVDev.SetMapMode( aTargetMapMode );
                 aVDev.AddHatchActions( pA->GetPolyPolygon(), pA->GetHatch(), aTmpMtf );
@@ -2181,16 +2206,16 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                         if( aOrigin.X() >= 0 )
                         {
                             if( aScaleX.GetNumerator() >= 0 )
-                                aX += BigInt( aScaleX.GetNumerator()/2 );
+                                aX += BigInt( aScaleX.GetNumerator() / 2 );
                             else
-                                aX -= BigInt( (aScaleX.GetNumerator()+1)/2 );
+                                aX -= BigInt( (aScaleX.GetNumerator() + 1) / 2 );
                         }
                         else
                         {
                             if( aScaleX.GetNumerator() >= 0 )
-                                aX -= BigInt( (aScaleX.GetNumerator()-1)/2 );
+                                aX -= BigInt( (aScaleX.GetNumerator() - 1) / 2 );
                             else
-                                aX += BigInt( aScaleX.GetNumerator()/2 );
+                                aX += BigInt( aScaleX.GetNumerator() / 2 );
                         }
 
                         aX /= BigInt( aScaleX.GetNumerator() );
@@ -2202,16 +2227,16 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                         if( aOrigin.Y() >= 0 )
                         {
                             if( aScaleY.GetNumerator() >= 0 )
-                                aY += BigInt( aScaleY.GetNumerator()/2 );
+                                aY += BigInt( aScaleY.GetNumerator() / 2 );
                             else
-                                aY -= BigInt( (aScaleY.GetNumerator()+1)/2 );
+                                aY -= BigInt( (aScaleY.GetNumerator() + 1) / 2 );
                         }
                         else
                         {
                             if( aScaleY.GetNumerator() >= 0 )
-                                aY -= BigInt( (aScaleY.GetNumerator()-1)/2 );
+                                aY -= BigInt( (aScaleY.GetNumerator() - 1) / 2 );
                             else
-                                aY += BigInt( aScaleY.GetNumerator()/2 );
+                                aY += BigInt( aScaleY.GetNumerator() / 2 );
                         }
 
                         aY /= BigInt( aScaleY.GetNumerator() );
@@ -2224,7 +2249,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                         aPictureMapMode.SetScaleY( aScaleY );
                     }
                     else
-                        aPictureMapMode=pA->GetMapMode();
+                        aPictureMapMode = pA->GetMapMode();
                 }
             }
             break;
@@ -2239,13 +2264,14 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             {
                 METGDIStackMember* pGS = new METGDIStackMember;
 
-                pGS->pSucc=pGDIStack; pGDIStack=pGS;
-                pGS->aLineColor=aGDILineColor;
-                pGS->aFillColor=aGDIFillColor;
-                pGS->eRasterOp=eGDIRasterOp;
-                pGS->aFont=aGDIFont;
-                pGS->aMapMode=aPictureMapMode;
-                pGS->aClipRect=aGDIClipRect;
+                pGS->pSucc = pGDIStack;
+                pGDIStack = pGS;
+                pGS->aLineColor = aGDILineColor;
+                pGS->aFillColor = aGDIFillColor;
+                pGS->eRasterOp = eGDIRasterOp;
+                pGS->aFont = aGDIFont;
+                pGS->aMapMode = aPictureMapMode;
+                pGS->aClipRect = aGDIClipRect;
             }
             break;
 
@@ -2255,14 +2281,15 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
                 if( pGDIStack )
                 {
-                    pGS=pGDIStack; pGDIStack=pGS->pSucc;
-                    aGDILineColor=pGS->aLineColor;
-                    aGDIFillColor=pGS->aFillColor;
-                    eGDIRasterOp=pGS->eRasterOp;
-                    aGDIFont=pGS->aFont;
+                    pGS = pGDIStack;
+                    pGDIStack = pGS->pSucc;
+                    aGDILineColor = pGS->aLineColor;
+                    aGDIFillColor = pGS->aFillColor;
+                    eGDIRasterOp = pGS->eRasterOp;
+                    aGDIFont = pGS->aFont;
                     if ( pGS->aClipRect != aGDIClipRect )
                         WriteClipRect( pGS->aClipRect );
-                    aPictureMapMode=pGS->aMapMode;
+                    aPictureMapMode = pGS->aMapMode;
                     delete pGS;
                 }
             }
@@ -2302,15 +2329,14 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             case META_FLOATTRANSPARENT_ACTION:
             {
                 const MetaFloatTransparentAction* pA = (const MetaFloatTransparentAction*) pMA;
-
-                GDIMetaFile     aTmpMtf( pA->GetGDIMetaFile() );
-                Point           aSrcPt( aTmpMtf.GetPrefMapMode().GetOrigin() );
-                const Size      aSrcSize( aTmpMtf.GetPrefSize() );
-                const Point     aDestPt( pA->GetPoint() );
-                const Size      aDestSize( pA->GetSize() );
-                const double    fScaleX = aSrcSize.Width() ? (double) aDestSize.Width() / aSrcSize.Width() : 1.0;
-                const double    fScaleY = aSrcSize.Height() ? (double) aDestSize.Height() / aSrcSize.Height() : 1.0;
-                long            nMoveX, nMoveY;
+                GDIMetaFile aTmpMtf( pA->GetGDIMetaFile() );
+                Point aSrcPt( aTmpMtf.GetPrefMapMode().GetOrigin() );
+                const Size aSrcSize( aTmpMtf.GetPrefSize() );
+                const Point aDestPt( pA->GetPoint() );
+                const Size aDestSize( pA->GetSize() );
+                const double fScaleX = aSrcSize.Width() ? (double) aDestSize.Width() / aSrcSize.Width() : 1.0;
+                const double fScaleY = aSrcSize.Height() ? (double) aDestSize.Height() / aSrcSize.Height() : 1.0;
+                long nMoveX, nMoveY;
 
                 if( fScaleX != 1.0 || fScaleY != 1.0 )
                 {
@@ -2332,7 +2358,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
       MayCallback();
 
       if( pMET->GetError() )
-        bStatus=sal_False;
+        bStatus = sal_False;
 
       if( bStatus == sal_False )
         break;
@@ -2344,11 +2370,11 @@ void METWriter::WriteObjectEnvironmentGroup(const GDIMetaFile * pMTF)
     sal_uLong i, nId;
 
     //--- The Field 'Begin Object Environment Group':
-    WriteFieldIntroducer(16,BegObjEnvMagic,0,0);
+    WriteFieldIntroducer(16, BegObjEnvMagic, 0, 0);
     WriteFieldId(7);
 
     //--- The Field 'Map Color Attribute Table':
-    WriteFieldIntroducer(22,MapColAtrMagic,0,0);
+    WriteFieldIntroducer(22, MapColAtrMagic, 0, 0);
     WriteBigEndianShort(0x000e);
     pMET->WriteUChar( (sal_uInt8)0x0c ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x84 ).WriteUChar( (sal_uInt8)0x00 );
     WriteFieldId(4);
@@ -2381,20 +2407,20 @@ void METWriter::WriteObjectEnvironmentGroup(const GDIMetaFile * pMTF)
     }
 
     //--- Das Feld 'End Object Environment Group':
-    WriteFieldIntroducer(16,EndObjEnvMagic,0,0);
+    WriteFieldIntroducer(16, EndObjEnvMagic, 0, 0);
     WriteFieldId(7);
 }
 
 
 void METWriter::WriteGraphicsObject(const GDIMetaFile * pMTF)
 {
-    sal_uLong nSegmentSize,nPos,nDataFieldsStartPos;
+    size_t nSegmentSize, nPos, nDataFieldsStartPos;
 
-    if( bStatus==sal_False )
+    if( bStatus == sal_False )
         return;
 
     //--- Das Feld 'Begin Graphics Object':
-    WriteFieldIntroducer(16,BegGrfObjMagic,0,0);
+    WriteFieldIntroducer(16, BegGrfObjMagic, 0, 0);
     WriteFieldId(7);
 
     // Map Color Attribute Table, Fonts and other stuff:
@@ -2404,10 +2430,10 @@ void METWriter::WriteGraphicsObject(const GDIMetaFile * pMTF)
     WriteDataDescriptor(pMTF);
 
     // initialise the counter for Data Fields:
-    nNumberOfDataFields=0;
+    nNumberOfDataFields = 0;
 
     // and remember the position of the first Data Field:
-    nDataFieldsStartPos=pMET->Tell();
+    nDataFieldsStartPos = pMET->Tell();
 
     //--- start of the first Field 'Graphics Data'
     WriteFieldIntroducer(0,DatGrfObjMagic,0,0);
@@ -2430,17 +2456,17 @@ void METWriter::WriteGraphicsObject(const GDIMetaFile * pMTF)
     UpdateFieldSize();
 
     //--- and finally correct the segment size:
-    nPos=pMET->Tell();
-    nSegmentSize=nPos-nDataFieldsStartPos;
-    nSegmentSize-=nNumberOfDataFields*8; // Structured Field Introducers are not counted
-    pMET->Seek(nDataFieldsStartPos+16); // seek to the Lo-Word of the segment size
-    WriteBigEndianShort((sal_uInt16)(nSegmentSize&0x0000ffff)); // Und schreiben
-    pMET->Seek(nDataFieldsStartPos+22); // seek to the Hi-Word of the segment size
-    WriteBigEndianShort((sal_uInt16)(nSegmentSize>>16)); // and writing it
+    nPos = pMET->Tell();
+    nSegmentSize = nPos - nDataFieldsStartPos;
+    nSegmentSize -= nNumberOfDataFields*8; // Structured Field Introducers are not counted
+    pMET->Seek(nDataFieldsStartPos + 16); // seek to the Lo-Word of the segment size
+    WriteBigEndianShort((sal_uInt16)(nSegmentSize & 0x0000ffff)); // Und schreiben
+    pMET->Seek(nDataFieldsStartPos + 22); // seek to the Hi-Word of the segment size
+    WriteBigEndianShort((sal_uInt16)(nSegmentSize >> 16)); // and writing it
     pMET->Seek(nPos); // back to business as usual
 
     //--- The Field 'End Graphic Objects':
-    WriteFieldIntroducer(16,EndGrfObjMagic,0,0);
+    WriteFieldIntroducer(16, EndGrfObjMagic, 0, 0);
     WriteFieldId(7);
 
     if( pMET->GetError() )
@@ -2450,22 +2476,22 @@ void METWriter::WriteGraphicsObject(const GDIMetaFile * pMTF)
 
 void METWriter::WriteResourceGroup(const GDIMetaFile * pMTF)
 {
-    if( bStatus==sal_False )
+    if( bStatus == sal_False )
         return;
 
     //--- The Field 'Begin Resource Group':
-    WriteFieldIntroducer(16,BegResGrpMagic,0,0);
+    WriteFieldIntroducer(16,BegResGrpMagic, 0, 0);
     WriteFieldId(2);
 
     //--- The Content:
     WriteColorAttributeTable();
-    nActBitmapId=0x77777700;
+    nActBitmapId = 0x77777700;
     WriteImageObjects(pMTF);
-    nActBitmapId=0x77777700;
+    nActBitmapId = 0x77777700;
     WriteGraphicsObject(pMTF);
 
     //--- The Field 'End Resource Group':
-    WriteFieldIntroducer(16,EndResGrpMagic,0,0);
+    WriteFieldIntroducer(16,EndResGrpMagic, 0, 0);
     WriteFieldId(2);
 
     if( pMET->GetError() )
@@ -2475,11 +2501,11 @@ void METWriter::WriteResourceGroup(const GDIMetaFile * pMTF)
 
 void METWriter::WriteDocument(const GDIMetaFile * pMTF)
 {
-    if( bStatus==sal_False )
+    if( bStatus == sal_False )
         return;
 
     //--- The Field 'Begin Document':
-    WriteFieldIntroducer(0,BegDocumnMagic,0,0);
+    WriteFieldIntroducer(0, BegDocumnMagic, 0, 0);
     WriteFieldId(1);
     pMET->WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 );
     pMET->WriteUChar( (sal_uInt8)0x05 ).WriteUChar( (sal_uInt8)0x18 ).WriteUChar( (sal_uInt8)0x03 ).WriteUChar( (sal_uInt8)0x0c ).WriteUChar( (sal_uInt8)0x00 );
@@ -2491,11 +2517,11 @@ void METWriter::WriteDocument(const GDIMetaFile * pMTF)
     WriteResourceGroup(pMTF);
 
     //--- The Field 'End Document':
-    WriteFieldIntroducer(16,EndDocumnMagic,0,0);
+    WriteFieldIntroducer(16, EndDocumnMagic, 0, 0);
     WriteFieldId(1);
 
     if( pMET->GetError() )
-        bStatus=sal_False;
+        bStatus = sal_False;
 }
 
 sal_Bool METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream, FilterConfigItem* pFilterConfigItem )
@@ -2513,36 +2539,36 @@ sal_Bool METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream, 
     METChrSet*          pCS;
     METGDIStackMember*  pGS;
 
-    bStatus=sal_True;
-    nLastPercent=0;
+    bStatus = sal_True;
+    nLastPercent = 0;
 
-    pMET=&rTargetStream;
+    pMET = &rTargetStream;
     pMET->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
 
     aPictureRect = Rectangle( Point(), rMTF.GetPrefSize() );
     aTargetMapMode = aPictureMapMode = rMTF.GetPrefMapMode();
 
-    aGDILineColor=Color( COL_BLACK );
-    aGDIFillColor=Color( COL_WHITE );
-    eGDIRasterOp=ROP_OVERPAINT;
-    aGDIFont=Font();
-    aGDIMapMode=MapMode();
-    aGDIClipRect=Rectangle();
-    pGDIStack=NULL;
-    aMETColor=Color(COL_BLACK);
-    aMETBackgroundColor=Color(COL_WHITE);
-    eMETMix=ROP_OVERPAINT;
-    nMETStrokeLineWidth=1;
-    aMETChrCellSize=Size(0,0);
-    nMETChrAngle=0;
-    nMETChrSet=0x00;
-    pChrSetList=NULL;
-    nNextChrSetId=1;
-    nNumberOfActions=0;
-    nNumberOfBitmaps=0;
-    nWrittenActions=0;
-    nWrittenBitmaps=0;
-    nActBitmapPercent=0;
+    aGDILineColor = Color( COL_BLACK );
+    aGDIFillColor = Color( COL_WHITE );
+    eGDIRasterOp = ROP_OVERPAINT;
+    aGDIFont = Font();
+    aGDIMapMode = MapMode();
+    aGDIClipRect = Rectangle();
+    pGDIStack = NULL;
+    aMETColor = Color(COL_BLACK);
+    aMETBackgroundColor = Color(COL_WHITE);
+    eMETMix = ROP_OVERPAINT;
+    nMETStrokeLineWidth = 1;
+    aMETChrCellSize = Size(0,0);
+    nMETChrAngle = 0;
+    nMETChrSet = 0x00;
+    pChrSetList = NULL;
+    nNextChrSetId = 1;
+    nNumberOfActions = 0;
+    nNumberOfBitmaps = 0;
+    nWrittenActions = 0;
+    nWrittenBitmaps = 0;
+    nActBitmapPercent = 0;
 
     CountActionsAndBitmaps(&rMTF);
 
@@ -2550,15 +2576,15 @@ sal_Bool METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream, 
 
     while( pChrSetList )
     {
-        pCS=pChrSetList;
-        pChrSetList=pCS->pSucc;
+        pCS = pChrSetList;
+        pChrSetList = pCS->pSucc;
         delete pCS;
     }
 
     while( pGDIStack )
     {
-        pGS=pGDIStack;
-        pGDIStack=pGS->pSucc;
+        pGS = pGDIStack;
+        pGDIStack = pGS->pSucc;
         delete pGS;
     }
 
