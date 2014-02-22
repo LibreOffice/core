@@ -31,7 +31,7 @@ using namespace ::svt;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
-//--- Defines
+// Defines
 #define HANDLE_ID 0
 
 OTableRowView::OTableRowView(Window* pParent)
@@ -61,12 +61,12 @@ void OTableRowView::Init()
     aFont.SetWeight( WEIGHT_NORMAL );
     GetDataWindow().SetFont( aFont );
 
-    // Font fuer die Ueberschriften auf Light setzen
+    // set font for the headings to light
     aFont = GetFont();
     aFont.SetWeight( WEIGHT_LIGHT );
     SetFont(aFont);
 
-    // HandleColumn, fuer maximal fuenf Ziffern einrichten
+    // set up HandleColumn for at maximum 5 digits
     InsertHandleColumn(static_cast<sal_uInt16>(GetTextWidth(OUString('0')) * 4)/*, sal_True */);
 
     BrowserMode nMode = BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_KEEPSELECTION |
