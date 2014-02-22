@@ -52,8 +52,8 @@ namespace dbaui
 #if OSL_DEBUG_LEVEL > 0
         OTableEditorCtrl* GetEditorCtrl();
 #endif
-        //  short GetFormatCategory(OFieldDescription* pFieldDescr);
-            // liefert zum am Feld eingestellten Format einen der CAT_xxx-Werte (CAT_NUMBER, CAT_DATE ...)
+        // short GetFormatCategory(OFieldDescription* pFieldDescr);
+        // gives you one of the CAT_xxx-values (CAT_NUMBER, CAT_DATE ...) belonging to the format specified by the field
 
         OUString BoolStringPersistent(const OUString& rUIString) const;
         OUString BoolStringUI(const OUString& rPersistentString) const;

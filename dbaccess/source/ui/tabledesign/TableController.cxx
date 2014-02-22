@@ -94,7 +94,7 @@ using namespace ::dbtools;
 using namespace ::dbaui;
 using namespace ::comphelper;
 
-// Anzahl Spalten beim Neuanlegen
+// number of columns when creating it from scratch
 #define NEWCOLS        128
 
 namespace
@@ -182,7 +182,7 @@ void OTableController::disposing()
 FeatureState OTableController::GetState(sal_uInt16 _nId) const
 {
     FeatureState aReturn;
-    // (disabled automatically)
+    // disabled automatically
 
     switch (_nId)
     {
@@ -785,12 +785,12 @@ void OTableController::appendPrimaryKey(Reference<XKeysSupplier>& _rxSup,sal_Boo
 
 void OTableController::loadData()
 {
-    // Wenn Datenstruktur bereits vorhanden, Struktur leeren
+    // if the data structure already exists, empty it
     m_vRowList.clear();
 
     ::boost::shared_ptr<OTableRow>  pTabEdRow;
     Reference< XDatabaseMetaData> xMetaData = getMetaData( );
-    // Datenstruktur mit Daten aus DatenDefinitionsObjekt fuellen
+    // fill data structure with data from DataDefinitionObject
     if(m_xTable.is() && xMetaData.is())
     {
         Reference<XColumnsSupplier> xColSup(m_xTable,UNO_QUERY);
@@ -798,9 +798,9 @@ void OTableController::loadData()
         Reference<XNameAccess> xColumns = xColSup->getColumns();
         OFieldDescription* pActFieldDescr = NULL;
         // ReadOnly-Flag
-        // Bei Drop darf keine Zeile editierbar sein.
-        // Bei Add duerfen nur die leeren Zeilen editierbar sein.
-        // Bei Add und Drop koennen alle Zeilen editiert werden.
+        // For Drop no row may be editable
+        // For Add only the empty rows may be editable
+        // For Add and Drop all rows can be edited
         //  sal_Bool bReadOldRow = xMetaData->supportsAlterTableWithAddColumn() && xMetaData->supportsAlterTableWithDropColumn();
         sal_Bool bIsAlterAllowed = isAlterAllowed();
         Sequence< OUString> aColumns = xColumns->getElementNames();
@@ -865,7 +865,7 @@ void OTableController::loadData()
                 pActFieldDescr->SetHorJustify(dbaui::mapTextJustify(nAlign));
                 pActFieldDescr->SetCurrency(bIsCurrency);
 
-                // Spezielle Daten
+                // special data
                 pActFieldDescr->SetIsNullable(nNullable);
                 pActFieldDescr->SetControlDefault(aControlDefault);
                 pActFieldDescr->SetPrecision(nPrecision);
@@ -897,7 +897,7 @@ void OTableController::loadData()
         }
     }
 
-    // Leere Zeilen fuellen
+    // fill empty rows
 
     OTypeInfoMap::iterator aTypeIter = m_aTypeInfo.find(DataType::VARCHAR);
     if(aTypeIter == m_aTypeInfo.end())

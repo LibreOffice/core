@@ -31,8 +31,6 @@
 
 using namespace ::com::sun::star;
 
-// ---------------------------------------------------------------
-
 void CGM::ImplCGMInit()
 {
     mbIsFinished = mbPicture = mbMetaFile = mbPictureBody = sal_False;
@@ -49,8 +47,6 @@ void CGM::ImplCGMInit()
     pElement = new CGMElements( *this );
 }
 
-// ---------------------------------------------------------------
-
 #ifdef CGM_EXPORT_IMPRESS
 
 CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > & rModel )  :
@@ -63,8 +59,6 @@ CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > & rModel )  :
     ImplCGMInit();
 }
 #endif
-
-// ---------------------------------------------------------------
 
 CGM::~CGM()
 {
@@ -91,14 +85,10 @@ CGM::~CGM()
     delete [] mpBuf;
 };
 
-// ---------------------------------------------------------------
-
 sal_uInt32 CGM::GetBackGroundColor()
 {
     return ( pElement ) ? pElement->aColorTable[ 0 ] : 0;
 }
-
-// ---------------------------------------------------------------
 
 sal_uInt32 CGM::ImplGetUI16( sal_uInt32 /*nAlign*/ )
 {
@@ -107,14 +97,10 @@ sal_uInt32 CGM::ImplGetUI16( sal_uInt32 /*nAlign*/ )
     return ( pSource[ 0 ] << 8 ) +  pSource[ 1 ];
 };
 
-// ---------------------------------------------------------------
-
 sal_uInt8 CGM::ImplGetByte( sal_uInt32 nSource, sal_uInt32 nPrecision )
 {
     return (sal_uInt8)( nSource >> ( ( nPrecision - 1 ) << 3 ) );
 };
-
-// ---------------------------------------------------------------
 
 long CGM::ImplGetI( sal_uInt32 nPrecision )
 {
@@ -146,8 +132,6 @@ long CGM::ImplGetI( sal_uInt32 nPrecision )
     }
 }
 
-// ---------------------------------------------------------------
-
 sal_uInt32 CGM::ImplGetUI( sal_uInt32 nPrecision )
 {
     sal_uInt8* pSource = mpSource + mnParaSize;
@@ -174,8 +158,6 @@ sal_uInt32 CGM::ImplGetUI( sal_uInt32 nPrecision )
     }
 }
 
-// ---------------------------------------------------------------
-
 void CGM::ImplGetSwitch4( sal_uInt8* pSource, sal_uInt8* pDest )
 {
     for ( int i = 0; i < 4; i++ )
@@ -184,8 +166,6 @@ void CGM::ImplGetSwitch4( sal_uInt8* pSource, sal_uInt8* pDest )
     }
 }
 
-// ---------------------------------------------------------------
-
 void CGM::ImplGetSwitch8( sal_uInt8* pSource, sal_uInt8* pDest )
 {
     for ( int i = 0; i < 8; i++ )
@@ -193,8 +173,6 @@ void CGM::ImplGetSwitch8( sal_uInt8* pSource, sal_uInt8* pDest )
         pDest[ i ] = pSource[ i ^ 7 ];          // Little Endian <-> Big Endian switch
     }
 }
-
-// ---------------------------------------------------------------
 
 double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
 {
@@ -265,8 +243,6 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
     return nRetValue;
 }
 
-// ---------------------------------------------------------------
-
 sal_uInt32 CGM::ImplGetPointSize()
 {
     if ( pElement->eVDCType == VDC_INTEGER )
@@ -275,35 +251,25 @@ sal_uInt32 CGM::ImplGetPointSize()
         return pElement->nVDCRealSize << 1;
 }
 
-// ---------------------------------------------------------------
-
 inline double CGM::ImplGetIX()
 {
     return ( ( ImplGetI( pElement->nVDCIntegerPrecision ) + mnVDCXadd ) * mnVDCXmul );
 }
-
-// ---------------------------------------------------------------
 
 inline double CGM::ImplGetFX()
 {
     return ( ( ImplGetFloat( pElement->eVDCRealPrecision, pElement->nVDCRealSize ) + mnVDCXadd ) * mnVDCXmul );
 }
 
-// ---------------------------------------------------------------
-
 inline double CGM::ImplGetIY()
 {
     return ( ( ImplGetI( pElement->nVDCIntegerPrecision ) + mnVDCYadd ) * mnVDCYmul );
 }
 
-// ---------------------------------------------------------------
-
 inline double CGM::ImplGetFY()
 {
     return ( ( ImplGetFloat( pElement->eVDCRealPrecision, pElement->nVDCRealSize ) + mnVDCYadd ) * mnVDCYmul );
 }
-
-// ---------------------------------------------------------------
 
 void CGM::ImplGetPoint( FloatPoint& rFloatPoint, sal_Bool bMap )
 {
@@ -320,8 +286,6 @@ void CGM::ImplGetPoint( FloatPoint& rFloatPoint, sal_Bool bMap )
     if ( bMap )
         ImplMapPoint( rFloatPoint );
 }
-
-// ---------------------------------------------------------------
 
 void CGM::ImplGetRectangle( FloatRect& rFloatRect, sal_Bool bMap )
 {
@@ -349,8 +313,6 @@ void CGM::ImplGetRectangle( FloatRect& rFloatRect, sal_Bool bMap )
     }
 }
 
-// ---------------------------------------------------------------
-
 void CGM::ImplGetRectangleNS( FloatRect& rFloatRect )
 {
     if ( pElement->eVDCType == VDC_INTEGER )
@@ -368,8 +330,6 @@ void CGM::ImplGetRectangleNS( FloatRect& rFloatRect )
         rFloatRect.Top = ImplGetFloat( pElement->eVDCRealPrecision, pElement->nVDCRealSize );
     }
 }
-
-// ---------------------------------------------------------------
 
 sal_uInt32 CGM::ImplGetBitmapColor( sal_Bool bDirect )
 {
@@ -407,8 +367,6 @@ sal_uInt32 CGM::ImplGetBitmapColor( sal_Bool bDirect )
     }
     return nTmp;
 }
-
-// ---------------------------------------------------------------
 
 // call this function each time after the mapmode settings has been changed
 void CGM::ImplSetMapMode()
@@ -453,8 +411,6 @@ void CGM::ImplSetMapMode()
     }
 }
 
-// ---------------------------------------------------------------
-
 void CGM::ImplMapDouble( double& nNumb )
 {
     if ( pElement->eDeviceViewPortMap == DVPM_FORCED )
@@ -470,7 +426,7 @@ void CGM::ImplMapDouble( double& nNumb )
 
             case DVPM_METRIC :
             {
-//              nNumb *= ( 100 * pElement->nDeviceViewPortScale );
+                // nNumb *= ( 100 * pElement->nDeviceViewPortScale );
                 nNumb *= ( mnXFraction + mnYFraction ) / 2;
                 if ( pElement->nDeviceViewPortScale < 0 )
                     nNumb = -nNumb;
@@ -494,8 +450,6 @@ void CGM::ImplMapDouble( double& nNumb )
 
     }
 }
-
-// ---------------------------------------------------------------
 
 void CGM::ImplMapX( double& nNumb )
 {
@@ -512,7 +466,7 @@ void CGM::ImplMapX( double& nNumb )
 
             case DVPM_METRIC :
             {
-//              nNumb *= ( 100 * pElement->nDeviceViewPortScale );
+                // nNumb *= ( 100 * pElement->nDeviceViewPortScale );
                 nNumb *= mnXFraction;
                 if ( pElement->nDeviceViewPortScale < 0 )
                     nNumb = -nNumb;
@@ -537,9 +491,6 @@ void CGM::ImplMapX( double& nNumb )
     }
 }
 
-
-// ---------------------------------------------------------------
-
 void CGM::ImplMapY( double& nNumb )
 {
     if ( pElement->eDeviceViewPortMap == DVPM_FORCED )
@@ -555,7 +506,7 @@ void CGM::ImplMapY( double& nNumb )
 
             case DVPM_METRIC :
             {
-//              nNumb *= ( 100 * pElement->nDeviceViewPortScale );
+                // nNumb *= ( 100 * pElement->nDeviceViewPortScale );
                 nNumb *= mnYFraction;
                 if ( pElement->nDeviceViewPortScale < 0 )
                     nNumb = -nNumb;
@@ -579,9 +530,6 @@ void CGM::ImplMapY( double& nNumb )
 
     }
 }
-
-
-// ---------------------------------------------------------------
 
 // convert a point to the current VC mapmode (1/100TH mm)
 void CGM::ImplMapPoint( FloatPoint& rFloatPoint )
@@ -628,8 +576,6 @@ void CGM::ImplMapPoint( FloatPoint& rFloatPoint )
     }
 }
 
-// ---------------------------------------------------------------
-
 void CGM::ImplDoClass()
 {
 #ifdef CGM_USER_BREAKPOINT
@@ -661,8 +607,6 @@ void CGM::ImplDoClass()
     }
     mnActCount++;
 };
-
-// ---------------------------------------------------------------
 
 void CGM::ImplDefaultReplacement()
 {
@@ -709,8 +653,6 @@ void CGM::ImplDefaultReplacement()
     }
 }
 
-// ---------------------------------------------------------------
-
 sal_Bool CGM::Write( SvStream& rIStm )
 {
     if ( !mpBuf )
@@ -748,20 +690,13 @@ sal_Bool CGM::Write( SvStream& rIStm )
     return mbStatus;
 };
 
-// ---------------------------------------------------------------
-
 SvStream& operator>>( SvStream& rOStm, CGM& /*rCGM*/ )
 {
 
     return rOStm;
 };
 
-// ---------------------------------------------------------------
-
-
-
-//================== GraphicImport - the exported function ================
-
+// GraphicImport - the exported function
 extern "C" SAL_DLLPUBLIC_EXPORT sal_uInt32 SAL_CALL
 ImportCGM( OUString& rFileName, uno::Reference< frame::XModel > & rXModel, sal_uInt32 nMode, void* pProgressBar )
 {

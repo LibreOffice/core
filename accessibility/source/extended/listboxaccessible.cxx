@@ -20,22 +20,15 @@
 #include <accessibility/extended/listboxaccessible.hxx>
 #include <svtools/treelistbox.hxx>
 
-//........................................................................
 namespace accessibility
 {
-//........................................................................
-
-    //====================================================================
-    //= ListBoxAccessibleBase
-    //====================================================================
-    //--------------------------------------------------------------------
+    // ListBoxAccessibleBase
     ListBoxAccessibleBase::ListBoxAccessibleBase( SvTreeListBox& _rWindow )
         :m_pWindow( &_rWindow )
     {
         m_pWindow->AddEventListener( LINK( this, ListBoxAccessibleBase, WindowEventListener ) );
     }
 
-    //--------------------------------------------------------------------
     ListBoxAccessibleBase::~ListBoxAccessibleBase( )
     {
         if ( m_pWindow )
@@ -47,7 +40,6 @@ namespace accessibility
         }
     }
 
-    //--------------------------------------------------------------------
     IMPL_LINK( ListBoxAccessibleBase, WindowEventListener, VclSimpleEvent*, pEvent )
     {
         OSL_ENSURE( pEvent && pEvent->ISA( VclWindowEvent ), "ListBoxAccessibleBase::WindowEventListener: unexpected WindowEvent!" );
@@ -61,7 +53,6 @@ namespace accessibility
         return 0;
     }
 
-    // -----------------------------------------------------------------------------
     void ListBoxAccessibleBase::disposing()
     {
         if ( m_pWindow )
@@ -69,7 +60,6 @@ namespace accessibility
         m_pWindow = NULL;
     }
 
-    // -----------------------------------------------------------------------------
     void ListBoxAccessibleBase::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
     {
         if ( isAlive() )
@@ -87,9 +77,6 @@ namespace accessibility
             }
         }
     }
-
-//........................................................................
 }   // namespace accessibility
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
