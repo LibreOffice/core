@@ -97,7 +97,7 @@ public:
     // nMaxHeight is the required height
     // bSplit indicates that the paragraph has to be split
     // bTst indicates that we are currently doing a test formatting
-    virtual sal_Bool WouldFit( SwTwips &nMaxHeight, sal_Bool &bSplit, sal_Bool bTst );
+    virtual bool WouldFit( SwTwips &nMaxHeight, bool &bSplit, bool bTst );
 
     sal_Bool MoveFtnCntFwd( sal_Bool, SwFtnBossFrm* ); // called by MoveFwd if content
 

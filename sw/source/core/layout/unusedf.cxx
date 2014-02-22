@@ -31,10 +31,10 @@ void SwFrm::Paint(SwRect const&, SwPrintData const*const) const
     OSL_FAIL( "Paint() of the base class called." );
 }
 
-sal_Bool SwCntntFrm::WouldFit( SwTwips &, sal_Bool&, sal_Bool )
+bool SwCntntFrm::WouldFit( SwTwips &, bool&, bool )
 {
     OSL_FAIL( "WouldFit of CntntFrm called." );
-    return sal_False;
+    return false;
 }
 
 bool SwFrm::FillSelection( SwSelectionList& , const SwRect& ) const

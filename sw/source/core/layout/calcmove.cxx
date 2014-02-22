@@ -1563,8 +1563,8 @@ void SwCntntFrm::MakeAll()
             {
                 SwTwips nTmp = (GetUpper()->Prt().*fnRect->fnGetHeight)() -
                                (Prt().*fnRect->fnGetTop)();
-                sal_Bool bSplit = !IsFwdMoveAllowed();
-                if ( nTmp > 0 && WouldFit( nTmp, bSplit, sal_False ) )
+                bool bSplit = !IsFwdMoveAllowed();
+                if ( nTmp > 0 && WouldFit( nTmp, bSplit, false ) )
                 {
                     Prepare( PREP_WIDOWS_ORPHANS, 0, false );
                     mbValidSize = sal_False;
@@ -1771,7 +1771,7 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
     }
 
     sal_Bool bRet;
-    sal_Bool bSplit = !pNewUpper->Lower();
+    bool bSplit = !pNewUpper->Lower();
     SwCntntFrm *pFrm = this;
     const SwFrm *pTmpPrev = pNewUpper->Lower();
     if( pTmpPrev && pTmpPrev->IsFtnFrm() )
@@ -1783,7 +1783,7 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
         // #i46181#
         SwTwips nSecondCheck = 0;
         SwTwips nOldSpace = nSpace;
-        sal_Bool bOldSplit = bSplit;
+        bool bOldSplit = bSplit;
 
         if ( bTstMove || IsInFly() || ( IsInSct() &&
              ( pFrm->GetUpper()->IsColBodyFrm() || ( pFtnFrm &&
@@ -1818,14 +1818,14 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                 bRet = ((SwTxtFrm*)pFrm)->TestFormat( pTmpPrev, nSpace, bSplit );
             }
             else
-                bRet = pFrm->WouldFit( nSpace, bSplit, sal_False );
+                bRet = pFrm->WouldFit( nSpace, bSplit, false );
 
             pTmpFrm->Remove();
             pTmpFrm->InsertBefore( pUp, pOldNext );
         }
         else
         {
-            bRet = pFrm->WouldFit( nSpace, bSplit, sal_False );
+            bRet = pFrm->WouldFit( nSpace, bSplit, false );
             nSecondCheck = !bSplit ? 1 : 0;
         }
 
@@ -1894,7 +1894,7 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                     // We do a second check with the original remaining space
                     // reduced by the required upper space:
                     nOldSpace -= nSecondCheck;
-                    const bool bSecondRet = nOldSpace >= 0 && pFrm->WouldFit( nOldSpace, bOldSplit, sal_False );
+                    const bool bSecondRet = nOldSpace >= 0 && pFrm->WouldFit( nOldSpace, bOldSplit, false );
                     if ( bSecondRet && bOldSplit && nOldSpace >= 0 )
                     {
                         bRet = sal_True;

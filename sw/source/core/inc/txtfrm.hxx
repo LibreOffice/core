@@ -331,14 +331,14 @@ public:
     // nMaxHeight is the required height
     // bSplit indicates, that the paragraph has to be split
     // bTst indicates, that we are currently doing a test formatting
-    virtual sal_Bool WouldFit( SwTwips &nMaxHeight, sal_Bool &bSplit, sal_Bool bTst );
+    virtual bool WouldFit( SwTwips &nMaxHeight, bool &bSplit, bool bTst );
 
     // Hier das WouldFit-Aequivalent fuer mal kurz probeweise
     // umgehaengte TextFrames, auch hier liefert
     // nMaxHeight die benoetigte Hoehe,
     // und bSplit sagt, obj der Absatz gesplittet werden muss.
     // Uebergeben wird der potentielle Vorgaenger fuer die Abstandsberechnung
-    sal_Bool TestFormat( const SwFrm* pPrv, SwTwips &nMaxHeight, sal_Bool &bSplit );
+    bool TestFormat( const SwFrm* pPrv, SwTwips &nMaxHeight, bool &bSplit );
 
     // Wir formatieren eine Zeile fuer die interaktive Trennung
     // Return: found

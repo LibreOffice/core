@@ -1836,16 +1836,16 @@ SwTestFormat::~SwTestFormat()
     pFrm->SetPara( pOldPara );
 }
 
-sal_Bool SwTxtFrm::TestFormat( const SwFrm* pPrv, SwTwips &rMaxHeight, sal_Bool &bSplit )
+bool SwTxtFrm::TestFormat( const SwFrm* pPrv, SwTwips &rMaxHeight, bool &bSplit )
 {
     PROTOCOL_ENTER( this, PROT_TESTFORMAT, 0, 0 )
 
     if( IsLocked() && GetUpper()->Prt().Width() <= 0 )
-        return sal_False;
+        return false;
 
     SwTestFormat aSave( this, pPrv, rMaxHeight );
 
-    return SwTxtFrm::WouldFit( rMaxHeight, bSplit, sal_True );
+    return SwTxtFrm::WouldFit( rMaxHeight, bSplit, true );
 }
 
 /* SwTxtFrm::WouldFit()
@@ -1859,14 +1859,14 @@ sal_Bool SwTxtFrm::TestFormat( const SwFrm* pPrv, SwTwips &rMaxHeight, sal_Bool 
  * Die benoetigte Hoehe wird von nMaxHeight abgezogen!
  */
 
-sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit, sal_Bool bTst )
+bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, bool &bSplit, bool bTst )
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),
             "SwTxtFrm::WouldFit with swapped frame" );
     SWRECTFN( this );
 
     if( IsLocked() )
-        return sal_False;
+        return false;
 
     // it can happen that the IdleCollector removed the cached information
     if( !IsEmpty() )
@@ -1878,23 +1878,23 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit, sal_Bool bTs
     // which is called in <SwTxtFrm::TestFormat(..)>
     if ( IsEmpty() && !bTst )
     {
-        bSplit = sal_False;
+        bSplit = false;
         SwTwips nHeight = bVert ? Prt().SSize().Width() : Prt().SSize().Height();
         if( rMaxHeight < nHeight )
-            return sal_False;
+            return false;
         else
         {
             rMaxHeight -= nHeight;
-            return sal_True;
+            return true;
         }
     }
 
     // In sehr unguenstigen Faellen kann GetPara immer noch 0 sein.
-    // Dann returnen wir sal_True, um auf der neuen Seite noch einmal
+    // Dann returnen wir true, um auf der neuen Seite noch einmal
     // anformatiert zu werden.
     OSL_ENSURE( HasPara() || IsHiddenNow(), "WouldFit: GetFormatted() and then !HasPara()" );
     if( !HasPara() || ( !(Frm().*fnRect->fnGetHeight)() && IsHiddenNow() ) )
-        return sal_True;
+        return true;
 
     // Da das Orphan-Flag nur sehr fluechtig existiert, wird als zweite
     // Bedingung  ueberprueft, ob die Rahmengroesse durch CalcPreps
@@ -1924,10 +1924,10 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit, sal_Bool bTs
                          !pFoll->Frm().Height() ) )
                     pFoll = pFoll->GetFollow();
                 if( pFoll )
-                    return sal_False;
+                    return false;
             }
             else
-                return sal_False;
+                return false;
         }
     }
 
@@ -1938,7 +1938,7 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit, sal_Bool bTs
 
     WidowsAndOrphans aFrmBreak( this, rMaxHeight, bSplit );
 
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     aLine.Bottom();
     // is breaking necessary?
