@@ -382,7 +382,7 @@ Raspbian
 ********
 
 In theory, this should work also for another Linux, it does not need to be Raspbian.
-But this cross-compilation work is tested from Debian based system to Raspbian.
+But this cross-compilation work is tested from Debian and openSUSE to Raspbian.
 
 You will need headers, pkg-config files and libraries from a Raspbian
 system to build against. Available at
